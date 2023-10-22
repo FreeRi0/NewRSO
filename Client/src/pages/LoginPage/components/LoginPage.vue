@@ -1,5 +1,5 @@
 <template>
-    <div class="LoginWrapper ">
+    <div class="AuthWrapper ">
         <div class="v-container">
 
                 <LoginForm></LoginForm>
