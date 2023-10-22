@@ -1,6 +1,6 @@
 <template>
   <div>
-    Header
+    Header Vue
   </div>
 </template>
 <script>
