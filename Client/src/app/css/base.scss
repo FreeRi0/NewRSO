@@ -1,0 +1,25 @@
+:root {
+  --primary: #39BFBF;
+  --disabled: #B6B6B6;
+  --success: #00C48C;
+  --success-hover: #7DDFC3;
+  --info: #0084F4;
+  --info-hover: #66B5F8;
+  --warning: #FFA26B;
+  --warning-hover: #FFC7A6;
+  --danger: #FF647C;
+  --danger-hover: #FDAFBB;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #fafafa;
+  margin: 0;
+}
+
+a {
+  color: var(--primary-color);
+}

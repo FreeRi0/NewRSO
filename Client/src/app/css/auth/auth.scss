@@ -1,0 +1,37 @@
+.AuthWrapper {
+  min-height: 100vh;
+   background-image: url(../assets/log-bg.jpg);
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center bottom;
+   padding-top: 100px;
+}
+
+.LoginForm {
+   width: 384px;
+}
+
+.v-card--variant-elevated {
+   box-shadow: none;
+}
+
+.text-field {
+   border-radius: 10px;
+}
+.v-input__details {
+ display: none !important;
+}
+
+.v-alert--density-compact {
+   margin-bottom: 10px;
+   padding-top: 5px;
+   padding-bottom: 5px;
+}
+
+.v-form {
+ margin-top: 40px;
+}
+
+.v-card {
+   border-radius: 10px;
+}
