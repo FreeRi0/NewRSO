@@ -11,11 +11,9 @@
             class="mb-2 text-field"
         ></v-text-field>
         <TransitionGroup>
-          <v-alert
-    density="compact"
-    type="error"
+          <div class="error-wrapper"
     v-for="element of error" :key="element.$uid"
-  ><div class="form-error__message">{{ element.$message }}</div></v-alert>
+  ><div class="form-error__message">{{ element.$message }}</div></div>
           </TransitionGroup
         >
     </div>
@@ -55,5 +53,14 @@ const updateValue = (e) => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+.error-wrapper {
+    margin-bottom: 5px;
+}
+.form-error__message {
+    color: var(--danger);
+    font-size: 12px;
+}
+</style>
 

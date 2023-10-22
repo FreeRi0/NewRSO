@@ -1,17 +1,123 @@
 <template>
-    <v-btn>
-        <slot></slot>
+    <v-btn
+        :class="[
+            'btn',
+            `btn_${color}`,
+            { btn_rounded: rounded },
+            { btn_outlined: outlined },
+            { btn_icon: icon },
+            { btn_large: size === 'large' },
+        ]"
+        :disabled="disabled"
+        @click="clickOnButton"
+    >
+        <span v-if="icon">
+            <font-awesome-icon :icon="`fa-regular fa-${icon}`" />
+        </span>
+        <span v-else>{{ label }}</span>
     </v-btn>
 </template>
-<script>
-export default {};
+<script setup>
+const props = defineProps({
+    label: {
+        type: String,
+        default: 'Button',
+    },
+    color: {
+        type: String,
+        default: 'primary',
+    },
+    disabled: {
+        type: Boolean,
+        required: false,
+    },
+    rounded: {
+        type: Boolean,
+        required: false,
+    },
+    outlined: {
+        type: Boolean,
+        required: false,
+    },
+    icon: {
+        type: String,
+        required: false,
+    },
+    size: {
+        type: String,
+        default: 'normal',
+    },
+});
+
+const emit = defineEmits(['click']);
+
+const clickOnButton = () => {
+    emit('click');
+};
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .btn {
+display: block;
+  margin: 20px auto;
+  padding: 16px 32px;
+  height: 52px;
+  color: white;
+  box-shadow: none;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: .2s;
+  &_primary {
+    background: var(--primary);
+    border: 1px solid var(--primary);
+  }
+  &_second {
+    background: var(--second);
+    border: 1px solid var(--second);
+  }
+  &_success {
+    background: var(--success);
+    border: 1px solid var(--success);
+
+  }
+  &_info {
+    background: var(--info);
+    border: 1px solid var(--info);
+
+  }
+  &_warning {
+    background: var(--warning);
+    border: 1px solid var(--warning);
+
+  }
+  &_danger {
+    background: var(--danger);
+    border: 1px solid var(--danger);
+  }
+  &:disabled {
+    opacity: .6;
+    cursor: default;
+  }
+  &_rounded {
+    border-radius: 15px;
+  }
+  &_outlined {
+    background: transparent;
+    color: #000;
+    &:hover {
+      color: #fff;
+    }
+  }
+  &_icon {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  &_large {
     height: 52px;
-    border-radius: 10px;
-    border: none;
-    background-color: #39bfbf;
     padding: 16px 32px;
+  }
 }
 </style>
