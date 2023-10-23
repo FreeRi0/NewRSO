@@ -24,6 +24,18 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/RegisterPage/components/RegisterPage.vue'),
             },
+            {
+                path: '/terms_of_use',
+                name: 'terms_of_use',
+                component: () =>
+                    import('@pages/terms_of_use/components/termsPage.vue'),
+            },
+            {
+                path: '/privacy_policy',
+                name: 'privacy_policy',
+                component: () =>
+                    import('@pages/privacy_policy/components/PolicyPage.vue'),
+            },
         ],
     },
 ];
