@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    <div class="container">                
+    <div class="container">
       <div class="footer__top-container">
         <div class="footer__logo-wrapper">
           <div class="footer__logo-rso">
@@ -39,10 +39,10 @@
 
         <ul class="footer__privacy-policy-list">
           <li class="footer__privacy-policy-item">
-            <a href="#">Политика конфиденциальности</a>
+            <router-link to="/privacy_policy">Политика конфидициальности</router-link>
           </li>
           <li class="footer__user-agreement">
-            <a href="#">Пользовательское соглашение</a>
+            <router-link to="/terms_of_use">Пользовательское соглашение</router-link>
           </li>
         </ul>
       </div>
