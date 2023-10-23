@@ -1,0 +1,1 @@
+export { default as termsPage } from './components/PolicyPage.vue';
