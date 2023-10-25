@@ -42,6 +42,7 @@ const data = ref({
     password: '',
 });
 
+console.log(data);
 
 const router = useRouter();
 

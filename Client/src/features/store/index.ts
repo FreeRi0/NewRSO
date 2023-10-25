@@ -2,11 +2,11 @@ import { Commit, createStore } from 'vuex';
 
 export default createStore({
     state: {
-        authenticated: false,
+        user: false,
     },
     mutations: {
-        SET_AUTH: (state: { authenticated: boolean }, auth: boolean) =>
-            (state.authenticated = auth),
+        SET_AUTH: (state: { user: boolean }, auth: boolean) =>
+            (state.user = auth),
     },
     actions: {
         setAuth: ({ commit }: { commit: Commit }, auth: boolean) =>

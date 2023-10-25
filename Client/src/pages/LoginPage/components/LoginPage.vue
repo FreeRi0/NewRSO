@@ -1,6 +1,6 @@
 <template>
     <div class="AuthWrapper ">
-        <div class="v-container">
+        <div class="container">
                 <LoginForm></LoginForm>
         </div>
     </div>

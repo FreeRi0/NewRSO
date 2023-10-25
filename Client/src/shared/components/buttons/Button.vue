@@ -12,7 +12,7 @@
         @click="clickOnButton"
     >
         <span v-if="icon">
-            <font-awesome-icon :icon="`fa-regular fa-${icon}`" />
+            
         </span>
         <span v-else>{{ label }}</span>
     </v-btn>

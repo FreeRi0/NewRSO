@@ -36,6 +36,12 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/privacy_policy/components/PolicyPage.vue'),
             },
+            {
+                path: 'UserPage',
+                name: 'userpage',
+                component: () =>
+                    import('@pages/UserPage/components/UserPage.vue'),
+            },
         ],
     },
 ];
