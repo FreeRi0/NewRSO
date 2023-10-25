@@ -1,8 +1,14 @@
 <template>
     <div class="d-flex justify-end">
-        <v-card class=" px-14 py-15" max-width="580">
+        <v-card class="px-14 py-15" max-width="580">
             <v-card-title class="text-h4 text-center">Регистрация</v-card-title>
-            <v-form action="#" method="post" @submit.prevent="submitForm">
+            <v-form action="#" method="post" @submit.prevent="RegisterUser">
+                <select>
+                    <option value="" selected>Выберете регион</option>
+                    <option v-for="region in regions" :value="region.value">
+                        {{ region.name }}
+                    </option>
+                </select>
                 <Input
                     placeholder="Фамилия"
                     name="surname"
@@ -21,6 +27,7 @@
                     v-model:value="patronomycField"
                 />
                 <Input
+                    type="tel"
                     placeholder="+7 (999) 999-99-99"
                     name="phone"
                     v-model:value="v.phoneField.$model"
@@ -39,20 +46,21 @@
                     v-model:value="v.loginField.$model"
                     :error="v.loginField.$errors"
                 />
-                <Input
+                <PasswordInputVue
                     placeholder="Придумайте пароль"
                     name="password"
-                    type="password"
                     v-model:value="v.password.$model"
                     :error="v.password.$errors"
-                />
-                <Input
+                ></PasswordInputVue>
+                <PasswordInputVue
                     placeholder="Повторите пароль"
                     name="confirm"
-                    type="password"
                     v-model:value="v.confirmPassword.$model"
                     :error="v.confirmPassword.$errors"
-                />
+                ></PasswordInputVue>
+                <v-checkbox
+                    label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных*."
+                ></v-checkbox>
                 <Button label="Зарегистрироваться" color="primary"></Button>
 
                 <v-card-text class="text-center">
@@ -65,11 +73,20 @@
     </div>
 </template>
 
+<style lang="scss" scoped>
+.btn {
+    margin: 60px auto;
+    margin-bottom: 15px;
+}
+</style>
+
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { Input } from '@shared/components/inputs';
+import { Input, PasswordInputVue } from '@shared/components/inputs';
 import { useVuelidate } from '@vuelidate/core';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 import {
     helpers,
     minLength,
@@ -89,6 +106,26 @@ const emailField = ref('');
 const loginField = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+
+const regions = [];
+
+const onChangeRegion = () => {
+    axios
+        .get(
+            'http://api.geonames.org/postalCodeSearchJSON?postalcode=9011&maxRows=10&username=demo',
+        )
+        .then((res) => {
+            regions.values = res.data;
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+
+onMounted(() => {
+    onChangeRegion();
+})
 
 const rules = computed(() => ({
     surnameUser: {
@@ -128,8 +165,8 @@ const rules = computed(() => ({
             minLength(5),
         ),
     },
-    phoneField : {
-      required: helpers.withMessage(
+    phoneField: {
+        required: helpers.withMessage(
             `Поле обязательно для заполнения`,
             required,
         ),
@@ -166,10 +203,13 @@ const v = useVuelidate(rules, {
     emailField,
 });
 
+const router = useRouter();
 
-const submitForm = () => {
-  v.value.$touch()
-  if (v.value.$error) return
-  alert('Form submitted')
-}
+const RegisterUser = async () => {
+    await axios.post('url', {
+        headers: { 'Content-Type': 'application/json' },
+        // body: JSON.stringify()
+    });
+    await router.push('/');
+};
 </script>
