@@ -8,18 +8,18 @@
                 >У вас еще нет аккаунта?
                 <router-link to="/Register">Зарегистрироваться</router-link>
             </v-card-text>
-            <v-form action="#" method="post">
+            <v-form action="#" method="post" @submit.prevent="LoginUser">
                 <Input
                     placeholder="Имя"
                     name="name"
-                    v-model:value="nameUser"
+                    v-model:value="data.nameUser"
                 />
-                <Input
+                <PasswordInputVue
                     placeholder="Пароль"
                     name="password"
-                    type="password"
-                    v-model:value="password"
-                />
+                    v-model:value="data.password"
+                ></PasswordInputVue>
+
                 <Button label="Войти" color="primary"></Button>
                 <v-card-text class="text-center"
                     >Забыли пароль?
@@ -33,8 +33,28 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { Input } from '@shared/components/inputs';
+import { Input, PasswordInputVue } from '@shared/components/inputs';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
-const nameUser = ref('');
-const password = ref('');
+const data = ref({
+    nameUser: '',
+    password: '',
+});
+
+
+const router = useRouter();
+
+const LoginUser = async () => {
+    await axios.post('url/login', {
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data),
+    });
+
+    await router.push('/');
+};
+
+// const nameUser = ref('');
+// const password = ref('');
 </script>
