@@ -1,69 +1,81 @@
 <template>
-    <v-menu 
-    :location="location" 
-    >
-        <template v-slot:activator="{ props }">
-            <v-btn v-bind="props">
-                <slot>Структура</slot>
-            </v-btn>
-        </template>
+    <div class="dropdown" @click="isOpen = !isOpen">
+      <div class="dropdown__overlay" v-if="isOpen"></div>
 
-        <v-list>
-            <v-list-item
-            v-for="(item, index) in items"
-            :key="index"
-            >
-                <a :href=" item.url ">{{ item.title }}</a>
-            </v-list-item>
-        </v-list>
-    </v-menu>
+      <button class="dropdown__button" type="button">
+        <span>{{ title }}</span>
+
+        <div v-if="image" class="dropdown__box-image">
+          <img  :src="url" :alt="desc">
+        </div>
+
+        <transition name="fade" appear>
+          <div>
+            <svg v-if="!isOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M19.9201 8.94922L13.4001 15.4692C12.6301 16.2392 11.3701 16.2392 10.6001 15.4692L4.08008 8.94922"  stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M4.07992 15.0508L10.5999 8.53078C11.3699 7.76078 12.6299 7.76078 13.3999 8.53078L19.9199 15.0508"  stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </transition>
+      </button>
+
+      
+      
+      <transition name="fade" appear>
+        <ul class="dropdown__list" v-if="isOpen">
+          <li v-for="(item, i) in items" :key="i" class="dropdown__item">
+            <a class="dropdown__link" :href="item.link">{{ item.title }}</a>
+          </li>
+        </ul>
+      </transition>
+    </div>
 </template>
   
 <script>
 export default {
-    data: () => ({
-      items: [
-        { title: 'ЛСО', url: '#' },
-        { title: 'Штабы СО ОО', url: '#' },
-        { title: 'Местные штабы', url: '#' },
-        { title: 'Региональные штабы', url: '#' },
-        { title: 'Окружные штабы', url: '#' },
-        { title: 'Центральный штаб', url: '#' },
-      ],
-      locations: ['top', 'bottom', 'start', 'end', 'center'],
-      location: 'bottom',
-    }),
-};
-</script>
-
-<style scoped>
-
-.v-btn.v-btn--elevated.v-theme--light.v-btn--density-default.v-btn--size-default.v-btn--variant-elevated {
-    background-color: transparent;
-    box-shadow: none;
-    text-transform: capitalize;
-    height: auto;
-    padding: 11px 0;
-    color: #35383f;
-    font-size: 16px;
-    line-height: 21px;
-    letter-spacing: normal;
-    
-
-    @media(max-width: 1024px) {
-        position: relative;
-        width: 100%;
-
-        &:before {
-            position: absolute;
-            content: "";
-            width: 24px;
-            height: 24px;
-            top: calc(50% - 12px);
-            right: 0;
-            background-image: url('../../../app/assets/icon/arrow-down.svg');
+    name: 'dropdown',
+    props: ['title', 'items', 'image', 'url', 'desc'],
+    data () {
+        return {
+        isOpen: false
         }
     }
+}
+</script>
+  
+<style lang="scss">
+    
+// .dropdown .dropdown-list {
+//   transform: translateX(-50%);
+// }
+
+.dropdown {
+  z-index: 2;
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  &__box-image img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all .3s ease-out;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 </style>
