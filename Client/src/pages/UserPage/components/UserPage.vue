@@ -13,6 +13,10 @@
                 </div>
             </div>
 
+            <TextArea></TextArea>
+
+           <photos></photos>
+
             <router-link to="/">
                 <Button
                     name="verify-btn"
@@ -26,6 +30,8 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { BannerComp } from '@features/baner/components';
+import {TextArea} from '@shared/components/inputs';
+import {photos} from '@shared/components/photos';
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
@@ -47,5 +53,6 @@ import { BannerComp } from '@features/baner/components';
 }
 .btn {
     margin: 0px;
+    height: 52px;
 }
 </style>

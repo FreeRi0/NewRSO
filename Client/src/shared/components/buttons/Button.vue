@@ -12,7 +12,7 @@
         @click="clickOnButton"
     >
         <span v-if="icon">
-            
+
         </span>
         <span v-else>{{ label }}</span>
     </v-btn>
