@@ -42,6 +42,12 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/UserPage/components/UserPage.vue'),
             },
+            {
+                path: '/CreateLSO',
+                name: 'CreateLSO',
+                component: () =>
+                    import('@pages/CreationOfDetachment/components/CreationOfDetachment.vue'),
+            },
         ],
     },
 ];

@@ -9,4 +9,6 @@ export * as termsPage from './termsPage';
 
 export * as termsPage from './PolicyPage';
 
-export * as UserPage from './UserPage'
+export * as UserPage from './UserPage';
+
+export * as CreationOfDetachment from './CreationOfDetachment';
