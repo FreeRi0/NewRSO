@@ -31,7 +31,7 @@
 import { Button } from '@shared/components/buttons';
 import { BannerComp } from '@features/baner/components';
 import {TextArea} from '@shared/components/inputs';
-import {photos} from '@shared/components/photos';
+import {photos} from '@shared/components/imagescomp';
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
