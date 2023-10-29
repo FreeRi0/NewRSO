@@ -37,10 +37,17 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/UserPage/components/UserPage.vue'),
             },
             {
+
+                path: '/CreateLSO',
+                name: 'CreateLSO',
+                component: () =>
+                    import('@pages/CreationOfDetachment/components/CreationOfDetachment.vue'),
+
                 path: '/AllSquads',
                 name: 'allsquads',
                 component: () =>
                     import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
+
             },
         ],
     },
