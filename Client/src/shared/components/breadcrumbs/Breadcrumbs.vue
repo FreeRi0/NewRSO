@@ -1,6 +1,6 @@
 <template>
-    <ul class="breadcrumbs-container" :items="items">
-        <li v-for="(item, i) in items" :key="i">
+    <ul class="breadcrumbs-container">
+        <li v-for="item in items" :key="item.pageTitle">
             <a :href="item.href">
                 {{ item.pageTitle }}
             </a>
@@ -11,7 +11,9 @@
 <script setup>
 import { ref } from 'vue';
 
-const items = ref('');
+const props = defineProps({
+    items: Array,
+});
 </script>
 
 <style lang="scss" scoped>

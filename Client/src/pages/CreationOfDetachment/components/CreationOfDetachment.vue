@@ -13,11 +13,11 @@ import { ref } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormCreateUnit } from '@features/FormCreateUnit';
 
-const pages = ref(
+const pages = [
     { pageTitle: 'Структура', href: '#' },
     { pageTitle: 'ЛСО', href: '#' },
     { pageTitle: 'Создание ЛСО', href: '#' },
-);
+];
 </script>
 
 <style lang="scss" scoped>
