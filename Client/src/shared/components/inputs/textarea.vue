@@ -1,6 +1,6 @@
 <template>
     <v-textarea
-    clearable
+        clearable
         counter
         :model-value="value"
         variant="outlined"
@@ -8,7 +8,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-
-// const rules = ref([v => v.length <= 3-- || 'Лимит 300 символов'])
+const value = ref('');
+const rules = ref([v => v.length <= 25 || 'Max 25 characters']);
 </script>
 <style lang="scss"></style>
