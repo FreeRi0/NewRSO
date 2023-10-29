@@ -3,6 +3,7 @@
         <div class="user-wrapper">
             <h2 class="page-title">Моя страница</h2>
             <BannerComp class="mt-3"></BannerComp>
+
             <div class="user-verify">
                 <p class="user-verify__title">Верификация данных</p>
                 <div class="user-verify__desc">
@@ -20,12 +21,25 @@
                     color="primary"
                 ></Button
             ></router-link>
+
+            <TextArea  class="mt-14"></TextArea>
+            <v-row class="mt-8">
+                <v-col
+                    v-for="n in 4"
+                    :key="n"
+                    class="d-flex"
+                >
+                   <photos></photos>
+                </v-col>
+            </v-row>
         </div>
     </div>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { BannerComp } from '@features/baner/components';
+import { TextArea } from '@shared/components/inputs';
+import { photos } from '@shared/components/imagescomp';
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
@@ -47,5 +61,6 @@ import { BannerComp } from '@features/baner/components';
 }
 .btn {
     margin: 0px;
+    height: 52px;
 }
 </style>

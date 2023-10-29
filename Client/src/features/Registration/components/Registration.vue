@@ -3,7 +3,7 @@
         <v-card class="px-14 py-15" max-width="580">
             <v-card-title class="text-h4 text-center">Регистрация</v-card-title>
             <v-form action="#" method="post" @submit.prevent="RegisterUser">
-           
+
                 <SelectRegion></SelectRegion>
                 <Input
                     placeholder="Фамилия"
@@ -60,7 +60,7 @@
                 <Button label="Зарегистрироваться" color="primary"></Button>
 
                 <v-card-text class="text-center">
-                    <router-link to="/login"
+                    <router-link to="/"
                         >У меня уже есть аккаунт</router-link
                     ></v-card-text
                 >
