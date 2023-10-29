@@ -24,6 +24,33 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/RegisterPage/components/RegisterPage.vue'),
             },
+<<<<<<< Updated upstream
+=======
+            {
+                path: '/terms_of_use',
+                name: 'terms_of_use',
+                component: () =>
+                    import('@pages/terms_of_use/components/termsPage.vue'),
+            },
+            {
+                path: '/privacy_policy',
+                name: 'privacy_policy',
+                component: () =>
+                    import('@pages/privacy_policy/components/PolicyPage.vue'),
+            },
+            {
+                path: ':catchAll(.*)*',
+                name: '404',
+                component: () =>
+                    import('@pages/404Page/components/404Page.vue'),
+            },
+            {
+                path: '/lso',
+                name: 'lso',
+                component: () =>
+                    import('@pages/lsoPage/lsoPage.vue'), 
+            },
+>>>>>>> Stashed changes
         ],
     },
 ];
