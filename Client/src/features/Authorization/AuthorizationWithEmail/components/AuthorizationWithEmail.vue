@@ -33,28 +33,8 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { Input, PasswordInputVue } from '@shared/components/inputs';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { Input } from '@shared/components/inputs';
 
-const data = ref({
-    nameUser: '',
-    password: '',
-});
-
-
-const router = useRouter();
-
-const LoginUser = async () => {
-    await axios.post('url/login', {
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(data),
-    });
-
-    await router.push('/');
-};
-
-// const nameUser = ref('');
-// const password = ref('');
+const nameUser = ref('');
+const password = ref('');
 </script>

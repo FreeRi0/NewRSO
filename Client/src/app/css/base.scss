@@ -9,6 +9,7 @@
   --warning-hover: #FFC7A6;
   --danger: #FF647C;
   --danger-hover: #FDAFBB;
+  --create: #FFFFFF;
 }
 
 * {
@@ -20,6 +21,50 @@ body {
   margin: 0;
 }
 
+body div[id="app"] {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+ul {
+  list-style: none;
+}
+.v-btn.v-btn--density-default {
+  height: 52px !important;
+}
 a {
   color: var(--primary-color);
+  text-decoration: none;
+}
+
+.page-title {
+  font-size: 52px;
+  font-weight: 700;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0 130px;
+  max-width: 1440px;
+  width: 100%;
+
+  @media(max-width:1440px) {
+    padding: 0 66px;
+    max-width: 1312px;
+  }
+
+  @media(max-width: 1024px) {
+    padding: 0 34px;
+    max-width: 960px;
+  }
+
+  @media(max-width: 768px) {
+    padding: 0 16px;
+    max-width: 732px;
+  }
+
+  @media(max-width: 360px) {
+    padding: 0 16px;
+  }
 }

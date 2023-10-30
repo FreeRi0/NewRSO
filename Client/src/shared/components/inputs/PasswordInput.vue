@@ -23,38 +23,10 @@
         </TransitionGroup>
     </div>
 </template>
-<script setup>
-import { ref } from 'vue';
-const emit = defineEmits(['update:value']);
+<script>
+export default {
 
-const props = defineProps({
-    error: {
-        type: Array,
-        required: false,
-    },
-    value: {
-        type: String,
-        default: '',
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    placeholder: {
-        type: String,
-        required: true,
-    },
-    width: {
-        type: String,
-        default: '380px',
-    },
-});
-
-const updateValue = (e) => {
-    emit('update:value', e.target.value);
-};
-
-const showPassword = ref(false);
+}
 </script>
 <style lang="scss" scoped>
 .error-wrapper {

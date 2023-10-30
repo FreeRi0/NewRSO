@@ -2,13 +2,7 @@
     <div class="d-flex justify-end">
         <v-card class="px-14 py-15" max-width="580">
             <v-card-title class="text-h4 text-center">Регистрация</v-card-title>
-            <v-form action="#" method="post" @submit.prevent="RegisterUser">
-                <select>
-                    <option value="" selected>Выберете регион</option>
-                    <option v-for="region in regions" :value="region.value">
-                        {{ region.name }}
-                    </option>
-                </select>
+            <v-form action="#" method="post" @submit.prevent="submitForm">
                 <Input
                     placeholder="Фамилия"
                     name="surname"
@@ -64,7 +58,7 @@
                 <Button label="Зарегистрироваться" color="primary"></Button>
 
                 <v-card-text class="text-center">
-                    <router-link to="/login"
+                    <router-link to="/"
                         >У меня уже есть аккаунт</router-link
                     ></v-card-text
                 >
@@ -97,6 +91,7 @@ import {
     sameAs,
 } from '@vuelidate/validators';
 import { IMaskDirective } from 'vue-imask';
+import {SelectRegion} from '@shared/components/selects'
 
 const surnameUser = ref('');
 const nameUser = ref('');
@@ -106,26 +101,6 @@ const emailField = ref('');
 const loginField = ref('');
 const password = ref('');
 const confirmPassword = ref('');
-
-const regions = [];
-
-const onChangeRegion = () => {
-    axios
-        .get(
-            'http://api.geonames.org/postalCodeSearchJSON?postalcode=9011&maxRows=10&username=demo',
-        )
-        .then((res) => {
-            regions.values = res.data;
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-
-onMounted(() => {
-    onChangeRegion();
-})
 
 const rules = computed(() => ({
     surnameUser: {
@@ -203,13 +178,11 @@ const v = useVuelidate(rules, {
     emailField,
 });
 
-const router = useRouter();
 
-const RegisterUser = async () => {
-    await axios.post('url', {
-        headers: { 'Content-Type': 'application/json' },
-        // body: JSON.stringify()
-    });
-    await router.push('/');
-};
+const submitForm = () => {
+  v.value.$touch()
+  if (v.value.$error) return
+  alert('Form submitted')
+}
 </script>
+//
