@@ -1,42 +1,57 @@
 <template>
     <div class="container">
-        <!-- @update:modelValue=""  -->
         <div class="squads">
             <bannerCreate></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
-            <Search type="text" v-model:value="searchSquads"></Search>
-            <div class="squads-sort"></div>
-            <div class="sort-filters">
-                <div class="sort-select">
-                    <sortByEducation
-                        v-model="selectedSort"
-                        :options="sortOptions"
-                    ></sortByEducation>
-                </div>
-                <div class="sort-select">
-                    <sortByEducation
-                        v-model="sortBy"
-                        :options="sortOptionss"
-                    ></sortByEducation>
+            <!-- <Search
+                v-model="searchSquads"
+            ></Search> -->
+
+            <input type="text" class="squads-search__input"  v-model="searchSquads" >
+            <div class="squads-sort">
+                <div class="sort-layout">
+                    <Button icon="icon" @click="showVertical"></Button>
+                    <Button icon="icon" @click="showHorizontal"></Button>
                 </div>
 
-                <Button
-                    @click="ascending = !ascending"
-                    icon="icon"
-                    color="white"
-                ></Button>
+                <div class="sort-filters">
+                    <div class="sort-select">
+                        <sortByEducation
+                            v-model="selectedSort"
+                            :options="sortOptions"
+                        ></sortByEducation>
+                    </div>
+                    <div class="sort-select">
+                        <sortByEducation
+                            v-model="sortBy"
+                            :options="sortOptionss"
+                        ></sortByEducation>
+                    </div>
+
+                    <Button
+                        @click="ascending = !ascending"
+                        icon="icon"
+                        color="white"
+                    ></Button>
+                </div>
             </div>
-            <div class="squads-wrapper">
+            <div class="squads-wrapper" v-show="vertical">
                 <squadsList :squads="sortedSquads"></squadsList>
             </div>
+
+            <div class="horizontal" v-show="horizontal">
+                <horizontalList :squads="sortedSquads"></horizontalList>
+            </div>
+            <Button @click="squadsVisible += step" v-if="squadsVisible < squads.length" label="Показать еще"></Button>
+            <Button @click="squadsVisible =- step" v-else label="Свернуть все"></Button>
         </div>
     </div>
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Search } from '@shared/components/inputs';
+import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { squadsList } from '@features/Squads/components';
+import { squadsList, horizontalList } from '@features/Squads/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed } from 'vue';
 
@@ -263,10 +278,26 @@ const squads = ref([
     },
 ]);
 
+const squadsVisible = ref(12);
+
+const step = ref(10);
+
+
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
+const vertical = ref(true);
+const horizontal = ref(false);
+
 const searchSquads = ref('');
+
+const showVertical = () => {
+    vertical.value = !vertical.value;
+};
+
+const showHorizontal = () => {
+    horizontal.value = !horizontal.value;
+};
 
 const sortOptions = ref([
     {
@@ -274,13 +305,12 @@ const sortOptions = ref([
         name: 'Все',
     },
     {
-        value: 'education',
+        value: 'Амурская государственная медицинская академия',
         name: 'Амурская государственная медицинская академия',
     },
-    { value: 'education', name: 'Университет имени Баумана' },
-    { value: 'education', name: 'Университет имени Баумана' },
-    { value: 'education', name: 'РГГУ' },
-    { value: 'education', name: 'МГУ' },
+    { value: 'Университет имени Баумана', name: 'Университет имени Баумана' },
+    { value: 'РГГУ', name: 'РГГУ' },
+    { value: 'МГУ', name: 'МГУ' },
 ]);
 
 const sortOptionss = ref([
@@ -292,17 +322,19 @@ const sortOptionss = ref([
     { value: 'peoples', name: 'Количеству участников' },
 ]);
 
+
 const sortedSquads = computed(() => {
     let tempSquads = squads.value;
 
+    tempSquads = tempSquads.slice(0, squadsVisible.value);
 
     tempSquads = tempSquads.filter((item) => {
-            return item.title
-                .toUpperCase()
-                .includes(searchSquads.value.toUpperCase());
-        });
+        return item.title
+            .toUpperCase()
+            .includes(searchSquads.value.toUpperCase());
+    });
 
-        console.log(tempSquads);
+
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -351,7 +383,18 @@ const sortedSquads = computed(() => {
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
     }
+    &-sort {
+        display: flex;
+        justify-content: space-between;
+    }
 }
+
+.horizontal {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-row-gap: 16px;
+}
+
 .sort-filters {
     display: flex;
     box-sizing: border-box;
@@ -371,6 +414,22 @@ const sortedSquads = computed(() => {
         border-radius: 10px;
         height: 32px;
         width: 32px;
+    }
+}
+
+.squads-search {
+    position: relative;
+    box-sizing: border-box;
+    svg {
+        position: absolute;
+        top: 10px;
+        left: 16px;
+    }
+    &__input {
+        width: 100%;
+        padding: 13px 0px 10px 60px;
+        border-radius: 10px;
+        border: 1px solid black;
     }
 }
 </style>

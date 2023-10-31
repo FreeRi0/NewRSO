@@ -23,6 +23,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    selected: {
+        type: String,
+        default: ''
+    }
 });
 
 const emit = defineEmits(['update:modelValue']);
