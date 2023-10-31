@@ -1,3 +1,4 @@
-import SelectRegion from "./SelectRegion.vue";
+import SelectRegion from './SelectRegion.vue';
+import Select from './Select.vue';
 
-export {SelectRegion};
+export { SelectRegion, Select };

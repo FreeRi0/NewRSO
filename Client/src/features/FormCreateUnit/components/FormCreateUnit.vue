@@ -14,44 +14,56 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="name_squad"
+                            <label for="name-squad"
                                 >Название отряда
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Input
                                 class="form__input"
-                                id="name_squad"
+                                id="name-squad"
                                 label="Название отряда"
                                 placeholder="Например, Монолит"
                                 name="name_squad"
+                                v-model:value="data.squad"
                             />
                         </div>
 
-                        <v-text-field
-                            v-model="name4"
-                            hide-details
-                            label="Выберите направление"
-                            placeholder="Например, ССО"
-                        ></v-text-field>
+                        <div class="form__field">
+                            <label for="select-direction"
+                                >Выберите направление
+                                <sup class="valid-red">*</sup>
+                            </label>
+                            <Select
+                                name="select_direction"
+                                :items="directions"
+                                id="select-direction"
+                                placeholder="Например, ССО"
+                            ></Select>
+                        </div>
 
                         <div class="form__field">
-                            <label for="create_date"
+                            <label for="create-date"
                                 >Дата основания
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Input
-                                id="create_date"
+                                id="create-date"
                                 label="Дата основания"
                                 name="create_date"
                                 type="date"
+                                placeholder=""
+                                v-model:value="data.date"
                             />
                         </div>
 
                         <div class="form__field">
-                            <label for="select_region">Выберите регион</label>
+                            <label for="select-region">Выберите регион</label>
                             <SelectRegion
-                                id="select_region"
+                                clearable
+                                name="select_region"
+                                id="select-region"
                                 placeholder="Например, Алтайский край"
+                                v-model:value="data.region"
                             ></SelectRegion>
                         </div>
 
@@ -65,22 +77,36 @@
                                 label="Город"
                                 placeholder="Например, Барнаул"
                                 name="city"
+                                v-model:value="data.city"
                             />
                         </div>
 
-                        <v-text-field
-                            v-model="name5"
-                            hide-details
-                            label="Выберите учебное заведение"
-                            placeholder="Например, Алтайский государственный медицинский университет"
-                        ></v-text-field>
+                        <div class="form__field">
+                            <label for="select-institution"
+                                >Выберите учебное заведение
+                                <sup class="valid-red">*</sup>
+                            </label>
+                            <Select
+                                :items="institutions"
+                                name="select_institution"
+                                id="select-institution"
+                                placeholder="Например, Алтайский государственный медицинский университет"
+                                v-model:value="data.institution"
+                            ></Select>
+                        </div>
 
-                        <v-text-field
-                            v-model="name6"
-                            hide-details
-                            label="Командир отряда:"
-                            placeholder="Поиск по ФИО"
-                        ></v-text-field>
+                        <div class="form__field">
+                            <label for="beast"
+                                >Командир отряда:
+                                <sup class="valid-red">*</sup>
+                            </label>
+                            <v-text-field
+                                variant="outlined"
+                                id="beast"
+                                name="beast"
+                                placeholder="Поиск по ФИО"
+                            />
+                        </div>
                     </div>
 
                     <v-card-actions class="form__button-group">
@@ -122,7 +148,8 @@
                                 id="social-media-vk"
                                 label="Группа отряда ВКонтакте"
                                 placeholder="Например, https://vk.com/cco_monolit"
-                                name="social-media-vk"
+                                name="social_media_vk"
+                                v-model:value="data.vk"
                             />
                         </div>
 
@@ -135,7 +162,8 @@
                                 id="social-media-te"
                                 label="Группа отряда в Телеграмме"
                                 placeholder="Например, https://t.me/cco_monolit"
-                                name="social-media-te"
+                                name="social_media_te"
+                                v-model:value="data.te"
                             />
                         </div>
 
@@ -191,7 +219,8 @@
                                 id="squad-slogan"
                                 label="Девиз отряда"
                                 placeholder="Например, через тернии к звездам"
-                                name="squad-slogan"
+                                name="squad_slogan"
+                                v-model:value="data.slogan"
                             />
                         </div>
 
@@ -200,10 +229,36 @@
                                 >Об отряде
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <textarea
+                            <v-textarea
+                                variant="outlined"
+                                name="about_squad"
                                 id="about-squad"
                                 placeholder="Расскажите об отряде"
-                            ></textarea>
+                            ></v-textarea>
+                        </div>
+
+                        <div class="form__field">
+                            <label for="upload-logo">Добавьте логотип</label>
+                            <Avatar
+                                name="upload_logo"
+                                id="upload-logo"
+                                v-model:value="data.avatar"
+                            />
+                            <span class="form__footnote"
+                                >Рекомендуемый размер 80х80</span
+                            >
+                        </div>
+
+                        <div class="form__field">
+                            <label for="upload-banner">Добавьте баннер</label>
+                            <bannerPhoto
+                                name="upload_banner"
+                                id="upload-banner"
+                                v-model:value="data.banner"
+                            />
+                            <span class="form__footnote"
+                                >Рекомендуемый размер 1920х768</span
+                            >
                         </div>
 
                         <!-- <v-col cols="3">
@@ -239,9 +294,49 @@ import { ref } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { SelectRegion } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
+import { Avatar } from '@shared/components/imagescomp';
+import { bannerPhoto } from '@shared/components/imagescomp';
+import { Select } from '@shared/components/selects';
+
+const directions = ref([
+    { title: 'ССО' },
+    { title: 'СПО' },
+    { title: 'СОП' },
+    { title: 'ССервО' },
+    { title: 'ССхО' },
+    { title: 'СМО' },
+]);
+
+const institutions = [
+    { title: 'Алтайский государственный медицинский университет' },
+    { title: 'Амурская государственная медицинская академия' },
+    { title: 'Амурский государственный университет' },
+    { title: 'Владивостокский государственный медицинский университет' },
+    {
+        title: 'Владивостокский государственный университет экономики и сервиса',
+    },
+    { title: 'Дальневосточный государственный технический университет' },
+    { title: 'Дальневосточный федеральный университет' },
+];
+
+const data = ref({
+    squad: '',
+    direction: '',
+    date: '',
+    region: '',
+    city: '',
+    institution: '',
+    // beast: '',
+    vk: '',
+    te: '',
+    slogan: '',
+    // about: '',
+    avatar: '',
+    banner: '',
+});
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .form {
     font-family: 'BertSans', sans-serif;
     font-weight: 400;
@@ -309,7 +404,7 @@ import { Button } from '@shared/components/buttons';
 
         textarea {
             border: 1px solid #b6b6b6;
-            margin-top: 8px;
+            // margin-top: 8px;
             padding: 12px 20px;
             min-height: 101px;
             outline: none;
@@ -319,6 +414,18 @@ import { Button } from '@shared/components/buttons';
             border-radius: 10px;
         }
     }
+
+    // &__field-direction {
+    //     margin-bottom: 0;
+    //     padding: 8px 44px 8px 20px;
+    //     width: 100%;
+    //     font-size: 16px;
+    //     line-height: 21px;
+    //     color: #898989;
+    //     border: 1px solid #b6b6b6;
+    //     border-radius: 10px;
+    //     // min-height: auto;
+    // }
 
     &__button-group {
         display: flex;
@@ -346,53 +453,58 @@ import { Button } from '@shared/components/buttons';
             background-color: #ffffff;
         }
     }
-}
 
-.v-expansion-panels,
-.v-expansion-panel,
-.v-expansion-panel--active {
-    position: static;
+    .user-metric__avatar-wrapper {
+        align-self: flex-start;
+    }
+
+    .v-field__outline {
+        display: none;
+    }
+}
+//------------------------------------------------------------------------------
+//Стили для компонента аккордион
+.v-expansion-panel {
+    border-bottom: 1px solid #d9d9d9;
+
+    &__shadow {
+        box-shadow: none;
+    }
+
+    &--active,
+    &--after-active {
+        margin: 0;
+    }
+
+    &--active:not(:first-child) {
+        margin: 0;
+    }
+
+    &--active + .v-expansion-panel {
+        margin: 0;
+    }
+
+    .v-expansion-panel-title {
+        padding: 16px 0;
+        max-height: 60px;
+        font-family: 'Akrobat';
+        font-size: 24px;
+        line-height: 28px;
+        font-weight: 600;
+        background-color: transparent;
+
+        &--active {
+            margin-bottom: 40px;
+        }
+
+        &__overlay {
+            display: none;
+        }
+    }
 }
 
 .v-expansion-panel--active,
 .v-expansion-panel--after-active {
     margin: 0;
-}
-
-.v-expansion-panel--active
-    .v-expansion-panel-title.v-expansion-panel-title--active {
-    margin-bottom: 40px;
-}
-.v-expansion-panel-title,
-.v-expansion-panel-title--active {
-    padding: 16px 0;
-    height: 60px;
-    font-family: Akrobat;
-    font-size: 24px;
-    line-height: 28px;
-    font-weight: 600;
-    background-color: transparent;
-}
-
-.v-expansion-panel {
-    border-bottom: 1px solid #d9d9d9;
-}
-.v-expansion-panel-text__wrapper {
-    border: 1px solid #b6b6b6;
-    border-radius: 10px;
-}
-.v-expansion-panel-text.form__inner-content .v-expansion-panel-text__wrapper {
-    padding: 0;
-}
-.v-expansion-panel.v-expansion-panel--active {
-    background-color: transparent;
-    border: none;
-}
-.v-expansion-panel.v-expansion-panel--active .v-expansion-panel__shadow {
-    box-shadow: none;
-    border: none;
-    border-radius: 10px;
-    background-color: transparent;
-    width: 0;
 }
 </style>

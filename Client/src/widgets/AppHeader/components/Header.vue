@@ -67,7 +67,12 @@
                         <!--прописать в span кнопки логику изменения ее названия-->
                         <span>Карачаево-Черкесское региональное отделение</span>
                     </button>
-                    <div class="nav-user__location-container" v-if="show">
+                    <div
+                        class="nav-user__location-container"
+                        v-if="show"
+                        v-click-outside="onClickOutsideStandard"
+                        @click="model = true"
+                    >
                         <button
                             type="button"
                             @click="show = !show"
@@ -151,12 +156,17 @@ export default {
                 { title: 'Выйти из ЛК', link: '#' },
             ],
             show: false,
+            model: false,
         };
     },
     methods: {
         removeClass() {
             const menu = this.$refs.navMenu;
             menu.classList.toggle('no-visible');
+        },
+        onClickOutsideStandard() {
+            // this.model = false;
+            this.active = false;
         },
     },
 };
