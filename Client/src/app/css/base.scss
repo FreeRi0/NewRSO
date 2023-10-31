@@ -1,41 +1,41 @@
 :root {
-  --primary: #39BFBF;
-  --disabled: #B6B6B6;
-  --success: #00C48C;
-  --success-hover: #7DDFC3;
-  --info: #0084F4;
-  --info-hover: #66B5F8;
-  --warning: #FFA26B;
-  --warning-hover: #FFC7A6;
-  --danger: #FF647C;
-  --danger-hover: #FDAFBB;
-  --create: #FFFFFF;
+    --primary: #39bfbf;
+    --disabled: #b6b6b6;
+    --success: #00c48c;
+    --success-hover: #7ddfc3;
+    --info: #0084f4;
+    --info-hover: #66b5f8;
+    --warning: #ffa26b;
+    --warning-hover: #ffc7a6;
+    --danger: #ff647c;
+    --danger-hover: #fdafbb;
+    --create: #ffffff;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  background: #fafafa;
-  margin: 0;
+    background: #ffffff;
+    margin: 0;
 }
 
-body div[id="app"] {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+body div[id='app'] {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 ul {
-  list-style: none;
+    list-style: none;
 }
 .v-btn.v-btn--density-default {
-  height: 52px !important;
+    height: 52px !important;
 }
 a {
-  color: var(--primary-color);
-  text-decoration: none;
+    color: var(--primary-color);
+    text-decoration: none;
 }
 
 
@@ -46,32 +46,32 @@ img {
 
 
 .page-title {
-  font-size: 52px;
-  font-weight: 700;
+    font-size: 52px;
+    font-weight: 700;
 }
 
 .container {
-  margin: 0 auto;
-  padding: 0 130px;
-  max-width: 1440px;
-  width: 100%;
+    margin: 0 auto;
+    padding: 0 130px;
+    max-width: 1440px;
+    width: 100%;
 
-  @media(max-width:1440px) {
-    padding: 0 66px;
-    max-width: 1312px;
-  }
+    @media (max-width: 1440px) {
+        padding: 0 66px;
+        max-width: 1312px;
+    }
 
-  @media(max-width: 1024px) {
-    padding: 0 34px;
-    max-width: 960px;
-  }
+    @media (max-width: 1024px) {
+        padding: 0 34px;
+        max-width: 960px;
+    }
 
-  @media(max-width: 768px) {
-    padding: 0 16px;
-    max-width: 732px;
-  }
+    @media (max-width: 768px) {
+        padding: 0 16px;
+        max-width: 732px;
+    }
 
-  @media(max-width: 360px) {
-    padding: 0 16px;
-  }
+    @media (max-width: 360px) {
+        padding: 0 16px;
+    }
 }
