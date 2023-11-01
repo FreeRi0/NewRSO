@@ -50,6 +50,12 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
             },
+            {
+                path: '/AllHeadquarters',
+                name: 'allheadquarters',
+                component: () =>
+                    import('@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'),
+            },
         ],
     },
 ];
