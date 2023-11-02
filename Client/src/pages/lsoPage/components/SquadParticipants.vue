@@ -161,6 +161,9 @@ section.squad-tabs .container {
 
 
 
+
+
+
 .squad__navigation ul {
     list-style: none;
     display: flex;

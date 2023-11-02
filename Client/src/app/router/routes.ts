@@ -32,6 +32,18 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/privacy_policy/components/PolicyPage.vue'),
             },
             {
+
+                path: ':catchAll(.*)*',
+                name: '404',
+                component: () =>
+                    import('@pages/404Page/components/404Page.vue'),
+            },
+            {
+                path: '/lso',
+                name: 'lso',
+                component: () => import('@pages/lsoPage/lsoPage.vue'),
+            },
+
                 path: 'UserPage',
                 name: 'userpage',
                 component: () =>
@@ -57,6 +69,7 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'),
             },
+
 
         ],
     },
