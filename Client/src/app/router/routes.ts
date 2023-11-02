@@ -8,12 +8,6 @@ const routes: RouteRecordRaw[] = [
         children: [
             {
                 path: '',
-                name: 'Home',
-                component: () =>
-                    import('@pages/HomePage/components/HomePage.vue'),
-            },
-            {
-                path: '/Login',
                 name: 'Login',
                 component: () =>
                     import('@pages/LoginPage/components/LoginPage.vue'),
@@ -24,6 +18,7 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/RegisterPage/components/RegisterPage.vue'),
             },
+
             {
                 path: '/terms_of_use',
                 name: 'terms_of_use',
@@ -37,6 +32,7 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/privacy_policy/components/PolicyPage.vue'),
             },
             {
+
                 path: ':catchAll(.*)*',
                 name: '404',
                 component: () =>
@@ -47,6 +43,34 @@ const routes: RouteRecordRaw[] = [
                 name: 'lso',
                 component: () => import('@pages/lsoPage/lsoPage.vue'),
             },
+
+                path: 'UserPage',
+                name: 'userpage',
+                component: () =>
+                    import('@pages/UserPage/components/UserPage.vue'),
+            },
+            {
+                path: '/CreateLSO',
+                name: 'CreateLSO',
+                component: () =>
+                    import(
+                        '@pages/CreationOfDetachment/components/CreationOfDetachment.vue'
+                    ),
+            },
+            {
+                path: '/AllSquads',
+                name: 'allsquads',
+                component: () =>
+                    import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
+            },
+            {
+                path: '/AllHeadquarters',
+                name: 'allheadquarters',
+                component: () =>
+                    import('@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'),
+            },
+
+
         ],
     },
 ];

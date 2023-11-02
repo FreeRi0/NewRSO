@@ -8,18 +8,18 @@
                 >У вас еще нет аккаунта?
                 <router-link to="/Register">Зарегистрироваться</router-link>
             </v-card-text>
-            <v-form action="#" method="post">
+            <v-form action="#" method="post" @submit.prevent="LoginUser">
                 <Input
                     placeholder="Имя"
                     name="name"
-                    v-model:value="nameUser"
+                    v-model:value="data.nameUser"
                 />
-                <Input
+                <PasswordInputVue
                     placeholder="Пароль"
                     name="password"
-                    type="password"
-                    v-model:value="password"
-                />
+                    v-model:value="data.password"
+                ></PasswordInputVue>
+
                 <Button label="Войти" color="primary"></Button>
                 <v-card-text class="text-center"
                     >Забыли пароль?

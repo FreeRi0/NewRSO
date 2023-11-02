@@ -10,9 +10,11 @@ import * as directives from 'vuetify/directives'
 import router from './router';
 import store from './store';
 
+
 const vuetify = createVuetify({
-  components,
-  directives,
-})
+    components,
+    directives,
+    icons,
+});
 
 createApp(App).use(vuetify).use(router).use(store).mount('#app');

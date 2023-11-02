@@ -1,0 +1,1 @@
+export { default as Squads} from './components/squadsList.vue';
