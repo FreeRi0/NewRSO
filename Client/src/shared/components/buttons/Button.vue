@@ -12,12 +12,28 @@
         @click="clickOnButton"
     >
         <span v-if="icon">
-          
+            <img :src="`@app/assets/icon/ ${icon.icon}`" alt="icon" />
         </span>
         <span v-else>{{ label }}</span>
     </v-btn>
 </template>
 <script setup>
+import { ref} from 'vue';
+
+const icons = ref([
+    {
+        name: "switch",
+        icon: "switch.svg",
+    },
+    {
+        name: "darhboard",
+        icon: "darhboard.svg",
+    },
+    {
+        name: "menu",
+        icon: "menu.svg",
+    }
+])
 const props = defineProps({
     label: {
         type: String,
@@ -57,67 +73,66 @@ const clickOnButton = () => {
 </script>
 <style lang="scss" scoped>
 .btn {
-display: block;
-  margin: 20px auto;
-  padding: 16px 32px;
-  height: 52px;
-  color: white;
-  box-shadow: none;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  transition: .2s;
-  &_primary {
-    background: var(--primary);
-    border: 1px solid var(--primary);
-  }
-  &_second {
-    background: var(--second);
-    border: 1px solid var(--second);
-  }
-  &_success {
-    background: var(--success);
-    border: 1px solid var(--success);
-
-  }
-  &_info {
-    background: var(--info);
-    border: 1px solid var(--info);
-
-  }
-  &_warning {
-    background: var(--warning);
-    border: 1px solid var(--warning);
-
-  }
-  &_danger {
-    background: var(--danger);
-    border: 1px solid var(--danger);
-  }
-  &:disabled {
-    opacity: .6;
-    cursor: default;
-  }
-  &_rounded {
-    border-radius: 15px;
-  }
-  &_outlined {
-    background: transparent;
-    color: #000;
-    &:hover {
-      color: #fff;
-    }
-  }
-  &_icon {
-    padding: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  &_large {
-    height: 52px;
+    display: block;
+    margin: 20px auto;
     padding: 16px 32px;
-  }
+    height: 52px;
+    color: white;
+    box-shadow: none;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.2s;
+    &_primary {
+        background: var(--primary);
+        border: 1px solid var(--primary);
+    }
+    &_second {
+        background: var(--second);
+        border: 1px solid var(--second);
+    }
+    &_success {
+        background: var(--success);
+        border: 1px solid var(--success);
+    }
+    &_info {
+        background: var(--info);
+        border: 1px solid var(--info);
+    }
+    &_warning {
+        background: var(--warning);
+        border: 1px solid var(--warning);
+    }
+    &_danger {
+        background: var(--danger);
+        border: 1px solid var(--danger);
+    }
+    &:disabled {
+        opacity: 0.6;
+        cursor: default;
+    }
+    &_rounded {
+        border-radius: 15px;
+    }
+    &_outlined {
+        background: transparent;
+        color: #000;
+        &:hover {
+            color: #fff;
+        }
+    }
+    &_icon {
+        border: 1px solid #35383f;
+        border-radius: 10px;
+        height: 32px;
+        width: 32px;
+        margin: 0px;
+        margin-right: 8px;
+    }
+    &_large {
+        height: 52px;
+        padding: 16px 32px;
+    }
 }
 </style>

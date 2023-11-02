@@ -41,7 +41,7 @@ import { BannerComp } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
 import { photos } from '@shared/components/imagescomp';
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .user-wrapper {
     padding: 60px 0px 80px 0px;
 }

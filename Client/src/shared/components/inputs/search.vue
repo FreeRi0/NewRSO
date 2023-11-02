@@ -5,6 +5,7 @@
             id="search"
             class="squads-search__input"
             placeholder="Поищем отряд?"
+
         />
         <svg
             width="28"
@@ -23,7 +24,20 @@
         </svg>
     </div>
 </template>
-<script setup></script>
+<script setup>
+// const props = defineProps({
+//    value: {
+//         type: String,
+//         default: ''
+//     },
+// });
+
+// const emit = defineEmits(['update:value']);
+
+// const updateValue = (e) => {
+//     emit('update:value', e.target.value);
+// };
+</script>
 <style lang="scss" scoped>
 .squads-search {
     position: relative;
