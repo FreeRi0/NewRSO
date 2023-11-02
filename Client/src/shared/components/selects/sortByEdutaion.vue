@@ -1,6 +1,6 @@
 <template>
     <select
-        class="sort-select__input education-check"
+        class="sort-select__input"
         :value="modelValue"
         @change="changeOption"
     >
@@ -43,9 +43,8 @@ const changeOption = (event) => {
     font-size: 16px;
     padding: 6px 0px 7px 16px;
     margin-right: 8px;
-}
-
-.education-check {
-    width: 305px;
+    background: url(@app/assets/icon/arrow-down.svg) no-repeat right;
+    appearance: none;
+    background-position-x: calc(100% - 16px);
 }
 </style>

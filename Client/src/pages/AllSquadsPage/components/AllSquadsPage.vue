@@ -6,13 +6,17 @@
 
             <div class="squads-tabs">
                 <!-- <Button label="все"></Button> -->
-                <v-btn value="все" @click="picked" >Все</v-btn>
-                <div class="squad-tabs__item" v-for="cat in categories">
-                    <v-btn :value="category" @click="picked">{{ cat }}</v-btn>
-                    <!-- <Button :value="category">{{ cat }}</Button> -->
-                </div>
+                <v-btn  @click="picked = ''">Все</v-btn>
+                <v-btn
+                    :class="{ active: picked === category }"
+                    v-for="category in categories"
+                    :key="category"
+                    @click="picked = category"
+                    >{{ category }}</v-btn
+                >
+                <!-- <Button :value="category">{{ cat }}</Button> -->
             </div>
-
+            <!--  -->
             <div class="squads-search">
                 <input
                     type="text"
@@ -42,7 +46,7 @@
                     <Button icon="icon" color="white" @click="showVertical">
                     </Button>
                     <Button
-                        icon="icon"
+                        icon="switch"
                         color="white"
                         @click="showVertical"
                     ></Button>
@@ -51,6 +55,7 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <sortByEducation
+                            class="education"
                             v-model="selectedSort"
                             :options="educations"
                         ></sortByEducation>
@@ -328,7 +333,7 @@ const step = ref(10);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const picked = ref('все');
+const picked = ref('');
 
 const categories = ref([
     'Проводников',
@@ -372,16 +377,9 @@ const sortOptionss = ref([
 const sortedSquads = computed(() => {
     let tempSquads = squads.value;
 
-    // if (picked.value == 'all')
-    //     return tempSquads
-    //   else
-    //     return _.filter(tempSquads, x => x.category == picked.value)
-
     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-    tempSquads = tempSquads.filter((item) => {
-        return picked.value == 'все' || item.category == picked.value;
-    })
+
 
     tempSquads = tempSquads.filter((item) => {
         return selectedSort.value == 0 || item.education == selectedSort.value;
@@ -420,6 +418,15 @@ const sortedSquads = computed(() => {
             return a.peoples - b.peoples;
         }
     });
+
+    if (!picked.value) {
+        return tempSquads;
+    }
+
+    tempSquads = tempSquads.filter((item) => item.category === picked.value);
+
+
+
 
     if (!ascending.value) {
         tempSquads.reverse();
@@ -468,35 +475,11 @@ const sortedSquads = computed(() => {
     display: grid;
     grid-template-columns: 1fr;
     grid-row-gap: 16px;
+    margin-top: 40px;
 }
 
-.sort {
-    &-filters {
-        display: flex;
-        box-sizing: border-box;
-        align-items: center;
-        margin-top: 60px;
-    }
-    &-select {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-    }
-
-    &-layout {
-        display: flex;
-    }
-}
-
-.btn {
-    &_icon {
-        border: 1px solid #35383f;
-        border-radius: 10px;
-        height: 32px;
-        width: 32px;
-        margin: 0px;
-        margin-right: 8px;
-    }
+.active {
+    background-color: blue;
 }
 
 .squads-search {
@@ -513,5 +496,9 @@ const sortedSquads = computed(() => {
         border-radius: 10px;
         border: 1px solid black;
     }
+}
+
+.education {
+    width: 305px;
 }
 </style>

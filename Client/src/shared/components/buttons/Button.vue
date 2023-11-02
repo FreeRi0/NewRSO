@@ -12,12 +12,28 @@
         @click="clickOnButton"
     >
         <span v-if="icon">
-            <img :src="`@app/assets/icon ${icon}`" alt="icon">
+            <img :src="`@app/assets/icon/ ${icon.icon}`" alt="icon" />
         </span>
         <span v-else>{{ label }}</span>
     </v-btn>
 </template>
 <script setup>
+import { ref} from 'vue';
+
+const icons = ref([
+    {
+        name: "switch",
+        icon: "switch.svg",
+    },
+    {
+        name: "darhboard",
+        icon: "darhboard.svg",
+    },
+    {
+        name: "menu",
+        icon: "menu.svg",
+    }
+])
 const props = defineProps({
     label: {
         type: String,
@@ -107,10 +123,12 @@ const clickOnButton = () => {
         }
     }
     &_icon {
-        padding: 0;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
+        border: 1px solid #35383f;
+        border-radius: 10px;
+        height: 32px;
+        width: 32px;
+        margin: 0px;
+        margin-right: 8px;
     }
     &_large {
         height: 52px;

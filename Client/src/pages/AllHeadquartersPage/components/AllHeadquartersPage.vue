@@ -1,14 +1,15 @@
 <template>
-  <div class="container">
-    <bannerCreate></bannerCreate>
-    <h2 class="headquartes-title">Штабы СО ОО</h2>
-    <div class="squads-search">
+    <div class="container">
+        <div class="headquarters">
+            <bannerCreate></bannerCreate>
+            <h2 class="headquarters-title">Штабы СО ОО</h2>
+            <div class="headquarters-search">
                 <input
                     type="text"
                     id="search"
-                    class="squads-search__input"
+                    class="headquarters-search__input"
                     v-model="searchHeadquartes"
-                    placeholder="Поищем отряд?"
+                    placeholder="Начните вводить название штаба образовательной организации."
                 />
                 <svg
                     width="28"
@@ -26,7 +27,7 @@
                     />
                 </svg>
             </div>
-            <div class="squads-sort">
+            <div class="headquarters-sort">
                 <div class="sort-layout">
                     <Button icon="icon" color="white" @click="showVertical">
                     </Button>
@@ -40,14 +41,30 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <sortByEducation
-                            v-model="selectedSort"
-                            :options="educations"
+                            v-model="selectedSortDistrict"
+                            :options="district"
+                            class="filter-district"
+                        ></sortByEducation>
+                    </div>
+                    <div class="sort-select">
+                        <sortByEducation
+                            v-model="selectedSortRegion"
+                            :options="region"
+                            class="filter-region"
+                        ></sortByEducation>
+                    </div>
+                    <div class="sort-select">
+                        <sortByEducation
+                            v-model="selectedSortLocal"
+                            :options="local"
+                            class="filter-local"
                         ></sortByEducation>
                     </div>
                     <div class="sort-select">
                         <sortByEducation
                             v-model="sortBy"
                             :options="sortOptionss"
+                            class="sort-alphabet"
                         ></sortByEducation>
                     </div>
 
@@ -59,13 +76,17 @@
                 </div>
             </div>
 
-            <div class="squads-wrapper" v-show="vertical">
-                <squadsList :headquarters="sortedHeadquarters"></squadsList>
+            <div class="headquarters-wrapper" v-show="vertical">
+                <HeadquartersList
+                    :headquarters="sortedHeadquarters"
+                ></HeadquartersList>
             </div>
 
-            <!-- <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
-            </div> -->
+            <div class="horizontal" v-show="!vertical">
+                <horizontalHeadquarters
+                    :headquarters="sortedHeadquarters"
+                ></horizontalHeadquarters>
+            </div>
             <Button
                 @click="headquartersVisible += step"
                 v-if="headquartersVisible < headquarters.length"
@@ -76,215 +97,199 @@
                 v-else
                 label="Свернуть все"
             ></Button>
-  </div>
+        </div>
+    </div>
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { squadsList, horizontalList } from '@features/Squads/components';
+import {
+    HeadquartersList,
+    horizontalHeadquarters,
+} from '@features/Headquarters/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed } from 'vue';
 
 const headquarters = ref([
-   {
-    desc: "Штаб КГПИ",
-    category: "Строительные",
-    full: "Штаб СО Коми государственного педагогического института",
-    image: 'squad-logo.png',
-    peoples: 12,
-    createdAt: "2022-12-10",
-    education: "Амурская государственная медицинская академия",
-  },
-  {
-    category: "Проводников",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 19,
-    createdAt: "2023-02-10",
-    education: "Амурский государственный университет",
-  },
-  {
-    category: "Медицинские",
-    desc: "ШОО-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 5,
-    createdAt: "2021-12-01",
-    education: "МГУ",
-  },
-  {
-    category: "Педагогические",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 8,
-    createdAt: "2020-11-10",
-    education: "Университет имени Баумана",
-  },
-  {
-    category: "Строительные",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 7,
-    createdAt: "2021-02-12",
-    education: "Амурская государственная медицинская академия",
-  },
-  {
-    category: "Сервисные",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 14,
-    createdAt: "2012-12-01",
-    education: "Амурский государственный университет",
-  },
-  {
-    category: "Сельскохозяйственные",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 12,
-    createdAt: "2020-12-18",
-    education: "МГУ",
-  },
-  {
-    category: "Медицинские",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 22,
-    createdAt: "2021-04-13",
-    education: "Университет имени Баумана",
-  },
-  {
-    category: "Педагогические",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 12,
-    createdAt: "2022-12-10",
-    education: "Амурская государственная медицинская академия",
-  },
-  {
-    category: "Путинные",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 2,
-    createdAt: "2022-12-10",
-    education: "Амурский государственный университет",
-  },
-  {
-    category: "Сервисные",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 5,
-    createdAt: "2022-12-10",
-    education: "МГУ",
-  },
-  {
-    category: "Строительные",
-    desc: "ССО",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 14,
-    createdAt: "2022-12-10",
-    education: "Университет имени Баумана",
-  },
-  {
-    category: "Проводников",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 22,
-    createdAt: "2022-12-10",
-    education: "Амурская государственная медицинская академия",
-  },
-  {
-    category: "Медицинские",
-    desc: "ССО",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 10,
-    createdAt: "2022-12-10",
-    education: "Амурский государственный университет",
-  },
-  {
-    category: "Педагогические",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 4,
-    createdAt: "2022-12-10",
-    education: "МГУ",
-  },
-  {
-    category: "Сельскохозяйственные",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 6,
-    createdAt: "2022-12-10",
-    education: "Университет имени Баумана",
-  },
-  {
-    category: "Сельскохозяйственные",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 25,
-    createdAt: "2022-12-10",
-    education: "Амурская государственная медицинская академия",
-  },
-  {
-    category: "Сельскохозяйственные",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 11,
-    createdAt: "2022-12-10",
-    education: "Амурский государственный университет",
-  },
-  {
-    category: "Медицинские",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 17,
-    createdAt: "2022-12-10",
-    education: "МГУ",
-  },
-  {
-    category: "Педагогические",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 15,
-    createdAt: "2022-12-10",
-    education: "РГГУ",
-  },
-  {
-    category: "Путинные",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 10,
-    createdAt: "2022-12-10",
-    education: "Амурская государственная медицинская академия",
-  },
-  {
-    category: "Сервисные",
-    desc: "СОП-1",
-    full: "Штаб СО Новосибирского Государственного Педагогического Университета",
-    image: 'squad-logo.png',
-    peoples: 12,
-    createdAt: "2022-12-10",
-    education: "Амурский государственный университет",
-  },
+    {
+        desc: 'Штаб КГПИ',
+        category: 'Строительные',
+        full: 'Штаб СО Коми государственного педагогического института',
+        image: 'squad-logo.png',
+        peoples: 12,
+        createdAt: '2022-12-10',
+        education: 'Амурская государственная медицинская академия',
+    },
+    {
+        category: 'Проводников',
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 19,
+        createdAt: '2023-02-10',
+        education: 'Амурский государственный университет',
+    },
+    {
+        desc: 'ШОО-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 5,
+        createdAt: '2021-12-01',
+        education: 'МГУ',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 8,
+        createdAt: '2020-11-10',
+        education: 'Университет имени Баумана',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 7,
+        createdAt: '2021-02-12',
+        education: 'Амурская государственная медицинская академия',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 14,
+        createdAt: '2012-12-01',
+        education: 'Амурский государственный университет',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 12,
+        createdAt: '2020-12-18',
+        education: 'МГУ',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 22,
+        createdAt: '2021-04-13',
+        education: 'Университет имени Баумана',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 12,
+        createdAt: '2022-12-10',
+        education: 'Амурская государственная медицинская академия',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 2,
+        createdAt: '2022-12-10',
+        education: 'Амурский государственный университет',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 5,
+        createdAt: '2022-12-10',
+        education: 'МГУ',
+    },
+    {
+        desc: 'ССО',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 14,
+        createdAt: '2022-12-10',
+        education: 'Университет имени Баумана',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 22,
+        createdAt: '2022-12-10',
+        education: 'Амурская государственная медицинская академия',
+    },
+    {
+        desc: 'ССО',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 10,
+        createdAt: '2022-12-10',
+        education: 'Амурский государственный университет',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 4,
+        createdAt: '2022-12-10',
+        education: 'МГУ',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 6,
+        createdAt: '2022-12-10',
+        education: 'Университет имени Баумана',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 25,
+        createdAt: '2022-12-10',
+        education: 'Амурская государственная медицинская академия',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 11,
+        createdAt: '2022-12-10',
+        education: 'Амурский государственный университет',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 17,
+        createdAt: '2022-12-10',
+        education: 'МГУ',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 15,
+        createdAt: '2022-12-10',
+        education: 'РГГУ',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 10,
+        createdAt: '2022-12-10',
+        education: 'Амурская государственная медицинская академия',
+    },
+    {
+        desc: 'СОП-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
+        image: 'squad-logo.png',
+        peoples: 12,
+        createdAt: '2022-12-10',
+        education: 'Амурский государственный университет',
+    },
 ]);
 
 const headquartersVisible = ref(12);
@@ -293,7 +298,6 @@ const step = ref(10);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
-
 
 const vertical = ref(true);
 
@@ -305,12 +309,34 @@ const showVertical = () => {
 
 const local = ref([
     {
-        value: 'Амурская государственная медицинская академия',
-        name: 'Амурская государственная медицинская академия',
+        value: 'Дальневосточный федеральный округ',
+        name: 'Дальневосточный федеральный округ',
     },
-    { value: 'Университет имени Баумана', name: 'Университет имени Баумана' },
-    { value: 'РГГУ', name: 'РГГУ' },
-    { value: 'МГУ', name: 'МГУ' },
+    {
+        value: 'Приволжский федеральный округ',
+        name: 'Приволжский федеральный округ',
+    },
+    {
+        value: 'Северо-Западный федеральный округ',
+        name: 'Северо-Западный федеральный округ',
+    },
+    {
+        value: 'Северо-Кавказский федеральный округ',
+        name: 'Северо-Кавказский федеральный округ',
+    },
+    {
+        value: 'Сибирский федеральный округ',
+        name: 'Сибирский федеральный округ',
+    },
+    {
+        value: 'Уральский федеральный округ',
+        name: 'Уральский федеральный округ',
+    },
+    {
+        value: 'Центральный федеральный округ',
+        name: 'Центральный федеральный округ',
+    },
+    { value: 'Южный федеральный округ', name: 'Южный федеральный округ' },
 ]);
 
 const selectedSort = ref(0);
@@ -327,7 +353,6 @@ const sortOptionss = ref([
 const sortedHeadquarters = computed(() => {
     let tempHeadquartes = headquarters.value;
 
-
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
 
     // tempSquads = tempSquads.filter((item) => {
@@ -340,41 +365,121 @@ const sortedHeadquarters = computed(() => {
             .includes(searchHeadquartes.value.toUpperCase());
     });
 
-    // tempHeadquartes = tempHeadquartes.sort((a, b) => {
-    //     if (sortBy.value == 'alphabetically') {
-    //         let fa = a.title.toLowerCase(),
-    //             fb = b.title.toLowerCase();
+    tempHeadquartes = tempHeadquartes.sort((a, b) => {
+        if (sortBy.value == 'alphabetically') {
+            let fa = a.desc.toLowerCase(),
+                fb = b.desc.toLowerCase();
 
-    //         if (fa < fb) {
-    //             return -1;
-    //         }
-    //         if (fa > fb) {
-    //             return 1;
-    //         }
-    //         return 0;
-    //     } else if (sortBy.value == 'createdAt') {
-    //         let fc = a.createdAt,
-    //             fn = b.createdAt;
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        } else if (sortBy.value == 'createdAt') {
+            let fc = a.createdAt,
+                fn = b.createdAt;
 
-    //         if (fc < fn) {
-    //             return -1;
-    //         }
-    //         if (fc > fn) {
-    //             return 1;
-    //         }
-    //         return 0;
-    //     } else if (sortBy.value == 'peoples') {
-    //         return a.peoples - b.peoples;
-    //     }
-    // });
+            if (fc < fn) {
+                return -1;
+            }
+            if (fc > fn) {
+                return 1;
+            }
+            return 0;
+        } else if (sortBy.value == 'peoples') {
+            return a.peoples - b.peoples;
+        }
+    });
 
     if (!ascending.value) {
-      tempHeadquartes.reverse();
+        tempHeadquartes.reverse();
     }
 
     return tempHeadquartes;
 });
 </script>
 <style lang="scss" scoped>
+.headquarters {
+    padding: 60px 0px 60px 0px;
+    &-title {
+        margin-bottom: 40px;
+        font-size: 52px;
+    }
+    &-sort {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+    &-search {
+        position: relative;
+        box-sizing: border-box;
+        svg {
+            position: absolute;
+            top: 10px;
+            left: 16px;
+        }
+        &__input {
+            width: 100%;
+            padding: 13px 0px 10px 60px;
+            border-radius: 10px;
+            border: 1px solid black;
+        }
+    }
+    &-wrapper {
+        padding: 60px 0px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-row-gap: 40px;
+        /* box-shadow: 1em 2em 2.5em rgba(1, 2, 68, 0.08); */
+    }
+}
+.headquarters-wrapper__item {
+    margin: 0px auto;
+    width: 180px;
+    &-category {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 20px;
+        font-family: 'Akrobat';
+        color: #1e1e1e;
+        &-full {
+            text-align: center;
+            font-size: 20px;
+            font-family: 'Akrobat';
+            margin-left: 20px;
+            margin-right: 5px;
+            color: #1e1e1e;
+        }
+    }
+    &-title {
+        text-align: center;
+        font-size: 20px;
+        font-family: 'Akrobat';
+        color: #1e1e1e;
+    }
+}
 
+.horizontal {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-row-gap: 16px;
+}
+
+.filter {
+    &-local {
+        width: 186px;
+    }
+    &-region {
+        width: 227px;
+    }
+
+    &-district {
+        width: 193px;
+    }
+}
 </style>

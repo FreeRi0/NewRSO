@@ -7,7 +7,7 @@
         <div class="round-img">
             <img :src="'./assets/logo/' + headquarter.image" alt="logo" />
         </div>
-        <div class="container-squad">
+        <div class="container-headquarters">
             <p class="headquarters-wrapper__item-title">
                 {{ headquarter.desc }}
             </p>

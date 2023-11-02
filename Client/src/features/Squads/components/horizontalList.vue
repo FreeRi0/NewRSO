@@ -21,10 +21,6 @@ const props = defineProps({
 </script>
 <style lang="scss">
 .horizontal {
-    display: none;
-    padding: 60px 0px;
-    grid-template-columns: 1fr;
-    grid-row-gap: 16px;
     &-item {
         border: 1px solid grey;
         border-radius: 10px;

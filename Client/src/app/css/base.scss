@@ -27,6 +27,29 @@ body div[id="app"] {
   min-height: 100vh;
 }
 
+.sort {
+  &-filters {
+      display: flex;
+      box-sizing: border-box;
+      align-items: center;
+      margin-top: 60px;
+  }
+  &-select {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+  }
+
+  &-layout {
+      display: flex;
+  }
+  &-alphabet {
+    width: 212px;
+  }
+}
+
+
+
 ul {
   list-style: none;
 }
