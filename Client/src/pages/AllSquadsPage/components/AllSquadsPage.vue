@@ -43,7 +43,7 @@
             </div>
             <div class="squads-sort">
                 <div class="sort-layout">
-                    <Button icon="icon" color="white" @click="showVertical">
+                    <Button icon="switch" color="white" @click="showVertical">
                     </Button>
                     <Button
                         icon="switch"
@@ -424,8 +424,6 @@ const sortedSquads = computed(() => {
     }
 
     tempSquads = tempSquads.filter((item) => item.category === picked.value);
-
-
 
 
     if (!ascending.value) {

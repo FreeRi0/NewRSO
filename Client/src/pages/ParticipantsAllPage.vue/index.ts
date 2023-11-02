@@ -1,0 +1,1 @@
+export { default as ParticipantsAll} from './components/ParticipantsAll.vue';

@@ -12,13 +12,15 @@
         @click="clickOnButton"
     >
         <span v-if="icon">
-            <img :src="`@app/assets/icon/ ${icon.icon}`" alt="icon" />
+            <img :src="`assets/icon/${res}.svg`" alt="icon" />
         </span>
         <span v-else>{{ label }}</span>
     </v-btn>
 </template>
 <script setup>
-import { ref} from 'vue';
+import { ref, computed} from 'vue';
+
+const res = ref();
 
 const icons = ref([
     {
@@ -34,6 +36,7 @@ const icons = ref([
         icon: "menu.svg",
     }
 ])
+
 const props = defineProps({
     label: {
         type: String,
@@ -65,6 +68,11 @@ const props = defineProps({
     },
 });
 
+// const res = computed(() => {
+//  return icons.value.find((item) => item.name  == name);
+// })
+
+
 const emit = defineEmits(['click']);
 
 const clickOnButton = () => {
@@ -76,7 +84,7 @@ const clickOnButton = () => {
     display: block;
     margin: 20px auto;
     padding: 16px 32px;
-    height: 52px;
+    min-height: 52px;
     color: white;
     box-shadow: none;
     border-radius: 10px;
@@ -125,7 +133,7 @@ const clickOnButton = () => {
     &_icon {
         border: 1px solid #35383f;
         border-radius: 10px;
-        height: 32px;
+        min-height: 32px;
         width: 32px;
         margin: 0px;
         margin-right: 8px;
