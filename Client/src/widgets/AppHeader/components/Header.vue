@@ -134,15 +134,15 @@ export default {
     data() {
         return {
             pages: [
-                { title: 'ЛСО', link: '#' },
-                { title: 'Штабы СО ОО', link: '#' },
+                { title: 'ЛСО', link: '/allSquads' },
+                { title: 'Штабы СО ОО', link: '/AllHeadquarters' },
                 { title: 'Местные штабы', link: '#' },
                 { title: 'Региональные штабы', link: '#' },
                 { title: 'Окружные штабы', link: '#' },
                 { title: 'Центральный штаб', link: '#' },
             ],
             userPages: [
-                { title: 'Моя страница', link: '#' },
+                { title: 'Моя страница', link: '/UserPage' },
                 { title: 'Мой отряд', link: '#' },
                 { title: 'Штаб СО ОО', link: '#' },
                 { title: 'Местный штаб', link: '#' },

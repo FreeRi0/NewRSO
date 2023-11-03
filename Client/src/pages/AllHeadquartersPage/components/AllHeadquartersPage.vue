@@ -1,29 +1,15 @@
 <template>
     <div class="container">
-        <div class="squads">
+        <div class="headquarters">
             <bannerCreate></bannerCreate>
-            <h2 class="squads-title">Студенческие отряды</h2>
-
-            <div class="squads-tabs">
-                <!-- <Button label="все"></Button> -->
-                <v-btn  @click="picked = ''">Все</v-btn>
-                <v-btn
-                    :class="{ active: picked === category }"
-                    v-for="category in categories"
-                    :key="category"
-                    @click="picked = category"
-                    >{{ category }}</v-btn
-                >
-                <!-- <Button :value="category">{{ cat }}</Button> -->
-            </div>
-            <!--  -->
-            <div class="squads-search">
+            <h2 class="headquarters-title">Штабы СО ОО</h2>
+            <div class="headquarters-search">
                 <input
                     type="text"
                     id="search"
-                    class="squads-search__input"
-                    v-model="searchSquads"
-                    placeholder="Поищем отряд?"
+                    class="headquarters-search__input"
+                    v-model="searchHeadquartes"
+                    placeholder="Начните вводить название штаба образовательной организации."
                 />
                 <svg
                     width="28"
@@ -41,12 +27,12 @@
                     />
                 </svg>
             </div>
-            <div class="squads-sort">
+            <div class="headquarters-sort">
                 <div class="sort-layout">
-                    <Button icon="switch" color="white" @click="showVertical">
+                    <Button icon="icon" color="white" @click="showVertical">
                     </Button>
                     <Button
-                        icon="switch"
+                        icon="icon"
                         color="white"
                         @click="showVertical"
                     ></Button>
@@ -55,15 +41,30 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <sortByEducation
-                            class="education"
-                            v-model="selectedSort"
-                            :options="educations"
+                            v-model="selectedSortDistrict"
+                            :options="district"
+                            class="filter-district"
+                        ></sortByEducation>
+                    </div>
+                    <div class="sort-select">
+                        <sortByEducation
+                            v-model="selectedSortRegion"
+                            :options="region"
+                            class="filter-region"
+                        ></sortByEducation>
+                    </div>
+                    <div class="sort-select">
+                        <sortByEducation
+                            v-model="selectedSortLocal"
+                            :options="local"
+                            class="filter-local"
                         ></sortByEducation>
                     </div>
                     <div class="sort-select">
                         <sortByEducation
                             v-model="sortBy"
                             :options="sortOptionss"
+                            class="sort-alphabet"
                         ></sortByEducation>
                     </div>
 
@@ -75,20 +76,24 @@
                 </div>
             </div>
 
-            <div class="squads-wrapper" v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
+            <div class="headquarters-wrapper" v-show="vertical">
+                <HeadquartersList
+                    :headquarters="sortedHeadquarters"
+                ></HeadquartersList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
+                <horizontalHeadquarters
+                    :headquarters="sortedHeadquarters"
+                ></horizontalHeadquarters>
             </div>
             <Button
-                @click="squadsVisible += step"
-                v-if="squadsVisible < squads.length"
+                @click="headquartersVisible += step"
+                v-if="headquartersVisible < headquarters.length"
                 label="Показать еще"
             ></Button>
             <Button
-                @click="squadsVisible -= step"
+                @click="headquartersVisible -= step"
                 v-else
                 label="Свернуть все"
             ></Button>
@@ -99,226 +104,187 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { squadsList, horizontalList } from '@features/Squads/components';
+import {
+    HeadquartersList,
+    horizontalHeadquarters,
+} from '@features/Headquarters/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed } from 'vue';
 
-const squads = ref([
+const headquarters = ref([
     {
-        title: 'Инвар',
+        desc: 'Штаб КГПИ',
         category: 'Строительные',
-        desc: 'ССО',
-        full: 'Студенческий строительный отряд',
+        full: 'Штаб СО Коми государственного педагогического института',
         image: 'squad-logo.png',
         peoples: 12,
         createdAt: '2022-12-10',
         education: 'Амурская государственная медицинская академия',
     },
     {
-        title: 'Звездочки',
         category: 'Проводников',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 19,
         createdAt: '2023-02-10',
         education: 'Амурский государственный университет',
     },
     {
-        title: 'Помощь рядом',
-        category: 'Медицинские',
-        desc: 'ССО',
-        full: 'Студенческий строительный отряд',
+        desc: 'ШОО-1',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 5,
         createdAt: '2021-12-01',
         education: 'МГУ',
     },
     {
-        title: 'Мафия',
-        category: 'Педагогические',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 8,
         createdAt: '2020-11-10',
         education: 'Университет имени Баумана',
     },
     {
-        title: 'Юмористы',
-        category: 'Строительные',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 7,
         createdAt: '2021-02-12',
         education: 'Амурская государственная медицинская академия',
     },
     {
-        title: 'Сокол',
-        category: 'Сервисные',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 14,
         createdAt: '2012-12-01',
         education: 'Амурский государственный университет',
     },
     {
-        title: 'Гиена',
-        category: 'Сельскохозяйственные',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 12,
         createdAt: '2020-12-18',
         education: 'МГУ',
     },
     {
-        title: 'Санитары',
-        category: 'Медицинские',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 22,
         createdAt: '2021-04-13',
         education: 'Университет имени Баумана',
     },
     {
-        title: 'Ежики',
-        category: 'Педагогические',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 12,
         createdAt: '2022-12-10',
         education: 'Амурская государственная медицинская академия',
     },
     {
-        title: 'Бригада',
-        category: 'Путинные',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 2,
         createdAt: '2022-12-10',
         education: 'Амурский государственный университет',
     },
     {
-        title: 'Юниоры',
-        category: 'Сервисные',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 5,
         createdAt: '2022-12-10',
         education: 'МГУ',
     },
     {
-        title: 'Студенты МГИМО',
-        category: 'Строительные',
         desc: 'ССО',
-        full: 'Студенческий строительный отряд',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 14,
         createdAt: '2022-12-10',
         education: 'Университет имени Баумана',
     },
     {
-        title: 'Барбарики',
-        category: 'Проводников',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 22,
         createdAt: '2022-12-10',
         education: 'Амурская государственная медицинская академия',
     },
     {
-        title: 'Спортсмены МГУ',
-        category: 'Медицинские',
         desc: 'ССО',
-        full: 'Студенческий строительный отряд',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 10,
         createdAt: '2022-12-10',
         education: 'Амурский государственный университет',
     },
     {
-        title: 'Ковбои',
-        category: 'Педагогические',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 4,
         createdAt: '2022-12-10',
         education: 'МГУ',
     },
     {
-        title: 'Пришельцы',
-        category: 'Сельскохозяйственные',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 6,
         createdAt: '2022-12-10',
         education: 'Университет имени Баумана',
     },
     {
-        title: 'Луч света',
-        category: 'Сельскохозяйственные',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 25,
         createdAt: '2022-12-10',
         education: 'Амурская государственная медицинская академия',
     },
     {
-        title: 'Мираж',
-        category: 'Сельскохозяйственные',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 11,
         createdAt: '2022-12-10',
         education: 'Амурский государственный университет',
     },
     {
-        title: 'Градусники',
-        category: 'Медицинские',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 17,
         createdAt: '2022-12-10',
         education: 'МГУ',
     },
     {
-        title: 'Студенты РГСУ',
-        category: 'Педагогические',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 15,
         createdAt: '2022-12-10',
         education: 'РГГУ',
     },
     {
-        title: 'Топ',
-        category: 'Путинные',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 10,
         createdAt: '2022-12-10',
         education: 'Амурская государственная медицинская академия',
     },
     {
-        title: 'Белки',
-        category: 'Сервисные',
         desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
+        full: 'Штаб СО Новосибирского Государственного Педагогического Университета',
         image: 'squad-logo.png',
         peoples: 12,
         createdAt: '2022-12-10',
@@ -326,41 +292,51 @@ const squads = ref([
     },
 ]);
 
-const squadsVisible = ref(12);
+const headquartersVisible = ref(12);
 
 const step = ref(10);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const picked = ref('');
-
-const categories = ref([
-    'Проводников',
-    'Строительные',
-    'Педагогические',
-    'Сельскохозяйственные',
-    'Сервисные',
-    'Медицинские',
-    'Путинные',
-]);
-
 const vertical = ref(true);
 
-const searchSquads = ref('');
+const searchHeadquartes = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
 
-const educations = ref([
+const local = ref([
     {
-        value: 'Амурская государственная медицинская академия',
-        name: 'Амурская государственная медицинская академия',
+        value: 'Дальневосточный федеральный округ',
+        name: 'Дальневосточный федеральный округ',
     },
-    { value: 'Университет имени Баумана', name: 'Университет имени Баумана' },
-    { value: 'РГГУ', name: 'РГГУ' },
-    { value: 'МГУ', name: 'МГУ' },
+    {
+        value: 'Приволжский федеральный округ',
+        name: 'Приволжский федеральный округ',
+    },
+    {
+        value: 'Северо-Западный федеральный округ',
+        name: 'Северо-Западный федеральный округ',
+    },
+    {
+        value: 'Северо-Кавказский федеральный округ',
+        name: 'Северо-Кавказский федеральный округ',
+    },
+    {
+        value: 'Сибирский федеральный округ',
+        name: 'Сибирский федеральный округ',
+    },
+    {
+        value: 'Уральский федеральный округ',
+        name: 'Уральский федеральный округ',
+    },
+    {
+        value: 'Центральный федеральный округ',
+        name: 'Центральный федеральный округ',
+    },
+    { value: 'Южный федеральный округ', name: 'Южный федеральный округ' },
 ]);
 
 const selectedSort = ref(0);
@@ -374,27 +350,25 @@ const sortOptionss = ref([
     { value: 'peoples', name: 'Количеству участников' },
 ]);
 
-const sortedSquads = computed(() => {
-    let tempSquads = squads.value;
+const sortedHeadquarters = computed(() => {
+    let tempHeadquartes = headquarters.value;
 
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
+    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
 
+    // tempSquads = tempSquads.filter((item) => {
+    //     return selectedSort.value == 0 || item.education == selectedSort.value;
+    // });
 
-
-    tempSquads = tempSquads.filter((item) => {
-        return selectedSort.value == 0 || item.education == selectedSort.value;
-    });
-
-    tempSquads = tempSquads.filter((item) => {
-        return item.title
+    tempHeadquartes = tempHeadquartes.filter((item) => {
+        return item.desc
             .toUpperCase()
-            .includes(searchSquads.value.toUpperCase());
+            .includes(searchHeadquartes.value.toUpperCase());
     });
 
-    tempSquads = tempSquads.sort((a, b) => {
+    tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.title.toLowerCase(),
-                fb = b.title.toLowerCase();
+            let fa = a.desc.toLowerCase(),
+                fb = b.desc.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -419,84 +393,93 @@ const sortedSquads = computed(() => {
         }
     });
 
-    if (!picked.value) {
-        return tempSquads;
-    }
-
-    tempSquads = tempSquads.filter((item) => item.category === picked.value);
-
-
     if (!ascending.value) {
-        tempSquads.reverse();
+        tempHeadquartes.reverse();
     }
 
-    return tempSquads;
+    return tempHeadquartes;
 });
 </script>
-<style lang="scss">
-.squads {
+<style lang="scss" scoped>
+.headquarters {
     padding: 60px 0px 60px 0px;
     &-title {
+        margin-bottom: 40px;
         font-size: 52px;
-    }
-    &-wrapper {
-        padding: 60px 0px;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        grid-row-gap: 40px;
     }
     &-sort {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
     }
-    &-tabs {
-        margin-top: 20px;
-        margin-bottom: 40px;
-        display: flex;
-        flex-wrap: wrap;
-        &__item {
-            padding: 10px 24px;
-            border: 2px solid black;
-            border-radius: 30px;
+    &-search {
+        position: relative;
+        box-sizing: border-box;
+        svg {
+            position: absolute;
+            top: 10px;
+            left: 16px;
+        }
+        &__input {
+            width: 100%;
+            padding: 13px 0px 10px 60px;
+            border-radius: 10px;
+            border: 1px solid black;
+        }
+    }
+    &-wrapper {
+        padding: 60px 0px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-row-gap: 40px;
+        /* box-shadow: 1em 2em 2.5em rgba(1, 2, 68, 0.08); */
+    }
+}
+.headquarters-wrapper__item {
+    margin: 0px auto;
+    width: 180px;
+    &-category {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 20px;
+        font-family: 'Akrobat';
+        color: #1e1e1e;
+        &-full {
             text-align: center;
             font-size: 20px;
-            background-color: white;
-            font-family: 'Bert Sans';
-            margin: 20px 20px 0px 0px;
-            cursor: pointer;
+            font-family: 'Akrobat';
+            margin-left: 20px;
+            margin-right: 5px;
+            color: #1e1e1e;
         }
+    }
+    &-title {
+        text-align: center;
+        font-size: 20px;
+        font-family: 'Akrobat';
+        color: #1e1e1e;
     }
 }
 
 .horizontal {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-row-gap: 16px;
-    margin-top: 40px;
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-row-gap: 16px;
 }
 
-.active {
-    background-color: blue;
-}
-
-.squads-search {
-    position: relative;
-    box-sizing: border-box;
-    svg {
-        position: absolute;
-        top: 10px;
-        left: 16px;
+.filter {
+    &-local {
+        width: 186px;
     }
-    &__input {
-        width: 100%;
-        padding: 13px 0px 10px 60px;
-        border-radius: 10px;
-        border: 1px solid black;
+    &-region {
+        width: 227px;
     }
-}
 
-.education {
-    width: 305px;
+    &-district {
+        width: 193px;
+    }
 }
 </style>
