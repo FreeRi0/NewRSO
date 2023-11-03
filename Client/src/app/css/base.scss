@@ -27,12 +27,38 @@ body div[id='app'] {
     min-height: 100vh;
 }
 
+.sort {
+  &-filters {
+      display: flex;
+      box-sizing: border-box;
+      align-items: center;
+      margin-top: 60px;
+  }
+  &-select {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+  }
+
+  &-layout {
+      display: flex;
+  }
+  &-alphabet {
+    width: 212px;
+  }
+}
+
+
+
 ul {
     list-style: none;
 }
 .v-btn.v-btn--density-default {
-    height: 52px !important;
+
+  height: 52px;
+
 }
+
 a {
     color: var(--primary-color);
     text-decoration: none;

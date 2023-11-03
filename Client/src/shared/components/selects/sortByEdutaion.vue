@@ -1,10 +1,10 @@
 <template>
     <select
-        class="sort-select__input education-check"
+        class="sort-select__input"
         :value="modelValue"
         @change="changeOption"
     >
-        <option disabled value="">Выберите из списка</option>
+        <option value="0">Выберите из списка</option>
         <option
             v-for="option in options"
             :key="option.value"
@@ -23,6 +23,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    selected: {
+        type: String,
+        default: ''
+    }
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -39,9 +43,8 @@ const changeOption = (event) => {
     font-size: 16px;
     padding: 6px 0px 7px 16px;
     margin-right: 8px;
-}
-
-.education-check {
-    width: 305px;
+    background: url(@app/assets/icon/arrow-down.svg) no-repeat right;
+    appearance: none;
+    background-position-x: calc(100% - 16px);
 }
 </style>

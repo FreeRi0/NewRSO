@@ -1,18 +1,17 @@
 <template>
-             <div class="squads-wrapper__item" v-for="squad in squads">
-                <div class="round-img">
-                    <img
-                        :src="'./assets/logo/' + squad.image"
-                        alt="logo"
-                    />
-                </div>
-                <div class="container-squad">
-                    <p class="squads-wrapper__item-category">
-                        {{ squad.desc }}
-                    </p>
-                    <p class="squads-wrapper__item-title">{{ squad.title }}</p>
-                </div>
+        <div class="squads-wrapper__item" v-for="squad in squads" v-if="squads.length > 0">
+            <div class="round-img">
+                <img :src="'./assets/logo/' + squad.image" alt="logo" />
             </div>
+            <div class="container-squad">
+                <p class="squads-wrapper__item-category">
+                    {{ squad.desc }}
+                </p>
+                <p class="squads-wrapper__item-title">{{ squad.title }}</p>
+            </div>
+        </div>
+
+    <h2 v-else>Отряд не найден...</h2>
 </template>
 <script setup>
 const props = defineProps({
@@ -23,8 +22,6 @@ const props = defineProps({
 });
 </script>
 <style lang="scss">
-
-
 .round-img {
     width: 128px;
     height: 128px;
