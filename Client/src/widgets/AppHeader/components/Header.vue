@@ -29,23 +29,26 @@
                 <button
                     class="header__button-mobile-menu"
                     type="button"
-                    @click="removeClass"
+                    @click="removeClass()"
                 ></button>
-                <ul ref="navMenu" class="header__nav-list no-visible">
-                    <li class="header__nav-item">
-                        <div class="nav-menu-item">
-                            <Dropdown title="Структура" :items="pages" />
-                        </div>
-                    </li>
-                    <li class="header__nav-item">
-                        <a class="header__nav-link" href="#">Мероприятия</a>
-                    </li>
-                    <li class="header__nav-item">
-                        <a class="header__nav-link" href="#"
-                            >Полезная информация</a
-                        >
-                    </li>
-                </ul>
+                <div ref="navMenu" class="header__nav-container no-visible">
+                    <div class="header__overlay" @click="removeClass()"></div>
+                    <ul class="header__nav-list">
+                        <li class="header__nav-item">
+                            <div class="nav-menu-item">
+                                <Dropdown title="Структура" :items="pages" />
+                            </div>
+                        </li>
+                        <li class="header__nav-item">
+                            <a class="header__nav-link" href="#">Мероприятия</a>
+                        </li>
+                        <li class="header__nav-item">
+                            <a class="header__nav-link" href="#"
+                                >Полезная информация</a
+                            >
+                        </li>
+                    </ul>
+                </div>
             </nav>
 
             <nav class="header__nav nav-user">
@@ -67,12 +70,14 @@
                         <!--прописать в span кнопки логику изменения ее названия-->
                         <span>Карачаево-Черкесское региональное отделение</span>
                     </button>
+
                     <div
-                        class="nav-user__location-container"
+                        class="header__overlay"
+                        @click="show = !show"
                         v-if="show"
-                        v-click-outside="onClickOutsideStandard"
-                        @click="model = true"
-                    >
+                    ></div>
+
+                    <div class="nav-user__location-container" v-if="show">
                         <button
                             type="button"
                             @click="show = !show"
@@ -156,17 +161,13 @@ export default {
                 { title: 'Выйти из ЛК', link: '#' },
             ],
             show: false,
-            model: false,
+            isOpen: false,
         };
     },
     methods: {
         removeClass() {
             const menu = this.$refs.navMenu;
             menu.classList.toggle('no-visible');
-        },
-        onClickOutsideStandard() {
-            // this.model = false;
-            this.active = false;
         },
     },
 };
@@ -183,6 +184,15 @@ export default {
     color: #35383f;
     position: relative;
 
+    &__overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+    }
+
     a {
         color: #35383f;
     }
@@ -197,6 +207,22 @@ export default {
     &__nav--order {
         @media (max-width: 1024px) {
             order: 3;
+        }
+    }
+
+    &__nav-container {
+        .header__overlay {
+            display: none;
+
+            @media (max-width: 1024px) {
+                display: block;
+            }
+        }
+
+        &.no-visible {
+            @media (max-width: 1024px) {
+                display: none;
+            }
         }
     }
 
@@ -266,12 +292,21 @@ export default {
     }
 }
 
-.header__nav-list.no-visible {
-    //пока не прописала логику бургера
-    @media (max-width: 1024px) {
-        display: none;
-    }
-}
+// .header__nav-container {
+// .header__overlay {
+//     display: none;
+
+//     @media (max-width: 1024px) {
+//         display: block;
+//     }
+// }
+
+// &.no-visible {
+//     @media (max-width: 1024px) {
+//         display: none;
+//     }
+// }
+// }
 //----------------------------------------------------------------------------------------
 
 //Стили для блоков с выпадающим меню
@@ -496,7 +531,7 @@ export default {
 .btn.nav-user__button-change {
     margin: 0;
     max-width: 175px;
-    min-height: 52px; //----свойство height из компонента не применилось(?)
+    min-height: 52px; //----свойство height из компонента не применилось(?)/удалить?
     font-size: 16px;
     line-height: 20px;
     font-weight: 600;

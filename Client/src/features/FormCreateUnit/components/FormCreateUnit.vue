@@ -18,14 +18,26 @@
                                 >Название отряда
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
+                            <v-textarea
+                                rows="1"
+                                variant="outlined"
+                                clearable
+                                :maxlength="30"
+                                class="form__input form__input--name"
+                                id="name-squad"
+                                placeholder="Например, Монолит"
+                                name="name_squad"
+                                v-model="data.squad"
+                            ></v-textarea>
+                            <div>{{ counter }} / 30</div>
+                            <!-- <Input
                                 class="form__input"
                                 id="name-squad"
                                 label="Название отряда"
                                 placeholder="Например, Монолит"
                                 name="name_squad"
                                 v-model:value="data.squad"
-                            />
+                            /> -->
                         </div>
 
                         <div class="form__field">
@@ -34,6 +46,8 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
+                                variant="outlined"
+                                clearable
                                 name="select_direction"
                                 :items="directions"
                                 id="select-direction"
@@ -68,10 +82,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="city"
-                                >Город
-                                <sup class="valid-red">*</sup>
-                            </label>
+                            <label for="city">Город </label>
                             <Input
                                 id="city"
                                 label="Город"
@@ -87,11 +98,12 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
+                                variant="outlined"
+                                clearable
                                 :items="institutions"
                                 name="select_institution"
                                 id="select-institution"
                                 placeholder="Например, Алтайский государственный медицинский университет"
-                                v-model:value="data.institution"
                             ></Select>
                         </div>
 
@@ -100,12 +112,20 @@
                                 >Командир отряда:
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <v-text-field
+                            <SearchSelect
+                                :items="leaders"
+                                variant="outlined"
+                                clearable
+                                id="beast"
+                                name="beast"
+                                placeholder="Поиск по ФИО"
+                            ></SearchSelect>
+                            <!-- <v-text-field
                                 variant="outlined"
                                 id="beast"
                                 name="beast"
                                 placeholder="Поиск по ФИО"
-                            />
+                            /> -->
                         </div>
                     </div>
 
@@ -230,11 +250,17 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <v-textarea
+                                rows="3"
                                 variant="outlined"
-                                name="about_squad"
+                                clearable
+                                :maxlength="300"
+                                class="form__input form__input--about"
                                 id="about-squad"
                                 placeholder="Расскажите об отряде"
+                                name="about_squad"
+                                v-model="data.about"
                             ></v-textarea>
+                            <div>{{ counterAbout }} / 300</div>
                         </div>
 
                         <div class="form__field">
@@ -290,13 +316,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { SelectRegion } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
+import { SearchSelect } from '@shared/components/selects';
 
 const directions = ref([
     { title: 'ССО' },
@@ -307,7 +334,7 @@ const directions = ref([
     { title: 'СМО' },
 ]);
 
-const institutions = [
+const institutions = ref([
     { title: 'Алтайский государственный медицинский университет' },
     { title: 'Амурская государственная медицинская академия' },
     { title: 'Амурский государственный университет' },
@@ -317,7 +344,7 @@ const institutions = [
     },
     { title: 'Дальневосточный государственный технический университет' },
     { title: 'Дальневосточный федеральный университет' },
-];
+]);
 
 const data = ref({
     squad: '',
@@ -326,17 +353,128 @@ const data = ref({
     region: '',
     city: '',
     institution: '',
-    // beast: '',
+    beast: '',
     vk: '',
     te: '',
     slogan: '',
-    // about: '',
+    about: '',
     avatar: '',
     banner: '',
 });
+
+const counter = computed(() => {
+    return data.value.squad.length || 0;
+});
+
+const counterAbout = computed(() => {
+    return data.value.about.length || 0;
+});
+
+const leaders = [
+    {
+        id: 1,
+        img: true,
+        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-01.png',
+        // altTitle: 'Фото бойца',
+        logo: true,
+        iconStatus: '@app/assets/icon/icon-status/icon-status-01.svg',
+        title: 'Васильев Андрей Владимирович',
+        date: '13.07.2000',
+    },
+    {
+        id: 2,
+        img: true,
+        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-02.png',
+        // altTitle: 'Фото бойца',
+        logo: true,
+        iconStatus: '@app/assets/icon/icon-status/icon-status-02.svg',
+        title: 'Иванов Александр Петрович',
+        date: '13.07.2000',
+    },
+    {
+        id: 3,
+        img: true,
+        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-03.png',
+        // altTitle: 'Фото бойца',
+        logo: true,
+        iconStatus: '@app/assets/icon/icon-status/icon-status-03.svg',
+        title: 'Сидоров Дмитрий Олегович',
+        date: '13.07.2000',
+    },
+    {
+        id: 4,
+        img: true,
+        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-04.png',
+        // altTitle: 'Фото бойца',
+        logo: true,
+        iconStatus: '@app/assets/icon/icon-status/icon-status-04.svg',
+        title: 'Петрова Анастасия Владимировна',
+        date: '13.07.2000',
+    },
+    {
+        id: 5,
+        img: true,
+        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-05.png',
+        // altTitle: 'Фото бойца',
+        logo: false,
+        iconStatus: '',
+        title: 'Петров Петр Петрович',
+        date: '13.07.2000',
+    },
+    {
+        id: 6,
+        img: true,
+        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-06.png',
+        // altTitle: 'Фото бойца',
+        logo: false,
+        iconStatus: '',
+        title: 'Смирнова Елена Дмитриевна',
+        date: '13.07.2000',
+    },
+    {
+        id: 7,
+        img: false,
+        srcImg: '',
+        // altTitle: 'Фото бойца',
+        logo: false,
+        iconStatus: '',
+        title: 'Николаева Ольга Васильевна',
+        date: '13.07.2000',
+    },
+    {
+        id: 8,
+        img: true,
+        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-08.png',
+        // altTitle: 'Фото бойца',
+        logo: false,
+        iconStatus: '',
+        title: 'Васильев Михаил Владимирович',
+        date: '13.07.2000',
+    },
+    {
+        id: 9,
+        img: true,
+        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-09.png',
+        // altTitle: 'Фото бойца',
+        logo: false,
+        iconStatus: '',
+        title: 'Олегов Иван Иванович',
+        date: '13.07.2000',
+    },
+    {
+        id: 10,
+        img: true,
+        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-10.png',
+        // altTitle: 'Фото бойца',
+        logo: false,
+        iconStatus: '',
+        title: 'Певцов Дмитрий Владимирович',
+        date: '13.07.2000',
+    },
+];
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .form {
     font-family: 'BertSans', sans-serif;
     font-weight: 400;
@@ -439,7 +577,7 @@ const data = ref({
         min-height: 52px;
         margin: 0;
         padding: 16px 32px;
-        font-family: Bert Sans;
+        font-family: 'Bert Sans';
         font-size: 16px;
         font-weight: 600;
         line-height: 20px;
@@ -463,48 +601,43 @@ const data = ref({
     }
 }
 //------------------------------------------------------------------------------
-//Стили для компонента аккордион
-.v-expansion-panel {
-    border-bottom: 1px solid #d9d9d9;
+//Стили для компонента аккордион - пенесла в стили для страницы "Станицы ЛСО"
+// .v-expansion-panel {
+//     border-bottom: 1px solid #d9d9d9;
 
-    &__shadow {
-        box-shadow: none;
-    }
+//     &__shadow {
+//         box-shadow: none;
+//     }
 
-    &--active,
-    &--after-active {
-        margin: 0;
-    }
+//     &--active,
+//     &--after-active {
+//         margin: 0;
+//     }
 
-    &--active:not(:first-child) {
-        margin: 0;
-    }
+//     &--active:not(:first-child) {
+//         margin: 0;
+//     }
 
-    &--active + .v-expansion-panel {
-        margin: 0;
-    }
+//     &--active + .v-expansion-panel {
+//         margin: 0;
+//     }
 
-    .v-expansion-panel-title {
-        padding: 16px 0;
-        max-height: 60px;
-        font-family: 'Akrobat';
-        font-size: 24px;
-        line-height: 28px;
-        font-weight: 600;
-        background-color: transparent;
+//     .v-expansion-panel-title {
+//         padding: 16px 0;
+//         max-height: 60px;
+//         font-family: 'Akrobat';
+//         font-size: 24px;
+//         line-height: 28px;
+//         font-weight: 600;
+//         background-color: transparent;
 
-        &--active {
-            margin-bottom: 40px;
-        }
+//         &--active {
+//             margin-bottom: 40px;
+//         }
 
-        &__overlay {
-            display: none;
-        }
-    }
-}
-
-.v-expansion-panel--active,
-.v-expansion-panel--after-active {
-    margin: 0;
-}
+//         &__overlay {
+//             display: none;
+//         }
+//     }
+// }
 </style>
