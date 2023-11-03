@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-            <router-link to="/">
+            <router-link to="/PersonalData">
                 <Button
                     name="verify-btn"
                     label="Пройти верификацию"
