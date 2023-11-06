@@ -5,7 +5,7 @@
     >
         <div class="horizontallso-img">
             <img :src="'./assets/' + participant.image" alt="logo" />
-            <img
+            <img v-if="participant.useIcon"
                 class="horizontallso-item__list-img-status"
                 :src="'./assets/icon/' + participant.icon"
                 alt="icon"
@@ -24,6 +24,7 @@
 </template>
 <script setup>
 
+// import participants from '@entities/Participants/participants';
 
 const props = defineProps({
     participants: {
@@ -44,6 +45,7 @@ const props = defineProps({
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
+    margin-bottom: 12px;
 }
 
 .containerHorizontal {
@@ -54,8 +56,8 @@ const props = defineProps({
 
 .horizontallso-img {
     align-items: center;
-    width: 50px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     justify-content: start;
 }
 
@@ -99,6 +101,7 @@ const props = defineProps({
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
     font-weight: 400;
+    margin-left: 10px;
 }
 
 .horizontallso-item__list-date p {
