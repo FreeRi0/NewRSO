@@ -51,16 +51,28 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
             },
             {
+                path: '/EditLSO',
+                name: 'EditLSO',
+                component: () =>
+                    import(
+                        '@pages/EditingDetachment/components/EditingDetachment.vue'
+                    ),
+            },
+            {
                 path: '/AllHeadquarters',
                 name: 'allheadquarters',
                 component: () =>
-                    import('@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'),
+                    import(
+                        '@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'
+                    ),
             },
             {
                 path: '/AllParticipants',
                 name: 'allparticipants',
                 component: () =>
-                    import('@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'),
+                    import(
+                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                    ),
             },
         ],
     },
