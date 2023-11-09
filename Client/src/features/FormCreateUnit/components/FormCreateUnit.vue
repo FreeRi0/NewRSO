@@ -182,9 +182,7 @@
                                 placeholder="Поиск по ФИО"
                                 v-model:value="searchMembers"
                             ></Search>
-                            <ParticipantsList
-                                :items="sortedMembers"
-                            ></ParticipantsList>
+                            <MembersList :items="sortedMembers"></MembersList>
                         </div>
                     </div>
 
@@ -312,7 +310,7 @@ import { bannerPhoto } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { Search } from '@shared/components/inputs';
-import { ParticipantsList } from '@features/Participants/components';
+import { MembersList } from '@features/Members/components';
 
 const panel = ref([]);
 
