@@ -95,6 +95,9 @@ import {
 import { IMaskDirective } from 'vue-imask';
 import {SelectRegion} from '@shared/components/selects'
 
+const data = ref([
+    
+])
 const surnameUser = ref('');
 const nameUser = ref('');
 const patronomycField = ref('');
@@ -180,6 +183,8 @@ const v = useVuelidate(rules, {
     loginField,
     emailField,
 });
+
+
 
 const router = useRouter();
 
