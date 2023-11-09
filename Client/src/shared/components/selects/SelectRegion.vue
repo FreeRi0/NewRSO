@@ -10,11 +10,23 @@
             <v-list-item v-bind="props"></v-list-item>
         </template>
     </v-select>
+    <TransitionGroup>
+        <div class="error-wrapper" v-for="element of error" :key="element.$uid">
+            <div class="form-error__message">{{ element.$message }}</div>
+        </div>
+    </TransitionGroup>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 const regions = ref([]);
+
+const props = defineProps({
+    error: {
+        type: Array,
+        required: false,
+    },
+});
 
 const onChangeRegion = async () => {
     await axios
@@ -28,23 +40,10 @@ const onChangeRegion = async () => {
         });
 };
 
-const onChangeNewRegion = async () => {
-    await axios
-        .get('http://api.geonames.org/get?geonameId=709716&lang=ru&username=demo')
-        .then((res) => {
-            regions.value = res.data.geonames;
-            console.log(res);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
 // http://api.geonames.org/get?geonameId=1&username=demo.
 
 onMounted(() => {
     onChangeRegion();
-    onChangeNewRegion();
 });
 </script>
 <style lang="scss"></style>

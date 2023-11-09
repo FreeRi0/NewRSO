@@ -6,7 +6,7 @@
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
                 <div class="user-data__name">
-                    <h4>Иванов Иван Иванович</h4>
+                    <h4>dddd</h4>
                 </div>
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
@@ -26,6 +26,7 @@
 import { ref } from 'vue';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
+
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {

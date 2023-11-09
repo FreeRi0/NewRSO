@@ -20,7 +20,8 @@
                     v-model:value="data.password"
                 ></PasswordInputVue>
 
-                <Button label="Войти" color="primary"></Button>
+                <!-- <Button label="Войти" color="primary"></Button> -->
+                <button>Войти</button>
                 <v-card-text class="text-center"
                     >Забыли пароль?
                     <router-link to="/">Восстановить</router-link></v-card-text
@@ -42,18 +43,25 @@ const data = ref({
     password: '',
 });
 
-console.log(data);
+
 
 const router = useRouter();
 
 const LoginUser = async () => {
-    await axios.post('url/login', {
+    // await axios.post('url/login', {
+    //     headers: { 'Content-Type': 'application/json' },
+    //     credentials: 'include',
+    //     body: JSON.stringify(data),
+    // });
+
+    await fetch('http://localhost:5000/auth/login', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(data),
-    });
+    })
 
-    await router.push('/');
+    await router.push('/UserPage');
 };
 
 // const nameUser = ref('');
