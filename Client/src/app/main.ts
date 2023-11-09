@@ -9,10 +9,9 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import * as icons from 'vuetify/iconsets/mdi';
 
-
 import router from './router';
 import store from './store';
-
+import PrimeVue from 'primevue/config';
 
 const vuetify = createVuetify({
     components,
@@ -20,4 +19,13 @@ const vuetify = createVuetify({
     icons,
 });
 
-createApp(App).use(vuetify).use(router).use(store).mount('#app');
+createApp(App)
+    .use(vuetify)
+    .use(router)
+    .use(store)
+    .use(PrimeVue, {
+        locale: {
+            emptyFilterMessage: 'Ничего не найдено',
+        },
+    })
+    .mount('#app');

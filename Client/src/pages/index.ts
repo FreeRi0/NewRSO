@@ -1,4 +1,3 @@
-
 export * as HomePage from './HomePage';
 
 export * as LoginPage from './LoginPage';
@@ -12,3 +11,5 @@ export * as termsPage from './PolicyPage';
 export * as UserPage from './UserPage';
 
 export * as CreationOfDetachment from './CreationOfDetachment';
+
+export * as EditingDetachment from './EditingDetachment';

@@ -2,9 +2,10 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
 
-        <h1 class="title title--create-lso">Создание ЛСО</h1>
+        <h1 class="title title--lso">Создание ЛСО</h1>
 
-        <FormCreateUnit />
+        <!-- <FormCreateUnit /> -->
+        <FormCreateUnit :data="dataCreateLso"></FormCreateUnit>
     </div>
 </template>
 
@@ -18,6 +19,23 @@ const pages = ref([
     { pageTitle: 'ЛСО', href: '#' },
     { pageTitle: 'Создание ЛСО', href: '#' },
 ]);
+
+const dataCreateLso = ref({
+    squad: '',
+    direction: '',
+    date: '',
+    region: '',
+    city: '',
+    institution: '',
+    beast: '',
+    vk: '',
+    te: '',
+    slogan: '',
+    about: '',
+    avatar: '',
+    banner: '',
+    participants: false,
+}); //-------------------------------------------------------------------------
 </script>
 
 <style lang="scss">
@@ -29,7 +47,7 @@ const pages = ref([
     font-weight: 700;
     color: #35383f;
 
-    &--create-lso {
+    &--lso {
         margin-bottom: 50px;
     }
 }

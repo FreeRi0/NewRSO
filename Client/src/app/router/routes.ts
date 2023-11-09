@@ -50,6 +50,14 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
             },
+            {
+                path: '/EditLSO',
+                name: 'EditLSO',
+                component: () =>
+                    import(
+                        '@pages/EditingDetachment/components/EditingDetachment.vue'
+                    ),
+            },
         ],
     },
 ];

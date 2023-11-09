@@ -1,9 +1,9 @@
 <template>
     <form class="form" action="#" method="post">
-        <v-expansion-panels>
-            <v-expansion-panel>
+        <v-expansion-panels v-model="panel">
+            <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
-                    <template v-slot:default="{ expanded }">
+                    <template v-slot="{ expanded }">
                         <v-row no-gutters>
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
@@ -29,15 +29,7 @@
                                 name="name_squad"
                                 v-model="data.squad"
                             ></v-textarea>
-                            <div>{{ counter }} / 30</div>
-                            <!-- <Input
-                                class="form__input"
-                                id="name-squad"
-                                label="Название отряда"
-                                placeholder="Например, Монолит"
-                                name="name_squad"
-                                v-model:value="data.squad"
-                            /> -->
+                            <!-- <div>{{ counter }} / 30</div> -->
                         </div>
 
                         <div class="form__field">
@@ -52,6 +44,7 @@
                                 :items="directions"
                                 id="select-direction"
                                 placeholder="Например, ССО"
+                                v-model="data.direction"
                             ></Select>
                         </div>
 
@@ -87,7 +80,7 @@
                                 id="city"
                                 label="Город"
                                 placeholder="Например, Барнаул"
-                                name="city"
+                                name="edit_city"
                                 v-model:value="data.city"
                             />
                         </div>
@@ -112,20 +105,11 @@
                                 >Командир отряда:
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <SearchSelect
-                                :items="leaders"
-                                variant="outlined"
-                                clearable
+                            <Dropdown
+                                :options="leaders"
                                 id="beast"
-                                name="beast"
-                                placeholder="Поиск по ФИО"
-                            ></SearchSelect>
-                            <!-- <v-text-field
-                                variant="outlined"
-                                id="beast"
-                                name="beast"
-                                placeholder="Поиск по ФИО"
-                            /> -->
+                                name="edit_beast"
+                            ></Dropdown>
                         </div>
                     </div>
 
@@ -134,12 +118,13 @@
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
+                            @click="openPanelTwo"
                         ></Button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
 
-            <v-expansion-panel>
+            <v-expansion-panel value="panelTwo">
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -187,21 +172,20 @@
                             />
                         </div>
 
-                        <!-- <v-col cols="5">
-                            <v-select
-                                v-model="trip.location"
-                                :items="locations"
-                                chips
-                                flat
-                                variant="solo"
-                            ></v-select>
-                        </v-col> -->
-
-                        <!-- <v-col cols="3">
-                            Select your destination of choice
-                            <br />
-                            <a href="#">Learn more</a>
-                        </v-col> -->
+                        <div class="form__field" v-if="data.participants">
+                            <p>
+                                Участники отряда
+                                <sup class="valid-red">*</sup>
+                            </p>
+                            <Search
+                                type="text"
+                                placeholder="Поиск по ФИО"
+                                v-model:value="searchMembers"
+                            ></Search>
+                            <ParticipantsList
+                                :items="sortedMembers"
+                            ></ParticipantsList>
+                        </div>
                     </div>
 
                     <v-card-actions class="form__button-group">
@@ -210,17 +194,19 @@
                             variant="text"
                             label="Назад"
                             size="large"
+                            @click="openPanelOne"
                         ></Button>
                         <Button
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
+                            @click="openPanelThree"
                         ></Button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
 
-            <v-expansion-panel>
+            <v-expansion-panel value="panelThree">
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -260,7 +246,7 @@
                                 name="about_squad"
                                 v-model="data.about"
                             ></v-textarea>
-                            <div>{{ counterAbout }} / 300</div>
+                            <!-- <div>{{ counterAbout }} / 300</div> -->
                         </div>
 
                         <div class="form__field">
@@ -303,6 +289,7 @@
                     variant="text"
                     label="Назад"
                     size="large"
+                    @click="openPanelTwo"
                 ></Button>
                 <Button
                     class="form__button"
@@ -323,7 +310,55 @@ import { Button } from '@shared/components/buttons';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
-import { SearchSelect } from '@shared/components/selects';
+import { Dropdown } from '@shared/components/selects';
+import { Search } from '@shared/components/inputs';
+import { ParticipantsList } from '@features/Participants/components';
+
+const panel = ref([]);
+
+const props = defineProps({
+    data: {
+        type: Object,
+        default: () => {},
+    },
+});
+
+const counter = computed(() => {
+    return data.value.squad.length || 0;
+});
+
+const counterAbout = computed(() => {
+    return data.value.about.length || 0;
+});
+
+const openPanelOne = () => {
+    panel.value = ['panelOne'];
+};
+
+const openPanelTwo = () => {
+    panel.value = ['panelTwo'];
+};
+
+const openPanelThree = () => {
+    panel.value = ['panelThree'];
+};
+
+// const data = ref({
+//     squad: '',
+//     direction: '',
+//     date: '',
+//     region: '',
+//     city: '',
+//     institution: '',
+//     beast: '',
+//     vk: '',
+//     te: '',
+//     slogan: '',
+//     about: '',
+//     avatar: '',
+//     banner: '',
+//     participants: true,
+// });
 
 const directions = ref([
     { title: 'ССО' },
@@ -346,76 +381,47 @@ const institutions = ref([
     { title: 'Дальневосточный федеральный университет' },
 ]);
 
-const data = ref({
-    squad: '',
-    direction: '',
-    date: '',
-    region: '',
-    city: '',
-    institution: '',
-    beast: '',
-    vk: '',
-    te: '',
-    slogan: '',
-    about: '',
-    avatar: '',
-    banner: '',
-});
-
-const counter = computed(() => {
-    return data.value.squad.length || 0;
-});
-
-const counterAbout = computed(() => {
-    return data.value.about.length || 0;
-});
-
 const leaders = [
     {
         id: 1,
         img: true,
-        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-01.png',
-        // altTitle: 'Фото бойца',
+        srcImg: 'foto-leader-squad-01.png',
         logo: true,
-        iconStatus: '@app/assets/icon/icon-status/icon-status-01.svg',
+        iconStatus: 'icon-status-01.svg',
         title: 'Васильев Андрей Владимирович',
         date: '13.07.2000',
     },
     {
         id: 2,
         img: true,
-        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-02.png',
-        // altTitle: 'Фото бойца',
+        srcImg: 'foto-leader-squad-02.png',
         logo: true,
-        iconStatus: '@app/assets/icon/icon-status/icon-status-02.svg',
+        iconStatus: 'icon-status-02.svg',
         title: 'Иванов Александр Петрович',
         date: '13.07.2000',
     },
     {
         id: 3,
         img: true,
-        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-03.png',
-        // altTitle: 'Фото бойца',
+        srcImg: 'foto-leader-squad-03.png',
         logo: true,
-        iconStatus: '@app/assets/icon/icon-status/icon-status-03.svg',
+        iconStatus: 'icon-status-03.svg',
         title: 'Сидоров Дмитрий Олегович',
         date: '13.07.2000',
     },
     {
         id: 4,
         img: true,
-        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-04.png',
-        // altTitle: 'Фото бойца',
+        srcImg: 'foto-leader-squad-04.png',
         logo: true,
-        iconStatus: '@app/assets/icon/icon-status/icon-status-04.svg',
+        iconStatus: 'icon-status-04.svg',
         title: 'Петрова Анастасия Владимировна',
         date: '13.07.2000',
     },
     {
         id: 5,
         img: true,
-        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-05.png',
-        // altTitle: 'Фото бойца',
+        srcImg: 'foto-leader-squad-05.png',
         logo: false,
         iconStatus: '',
         title: 'Петров Петр Петрович',
@@ -424,8 +430,7 @@ const leaders = [
     {
         id: 6,
         img: true,
-        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-06.png',
-        // altTitle: 'Фото бойца',
+        srcImg: 'foto-leader-squad-06.png',
         logo: false,
         iconStatus: '',
         title: 'Смирнова Елена Дмитриевна',
@@ -435,7 +440,6 @@ const leaders = [
         id: 7,
         img: false,
         srcImg: '',
-        // altTitle: 'Фото бойца',
         logo: false,
         iconStatus: '',
         title: 'Николаева Ольга Васильевна',
@@ -444,8 +448,7 @@ const leaders = [
     {
         id: 8,
         img: true,
-        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-08.png',
-        // altTitle: 'Фото бойца',
+        srcImg: 'foto-leader-squad-08.png',
         logo: false,
         iconStatus: '',
         title: 'Васильев Михаил Владимирович',
@@ -454,8 +457,7 @@ const leaders = [
     {
         id: 9,
         img: true,
-        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-09.png',
-        // altTitle: 'Фото бойца',
+        srcImg: 'foto-leader-squad-09.png',
         logo: false,
         iconStatus: '',
         title: 'Олегов Иван Иванович',
@@ -464,14 +466,134 @@ const leaders = [
     {
         id: 10,
         img: true,
-        srcImg: '@app/assets/foto-leader-squad/foto-leader-squad-10.png',
-        // altTitle: 'Фото бойца',
+        srcImg: 'foto-leader-squad-10.png',
         logo: false,
         iconStatus: '',
         title: 'Певцов Дмитрий Владимирович',
         date: '13.07.2000',
     },
 ];
+
+const members = ref([
+    {
+        id: 1,
+        img: true,
+        srcImg: 'foto-leader-squad-01.png',
+        logo: true,
+        iconStatus: 'icon-status-01.svg',
+        title: 'Васильев Андрей Владимирович',
+        date: '13.07.2000',
+        confidant: false,
+    },
+    {
+        id: 2,
+        img: true,
+        srcImg: 'foto-leader-squad-02.png',
+        logo: true,
+        iconStatus: 'icon-status-02.svg',
+        title: 'Иванов Александр Петрович',
+        date: '13.07.2000',
+        confidant: true,
+    },
+    {
+        id: 3,
+        img: true,
+        srcImg: 'foto-leader-squad-03.png',
+        logo: true,
+        iconStatus: 'icon-status-03.svg',
+        title: 'Сидоров Дмитрий Олегович',
+        date: '13.07.2000',
+        confidant: true,
+    },
+    {
+        id: 4,
+        img: true,
+        srcImg: 'foto-leader-squad-04.png',
+        logo: true,
+        iconStatus: 'icon-status-04.svg',
+        title: 'Петрова Анастасия Владимировна',
+        date: '13.07.2000',
+        confidant: false,
+    },
+    {
+        id: 5,
+        img: true,
+        srcImg: 'foto-leader-squad-05.png',
+        logo: false,
+        iconStatus: '',
+        title: 'Петров Петр Петрович',
+        date: '13.07.2000',
+        confidant: false,
+    },
+    {
+        id: 6,
+        img: true,
+        srcImg: 'foto-leader-squad-06.png',
+        logo: false,
+        iconStatus: '',
+        title: 'Смирнова Елена Дмитриевна',
+        date: '13.07.2000',
+        confidant: false,
+    },
+    {
+        id: 7,
+        img: false,
+        srcImg: '',
+        logo: false,
+        iconStatus: '',
+        title: 'Николаева Ольга Васильевна',
+        date: '13.07.2000',
+        confidant: false,
+    },
+]);
+
+const searchMembers = ref('');
+
+const sortedMembers = computed(() => {
+    let tempMembers = members.value;
+
+    tempMembers = tempMembers.filter((item) => {
+        return item.title
+            .toUpperCase()
+            .includes(searchMembers.value.toUpperCase());
+    });
+
+    console.log(tempMembers);
+
+    // tempSquads = tempSquads.sort((a, b) => {
+    //     if (sortBy.value == 'alphabetically') {
+    //         let fa = a.title.toLowerCase(),
+    //             fb = b.title.toLowerCase();
+
+    //         if (fa < fb) {
+    //             return -1;
+    //         }
+    //         if (fa > fb) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     } else if (sortBy.value == 'createdAt') {
+    //         let fc = a.createdAt,
+    //             fn = b.createdAt;
+
+    //         if (fc < fn) {
+    //             return -1;
+    //         }
+    //         if (fc > fn) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     } else if (sortBy.value == 'peoples') {
+    //         return a.peoples - b.peoples;
+    //     }
+    // });
+
+    // if (!ascending.value) {
+    //     tempSquads.reverse();
+    // }
+
+    return tempMembers;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -509,6 +631,10 @@ const leaders = [
         display: flex;
         flex-direction: column;
         margin-bottom: 20px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
 
         label {
             width: fit-content;
