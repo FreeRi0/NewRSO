@@ -1192,7 +1192,7 @@
                                             Скачать бланк
                                         </button>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" customUpload @uploader="customBase64Uploader" />
                                 </div>
                             </div>
                             <div class="dowmload-all">
@@ -1854,7 +1854,7 @@
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-expansion-panel class="no-RSO-foreign">
+            <v-expansion-panel class="no-RSO-foreign" v-if="selectedAnswer == 'Нет' && selectedPass == 'Нет'">
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -2226,7 +2226,7 @@
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-expansion-panel class="yes-RSO-foreign">
+            <v-expansion-panel class="yes-RSO-foreign" v-else="selectedAnswer == 'Да' && selectedPass == 'Нет'">
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -2530,6 +2530,7 @@ import {
     numeric,
     sameAs,
 } from '@vuelidate/validators';
+// import FileUpload from 'primevue/fileupload';
 
 const answers = ref([
     { name: 'Да', id: 'f1' },

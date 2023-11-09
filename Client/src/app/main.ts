@@ -4,6 +4,8 @@ import App from './App.vue';
 
 import 'vuetify/styles';
 import '@mdi/font/css/materialdesignicons.css';
+import PrimeVue from 'primevue/config';
+import FileUpload from 'primevue/fileupload';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
@@ -20,4 +22,4 @@ const vuetify = createVuetify({
     icons,
 });
 
-createApp(App).use(vuetify).use(router).use(store).mount('#app');
+createApp(App).component('FileUpload', FileUpload).use(vuetify).use(PrimeVue).use(router).use(store).mount('#app');
