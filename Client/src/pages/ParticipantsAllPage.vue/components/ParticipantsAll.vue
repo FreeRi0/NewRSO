@@ -1,29 +1,23 @@
 <template>
     <div class="container">
-        <div class="squads">
-            <bannerCreate></bannerCreate>
-            <h2 class="squads-title">Студенческие отряды</h2>
-
-            <div class="squads-tabs">
-                <!-- <Button label="все"></Button> -->
-                <v-btn  @click="picked = ''">Все</v-btn>
+        <div class="participants">
+            <h2 class="participants-title">Участники ЛСО</h2>
+            <div class="participants-tabs">
                 <v-btn
-                    :class="{ active: picked === category }"
+                    :class="{ active: checked === category }"
                     v-for="category in categories"
                     :key="category"
-                    @click="picked = category"
+                    @click="checked = category"
                     >{{ category }}</v-btn
                 >
-                <!-- <Button :value="category">{{ cat }}</Button> -->
             </div>
-            <!--  -->
-            <div class="squads-search">
+            <div class="participants-search">
                 <input
                     type="text"
                     id="search"
-                    class="squads-search__input"
-                    v-model="searchSquads"
-                    placeholder="Поищем отряд?"
+                    class="participants-search__input"
+                    v-model="searchParticipants"
+                    placeholder="Иванов Иван"
                 />
                 <svg
                     width="28"
@@ -41,7 +35,7 @@
                     />
                 </svg>
             </div>
-            <div class="squads-sort">
+            <div class="participants-sort">
                 <div class="sort-layout">
                     <Button icon="switch" color="white" @click="showVertical">
                     </Button>
@@ -51,15 +45,7 @@
                         @click="showVertical"
                     ></Button>
                 </div>
-
                 <div class="sort-filters">
-                    <div class="sort-select">
-                        <sortByEducation
-                            class="education"
-                            v-model="selectedSort"
-                            :options="educations"
-                        ></sortByEducation>
-                    </div>
                     <div class="sort-select">
                         <sortByEducation
                             v-model="sortBy"
@@ -75,20 +61,22 @@
                 </div>
             </div>
 
-            <div class="squads-wrapper" v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
+            <div class="participants-wrapper" v-show="vertical">
+                <ParticipantsList
+                    :participants="sortedParticipants"
+                ></ParticipantsList>
             </div>
 
-            <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
+            <div class="horizontallso" v-show="!vertical">
+                <horizontalParticipantsList :participants="sortedParticipants"></horizontalParticipantsList>
             </div>
             <Button
-                @click="squadsVisible += step"
-                v-if="squadsVisible < squads.length"
+                @click="participantsVisible += step"
+                v-if="participantsVisible < participants.length"
                 label="Показать еще"
             ></Button>
             <Button
-                @click="squadsVisible -= step"
+                @click="participantsVisible -= step"
                 v-else
                 label="Свернуть все"
             ></Button>
@@ -96,83 +84,56 @@
     </div>
 </template>
 <script setup>
-import { bannerCreate } from '@shared/components/imagescomp';
-import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { squadsList, horizontalList } from '@features/Squads/components';
+import { ParticipantsList, horizontalParticipantsList } from '@features/Participants/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed } from 'vue';
-import squads from '@entities/Squads/squads';
+import participants from '@entities/Participants/participants';
 
-const squadsVisible = ref(12);
 
-const step = ref(10);
+const participantsVisible = ref(12);
+
+const step = ref(12);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
 const picked = ref('');
 
-const categories = ref([
-    'Проводников',
-    'Строительные',
-    'Педагогические',
-    'Сельскохозяйственные',
-    'Сервисные',
-    'Медицинские',
-    'Путинные',
-]);
+const categories = ref(['В отряде', 'Ожидают одобрения']);
 
 const vertical = ref(true);
 
-const searchSquads = ref('');
+const searchParticipants = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
-
-const educations = ref([
-    {
-        value: 'Амурская государственная медицинская академия',
-        name: 'Амурская государственная медицинская академия',
-    },
-    { value: 'Университет имени Баумана', name: 'Университет имени Баумана' },
-    { value: 'РГГУ', name: 'РГГУ' },
-    { value: 'МГУ', name: 'МГУ' },
-]);
-
-const selectedSort = ref(0);
 
 const sortOptionss = ref([
     {
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'createdAt', name: 'Дате создания отряда' },
-    { value: 'peoples', name: 'Количеству участников' },
+    { value: 'birthdate', name: 'По дате рождения' },
+    { value: 'days', name: 'Количество дней в отряде' },
 ]);
 
-const sortedSquads = computed(() => {
-    let tempSquads = squads;
+const sortedParticipants = computed(() => {
+    let tempParticipants = participants;
 
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
+    tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
-
-
-    tempSquads = tempSquads.filter((item) => {
-        return selectedSort.value == 0 || item.education == selectedSort.value;
-    });
-
-    tempSquads = tempSquads.filter((item) => {
-        return item.title
+    tempParticipants = tempParticipants.filter((item) => {
+        return item.name
             .toUpperCase()
-            .includes(searchSquads.value.toUpperCase());
+            .includes(searchParticipants.value.toUpperCase());
     });
 
-    tempSquads = tempSquads.sort((a, b) => {
+    tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.title.toLowerCase(),
-                fb = b.title.toLowerCase();
+            let fa = a.name.toLowerCase(),
+                fb = b.name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -181,9 +142,9 @@ const sortedSquads = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'createdAt') {
-            let fc = a.createdAt,
-                fn = b.createdAt;
+        } else if (sortBy.value == 'birthdate') {
+            let fc = a.birthdate,
+                fn = b.birthdate;
 
             if (fc < fn) {
                 return -1;
@@ -192,27 +153,22 @@ const sortedSquads = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'peoples') {
-            return a.peoples - b.peoples;
+        } else if (sortBy.value == 'days') {
+            return a.days - b.days;
         }
     });
 
-    if (!picked.value) {
-        return tempSquads;
-    }
-
-    tempSquads = tempSquads.filter((item) => item.category === picked.value);
-
+    // tempParticipants = tempParticipants.filter((item) => item.inSquad === picked.value);
 
     if (!ascending.value) {
-        tempSquads.reverse();
+        tempParticipants.reverse();
     }
 
-    return tempSquads;
+    return tempParticipants;
 });
 </script>
 <style lang="scss">
-.squads {
+.participants {
     padding: 60px 0px 60px 0px;
     &-title {
         font-size: 52px;
@@ -220,13 +176,28 @@ const sortedSquads = computed(() => {
     &-wrapper {
         padding: 60px 0px;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
     }
     &-sort {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+    }
+    &-search {
+        position: relative;
+        box-sizing: border-box;
+        svg {
+            position: absolute;
+            top: 10px;
+            left: 16px;
+        }
+        &__input {
+            width: 100%;
+            padding: 13px 0px 10px 60px;
+            border-radius: 10px;
+            border: 1px solid black;
+        }
     }
     &-tabs {
         margin-top: 20px;
@@ -245,36 +216,13 @@ const sortedSquads = computed(() => {
             cursor: pointer;
         }
     }
-}
 
-.horizontal {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-row-gap: 16px;
-    margin-top: 40px;
-}
-
-.active {
-    background-color: blue;
-}
-
-.squads-search {
-    position: relative;
-    box-sizing: border-box;
-    svg {
-        position: absolute;
-        top: 10px;
-        left: 16px;
+    .active {
+        background-color: blue;
     }
-    &__input {
-        width: 100%;
-        padding: 13px 0px 10px 60px;
-        border-radius: 10px;
-        border: 1px solid black;
-    }
-}
 
-.education {
-    width: 305px;
+    .horizontallso {
+      padding-top: 40px;
+    }
 }
 </style>

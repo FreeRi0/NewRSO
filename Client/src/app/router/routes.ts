@@ -58,6 +58,22 @@ const routes: RouteRecordRaw[] = [
                         '@pages/EditingDetachment/components/EditingDetachment.vue'
                     ),
             },
+            {
+                path: '/AllHeadquarters',
+                name: 'allheadquarters',
+                component: () =>
+                    import(
+                        '@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'
+                    ),
+            },
+            {
+                path: '/AllParticipants',
+                name: 'allparticipants',
+                component: () =>
+                    import(
+                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                    ),
+            },
         ],
     },
 ];
