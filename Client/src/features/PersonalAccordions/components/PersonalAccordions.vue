@@ -13,7 +13,11 @@
         </div>
     </div>
 
-    <form class="accordion-form" enctype="multipart/form-data">
+    <form
+        class="accordion-form"
+        enctype="multipart/form-data"
+        @submit.prevent="UploadData"
+    >
         <p class="accordion-title">
             Для вступления в РСО внесите ниже персональные данные
         </p>
@@ -124,16 +128,26 @@
                                     >*</span
                                 ></label
                             >
-                            <Input
+                            <!-- <Input
                                 type="date"
                                 name="date_of_birth"
                                 class="input-small"
+                                @input="ageValid(birth)"
+                                v-model="v.birth.$model"
+                                :error="v.birth.$errors"
+                            /> -->
+                            <input
+                                type="date"
+                                name="date_of_birth"
+                                class="input-small"
+                                @change="ageValid(birth)"
                                 v-model="v.birth.$model"
                                 :error="v.birth.$errors"
                             />
                         </div>
+                        <p v-if="birth">Your age is {{ years }} years</p>
                     </div>
-                    <div class="parents-wrapper">
+                    <div class="parents-wrapper" v-if="years < 18">
                         <p class="parents-wrapper__title">
                             Законный представитель несовершенолетнего
                         </p>
@@ -490,7 +504,6 @@
                             >
                             <SelectRegion
                                 v-model="v.regionContact.$model"
-                                :error="v.regionContact.$errors"
                             ></SelectRegion>
                         </div>
                         <div class="form-field">
@@ -1192,7 +1205,14 @@
                                             Скачать бланк
                                         </button>
                                     </div>
-                                    <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" customUpload @uploader="customBase64Uploader" />
+                                    <FileUpload
+                                        mode="basic"
+                                        name="demo[]"
+                                        url="/api/upload"
+                                        accept="image/*"
+                                        customUpload
+                                        @uploader="customBase64Uploader"
+                                    />
                                 </div>
                             </div>
                             <div class="dowmload-all">
@@ -1838,7 +1858,6 @@
                         </div>
                     </div>
 
-
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
                             class="form__button form__button--prev"
@@ -1854,7 +1873,10 @@
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-expansion-panel class="no-RSO-foreign" v-if="selectedAnswer == 'Нет' && selectedPass == 'Нет'">
+            <v-expansion-panel
+                class="no-RSO-foreign"
+                v-if="selectedAnswer == 'Нет' && selectedPass == 'Нет'"
+            >
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -1999,7 +2021,6 @@
                                     </div>
                                     <FileUpload></FileUpload>
                                 </div>
-
                             </div>
                             <div class="dowmload-all">
                                 <button
@@ -2034,9 +2055,8 @@
                         <div class="pass-details__wrapper">
                             <div class="pass-details__item">
                                 <p class="statement-title">
-                                    Паспорт иностранного гражданина <span class="valid-red"
-                                        >*</span
-                                    >
+                                    Паспорт иностранного гражданина
+                                    <span class="valid-red">*</span>
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
@@ -2226,7 +2246,10 @@
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-expansion-panel class="yes-RSO-foreign" v-else="selectedAnswer == 'Да' && selectedPass == 'Нет'">
+            <v-expansion-panel
+                class="yes-RSO-foreign"
+                v-else="selectedAnswer == 'Да' && selectedPass == 'Нет'"
+            >
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -2237,12 +2260,14 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="RSO-blanks RSO" id="Blanks">
                         <p class="RSO-blanks__title RSO-title">
-                            Следите, пожалуйста, за актуальностью загруженных документов.
+                            Следите, пожалуйста, за актуальностью загруженных
+                            документов.
                         </p>
                         <div class="pass-details__wrapper">
                             <div class="pass-details__item">
                                 <p class="statement-title">
-                                    Паспорт иностранного гражданина<span class="valid-red"
+                                    Паспорт иностранного гражданина<span
+                                        class="valid-red"
                                         >*</span
                                     >
                                 </p>
@@ -2487,7 +2512,6 @@
                         </div>
                     </div>
 
-
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
                             class="form__button form__button--prev"
@@ -2504,18 +2528,15 @@
                 </v-expansion-panel-text>
             </v-expansion-panel>
             <v-card-actions class="form__button-group">
-                <Button
-                    class="form__button"
-                    variant="text"
-                    label="Отправить данные на верификацию"
-                    size="large"
-                ></Button>
+                <button class="form__button">
+                    Отправить данные на верификацию
+                </button>
             </v-card-actions>
         </v-expansion-panels>
     </form>
 </template>
 <script setup>
-import { ref, computed, onMounted, reactive } from 'vue';
+import { ref, computed, onMounted, reactive, inject } from 'vue';
 import { RadioButton } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { FileUpload } from '@features/Upload/components';
@@ -2530,7 +2551,6 @@ import {
     numeric,
     sameAs,
 } from '@vuelidate/validators';
-// import FileUpload from 'primevue/fileupload';
 
 const answers = ref([
     { name: 'Да', id: 'f1' },
@@ -2572,6 +2592,25 @@ const passport = reactive([
     { name: 'Нет', id: 'pass2' },
 ]);
 
+const birth = ref('');
+const years = ref(null);
+
+
+const ageValid = (birth) => {
+    if (!birth) return;
+
+    const currentDate = new Date();
+    if (new Date(birth) > currentDate) {
+        birth.value = null;
+        years.value = null;
+        alert('Invalid Date of Birth');
+    }
+
+    const diffTime = currentDate - new Date(birth);
+    const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    years.value = Math.floor(totalDays / 365.25);
+};
+
 const selectedSex = ref('Мужской');
 const selectedAnswer = ref('Нет');
 const selectedPassParent = ref('Да');
@@ -2583,7 +2622,7 @@ const patronomyc = ref('');
 const patronomycLat = ref('');
 const nameLat = ref('');
 const surnameLat = ref('');
-const birth = ref('');
+
 const nameParent = ref('');
 const surnameParent = ref('');
 const birthParent = ref('');
@@ -2810,6 +2849,27 @@ const v = useVuelidate(rules, {
     educationOrg,
     course,
 });
+
+const swal = inject('$swal');
+
+const UploadData = async () => {
+    v.value.$touch();
+    if (v.value.$error) {
+        swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+        });
+    } else {
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'Данные успешно сохранены',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    }
+};
 </script>
 <style lang="scss" scoped>
 .accordion {
@@ -2976,17 +3036,17 @@ const v = useVuelidate(rules, {
     border: 1px solid #a3a3a3;
     border-radius: 10px;
     padding: 40px 40px 0px 40px;
+    &__title {
+        font-size: 20px;
+        font-weight: bold;
+        width: 878px;
+        margin-bottom: 40px;
+    }
 }
 
 .dowmload-all a {
     color: #1c5c94;
     text-decoration: none;
-}
-.RSO-blanks__title {
-    font-size: 20px;
-    font-weight: bold;
-    width: 878px;
-    margin-bottom: 40px;
 }
 
 .blanks-wrapper {
@@ -3022,12 +3082,11 @@ const v = useVuelidate(rules, {
     border-radius: 10px;
     padding: 40px 40px 40px 40px;
     margin-bottom: 40px;
-}
-
-.RSO-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 40px;
+    &-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 40px;
+    }
 }
 
 .no-RSO-foreign {
@@ -3035,6 +3094,6 @@ const v = useVuelidate(rules, {
 }
 
 .yes-RSO-foreign {
-  display: none;
+    display: none;
 }
 </style>

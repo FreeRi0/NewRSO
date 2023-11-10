@@ -15,15 +15,7 @@
                     fill="#1F7CC0"
                 />
             </svg>
-            <Input
-                type="file"
-                name="upload"
-                accept=".pdf, .jpeg, .png"
-                hidden
-            />
-            <label for="pass-upload-yes" class="file-choose"
-                >Выбрать файл</label
-            >
+            <FileUpload  mode="basic" name="demo[]" url="/api/upload" accept=".pdf, .jpeg, .png"  :maxFileSize="7000000" customUpload @uploader="customBase64Uploader" chooseLabel="Выбрать файл" />
         </div>
     </div>
 </template>
@@ -56,6 +48,14 @@
 .statement-wrapper {
     display: flex;
     margin-bottom: 40px;
-    align-items: center;
+    align-items: flex-start;
+}
+
+.p-icon {
+  display: none;
+}
+
+.p-button-label {
+    color: #1c5c94;
 }
 </style>
