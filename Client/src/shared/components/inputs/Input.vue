@@ -1,15 +1,16 @@
 <template>
     <div class="form-input" :style="{ width: width }">
-        <v-text-field
+        <input
             :type="type"
             :name="name"
             :id="name"
             :placeholder="placeholder"
             :value="value"
             @input="updateValue"
+            @change="changeValue"
             variant="outlined"
             class="mb-2 text-field"
-        ></v-text-field>
+        />
         <TransitionGroup>
           <div class="error-wrapper"
     v-for="element of error" :key="element.$uid"
@@ -40,17 +41,21 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        required: true,
+        required: false,
     },
     width: {
         type: String,
-        default: '100%',
+        default: '',
     },
 });
 
 const updateValue = (e) => {
     emit('update:value', e.target.value);
 };
+
+// const changeValue = (e) => {
+//     emit('update:modelValue', e.target.files[0]);
+// }
 </script>
 
 <style lang="scss" scoped>
@@ -61,6 +66,16 @@ const updateValue = (e) => {
 .form-error__message {
     color: var(--danger);
     font-size: 12px;
+}
+
+.form-input input {
+    border: 2px solid #a3a3a3;
+  border-radius: 10px;
+  display: block;
+  font-size: 12px;
+  padding: 10px 16px 10px 16px;
+  margin-bottom: 20px;
+  width: 100%;
 }
 </style>
 

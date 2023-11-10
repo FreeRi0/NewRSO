@@ -12,3 +12,5 @@ export * as termsPage from './PolicyPage';
 export * as UserPage from './UserPage';
 
 export * as CreationOfDetachment from './CreationOfDetachment';
+
+export * as PersonalData from './PersonalDataPage';
