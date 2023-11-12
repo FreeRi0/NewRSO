@@ -85,12 +85,15 @@
 
                         <div class="form__field">
                             <label for="city">Город </label>
-                            <Input
+                            <v-textarea
+                                rows="1"
+                                no-resize
+                                variant="outlined"
+                                clearable
                                 id="city"
-                                label="Город"
                                 placeholder="Например, Барнаул"
                                 name="edit_city"
-                                v-model:value="data.city"
+                                v-model="data.city"
                             />
                         </div>
 
@@ -148,12 +151,15 @@
                                 >Группа отряда ВКонтакте
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
+                            <v-textarea
+                                rows="1"
+                                no-resize
+                                variant="outlined"
+                                clearable
                                 id="social-media-vk"
-                                label="Группа отряда ВКонтакте"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
-                                v-model:value="data.vk"
+                                v-model="data.vk"
                             />
                         </div>
 
@@ -162,12 +168,15 @@
                                 >Группа отряда в Телеграмме
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
+                            <v-textarea
+                                rows="1"
+                                no-resize
+                                variant="outlined"
+                                clearable
                                 id="social-media-te"
-                                label="Группа отряда в Телеграмме"
                                 placeholder="Например, https://t.me/cco_monolit"
                                 name="social_media_te"
-                                v-model:value="data.te"
+                                v-model="data.te"
                             />
                         </div>
 
@@ -230,9 +239,9 @@
                                 >Девиз отряда
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
+                            <v-text-field
+                                variant="outlined"
                                 id="squad-slogan"
-                                label="Девиз отряда"
                                 placeholder="Например, через тернии к звездам"
                                 name="squad_slogan"
                                 v-model:value="data.slogan"
