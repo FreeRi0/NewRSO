@@ -1,0 +1,1 @@
+export { default as PersonalAccordions} from './components/PersonalAccordions.vue';

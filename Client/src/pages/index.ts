@@ -12,4 +12,8 @@ export * as UserPage from './UserPage';
 
 export * as CreationOfDetachment from './CreationOfDetachment';
 
+
 export * as EditingDetachment from './EditingDetachment';
+
+export * as PersonalData from './PersonalDataPage';
+

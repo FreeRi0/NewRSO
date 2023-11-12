@@ -74,6 +74,12 @@ const routes: RouteRecordRaw[] = [
                         '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
                     ),
             },
+            {
+                path: '/PersonalData',
+                name: 'personaldata',
+                component: () =>
+                    import('@pages/PersonalDataPage/components/PersonalData.vue'),
+            },
         ],
     },
 ];

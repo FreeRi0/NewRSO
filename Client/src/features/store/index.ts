@@ -10,6 +10,6 @@ export default createStore({
     },
     actions: {
         setAuth: ({ commit }: { commit: Commit }, auth: boolean) =>
-            commit('', auth),
+            commit('SET_AUTH', auth),
     },
 });

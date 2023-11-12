@@ -4,6 +4,10 @@ import App from './App.vue';
 
 import 'vuetify/styles';
 import '@mdi/font/css/materialdesignicons.css';
+import PrimeVue from 'primevue/config';
+import FileUpload from 'primevue/fileupload';
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
@@ -20,12 +24,15 @@ const vuetify = createVuetify({
 });
 
 createApp(App)
-    .use(vuetify)
-    .use(router)
-    .use(store)
-    .use(PrimeVue, {
+  .use(vuetify)
+  .use(VueSweetalert2)
+  .use(PrimeVue, {
         locale: {
             emptyFilterMessage: 'Ничего не найдено',
         },
     })
-    .mount('#app');
+  .use(router)
+  .use(store)
+  .component('FileUpload', FileUpload)
+  .mount('#app');
+

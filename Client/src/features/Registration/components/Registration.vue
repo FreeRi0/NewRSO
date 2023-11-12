@@ -20,7 +20,7 @@
                 <Input
                     placeholder="Отчество(При наличии)"
                     name="patronomyc"
-                    v-model:value="patronomycField"
+                    v-model:value="data.patronomycField"
                 />
                 <Input
                     type="tel"
@@ -57,7 +57,8 @@
                 <v-checkbox
                     label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных*."
                 ></v-checkbox>
-                <Button label="Зарегистрироваться" color="primary"></Button>
+                <!-- <Button label="Зарегистрироваться" color="primary"></Button> -->
+                <button>Зарегистрироваться</button>
 
                 <v-card-text class="text-center">
                     <router-link to="/"
@@ -77,7 +78,7 @@
 </style>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, PasswordInputVue } from '@shared/components/inputs';
 import { useVuelidate } from '@vuelidate/core';
@@ -179,16 +180,37 @@ const v = useVuelidate(rules, {
     phoneField,
     loginField,
     emailField,
+    selectRegion
 });
 
 const router = useRouter();
+const swal = inject('$swal');
 
 const RegisterUser = async () => {
-    await axios.post('url', {
-        headers: { 'Content-Type': 'application/json' },
-        // body: JSON.stringify(data)
-    });
-    await router.push('/');
+    v.value.$touch();
+    if (v.value.$error) {
+        swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+        });
+    } else {
+        // axios
+        //     .post('https://reqres.in/api/articles', v)
+        //     .then((response) => (v.value = response.data))
+        //     .catch((error) => {
+        //         console.error('There was an error!', error);
+        //     });
+
+        //     await router.push('/');
+
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    }
 };
 </script>
-//
