@@ -25,6 +25,7 @@
         "vuex": "^4.1.0"
     },
     "devDependencies": {
+        "@iconify/vue": "^4.1.1",
         "@mdi/font": "^7.3.67",
         "@types/node": "^20.8.4",
         "@typescript-eslint/eslint-plugin": "^6.7.5",

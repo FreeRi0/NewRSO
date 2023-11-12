@@ -1,6 +1,11 @@
 <template>
     <div class="member">
-        <div class="member__item" v-for="item in items" :key="item.title">
+        <div
+            class="member__item"
+            v-for="item in items"
+            :key="item.title"
+            v-if="items.length > 0"
+        >
             <div class="member__content">
                 <div class="member__image">
                     <img
@@ -39,10 +44,35 @@
             <div class="member__confidant">
                 <Checkbox
                     label="Доверенное лицо"
-                    :model-value="item.confidant"
+                    :id="item.title"
+                    :value="item.title"
+                    v-model:checked="item.confidant"
                 ></Checkbox>
+
+                <!-- <Checkbox
+                    class="member__input"
+                    label="Доверенное лицо"
+                    :id="item.title"
+                    :model-value="item.confidant"
+                    v-model:checked="item.confidant"
+                ></Checkbox> -->
+
+                <!-- <Checkbox
+                    class="member__input"
+                    label="Доверенное лицо"
+                    :id="item.title"
+                    :model-value="true"
+                    v-model:checked="item.confidant"
+                ></Checkbox> -->
+
+                <!-- <div>
+                    <label>Доверенное лицо</label>
+                    <Checkbox v-model:checked="item.confidant" />
+                </div> -->
             </div>
         </div>
+
+        <h2 v-else>Участники не найдены...</h2>
     </div>
 </template>
 
@@ -54,20 +84,25 @@ const props = defineProps({
     items: {
         type: Array,
         default: () => [],
+        required: true,
     },
 });
 
 const functions = ['Комиссар', 'Мастер-методист', 'Специалист', 'Медик'];
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .member {
-    // height: 200px;
-    // overflow: scroll; //-------------------------------------------
+    // max-height: 200px;
+    // overflow: auto; //-------------------------------------------
     display: grid;
     grid-template-columns: 1fr;
     row-gap: 12px;
-    padding: 20px;
+    margin-top: -8px;
+    padding: 28px 20px 20px;
+    border: 1px solid #b6b6b6;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
 
     &__item {
         display: flex;
@@ -130,6 +165,7 @@ const functions = ['Комиссар', 'Мастер-методист', 'Спе�
 
     &__select-box {
         margin-left: 12px;
+        min-width: 224px;
         width: 224px;
     }
 
@@ -142,9 +178,39 @@ const functions = ['Комиссар', 'Мастер-методист', 'Спе�
     &__confidant {
         margin-left: 12px;
         padding: 4px 16px;
+        display: flex;
+        align-items: center;
+        min-width: 224px;
         width: 224px;
         border: 1px solid #b6b6b6;
         border-radius: 10px;
+
+        label {
+            margin-right: 12px;
+        }
+
+        .v-field__overlay,
+        .v-field__loader {
+            display: none;
+        }
+
+        .v-input,
+        .v-input__control,
+        .v-field {
+            width: 24px;
+            // height: 50%;
+            min-height: 0;
+        }
+
+        // .v-field__field {
+        // }
+        .v-field__input,
+        .v-text-field input.v-field__input {
+            // max-height: 24px;
+            min-height: 0;
+            width: 24px;
+            height: 24px;
+        }
     }
 }
 </style>

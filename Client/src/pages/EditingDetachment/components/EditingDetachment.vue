@@ -4,10 +4,7 @@
 
         <h1 class="title title--lso">Редактирование ЛСО</h1>
 
-        <!-- <FormCreateUnit /> -->
         <FormCreateUnit :data="dataEditLso"></FormCreateUnit>
-
-        <Checkbox label="ТЕСТ"></Checkbox>
     </div>
 </template>
 
@@ -15,7 +12,6 @@
 import { ref } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormCreateUnit } from '@features/FormCreateUnit';
-import { Checkbox } from '@shared/components/checkboxes'; //------------------------------------
 
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
@@ -42,7 +38,7 @@ const dataEditLso = ref({
     avatar: imgAvatarUrl,
     banner: imgDataUrl,
     participants: true,
-}); //-------------------------------------------------------------------------
+});
 </script>
 
 <style lang="scss">

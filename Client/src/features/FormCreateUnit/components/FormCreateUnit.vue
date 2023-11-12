@@ -20,6 +20,7 @@
                             </label>
                             <v-textarea
                                 rows="1"
+                                no-resize
                                 variant="outlined"
                                 clearable
                                 :maxlength="30"
@@ -53,6 +54,14 @@
                                 >Дата основания
                                 <sup class="valid-red">*</sup>
                             </label>
+                            <!-- <input
+                                id="create-date"
+                                label="Дата основания"
+                                name="create_date"
+                                type="date"
+                                placeholder=""
+                                :value="data.date"
+                            /> -->
                             <Input
                                 id="create-date"
                                 label="Дата основания"
@@ -130,16 +139,6 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Контакты
                         </v-col>
-                        <!-- <v-col cols="8" class="text--secondary">
-                            <v-fade-transition leave-absolute>
-                                <span v-if="open" key="0">
-                                    Select trip destination
-                                </span>
-                                <span v-else key="1">
-                                    {{ trip.location }}
-                                </span>
-                            </v-fade-transition>
-                        </v-col> -->
                     </v-row>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
@@ -177,11 +176,23 @@
                                 Участники отряда
                                 <sup class="valid-red">*</sup>
                             </p>
-                            <Search
+                            <v-text-field
+                                class="form__field-search"
+                                variant="outlined"
                                 type="text"
                                 placeholder="Поиск по ФИО"
-                                v-model:value="searchMembers"
-                            ></Search>
+                                v-model="searchMembers"
+                            >
+                                <template #prepend-inner>
+                                    <Icon
+                                        icon="clarity-search-line"
+                                        color="#222222"
+                                        width="24"
+                                        height="24"
+                                    >
+                                    </Icon>
+                                </template>
+                            </v-text-field>
                             <MembersList :items="sortedMembers"></MembersList>
                         </div>
                     </div>
@@ -235,6 +246,7 @@
                             </label>
                             <v-textarea
                                 rows="3"
+                                no-resize
                                 variant="outlined"
                                 clearable
                                 :maxlength="300"
@@ -270,14 +282,6 @@
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
-
-                        <!-- <v-col cols="3">
-                            <v-text-field
-                                v-model="trip.end"
-                                label="End date"
-                                type="date"
-                            ></v-text-field>
-                        </v-col>  -->
                     </div>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -309,8 +313,8 @@ import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
-import { Search } from '@shared/components/inputs';
 import { MembersList } from '@features/Members/components';
+import { Icon } from '@iconify/vue';
 
 const panel = ref([]);
 
@@ -379,7 +383,7 @@ const institutions = ref([
     { title: 'Дальневосточный федеральный университет' },
 ]);
 
-const leaders = [
+const leaders = ref([
     {
         id: 1,
         img: true,
@@ -470,7 +474,7 @@ const leaders = [
         title: 'Певцов Дмитрий Владимирович',
         date: '13.07.2000',
     },
-];
+]);
 
 const members = ref([
     {
@@ -557,38 +561,6 @@ const sortedMembers = computed(() => {
     });
 
     console.log(tempMembers);
-
-    // tempSquads = tempSquads.sort((a, b) => {
-    //     if (sortBy.value == 'alphabetically') {
-    //         let fa = a.title.toLowerCase(),
-    //             fb = b.title.toLowerCase();
-
-    //         if (fa < fb) {
-    //             return -1;
-    //         }
-    //         if (fa > fb) {
-    //             return 1;
-    //         }
-    //         return 0;
-    //     } else if (sortBy.value == 'createdAt') {
-    //         let fc = a.createdAt,
-    //             fn = b.createdAt;
-
-    //         if (fc < fn) {
-    //             return -1;
-    //         }
-    //         if (fc > fn) {
-    //             return 1;
-    //         }
-    //         return 0;
-    //     } else if (sortBy.value == 'peoples') {
-    //         return a.peoples - b.peoples;
-    //     }
-    // });
-
-    // if (!ascending.value) {
-    //     tempSquads.reverse();
-    // }
 
     return tempMembers;
 });
@@ -677,6 +649,12 @@ const sortedMembers = computed(() => {
         }
     }
 
+    &__field-search {
+        input {
+            padding: 8px 20px 8px 54px;
+        }
+    }
+
     // &__field-direction {
     //     margin-bottom: 0;
     //     padding: 8px 44px 8px 20px;
@@ -722,6 +700,11 @@ const sortedMembers = computed(() => {
 
     .v-field__outline {
         display: none;
+    }
+
+    .v-field {
+        //---------------------------не срабатывает
+        border-radius: 10px;
     }
 }
 //------------------------------------------------------------------------------
