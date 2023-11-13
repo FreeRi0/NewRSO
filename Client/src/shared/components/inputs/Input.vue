@@ -6,10 +6,9 @@
             :id="name"
             :placeholder="placeholder"
             :value="value"
+             v-maska
+            :maska="data-maska"
             @input="updateValue"
-            @change="changeValue"
-            variant="outlined"
-            class="mb-2 text-field"
         />
         <TransitionGroup>
           <div class="error-wrapper"
@@ -21,6 +20,7 @@
 </template>
 
 <script setup>
+import { vMaska } from 'maska';
 const emit = defineEmits(['update:value']);
 const props = defineProps({
     error: {
@@ -47,15 +47,16 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    maska: {
+     type: String,
+     required: false
+    }
 });
 
 const updateValue = (e) => {
     emit('update:value', e.target.value);
 };
 
-// const changeValue = (e) => {
-//     emit('update:modelValue', e.target.files[0]);
-// }
 </script>
 
 <style lang="scss" scoped>

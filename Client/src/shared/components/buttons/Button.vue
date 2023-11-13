@@ -1,5 +1,5 @@
 <template>
-    <v-btn
+    <button
         :class="[
             'btn',
             `btn_${color}`,
@@ -15,7 +15,7 @@
             <img :src="`assets/icon/${res}.svg`" alt="icon" />
         </span>
         <span v-else>{{ label }}</span>
-    </v-btn>
+    </button>
 </template>
 <script setup>
 import { ref, computed} from 'vue';
