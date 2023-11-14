@@ -93,8 +93,8 @@ const functions = ['Комиссар', 'Мастер-методист', 'Спе�
 
 <style lang="scss">
 .member {
-    // max-height: 200px;
-    // overflow: auto; //-------------------------------------------
+    max-height: 200px;
+    overflow: auto; //-------------------------------------------
     display: grid;
     grid-template-columns: 1fr;
     row-gap: 12px;

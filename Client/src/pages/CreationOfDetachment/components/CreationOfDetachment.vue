@@ -4,7 +4,6 @@
 
         <h1 class="title title--lso">Создание ЛСО</h1>
 
-        <!-- <FormCreateUnit /> -->
         <FormCreateUnit :data="dataCreateLso"></FormCreateUnit>
     </div>
 </template>
@@ -35,7 +34,7 @@ const dataCreateLso = ref({
     avatar: '',
     banner: '',
     participants: false,
-}); //-------------------------------------------------------------------------
+});
 </script>
 
 <style lang="scss">
