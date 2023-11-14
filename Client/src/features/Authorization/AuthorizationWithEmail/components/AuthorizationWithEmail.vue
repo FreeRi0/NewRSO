@@ -50,7 +50,7 @@ const LoginUser = async () => {
     await axios.post('url/login', {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(data),
+        body: JSON.stringify(data),cd 
     });
 
     await router.push('/');

@@ -21,6 +21,10 @@
         <p class="accordion-title">
             Для вступления в РСО внесите ниже персональные данные
         </p>
+
+        <p>{{ selectedAnswer }}</p>
+        <p>{{ selectedPass }}</p>
+        <p>{{ selectedAnswer == 'Нет' && selectedPass == 'Нет' }}</p>
         <v-expansion-panels>
             <v-expansion-panel>
                 <v-expansion-panel-title>
@@ -133,19 +137,11 @@
                                 name="date_of_birth"
                                 class="input-small"
                                 @change="ageValid(birth)"
-                                v-model="v.birth.$model"
-                                :error="v.birth.$errors"
-                            />
-                            <input
-                                type="date"
-                                name="date_of_birth"
-                                class="date input-small"
-                                @change="ageValid(birth)"
-                                v-model="v.birth.$model"
+                                v-model:value="v.birth.$model"
                                 :error="v.birth.$errors"
                             />
                         </div>
-                        <p v-if="birth">Your age is {{ years }} years</p>
+                        <!-- <p v-if="birth">Your age is {{ years }} years</p> -->
                     </div>
                     <div class="parents-wrapper" v-if="years < 18">
                         <p class="parents-wrapper__title">
@@ -228,15 +224,15 @@
                                     >
                                     <Input
                                         type="tel"
-                                        v-maska
-                                        data-maska="+7 ### ###-##-##"
+                                        vmaska
+                                        maska="+7 ### ###-##-##"
                                         name="phone-parent"
                                         class="input-small phone"
                                         placeholder="+7(__) __ __ _"
                                         v-model:value="v.phoneParent.$model"
                                         :error="v.phoneParent.$errors"
                                     />
-                                    <input type="tel" v-maska  data-maska="+7 ### ###-##-##">
+                                    <!-- <input type="tel" v-maska  data-maska="+7 ### ###-##-##"> -->
                                 </div>
                             </div>
                             <div class="how">
@@ -290,7 +286,9 @@
                                     >
                                     <Input
                                         name="passInput"
-                                        class="input-small pass-masked"
+                                        class="input-small"
+                                        vmaska
+                                        maska="####-######"
                                         placeholder="__ __ ____"
                                         v-model:value="v.passInputP.$model"
                                         :error="v.passInputP.$errors"
@@ -383,6 +381,10 @@
                                         type="text"
                                         class="input-full"
                                         placeholder="документ"
+                                        v-model:value="
+                                            v.foreignDocParent.$model
+                                        "
+                                        :error="v.foreignDocParent.$errors"
                                     />
                                 </div>
 
@@ -396,6 +398,10 @@
                                         type="date"
                                         name="pass-date"
                                         class="input-small"
+                                        v-model:value="
+                                            v.foreignDocDateParent.$model
+                                        "
+                                        :error="v.foreignDocDateParent.$errors"
                                     />
                                 </div>
 
@@ -406,6 +412,9 @@
                                         id="pass-id"
                                         class="input-small pass-masked"
                                         placeholder="__ ___ ____"
+                                        v-model:value="foreignNumberDocParent"
+                                        vmaska
+                                        maska="####-######"
                                     />
                                 </div>
                                 <div class="form-field one">
@@ -419,6 +428,10 @@
                                         id="org-id"
                                         class="input-full"
                                         placeholder="оуфмс по моковской обл"
+                                        v-model:value="
+                                            v.foreignOrgDocParent.$model
+                                        "
+                                        :error="v.foreignOrgDocParent.$errors"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -430,6 +443,9 @@
                                         id="work-book-foreign"
                                         class="input-big mask-workbook"
                                         placeholder="AA 999999999"
+                                        v-model:value="foreignWorkBookParent"
+                                        vmaska
+                                        maska="AA #########"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -439,6 +455,9 @@
                                         id="INN-id-foreign"
                                         class="input-big mask-inn"
                                         placeholder="AA 999999999"
+                                        v-model:value="foreignINNParent"
+                                        vmaska
+                                        maska="AA #########"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -450,6 +469,9 @@
                                         id="snils-id-foreign"
                                         class="input-big mask-snils"
                                         placeholder="AA 999999999"
+                                        v-model:value="foreignSNILSParent"
+                                        vmaska
+                                        maska="AA #########"
                                     />
                                 </div>
                             </div>
@@ -457,7 +479,12 @@
                     </div>
 
                     <v-card-actions class="nav-btn__wrapper">
-                        <Button     type="button" class="btn" label="Далее" size="large"></Button>
+                        <Button
+                            type="button"
+                            class="btn"
+                            label="Далее"
+                            size="large"
+                        ></Button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -634,14 +661,14 @@
                     </div>
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
-                        type="button"
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
                         ></Button>
                         <Button
-                        type="button"
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
@@ -698,6 +725,8 @@
                                     type="text"
                                     class="input-big"
                                     placeholder="__ __ ____"
+                                    vmaska
+                                    maska="####-######"
                                     v-model:value="v.passNumber.$model"
                                     :error="v.passNumber.$errors"
                                 />
@@ -740,6 +769,8 @@
                                     type="text"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
+                                    vmaska
+                                    maska="AA ##########"
                                     v-model:value="v.snils.$model"
                                     :error="v.snils.$errors"
                                 />
@@ -753,6 +784,8 @@
                                     type="text"
                                     class="input-big mask-inn"
                                     placeholder="AA 999999999"
+                                    vmaska
+                                    maska="AA ##########"
                                     v-model:value="v.inn.$model"
                                     :error="v.inn.$errors"
                                 />
@@ -763,6 +796,8 @@
                                     name="work_book"
                                     type="text"
                                     class="input-big mask-workbook"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="AA 999999999"
                                     v-model:value="workbook"
                                 />
@@ -773,6 +808,8 @@
                                     name="foreign-pass"
                                     type="text"
                                     class="input-big mask-foreign-pass"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="AA 999999999"
                                     v-model:value="foreignPass"
                                 />
@@ -782,6 +819,8 @@
                                 <sortByEducation
                                     class="select-big"
                                     v-model="selectedMilitary"
+                                    vmaska
+                                    maska="AA ##########"
                                     :options="militaryDocs"
                                 ></sortByEducation>
                             </div>
@@ -794,6 +833,8 @@
                                     name="military-id"
                                     type="text"
                                     class="input-big mask-military"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="AA 999999999"
                                     v-model:value="militaryNumber"
                                 />
@@ -813,6 +854,8 @@
                                     type="text"
                                     class="input-full"
                                     placeholder="документ"
+                                    v-model:value="v.foreignDoc.$model"
+                                    :error="v.foreignDoc.$errors"
                                 />
                             </div>
 
@@ -826,6 +869,8 @@
                                     type="date"
                                     name="pass-date"
                                     class="input-small"
+                                    v-model:value="v.foreignDocDate.$model"
+                                    :error="v.foreignDocDate.$errors"
                                 />
                             </div>
 
@@ -835,7 +880,10 @@
                                     type="text"
                                     id="pass-id"
                                     class="input-small pass-masked"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="__ ___ ____"
+                                    v-model:value="foreignDocNum"
                                 />
                             </div>
                             <div class="form-field one">
@@ -849,6 +897,8 @@
                                     id="org-id"
                                     class="input-full"
                                     placeholder="оуфмс по моковской обл"
+                                    v-model:value="v.foreignDocOrg.$model"
+                                    :error="v.foreignDocOrg.$errors"
                                 />
                             </div>
                             <div class="form-field">
@@ -859,9 +909,11 @@
                                     type="text"
                                     id="work-book-foreign"
                                     class="input-big mask-workbook"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="AA 999999999"
+                                    v-model:value="foreingWorkbook"
                                 />
-                                <div class="error"></div>
                             </div>
                             <div class="form-field">
                                 <label for="INN-id-foreign">ИНН</label>
@@ -869,9 +921,11 @@
                                     type="text"
                                     id="INN-id-foreign"
                                     class="input-big mask-inn"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="AA 999999999"
+                                    v-model:value="foreingINN"
                                 />
-                                <div class="error"></div>
                             </div>
                             <div class="form-field">
                                 <label for="snils-id-foreign"
@@ -880,22 +934,25 @@
                                 <Input
                                     type="text"
                                     id="snils-id-foreign"
+                                    vmaska
+                                    maska="AA ##########"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
+                                    v-model:value="foreingSNILS"
                                 />
                             </div>
                         </div>
                     </div>
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
-                        type="button"
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
                         ></Button>
                         <Button
-                        type="button"
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
@@ -971,14 +1028,14 @@
                     </div>
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
-                        type="button"
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
                         ></Button>
                         <Button
-                        type="button"
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
@@ -1240,14 +1297,14 @@
 
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
-                        type="button"
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
                         ></Button>
                         <Button
-                        type="button"
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
@@ -1255,7 +1312,10 @@
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-expansion-panel class="yes-RSO" v-else="selectedAnswer == 'Да'">
+            <v-expansion-panel
+                class="yes-RSO"
+                v-else-if="selectedAnswer == 'Да'"
+            >
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -1419,7 +1479,7 @@
             </v-expansion-panel>
             <v-expansion-panel
                 class="no-RSO-foreign"
-                v-if="selectedAnswer == 'Нет' && selectedPass == 'Нет'"
+                v-else-if="selectedAnswer == 'Нет' && selectedPass == 'Нет'"
             >
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
@@ -1625,7 +1685,7 @@
             </v-expansion-panel>
             <v-expansion-panel
                 class="yes-RSO-foreign"
-                v-else="selectedAnswer == 'Да' && selectedPass == 'Нет'"
+                v-else-if="selectedAnswer == 'Да' && selectedPass == 'Нет'"
             >
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
@@ -1878,6 +1938,24 @@ const PassIdParent = ref('');
 const localParent = ref('');
 const passDateP = ref('');
 const AddresParent = ref('');
+
+const foreignDocParent = ref('');
+const foreignDocDateParent = ref('2022-10-08');
+const foreignINNParent = ref('');
+const foreignNumberDocParent = ref('');
+const foreignOrgDocParent = ref('');
+const foreignSNILSParent = ref('');
+const foreignWorkBookParent = ref('');
+
+
+const foreignDoc = ref('');
+const foreignDocDate = ref('2022-10-08');
+const foreignINN = ref('');
+const foreignDocNum = ref('');
+const foreignDocOrg= ref('');
+const foreignSNILS = ref('');
+const foreignWorkBook= ref('');
+
 const phoneContact = ref('');
 const emailContact = ref('');
 const localityContact = ref('');
@@ -1972,6 +2050,49 @@ const rules = computed(() => ({
             required,
         ),
     },
+
+    foreignDocParent: {
+        required: helpers.withMessage(
+            `Поле обязательно для заполнения`,
+            required,
+        ),
+    },
+
+    foreignDocDateParent: {
+        required: helpers.withMessage(
+            `Поле обязательно для заполнения`,
+            required,
+        ),
+    },
+
+    foreignOrgDocParent: {
+        required: helpers.withMessage(
+            `Поле обязательно для заполнения`,
+            required,
+        ),
+    },
+
+    foreignDoc: {
+        required: helpers.withMessage(
+            `Поле обязательно для заполнения`,
+            required,
+        ),
+    },
+
+    foreignDocDate: {
+        required: helpers.withMessage(
+            `Поле обязательно для заполнения`,
+            required,
+        ),
+    },
+
+    foreignDocOrg: {
+        required: helpers.withMessage(
+            `Поле обязательно для заполнения`,
+            required,
+        ),
+    },
+
     passDateP: {
         required: helpers.withMessage(
             `Поле обязательно для заполнения`,
@@ -2091,6 +2212,12 @@ const v = useVuelidate(rules, {
     passOrg,
     educationOrg,
     course,
+    foreignDocParent,
+    foreignDocDateParent,
+    foreignOrgDocParent,
+    foreignDoc,
+    foreignDocDate,
+    foreignDocOrg,
 });
 
 const swal = inject('$swal');
@@ -2332,13 +2459,13 @@ const UploadData = async () => {
     }
 }
 
-.no-RSO-foreign {
-    display: none;
-}
+// .no-RSO-foreign {
 
-.yes-RSO-foreign {
-    display: none;
-}
+// }
+
+// .yes-RSO-foreign {
+//     display: none;
+// }
 
 .date {
     border: 2px solid #a3a3a3;

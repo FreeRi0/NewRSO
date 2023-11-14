@@ -6,22 +6,26 @@
             :id="name"
             :placeholder="placeholder"
             :value="value"
-             v-maska
-            :maska="data-maska"
+            :data-maska="maska"
+            :v-maska="vmaska"
             @input="updateValue"
+            @change="changeValue"
         />
         <TransitionGroup>
-          <div class="error-wrapper"
-    v-for="element of error" :key="element.$uid"
-  ><div class="form-error__message">{{ element.$message }}</div></div>
-          </TransitionGroup
-        >
+            <div
+                class="error-wrapper"
+                v-for="element of error"
+                :key="element.$uid"
+            >
+                <div class="form-error__message">{{ element.$message }}</div>
+            </div>
+        </TransitionGroup>
     </div>
 </template>
 
 <script setup>
 import { vMaska } from 'maska';
-const emit = defineEmits(['update:value']);
+const emit = defineEmits(['update:value', 'change']);
 const props = defineProps({
     error: {
         type: Array,
@@ -48,19 +52,25 @@ const props = defineProps({
         default: '',
     },
     maska: {
-     type: String,
-     required: false
-    }
+        type: String,
+        required: false,
+    },
+    vmaska: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const updateValue = (e) => {
     emit('update:value', e.target.value);
 };
 
+const changeValue = (e) => {
+    emit('change', e.target.value);
+};
 </script>
 
 <style lang="scss" scoped>
-
 .error-wrapper {
     margin-bottom: 5px;
 }
@@ -71,12 +81,11 @@ const updateValue = (e) => {
 
 .form-input input {
     border: 2px solid #a3a3a3;
-  border-radius: 10px;
-  display: block;
-  font-size: 12px;
-  padding: 10px 16px 10px 16px;
-  margin-bottom: 20px;
-  width: 100%;
+    border-radius: 10px;
+    display: block;
+    font-size: 12px;
+    padding: 10px 16px 10px 16px;
+    margin-bottom: 20px;
+    width: 100%;
 }
 </style>
-
