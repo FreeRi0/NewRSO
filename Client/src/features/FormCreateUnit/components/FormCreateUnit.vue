@@ -18,9 +18,7 @@
                                 >Название отряда
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <v-textarea
-                                rows="1"
-                                no-resize
+                            <v-text-field
                                 variant="outlined"
                                 clearable
                                 :maxlength="30"
@@ -29,7 +27,7 @@
                                 placeholder="Например, Монолит"
                                 name="name_squad"
                                 v-model="data.squad"
-                            ></v-textarea>
+                            />
                             <!-- <div>{{ counter }} / 30</div> -->
                         </div>
 
@@ -85,12 +83,13 @@
 
                         <div class="form__field">
                             <label for="city">Город </label>
-                            <Input
+                            <v-text-field
+                                variant="outlined"
+                                clearable
                                 id="city"
-                                label="Город"
                                 placeholder="Например, Барнаул"
                                 name="edit_city"
-                                v-model:value="data.city"
+                                v-model="data.city"
                             />
                         </div>
 
@@ -148,12 +147,13 @@
                                 >Группа отряда ВКонтакте
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
+                            <v-text-field
+                                variant="outlined"
+                                clearable
                                 id="social-media-vk"
-                                label="Группа отряда ВКонтакте"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
-                                v-model:value="data.vk"
+                                v-model="data.vk"
                             />
                         </div>
 
@@ -162,12 +162,13 @@
                                 >Группа отряда в Телеграмме
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
+                            <v-text-field
+                                variant="outlined"
+                                clearable
                                 id="social-media-te"
-                                label="Группа отряда в Телеграмме"
                                 placeholder="Например, https://t.me/cco_monolit"
                                 name="social_media_te"
-                                v-model:value="data.te"
+                                v-model="data.te"
                             />
                         </div>
 
@@ -230,9 +231,9 @@
                                 >Девиз отряда
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
+                            <v-text-field
+                                variant="outlined"
                                 id="squad-slogan"
-                                label="Девиз отряда"
                                 placeholder="Например, через тернии к звездам"
                                 name="squad_slogan"
                                 v-model:value="data.slogan"
@@ -282,6 +283,33 @@
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
+                        <div class="form__field">
+                            <label for="upload-photo"
+                                >Добавьте фотографии</label
+                            >
+                            <div class="form__photo-wrapper">
+                                <photos
+                                    name="upload_photo"
+                                    id="upload-photo"
+                                    v-model:value="data.photo"
+                                />
+                                <photos
+                                    name="upload_photo"
+                                    id="upload-photo"
+                                    v-model:value="data.photo"
+                                />
+                                <photos
+                                    name="upload_photo"
+                                    id="upload-photo"
+                                    v-model:value="data.photo"
+                                />
+                                <photos
+                                    name="upload_photo"
+                                    id="upload-photo"
+                                    v-model:value="data.photo"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -311,6 +339,7 @@ import { SelectRegion } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
+import { photos } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
@@ -692,6 +721,13 @@ const sortedMembers = computed(() => {
             border: 2px solid #35383f;
             background-color: #ffffff;
         }
+    }
+
+    &__photo-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 20px;
+        height: 347px;
     }
 
     .user-metric__avatar-wrapper {
