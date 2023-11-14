@@ -18,9 +18,7 @@
                                 >Название отряда
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <v-textarea
-                                rows="1"
-                                no-resize
+                            <v-text-field
                                 variant="outlined"
                                 clearable
                                 :maxlength="30"
@@ -29,7 +27,7 @@
                                 placeholder="Например, Монолит"
                                 name="name_squad"
                                 v-model="data.squad"
-                            ></v-textarea>
+                            />
                             <!-- <div>{{ counter }} / 30</div> -->
                         </div>
 
@@ -85,9 +83,7 @@
 
                         <div class="form__field">
                             <label for="city">Город </label>
-                            <v-textarea
-                                rows="1"
-                                no-resize
+                            <v-text-field
                                 variant="outlined"
                                 clearable
                                 id="city"
@@ -151,9 +147,7 @@
                                 >Группа отряда ВКонтакте
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <v-textarea
-                                rows="1"
-                                no-resize
+                            <v-text-field
                                 variant="outlined"
                                 clearable
                                 id="social-media-vk"
@@ -168,9 +162,7 @@
                                 >Группа отряда в Телеграмме
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <v-textarea
-                                rows="1"
-                                no-resize
+                            <v-text-field
                                 variant="outlined"
                                 clearable
                                 id="social-media-te"
@@ -291,6 +283,33 @@
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
+                        <div class="form__field">
+                            <label for="upload-photo"
+                                >Добавьте фотографии</label
+                            >
+                            <div class="form__photo-wrapper">
+                                <photos
+                                    name="upload_photo"
+                                    id="upload-photo"
+                                    v-model:value="data.photo"
+                                />
+                                <photos
+                                    name="upload_photo"
+                                    id="upload-photo"
+                                    v-model:value="data.photo"
+                                />
+                                <photos
+                                    name="upload_photo"
+                                    id="upload-photo"
+                                    v-model:value="data.photo"
+                                />
+                                <photos
+                                    name="upload_photo"
+                                    id="upload-photo"
+                                    v-model:value="data.photo"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -320,6 +339,7 @@ import { SelectRegion } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
+import { photos } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
@@ -701,6 +721,13 @@ const sortedMembers = computed(() => {
             border: 2px solid #35383f;
             background-color: #ffffff;
         }
+    }
+
+    &__photo-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 20px;
+        height: 347px;
     }
 
     .user-metric__avatar-wrapper {
