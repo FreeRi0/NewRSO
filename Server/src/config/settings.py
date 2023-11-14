@@ -1,6 +1,5 @@
 import os
 
-import decouple
 from decouple import config, Csv  # add this to the top
 
 MODE = config("MODE")
@@ -14,7 +13,8 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 from pathlib import Path
 import dj_database_url
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CLIENT_DIR = os.path.join(BASE_DIR, "RSOnew/Client")
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -24,8 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.system.apps.SystemConfig',
-    'rest_framework',
-    'axios'
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -110,7 +109,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(CLIENT_DIR, "dist"),
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

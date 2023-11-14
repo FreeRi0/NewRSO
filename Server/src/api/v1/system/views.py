@@ -1,20 +1,19 @@
 from django.http import Http404
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from apps.system.models import Profile, Detachment
 from apps.system.serializers import ProfileSerializer, DetachmentSerializer
 
 
-@api_view(['GET', 'POST'])
-def profile_list_create(request):
-    if request.method == 'GET':
+class ProfileListCreateView(APIView):
+    def get(self, request):
         profiles = Profile.objects.all()
         serializer = ProfileSerializer(profiles, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
+    def post(self, request):
         serializer = ProfileSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -22,37 +21,39 @@ def profile_list_create(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def profile_detail(request, pk):
-    try:
-        profile = Profile.objects.get(pk=pk)
-    except Profile.DoesNotExist:
-        raise Http404
+class ProfileDetailView(APIView):
+    def get_object(self, pk):
+        try:
+            return Profile.objects.get(pk=pk)
+        except Profile.DoesNotExist:
+            raise Http404
 
-    if request.method == 'GET':
+    def get(self, request, pk):
+        profile = self.get_object(pk)
         serializer = ProfileSerializer(profile)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
+    def put(self, request, pk):
+        profile = self.get_object(pk)
         serializer = ProfileSerializer(profile, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+    def delete(self, request, pk):
+        profile = self.get_object(pk)
         profile.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['GET', 'POST'])
-def detachment_list_create(request):
-    if request.method == 'GET':
+class DetachmentListCreateView(APIView):
+    def get(self, request):
         detachments = Detachment.objects.all()
         serializer = DetachmentSerializer(detachments, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
+    def post(self, request):
         serializer = DetachmentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -60,27 +61,31 @@ def detachment_list_create(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def detachment_detail(request, pk):
-    try:
-        detachment = Detachment.objects.get(pk=pk)
-    except Detachment.DoesNotExist:
-        raise Http404
+class DetachmentDetailView(APIView):
+    def get_object(self, pk):
+        try:
+            return Detachment.objects.get(pk=pk)
+        except Detachment.DoesNotExist:
+            raise Http404
 
-    if request.method == 'GET':
+    def get(self, request, pk):
+        detachment = self.get_object(pk)
         serializer = DetachmentSerializer(detachment)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
+    def put(self, request, pk):
+        detachment = self.get_object(pk)
         serializer = DetachmentSerializer(detachment, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+    def delete(self, request, pk):
+        detachment = self.get_object(pk)
         detachment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # class UserSystemEditView(TemplateView):
 #     template_name = 'profile/profile_settings/system.html'
