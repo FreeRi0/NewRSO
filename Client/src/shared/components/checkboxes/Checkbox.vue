@@ -35,7 +35,6 @@
 </template>
 
 <script setup>
-// import Checkbox from 'primevue/checkbox';
 
 const emits = defineEmits(['update:checked']);
 

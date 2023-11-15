@@ -314,7 +314,7 @@ import { bannerPhoto } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
-import { Icon } from '@iconify/vue';
+// import { Icon } from '@iconify/vue';
 
 const panel = ref([]);
 

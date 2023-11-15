@@ -80,6 +80,12 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/PersonalDataPage/components/PersonalData.vue'),
             },
+            {
+                path: '/reference',
+                name: 'reference',
+                component: () =>
+                    import('@pages/ReferencePage/components/reference.vue'),
+            },
         ],
     },
 ];
