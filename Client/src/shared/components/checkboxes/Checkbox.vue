@@ -35,8 +35,7 @@
 </template>
 
 <script setup>
-
-const emits = defineEmits(['update:checked']);
+const emits = defineEmits(['update:checked', 'updateCheckboxGroup']);
 
 const props = defineProps({
     label: {
@@ -59,6 +58,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    group: {
+        type: Boolean,
+        default: false,
+    },
     disabled: {
         type: Boolean,
         default: false,
@@ -70,7 +73,15 @@ const props = defineProps({
 });
 
 const handleClick = (event) => {
-    emits('update:checked', event.target.checked);
+    // emits('update:checked', event.target.checked);
+    if (props.group) {
+        emits('updateCheckboxGroup', {
+            optionId: props.id,
+            checked: event.target.checked,
+        });
+    } else {
+        emits('update:checked', event.target.checked);
+    }
 };
 </script>
 

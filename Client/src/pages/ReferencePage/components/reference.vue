@@ -12,55 +12,51 @@
                     v-model="searchParticipants"
                     placeholder="Поищем пользователей?"
                 />
-                <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 28 28"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z"
-                        stroke="#898989"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-                </svg>
+                <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
-            <div class="references-items">
-                <div class="references-sort">
-                    <div class="references-sort__all">checkbox</div>
-                    <div class="sort-filters">
-                        <div class="sort-select">
-                            <sortByEducation
-                                v-model="sortBy"
-                                :options="sortOptionss"
-                            ></sortByEducation>
+            <!-- <Search v-model="searchParticipants" /> -->
+            <div class="references-container">
+                <filters></filters>
+                <div class="references-items">
+                    <div class="references-sort">
+                        <div class="references-sort__all">
+                            <Checkbox
+                                :id="checkboxAll"
+                                :value="checkboxAll"
+                                v-model:checked="checkboxAll"
+                            ></Checkbox>
                         </div>
+                        <div class="sort-filters">
+                            <div class="sort-select">
+                                <sortByEducation
+                                    v-model="sortBy"
+                                    :options="sortOptionss"
+                                ></sortByEducation>
+                            </div>
 
-                        <Button
-                            @click="ascending = !ascending"
-                            icon="icon"
-                            color="white"
-                        ></Button>
+                            <Button
+                                @click="ascending = !ascending"
+                                icon="icon"
+                                color="white"
+                            ></Button>
+                        </div>
                     </div>
+                    <div class="references-wrapper">
+                        <referencesList
+                            :participants="sortedParticipants"
+                        ></referencesList>
+                    </div>
+                    <Button
+                        @click="participantsVisible += step"
+                        v-if="participantsVisible < participants.length"
+                        label="Показать еще"
+                    ></Button>
+                    <Button
+                        @click="participantsVisible -= step"
+                        v-else
+                        label="Свернуть все"
+                    ></Button>
                 </div>
-                <div class="references-wrapper">
-                    <referencesList
-                        :participants="sortedParticipants"
-                    ></referencesList>
-                </div>
-                <Button
-                    @click="participantsVisible += step"
-                    v-if="participantsVisible < participants.length"
-                    label="Показать еще"
-                ></Button>
-                <Button
-                    @click="participantsVisible -= step"
-                    v-else
-                    label="Свернуть все"
-                ></Button>
             </div>
 
             <div class="references-form">
@@ -77,37 +73,35 @@
                                 name="date_start"
                                 type="date"
                                 class="input-big"
-
-
                             />
                         </div>
                         <div class="form-field">
-                            <label for="facultet">Дата окончания действия справки </label>
+                            <label for="facultet"
+                                >Дата окончания действия справки
+                            </label>
                             <Input
                                 name="date_end"
                                 type="date"
                                 class="input-big"
-
-
                             />
                         </div>
-
                     </div>
                     <div class="form-field another">
-                            <label for="course"
-                                >Справка выдана для предоставления <span class="valid-red"
-                                    >*</span
-                                ></label
-                            >
-                            <Input
-                                name="spravka-field"
-                                type="text"
-                                id="course"
-                                class="input-full"
-                                placeholder="Ответ"
+                        <label for="course"
+                            >Справка выдана для предоставления
+                            <span class="valid-red">*</span></label
+                        >
+                        <Input
+                            name="spravka-field"
+                            type="text"
+                            id="course"
+                            class="input-full"
+                            placeholder="Ответ"
+                        />
+                    </div>
+                    <div></div>
+                    <!-- <p :selectedPeoples="selectedPeoples">Selected Heroes: {{selectedPeoples}}</p> -->
 
-                            />
-                        </div>
                     <Button label="Получить справки"></Button>
                 </form>
             </div>
@@ -119,14 +113,16 @@ import participants from '@entities/Participants/participants';
 import { Button } from '@shared/components/buttons';
 import { RadioButton } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
-import { referencesList } from '@features/references/components';
+import { referencesList, filters } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed } from 'vue';
 import { Checkbox } from '@shared/components/checkboxes';
 
 const participantsVisible = ref(12);
+const checkboxAll = ref(true);
 
 const step = ref(12);
+const selectedPeoples = ref([]);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -201,13 +197,18 @@ const sortedParticipants = computed(() => {
         justify-content: space-between;
         align-items: flex-end;
     }
+    &-container {
+        display: grid;
+        grid-template-columns: 0.5fr 1.5fr;
+        align-items: baseline;
+    }
     &-search {
         position: relative;
         box-sizing: border-box;
         margin: 60px 0px 60px 0px;
-        svg {
+        img {
             position: absolute;
-            top: 10px;
+            top: 15px;
             left: 16px;
         }
         &__input {
@@ -245,5 +246,38 @@ const sortedParticipants = computed(() => {
 
 .input-full {
     width: 100%;
+}
+
+.references-sort__all {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    padding: 12px;
+    min-width: 48px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+
+    .v-field__overlay,
+    .v-field__loader {
+        display: none;
+    }
+
+    .v-input,
+    .v-input__control,
+    .v-field {
+        width: 24px;
+        // height: 50%;
+        min-height: 0;
+    }
+
+    // .v-field__field {
+    // }
+    .v-field__input,
+    .v-text-field input.v-field__input {
+        // max-height: 24px;
+        min-height: 0;
+        width: 24px;
+        height: 24px;
+    }
 }
 </style>

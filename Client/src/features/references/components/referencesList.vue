@@ -8,7 +8,8 @@
             <Checkbox
                 :id="participant.id"
                 :value="participant.name"
-                v-model="participant.confidant"
+                v-model:checked="selectedPeoples"
+                
             ></Checkbox>
         </div>
 
@@ -51,6 +52,9 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    // selectedPeoples: {
+    //     type: Array,
+    // }
 });
 </script>
 
