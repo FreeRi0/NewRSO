@@ -15,6 +15,7 @@ export default defineConfig({
     root: './src/app',
     server: {
         port: 8080,
+        cors: false,
     },
     resolve: {
         alias: [
