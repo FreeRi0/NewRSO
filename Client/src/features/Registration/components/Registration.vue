@@ -8,13 +8,11 @@
                     placeholder="Фамилия"
                     name="surname"
                     v-model:value="form.surname"
-
                 />
                 <Input
                     placeholder="Имя"
                     name="name"
                     v-model:value="form.nameUser"
-
                 />
                 <!-- <Input
                     placeholder="Отчество(При наличии)"
@@ -26,26 +24,22 @@
                     placeholder="+7 (999) 999-99-99"
                     name="phone"
                     v-model:value="form.phoneField"
-
                 />
                 <Input
                     placeholder="Электронная почта"
                     name="email"
                     type="email"
                     v-model:value="form.emailField"
-
                 />
                 <Input
                     placeholder="Придумайте логин"
                     name="login"
                     v-model:value="form.loginField"
-
                 />
                 <PasswordInputVue
                     placeholder="Придумайте пароль"
                     name="password"
                     v-model:value="form.password"
-
                 ></PasswordInputVue>
                 <!-- <PasswordInputVue
                     placeholder="Повторите пароль"
@@ -101,7 +95,7 @@ const form = ref({
     phoneField: '',
     emailField: '',
     loginField: '',
-    password: ''
+    password: '',
 });
 
 // const surnameUser = ref('');
@@ -192,29 +186,28 @@ const router = useRouter();
 const swal = inject('$swal');
 
 const RegisterUser = async () => {
-        HTTP
-            .post('v1/login', form)
-            .then((response) => {
-                // form.value = response.data;
-                console.log(response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-
-            .catch((error) => {
-                console.error('There was an error!', error);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+    HTTP.post('v1/login', form)
+        .then((response) => {
+            // form.value = response.data;
+            console.log(response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
             });
-    }
+        })
+
+        .catch((error) => {
+            console.error('There was an error!', error);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+};
 </script>

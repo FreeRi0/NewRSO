@@ -15,7 +15,13 @@ export default defineConfig({
     root: './src/app',
     server: {
         port: 8080,
-        cors: false,
+        // proxy: {
+        //     '^/v1/login': {
+        //       target: 'http://localhost:5000/api/',
+        //       ws: true,
+        //       changeOrigin: true
+        //     },
+        // }
     },
     resolve: {
         alias: [
