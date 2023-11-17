@@ -4,7 +4,7 @@
       :label="option.name"
       :id="option.id"
       :name="name"
-      :value="option.name"
+      :value="option.id"
       :checked="value.includes(option.id)"
       group
       @updateCheckboxGroup="check"

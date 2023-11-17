@@ -16,15 +16,172 @@
             </div>
             <!-- <Search v-model="searchParticipants" /> -->
             <div class="references-container">
-                <filters></filters>
+                <div class="filters">
+                    <h3>Основные фильтры</h3>
+                    <div class="checkbox">
+                        <p>Уровень поиска</p>
+                        <div
+                            class="checkbox-item"
+                            v-for="answer in answers"
+                            :key="answer.id"
+                        >
+                            <RadioButton
+                                :value="answer.name"
+                                :label="answer.name"
+                                :id="answer.id"
+                                :checked="answer.checked"
+                                name="answer"
+                                v-model:checkedValue="selectedAnswer"
+                            />
+                        </div>
+                        <p>Выбрано:{{ selectedAnswer }}</p>
+                    </div>
+
+                    <div class="references-search filter">
+                        <input
+                            type="text"
+                            id="search"
+                            class="references-search__input"
+                            v-model="searchHeadquarter"
+                            placeholder="ввод?"
+                        />
+                        <img src="@app/assets/icon/search.svg" alt="search" />
+                    </div>
+                    <div class="references-search filter">
+                        <input
+                            type="text"
+                            id="search"
+                            class="references-search__input"
+                            v-model="searchHeadquarterRegion"
+                            placeholder="ввод?"
+                        />
+                        <img src="@app/assets/icon/search.svg" alt="search" />
+                    </div>
+                    <div class="references-search filter">
+                        <input
+                            type="text"
+                            id="search"
+                            class="references-search__input"
+                            v-model="searchHeadquarterLocal"
+                            placeholder="ввод?"
+                        />
+                        <img src="@app/assets/icon/search.svg" alt="search" />
+                    </div>
+                    <div class="references-search filter">
+                        <input
+                            type="text"
+                            id="search"
+                            class="references-search__input"
+                            v-model="searchEducation"
+                            placeholder="ввод?"
+                        />
+                        <img src="@app/assets/icon/search.svg" alt="search" />
+                    </div>
+                    <div class="references-search filter">
+                        <input
+                            type="text"
+                            id="search"
+                            class="references-search__input"
+                            v-model="searchLSO"
+                            placeholder="ввод?"
+                        />
+                        <img src="@app/assets/icon/search.svg" alt="search" />
+                    </div>
+
+                    <div class="checkbox">
+                        <p>Направление отряда</p>
+                        <div
+                            class="checkbox-item"
+                            v-for="cat in categories"
+                            :key="cat.id"
+                        >
+                            <RadioButton
+                                :value="cat.name"
+                                :label="cat.name"
+                                :id="cat.id"
+                                :checked="cat.checked"
+                                name="category"
+                                v-model:checkedValue="selectedCat"
+                            />
+                        </div>
+                        <p>Выбрано:{{ selectedCat }}</p>
+                    </div>
+
+                    <h3>Дополнительные фильтры</h3>
+
+                    <div class="checkbox">
+                        <p>Пол</p>
+                        <div
+                            class="checkbox-item"
+                            v-for="sex in sexes"
+                            :key="sex.id"
+                        >
+                            <RadioButton
+                                :value="sex.name"
+                                :label="sex.name"
+                                :id="sex.id"
+                                :checked="sex.checked"
+                                name="sex"
+                                v-model:checkedValue="selectedSex"
+                            />
+                        </div>
+                        <p>Выбрано:{{ selectedSex }}</p>
+                    </div>
+
+                    <div class="checkbox">
+                        <p>Статус аккаунта</p>
+                        <div
+                            class="checkbox-item"
+                            v-for="stat in status"
+                            :key="stat.id"
+                        >
+                            <RadioButton
+                                :value="stat.name"
+                                :label="stat.name"
+                                :id="stat.id"
+                                :checked="stat.checked"
+                                name="status"
+                                v-model:checkedValue="selectedStatus"
+                            />
+                        </div>
+                        <p>Выбрано:{{ selectedStatus }}</p>
+                    </div>
+
+                    <div class="checkbox">
+                        <p>Членский взнос</p>
+                        <div class="checkbox-item" v-for="p in pay" :key="p.id">
+                            <RadioButton
+                                :value="p.name"
+                                :label="p.name"
+                                :id="p.id"
+                                :checked="p.checked"
+                                name="sex"
+                                v-model:checkedValue="selectedPay"
+                            />
+                        </div>
+                        <p>Выбрано:{{ selectedPay }}</p>
+                    </div>
+                    <p>Возраст</p>
+                    <Input v-model:value="minAge" />
+                    <Input v-model:value="maxAge" />
+                    <p>Найдено пользователей: {{ sortedParticipants.length }}</p>
+                </div>
+
+
+
                 <div class="references-items">
                     <div class="references-sort">
                         <div class="references-sort__all">
-                            <Checkbox
+                            <!-- <Checkbox
                                 :id="checkboxAll"
-                                :value="checkboxAll"
+                                @click="select"
                                 v-model:checked="checkboxAll"
-                            ></Checkbox>
+                            ></Checkbox> -->
+                            <input
+                                type="checkbox"
+                                @click="select"
+                                v-model="checkboxAll"
+                            />
                         </div>
                         <div class="sort-filters">
                             <div class="sort-select">
@@ -58,6 +215,11 @@
                     ></Button>
                 </div>
             </div>
+            <!-- <div class="references-wrapper">
+                <referencesList
+                    :participants="selectedHeroes"
+                ></referencesList>
+            </div> -->
 
             <div class="references-form">
                 <form action="#">
@@ -100,8 +262,8 @@
                         />
                     </div>
                     <div></div>
-                    <!-- <p :selectedPeoples="selectedPeoples">Selected Heroes: {{selectedPeoples}}</p> -->
 
+                    <!-- <div v-for="item in selectedHeroes">{{ item }}</div> -->
                     <Button label="Получить справки"></Button>
                 </form>
             </div>
@@ -116,10 +278,18 @@ import { Input } from '@shared/components/inputs';
 import { referencesList, filters } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed } from 'vue';
-import { Checkbox } from '@shared/components/checkboxes';
+import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
 
 const participantsVisible = ref(12);
+
+// const listOfHeroes = ref([
+//     { name: 'Spider Man', id: 'h1' },
+//     { name: 'Batman', id: 'h2' },
+//     { name: 'Tor', id: 'h3' },
+//     { name: 'Loki', id: 'h4' },
+// ]);
 const checkboxAll = ref(true);
+const selectedHeroes = ref([]);
 
 const step = ref(12);
 const selectedPeoples = ref([]);
@@ -128,6 +298,66 @@ const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
 const searchParticipants = ref('');
+
+const selectedAnswer = ref('Все');
+const selectedCat = ref('Все');
+const selectedSex = ref('Все');
+const selectedStatus = ref('Все');
+const selectedPay = ref('Все');
+const searchHeadquarter = ref('');
+const searchHeadquarterLocal = ref('');
+const searchHeadquarterRegion = ref('');
+const searchLSO = ref('');
+const searchEducation = ref('');
+const minAge = ref('');
+const maxAge = ref('');
+
+const answers = ref([
+    { name: 'Все', id: 'f1', checked: true },
+    { name: 'Окружные штабы', id: 'f2' },
+    { name: 'Региональные отделения', id: 'f3' },
+    { name: 'Местные штабы', id: 'f4' },
+    { name: 'Штабы СО ОО', id: 'f5' },
+    { name: 'ЛСО', id: 'f6' },
+    { name: 'Пользователи', id: 'f7' },
+]);
+
+const categories = ref([
+    { name: 'Все', id: 'c1', checked: true },
+    { name: 'Сервисные', id: 'c2' },
+    { name: 'Строительные', id: 'c3' },
+    { name: 'Проводников', id: 'c4' },
+    { name: 'Педагогические', id: 'c5' },
+    { name: 'Медицинские', id: 'c6' },
+    { name: 'Путинные', id: 'c7' },
+    { name: 'Сельскохозяйственные', id: 'c8' },
+]);
+
+const sexes = ref([
+    { name: 'Все', id: 's1', checked: true },
+    { name: 'Мужской', id: 's2' },
+    { name: 'Женский', id: 's3' },
+]);
+const status = ref([
+    { name: 'Все', id: 'st1', checked: true },
+    { name: 'Верифицированный', id: 'st2' },
+    { name: 'Неверифицированный', id: 'st3' },
+]);
+
+const pay = ref([
+    { name: 'Все', id: 'p1', checked: true },
+    { name: 'Оплачен', id: 'p2' },
+    { name: 'Не оплачен', id: 'p3' },
+]);
+
+const select = () => {
+    selectedHeroes.value = [];
+    if (!checkboxAll.value) {
+        for (let i in participants.value) {
+            selectedHeroes.value.push(participants.value[i].id);
+        }
+    }
+};
 
 const sortOptionss = ref([
     {
@@ -183,6 +413,16 @@ const sortedParticipants = computed(() => {
         tempParticipants.reverse();
     }
 
+    const rangeConditions = {
+        'Все': () => true,
+       'Мужской': (participant) => participant.sex = 'Мужской',
+        'Женский': (participant) => participant.sex = 'Женский',
+    };
+
+    return tempParticipants.filter(
+        (item) => rangeConditions[selectedSex.value](item) || false,
+    );
+
     return tempParticipants;
 });
 </script>
@@ -201,6 +441,7 @@ const sortedParticipants = computed(() => {
         display: grid;
         grid-template-columns: 0.5fr 1.5fr;
         align-items: baseline;
+        grid-column-gap: 36px;
     }
     &-search {
         position: relative;
@@ -279,5 +520,9 @@ const sortedParticipants = computed(() => {
         width: 24px;
         height: 24px;
     }
+}
+.filter {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 </style>

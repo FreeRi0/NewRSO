@@ -1,16 +1,21 @@
 <template>
+    <!-- <checkbox-group
+            v-model:value="selectedHeroes"
+            :options="participants"
+        /> -->
+        <!-- <input type="checkbox"  @click="select" v-model="checkboxAll"> -->
     <div
         class="horizontallso"
         v-for="participant in participants"
         :key="participant.id"
     >
         <div class="horizontallso__confidant">
-            <Checkbox
+            <!-- <Checkbox
                 :id="participant.id"
-                :value="participant.name"
-                v-model:checked="selectedPeoples"
-                
-            ></Checkbox>
+                :value="participant.id"
+                v-model:checked="selectedHeroes"
+            ></Checkbox> -->
+            <input type="checkbox" v-model="selectedHeroes" :value="participant.id">
         </div>
 
         <div class="horizontallso-item__wrapper">
@@ -38,24 +43,50 @@
                 </div>
             </div>
         </div>
-        <!-- <div v-for="item in participant.confidant">{{ item }}</div> -->
     </div>
-
-
+    <!-- <div v-for="item in selectedHeroes">
+        <div class="horizontallso-item__wrapper">
+            <div class="horizontallso-img">
+                <img :src="'./assets/' + item.image" alt="logo" />
+                <img
+                    v-if="item.useIcon"
+                    class="horizontallso-item__list-img-status"
+                    :src="'./assets/icon/' + item.icon"
+                    alt="icon"
+                />
+            </div>
+            <div class="containerHorizontal">
+                <p class="horizontallso-item__list-full">
+                    {{ item.name }}
+                </p>
+                <div class="horizontallso-item__list-date">
+                    <span
+                        style="
+                            border-left: 2px solid #b6b6b6;
+                            padding-right: 8px;
+                        "
+                    ></span>
+                    <p>{{ item.birthdate }}</p>
+                </div>
+            </div>
+        </div>
+    </div> -->
 </template>
 
 <script setup>
-import { Checkbox } from '@shared/components/checkboxes';
+import { CheckboxGroup } from '@shared/components/checkboxes';
+import { ref, computed } from 'vue';
+
+const selectedHeroes = ref([]);
 
 const props = defineProps({
     participants: {
         type: Array,
-        required: true,
+        required: false,
     },
-    // selectedPeoples: {
-    //     type: Array,
-    // }
 });
+
+
 </script>
 
 <style lang="scss" scoped>
