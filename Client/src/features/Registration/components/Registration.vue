@@ -75,6 +75,7 @@ import { ref, computed, onMounted, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, PasswordInputVue } from '@shared/components/inputs';
 import { useVuelidate } from '@vuelidate/core';
+import axios from 'axios';
 import { HTTP } from '@app/http.ts';
 import { useRouter } from 'vue-router';
 import {
@@ -186,7 +187,7 @@ const router = useRouter();
 const swal = inject('$swal');
 
 const RegisterUser = async () => {
-    HTTP.post('v1/login', form)
+   axios.post('http://localhost:3000/check', form)
         .then((response) => {
             // form.value = response.data;
             console.log(response.data);
