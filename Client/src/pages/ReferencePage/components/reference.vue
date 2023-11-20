@@ -30,6 +30,7 @@
                                 :label="answer.name"
                                 :id="answer.id"
                                 :checked="answer.checked"
+                                :disabled="disabledRadio"
                                 name="answer"
                                 v-model:checkedValue="selectedAnswer"
                             />
@@ -155,19 +156,22 @@
                                 :label="p.name"
                                 :id="p.id"
                                 :checked="p.checked"
-                                name="sex"
+                                name="pay"
                                 v-model:checkedValue="selectedPay"
                             />
                         </div>
                         <p>Выбрано:{{ selectedPay }}</p>
                     </div>
                     <p>Возраст</p>
-                    <Input v-model:value="minAge" />
-                    <Input v-model:value="maxAge" />
-                    <p>Найдено пользователей: {{ sortedParticipants.length }}</p>
+                    <Input name="miAge" type="number" v-model:value="minAge" />
+                    <p>{{ minAge }}</p>
+                    <Input name="mAge" type="number" v-model:value="maxAge" />
+                    <p>{{ maxAge }}</p>
+                    <p>
+                        Найдено пользователей: {{ sortedParticipants.length }}
+                    </p>
                 </div>
-
-
+                <!-- <filters></filters> -->
 
                 <div class="references-items">
                     <div class="references-sort">
@@ -199,7 +203,7 @@
                         </div>
                     </div>
                     <div class="references-wrapper">
-                        <referencesList
+                        <referencesList  @change="changePeoples"
                             :participants="sortedParticipants"
                         ></referencesList>
                     </div>
@@ -215,11 +219,13 @@
                     ></Button>
                 </div>
             </div>
-            <!-- <div class="references-wrapper">
+
+            <!-- <checkbox-group v-model:value="selectedHeroes" name="heroes" :options="participants"/> -->
+            <div class="references-wrapper">
                 <referencesList
-                    :participants="selectedHeroes"
+                    :participants="selectedPeoples"
                 ></referencesList>
-            </div> -->
+            </div>
 
             <div class="references-form">
                 <form action="#">
@@ -282,24 +288,18 @@ import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
 
 const participantsVisible = ref(12);
 
-// const listOfHeroes = ref([
-//     { name: 'Spider Man', id: 'h1' },
-//     { name: 'Batman', id: 'h2' },
-//     { name: 'Tor', id: 'h3' },
-//     { name: 'Loki', id: 'h4' },
-// ]);
 const checkboxAll = ref(true);
-const selectedHeroes = ref([]);
 
 const step = ref(12);
 const selectedPeoples = ref([]);
+const disabledRadio = ref(true);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
 const searchParticipants = ref('');
 
-const selectedAnswer = ref('Все');
+const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
 const selectedSex = ref('Все');
 const selectedStatus = ref('Все');
@@ -309,17 +309,20 @@ const searchHeadquarterLocal = ref('');
 const searchHeadquarterRegion = ref('');
 const searchLSO = ref('');
 const searchEducation = ref('');
+const changePeoples = (selectedHumans) => {
+    selectedPeoples.value = selectedHumans
+}
+
 const minAge = ref('');
 const maxAge = ref('');
-
 const answers = ref([
-    { name: 'Все', id: 'f1', checked: true },
-    { name: 'Окружные штабы', id: 'f2' },
-    { name: 'Региональные отделения', id: 'f3' },
-    { name: 'Местные штабы', id: 'f4' },
-    { name: 'Штабы СО ОО', id: 'f5' },
-    { name: 'ЛСО', id: 'f6' },
-    { name: 'Пользователи', id: 'f7' },
+    { name: 'Все', id: 'f1', disabled: true},
+    { name: 'Окружные штабы', id: 'f2', disabled: true },
+    { name: 'Региональные отделения', id: 'f3',  disabled: true },
+    { name: 'Местные штабы', id: 'f4',  disabled: true },
+    { name: 'Штабы СО ОО', id: 'f5',  disabled: true },
+    { name: 'ЛСО', id: 'f6',  disabled: true },
+    { name: 'Пользователи', id: 'f7',checked: true,  disabled: false  },
 ]);
 
 const categories = ref([
@@ -340,8 +343,8 @@ const sexes = ref([
 ]);
 const status = ref([
     { name: 'Все', id: 'st1', checked: true },
-    { name: 'Верифицированный', id: 'st2' },
-    { name: 'Неверифицированный', id: 'st3' },
+    { name: 'Верифицированный', value: true, id: 'st2' },
+    { name: 'Неверифицированный', value: false, id: 'st3' },
 ]);
 
 const pay = ref([
@@ -350,14 +353,14 @@ const pay = ref([
     { name: 'Не оплачен', id: 'p3' },
 ]);
 
-const select = () => {
-    selectedHeroes.value = [];
-    if (!checkboxAll.value) {
-        for (let i in participants.value) {
-            selectedHeroes.value.push(participants.value[i].id);
-        }
-    }
-};
+// const select = () => {
+//     selectedHeroes.value = [];
+//     if (!checkboxAll.value) {
+//         for (let i in participants.value) {
+//             selectedHeroes.value.push(participants.value[i].id);
+//         }
+//     }
+// };
 
 const sortOptionss = ref([
     {
@@ -407,26 +410,55 @@ const sortedParticipants = computed(() => {
         }
     });
 
-    // tempParticipants = tempParticipants.filter((item) => item.inSquad === picked.value);
-
     if (!ascending.value) {
         tempParticipants.reverse();
     }
 
-    const rangeConditions = {
-        'Все': () => true,
-       'Мужской': (participant) => participant.sex = 'Мужской',
-        'Женский': (participant) => participant.sex = 'Женский',
+    const rangeSexes = {
+        Все: () => true,
+        Мужской: (participant) => participant.sex == 'Мужской',
+        Женский: (participant) => participant.sex == 'Женский',
     };
 
-    return tempParticipants.filter(
-        (item) => rangeConditions[selectedSex.value](item) || false,
-    );
+    const rangeStatus = {
+        Все: () => true,
+        Верифицированный: (participant) => participant.verify == true,
+        Неверифицированный: (participant) => participant.verify == false,
+    };
+
+    const rangePayed = {
+        Все: () => true,
+        Оплачен: (participant) => participant.payed == true,
+        'Не оплачен': (participant) => participant.payed == false,
+    };
+
+    tempParticipants = tempParticipants.filter((item) => {
+        return rangeSexes[selectedSex.value](item) || false;
+    });
+
+    tempParticipants = tempParticipants.filter((item) => {
+        return rangeStatus[selectedStatus.value](item) || false;
+    });
+
+    tempParticipants = tempParticipants.filter((item) => {
+        return rangePayed[selectedPay.value](item) || false;
+    });
+
+
+    tempParticipants = tempParticipants.filter((item) => {
+        return item.days >= minAge.value && item.days <= maxAge.value;
+    });
 
     return tempParticipants;
 });
 </script>
 <style lang="scss">
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .references {
     padding: 60px 0px 60px 0px;
     &-title {

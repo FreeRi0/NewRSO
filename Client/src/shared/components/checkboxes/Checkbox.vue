@@ -9,7 +9,7 @@
         @input="handleClick($event)"
     /> -->
 
-    <v-text-field
+    <input
         variant="outlined"
         type="checkbox"
         :name="name"
@@ -73,7 +73,6 @@ const props = defineProps({
 });
 
 const handleClick = (event) => {
-    // emits('update:checked', event.target.checked);
     if (props.group) {
         emits('updateCheckboxGroup', {
             optionId: props.id,

@@ -136,55 +136,57 @@ import { ref, computed } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { RadioButton } from '@shared/components/buttons';
 
-const selectedAnswer = ref('Все');
-const selectedCat = ref('Все');
-const selectedSex = ref('Все');
-const selectedStatus = ref('Все');
-const selectedPay = ref('Все');
-const searchHeadquarter = ref('');
-const searchHeadquarterLocal = ref('');
-const searchHeadquarterRegion = ref('');
-const searchLSO = ref('');
-const searchEducation = ref('');
-const minAge= ref('');
-const maxAge = ref('');
+// const selectedAnswer = ref('Все');
+// const selectedCat = ref('Все');
+// const selectedSex = ref('Все');
+// const selectedStatus = ref('Все');
+// const selectedPay = ref('Все');
+// const searchHeadquarter = ref('');
+// const searchHeadquarterLocal = ref('');
+// const searchHeadquarterRegion = ref('');
+// const searchLSO = ref('');
+// const searchEducation = ref('');
+// const minAge= ref('');
+// const maxAge = ref('');
 
-const answers = ref([
-    { name: 'Все', id: 'f1', checked: true },
-    { name: 'Окружные штабы', id: 'f2' },
-    { name: 'Региональные отделения', id: 'f3' },
-    { name: 'Местные штабы', id: 'f4' },
-    { name: 'Штабы СО ОО', id: 'f5' },
-    { name: 'ЛСО', id: 'f6' },
-    { name: 'Пользователи', id: 'f7' },
-]);
+// const answers = ref([
+//     { name: 'Все', id: 'f1', checked: true },
+//     { name: 'Окружные штабы', id: 'f2' },
+//     { name: 'Региональные отделения', id: 'f3' },
+//     { name: 'Местные штабы', id: 'f4' },
+//     { name: 'Штабы СО ОО', id: 'f5' },
+//     { name: 'ЛСО', id: 'f6' },
+//     { name: 'Пользователи', id: 'f7' },
+// ]);
 
-const categories = ref([
-    { name: 'Все', id: 'c1', checked: true },
-    { name: 'Сервисные', id: 'c2' },
-    { name: 'Строительные', id: 'c3' },
-    { name: 'Проводников', id: 'c4' },
-    { name: 'Педагогические', id: 'c5' },
-    { name: 'Медицинские', id: 'c6' },
-    { name: 'Путинные', id: 'c7' },
-    { name: 'Сельскохозяйственные', id: 'c8' },
-]);
+// const categories = ref([
+//     { name: 'Все', id: 'c1', checked: true },
+//     { name: 'Сервисные', id: 'c2' },
+//     { name: 'Строительные', id: 'c3' },
+//     { name: 'Проводников', id: 'c4' },
+//     { name: 'Педагогические', id: 'c5' },
+//     { name: 'Медицинские', id: 'c6' },
+//     { name: 'Путинные', id: 'c7' },
+//     { name: 'Сельскохозяйственные', id: 'c8' },
+// ]);
 
-const sexes = ref([
-    { name: 'Все', id: 's1', checked: true },
-    { name: 'Мужской', id: 's2' },
-    { name: 'Женский', id: 's3' },
-]);const status = ref([
-    { name: 'Все', id: 'st1', checked: true },
-    { name: 'Верифицированный', id: 'st2' },
-    { name: 'Неверифицированный', id: 'st3' },
-]);
+// const sexes = ref([
+//     { name: 'Все', id: 's1', checked: true },
+//     { name: 'Мужской', id: 's2' },
+//     { name: 'Женский', id: 's3' },
+// ]);const status = ref([
+//     { name: 'Все', id: 'st1', checked: true },
+//     { name: 'Верифицированный', id: 'st2' },
+//     { name: 'Неверифицированный', id: 'st3' },
+// ]);
 
-const pay = ref([
-    { name: 'Все', id: 'p1', checked: true },
-    { name: 'Оплачен', id: 'p2' },
-    { name: 'Не оплачен', id: 'p3' },
-]);
+// const pay = ref([
+//     { name: 'Все', id: 'p1', checked: true },
+//     { name: 'Оплачен', id: 'p2' },
+//     { name: 'Не оплачен', id: 'p3' },
+// ]);
+
+
 </script>
 <style lang="scss" scoped>
 .filter {
