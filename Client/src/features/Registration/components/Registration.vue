@@ -3,50 +3,49 @@
         <v-card class="px-14 py-15" max-width="580">
             <v-card-title class="text-h4 text-center">Регистрация</v-card-title>
             <v-form action="#" method="post" @submit.prevent="RegisterUser">
-                <!-- <SelectRegion></SelectRegion> -->
+                <!-- <SelectRegion v-model="form.region"></SelectRegion> -->
                 <Input
                     placeholder="Фамилия"
                     name="surname"
-                    v-model:value="form.surname"
+                    v-model:value="form.last_name"
                 />
                 <Input
                     placeholder="Имя"
                     name="name"
-                    v-model:value="form.nameUser"
+                    v-model:value="form.first_name"
                 />
-                <!-- <Input
+                <Input
                     placeholder="Отчество(При наличии)"
                     name="patronomyc"
-                    v-model:value="v.patronomycField"
-                /> -->
+                    v-model:value="form.patronymic_name"
+                />
                 <Input
                     type="tel"
                     placeholder="+7 (999) 999-99-99"
                     name="phone"
-                    v-model:value="form.phoneField"
+                    v-model:value="form.phone_number"
                 />
                 <Input
                     placeholder="Электронная почта"
                     name="email"
                     type="email"
-                    v-model:value="form.emailField"
+                    v-model:value="form.email"
                 />
                 <Input
                     placeholder="Придумайте логин"
                     name="login"
-                    v-model:value="form.loginField"
+                    v-model:value="form.username"
                 />
                 <PasswordInputVue
                     placeholder="Придумайте пароль"
                     name="password"
                     v-model:value="form.password"
                 ></PasswordInputVue>
-                <!-- <PasswordInputVue
+                <PasswordInputVue
                     placeholder="Повторите пароль"
                     name="confirm"
-
-
-                ></PasswordInputVue> -->
+                    v-model:value="form.re_password"
+                ></PasswordInputVue>
                 <v-checkbox
                     label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных*."
                 ></v-checkbox>
@@ -91,12 +90,14 @@ import { IMaskDirective } from 'vue-imask';
 import { SelectRegion } from '@shared/components/selects';
 
 const form = ref({
-    surname: '',
-    nameUser: '',
-    phoneField: '',
-    emailField: '',
-    loginField: '',
+    last_name: '',
+    first_name: '',
+    patronymic_name: '',
+    phone_number: '',
+    email: '',
+    username: '',
     password: '',
+    re_password: '',
 });
 
 // const surnameUser = ref('');
@@ -187,9 +188,14 @@ const router = useRouter();
 const swal = inject('$swal');
 
 const RegisterUser = async () => {
-   axios.post('http://localhost:3000/check', form)
+    axios
+        .post('api/v1/register/', form, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
         .then((response) => {
-            // form.value = response.data;
+            form.value = response.data;
             console.log(response.data);
             swal.fire({
                 position: 'top-center',
