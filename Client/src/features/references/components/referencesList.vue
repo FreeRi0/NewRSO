@@ -1,4 +1,7 @@
 <template>
+    <!-- <div class="references-sort__all">
+        <input type="checkbox" @click="select" v-model="checkboxAll" />
+    </div> -->
     <div
         class="horizontallso"
         v-for="participant in participants"
@@ -39,14 +42,12 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script setup>
-import { Checkbox } from '@shared/components/checkboxes';
-import { ref } from 'vue';
+// import referenceItem from '@entities/ReferencesPeoples/components';
 
-const selectedPeoples = ref([]);
+import { ref } from 'vue';
 
 const emit = defineEmits(['change']);
 
@@ -54,125 +55,28 @@ const updateCheck = (e) => {
     console.log('dddddd');
     emit('change', selectedPeoples.value);
 };
-
 const props = defineProps({
     participants: {
         type: Array,
-        required: false,
+        required: true,
     },
 });
+
+// const checkboxAll = ref(false);
+
+const selectedPeoples = ref([]);
+
+// const select = () => {
+//     selectedPeoples.value = [];
+
+//     if (checkboxAll.value) {
+//         for (participant in participants) {
+//             selectedPeoples.value.push(participants[participant].id.toString());
+//         }
+//     }
+// };
+
+
 </script>
 
-<style lang="scss" scoped>
-.horizontallso {
-    display: flex;
-}
-.horizontallso-item__wrapper {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: baseline;
-    align-items: center;
-
-    padding: 4px 20px;
-
-    border-radius: 10px;
-    border: 1px solid #b6b6b6;
-    background: #fff;
-    margin-bottom: 12px;
-    margin-left: 12px;
-    width: 100%;
-}
-
-.containerHorizontal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.horizontallso-img {
-    align-items: center;
-    width: 36px;
-    height: 36px;
-    justify-content: start;
-}
-
-.horizontallso-item img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    overflow: cover;
-}
-
-.horizontallso-item p {
-    margin-left: 10px;
-}
-
-.horizontallso-item__list-date {
-    width: 95px;
-    display: grid;
-    grid-template-columns: auto 1fr 1fr;
-}
-
-.horizontallso-img img {
-    display: flex;
-    position: relative;
-    align-items: center;
-}
-
-.horizontallso-item__list-img-status {
-    position: absolute;
-    width: 18px;
-    max-height: 18px;
-    top: -17px;
-    right: -15px;
-}
-
-.horizontallso-itemo__list-img {
-    margin-right: 13px;
-}
-
-.horizontallso-item__list-full {
-    color: #35383f;
-    font-family: 'BertSans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    margin-left: 10px;
-}
-
-.horizontallso-item__list-date p {
-    color: #1c5c94;
-    font-family: 'BertSans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.horizontallso__confidant {
-    padding: 12px;
-    min-width: 48px;
-    border: 1px solid #b6b6b6;
-    border-radius: 10px;
-
-    .v-field__overlay,
-    .v-field__loader {
-        display: none;
-    }
-
-    .v-input,
-    .v-input__control,
-    .v-field {
-        width: 24px;
-        // height: 50%;
-        min-height: 0;
-    }
-
-    // .v-field__field {
-    // }
-    .v-field__input,
-    .v-text-field input.v-field__input {
-        // max-height: 24px;
-        min-height: 0;
-        width: 24px;
-        height: 24px;
-    }
-}
-</style>
+<style lang="scss" scoped></style>

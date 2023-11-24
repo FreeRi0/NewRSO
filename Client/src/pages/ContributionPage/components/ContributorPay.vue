@@ -1,21 +1,37 @@
 <template>
     <div class="container">
-        <div class="references">
-            <h2 class="references-title">
-                Справка о членстве в РСО (для работодателя)
-            </h2>
-            <div class="references-search">
+        <div class="contributor">
+            <h2 class="contributor-title">Членский взнос</h2>
+            <div class="d-flex mt-7">
+                <v-btn :class="{ active: picked === true }"
+                @click="picked = true" >Мой членский взнос</v-btn
+                >
+                <v-btn :class="{ active: picked === false }"
+                @click="picked = false">Данные об оплате членского взноса пользователями
+                    системы</v-btn
+                >
+            </div>
+
+
+            <!-- <Search v-model="searchParticipants" /> -->
+
+            <div v-if="picked === true">
+              Уважаемый пользователь, ваш членский взнос не оплачен.
+            </div>
+            <div v-else="picked === false">
+              <div class="contributor-search">
                 <input
                     type="text"
                     id="search"
-                    class="references-search__input"
+                    class="contributor-search__input"
                     v-model="searchParticipants"
                     placeholder="Поищем пользователей?"
                 />
                 <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
-            <!-- <Search v-model="searchParticipants" /> -->
-            <div class="references-container">
+
+            <div class="contributor-container" >
+
                 <div class="filters">
                     <h3 class="filters-title">Основные фильтры</h3>
                     <v-expansion-panels>
@@ -69,11 +85,11 @@
                                 </template>
                             </v-expansion-panel-title>
                             <v-expansion-panel-text>
-                                <div class="references-search filter">
+                                <div class="contributor-search filter">
                                     <input
                                         type="text"
                                         id="search"
-                                        class="references-search__input"
+                                        class="contributor-search__input"
                                         v-model="searchHeadquarter"
                                         placeholder="ввод?"
                                     />
@@ -98,11 +114,11 @@
                                 </template>
                             </v-expansion-panel-title>
                             <v-expansion-panel-text>
-                                <div class="references-search filter">
+                                <div class="contributor-search filter">
                                     <input
                                         type="text"
                                         id="search"
-                                        class="references-search__input"
+                                        class="contributor-search__input"
                                         v-model="searchHeadquarterRegion"
                                         placeholder="ввод?"
                                     />
@@ -127,11 +143,11 @@
                                 </template>
                             </v-expansion-panel-title>
                             <v-expansion-panel-text>
-                                <div class="references-search filter">
+                                <div class="contributor-search filter">
                                     <input
                                         type="text"
                                         id="search"
-                                        class="references-search__input"
+                                        class="contributor-search__input"
                                         v-model="searchHeadquarterLocal"
                                         placeholder="ввод?"
                                     />
@@ -156,11 +172,11 @@
                                 </template>
                             </v-expansion-panel-title>
                             <v-expansion-panel-text>
-                                <div class="references-search filter">
+                                <div class="contributor-search filter">
                                     <input
                                         type="text"
                                         id="search"
-                                        class="references-search__input"
+                                        class="contributor-search__input"
                                         v-model="searchEducation"
                                         placeholder="ввод?"
                                     />
@@ -218,11 +234,11 @@
                                 </template>
                             </v-expansion-panel-title>
                             <v-expansion-panel-text>
-                                <div class="references-search filter">
+                                <div class="contributor-search filter">
                                     <input
                                         type="text"
                                         id="search"
-                                        class="references-search__input"
+                                        class="contributor-search__input"
                                         v-model="searchLSO"
                                         placeholder="ввод?"
                                     />
@@ -372,9 +388,9 @@
                 </div>
                 <!-- <filters></filters> -->
 
-                <div class="references-items">
-                    <div class="references-sort">
-                        <div class="references-sort__all">
+                <div class="contributor-items">
+                    <div class="contributor-sort">
+                        <div class="contributor-sort__all">
                             <input
                                 type="checkbox"
                                 @click="select"
@@ -396,11 +412,11 @@
                             ></Button>
                         </div>
                     </div>
-                    <div class="references-wrapper">
-                        <referencesList
+                    <div class="contributor-wrapper">
+                        <contributorsList
                             @change="changePeoples"
                             :participants="sortedParticipants"
-                        ></referencesList>
+                        ></contributorsList>
                     </div>
                     <Button
                         @click="participantsVisible += step"
@@ -414,59 +430,8 @@
                     ></Button>
                 </div>
             </div>
-
-            <div class="references-form" v-if="selectedPeoples.length > 0">
-                <form action="#">
-                    <div class="data-form refer">
-                        <div class="form-field">
-                            <label for="education-org"
-                                >Дата начала действия справки<span
-                                    class="valid-red"
-                                    >*</span
-                                ></label
-                            >
-                            <Input
-                                name="date_start"
-                                type="date"
-                                class="input-big"
-                            />
-                        </div>
-                        <div class="form-field">
-                            <label for="facultet"
-                                >Дата окончания действия справки
-                            </label>
-                            <Input
-                                name="date_end"
-                                type="date"
-                                class="input-big"
-                            />
-                        </div>
-                    </div>
-                    <div class="form-field another">
-                        <label for="course"
-                            >Справка выдана для предоставления
-                            <span class="valid-red">*</span></label
-                        >
-                        <Input
-                            name="spravka-field"
-                            type="text"
-                            id="course"
-                            class="input-full"
-                            placeholder="Ответ"
-                        />
-                    </div>
-                    <div class="selectedItems">
-                        <h3>Итого: {{ selectedPeoples.length }}</h3>
-
-                        <checkedReference
-                            @change="changePeoples"
-                            :participants="selectedPeoples"
-                        ></checkedReference>
-                    </div>
-
-                    <Button label="Получить справки"></Button>
-                </form>
             </div>
+
         </div>
     </div>
 </template>
@@ -476,14 +441,9 @@ import { Button } from '@shared/components/buttons';
 import { RadioButton } from '@shared/components/buttons';
 import { Dropdown } from '@shared/components/dropdown';
 import { Input } from '@shared/components/inputs';
-import {
-    referencesList,
-    filters,
-    checkedReference,
-} from '@features/references/components';
+import { contributorsList } from '@features/Contributor/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed } from 'vue';
-import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
 
 const participantsVisible = ref(12);
 
@@ -499,6 +459,7 @@ const searchLSO = ref('');
 const searchEducation = ref('');
 const minAge = ref('');
 const maxAge = ref('');
+const picked = ref(false);
 
 const checkboxAll = ref(false);
 
@@ -651,7 +612,7 @@ input[type='number']::-webkit-outer-spin-button {
     margin: 0;
 }
 
-.references {
+.contributor {
     padding: 60px 0px 60px 0px;
     &-title {
         font-size: 52px;
@@ -713,7 +674,7 @@ input[type='number']::-webkit-outer-spin-button {
     width: 100%;
 }
 
-.references-sort__all {
+.contributor-sort__all {
     display: flex;
     align-items: center;
     flex-direction: row-reverse;
@@ -772,5 +733,9 @@ input[type='number']::-webkit-outer-spin-button {
 
 .v-expansion-panel:not(:first-child)::after {
     display: none;
+}
+
+.active {
+    background-color: blue;
 }
 </style>
