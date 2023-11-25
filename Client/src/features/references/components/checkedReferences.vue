@@ -1,24 +1,24 @@
 <template>
     <div
-        class="horizontallso"
+        class="checked"
         v-for="participant in participants"
         :key="participant.id"
     >
-        <div class="horizontallso-item__wrapper">
-            <div class="horizontallso-img">
+        <div class="checked-item__wrapper">
+            <div class="checked-img">
                 <img :src="'./assets/' + participant.image" alt="logo" />
                 <img
                     v-if="participant.useIcon"
-                    class="horizontallso-item__list-img-status"
+                    class="checked-item__list-img-status"
                     :src="'./assets/icon/' + participant.icon"
                     alt="icon"
                 />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full">
+                <p class="checked-item__list-full">
                     {{ participant.name }}
                 </p>
-                <div class="horizontallso-item__list-date">
+                <div class="checked-item__list-date">
                     <span
                         style="
                             border-left: 2px solid #b6b6b6;
@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class="horizontallso__confidant">
+        <div class="checked__confidant">
             <input
                 type="checkbox"
                 v-model="selectedPeoples"
@@ -37,7 +37,8 @@
                 @change="updateCheck"
             />
         </div>
-        <Button type="button" label="Предпросмотр"></Button>
+        <Button class="preview" type="button" label="Предпросмотр"></Button>
+
     </div>
 </template>
 <script setup>
@@ -57,9 +58,10 @@ const props = defineProps({
     },
 });
 </script>
-<style lang="scss">
-.horizontallso {
+<style lang="scss" scoped>
+.checked {
     display: flex;
+    align-items: center;
     &-img {
         align-items: center;
         width: 36px;
@@ -72,7 +74,7 @@ const props = defineProps({
         }
     }
 }
-.horizontallso-item__wrapper {
+.checked-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: baseline;
@@ -83,7 +85,6 @@ const props = defineProps({
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
-    margin-bottom: 12px;
     margin-left: 12px;
     width: 100%;
 }
@@ -94,24 +95,24 @@ const props = defineProps({
     justify-content: space-between;
 }
 
-.horizontallso-item img {
+.checked-item img {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     overflow: cover;
 }
 
-.horizontallso-item p {
+.checked-item p {
     margin-left: 10px;
 }
 
-.horizontallso-item__list-date {
+.checked-item__list-date {
     width: 95px;
     display: grid;
     grid-template-columns: auto 1fr 1fr;
 }
 
-.horizontallso-item__list-img-status {
+.checked-item__list-img-status {
     position: absolute;
     width: 18px;
     max-height: 18px;
@@ -119,11 +120,11 @@ const props = defineProps({
     right: -15px;
 }
 
-.horizontallso-itemo__list-img {
+.checked-itemo__list-img {
     margin-right: 13px;
 }
 
-.horizontallso-item__list-full {
+.checked-item__list-full {
     color: #35383f;
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
@@ -131,17 +132,34 @@ const props = defineProps({
     margin-left: 10px;
 }
 
-.horizontallso-item__list-date p {
+.checked-item__list-date p {
     color: #1c5c94;
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
     font-weight: 400;
 }
 
-.horizontallso__confidant {
-    padding: 11px 15px;
+.checked__confidant {
+    padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
-    height: 46px;
+    height: 48px;
+    margin: 0px 12px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.preview {
+    background-color: white;
+    color: #35383f;
+    border: 1px solid black;
+    width: 168px;
+    height: 48px;
+    span {
+        font-size: 16px;
+    }
 }
 </style>

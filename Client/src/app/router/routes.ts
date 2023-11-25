@@ -87,6 +87,12 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/ReferencePage/components/reference.vue'),
             },
             {
+                path: '/referenceForYou',
+                name: 'referenceForYou',
+                component: () =>
+                    import('@pages/ReferencePage/components/referenceForYou.vue'),
+            },
+            {
                 path: '/contributorPay',
                 name: 'contributorPay',
                 component: () =>

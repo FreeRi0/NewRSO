@@ -3,438 +3,451 @@
         <div class="contributor">
             <h2 class="contributor-title">Членский взнос</h2>
             <div class="d-flex mt-7">
-                <v-btn :class="{ active: picked === true }"
-                @click="picked = true" >Мой членский взнос</v-btn
-                >
-                <v-btn :class="{ active: picked === false }"
-                @click="picked = false">Данные об оплате членского взноса пользователями
-                    системы</v-btn
-                >
-            </div>
+                <Button
+                    type="button"
+                    label="Мой членский взнос"
+                    class="contributorBtn"
+                    :class="{ active: picked === true }"
+                    @click="picked = true"
+                ></Button>
 
+                <Button
+                    type="button"
+                    label="Данные об оплате членского взноса пользователями системы"
+                    class="contributorBtn"
+                    :class="{ active: picked === false }"
+                    @click="picked = false"
+                ></Button>
+            </div>
 
             <!-- <Search v-model="searchParticipants" /> -->
 
             <div v-if="picked === true">
-              Уважаемый пользователь, ваш членский взнос не оплачен.
+                Уважаемый пользователь, ваш членский взнос не оплачен.
             </div>
             <div v-else="picked === false">
-              <div class="contributor-search">
-                <input
-                    type="text"
-                    id="search"
-                    class="contributor-search__input"
-                    v-model="searchParticipants"
-                    placeholder="Поищем пользователей?"
-                />
-                <img src="@app/assets/icon/search.svg" alt="search" />
-            </div>
-
-            <div class="contributor-container" >
-
-                <div class="filters">
-                    <h3 class="filters-title">Основные фильтры</h3>
-                    <v-expansion-panels>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Уровень поиска
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text class="inner-content">
-                                <div class="checkbox">
-                                    <div
-                                        class="checkbox-item"
-                                        v-for="answer in answers"
-                                        :key="answer.id"
-                                    >
-                                        <RadioButton
-                                            :value="answer.name"
-                                            :label="answer.name"
-                                            :id="answer.id"
-                                            :checked="answer.checked"
-                                            :disabled="disabledRadio"
-                                            name="answer"
-                                            v-model:checkedValue="
-                                                selectedAnswer
-                                            "
-                                        />
-                                    </div>
-                                </div>
-                                <p>Выбрано:{{ selectedAnswer }}</p>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Окружной штаб
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="contributor-search filter">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        class="contributor-search__input"
-                                        v-model="searchHeadquarter"
-                                        placeholder="ввод?"
-                                    />
-                                    <img
-                                        src="@app/assets/icon/search.svg"
-                                        alt="search"
-                                    />
-                                </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Региональный штаб
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="contributor-search filter">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        class="contributor-search__input"
-                                        v-model="searchHeadquarterRegion"
-                                        placeholder="ввод?"
-                                    />
-                                    <img
-                                        src="@app/assets/icon/search.svg"
-                                        alt="search"
-                                    />
-                                </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Местный штаб
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="contributor-search filter">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        class="contributor-search__input"
-                                        v-model="searchHeadquarterLocal"
-                                        placeholder="ввод?"
-                                    />
-                                    <img
-                                        src="@app/assets/icon/search.svg"
-                                        alt="search"
-                                    />
-                                </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Обазовательная организация
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="contributor-search filter">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        class="contributor-search__input"
-                                        v-model="searchEducation"
-                                        placeholder="ввод?"
-                                    />
-                                    <img
-                                        src="@app/assets/icon/search.svg"
-                                        alt="search"
-                                    />
-                                </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Направление отряда
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="checkbox">
-                                    <div
-                                        class="checkbox-item"
-                                        v-for="cat in categories"
-                                        :key="cat.id"
-                                    >
-                                        <RadioButton
-                                            :value="cat.name"
-                                            :label="cat.name"
-                                            :id="cat.id"
-                                            :checked="cat.checked"
-                                            name="category"
-                                            v-model:checkedValue="selectedCat"
-                                        />
-                                    </div>
-                                </div>
-                                <p>Выбрано:{{ selectedCat }}</p>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            ЛСО
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="contributor-search filter">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        class="contributor-search__input"
-                                        v-model="searchLSO"
-                                        placeholder="ввод?"
-                                    />
-                                    <img
-                                        src="@app/assets/icon/search.svg"
-                                        alt="search"
-                                    />
-                                </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-                    <h3 class="filters-title">Дополнительные фильтры</h3>
-                    <v-expansion-panels>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Пол
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="checkbox">
-                                    <div
-                                        class="checkbox-item"
-                                        v-for="sex in sexes"
-                                        :key="sex.id"
-                                    >
-                                        <RadioButton
-                                            :value="sex.name"
-                                            :label="sex.name"
-                                            :id="sex.id"
-                                            :checked="sex.checked"
-                                            name="sex"
-                                            v-model:checkedValue="selectedSex"
-                                        />
-                                    </div>
-                                </div>
-                                <p>Выбрано:{{ selectedSex }}</p>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Статус аккаунта
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="checkbox">
-                                    <div
-                                        class="checkbox-item"
-                                        v-for="stat in status"
-                                        :key="stat.id"
-                                    >
-                                        <RadioButton
-                                            :value="stat.name"
-                                            :label="stat.name"
-                                            :id="stat.id"
-                                            :checked="stat.checked"
-                                            name="status"
-                                            v-model:checkedValue="
-                                                selectedStatus
-                                            "
-                                        />
-                                    </div>
-                                </div>
-                                <p>Выбрано:{{ selectedStatus }}</p>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Членский взнос
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="checkbox">
-                                    <div
-                                        class="checkbox-item"
-                                        v-for="p in pay"
-                                        :key="p.id"
-                                    >
-                                        <RadioButton
-                                            :value="p.name"
-                                            :label="p.name"
-                                            :id="p.id"
-                                            :checked="p.checked"
-                                            name="pay"
-                                            v-model:checkedValue="selectedPay"
-                                        />
-                                    </div>
-                                </div>
-                                <p>Выбрано:{{ selectedPay }}</p>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Возраст
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <Input
-                                    name="miAge"
-                                    type="number"
-                                    v-model:value="minAge"
-                                />
-
-                                <Input
-                                    name="mAge"
-                                    type="number"
-                                    v-model:value="maxAge"
-                                />
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-
-                    <p>
-                        Найдено пользователей: {{ sortedParticipants.length }}
-                    </p>
+                <div class="contributor-search">
+                    <input
+                        type="text"
+                        id="search"
+                        class="contributor-search__input"
+                        v-model="searchParticipants"
+                        placeholder="Поищем пользователей?"
+                    />
+                    <img src="@app/assets/icon/search.svg" alt="search" />
                 </div>
-                <!-- <filters></filters> -->
 
-                <div class="contributor-items">
-                    <div class="contributor-sort">
-                        <div class="contributor-sort__all">
-                            <input
-                                type="checkbox"
-                                @click="select"
-                                v-model="checkboxAll"
-                            />
-                        </div>
-                        <div class="sort-filters">
-                            <div class="sort-select">
-                                <sortByEducation
-                                    v-model="sortBy"
-                                    :options="sortOptionss"
-                                ></sortByEducation>
+                <div class="contributor-container">
+                    <div class="filters">
+                        <h3 class="filters-title">Основные фильтры</h3>
+                        <v-expansion-panels>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                Уровень поиска
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text class="inner-content">
+                                    <div class="checkbox">
+                                        <div
+                                            class="checkbox-item"
+                                            v-for="answer in answers"
+                                            :key="answer.id"
+                                        >
+                                            <RadioButton
+                                                :value="answer.name"
+                                                :label="answer.name"
+                                                :id="answer.id"
+                                                :checked="answer.checked"
+                                                :disabled="disabledRadio"
+                                                name="answer"
+                                                v-model:checkedValue="
+                                                    selectedAnswer
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                    <p>Выбрано:{{ selectedAnswer }}</p>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                Окружной штаб
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <div class="contributor-search filter">
+                                        <input
+                                            type="text"
+                                            id="search"
+                                            class="contributor-search__input"
+                                            v-model="searchHeadquarter"
+                                            placeholder="ввод?"
+                                        />
+                                        <img
+                                            src="@app/assets/icon/search.svg"
+                                            alt="search"
+                                        />
+                                    </div>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                Региональный штаб
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <div class="contributor-search filter">
+                                        <input
+                                            type="text"
+                                            id="search"
+                                            class="contributor-search__input"
+                                            v-model="searchHeadquarterRegion"
+                                            placeholder="ввод?"
+                                        />
+                                        <img
+                                            src="@app/assets/icon/search.svg"
+                                            alt="search"
+                                        />
+                                    </div>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                Местный штаб
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <div class="contributor-search filter">
+                                        <input
+                                            type="text"
+                                            id="search"
+                                            class="contributor-search__input"
+                                            v-model="searchHeadquarterLocal"
+                                            placeholder="ввод?"
+                                        />
+                                        <img
+                                            src="@app/assets/icon/search.svg"
+                                            alt="search"
+                                        />
+                                    </div>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                Обазовательная организация
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <div class="contributor-search filter">
+                                        <input
+                                            type="text"
+                                            id="search"
+                                            class="contributor-search__input"
+                                            v-model="searchEducation"
+                                            placeholder="ввод?"
+                                        />
+                                        <img
+                                            src="@app/assets/icon/search.svg"
+                                            alt="search"
+                                        />
+                                    </div>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                Направление отряда
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <div class="checkbox">
+                                        <div
+                                            class="checkbox-item"
+                                            v-for="cat in categories"
+                                            :key="cat.id"
+                                        >
+                                            <RadioButton
+                                                :value="cat.name"
+                                                :label="cat.name"
+                                                :id="cat.id"
+                                                :checked="cat.checked"
+                                                name="category"
+                                                v-model:checkedValue="
+                                                    selectedCat
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                    <p>Выбрано:{{ selectedCat }}</p>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                ЛСО
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <div class="contributor-search filter">
+                                        <input
+                                            type="text"
+                                            id="search"
+                                            class="contributor-search__input"
+                                            v-model="searchLSO"
+                                            placeholder="ввод?"
+                                        />
+                                        <img
+                                            src="@app/assets/icon/search.svg"
+                                            alt="search"
+                                        />
+                                    </div>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                        </v-expansion-panels>
+                        <h3 class="filters-title">Дополнительные фильтры</h3>
+                        <v-expansion-panels>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                Пол
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <div class="checkbox">
+                                        <div
+                                            class="checkbox-item"
+                                            v-for="sex in sexes"
+                                            :key="sex.id"
+                                        >
+                                            <RadioButton
+                                                :value="sex.name"
+                                                :label="sex.name"
+                                                :id="sex.id"
+                                                :checked="sex.checked"
+                                                name="sex"
+                                                v-model:checkedValue="
+                                                    selectedSex
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                    <p>Выбрано:{{ selectedSex }}</p>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                Статус аккаунта
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <div class="checkbox">
+                                        <div
+                                            class="checkbox-item"
+                                            v-for="stat in status"
+                                            :key="stat.id"
+                                        >
+                                            <RadioButton
+                                                :value="stat.name"
+                                                :label="stat.name"
+                                                :id="stat.id"
+                                                :checked="stat.checked"
+                                                name="status"
+                                                v-model:checkedValue="
+                                                    selectedStatus
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                    <p>Выбрано:{{ selectedStatus }}</p>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                Членский взнос
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <div class="checkbox">
+                                        <div
+                                            class="checkbox-item"
+                                            v-for="p in pay"
+                                            :key="p.id"
+                                        >
+                                            <RadioButton
+                                                :value="p.name"
+                                                :label="p.name"
+                                                :id="p.id"
+                                                :checked="p.checked"
+                                                name="pay"
+                                                v-model:checkedValue="
+                                                    selectedPay
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                    <p>Выбрано:{{ selectedPay }}</p>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>
+                                    <template v-slot:default="{ expanded }">
+                                        <v-row no-gutters>
+                                            <v-col
+                                                cols="4"
+                                                class="d-flex justify-start"
+                                            >
+                                                Возраст
+                                            </v-col>
+                                        </v-row>
+                                    </template>
+                                </v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <Input
+                                        name="miAge"
+                                        type="number"
+                                        v-model:value="minAge"
+                                    />
+
+                                    <Input
+                                        name="mAge"
+                                        type="number"
+                                        v-model:value="maxAge"
+                                    />
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                        </v-expansion-panels>
+
+                        <p>
+                            Найдено пользователей:
+                            {{ sortedParticipants.length }}
+                        </p>
+                    </div>
+                    <!-- <filters></filters> -->
+
+                    <div class="contributor-items">
+                        <div class="contributor-sort">
+                            <div class="contributor-sort__all">
+                                <input
+                                    type="checkbox"
+                                    @click="select"
+                                    v-model="checkboxAll"
+                                />
                             </div>
+                            <div class="sort-filters">
+                                <div class="sort-select">
+                                    <sortByEducation
+                                        v-model="sortBy"
+                                        :options="sortOptionss"
+                                    ></sortByEducation>
+                                </div>
 
-                            <Button
-                                @click="ascending = !ascending"
-                                icon="icon"
-                                color="white"
-                            ></Button>
+                                <Button
+                                    @click="ascending = !ascending"
+                                    icon="icon"
+                                    color="white"
+                                ></Button>
+                            </div>
                         </div>
+                        <div class="contributor-wrapper">
+                            <contributorsList
+                                @change="changePeoples"
+                                :participants="sortedParticipants"
+                            ></contributorsList>
+                        </div>
+                        <Button
+                            @click="participantsVisible += step"
+                            v-if="participantsVisible < participants.length"
+                            label="Показать еще"
+                        ></Button>
+                        <Button
+                            @click="participantsVisible -= step"
+                            v-else
+                            label="Свернуть все"
+                        ></Button>
                     </div>
-                    <div class="contributor-wrapper">
-                        <contributorsList
-                            @change="changePeoples"
-                            :participants="sortedParticipants"
-                        ></contributorsList>
-                    </div>
-                    <Button
-                        @click="participantsVisible += step"
-                        v-if="participantsVisible < participants.length"
-                        label="Показать еще"
-                    ></Button>
-                    <Button
-                        @click="participantsVisible -= step"
-                        v-else
-                        label="Свернуть все"
-                    ></Button>
                 </div>
             </div>
-            </div>
-
         </div>
     </div>
 </template>
+//
 <script setup>
 import participants from '@entities/Participants/participants';
 import { Button } from '@shared/components/buttons';
@@ -605,7 +618,7 @@ const sortedParticipants = computed(() => {
     return tempParticipants;
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -735,7 +748,18 @@ input[type='number']::-webkit-outer-spin-button {
     display: none;
 }
 
+.contributorBtn {
+    border-radius: 30px;
+    background-color: white;
+    color: #1C5C94;
+    border: 1px solid #1C5C94;
+    margin: 0px;
+    padding: 10px 24px;
+    margin: 7px;
+}
+
 .active {
-    background-color: blue;
+    background-color: #1C5C94;
+    color: white;
 }
 </style>

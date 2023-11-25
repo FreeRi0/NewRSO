@@ -3,20 +3,22 @@
         <div class="squads">
             <bannerCreate></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
-
             <div class="squads-tabs">
-                <!-- <Button label="все"></Button> -->
-                <v-btn  @click="picked = ''">Все</v-btn>
                 <v-btn
+                    class="squads-tabs__item"
+                    :class="{ active: picked === '' }"
+                    @click="picked = ''"
+                    >Все</v-btn
+                >
+                <v-btn
+                    class="squads-tabs__item"
                     :class="{ active: picked === category }"
                     v-for="category in categories"
                     :key="category"
                     @click="picked = category"
                     >{{ category }}</v-btn
                 >
-                <!-- <Button :value="category">{{ cat }}</Button> -->
             </div>
-            <!--  -->
             <div class="squads-search">
                 <input
                     type="text"
@@ -157,8 +159,6 @@ const sortedSquads = computed(() => {
 
     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-
-
     tempSquads = tempSquads.filter((item) => {
         return selectedSort.value == 0 || item.education == selectedSort.value;
     });
@@ -203,7 +203,6 @@ const sortedSquads = computed(() => {
 
     tempSquads = tempSquads.filter((item) => item.category === picked.value);
 
-
     if (!ascending.value) {
         tempSquads.reverse();
     }
@@ -234,8 +233,8 @@ const sortedSquads = computed(() => {
         display: flex;
         flex-wrap: wrap;
         &__item {
-            padding: 10px 24px;
-            border: 2px solid black;
+            padding: 6px 24px;
+            border: 1px solid black;
             border-radius: 30px;
             text-align: center;
             font-size: 20px;
@@ -243,6 +242,8 @@ const sortedSquads = computed(() => {
             font-family: 'Bert Sans';
             margin: 20px 20px 0px 0px;
             cursor: pointer;
+            text-transform: none;
+            box-shadow: none;
         }
     }
 }
@@ -255,9 +256,10 @@ const sortedSquads = computed(() => {
 }
 
 .active {
-    background-color: blue;
+    background-color: #1C5C94;
+    color: white;
+    border: 1px solid #1C5C94;
 }
-
 .squads-search {
     position: relative;
     box-sizing: border-box;
