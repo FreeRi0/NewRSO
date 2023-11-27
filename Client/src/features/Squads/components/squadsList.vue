@@ -1,15 +1,19 @@
 <template>
-        <div class="squads-wrapper__item" v-for="squad in squads" v-if="squads.length > 0">
-            <div class="round-img">
-                <img :src="'./assets/logo/' + squad.image" alt="logo" />
-            </div>
-            <div class="container-squad">
-                <p class="squads-wrapper__item-category">
-                    {{ squad.desc }}
-                </p>
-                <p class="squads-wrapper__item-title">{{ squad.title }}</p>
-            </div>
+    <div
+        class="squads-wrapper__item"
+        v-for="squad in squads"
+        v-if="squads.length > 0"
+    >
+        <div class="round-img">
+            <img :src="'./assets/logo/' + squad.image" alt="logo" />
         </div>
+        <div class="container-squad">
+            <p class="squads-wrapper__item-category">
+                {{ squad.desc }}
+            </p>
+            <p class="squads-wrapper__item-title">{{ squad.title }}</p>
+        </div>
+    </div>
 
     <h2 v-else>Отряд не найден...</h2>
 </template>
@@ -27,10 +31,17 @@ const props = defineProps({
     height: 128px;
     display: block;
     margin: 0px auto;
+    @media screen and (max-width: 575px) {
+        width: 100px;
+        height: 100px;
+    }
 }
 .squads-wrapper__item {
     margin: 0px auto;
     width: 180px;
+    @media screen and (max-width: 575px) {
+        width: 150px;
+    }
 
     &-category {
         margin-top: 10px;
@@ -46,6 +57,9 @@ const props = defineProps({
         font-size: 20px;
         font-family: 'Akrobat';
         color: #1e1e1e;
+        @media screen and (max-width: 575px) {
+            font-size: 15px;
+        }
     }
 }
 </style>

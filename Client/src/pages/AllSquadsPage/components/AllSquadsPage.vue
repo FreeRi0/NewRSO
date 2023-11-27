@@ -211,16 +211,28 @@ const sortedSquads = computed(() => {
 });
 </script>
 <style lang="scss">
+body {
+    border: 1px solid red;
+}
 .squads {
     padding: 60px 0px 60px 0px;
     &-title {
         font-size: 52px;
+        @media screen and (max-width: 575px) {
+            font-size: 32px;
+        }
     }
     &-wrapper {
         padding: 60px 0px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+        @media screen and (max-width: 1024px) {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 575px) {
+            grid-template-columns: 1fr 1fr;
+        }
     }
     &-sort {
         display: flex;
@@ -244,6 +256,11 @@ const sortedSquads = computed(() => {
             cursor: pointer;
             text-transform: none;
             box-shadow: none;
+            @media screen and (max-width: 768px) {
+                font-size: 14px;
+                padding: 8px 8px;
+                margin: 20px 8px 0px 0px;
+            }
         }
     }
 }
@@ -256,9 +273,9 @@ const sortedSquads = computed(() => {
 }
 
 .active {
-    background-color: #1C5C94;
+    background-color: #1c5c94;
     color: white;
-    border: 1px solid #1C5C94;
+    border: 1px solid #1c5c94;
 }
 .squads-search {
     position: relative;
@@ -278,5 +295,23 @@ const sortedSquads = computed(() => {
 
 .education {
     width: 305px;
+    @media screen and (max-width: 768px) {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575px) {
+    .squads-sort {
+        flex-direction: column-reverse;
+    }
+    .sort-filters {
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+        align-items: end;
+    }
+
+    .sort-select {
+        margin-top: 12px;
+    }
 }
 </style>

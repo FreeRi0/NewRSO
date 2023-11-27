@@ -37,12 +37,14 @@ const props = defineProps({
 .containerHorizontal {
     display: flex;
     align-items: center;
+    @media screen and (max-width: 575px) {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-left: 10px;
+    }
 }
 
 .squads-wrapper__item {
-    margin: 0px auto;
-    width: 180px;
-
     &-category-full {
         text-align: center;
         font-size: 18px;
@@ -50,6 +52,9 @@ const props = defineProps({
         margin-left: 20px;
         margin-right: 5px;
         color: #1e1e1e;
+        @media screen and (max-width: 575px) {
+            font-size: 15px;
+        }
     }
     &-title {
         text-align: center;

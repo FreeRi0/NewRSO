@@ -20,7 +20,7 @@
                 <Input
                     placeholder="Отчество(При наличии)"
                     name="patronomyc"
-                    v-model:value="data.patronomycField"
+                    v-model:value="patronomycField"
                 />
                 <Input
                     type="tel"
@@ -57,8 +57,8 @@
                 <v-checkbox
                     label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных*."
                 ></v-checkbox>
-                <!-- <Button label="Зарегистрироваться" color="primary"></Button> -->
-                <button>Зарегистрироваться</button>
+                <Button label="Зарегистрироваться" color="primary"></Button>
+
 
                 <v-card-text class="text-center">
                     <router-link to="/"
@@ -180,7 +180,6 @@ const v = useVuelidate(rules, {
     phoneField,
     loginField,
     emailField,
-    selectRegion
 });
 
 const router = useRouter();
