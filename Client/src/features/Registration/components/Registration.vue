@@ -189,7 +189,7 @@ const swal = inject('$swal');
 
 const RegisterUser = async () => {
     axios
-        .post('api/v1/register/', form, {
+        .post('api/v1/register/', form.value, {
             headers: {
                 'Content-Type': 'application/json',
             },
