@@ -34,7 +34,8 @@
                 type="checkbox"
                 v-model="selectedPeoples"
                 :value="participant"
-                @change="updateCheck"
+                @change="updateCheck(participant)"
+
             />
         </div>
         <Button class="preview" type="button" label="Предпросмотр"></Button>
@@ -43,13 +44,14 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
+import { ref } from 'vue';
 const emit = defineEmits(['change']);
 
 
-// const updateCheck = (e) => {
-//     console.log('dddddd');
-//     emit('change', participants.value);
-// };
+const updateCheck = (participant) => {
+    console.log('dddddddf');
+    emit('change', participant);
+};
 
 const props = defineProps({
     participants: {
@@ -57,6 +59,10 @@ const props = defineProps({
         required: true,
     },
 });
+const selectedPeoples = ref(props.participants);
+
+// watch(() => props.participants)
+//
 </script>
 <style lang="scss" scoped>
 .checked {

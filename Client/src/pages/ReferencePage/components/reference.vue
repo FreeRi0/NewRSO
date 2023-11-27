@@ -377,7 +377,7 @@
                         <div class="references-sort__all">
                             <input
                                 type="checkbox"
-                                @click="select"
+                                @change="select"
                                 v-model="checkboxAll"
                             />
                         </div>
@@ -459,7 +459,7 @@
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
                         <checkedReference
-                            @change="changePeoples"
+                            @change="changeS"
                             :participants="selectedPeoples"
                         ></checkedReference>
                     </div>
@@ -511,9 +511,9 @@ const sortBy = ref('alphabetically');
 const select = () => {
     selectedPeoples.value = [];
 
-    if (!checkboxAll.value) {
-        for (item in participants) {
-            selectedPeoples.push(participants[item]);
+    if (checkboxAll.value) {
+        for (let item in participants) {
+            selectedPeoples.value.push(participants[item]);
         }
     }
 };
@@ -521,6 +521,7 @@ const searchParticipants = ref('');
 const changePeoples = (selectedHumans) => {
     selectedPeoples.value = selectedHumans;
 };
+
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
 
