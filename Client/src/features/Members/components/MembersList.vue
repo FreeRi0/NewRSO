@@ -7,6 +7,7 @@
                     v-for="item in items"
                     :key="item.title"
                     v-bind="item"
+                    @update-member="onUpdateMember"
                 ></ItemMember>
             </template>
 
@@ -30,6 +31,10 @@ const props = defineProps({
         default: false,
     },
 });
+
+const onUpdateMember = (event, id) => {
+    emit('updateMember', event, id);
+};
 </script>
 
 <style lang="scss">
