@@ -28,11 +28,16 @@
                 >
             </v-form>
         </v-card>
+
+        <!-- <div v-for="user in users">
+            <p>{{ user.username }}</p>
+            <p>{{ user.email }}</p>
+        </div> -->
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, PasswordInputVue } from '@shared/components/inputs';
 import axios from 'axios';
@@ -43,27 +48,61 @@ const data = ref({
     password: '',
 });
 
+const users = ref([]);
 
+const getUsers = async () => {
+    await axios
+        .get('api/v1/users/')
+        .then((res) => {
+            users.value = res.data;
+            console.log(users);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
+const swal = inject('$swal');
 const router = useRouter();
 
 const LoginUser = async () => {
-    // await axios.post('url/login', {
-    //     headers: { 'Content-Type': 'application/json' },
-    //     credentials: 'include',
-    //     body: JSON.stringify(data),
-    // });
+    axios
+        .post('api/v1/token/login/', data.value, {
+            headers: {
+                'Authorization': 'Bearer '+ token,
+            },
+            credentials: 'include',
+        })
+        .then((response) => {
+            data.value = response.data;
+            console.log(response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        })
 
-    await fetch('http://localhost:5000/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(data),
-    })
+        .catch((error) => {
+            console.error('There was an error!', error);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
 
-    await router.push('/UserPage');
+    // await router.push('/UserPage');
 };
 
 // const nameUser = ref('');
 // const password = ref('');
+
+onMounted(() => {
+    getUsers();
+});
 </script>
