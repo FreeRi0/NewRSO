@@ -332,6 +332,7 @@
                                 :items="sortedMembers"
                                 :validate="v"
                                 :submited="submited"
+                                @updateMember="onUpdateMember"
                             ></MembersList>
                         </div>
                     </div>
@@ -559,10 +560,6 @@ import {
     email,
     sameAs,
 } from '@vuelidate/validators';
-
-const onUpdateMember = (event, id) => {
-    // emit('updateMember', event, id);
-};
 
 const props = defineProps({
     participants: {
@@ -893,18 +890,19 @@ const members = ref([
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
-    let tempMembers = members.value;
-
-    tempMembers = tempMembers.filter((item) => {
+    return members.value.filter((item) => {
         return item.title
             .toUpperCase()
             .includes(searchMembers.value.toUpperCase());
     });
-
-    // console.log(tempMembers);
-
-    return tempMembers;
 });
+
+const onUpdateMember = (event, id) => {
+    const targetMember = members.value.find((member) => member.id === id);
+
+    const firstkey = Object.keys(event)[0];
+    targetMember[firstkey] = event[firstkey];
+};
 </script>
 
 <style lang="scss" scoped>

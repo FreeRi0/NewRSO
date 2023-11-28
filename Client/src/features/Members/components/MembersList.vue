@@ -32,6 +32,8 @@ const props = defineProps({
     },
 });
 
+const emit = defineEmits(['updateMember']);
+
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
 };

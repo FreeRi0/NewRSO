@@ -45,8 +45,8 @@
                 label="Доверенное лицо"
                 :id="title"
                 :value="title"
-                :checked="confidant"
-                @update:value="changeOption"
+                v-model:checked="confidant2"
+                @update:checked="changeOption2"
             ></Checkbox>
         </div>
     </div>
@@ -111,11 +111,28 @@ const props = defineProps({
     },
 });
 
+const confidant2 = ref(props.confidant);
 const emit = defineEmits(['updateMember']);
 
 const changeOption = (event) => {
     // console.log(event);
-    emit('updateMember', event, props.id);
+    emit(
+        'updateMember',
+        {
+            position: event,
+        },
+        props.id,
+    );
+};
+const changeOption2 = (event) => {
+    // console.log(event);
+    emit(
+        'updateMember',
+        {
+            confidant: event,
+        },
+        props.id,
+    );
 };
 
 const position = ref(props.position);
