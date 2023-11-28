@@ -1,0 +1,18 @@
+//Общий класс для всех заголовков h1
+.title {
+    font-family: 'Akrobat';
+    font-size: 52px;
+    line-height: 62px;
+    font-weight: 700;
+    color: #35383f;
+
+    &--lso {
+        margin-bottom: 50px;
+    }
+
+    @media (max-width: 768px) {
+        font-size: 40px;
+        line-height: 48px;
+        font-weight: 600;
+    }
+}

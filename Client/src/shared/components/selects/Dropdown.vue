@@ -2,10 +2,14 @@
     <Dropdown
         v-model="selected"
         :options="items"
-        filter
         showClear
+        filter
+        :filterPlaceholder="filterPlaceholder"
+        :resetFilterOnHide="resetFilterOnHide"
         optionLabel="title"
         placeholder="Поиск по ФИО"
+        v-bind="$attrs"
+        @update:model-value="changeValue"
     >
         <template #value="slotProps">
             <div v-if="slotProps.value" class="option__content">
@@ -33,8 +37,10 @@
                         alt="Статус бойца"
                     />
                 </div>
-                <p class="option__title">{{ slotProps.value.title }}</p>
-                <p class="option__date">{{ slotProps.value.date }}</p>
+                <div class="option__wrapper">
+                    <p class="option__title">{{ slotProps.value.title }}</p>
+                    <p class="option__date">{{ slotProps.value.date }}</p>
+                </div>
             </div>
 
             <span v-else>
@@ -67,25 +73,77 @@
                         alt="Статус бойца"
                     />
                 </div>
-                <p class="option__title">{{ slotProps.option.title }}</p>
-                <p class="option__date">{{ slotProps.option.date }}</p>
+                <div class="option__wrapper">
+                    <p class="option__title">{{ slotProps.option.title }}</p>
+                    <p class="option__date">{{ slotProps.option.date }}</p>
+                </div>
             </div>
         </template>
     </Dropdown>
+    <TransitionGroup>
+        <div class="error-wrapper" v-for="element of error" :key="element.$uid">
+            <div class="form-error__message">{{ element.$message }}</div>
+        </div>
+    </TransitionGroup>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import Dropdown from 'primevue/dropdown';
 
+defineOptions({
+    inheritAttrs: false,
+});
+
+const emit = defineEmits(['update:value']);
+
+const props = defineProps({
+    error: {
+        type: Array,
+        required: false,
+    },
+    filterPlaceholder: {
+        type: String,
+        default: '',
+    },
+    resetFilterOnHide: {
+        type: Boolean,
+        default: false,
+    },
+    filtericon: {
+        type: Boolean,
+        default: true,
+    },
+});
+
 const selected = ref();
 const items = ref([]);
+
+const changeValue = (event) => {
+    // console.log(event);
+    emit('update:value', event);
+};
 </script>
 
 <style lang="scss">
+//-----отсутствует атрибут scoped, чтобы стилизовать Dropdown
+.error-wrapper {
+    position: relative;
+}
+.form-error__message {
+    position: absolute;
+    right: 0;
+    color: var(--danger);
+    font-size: 12px;
+}
+
 .p-dropdown {
     display: flex;
-    padding: 8px 20px;
+    // padding: 8px 20px 8px 54px;
+    padding: 1px 20px 1px 54px;
+    min-height: 40px;
+    background-image: url('@app/assets/icon/search.svg');
+    background-position: 20px;
     justify-content: center;
     align-items: center;
     gap: 10px;
@@ -145,11 +203,15 @@ const items = ref([]);
         // width: calc(100% - 24px);
 
         input {
-            // background-color: #ffffff;
             // height: 100%;
             position: absolute;
+            left: 34px;
             margin-top: -45px;
-            width: calc(100% - 50px);
+            width: calc(100% - 86px);
+
+            &:focus {
+                background-color: white;
+            }
         }
     }
 
@@ -194,6 +256,11 @@ const items = ref([]);
         gap: 10px;
         border-radius: 10px;
         border: 1px solid #b6b6b6;
+
+        @media (max-width: 768px) {
+            height: 56px;
+            padding: 8px;
+        }
     }
 }
 
@@ -203,8 +270,6 @@ const items = ref([]);
     background-color: #ffffff;
 
     &__content {
-        // display: grid;
-        // grid-template-columns: 50px 18px auto 95px;
         width: 100%;
         display: flex;
         align-items: center;
@@ -215,8 +280,17 @@ const items = ref([]);
         margin-right: 11px;
         width: 38px;
         height: 38px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         border-radius: 50%;
         overflow: hidden;
+
+        @media (max-width: 768px) {
+            margin-right: 13px;
+            width: 36px;
+            height: 36px;
+        }
     }
     &__status {
         position: absolute;
@@ -232,9 +306,31 @@ const items = ref([]);
         background-color: #ffff00;
     }
 
+    &__wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+        width: calc(100% - 49px);
+        justify-content: space-between;
+        font-family: 'BertSans', sans-serif;
+        line-height: 21px;
+
+        @media (max-width: 768px) {
+            flex-wrap: wrap;
+            font-size: 12px;
+            line-height: 16px;
+        }
+    }
+
+    &__title {
+        @media (max-width: 768px) {
+            width: 100%;
+            margin-bottom: 3px;
+        }
+    }
+
     &__date {
-        margin-left: auto;
         position: relative;
+        color: #1c5c94;
 
         &::before {
             position: absolute;
@@ -244,6 +340,10 @@ const items = ref([]);
             top: calc(50% - 7.5px);
             left: -11px;
             background-color: #b6b6b6;
+
+            @media (max-width: 768px) {
+                display: none;
+            }
         }
     }
 

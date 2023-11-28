@@ -88,6 +88,12 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/CreationOfHQ/components/CreationOfHQ.vue'),
             },
+            {
+                path: '/edithq',
+                name: 'edithq',
+                component: () =>
+                    import('@pages/EditingHQ/components/EditingHQ.vue'),
+            },
         ],
     },
 ];
