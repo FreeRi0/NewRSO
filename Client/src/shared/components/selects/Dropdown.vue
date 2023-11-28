@@ -120,7 +120,7 @@ const selected = ref();
 const items = ref([]);
 
 const changeValue = (event) => {
-    // console.log(event);
+    console.log(event);
     emit('update:value', event);
 };
 </script>

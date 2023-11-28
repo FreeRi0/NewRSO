@@ -36,6 +36,7 @@
                 placeholder="Выберите должность"
                 v-model:value="v.position.$model"
                 :error="v.position.$errors"
+                @update:value="changeOption"
             ></Select>
         </div>
 
@@ -45,6 +46,7 @@
                 :id="title"
                 :value="title"
                 :checked="confidant"
+                @update:value="changeOption"
             ></Checkbox>
         </div>
     </div>
@@ -67,6 +69,10 @@ import {
 } from '@vuelidate/validators';
 
 const props = defineProps({
+    id: {
+        type: Number,
+        // default: ,
+    },
     img: {
         type: Boolean,
         default: false,
@@ -104,6 +110,13 @@ const props = defineProps({
         default: false,
     },
 });
+
+const emit = defineEmits(['updateMember']);
+
+const changeOption = (event) => {
+    // console.log(event);
+    emit('updateMember', event, props.id);
+};
 
 const position = ref(props.position);
 

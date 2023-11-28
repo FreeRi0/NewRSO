@@ -25,7 +25,8 @@ const imgDataUrl = ref('@app/assets/lso/banner-invar');
 
 const unit = ref({
     squad: 'Инвар',
-    direction: 'ССО',
+    // direction: 'ССО',
+    direction: null,
     date: '2003-08-16',
     region: ' Алтайский край',
     city: 'Бийск',

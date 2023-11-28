@@ -306,7 +306,7 @@
                             />
                         </div>
 
-                        <div class="form__field" v-if="participants">
+                        <div class="form__field">
                             <p>
                                 Участники отряда
                                 <sup class="valid-red">*</sup>
@@ -560,10 +560,9 @@ import {
     sameAs,
 } from '@vuelidate/validators';
 
-
-
-const panel = ref([]);
-
+const onUpdateMember = (event, id) => {
+    // emit('updateMember', event, id);
+};
 
 const props = defineProps({
     participants: {
