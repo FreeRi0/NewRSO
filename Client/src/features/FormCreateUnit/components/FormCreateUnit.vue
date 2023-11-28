@@ -543,6 +543,7 @@ import { photos } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
+
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
 
@@ -558,6 +559,11 @@ import {
     email,
     sameAs,
 } from '@vuelidate/validators';
+
+
+
+const panel = ref([]);
+
 
 const props = defineProps({
     participants: {

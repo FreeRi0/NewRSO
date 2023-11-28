@@ -24,7 +24,6 @@
 </template>
 <script setup>
 
-// import participants from '@entities/Participants/participants';
 
 const props = defineProps({
     participants: {

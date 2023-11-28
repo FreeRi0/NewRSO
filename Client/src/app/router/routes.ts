@@ -94,6 +94,30 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/EditingHQ/components/EditingHQ.vue'),
             },
+            {
+                path: '/reference',
+                name: 'reference',
+                component: () =>
+                    import('@pages/ReferencePage/components/reference.vue'),
+            },
+            {
+                path: '/referenceForYou',
+                name: 'referenceForYou',
+                component: () =>
+                    import('@pages/ReferencePage/components/referenceForYou.vue'),
+            },
+            {
+                path: '/contributorPay',
+                name: 'contributorPay',
+                component: () =>
+                    import('@pages/ContributionPage/components/ContributorPay.vue'),
+            },
+            {
+                path: '/references',
+                name: 'references',
+                component: () =>
+                    import('@pages/ReferencePage/components/references.vue'),
+            },
         ],
     },
 ];

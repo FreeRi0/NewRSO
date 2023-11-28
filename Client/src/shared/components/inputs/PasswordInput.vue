@@ -63,4 +63,27 @@ const showPassword = ref(false);
 .form-error__message {
     color: var(--danger);
     font-size: 12px;
-}</style>
+}
+
+.v-field {
+    display: grid;
+    grid-template-areas: 'prepend-inner field clear append-inner';
+    grid-template-columns: min-content minmax(0, 1fr) min-content min-content;
+    font-size: 14px;
+    padding: 10px;
+    letter-spacing: 0.009375em;
+    max-width: 100%;
+    border-radius: 10px;
+    contain: layout;
+    flex: 1 0;
+    grid-area: control;
+    position: relative;
+    --v-field-padding-start: 16px;
+    --v-field-padding-end: 16px;
+    --v-field-padding-top: 0px;
+    --v-field-padding-bottom: 0px;
+
+    --v-field-input-padding-top: calc(var(0px) + var());
+    --v-field-input-padding-bottom: var(0px);
+}
+</style>

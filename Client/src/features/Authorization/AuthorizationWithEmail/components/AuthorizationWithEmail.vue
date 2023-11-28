@@ -20,8 +20,8 @@
                     v-model:value="data.password"
                 ></PasswordInputVue>
 
-                <!-- <Button label="Войти" color="primary"></Button> -->
-                <button>Войти</button>
+                <Button label="Войти" color="primary"></Button>
+
                 <v-card-text class="text-center"
                     >Забыли пароль?
                     <router-link to="/">Восстановить</router-link></v-card-text
