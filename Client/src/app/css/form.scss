@@ -1,0 +1,205 @@
+//Стили для формы создания/редактирования отряда/штаба
+.form {
+    font-family: 'BertSans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #35383f;
+    background-color: transparent;
+
+    &__inner-content {
+        border-bottom: 1px solid #d9d9d9;
+        background-color: #ffffff;
+    }
+
+    &__field-group {
+        padding: 40px;
+        border: 1px solid #b6b6b6;
+        border-radius: 10px;
+        background-color: #ffffff;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 24px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            width: fit-content;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #35383f;
+        }
+
+        .form-input input.form__input {
+            padding: 8px 44px 8px 20px;
+            font-size: 16px;
+            line-height: 21px;
+            color: #898989;
+            border: 1px solid #b6b6b6;
+        }
+
+        .form-input input[type='date'] {
+            padding: 8px 20px;
+        }
+
+        // select {
+        //     background-image: url('../images/icons/angel-down-form.svg');
+        //     background-repeat: no-repeat;
+        //     background-position: right 19px center;
+        //     appearance: none;
+        // }
+    }
+
+    &__input {
+        min-height: 40px;
+    }
+
+    &__textarea {
+        // margin-bottom: 8px;
+        padding: 12px 20px;
+        width: 100%;
+        font-size: 16px;
+        line-height: 21px;
+        outline: none;
+        overflow: hidden;
+        text-align: left;
+        resize: none;
+        border: 1px solid #b6b6b6;
+        border-radius: 10px;
+        overflow-y: auto;
+    }
+
+    &__select {
+        margin-bottom: 8px;
+        border: 1px solid #b6b6b6;
+        border-radius: 10px;
+        // width: 100%;
+
+        .v-field__input {
+            min-height: 40px;
+            padding: 8px 20px;
+            font-size: 16px;
+            line-height: 21px;
+            font-weight: 400;
+        }
+    }
+
+    &__counter {
+        font-size: 14px;
+        line-height: 18.5px;
+        color: #939393;
+    }
+
+    &__field-search {
+        border: 1px solid #b6b6b6;
+        border-radius: 10px;
+        height: 40px;
+        line-height: 21px;
+        font-weight: 400;
+
+        .v-field__field input {
+            padding: 8px 20px 8px 10px;
+        }
+        // input {
+        //     padding: 8px 20px 8px 10px;
+        // }
+    }
+
+    &__footnote {
+        margin: 16px 0 8px;
+        font-size: 14px;
+        line-height: 18.5px;
+        color: #939393;
+    }
+
+    &__button-group.v-card-actions {
+        // display: flex;
+        // align-items: center;
+        justify-content: center;
+        margin: 40px 0 60px;
+        padding: 0;
+    }
+
+    &__photo-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 20px;
+        height: 347px;
+    }
+
+    .avatar-preview.my_photo__plug img {
+        height: 347px;
+    }
+
+    .valid-red {
+        color: #db0000;
+    }
+
+    .user-metric__avatar-wrapper {
+        align-self: flex-start;
+    }
+
+    .v-field__outline {
+        display: none;
+    }
+
+    .v-expansion-panel {
+        border-bottom: 1px solid #d9d9d9;
+
+        &__shadow {
+            box-shadow: none;
+        }
+
+        &--active,
+        &--after-active {
+            margin: 0;
+        }
+
+        &--active:not(:first-child) {
+            margin: 0;
+        }
+
+        &--active + .v-expansion-panel {
+            margin: 0;
+        }
+
+        .v-expansion-panel-title {
+            padding: 16px 0;
+            max-height: 60px;
+            font-family: 'Akrobat';
+            font-size: 24px;
+            line-height: 28px;
+            font-weight: 600;
+            background-color: transparent;
+
+            &--active {
+                margin-bottom: 40px;
+            }
+
+            &__overlay {
+                display: none;
+            }
+        }
+
+        // .v-expansion-panel--active
+        //     > .v-expansion-panel-title--active.button-height {
+        //     min-height: auto;
+        // }
+
+        // $expansion-panel-active-title-min-height 64px
+
+        // .v-expansion-panel-title.v-expansion-panel-title--active {
+        //     max-height: 60px;
+        // }
+
+        .v-expansion-panel-text__wrapper {
+            padding: 0;
+        }
+    }
+}

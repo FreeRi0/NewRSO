@@ -1,18 +1,16 @@
 <template>
-    <div class="form-input" :style="{ width: width }">
-        <input
-            :type="type"
+    <div>
+        <textarea
             :name="name"
             :id="name"
             :placeholder="placeholder"
             :value="value"
+            :rows="rows"
             :maxlength="maxLength"
             @input="updateValue"
             @change="changeValue"
-            variant="outlined"
-            class="mb-2 text-field"
             v-bind="$attrs"
-        />
+        ></textarea>
         <TransitionGroup>
             <div
                 class="error-wrapper"
@@ -45,17 +43,13 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    type: {
-        type: String,
-        default: 'text',
+    rows: {
+        type: Number,
+        default: 1,
     },
     placeholder: {
         type: String,
         required: false,
-    },
-    width: {
-        type: String,
-        default: '',
     },
     maxLength: {
         type: Number,
@@ -63,6 +57,7 @@ const props = defineProps({
 });
 
 const updateValue = (e) => {
+    // console.log(event);
     emit('update:value', e.target.value);
 };
 
@@ -73,7 +68,6 @@ const updateValue = (e) => {
 
 <style lang="scss" scoped>
 .error-wrapper {
-    // margin-bottom: 5px;
     position: relative;
 }
 .form-error__message {
@@ -81,15 +75,5 @@ const updateValue = (e) => {
     right: 0;
     color: var(--danger);
     font-size: 12px;
-}
-
-.form-input input {
-    border: 1px solid #a3a3a3;
-    border-radius: 10px;
-    display: block;
-    font-size: 12px;
-    padding: 10px 16px 10px 16px;
-    margin-bottom: 20px;
-    width: 100%;
 }
 </style>
