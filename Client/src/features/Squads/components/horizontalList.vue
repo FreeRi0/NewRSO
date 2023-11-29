@@ -7,7 +7,7 @@
             <p class="squads-wrapper__item-category-full">
                 {{ squad.full }}
             </p>
-            <p class="squads-wrapper__item-title">{{ squad.title }}</p>
+            <p class="squads-wrapper__item-title">"{{ squad.title }}"</p>
         </div>
     </div>
 </template>
@@ -54,6 +54,8 @@ const props = defineProps({
         color: #1e1e1e;
         @media screen and (max-width: 575px) {
             font-size: 15px;
+            margin: 0;
+            text-align: left;
         }
     }
     &-title {
@@ -61,6 +63,9 @@ const props = defineProps({
         font-size: 20px;
         font-family: 'Akrobat';
         color: #1e1e1e;
+        @media screen and (max-width: 575px) {
+            font-size: 15px;
+        }
     }
 }
 </style>

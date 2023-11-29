@@ -11,7 +11,9 @@
             <p class="squads-wrapper__item-category">
                 {{ squad.desc }}
             </p>
-            <p class="squads-wrapper__item-title">{{ squad.title }}</p>
+            <p class="squads-wrapper__item-title normal-title">
+                {{ squad.title }}
+            </p>
         </div>
     </div>
 
@@ -36,6 +38,15 @@ const props = defineProps({
         height: 100px;
     }
 }
+.normal-title {
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Akrobat';
+    color: #1e1e1e;
+    @media screen and (max-width: 575px) {
+        font-size: 15px;
+    }
+}
 .squads-wrapper__item {
     margin: 0px auto;
     width: 180px;
@@ -52,14 +63,6 @@ const props = defineProps({
         font-family: 'Akrobat';
         color: #1e1e1e;
     }
-    &-title {
-        text-align: center;
-        font-size: 20px;
-        font-family: 'Akrobat';
-        color: #1e1e1e;
-        @media screen and (max-width: 575px) {
-            font-size: 15px;
-        }
-    }
 }
+
 </style>

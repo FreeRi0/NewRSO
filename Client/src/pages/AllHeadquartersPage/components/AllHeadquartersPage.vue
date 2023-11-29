@@ -227,11 +227,18 @@ const sortedHeadquarters = computed(() => {
     &-title {
         margin-bottom: 40px;
         font-size: 52px;
+        @media screen and (max-width: 575px) {
+            font-size: 40px;
+        }
     }
     &-sort {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+        @media screen and (max-width: 768px) {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+    }
     }
     &-search {
         position: relative;
@@ -254,6 +261,12 @@ const sortedHeadquarters = computed(() => {
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
         /* box-shadow: 1em 2em 2.5em rgba(1, 2, 68, 0.08); */
+        @media screen and (max-width: 1024px) {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 575px) {
+            grid-template-columns: 1fr 1fr;
+        }
     }
 }
 .headquarters-wrapper__item {
@@ -291,6 +304,15 @@ const sortedHeadquarters = computed(() => {
   grid-row-gap: 16px;
 }
 
+.sort-filters {
+    @media screen and (max-width: 768px) {
+        margin-top: 40px;
+       display: flex;
+       flex-wrap: wrap;
+       margin-bottom: 60px;
+    }
+}
+
 .filter {
     &-local {
         width: 186px;
@@ -301,6 +323,21 @@ const sortedHeadquarters = computed(() => {
 
     &-district {
         width: 193px;
+    }
+}
+
+@media (max-width: 575px) {
+    .squads-sort {
+        flex-direction: column-reverse;
+    }
+    .sort-filters {
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+        align-items: end;
+    }
+
+    .sort-select {
+        margin-top: 12px;
     }
 }
 </style>

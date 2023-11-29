@@ -4,6 +4,7 @@
             <h2 class="participants-title">Участники ЛСО</h2>
             <div class="participants-tabs">
                 <v-btn
+                    class="participants-tabs__item"
                     :class="{ active: checked === category }"
                     v-for="category in categories"
                     :key="category"
@@ -68,7 +69,9 @@
             </div>
 
             <div class="horizontallso" v-show="!vertical">
-                <horizontalParticipantsList :participants="sortedParticipants"></horizontalParticipantsList>
+                <horizontalParticipantsList
+                    :participants="sortedParticipants"
+                ></horizontalParticipantsList>
             </div>
             <Button
                 @click="participantsVisible += step"
@@ -85,11 +88,13 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ParticipantsList, horizontalParticipantsList } from '@features/Participants/components';
+import {
+    ParticipantsList,
+    horizontalParticipantsList,
+} from '@features/Participants/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed } from 'vue';
 import participants from '@entities/Participants/participants';
-
 
 const participantsVisible = ref(12);
 
@@ -172,12 +177,24 @@ const sortedParticipants = computed(() => {
     padding: 60px 0px 60px 0px;
     &-title {
         font-size: 52px;
+        @media screen and (max-width: 575px) {
+            font-size: 40px;
+        }
     }
     &-wrapper {
         padding: 60px 0px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+        @media screen and (max-width: 1024px) {
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 768px) {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 575px) {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
     }
     &-sort {
         display: flex;
@@ -205,8 +222,9 @@ const sortedParticipants = computed(() => {
         display: flex;
         flex-wrap: wrap;
         &__item {
-            padding: 10px 24px;
-            border: 2px solid black;
+            color: #1c5c94;
+            padding: 6px 24px;
+            border: 1px solid #1c5c94;
             border-radius: 30px;
             text-align: center;
             font-size: 20px;
@@ -214,15 +232,24 @@ const sortedParticipants = computed(() => {
             font-family: 'Bert Sans';
             margin: 20px 20px 0px 0px;
             cursor: pointer;
+            text-transform: none;
+            box-shadow: none;
+            @media screen and (max-width: 768px) {
+                font-size: 14px;
+                padding: 8px 8px;
+                margin: 20px 8px 0px 0px;
+            }
         }
     }
 
     .active {
-        background-color: blue;
+        background-color: #1c5c94;
+        color: white;
+        border: 1px solid #1c5c94;
     }
 
     .horizontallso {
-      padding-top: 40px;
+        padding-top: 40px;
     }
 }
 </style>
