@@ -35,6 +35,9 @@ const routes: RouteRecordRaw[] = [
                 name: 'userpage',
                 component: () =>
                     import('@pages/UserPage/components/UserPage.vue'),
+                    meta: {
+                        requiresAuth: true
+                    }
             },
             {
                 path: '/CreateLSO',

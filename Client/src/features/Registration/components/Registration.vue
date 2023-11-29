@@ -204,6 +204,7 @@ const RegisterUser = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
+            router.push('/');
         })
 
         .catch((error) => {

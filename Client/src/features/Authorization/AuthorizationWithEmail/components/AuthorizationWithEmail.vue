@@ -12,7 +12,7 @@
                 <Input
                     placeholder="Имя"
                     name="name"
-                    v-model:value="data.nameUser"
+                    v-model:value="data.username"
                 />
                 <PasswordInputVue
                     placeholder="Пароль"
@@ -28,11 +28,6 @@
                 >
             </v-form>
         </v-card>
-
-        <!-- <div v-for="user in users">
-            <p>{{ user.username }}</p>
-            <p>{{ user.email }}</p>
-        </div> -->
     </div>
 </template>
 
@@ -44,38 +39,22 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 const data = ref({
-    nameUser: '',
+    username: '',
     password: '',
 });
 
 const users = ref([]);
-
-const getUsers = async () => {
-    await axios
-        .get('api/v1/users/')
-        .then((res) => {
-            users.value = res.data;
-            console.log(users);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
 const swal = inject('$swal');
 const router = useRouter();
 
 const LoginUser = async () => {
     axios
-        .post('api/v1/token/login/', data.value, {
-            headers: {
-                'Authorization': 'Bearer '+ token,
-            },
-            credentials: 'include',
-        })
+        .post('api/v1/token/login/', data.value  )
         .then((response) => {
             data.value = response.data;
-            console.log(response.data);
+            localStorage.setItem('Token', response.data.token );
+           console.log(response.data)
             swal.fire({
                 position: 'top-center',
                 icon: 'success',
@@ -83,6 +62,7 @@ const LoginUser = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
+            router.push('/UserPage');
         })
 
         .catch((error) => {
@@ -95,14 +75,6 @@ const LoginUser = async () => {
                 timer: 1500,
             });
         });
-
-    // await router.push('/UserPage');
 };
 
-// const nameUser = ref('');
-// const password = ref('');
-
-onMounted(() => {
-    getUsers();
-});
 </script>

@@ -6,7 +6,8 @@
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
                 <div class="user-data__name">
-                    <h4>dddd</h4>
+                    <h4 v-if="user">{{ user.username }}</h4>
+                    <h4 v-else>Not auth</h4>
                 </div>
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
@@ -23,9 +24,29 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
+import axios from 'axios';
+
+let user = ref(null);
+const getUser = async () => {
+    await axios
+        .get('api/v1/users/me/', {
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            user.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+getUser();
 
 </script>
 <style lang="scss" scoped>
