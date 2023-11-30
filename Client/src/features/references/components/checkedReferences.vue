@@ -44,7 +44,7 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 const emit = defineEmits(['change']);
 
 
@@ -61,8 +61,10 @@ const props = defineProps({
 });
 const selectedPeoples = ref(props.participants);
 
-// watch(() => props.participants)
-//
+ watch(() => props.participants,
+ (newChecked) =>{
+    if(!newChecked) return;
+ })
 </script>
 <style lang="scss" scoped>
 .checked {
