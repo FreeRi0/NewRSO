@@ -61,7 +61,7 @@ const props = defineProps({
     },
     selectedParticipants: {
         type: Array,
-        default: () => [],
+        default: () => []
     },
 });
 

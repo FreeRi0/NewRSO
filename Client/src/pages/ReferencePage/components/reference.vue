@@ -460,7 +460,6 @@
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
                         <checkedReference
-
                             @change="changeSelected"
                             :participants="selectedPeoples"
                         ></checkedReference>
@@ -525,8 +524,7 @@ const changePeoples = (selectedHumans) => {
 };
 const changeSelected = (changePeoples) => {
     selectedPeoples.value = changePeoples;
-}
-
+};
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
 
@@ -666,12 +664,19 @@ input[type='number']::-webkit-outer-spin-button {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+        @media screen and (max-width: 768px) {
+            align-items: flex-start;
+            flex-direction: column;
+        }
     }
     &-container {
         display: grid;
         grid-template-columns: 0.5fr 1.5fr;
         align-items: baseline;
         grid-column-gap: 36px;
+        @media screen and (max-width: 768px) {
+            margin-top: 60px;
+        }
     }
     &-search {
         position: relative;
@@ -699,6 +704,10 @@ input[type='number']::-webkit-outer-spin-button {
     grid-template-columns: 1.5fr 1fr;
     column-gap: 140px;
     margin-top: 60px;
+    @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 40px;
+    }
 }
 
 .another {
@@ -713,6 +722,9 @@ input[type='number']::-webkit-outer-spin-button {
 
 .input-big {
     width: 465px;
+    @media screen and (max-width: 768px) {
+       width: 100%;
+    }
 }
 
 .input-full {
@@ -778,5 +790,11 @@ input[type='number']::-webkit-outer-spin-button {
 
 .v-expansion-panel:not(:first-child)::after {
     display: none;
+}
+
+.sort-filters {
+    @media screen and (max-width: 768px) {
+        margin-top: 20px;
+    }
 }
 </style>
