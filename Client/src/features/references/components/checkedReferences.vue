@@ -34,7 +34,7 @@
                 type="checkbox"
                 v-model="selectedPeoples"
                 :value="participant"
-                @change="updateCheck(participant)"
+                @change="(event) => updateCheck(participant, event)"
 
             />
         </div>
@@ -48,9 +48,9 @@ import { ref, watch } from 'vue';
 const emit = defineEmits(['change']);
 
 
-const updateCheck = (participant) => {
-    console.log('dddddddf');
-    emit('change', participant);
+const updateCheck = (participant, event) => {
+    console.log('dddddddf', participant, event);
+    // emit('change', participant, event);
 };
 
 const props = defineProps({
@@ -58,12 +58,15 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+
 });
 const selectedPeoples = ref(props.participants);
 
- watch(() => props.participants,
+ watch(selectedPeoples,
  (newChecked) =>{
     if(!newChecked) return;
+    emit('change', selectedPeoples)
+    console.log(newChecked);
  })
 </script>
 <style lang="scss" scoped>

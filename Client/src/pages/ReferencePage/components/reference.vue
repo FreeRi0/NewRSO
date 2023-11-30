@@ -400,6 +400,7 @@
                         <referencesList
                             @change="changePeoples"
                             :participants="sortedParticipants"
+                            :selectedParticipants="selectedPeoples"
                         ></referencesList>
                     </div>
                     <Button
@@ -459,7 +460,8 @@
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
                         <checkedReference
-                            @change="changeS"
+
+                            @change="changeSelected"
                             :participants="selectedPeoples"
                         ></checkedReference>
                     </div>
@@ -521,6 +523,9 @@ const searchParticipants = ref('');
 const changePeoples = (selectedHumans) => {
     selectedPeoples.value = selectedHumans;
 };
+const changeSelected = (changePeoples) => {
+    selectedPeoples.value = changePeoples;
+}
 
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);

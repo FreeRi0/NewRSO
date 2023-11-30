@@ -1,12 +1,10 @@
 <template>
-    <!-- <div class="references-sort__all">
-        <input type="checkbox" @click="select" v-model="checkboxAll" />
-    </div> -->
     <div
         class="horizontallso"
         v-for="participant in participants"
         :key="participant.id"
     >
+        <!-- <referenceItem v-for="participant in participants" :participant="participant" :key="participant.id"></referenceItem> -->
         <div class="horizontallso__confidant">
             <input
                 type="checkbox"
@@ -42,12 +40,13 @@
             </div>
         </div>
     </div>
+    <!-- <pre>{{  }}</pre> -->
 </template>
 
 <script setup>
 // import referenceItem from '@entities/ReferencesPeoples/components';
 
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const emit = defineEmits(['change']);
 
@@ -60,11 +59,30 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    selectedParticipants: {
+        type: Array,
+        default: () => [],
+    },
 });
 
-// const checkboxAll = ref(false);
+const selectedPeoples = ref(props.selectedParticipants);
 
-const selectedPeoples = ref([]);
+// watch(selectedPeoples,
+//  (newChecked) =>{
+//     if(!newChecked) return;
+//     emit('change', selectedPeoples)
+//     console.log(newChecked);
+//  });
+
+watch(
+    () => props.selectedParticipants,
+    (newChecked) => {
+        if (!newChecked) return;
+        selectedPeoples.value = newChecked;
+    },
+);
+
+// const checkboxAll = ref(false);
 
 // const select = () => {
 //     selectedPeoples.value = [];
@@ -75,8 +93,6 @@ const selectedPeoples = ref([]);
 //         }
 //     }
 // };
-
-
 </script>
 
 <style lang="scss" scoped>
