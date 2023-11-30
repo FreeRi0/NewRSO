@@ -7,7 +7,7 @@
                 :src="imgAvatarUrl"
                 alt="Аватарка"
                 v-if="imgAvatarUrl"
-                v-showAvatar="true"
+                v-photo="true"
             />
             <img
                 id="profile-pic"
@@ -21,10 +21,10 @@
                 @crop-success="cropSuccess"
                 @crop-upload-success="cropUploadSuccess"
                 @crop-upload-fail="cropUploadFail"
-                v-model="showAvatar"
+                v-model="photo"
                 :width="300"
                 :height="300"
-                url="https://httpbin.org/post"
+                url="api/v1/users/me/media/"
                 :params="params"
                 :headers="headers"
                 :no-square="true"
@@ -79,7 +79,7 @@
 import { ref } from 'vue';
 import myUpload from 'vue-image-crop-upload';
 
-const showAvatar = ref(false);
+const photo = ref(false);
 
 const params = ref({
     token: '123456798',
@@ -91,7 +91,7 @@ const headers = ref({
 });
 
 const toggleShowAvatar = () => {
-    showAvatar.value = !showAvatar.value;
+    photo.value = !photo.value;
 };
 
 const cropSuccess = (data, field) => {

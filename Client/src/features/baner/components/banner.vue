@@ -6,9 +6,11 @@
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
                 <div class="user-data__name">
-                    <h4 v-if="user">{{ user.username }}</h4>
-                    <h4 v-else>Not auth</h4>
+                    <h4 v-if="user">{{ user.first_name}}</h4>
+                    <h4 v-if="user">{{ user.last_name}}</h4>
+
                 </div>
+                <h4 v-if="user">{{ user.email}}</h4>
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
@@ -34,7 +36,8 @@ const getUser = async () => {
     await axios
         .get('api/v1/users/me/', {
             headers: {
-                Authorization: localStorage.getItem('Token'),
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         })
         .then((response) => {

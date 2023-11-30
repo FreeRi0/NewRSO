@@ -56,7 +56,11 @@ const router = useRouter();
 const LoginUser = async () => {
     isLoading.value = true;
     axios
-        .post('api/v1/token/login/', data.value)
+        .post('api/v1/token/login/', data.value, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
         .then((response) => {
             data.value = response.data;
             localStorage.setItem('Token', response.data.auth_token);
