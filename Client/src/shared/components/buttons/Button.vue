@@ -9,12 +9,14 @@
             { btn_large: size === 'large' },
         ]"
         :disabled="disabled"
+        :loaded="loaded"
         @click="clickOnButton"
     >
         <span v-if="icon">
             <img :src="`assets/icon/${res}.svg`" alt="icon" />
         </span>
         <span v-else>{{ label }}</span>
+        <v-progress-circular indeterminate v-if="loaded"></v-progress-circular>
     </v-btn>
 </template>
 <script setup>
@@ -47,6 +49,10 @@ const props = defineProps({
         default: 'primary',
     },
     disabled: {
+        type: Boolean,
+        required: false,
+    },
+    loaded: {
         type: Boolean,
         required: false,
     },

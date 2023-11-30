@@ -20,8 +20,14 @@
                     v-model:value="data.password"
                 ></PasswordInputVue>
 
-                <!-- <Button label="Войти" color="primary"></Button> -->
-                <button>Войти</button>
+                <Button
+                    type="submit"
+                    label="Войти"
+                    :loaded="isLoading"
+                    :disabled="isLoading"
+                    color="primary"
+                ></Button>
+
                 <v-card-text class="text-center"
                     >Забыли пароль?
                     <router-link to="/">Восстановить</router-link></v-card-text
@@ -43,18 +49,19 @@ const data = ref({
     password: '',
 });
 
-const users = ref([]);
-
+const isLoading = ref(false);
 const swal = inject('$swal');
 const router = useRouter();
 
 const LoginUser = async () => {
+    isLoading.value = true;
     axios
-        .post('api/v1/token/login/', data.value  )
+        .post('api/v1/token/login/', data.value)
         .then((response) => {
             data.value = response.data;
-            localStorage.setItem('Token', response.data.token );
-           console.log(response.data)
+            localStorage.setItem('Token', response.data.auth_token);
+            console.log(response.data);
+            isLoading.value = false;
             swal.fire({
                 position: 'top-center',
                 icon: 'success',
@@ -67,6 +74,7 @@ const LoginUser = async () => {
 
         .catch((error) => {
             console.error('There was an error!', error);
+            isLoading.value = false;
             swal.fire({
                 position: 'top-center',
                 icon: 'error',
@@ -76,5 +84,4 @@ const LoginUser = async () => {
             });
         });
 };
-
 </script>

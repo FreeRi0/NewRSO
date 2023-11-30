@@ -7,50 +7,58 @@
                 <Input
                     placeholder="Фамилия"
                     name="surname"
-                    v-model:value="form.last_name"
+                    v-model:value.trim="form.last_name"
                 />
                 <Input
                     placeholder="Имя"
                     name="name"
-                    v-model:value="form.first_name"
+                    v-model:value.trim="form.first_name"
                 />
                 <Input
                     placeholder="Отчество(При наличии)"
                     name="patronomyc"
-                    v-model:value="form.patronymic_name"
+                    v-model:value.trim="form.patronymic_name"
                 />
                 <Input
                     type="tel"
                     placeholder="+7 (999) 999-99-99"
                     name="phone"
-                    v-model:value="form.phone_number"
+                    v-model:value.trim="form.phone_number"
                 />
                 <Input
                     placeholder="Электронная почта"
                     name="email"
                     type="email"
-                    v-model:value="form.email"
+                    v-model:value.trim="form.email"
                 />
                 <Input
                     placeholder="Придумайте логин"
                     name="login"
-                    v-model:value="form.username"
+                    v-model:value.trim="form.username"
                 />
                 <PasswordInputVue
                     placeholder="Придумайте пароль"
                     name="password"
-                    v-model:value="form.password"
+                    v-model:value.trim="form.password"
                 ></PasswordInputVue>
                 <PasswordInputVue
                     placeholder="Повторите пароль"
                     name="confirm"
-                    v-model:value="form.re_password"
+                    v-model:value.trim="form.re_password"
                 ></PasswordInputVue>
                 <v-checkbox
                     label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных*."
                 ></v-checkbox>
-                <!-- <Button label="Зарегистрироваться" color="primary"></Button> -->
-                <button>Зарегистрироваться</button>
+                <Button
+                    label="Зарегистрироваться"
+                    :loaded="isLoading"
+                    :disabled="isLoading"
+                    type="submit"
+                    color="primary"
+                >
+              </Button>
+
+                <!-- <div v-if="isLoading">Loading.....</div> -->
 
                 <v-card-text class="text-center">
                     <router-link to="/"
@@ -100,13 +108,7 @@ const form = ref({
     re_password: '',
 });
 
-// const surnameUser = ref('');
-// const nameUser = ref('');
-// const phoneField = ref('');
-// const emailField = ref('');
-// const loginField = ref('');
-// const password = ref('');
-// const confirmPassword = ref('');
+const isLoading = ref(false);
 
 // const rules = computed(() => ({
 //     surnameUser: {
@@ -188,6 +190,7 @@ const router = useRouter();
 const swal = inject('$swal');
 
 const RegisterUser = async () => {
+    isLoading.value = true;
     axios
         .post('api/v1/register/', form.value, {
             headers: {
@@ -197,6 +200,7 @@ const RegisterUser = async () => {
         .then((response) => {
             form.value = response.data;
             console.log(response.data);
+            isLoading.value = false;
             swal.fire({
                 position: 'top-center',
                 icon: 'success',
@@ -205,10 +209,12 @@ const RegisterUser = async () => {
                 timer: 1500,
             });
             router.push('/');
+
         })
 
         .catch((error) => {
             console.error('There was an error!', error);
+            isLoading.value = false;
             swal.fire({
                 position: 'top-center',
                 icon: 'error',

@@ -34,7 +34,7 @@ const getUser = async () => {
     await axios
         .get('api/v1/users/me/', {
             headers: {
-                Authorization: 'Bearer' + localStorage.getItem('Token'),
+                Authorization: localStorage.getItem('Token'),
             },
         })
         .then((response) => {
