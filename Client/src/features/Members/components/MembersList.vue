@@ -30,6 +30,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    // membersList: {
+    //     type: Array,
+    //     default: () => [],
+    // },
 });
 
 const emit = defineEmits(['updateMember']);

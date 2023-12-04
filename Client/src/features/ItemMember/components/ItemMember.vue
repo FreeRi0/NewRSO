@@ -46,7 +46,7 @@
                 :id="title"
                 :value="title"
                 v-model:checked="confidant2"
-                @update:checked="changeOption2"
+                @update:checked="changeConfidant"
             ></Checkbox>
         </div>
     </div>
@@ -109,6 +109,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    // membersList: {
+    //     type: Array,
+    //     default: () => [],
+    // },
 });
 
 const confidant2 = ref(props.confidant);
@@ -124,7 +128,7 @@ const changeOption = (event) => {
         props.id,
     );
 };
-const changeOption2 = (event) => {
+const changeConfidant = (event) => {
     // console.log(event);
     emit(
         'updateMember',
@@ -137,14 +141,29 @@ const changeOption2 = (event) => {
 
 const position = ref(props.position);
 
+// const membersList = ref(props.membersList);
+
 const rules = computed(() => ({
     position: {
         required: helpers.withMessage(`* обязательно для заполнения`, required),
     },
+    // membersList: {
+    //     //--------------------------------------------------------------------------------------
+    //     required,
+    //     $each: {
+    //         position: {
+    //             required: helpers.withMessage(
+    //                 `* обязательно для заполнения`,
+    //                 required,
+    //             ),
+    //         },
+    //     },
+    // },
 }));
 
 const v = useVuelidate(rules, {
     position,
+    // membersList,
 });
 
 const UploadData = async () => {

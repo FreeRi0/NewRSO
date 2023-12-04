@@ -9,7 +9,7 @@
         optionLabel="title"
         placeholder="Поиск по ФИО"
         v-bind="$attrs"
-        @update:model-value="changeValue"
+        @update:value="changeValue"
     >
         <template #value="slotProps">
             <div v-if="slotProps.value" class="option__content">
@@ -116,7 +116,8 @@ const props = defineProps({
     },
 });
 
-const selected = ref();
+const selected = ref(null);
+
 const items = ref([]);
 
 const changeValue = (event) => {

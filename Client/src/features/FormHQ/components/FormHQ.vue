@@ -12,6 +12,7 @@
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
                             </v-col>
+                            <!-- <div v-if="">обязательно для заполнения</div> -->
                         </v-row>
                     </template>
                     <template v-slot:actions="{ expanded }">
@@ -71,102 +72,23 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="name-squad"
-                                >Название отряда
+                            <label for="name-hq"
+                                >Наименование штаба
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Input
-                                :maxlength="30"
+                                id="name-hq"
                                 class="form__input"
-                                id="name-squad"
-                                placeholder="Например, Монолит"
-                                name="name_squad"
-                                v-model:value="v.squad.$model"
-                                :error="v.squad.$errors"
+                                placeholder="Например, Штаб СО Алтайского государственного медицинского университета (Штаб СО АГМУ)"
+                                name="name_hq"
+                                v-model:value="v.title.$model"
+                                :error="v.title.$errors"
+                                :maxlength="100"
                             />
                             <div class="form__counter">
-                                {{ counterSquad }} / 30
+                                {{ counterTitle }} / 100
                             </div>
                         </div>
-
-                        <div class="form__field">
-                            <label for="select-direction"
-                                >Выберите направление
-                                <sup class="valid-red">*</sup>
-                            </label>
-                            <Select
-                                variant="outlined"
-                                clearable
-                                name="select_direction"
-                                :items="directions"
-                                id="select-direction"
-                                placeholder="Например, ССО"
-                                v-model:value="v.direction.$model"
-                                :error="v.direction.$errors"
-                            ></Select>
-                        </div>
-
-                        <div class="form__field">
-                            <label for="create-date"
-                                >Дата основания
-                                <sup class="valid-red">*</sup>
-                            </label>
-                            <!-- <input
-                                id="create-date"
-                                label="Дата основания"
-                                name="create_date"
-                                type="date"
-                                placeholder=""
-                                :value="v.date.$model"
-                                :error="v.date.$errors"
-                            /> -->
-                            <Input
-                                class="form__input"
-                                id="create-date"
-                                name="create_date"
-                                type="date"
-                                v-model:value="v.date.$model"
-                                :error="v.date.$errors"
-                            />
-                            <!-- <Input
-                                class="form__input"
-                                id="create-date"
-                                name="create_date"
-                                placeholder="00.00.0000"
-                                type="text"
-                                onfocus="(this.type = 'date')"
-                                v-model:value="v.date.$model"
-                                :error="v.date.$errors"
-                            /> -->
-                        </div>
-
-                        <div class="form__field">
-                            <label for="select-region"
-                                >Выберите регион
-                                <sup class="valid-red">*</sup>
-                            </label>
-                            <SelectRegion
-                                class="form__region"
-                                clearable
-                                name="select_region"
-                                id="select-region"
-                                placeholder="Например, Алтайский край"
-                                v-model:value="v.region.$model"
-                                :error="v.region.$errors"
-                            ></SelectRegion>
-                        </div>
-
-                        <div class="form__field">
-                            <label for="city">Город </label>
-                            <Input
-                                class="form__input"
-                                id="city"
-                                placeholder="Например, Барнаул"
-                                name="edit_city"
-                                v-model:value="city"
-                            />
-                        </div>
-
                         <div class="form__field">
                             <label for="select-institution"
                                 >Выберите учебное заведение
@@ -185,18 +107,67 @@
                         </div>
 
                         <div class="form__field">
+                            <label for="create-date">Дата основания </label>
+                            <!-- <input
+                                id="create-date"
+                                label="Дата основания"
+                                name="create_date"
+                                type="date"
+                                placeholder=""
+                                ::value="v.date.$model"
+                                :error="v.date.$errors"
+                            /> -->
+                            <Input
+                                class="form__input"
+                                id="create-date"
+                                name="create_date"
+                                type="date"
+                                v-model:value="date"
+                            />
+                        </div>
+
+                        <div class="form__field">
+                            <label for="select-regional-office"
+                                >Выберите региональное отделение
+                                <sup class="valid-red">*</sup>
+                            </label>
+                            <Select
+                                variant="outlined"
+                                clearable
+                                :items="regionalOffices"
+                                name="select_regional-office"
+                                id="select-regional-office"
+                                placeholder="Например, Карачаево-Черкесское региональное отделение"
+                                v-model:value="v.regional.$model"
+                                :error="v.regional.$errors"
+                            ></Select>
+                        </div>
+
+                        <div class="form__field">
+                            <label for="city">Город</label>
+                            <Input
+                                class="form__input"
+                                id="city"
+                                placeholder="Например, Барнаул"
+                                name="edit_city"
+                                v-model:value="city"
+                            />
+                        </div>
+
+                        <div class="form__field">
                             <label for="beast"
-                                >Командир отряда:
+                                >Командир штаба СО ОО:
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
                                 :options="leaders"
                                 id="beast"
                                 name="edit_beast"
-                                v-model:value="v.beast.$model"
+                                v-model="v.beast.$model"
                                 :error="v.beast.$errors"
                                 :filterPlaceholder="'Поиск по ФИО'"
                                 :resetFilterOnHide="true"
+                                @update:value="changeValue"
                             ></Dropdown>
                         </div>
                     </div>
@@ -278,35 +249,31 @@
                     <div class="form__field-group">
                         <div class="form__field">
                             <label for="social-media-vk"
-                                >Группа отряда ВКонтакте
-                                <sup class="valid-red">*</sup>
+                                >Группа штаба ВКонтакте
                             </label>
                             <Input
                                 class="form__input"
                                 id="social-media-vk"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
-                                v-model:value="v.vk.$model"
-                                :error="v.vk.$errors"
+                                v-model:value="vk"
                             />
                         </div>
 
                         <div class="form__field">
                             <label for="social-media-te"
-                                >Группа отряда в Телеграмме
-                                <sup class="valid-red">*</sup>
+                                >Группа штаба в Телеграмме
                             </label>
                             <Input
                                 class="form__input"
                                 id="social-media-te"
-                                placeholder="Например, https://t.me/cco_monolit"
+                                placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                 name="social_media_te"
-                                v-model:value="v.te.$model"
-                                :error="v.te.$errors"
+                                v-model:value="te"
                             />
                         </div>
 
-                        <div class="form__field">
+                        <div class="form__field" v-if="participants">
                             <p>
                                 Участники отряда
                                 <sup class="valid-red">*</sup>
@@ -420,39 +387,30 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="squad-slogan"
-                                >Девиз отряда
-                                <sup class="valid-red">*</sup>
-                            </label>
+                            <label for="hq-slogan">Девиз штаба</label>
                             <Input
                                 class="form__input"
                                 type="text"
-                                id="squad-slogan"
+                                id="hq-slogan"
                                 placeholder="Например, через тернии к звездам"
-                                name="squad_slogan"
+                                name="hq_slogan"
+                                v-model:value="slogan"
                                 :maxlength="100"
-                                v-model:value="v.slogan.$model"
-                                :error="v.slogan.$errors"
                             />
                             <div class="form__counter">
                                 {{ counterSlogan }} / 100
                             </div>
                         </div>
-
                         <div class="form__field">
-                            <label for="about-squad"
-                                >Об отряде
-                                <sup class="valid-red">*</sup>
-                            </label>
+                            <label for="about-hq">О штабе</label>
                             <TextareaAbout
                                 :rows="6"
                                 maxlength="500"
                                 class="form__textarea"
-                                id="about-squad"
-                                placeholder="Расскажите об отряде"
-                                name="about_squad"
-                                v-model:value="v.about.$model"
-                                :error="v.about.$errors"
+                                id="about-hq"
+                                placeholder="Расскажите о штабе"
+                                name="about_hq"
+                                v-model:value="about"
                             ></TextareaAbout>
                             <div class="form__counter">
                                 {{ counterAbout }} / 500
@@ -482,33 +440,6 @@
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
-                        <div class="form__field">
-                            <label for="upload-photo"
-                                >Добавьте фотографии</label
-                            >
-                            <div class="form__photo-wrapper">
-                                <photos
-                                    name="upload_photo"
-                                    id="upload-photo"
-                                    v-model:value="photoOne"
-                                />
-                                <photos
-                                    name="upload_photo"
-                                    id="upload-photo"
-                                    v-model:value="photoTwo"
-                                />
-                                <photos
-                                    name="upload_photo"
-                                    id="upload-photo"
-                                    v-model:value="photoThree"
-                                />
-                                <photos
-                                    name="upload_photo"
-                                    id="upload-photo"
-                                    v-model:value="photoFour"
-                                />
-                            </div>
-                        </div>
                     </div>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -525,7 +456,7 @@
                     type="text"
                     class="form-button"
                     variant="text"
-                    label="Создать"
+                    label="Сохранить"
                     size="large"
                 ></Button>
             </v-card-actions>
@@ -536,15 +467,12 @@
 <script setup>
 import { ref, computed, inject } from 'vue';
 import { Input } from '@shared/components/inputs';
-import { SelectRegion } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
-import { photos } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
-
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
 
@@ -561,6 +489,8 @@ import {
     sameAs,
 } from '@vuelidate/validators';
 
+const emit = defineEmits(['update:value']);
+
 const props = defineProps({
     participants: {
         type: Boolean,
@@ -574,74 +504,45 @@ const props = defineProps({
 
 const submited = ref(false);
 
-const squad = ref(props.unit.squad);
-const direction = ref(props.unit.direction);
+const title = ref(props.unit.title);
 const date = ref(props.unit.date);
-const region = ref(props.unit.region);
-const city = ref(props.unit.city);
 const institution = ref(props.unit.institution);
+const city = ref(props.unit.city);
+const regional = ref(props.unit.regional);
 const beast = ref(props.unit.beast);
 const vk = ref(props.unit.vk);
 const te = ref(props.unit.te);
 const slogan = ref(props.unit.slogan);
 const about = ref(props.unit.about);
+
 const avatar = ref(props.unit.avatar);
 const banner = ref(props.unit.banner);
-const photoOne = ref(props.unit.photoOne);
-const photoTwo = ref(props.unit.photoTwo);
-const photoThree = ref(props.unit.photoThree);
-const photoFour = ref(props.unit.photoFour);
 
 const rules = computed(() => ({
-    squad: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    direction: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    date: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    region: {
+    title: {
         required: helpers.withMessage(`* обязательно для заполнения`, required),
     },
     institution: {
         required: helpers.withMessage(`* обязательно для заполнения`, required),
     },
+    regional: {
+        required: helpers.withMessage(`* обязательно для заполнения`, required),
+    },
     beast: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    vk: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    te: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    slogan: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    about: {
         required: helpers.withMessage(`* обязательно для заполнения`, required),
     },
 }));
 
 const v = useVuelidate(rules, {
-    squad,
-    direction,
-    date,
-    region,
+    title,
     institution,
+    regional,
     beast,
-    vk,
-    te,
-    slogan,
-    about,
 });
 
 const swal = inject('$swal');
 
 const UploadData = async () => {
-    submited.value = true;
     v.value.$touch();
     if (v.value.$error) {
         swal.fire({
@@ -661,9 +562,10 @@ const UploadData = async () => {
     }
 };
 
-//------------------------------------------------------------------------------------------------
-const counterSquad = computed(() => {
-    return squad.value.length || 0;
+//----------------------------------------------------------------------------------------------------------
+const counterTitle = computed(() => {
+    // console.log(title.value.length);
+    return title.value.length || 0;
 });
 
 const counterSlogan = computed(() => {
@@ -673,8 +575,7 @@ const counterSlogan = computed(() => {
 const counterAbout = computed(() => {
     return about.value.length || 0;
 });
-
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------
 const panel = ref();
 
 const openPanelOne = () => {
@@ -688,19 +589,10 @@ const openPanelTwo = () => {
 const openPanelThree = () => {
     panel.value = 'panelThree';
 };
-//-----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------
 const showButtonPrev = computed(() => {
     return panel.value === 'panelThree';
 });
-
-const directions = ref([
-    { title: 'ССО' },
-    { title: 'СПО' },
-    { title: 'СОП' },
-    { title: 'ССервО' },
-    { title: 'ССхО' },
-    { title: 'СМО' },
-]);
 
 const institutions = ref([
     { title: 'Алтайский государственный медицинский университет' },
@@ -712,6 +604,14 @@ const institutions = ref([
     },
     { title: 'Дальневосточный государственный технический университет' },
     { title: 'Дальневосточный федеральный университет' },
+]);
+
+const regionalOffices = ref([
+    { title: 'Карачаево-Черкесское региональное отделение' },
+    { title: 'Московское региональное отделение' },
+    { title: 'Амурское региональное отделение' },
+    { title: 'Дальневосточное региональное отделение' },
+    { title: 'Алтайское региональное отделение' },
 ]);
 
 const leaders = ref([
@@ -903,9 +803,15 @@ const onUpdateMember = (event, id) => {
     const firstkey = Object.keys(event)[0];
     targetMember[firstkey] = event[firstkey];
 };
+
+const changeValue = (event) => {
+    console.log(event);
+    emit('update:value', event);
+};
 </script>
 
 <style lang="scss" scoped>
+// $expansion-panel-active-title-min-height 64px
 .form-button {
     width: 132px;
     min-height: 52px;

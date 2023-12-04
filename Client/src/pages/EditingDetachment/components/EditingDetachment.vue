@@ -25,8 +25,7 @@ const imgDataUrl = ref('@app/assets/lso/banner-invar');
 
 const unit = ref({
     squad: 'Инвар',
-    // direction: 'ССО',
-    direction: null,
+    direction: 'ССО',
     date: '2003-08-16',
     region: ' Алтайский край',
     city: 'Бийск',
@@ -46,10 +45,10 @@ const unit = ref({
     about: 'Студенческий отряд "Инвар" был основан в 1995 году на базе одного из ведущих вузов нашего региона. Идея создания отряда возникла благодаря нескольким амбициозным студентам, чья основная цель была содействовать активной жизнедеятельности студенческого сообщества и общественной сферы.',
     avatar: imgAvatarUrl,
     banner: imgDataUrl,
-    // photoOne: '',
-    // photoTwo: '',
-    // photoThree: '',
-    // photoFour: '',
+    photoOne: '', //------------------------------------------------------------
+    photoTwo: '',
+    photoThree: '',
+    photoFour: '',
 });
 </script>
 

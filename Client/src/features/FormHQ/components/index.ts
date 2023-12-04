@@ -1,3 +1,3 @@
-import FormCreateHQ from './FormCreateHQ.vue';
+import FormHQ from './FormHQ.vue';
 
-export { FormCreateHQ };
+export { FormHQ };

@@ -1,1 +1,1 @@
-export { default as FormCreateHQ } from './components/FormCreateHQ.vue';
+export { default as FormHQ } from './components/FormHQ.vue';
