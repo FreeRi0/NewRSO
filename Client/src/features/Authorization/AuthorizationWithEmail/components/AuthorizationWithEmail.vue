@@ -54,13 +54,6 @@ const LoginUser = async () => {
     //     body: JSON.stringify(data),
     // });
 
-    await fetch('http://localhost:5000/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(data),
-    })
-
     await router.push('/UserPage');
 };
 
