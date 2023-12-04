@@ -81,7 +81,45 @@ const routes: RouteRecordRaw[] = [
                 path: '/PersonalData',
                 name: 'personaldata',
                 component: () =>
-                    import('@pages/PersonalDataPage/components/PersonalData.vue'),
+                    import(
+                        '@pages/PersonalDataPage/components/PersonalData.vue'
+                    ),
+            },
+            {
+                path: '/createhq',
+                name: 'createhq',
+                component: () =>
+                    import('@pages/CreationOfHQ/components/CreationOfHQ.vue'),
+            },
+            {
+                path: '/edithq',
+                name: 'edithq',
+                component: () =>
+                    import('@pages/EditingHQ/components/EditingHQ.vue'),
+            },
+            {
+                path: '/reference',
+                name: 'reference',
+                component: () =>
+                    import('@pages/ReferencePage/components/reference.vue'),
+            },
+            {
+                path: '/referenceForYou',
+                name: 'referenceForYou',
+                component: () =>
+                    import('@pages/ReferencePage/components/referenceForYou.vue'),
+            },
+            {
+                path: '/contributorPay',
+                name: 'contributorPay',
+                component: () =>
+                    import('@pages/ContributionPage/components/ContributorPay.vue'),
+            },
+            {
+                path: '/references',
+                name: 'references',
+                component: () =>
+                    import('@pages/ReferencePage/components/references.vue'),
             },
         ],
     },

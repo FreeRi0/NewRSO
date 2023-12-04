@@ -18,6 +18,7 @@
                     placeholder="Отчество(При наличии)"
                     name="patronomyc"
                     v-model:value.trim="form.patronymic_name"
+
                 />
                 <Input
                     type="tel"
@@ -54,6 +55,7 @@
                 <v-checkbox
                     label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных*."
                 ></v-checkbox>
+
                 <Button
                     label="Зарегистрироваться"
                     :loaded="isLoading"
@@ -62,6 +64,8 @@
                     color="primary"
                 >
               </Button>
+
+
 
                 <v-card-text class="text-center">
                     <router-link to="/"

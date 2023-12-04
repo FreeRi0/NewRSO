@@ -9,8 +9,6 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-
 const props = defineProps({
     items: Array,
 });
@@ -22,7 +20,7 @@ const props = defineProps({
     align-items: center;
     margin-bottom: 35px;
     padding: 0;
-    // font-family:  ;
+    font-family: 'Akrobat';
     font-size: 14px;
     line-height: 17px;
     font-weight: 600;

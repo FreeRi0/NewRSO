@@ -19,8 +19,7 @@
                     name="password"
                     v-model:value="data.password"
                 ></PasswordInputVue>
-
-                <Button
+               <Button
                     type="submit"
                     label="Войти"
                     :loaded="isLoading"
@@ -56,7 +55,7 @@ const swal = inject('$swal');
 const router = useRouter();
 
 const LoginUser = async () => {
-    isLoading.value = true;
+ isLoading.value = true;
     axios
         .post('api/v1/token/login/', data.value, {
             headers: {

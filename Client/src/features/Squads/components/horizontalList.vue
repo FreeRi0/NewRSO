@@ -7,7 +7,7 @@
             <p class="squads-wrapper__item-category-full">
                 {{ squad.full }}
             </p>
-            <p class="squads-wrapper__item-title">{{ squad.title }}</p>
+            <p class="squads-wrapper__item-title">"{{ squad.title }}"</p>
         </div>
     </div>
 </template>
@@ -37,12 +37,14 @@ const props = defineProps({
 .containerHorizontal {
     display: flex;
     align-items: center;
+    @media screen and (max-width: 575px) {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-left: 10px;
+    }
 }
 
 .squads-wrapper__item {
-    margin: 0px auto;
-    width: 180px;
-
     &-category-full {
         text-align: center;
         font-size: 18px;
@@ -50,12 +52,20 @@ const props = defineProps({
         margin-left: 20px;
         margin-right: 5px;
         color: #1e1e1e;
+        @media screen and (max-width: 575px) {
+            font-size: 15px;
+            margin: 0;
+            text-align: left;
+        }
     }
     &-title {
         text-align: center;
         font-size: 20px;
         font-family: 'Akrobat';
         color: #1e1e1e;
+        @media screen and (max-width: 575px) {
+            font-size: 15px;
+        }
     }
 }
 </style>
