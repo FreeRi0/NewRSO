@@ -2,41 +2,36 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
 
-        <h1 class="title title--lso">Создание ЛСО</h1>
+        <h1 class="title title--lso">Создание штаба СО ОО</h1>
 
-        <FormCreateUnit :unit="unit"></FormCreateUnit>
+        <FormHQ :unit="unit"></FormHQ>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { FormCreateUnit } from '@features/FormCreateUnit';
+import { FormHQ } from '@features/FormHQ';
 
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'ЛСО', href: '#' },
-    { pageTitle: 'Создание ЛСО', href: '#' },
+    { pageTitle: 'Штабы СО ОО', href: '#' },
+    { pageTitle: 'Создание штаба СО ОО', href: '#' },
 ]);
 
 const unit = ref({
-    squad: '',
-    direction: null,
-    date: '',
-    region: null,
-    city: '',
+    title: '',
     institution: null,
-    beast: null,
+    date: '',
+    regional: null,
+    city: '',
+    beast: '',
     vk: '',
     te: '',
     slogan: '',
     about: '',
     avatar: '',
     banner: '',
-    photoOne: '',
-    photoTwo: '',
-    photoThree: '',
-    photoFour: '',
 });
 </script>
 

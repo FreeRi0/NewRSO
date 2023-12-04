@@ -3,4 +3,7 @@ import PasswordInputVue from './PasswordInput.vue';
 import TextArea from './textarea.vue';
 import Search from './search.vue';
 
-export { Input, PasswordInputVue, TextArea, Search };
+import TextareaAbout from './TextareaAbout.vue';
+
+
+export { Input, PasswordInputVue, TextArea, Search, TextareaAbout };
