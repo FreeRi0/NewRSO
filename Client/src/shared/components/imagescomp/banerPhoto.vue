@@ -21,10 +21,10 @@
                 @crop-success="cropSuccess"
                 @crop-upload-success="cropUploadSuccess"
                 @crop-upload-fail="cropUploadFail"
-                v-model="show"
+                v-model="banner"
                 :width="1100"
                 :height="200"
-                url="https://httpbin.org/post"
+                url="api/v1/users/me/media/"
                 :params="params"
                 :headers="headers"
                 :no-circle="true"
@@ -87,21 +87,21 @@
 <script setup>
 import { ref } from 'vue';
 import myUpload from 'vue-image-crop-upload';
-const show = ref(false);
+const banner = ref(false);
 
 const params = ref({
-    token: '123456798',
     name: 'avatar',
 });
 
 const headers = ref({
     smail: '*_~',
+    token: 'Token ' + localStorage.getItem('Token'),
 });
 
 const imgDataUrl = ref(null);
 
 const toggleShow = () => {
-    show.value = !show.value;
+    banner.value = !banner.value;
 };
 
 const cropSuccess = (data, field) => {

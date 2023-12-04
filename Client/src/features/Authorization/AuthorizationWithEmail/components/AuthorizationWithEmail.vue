@@ -12,7 +12,7 @@
                 <Input
                     placeholder="Имя"
                     name="name"
-                    v-model:value="data.nameUser"
+                    v-model:value="data.username"
                 />
                 <PasswordInputVue
                     placeholder="Пароль"
@@ -20,43 +20,74 @@
                     v-model:value="data.password"
                 ></PasswordInputVue>
 
-                <Button label="Войти" color="primary"></Button>
+                <Button
+                    type="submit"
+                    label="Войти"
+                    :loaded="isLoading"
+                    :disabled="isLoading"
+                    color="primary"
+                ></Button>
 
                 <v-card-text class="text-center"
                     >Забыли пароль?
                     <router-link to="/">Восстановить</router-link></v-card-text
                 >
             </v-form>
+
         </v-card>
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, PasswordInputVue } from '@shared/components/inputs';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
+
 const data = ref({
-    nameUser: '',
+    username: '',
     password: '',
 });
 
-
-
+const isLoading = ref(false);
+const swal = inject('$swal');
 const router = useRouter();
-
 const LoginUser = async () => {
-    // await axios.post('url/login', {
-    //     headers: { 'Content-Type': 'application/json' },
-    //     credentials: 'include',
-    //     body: JSON.stringify(data),
-    // });
+    isLoading.value = true;
+    axios
+        .post('api/v1/token/login/', data.value, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then((response) => {
+            data.value = response.data;
+            localStorage.setItem('Token', response.data.auth_token);
+            console.log(response.data);
+            isLoading.value = false;
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            router.push('/UserPage');
+        })
 
-    await router.push('/UserPage');
+        .catch((error) => {
+            console.error('There was an error!', error);
+            isLoading.value = false;
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
 };
 
-// const nameUser = ref('');
-// const password = ref('');
 </script>

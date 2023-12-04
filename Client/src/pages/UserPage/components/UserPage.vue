@@ -3,7 +3,6 @@
         <div class="user-wrapper">
             <h2 class="page-title">Моя страница</h2>
             <BannerComp class="mt-3"></BannerComp>
-            <p>{{ message }}</p>
             <div class="user-verify">
                 <p class="user-verify__title">Верификация данных</p>
                 <div class="user-verify__desc">
@@ -39,30 +38,8 @@ import { BannerComp } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
 import { photos } from '@shared/components/imagescomp';
 
-import { onMounted, ref, computed } from 'vue';
-import { useStore } from 'vuex';
+import { ref, computed } from 'vue';
 
-const store = useStore();
-const auth = computed(() => store.state.user)
-
-const message = ref('');
-
-onMounted(async () => {
-    try {
-        const response = await fetch('http://localhost:5000/auth/users', {
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-        });
-
-        const content = await response.json();
-
-        message.value = content.name;
-
-        await store.dispatch('setAuth', true);
-    } catch (error) {
-        await store.dispatch('setAuth', false);
-    }
-});
 </script>
 <style lang="scss">
 .user-wrapper {

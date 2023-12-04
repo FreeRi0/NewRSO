@@ -16,7 +16,7 @@
     <form
         class="accordion-form"
         enctype="multipart/form-data"
-        @submit.prevent="UploadData"
+        @submit.prevent="addData"
     >
         <p class="accordion-title">
             Для вступления в РСО внесите ниже персональные данные
@@ -43,8 +43,7 @@
                                 clearable
                                 placeholder="Введите фамилию"
                                 name="surname"
-                                v-model:value="v.surname.$model"
-                                :error="v.surname.$errors"
+                                v-model:value="user.last_name"
                             />
                         </div>
                         <div class="form-field">
@@ -54,7 +53,7 @@
                                 clearable
                                 placeholder="familia"
                                 name="surname-lat"
-                                v-model:value="surnameLat"
+                                v-model:value="user.last_name"
                             />
                         </div>
                         <div class="form-field">
@@ -66,8 +65,7 @@
                                 clearable
                                 placeholder="Введите имя"
                                 name="name"
-                                v-model:value="v.name.$model"
-                                :error="v.name.$errors"
+                                v-model:value="user.first_name"
                             />
                         </div>
                         <div class="form-field">
@@ -77,7 +75,7 @@
                                 clearable
                                 placeholder="name"
                                 name="name-lat"
-                                v-model:value="nameLat"
+                                v-model:value="user.first_name"
                             />
                         </div>
                         <div class="form-field">
@@ -87,7 +85,7 @@
                                 clearable
                                 placeholder="Отчество"
                                 name="patronomyc"
-                                v-model:value="patronomyc"
+                                v-model:value="user.patronymic_name"
                             />
                         </div>
                         <div class="form-field">
@@ -108,7 +106,7 @@
                             </p>
                             <div
                                 class="checkbox"
-                                v-for="sex in sexes"
+                                v-for="sex in gender"
                                 :key="sex.id"
                             >
                                 <RadioButton
@@ -141,8 +139,7 @@
                                 name="date_of_birth"
                                 class="input-small"
                                 @change="ageValid(birth)"
-                                v-model="v.birth.$model"
-                                :error="v.birth.$errors"
+                                v-model="user.date_of_birth"
                             />
                         </div>
                         <p v-if="birth">Your age is {{ years }} years</p>
@@ -163,8 +160,8 @@
                                         name="surname-parent"
                                         class="input-big"
                                         placeholder="Введите фамилию"
-                                        v-model:value="v.surnameParent.$model"
-                                        :error="v.surnameParent.$errors"
+                                        v-model:value="surnameParent"
+
                                     />
                                 </div>
                                 <div class="form-field">
@@ -201,8 +198,8 @@
                                         type="datetime-local"
                                         name="date-parent"
                                         class="input-small"
-                                        v-model:value="v.birthParent.$model"
-                                        :error="v.birthParent.$errors"
+                                        v-model:value="birthParent"
+
                                     />
                                 </div>
                                 <div class="form-field">
@@ -215,8 +212,7 @@
                                         name="name-parent"
                                         class="input-big"
                                         placeholder="Введите имя"
-                                        v-model:value="v.nameParent.$model"
-                                        :error="v.nameParent.$errors"
+                                        v-model:value="nameParent"
                                     />
                                 </div>
 
@@ -232,8 +228,8 @@
                                         class="input-small phone"
                                         placeholder="+7(__) __ __ _"
                                         @change="ageValid"
-                                        v-model:value="v.phoneParent.$model"
-                                        :error="v.phoneParent.$errors"
+                                        v-model:value="phoneParent"
+
                                     />
                                 </div>
                             </div>
@@ -290,8 +286,8 @@
                                         name="passInput"
                                         class="input-small pass-masked"
                                         placeholder="__ __ ____"
-                                        v-model:value="v.passInputP.$model"
-                                        :error="v.passInputP.$errors"
+                                        v-model:value="passInputP"
+
                                     />
                                 </div>
 
@@ -316,8 +312,8 @@
                                         type="datetime-local"
                                         name="pass-date-parent"
                                         class="input-small"
-                                        v-model:value="v.passDateP.$model"
-                                        :error="v.passDateP.$errors"
+                                        v-model:value="passDateP"
+
                                     />
                                 </div>
 
@@ -331,8 +327,8 @@
                                         name="locality-parent"
                                         class="input-big"
                                         placeholder="Москва"
-                                        v-model:value="v.localParent.$model"
-                                        :error="v.localParent.$errors"
+                                        v-model:value="localParent"
+
                                     />
                                 </div>
 
@@ -346,8 +342,8 @@
                                         name="pass-id-parent"
                                         class="input-big"
                                         placeholder="Название организации"
-                                        v-model:value="v.PassIdParent.$model"
-                                        :error="v.PassIdParent.$errors"
+                                        v-model:value="PassIdParent"
+
                                     />
                                 </div>
 
@@ -362,8 +358,8 @@
                                         name="addres-parent"
                                         class="input-big"
                                         placeholder="Москва"
-                                        v-model:value="v.AddresParent.$model"
-                                        :error="v.AddresParent.$errors"
+                                        v-model:value="AddresParent"
+
                                     />
                                 </div>
                             </div>
@@ -494,8 +490,7 @@
                                 name="phone-contact"
                                 class="input-small phone"
                                 placeholder="+7(__) __ __ _"
-                                v-model:value="v.phoneContact.$model"
-                                :error="v.phoneContact.$errors"
+                                v-model:value="user.phone_number"
                             />
                         </div>
                         <div class="form-field">
@@ -503,7 +498,7 @@
                                 >Регион<span class="valid-red">*</span></label
                             >
                             <SelectRegion
-                                v-model="v.regionContact.$model"
+                                v-model="regionContact"
                             ></SelectRegion>
                         </div>
                         <div class="form-field">
@@ -517,8 +512,7 @@
                                 name="email-сontact"
                                 class="input-big mask-email"
                                 placeholder="mail@mail.com"
-                                v-model:value="v.emailContact.$model"
-                                :error="v.emailContact.$errors"
+                                v-model:value="user.email"
                             />
                         </div>
                         <div class="form-field">
@@ -532,8 +526,8 @@
                                 name="locality-contact"
                                 class="input-big"
                                 placeholder="Москва"
-                                v-model:value="v.localityContact.$model"
-                                :error="v.localityContact.$errors"
+                                v-model:value="localityContact"
+
                             />
                         </div>
                         <div class="scoial-networks">
@@ -571,8 +565,8 @@
                                 name="addres-contact"
                                 class="input-big"
                                 placeholder="ул. Комсомольская, д. 42, кв. 56"
-                                v-model:value="v.addresContact.$model"
-                                :error="v.addresContact.$errors"
+                                v-model:value="addresContact"
+
                             />
                         </div>
                         <div class="checkbox addr" id="checkbox">
@@ -703,8 +697,7 @@
                                     type="text"
                                     class="input-big"
                                     placeholder="__ __ ____"
-                                    v-model:value="v.passNumber.$model"
-                                    :error="v.passNumber.$errors"
+                                    v-model:value="documentsData.pass_ser_num"
                                 />
                             </div>
 
@@ -718,8 +711,8 @@
                                     type="date"
                                     name="pass_date"
                                     class="input-small"
-                                    v-model:value="v.passDate.$model"
-                                    :error="v.passDate.$errors"
+                                    v-model:value="documentsData.pass_date"
+
                                 />
                             </div>
 
@@ -730,8 +723,7 @@
                                     type="text"
                                     class="input-full"
                                     placeholder="Название организации"
-                                    v-model:value="v.passOrg.$model"
-                                    :error="v.passOrg.$errors"
+                                    v-model:value="documentsData.pass_whom"
                                 />
                             </div>
                             <div class="form-field">
@@ -745,8 +737,7 @@
                                     type="text"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
-                                    v-model:value="v.snils.$model"
-                                    :error="v.snils.$errors"
+                                    v-model:value="documentsData.snils"
                                 />
                             </div>
                             <div class="form-field">
@@ -758,8 +749,7 @@
                                     type="text"
                                     class="input-big mask-inn"
                                     placeholder="AA 999999999"
-                                    v-model:value="v.inn.$model"
-                                    :error="v.inn.$errors"
+                                    v-model:value="documentsData.inn"
                                 />
                             </div>
                             <div class="form-field">
@@ -769,7 +759,7 @@
                                     type="text"
                                     class="input-big mask-workbook"
                                     placeholder="AA 999999999"
-                                    v-model:value="workbook"
+                                    v-model:value="documentsData.work_book_num"
                                 />
                             </div>
                             <div class="form-field">
@@ -779,7 +769,7 @@
                                     type="text"
                                     class="input-big mask-foreign-pass"
                                     placeholder="AA 999999999"
-                                    v-model:value="foreignPass"
+                                    v-model:value="documentsData.international_pass"
                                 />
                             </div>
                             <div class="form-field">
@@ -800,7 +790,7 @@
                                     type="text"
                                     class="input-big mask-military"
                                     placeholder="AA 999999999"
-                                    v-model:value="militaryNumber"
+                                    v-model:value="documentsData.mil_reg_doc_ser_num"
                                 />
                             </div>
                         </div>
@@ -938,8 +928,7 @@
                                 id="education-org"
                                 class="input-full"
                                 placeholder="Введите название образовательной организации"
-                                v-model:value="v.educationOrg.$model"
-                                :error="v.educationOrg.$errors"
+                                v-model:value="educationData.study_institution"
                             />
                         </div>
                         <div class="form-field">
@@ -950,7 +939,7 @@
                                 id="facultet"
                                 class="input-full"
                                 placeholder="Ввведите название факультета"
-                                v-model:value="facultet"
+                                v-model:value="educationData.study_faculty"
                             />
                         </div>
                         <div class="form-field">
@@ -965,8 +954,7 @@
                                 id="course"
                                 class="input-full"
                                 placeholder="1 курс"
-                                v-model:value="v.course.$model"
-                                :error="v.course.$errors"
+                                v-model:value="educationData.study_year"
                             />
                         </div>
                         <div class="form-field">
@@ -977,7 +965,7 @@
                                 id="speciality"
                                 class="input-full"
                                 placeholder="Введите название специальности"
-                                v-model:value="speciality"
+                                v-model:value="educationData.study_specialty"
                             />
                         </div>
                     </div>
@@ -2541,6 +2529,7 @@ import { RadioButton } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { FileUpload } from '@features/Upload/components';
 import { useVuelidate } from '@vuelidate/core';
+import { useRouter } from 'vue-router';
 import { SelectRegion, sortByEducation } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import {
@@ -2551,13 +2540,161 @@ import {
     numeric,
     sameAs,
 } from '@vuelidate/validators';
+import axios from 'axios';
+
+let education = ref(null);
+
+let endpoints =  [
+    'api/v1/users/me/education/',
+    'api/v1/users/me/documents/',  ];
+
+const educationData = ref({
+    study_institution: '',
+    study_faculty: '',
+    study_year: '',
+    study_specialty: '',
+});
+
+// const editEducData = ref({
+//     study_institution: education.study_institution,
+//     study_faculty: education.study_faculty,
+//     study_year: education.study_year,
+//     study_specialty: education.study_specialty,
+// })
+
+// const regionData = ref({
+//     study_institution: '',
+//     study_faculty: '',
+//     study_year: '',
+//     study_specialty: '',
+// });
+
+const documentsData = ref({
+    snils: '',
+    inn: '',
+    pass_ser_num: '',
+    pass_whom: '',
+    pass_date: '',
+    work_book_num: '',
+    international_pass: '',
+    mil_reg_doc_ser_num: '',
+});
+
+const swal = inject('$swal');
+
+let user = ref(null);
+
+let region = ref(null);
+let documents = ref(null);
+
+const getUser = async () => {
+    await axios
+        .get('api/v1/users/me/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            user.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+getUser();
+
+
+
+const addData = async () => {
+    // axios
+    //     .post('api/v1/users/me/documents/', documentsData.value, {
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             Authorization: 'Token ' + localStorage.getItem('Token'),
+    //         },
+    //     })
+    //     .then((response) => {
+    //         documentsData.value = response.data;
+    //         console.log(response.data);
+    //         swal.fire({
+    //             position: 'top-center',
+    //             icon: 'success',
+    //             title: 'успешно',
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //         });
+    //     })
+
+    //     .catch((error) => {
+    //         console.error('There was an error!', error);
+    //         swal.fire({
+    //             position: 'top-center',
+    //             icon: 'error',
+    //             title: 'ошибка',
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //         });
+    //     });
+    axios
+        .post('api/v1/users/me/education/', educationData.value, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            educationData.value = response.data;
+            console.log(response.data);
+
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        })
+
+        .catch((error) => {
+            console.error('There was an error!', error);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+};
+
+// const getEducation = async () => {
+//     await axios
+//         .ge('api/v1/users/me/education', {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         })
+//         .then((response) => {
+//             education.value = response.data;
+//             console.log(education.value);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+
+// getEducation();
 
 const answers = ref([
     { name: 'Да', id: 'f1' },
     { name: 'Нет', id: 'f2', checked: true },
 ]);
 
-const sexes = ref([
+const gender = ref([
     { name: 'Мужской', id: 's1', checked: true },
     { name: 'Женский', id: 's2' },
 ]);
@@ -2592,9 +2729,9 @@ const passport = reactive([
     { name: 'Нет', id: 'pass2' },
 ]);
 
-const birth = ref('');
 const years = ref(null);
 
+const birth = ref(user.date_of_birth);
 
 const ageValid = (birth) => {
     if (!birth) return;
@@ -2616,12 +2753,12 @@ const selectedAnswer = ref('Нет');
 const selectedPassParent = ref('Да');
 const selectedAddress = ref('Нет');
 const selectedPass = ref('Да');
-const surname = ref('');
-const name = ref('');
-const patronomyc = ref('');
-const patronomycLat = ref('');
-const nameLat = ref('');
-const surnameLat = ref('');
+// const surname = ref('');
+// const name = ref('');
+// const patronomyc = ref('');
+// const patronomycLat = ref('');
+// const nameLat = ref('');
+// const surnameLat = ref('');
 
 const nameParent = ref('');
 const surnameParent = ref('');
@@ -2635,8 +2772,8 @@ const PassIdParent = ref('');
 const localParent = ref('');
 const passDateP = ref('');
 const AddresParent = ref('');
-const phoneContact = ref('');
-const emailContact = ref('');
+// const phoneContact = ref('');
+// const emailContact = ref('');
 const localityContact = ref('');
 const regionContact = ref('');
 const socialsVk = ref('');
@@ -2653,223 +2790,203 @@ const inn = ref('');
 const foreignPass = ref('');
 const workbook = ref('');
 const militaryNumber = ref('');
-const educationOrg = ref('');
-const speciality = ref('');
-const course = ref('');
-const facultet = ref('');
 
-const rules = computed(() => ({
-    surname: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-        minLength: helpers.withMessage(
-            `Минимальная длина: 2 символа`,
-            minLength(2),
-        ),
-    },
-    surnameParent: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-        minLength: helpers.withMessage(
-            `Минимальная длина: 2 символа`,
-            minLength(2),
-        ),
-    },
-    name: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-        minLength: helpers.withMessage(
-            `Минимальная длина: 2 символа`,
-            minLength(2),
-        ),
-    },
-    nameParent: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-        minLength: helpers.withMessage(
-            `Минимальная длина: 2 символа`,
-            minLength(2),
-        ),
-    },
-    birth: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    birthParent: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    phoneParent: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    AddresParent: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    localParent: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    passDateP: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    passInputP: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    PassIdParent: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    phoneContact: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    emailContact: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-        email: helpers.withMessage('Вы ввели неверный email', emailContact),
-    },
+// const rules = computed(() => ({
+//     surname: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//         minLength: helpers.withMessage(
+//             `Минимальная длина: 2 символа`,
+//             minLength(2),
+//         ),
+//     },
+//     surnameParent: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//         minLength: helpers.withMessage(
+//             `Минимальная длина: 2 символа`,
+//             minLength(2),
+//         ),
+//     },
+//     name: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//         minLength: helpers.withMessage(
+//             `Минимальная длина: 2 символа`,
+//             minLength(2),
+//         ),
+//     },
+//     nameParent: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//         minLength: helpers.withMessage(
+//             `Минимальная длина: 2 символа`,
+//             minLength(2),
+//         ),
+//     },
+//     birth: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     birthParent: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     phoneParent: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     AddresParent: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     localParent: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     passDateP: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     passInputP: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     PassIdParent: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     phoneContact: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     emailContact: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//         email: helpers.withMessage('Вы ввели неверный email', emailContact),
+//     },
 
-    regionContact: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    localityContact: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    addresContact: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    passNumber: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    passDate: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    snils: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    inn: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    passOrg: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    educationOrg: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-    course: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-    },
-}));
+//     regionContact: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     localityContact: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     addresContact: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     passNumber: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     passDate: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     snils: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     inn: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     passOrg: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     educationOrg: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+//     course: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//     },
+// }));
 
-const v = useVuelidate(rules, {
-    surname,
-    name,
-    birth,
-    birthParent,
-    nameParent,
-    surnameParent,
-    phoneParent,
-    passDateP,
-    passInputP,
-    localParent,
-    AddresParent,
-    PassIdParent,
-    phoneContact,
-    emailContact,
-    regionContact,
-    localityContact,
-    addresContact,
-    passNumber,
-    passDate,
-    snils,
-    inn,
-    passOrg,
-    educationOrg,
-    course,
-});
+// const v = useVuelidate(rules, {
+//     surname,
+//     name,
+//     birth,
+//     birthParent,
+//     nameParent,
+//     surnameParent,
+//     phoneParent,
+//     passDateP,
+//     passInputP,
+//     localParent,
+//     AddresParent,
+//     PassIdParent,
+//     phoneContact,
+//     emailContact,
+//     regionContact,
+//     localityContact,
+//     addresContact,
+//     passNumber,
+//     passDate,
+//     snils,
+//     inn,
+//     passOrg,
+//     educationOrg,
+//     course,
+// });
 
-const swal = inject('$swal');
+// const  = async () => {
+//     // v.value.$touch();
 
-const UploadData = async () => {
-    v.value.$touch();
-    if (v.value.$error) {
-        swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-        });
-    } else {
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'Данные успешно сохранены',
-            showConfirmButton: false,
-            timer: 1500,
-        });
-    }
-};
+// };
 </script>
 <style lang="scss" scoped>
 .accordion {
@@ -3097,3 +3214,4 @@ const UploadData = async () => {
     display: none;
 }
 </style>
+// 6S3-7s!7A}@t

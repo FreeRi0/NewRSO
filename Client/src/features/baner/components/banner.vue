@@ -6,8 +6,14 @@
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
                 <div class="user-data__name">
-                    <h4>dddd</h4>
+                    <h4 v-if="user">{{ user.first_name}}</h4>
+                    <h4 v-if="user">{{ user.last_name}}</h4>
+
                 </div>
+                <h4 v-if="user">{{ user.email}}</h4>
+                <h4 v-if="education">{{ education.study_faculty}}</h4>
+                <h4 v-if="education">{{ education.study_specialty}}</h4>
+                <h4 v-if="education">{{ education.study_year}} Курс</h4>
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
@@ -19,13 +25,96 @@
                 </div>
                 <!-- Контакты пользователя  -->
             </div>
+            <!--vascnecK-->
+            <!--gf3E7T(38V9j-->
         </div>
+        <!-- <div v-for="item in users" :key="user.id">
+        <p>{{ item.email }}</p>
+           <p>{{ item.first_name }}</p>
+           <p>{{ item.last_name }}</p>
+        </div> -->
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
+import axios from 'axios';
+const users = ref([]);
+let user = ref(null);
+let education = ref(null);
+const getUser = async () => {
+    await axios
+        .get('api/v1/users/me/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            user.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+getUser();
+
+const getEducation = async () => {
+    await axios
+        .get('api/v1/users/me/education', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            education.value = response.data;
+            console.log(education.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+getEducation();
+
+// const getUsers = async () => {
+//     axios
+//         .get('api/v1/users/', users.value, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         })
+//         .then((response) => {
+//             users.value = response.data;
+//             console.log(response.data);
+//             swal.fire({
+//                 position: 'top-center',
+//                 icon: 'success',
+//                 title: 'успешно',
+//                 showConfirmButton: false,
+//                 timer: 1500,
+//             });
+//             router.push('/UserPage');
+//         })
+
+//         .catch((error) => {
+//             console.error('There was an error!', error);
+//             isLoading.value = false;
+//             swal.fire({
+//                 position: 'top-center',
+//                 icon: 'error',
+//                 title: 'ошибка',
+//                 showConfirmButton: false,
+//                 timer: 1500,
+//             });
+//         });
+// }
+
+// getUsers()
 
 </script>
 <style lang="scss" scoped>
