@@ -4,14 +4,14 @@
 
         <h1 class="title title--lso">Редактирование ЛСО</h1>
 
-        <FormCreateUnit :participants="true" :unit="unit"></FormCreateUnit>
+        <FormUnit :participants="true" :unit="unit"></FormUnit>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { FormCreateUnit } from '@features/FormCreateUnit';
+import { FormUnit } from '@features/FormUnit';
 
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
