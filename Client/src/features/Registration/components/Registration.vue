@@ -32,6 +32,11 @@
                     v-model:value.trim="form.email"
                 />
                 <Input
+                    name="date"
+                    type="date"
+                    v-model:value="form.date_of_birth"
+                />
+                <Input
                     placeholder="Придумайте логин"
                     name="login"
                     v-model:value.trim="form.username"
@@ -57,8 +62,6 @@
                     color="primary"
                 >
               </Button>
-
-                <!-- <div v-if="isLoading">Loading.....</div> -->
 
                 <v-card-text class="text-center">
                     <router-link to="/"
@@ -103,6 +106,7 @@ const form = ref({
     patronymic_name: '',
     phone_number: '',
     email: '',
+    date_of_birth: '',
     username: '',
     password: '',
     re_password: '',

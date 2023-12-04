@@ -33,6 +33,7 @@
                     <router-link to="/">Восстановить</router-link></v-card-text
                 >
             </v-form>
+          
         </v-card>
     </div>
 </template>
@@ -43,6 +44,7 @@ import { Button } from '@shared/components/buttons';
 import { Input, PasswordInputVue } from '@shared/components/inputs';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+
 
 const data = ref({
     username: '',

@@ -90,12 +90,12 @@ import myUpload from 'vue-image-crop-upload';
 const banner = ref(false);
 
 const params = ref({
-    token: '123456798',
     name: 'avatar',
 });
 
 const headers = ref({
     smail: '*_~',
+    token: 'Token ' + localStorage.getItem('Token'),
 });
 
 const imgDataUrl = ref(null);

@@ -4,7 +4,7 @@
             <!-- Аватар пользователя  -->
 
             <img
-                :src="imgAvatarUrl"
+                :src="imgAvatarUrl.photo"
                 alt="Аватарка"
                 v-if="imgAvatarUrl"
                 v-photo="true"
@@ -22,9 +22,9 @@
                 @crop-upload-success="cropUploadSuccess"
                 @crop-upload-fail="cropUploadFail"
                 v-model="photo"
+                @change="selectFile"
                 :width="300"
                 :height="300"
-                url="api/v1/users/me/media/"
                 :params="params"
                 :headers="headers"
                 :no-square="true"
@@ -44,7 +44,7 @@
             <v-card>
                 <v-card-text>
                     <div class="mx-auto text-center">
-                        <v-btn rounded variant="text" @click="toggleShowAvatar">
+                        <v-btn rounded variant="text" @click="toggleShowAvatar()">
                             Добавить аватар
                         </v-btn>
                     </div>
@@ -62,7 +62,7 @@
             <v-card>
                 <v-card-text>
                     <div class="mx-auto text-center">
-                        <v-btn rounded variant="text" @click="toggleShowAvatar">
+                        <v-btn rounded variant="text" @click="toggleEditShowAvatar()">
                             Редактировать аватар
                         </v-btn>
                         <v-divider class="my-3"></v-divider>
@@ -78,20 +78,85 @@
 <script setup>
 import { ref } from 'vue';
 import myUpload from 'vue-image-crop-upload';
+import axios from 'axios';
 
-const photo = ref(false);
+const photo = ref(null);
+const imgAvatarUrl = ref(null);
+
+let formData = new FormData();
+formData.append('file', photo.value);
 
 const params = ref({
-    token: '123456798',
-    name: 'avatar',
+    name: 'avatar'
 });
 
 const headers = ref({
     smail: '*_~',
+    // Authorization: 'Token ' + localStorage.getItem('Token'),
 });
 
-const toggleShowAvatar = () => {
+const viewAvatar = async() => {
+    await axios
+         .get('api/v1/users/me/media/', {
+             headers: {
+                 Authorization: 'Token ' + localStorage.getItem('Token'),
+             },
+         })
+         .then((response) => {
+            imgAvatarUrl.value = response.data;
+            console.log(imgAvatarUrl.value);
+         })
+        .catch(function (error) {
+             console.log('an error occured ' + error);
+         });
+}
+
+viewAvatar()
+
+const selectFile = (event) => {
+    photo.value = event.target.files[0];
+}
+
+const toggleShowAvatar = async() => {
     photo.value = !photo.value;
+    console.log(photo.value, 'sssdd');
+    let formData = new FormData();
+    formData.append('image', photo.value);
+
+    await axios
+        .post('api/v1/users/me/media/', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            console.log(response, 'avatar uploaded');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const toggleEditShowAvatar = async() => {
+    photo.value = !photo.value;
+
+    let formData = new FormData();
+    formData.append('image', photo.value);
+
+    await axios
+        .put('api/v1/users/me/media/', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            console.log(response, 'avatar edited');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
 };
 
 const cropSuccess = (data, field) => {
@@ -99,6 +164,7 @@ const cropSuccess = (data, field) => {
     if (field == 'avatar') {
         imgAvatarUrl.value = data;
     }
+    console.log(imgAvatarUrl.value, 'url');
 };
 
 const cropUploadSuccess = (data, field) => {
@@ -112,12 +178,28 @@ const cropUploadFail = (status, field) => {
     console.log(status);
     console.log('field: ' + field);
 };
-const deleteAvatar = () => {
-    imgAvatarUrl.value = '';
-};
 
-const imgAvatarUrl = ref(null);
+
+const deleteAvatar = async() => {
+
+    await axios
+         .delete('api/v1/users/me/media/', {
+             headers: {
+                 Authorization: 'Token ' + localStorage.getItem('Token'),
+             },
+         })
+         .then((response) => {
+             return response.data;
+             console.log(response.data, 'avatar deleted');
+         })
+        .catch(function (error) {
+             console.log('an error occured ' + error);
+         });
+
+          imgAvatarUrl.value = '';
+};
 </script>
+
 <style lang="scss">
 .user-metric__avatar {
     /*    display: grid;*/
