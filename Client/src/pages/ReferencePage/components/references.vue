@@ -21,7 +21,7 @@
         </div>
     </div>
 </template>
-<script></script>
+<script setup></script>
 <style lang="scss">
 .referencesMenu {
     padding: 100px 0px 350px 0px;

@@ -109,18 +109,20 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/ReferencePage/components/referenceForYou.vue'),
             },
-            {
-                path: '/contributorPay',
-                name: 'contributorPay',
-                component: () =>
-                    import('@pages/ContributionPage/components/ContributorPay.vue'),
-            },
+
             {
                 path: '/references',
                 name: 'references',
                 component: () =>
                     import('@pages/ReferencePage/components/references.vue'),
             },
+            {
+                path: '/contributorPay',
+                name: 'contributorPay',
+                component: () =>
+                    import('@pages/ContributionPage/components/ContributorPay.vue'),
+            },
+
         ],
     },
 ];

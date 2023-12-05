@@ -15,7 +15,6 @@ import * as directives from 'vuetify/directives';
 import * as icons from 'vuetify/iconsets/mdi';
 
 import router from './router';
-import store from './store';
 
 const vuetify = createVuetify({
     components,
@@ -27,4 +26,4 @@ createApp(App).use(vuetify).use(VueSweetalert2).use(PrimeVue, {
     locale: {
         emptyFilterMessage: 'Ничего не найдено',
     },
-}).use(router).use(store).component('FileUpload', FileUpload)  .component('InputMask', InputMask).mount('#app');
+}).use(router).component('FileUpload', FileUpload).component('InputMask', InputMask).mount('#app');

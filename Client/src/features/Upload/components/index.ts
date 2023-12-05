@@ -1,3 +1,1 @@
-import FileUpload from './fileUploads.vue';
-
-export{ FileUpload}
+export { default as FileUpload } from './fileUploads.vue';

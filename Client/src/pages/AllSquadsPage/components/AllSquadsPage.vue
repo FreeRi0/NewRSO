@@ -78,7 +78,7 @@
             </div>
 
             <div class="squads-wrapper" v-show="vertical">
-                <squadsList :squads="squads"></squadsList>
+                <squadsList :squads="sortedSquads"></squadsList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
@@ -178,61 +178,61 @@ const sortOptionss = ref([
     { value: 'peoples', name: 'Количеству участников' },
 ]);
 
-// const sortedSquads = computed(() => {
-//     let tempSquads = squads;
+const sortedSquads = computed(() => {
+    let tempSquads = squads.value;
 
-//     // tempSquads = tempSquads.slice(0, squadsVisible.value);
+    tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-//     tempSquads = tempSquads.filter((item) => {
-//         return selectedSort.value == 0 || item.education == selectedSort.value;
-//     });
+    // tempSquads = tempSquads.filter((item) => {
+    //     return selectedSort.value == 0 || item.education == selectedSort.value;
+    // });
 
-//     tempSquads = tempSquads.filter((item) => {
-//         return item.title
-//             .toUpperCase()
-//             .includes(searchSquads.value.toUpperCase());
-//     });
+    tempSquads = tempSquads.filter((item) => {
+        return item.name
+            .toUpperCase()
+            .includes(searchSquads.value.toUpperCase());
+    });
 
-//     tempSquads = tempSquads.sort((a, b) => {
-//         if (sortBy.value == 'alphabetically') {
-//             let fa = a.title.toLowerCase(),
-//                 fb = b.title.toLowerCase();
+    tempSquads = tempSquads.sort((a, b) => {
+        if (sortBy.value == 'alphabetically') {
+            let fa = a.name.toLowerCase(),
+                fb = b.name.toLowerCase();
 
-//             if (fa < fb) {
-//                 return -1;
-//             }
-//             if (fa > fb) {
-//                 return 1;
-//             }
-//             return 0;
-//         } else if (sortBy.value == 'createdAt') {
-//             let fc = a.createdAt,
-//                 fn = b.createdAt;
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        } else if (sortBy.value == 'founding_date') {
+            let fc = a.founding_date,
+                fn = b.founding_date;
 
-//             if (fc < fn) {
-//                 return -1;
-//             }
-//             if (fc > fn) {
-//                 return 1;
-//             }
-//             return 0;
-//         } else if (sortBy.value == 'peoples') {
-//             return a.peoples - b.peoples;
-//         }
-//     });
+            if (fc < fn) {
+                return -1;
+            }
+            if (fc > fn) {
+                return 1;
+            }
+            return 0;
+        } else if (sortBy.value == 'members') {
+            return a.members - b.members;
+        }
+    });
 
-//     if (!picked.value) {
-//         return tempSquads;
-//     }
+    if (!picked.value) {
+        return tempSquads;
+    }
 
-//     tempSquads = tempSquads.filter((item) => item.category === picked.value);
+    tempSquads = tempSquads.filter((item) => item.category === picked.value);
 
-//     if (!ascending.value) {
-//         tempSquads.reverse();
-//     }
+    if (!ascending.value) {
+        tempSquads.reverse();
+    }
 
-//     return tempSquads;
-// });
+    return tempSquads;
+});
 </script>
 <style lang="scss">
 body {
