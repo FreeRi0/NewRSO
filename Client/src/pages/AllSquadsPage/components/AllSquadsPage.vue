@@ -78,7 +78,7 @@
             </div>
 
             <div class="squads-wrapper" v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
+                <squadsList :squads="squads"></squadsList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
@@ -103,9 +103,33 @@ import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed } from 'vue';
-import squads from '@entities/Squads/squads';
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
+// import squads from '@entities/Squads/squads';
 
+
+const squads = ref([]);
+
+const getSquads = async() => {
+    await axios
+        .get('api/v1/detachments/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            squads.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
+
+onMounted(() => {
+    getSquads();
+});
 const squadsVisible = ref(12);
 
 const step = ref(10);
@@ -154,61 +178,61 @@ const sortOptionss = ref([
     { value: 'peoples', name: 'Количеству участников' },
 ]);
 
-const sortedSquads = computed(() => {
-    let tempSquads = squads;
+// const sortedSquads = computed(() => {
+//     let tempSquads = squads;
 
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
+//     // tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-    tempSquads = tempSquads.filter((item) => {
-        return selectedSort.value == 0 || item.education == selectedSort.value;
-    });
+//     tempSquads = tempSquads.filter((item) => {
+//         return selectedSort.value == 0 || item.education == selectedSort.value;
+//     });
 
-    tempSquads = tempSquads.filter((item) => {
-        return item.title
-            .toUpperCase()
-            .includes(searchSquads.value.toUpperCase());
-    });
+//     tempSquads = tempSquads.filter((item) => {
+//         return item.title
+//             .toUpperCase()
+//             .includes(searchSquads.value.toUpperCase());
+//     });
 
-    tempSquads = tempSquads.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.title.toLowerCase(),
-                fb = b.title.toLowerCase();
+//     tempSquads = tempSquads.sort((a, b) => {
+//         if (sortBy.value == 'alphabetically') {
+//             let fa = a.title.toLowerCase(),
+//                 fb = b.title.toLowerCase();
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'createdAt') {
-            let fc = a.createdAt,
-                fn = b.createdAt;
+//             if (fa < fb) {
+//                 return -1;
+//             }
+//             if (fa > fb) {
+//                 return 1;
+//             }
+//             return 0;
+//         } else if (sortBy.value == 'createdAt') {
+//             let fc = a.createdAt,
+//                 fn = b.createdAt;
 
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'peoples') {
-            return a.peoples - b.peoples;
-        }
-    });
+//             if (fc < fn) {
+//                 return -1;
+//             }
+//             if (fc > fn) {
+//                 return 1;
+//             }
+//             return 0;
+//         } else if (sortBy.value == 'peoples') {
+//             return a.peoples - b.peoples;
+//         }
+//     });
 
-    if (!picked.value) {
-        return tempSquads;
-    }
+//     if (!picked.value) {
+//         return tempSquads;
+//     }
 
-    tempSquads = tempSquads.filter((item) => item.category === picked.value);
+//     tempSquads = tempSquads.filter((item) => item.category === picked.value);
 
-    if (!ascending.value) {
-        tempSquads.reverse();
-    }
+//     if (!ascending.value) {
+//         tempSquads.reverse();
+//     }
 
-    return tempSquads;
-});
+//     return tempSquads;
+// });
 </script>
 <style lang="scss">
 body {

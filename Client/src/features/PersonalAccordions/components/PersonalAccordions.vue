@@ -122,6 +122,7 @@
                                     v-model:checkedValue="selectedSex"
                                 />
                             </div>
+                            {{ user.gender }}
                         </div>
 
                         <div class="form-field">
@@ -134,14 +135,11 @@
                                 type="date"
                                 name="date_of_birth"
                                 class="input-small"
-                                @change="ageValid(birth)"
-                                v-model="birth"
-
+                                v-model="user.date_of_birth"
                             />
                         </div>
-                        <!-- <p v-if="birth">Your age is {{ years }} years</p> -->
                     </div>
-                    <div class="parents-wrapper" v-if="years < 18">
+                    <div class="parents-wrapper" v-if="!user.is_adult">
                         <p class="parents-wrapper__title">
                             Законный представитель несовершенолетнего
                         </p>
@@ -158,7 +156,6 @@
                                         class="input-big"
                                         placeholder="Введите фамилию"
                                         v-model:value="surnameParent"
-
                                     />
                                 </div>
                                 <div class="form-field">
@@ -227,7 +224,6 @@
                                         placeholder="+7(__) __ __ _"
                                         v-model:value="phoneParent"
                                     />
-
                                 </div>
                             </div>
                             <div class="how">
@@ -286,7 +282,6 @@
                                         maska="####-######"
                                         placeholder="__ __ ____"
                                         v-model:value="passInputP"
-
                                     />
                                 </div>
 
@@ -312,7 +307,6 @@
                                         name="pass-date-parent"
                                         class="input-small"
                                         v-model:value="passDateP"
-
                                     />
                                 </div>
 
@@ -327,7 +321,6 @@
                                         class="input-big"
                                         placeholder="Москва"
                                         v-model:value="localParent"
-
                                     />
                                 </div>
 
@@ -342,7 +335,6 @@
                                         class="input-big"
                                         placeholder="Название организации"
                                         v-model:value="PassIdParent"
-
                                     />
                                 </div>
 
@@ -358,7 +350,6 @@
                                         class="input-big"
                                         placeholder="Москва"
                                         v-model:value="AddresParent"
-
                                     />
                                 </div>
                             </div>
@@ -376,10 +367,7 @@
                                         type="text"
                                         class="input-full"
                                         placeholder="документ"
-                                        v-model:value="
-                                            foreignDocParent
-                                        "
-
+                                        v-model:value="foreignDocParent"
                                     />
                                 </div>
 
@@ -393,10 +381,7 @@
                                         type="date"
                                         name="pass-date"
                                         class="input-small"
-                                        v-model:value="
-                                            foreignDocDateParent
-                                        "
-
+                                        v-model:value="foreignDocDateParent"
                                     />
                                 </div>
 
@@ -423,10 +408,7 @@
                                         id="org-id"
                                         class="input-full"
                                         placeholder="оуфмс по моковской обл"
-                                        v-model:value="
-                                            foreignOrgDocParent
-                                        "
-
+                                        v-model:value="foreignOrgDocParent"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -517,7 +499,7 @@
                                 >Регион<span class="valid-red">*</span></label
                             >
                             <SelectRegion
-                                v-model="regionContact"
+                                v-model:value="regionData.reg_region_id"
                             ></SelectRegion>
                         </div>
                         <div class="form-field">
@@ -545,8 +527,7 @@
                                 name="locality-contact"
                                 class="input-big"
                                 placeholder="Москва"
-                                v-model:value="localityContact"
-
+                                v-model:value="regionData.reg_town"
                             />
                         </div>
                         <div class="scoial-networks">
@@ -584,8 +565,7 @@
                                 name="addres-contact"
                                 class="input-big"
                                 placeholder="ул. Комсомольская, д. 42, кв. 56"
-                                v-model:value="addresContact"
-
+                                v-model:value="regionData.reg_house"
                             />
                         </div>
                         <div class="checkbox addr" id="checkbox">
@@ -718,8 +698,7 @@
                                     type="text"
                                     class="input-big"
                                     placeholder="__ __ ____"
-                                    v-model:value="passNumber"
-
+                                    v-model:value="documentsData.pass_ser_num"
                                 />
                             </div>
 
@@ -734,7 +713,6 @@
                                     name="pass_date"
                                     class="input-small"
                                     v-model:value="documentsData.pass_date"
-
                                 />
                             </div>
 
@@ -759,8 +737,8 @@
                                     type="text"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
-                                    v-model:value="snils"
-                                    :error="snils"
+                                    v-model:value="documentsData.snils"
+
                                 />
                             </div>
                             <div class="form-field">
@@ -772,8 +750,8 @@
                                     type="text"
                                     class="input-big mask-inn"
                                     placeholder="AA 999999999"
-                                    v-model:value="inn"
-                                    :error="inn"
+                                    v-model:value="documentsData.inn"
+
                                 />
                             </div>
                             <div class="form-field">
@@ -797,7 +775,9 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="documentsData.international_pass"
+                                    v-model:value="
+                                        documentsData.international_pass
+                                    "
                                 />
                             </div>
                             <div class="form-field">
@@ -822,7 +802,9 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="documentsData.mil_reg_doc_ser_num"
+                                    v-model:value="
+                                        documentsData.mil_reg_doc_ser_num
+                                    "
                                 />
                             </div>
                         </div>
@@ -882,7 +864,6 @@
                                     class="input-full"
                                     placeholder="оуфмс по моковской обл"
                                     v-model:value="foreignDocOrg"
-
                                 />
                             </div>
                             <div class="form-field">
@@ -1079,7 +1060,6 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-
                                         <p id="file-chosen-personal">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1844,7 +1824,10 @@
                 </v-expansion-panel-text>
             </v-expansion-panel>
             <v-card-actions class="form__button-group">
-                <Button label="Отправить данные на верификацию"></Button>
+                <Button
+                    type="submit"
+                    label="Отправить данные на верификацию"
+                ></Button>
             </v-card-actions>
         </v-expansion-panels>
     </form>
@@ -1872,9 +1855,7 @@ import axios from 'axios';
 let education = ref(null);
 const router = useRouter();
 
-let endpoints =  [
-    'api/v1/users/me/education/',
-    'api/v1/users/me/documents/',  ];
+let endpoints = ['api/v1/users/me/education/', 'api/v1/users/me/documents/'];
 
 const educationData = ref({
     study_institution: '',
@@ -1882,20 +1863,6 @@ const educationData = ref({
     study_year: '',
     study_specialty: '',
 });
-
-// const editEducData = ref({
-//     study_institution: education.study_institution,
-//     study_faculty: education.study_faculty,
-//     study_year: education.study_year,
-//     study_specialty: education.study_specialty,
-// })
-
-// const regionData = ref({
-//     study_institution: '',
-//     study_faculty: '',
-//     study_year: '',
-//     study_specialty: '',
-// });
 
 const documentsData = ref({
     snils: '',
@@ -1908,12 +1875,16 @@ const documentsData = ref({
     mil_reg_doc_ser_num: '',
 });
 
+const regionData = ref({
+    reg_town: '',
+    reg_house: '',
+    reg_fact_same_address: true,
+    reg_region_id: 1,
+});
+
 const swal = inject('$swal');
 
 let user = ref(null);
-
-let region = ref(null);
-let documents = ref(null);
 
 const getUser = async () => {
     await axios
@@ -1934,66 +1905,76 @@ const getUser = async () => {
 
 getUser();
 
-const downloadBlank = async () => {
-    await axios
-        .get('api/v1/users/me/statement/download_membership_statement_file/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-        .then((response) => {
-            console.log(response, 'success');
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-}
-downloadBlank(
-    window.open('api/v1/users/me/statement/download_membership_statement_file/')
-)
+// const downloadBlank = async () => {
+//     await axios
+//         .get('api/v1/users/me/statement/download_membership_statement_file/', {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         })
+//         .then((response) => {
+//             console.log(response, 'success');
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// }
+// downloadBlank(
+//     window.open('api/v1/users/me/statement/download_membership_statement_file/')
+// )
 
 const addData = async () => {
-    // axios
-    //     .post('api/v1/users/me/documents/', documentsData.value, {
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             Authorization: 'Token ' + localStorage.getItem('Token'),
-    //         },
-    //     })
-    //     .then((response) => {
-    //         documentsData.value = response.data;
-    //         console.log(response.data);
-    //         swal.fire({
-    //             position: 'top-center',
-    //             icon: 'success',
-    //             title: 'успешно',
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //         });
-    //     })
-
-    //     .catch((error) => {
-    //         console.error('There was an error!', error);
-    //         swal.fire({
-    //             position: 'top-center',
-    //             icon: 'error',
-    //             title: 'ошибка',
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //         });
-    //     });
+    // const axiosrequest1 = axios.post('api/v1/users/me/region/');
+    // const axiosrequest2 = axios.post('api/v1/users/me/documents/');
+    // const axiosrequest3 = axios.post('api/v1/users/me/education/');
+    // // you could also use destructuring to have an array of responses
+    // await axios.all([axiosrequest1, axiosrequest2, axiosrequest3]).then(
+    //     axios.spread(function (res1, res2, res3) {
+    //         console.log(res1);
+    //         console.log(res2);
+    //         console.log(res3);
+    //     }),
+    // );
     axios
-        .post('api/v1/users/me/education/', educationData.value, {
+        // .post('api/v1/users/me/region/', regionData.value, {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         Authorization: 'Token ' + localStorage.getItem('Token'),
+        //     },
+        // })
+        // .then((response) => {
+        //     regionData.value = response.data;
+        //     console.log(response.data);
+        //     swal.fire({
+        //         position: 'top-center',
+        //         icon: 'success',
+        //         title: 'успешно',
+        //         showConfirmButton: false,
+        //         timer: 1500,
+        //     });
+        // })
+
+        // .catch((error) => {
+        //     console.error('There was an error!', error);
+        //     swal.fire({
+        //         position: 'top-center',
+        //         icon: 'error',
+        //         title: 'ошибка',
+        //         showConfirmButton: false,
+        //         timer: 1500,
+        //     });
+        // });
+    axios
+        .post('api/v1/users/me/documents/', documentsData.value, {
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         })
         .then((response) => {
-            educationData.value = response.data;
+            documentsData.value = response.data;
             console.log(response.data);
-
             swal.fire({
                 position: 'top-center',
                 icon: 'success',
@@ -2001,7 +1982,6 @@ const addData = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            router.push('/UserPage');
         })
 
         .catch((error) => {
@@ -2014,26 +1994,38 @@ const addData = async () => {
                 timer: 1500,
             });
         });
+    // axios
+    //     .post('api/v1/users/me/education/', educationData.value, {
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             Authorization: 'Token ' + localStorage.getItem('Token'),
+    //         },
+    //     })
+    //     .then((response) => {
+    //         educationData.value = response.data;
+    //         console.log(response.data);
+
+    //         swal.fire({
+    //             position: 'top-center',
+    //             icon: 'success',
+    //             title: 'успешно',
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //         });
+    //         router.push('/UserPage');
+    //     })
+
+    //     .catch((error) => {
+    //         console.error('There was an error!', error);
+    //         swal.fire({
+    //             position: 'top-center',
+    //             icon: 'error',
+    //             title: 'ошибка',
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //         });
+    //     });
 };
-
-// const getEducation = async () => {
-//     await axios
-//         .ge('api/v1/users/me/education', {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         })
-//         .then((response) => {
-//             education.value = response.data;
-//             console.log(education.value);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// getEducation();
 
 const answers = ref([
     { name: 'Да', id: 'f1' },
@@ -2041,8 +2033,8 @@ const answers = ref([
 ]);
 
 const gender = ref([
-    { name: 'Мужской', id: 's1', checked: true },
-    { name: 'Женский', id: 's2' },
+    { name: 'male', id: 's1', checked: true },
+    { name: 'female', id: 's2' },
 ]);
 
 const passportParent = ref([
@@ -2075,35 +2067,11 @@ const passport = reactive([
     { name: 'Нет', id: 'pass2' },
 ]);
 
-const years = ref(null);
-
-
-const ageValid = (birth) => {
-    if (!birth) return;
-
-    const currentDate = new Date();
-    if (new Date(birth) > currentDate) {
-        birth.value = null;
-        years.value = null;
-        alert('Invalid Date of Birth');
-    }
-
-    const diffTime = currentDate - new Date(birth);
-    const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    years.value = Math.floor(totalDays / 365.25);
-};
-
-const selectedSex = ref('Мужской');
+// const selectedSex = ref(user.gender);
 const selectedAnswer = ref('Нет');
 const selectedPassParent = ref('Да');
 const selectedAddress = ref('Нет');
 const selectedPass = ref('Да');
-// const surname = ref('');
-// const name = ref('');
-// const patronomyc = ref('');
-// const patronomycLat = ref('');
-// const nameLat = ref('');
-// const surnameLat = ref('');
 
 const nameParent = ref('');
 const surnameParent = ref('');
@@ -2195,8 +2163,6 @@ const militaryNumber = ref('');
 //         ),
 //     },
 // });
-
-
 </script>
 <style lang="scss" scoped>
 .accordion {

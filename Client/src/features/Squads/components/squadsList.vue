@@ -2,24 +2,24 @@
     <div
         class="squads-wrapper__item"
         v-for="squad in squads"
-        v-if="squads.length > 0"
+
     >
         <div class="round-img">
-            <img :src="'./assets/logo/' + squad.image" alt="logo" />
+            <img :src="squad.emblem" alt="logo" />
         </div>
         <div class="container-squad">
-            <p class="squads-wrapper__item-category">
+            <!-- <p class="squads-wrapper__item-category">
                 {{ squad.desc }}
-            </p>
+            </p> -->
             <p class="squads-wrapper__item-title normal-title">
-                {{ squad.title }}
+                {{ squad.name }}
             </p>
         </div>
     </div>
 
-    <h2 v-else>Отряд не найден...</h2>
 </template>
 <script setup>
+
 const props = defineProps({
     squads: {
         type: Array,

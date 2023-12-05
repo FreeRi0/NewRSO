@@ -18,8 +18,8 @@
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
 
-                        <li class="user-data__regional-office">
-                            <p>Ленинградское отделение</p>
+                        <li v-if="user" class="user-data__regional-office">
+                            <p>{{ user.region }}</p>
                         </li>
                     </ul>
                 </div>
