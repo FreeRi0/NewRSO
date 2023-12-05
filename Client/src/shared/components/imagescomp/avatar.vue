@@ -81,7 +81,7 @@
 <script setup>
 import { ref } from 'vue';
 import myUpload from 'vue-image-crop-upload';
-import axios from 'axios';
+import { HTTP } from '@app/http';
 
 const photo = ref(null);
 const file = ref(null);
@@ -96,8 +96,8 @@ const headers = ref({
 });
 
 const viewAvatar = async () => {
-    await axios
-        .get('api/v1/users/me/media/', {
+    await HTTP
+        .get('/users/me/media/', {
             headers: {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
@@ -128,8 +128,8 @@ const toggleEditShowAvatar = async () => {
     let formData = new FormData();
     formData.append('image', photo.value);
 
-    await axios
-        .put('api/v1/users/me/media/', formData, {
+    await HTTP
+        .put('/users/me/media/', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -163,8 +163,8 @@ const cropUploadSuccess = async(data, field) => {
     let formData = new FormData();
         formData.append('image', photo.value);
 
-        await axios
-            .post('api/v1/users/me/media/', formData, {
+        await HTTP
+            .post('/users/me/media/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -186,8 +186,8 @@ const cropUploadFail = (status, field) => {
 };
 
 const deleteAvatar = async () => {
-    await axios
-        .delete('api/v1/users/me/media/', {
+    await HTTP
+        .delete('/users/me/media/', {
             headers: {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },

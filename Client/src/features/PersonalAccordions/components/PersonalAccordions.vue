@@ -738,7 +738,6 @@
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
                                     v-model:value="documentsData.snils"
-
                                 />
                             </div>
                             <div class="form-field">
@@ -751,7 +750,6 @@
                                     class="input-big mask-inn"
                                     placeholder="AA 999999999"
                                     v-model:value="documentsData.inn"
-
                                 />
                             </div>
                             <div class="form-field">
@@ -1850,12 +1848,12 @@ import {
     numeric,
     sameAs,
 } from '@vuelidate/validators';
-import axios from 'axios';
+import { HTTP } from '@app/http';
 
 let education = ref(null);
 const router = useRouter();
 
-let endpoints = ['api/v1/users/me/education/', 'api/v1/users/me/documents/'];
+// let endpoints = ['api/v1/users/me/education/', 'api/v1/users/me/documents/'];
 
 const educationData = ref({
     study_institution: '',
@@ -1887,13 +1885,12 @@ const swal = inject('$swal');
 let user = ref(null);
 
 const getUser = async () => {
-    await axios
-        .get('api/v1/users/me/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+    await HTTP.get('/users/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
         .then((response) => {
             user.value = response.data;
             console.log(user.value);
@@ -1936,42 +1933,41 @@ const addData = async () => {
     //         console.log(res3);
     //     }),
     // );
-    axios
-        // .post('api/v1/users/me/region/', regionData.value, {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         Authorization: 'Token ' + localStorage.getItem('Token'),
-        //     },
-        // })
-        // .then((response) => {
-        //     regionData.value = response.data;
-        //     console.log(response.data);
-        //     swal.fire({
-        //         position: 'top-center',
-        //         icon: 'success',
-        //         title: 'успешно',
-        //         showConfirmButton: false,
-        //         timer: 1500,
-        //     });
-        // })
+    // axios
+    // .post('api/v1/users/me/region/', regionData.value, {
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Token ' + localStorage.getItem('Token'),
+    //     },
+    // })
+    // .then((response) => {
+    //     regionData.value = response.data;
+    //     console.log(response.data);
+    //     swal.fire({
+    //         position: 'top-center',
+    //         icon: 'success',
+    //         title: 'успешно',
+    //         showConfirmButton: false,
+    //         timer: 1500,
+    //     });
+    // })
 
-        // .catch((error) => {
-        //     console.error('There was an error!', error);
-        //     swal.fire({
-        //         position: 'top-center',
-        //         icon: 'error',
-        //         title: 'ошибка',
-        //         showConfirmButton: false,
-        //         timer: 1500,
-        //     });
-        // });
-    axios
-        .post('api/v1/users/me/documents/', documentsData.value, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+    // .catch((error) => {
+    //     console.error('There was an error!', error);
+    //     swal.fire({
+    //         position: 'top-center',
+    //         icon: 'error',
+    //         title: 'ошибка',
+    //         showConfirmButton: false,
+    //         timer: 1500,
+    //     });
+    // });
+    HTTP.post('/users/me/documents/', documentsData.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
         .then((response) => {
             documentsData.value = response.data;
             console.log(response.data);

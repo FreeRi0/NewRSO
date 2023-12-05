@@ -104,15 +104,15 @@ import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
+import { HTTP } from '@app/http';
 // import squads from '@entities/Squads/squads';
 
 
 const squads = ref([]);
 
 const getSquads = async() => {
-    await axios
-        .get('api/v1/detachments/', {
+    await HTTP
+        .get('/detachments/', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),

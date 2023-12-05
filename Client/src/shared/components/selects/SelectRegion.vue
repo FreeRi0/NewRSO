@@ -33,7 +33,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { HTTP } from '@app/http';
 const regions = ref([]);
 
 const props = defineProps({
@@ -57,8 +57,8 @@ const changeOption = (event) => {
 };
 
 const onChangeRegion = async () => {
-    await axios
-        .get('api/v1/regions/')
+    await HTTP
+        .get('/regions/')
 
         .then((res) => {
             regions.value = res.data;

@@ -3,7 +3,7 @@
         <v-card class="px-14 py-15" max-width="580">
             <v-card-title class="text-h4 text-center">Регистрация</v-card-title>
             <v-form action="#" method="post" @submit.prevent="RegisterUser">
-                <SelectRegion v-model="form.region"></SelectRegion>
+                <!-- <SelectRegion v-model:value="form.region"></SelectRegion> -->
                 <Input
                     placeholder="Фамилия"
                     name="surname"
@@ -86,8 +86,7 @@ import { ref, computed, onMounted, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, PasswordInputVue } from '@shared/components/inputs';
 import { useVuelidate } from '@vuelidate/core';
-import axios from 'axios';
-import { HTTP } from '@app/http.ts';
+import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import {
     helpers,
@@ -196,8 +195,8 @@ const swal = inject('$swal');
 
 const RegisterUser = async () => {
     isLoading.value = true;
-    axios
-        .post('api/v1/register/', form.value, {
+    HTTP
+        .post('/register/', form.value, {
             headers: {
                 'Content-Type': 'application/json',
             },

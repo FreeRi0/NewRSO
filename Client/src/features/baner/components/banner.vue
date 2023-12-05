@@ -25,9 +25,9 @@
                 </div>
                 <!-- Контакты пользователя  -->
             </div>
-            <!--DaviOleg-->
+            <!--alferovsergio-->
 
-            <!--uyF}eT6132kB-->
+            <!--DQ2>uME143Da-->
 
         </div>
         <!-- <div v-for="item in users" :key="user.id">
@@ -41,13 +41,13 @@
 import { ref, onMounted } from 'vue';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
-import axios from 'axios';
+import { HTTP } from '@app/http';
 const users = ref([]);
 let user = ref(null);
 let education = ref(null);
 const getUser = async () => {
-    await axios
-        .get('api/v1/users/me/', {
+    await HTTP
+        .get('/users/me/', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -65,8 +65,8 @@ const getUser = async () => {
 getUser();
 
 const getEducation = async () => {
-    await axios
-        .get('api/v1/users/me/education', {
+    await HTTP
+        .get('users/me/education', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),

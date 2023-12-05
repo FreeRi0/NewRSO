@@ -33,7 +33,6 @@
                     <router-link to="/">Восстановить</router-link></v-card-text
                 >
             </v-form>
-
         </v-card>
     </div>
 </template>
@@ -42,9 +41,9 @@
 import { ref, computed, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, PasswordInputVue } from '@shared/components/inputs';
-import axios from 'axios';
+import { HTTP } from '@app/http';
+// import axios from 'axios';
 import { useRouter } from 'vue-router';
-
 
 const data = ref({
     username: '',
@@ -56,12 +55,7 @@ const swal = inject('$swal');
 const router = useRouter();
 const LoginUser = async () => {
     isLoading.value = true;
-    axios
-        .post('api/v1/token/login/', data.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
+    HTTP.post('/token/login/', data.value)
         .then((response) => {
             data.value = response.data;
             localStorage.setItem('Token', response.data.auth_token);
@@ -89,6 +83,4 @@ const LoginUser = async () => {
             });
         });
 };
-
-
 </script>
