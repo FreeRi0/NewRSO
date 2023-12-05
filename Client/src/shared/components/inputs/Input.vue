@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { vMaska } from 'maska';
+// import { vmaska } from 'maska';
 const emit = defineEmits(['update:value', 'change']);
 const props = defineProps({
     error: {
