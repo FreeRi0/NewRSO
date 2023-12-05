@@ -15,13 +15,22 @@
                     fill="#1F7CC0"
                 />
             </svg>
-            <FileUpload  mode="basic" name="demo[]" url="/api/upload" accept=".pdf, .jpeg, .png"  :maxFileSize="7000000" customUpload @uploader="customBase64Uploader" chooseLabel="Выбрать файл" />
+            <FileUpload
+                mode="basic"
+                name="demo[]"
+                url="/api/upload"
+                accept=".pdf, .jpeg, .png"
+                :maxFileSize="7000000"
+                customUpload
+                @uploader="customBase64Uploader"
+                chooseLabel="Выбрать файл"
+            />
         </div>
     </div>
 </template>
-<script>
 
-</script>
+<script setup></script>
+
 <style lang="scss">
 .statement-title {
     font-size: 16px;
@@ -52,7 +61,7 @@
 }
 
 .p-icon {
-  display: none;
+    display: none;
 }
 
 .p-button-label {

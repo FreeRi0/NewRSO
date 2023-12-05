@@ -1,3 +1,3 @@
-import { squadItem } from './components/squadItem.vue';
+export { default as squadItem } from './components/squadItem.vue';
 
-export { squadItem };
+// export { squadItem };
