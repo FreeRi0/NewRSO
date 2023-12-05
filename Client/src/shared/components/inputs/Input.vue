@@ -7,11 +7,12 @@
             :placeholder="placeholder"
             :value="value"
             :maxlength="maxLength"
+            :data-maska="maska"
+            :v-maska="vmaska"
             @input="updateValue"
             @change="changeValue"
             variant="outlined"
             class="mb-2 text-field"
-            v-bind="$attrs"
         />
         <TransitionGroup>
             <div
@@ -26,12 +27,8 @@
 </template>
 
 <script setup>
+// import { vmaska } from 'maska';
 const emit = defineEmits(['update:value']);
-
-defineOptions({
-    inheritAttrs: false,
-});
-
 const props = defineProps({
     error: {
         type: Array,
@@ -57,6 +54,14 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    maska: {
+        type: String,
+        required: false,
+    },
+    vmaska: {
+        type: Boolean,
+        default: false,
+    },
     maxLength: {
         type: Number,
     },
@@ -65,11 +70,10 @@ const props = defineProps({
 const updateValue = (e) => {
     emit('update:value', e.target.value);
 };
-// const changeValue
 
-// const changeValue = (e) => {
-//     emit('update:modelValue', e.target.files[0]);
-// }
+const changeValue = (e) => {
+    emit('change', e.target.value);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -85,12 +89,12 @@ const updateValue = (e) => {
 }
 
 .form-input input {
-    border: 1px solid #a3a3a3;
-    border-radius: 10px;
-    display: block;
-    font-size: 12px;
-    padding: 10px 16px 10px 16px;
-    margin-bottom: 20px;
-    width: 100%;
+    border: 2px solid #a3a3a3;
+  border-radius: 10px;
+  display: block;
+  font-size: 12px;
+  padding: 10px 16px 10px 16px;
+  margin-bottom: 20px;
+  width: 100%;
 }
 </style>

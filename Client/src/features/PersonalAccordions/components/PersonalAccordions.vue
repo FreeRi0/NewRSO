@@ -21,6 +21,10 @@
         <p class="accordion-title">
             Для вступления в РСО внесите ниже персональные данные
         </p>
+
+        <p>{{ selectedAnswer }}</p>
+        <p>{{ selectedPass }}</p>
+        <p>{{ selectedAnswer == 'Нет' && selectedPass == 'Нет' }}</p>
         <v-expansion-panels>
             <v-expansion-panel>
                 <v-expansion-panel-title>
@@ -126,23 +130,16 @@
                                     >*</span
                                 ></label
                             >
-                            <!-- <Input
-                                type="date"
-                                name="date_of_birth"
-                                class="input-small"
-                                @input="ageValid(birth)"
-                                v-model="v.birth.$model"
-                                :error="v.birth.$errors"
-                            /> -->
-                            <input
+                            <Input
                                 type="date"
                                 name="date_of_birth"
                                 class="input-small"
                                 @change="ageValid(birth)"
-                                v-model="user.date_of_birth"
+                                v-model="birth"
+
                             />
                         </div>
-                        <p v-if="birth">Your age is {{ years }} years</p>
+                        <!-- <p v-if="birth">Your age is {{ years }} years</p> -->
                     </div>
                     <div class="parents-wrapper" v-if="years < 18">
                         <p class="parents-wrapper__title">
@@ -195,11 +192,10 @@
                                         ></label
                                     >
                                     <Input
-                                        type="datetime-local"
+                                        type="date"
                                         name="date-parent"
                                         class="input-small"
                                         v-model:value="birthParent"
-
                                     />
                                 </div>
                                 <div class="form-field">
@@ -224,13 +220,14 @@
                                     >
                                     <Input
                                         type="tel"
+                                        vmaska
+                                        maska="+7 ### ###-##-##"
                                         name="phone-parent"
                                         class="input-small phone"
                                         placeholder="+7(__) __ __ _"
-                                        @change="ageValid"
                                         v-model:value="phoneParent"
-
                                     />
+
                                 </div>
                             </div>
                             <div class="how">
@@ -284,7 +281,9 @@
                                     >
                                     <Input
                                         name="passInput"
-                                        class="input-small pass-masked"
+                                        class="input-small"
+                                        vmaska
+                                        maska="####-######"
                                         placeholder="__ __ ____"
                                         v-model:value="passInputP"
 
@@ -309,7 +308,7 @@
                                         ></label
                                     >
                                     <Input
-                                        type="datetime-local"
+                                        type="date"
                                         name="pass-date-parent"
                                         class="input-small"
                                         v-model:value="passDateP"
@@ -377,6 +376,10 @@
                                         type="text"
                                         class="input-full"
                                         placeholder="документ"
+                                        v-model:value="
+                                            foreignDocParent
+                                        "
+
                                     />
                                 </div>
 
@@ -390,6 +393,10 @@
                                         type="date"
                                         name="pass-date"
                                         class="input-small"
+                                        v-model:value="
+                                            foreignDocDateParent
+                                        "
+
                                     />
                                 </div>
 
@@ -400,6 +407,9 @@
                                         id="pass-id"
                                         class="input-small pass-masked"
                                         placeholder="__ ___ ____"
+                                        v-model:value="foreignNumberDocParent"
+                                        vmaska
+                                        maska="####-######"
                                     />
                                 </div>
                                 <div class="form-field one">
@@ -413,17 +423,12 @@
                                         id="org-id"
                                         class="input-full"
                                         placeholder="оуфмс по моковской обл"
+                                        v-model:value="
+                                            foreignOrgDocParent
+                                        "
+
                                     />
                                 </div>
-                                <!-- <div class="NoPass one"></div>
-                          <div class="one">
-                                   <Button
-                            class="add-doc-foreign"
-                            onclick="add_document_field_NoPass()"
-                          >
-                            +Добавить документ
-                          </Button>
-                          </div> -->
                                 <div class="form-field">
                                     <label for="work-book-foreign"
                                         >Трудовая книжка
@@ -433,8 +438,10 @@
                                         id="work-book-foreign"
                                         class="input-big mask-workbook"
                                         placeholder="AA 999999999"
+                                        v-model:value="foreignWorkBookParent"
+                                        vmaska
+                                        maska="AA #########"
                                     />
-                                    <div class="error"></div>
                                 </div>
                                 <div class="form-field">
                                     <label for="INN-id-foreign">ИНН</label>
@@ -443,8 +450,10 @@
                                         id="INN-id-foreign"
                                         class="input-big mask-inn"
                                         placeholder="AA 999999999"
+                                        v-model:value="foreignINNParent"
+                                        vmaska
+                                        maska="AA #########"
                                     />
-                                    <div class="error"></div>
                                 </div>
                                 <div class="form-field">
                                     <label for="snils-id-foreign"
@@ -455,6 +464,9 @@
                                         id="snils-id-foreign"
                                         class="input-big mask-snils"
                                         placeholder="AA 999999999"
+                                        v-model:value="foreignSNILSParent"
+                                        vmaska
+                                        maska="AA #########"
                                     />
                                 </div>
                             </div>
@@ -462,7 +474,12 @@
                     </div>
 
                     <v-card-actions class="nav-btn__wrapper">
-                        <Button class="btn" label="Далее" size="large"></Button>
+                        <Button
+                            type="button"
+                            class="btn"
+                            label="Далее"
+                            size="large"
+                        ></Button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -492,6 +509,8 @@
                                 placeholder="+7(__) __ __ _"
                                 v-model:value="user.phone_number"
                             />
+
+                            \
                         </div>
                         <div class="form-field">
                             <label for="regionContact"
@@ -635,12 +654,14 @@
                     </div>
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
                         ></Button>
                         <Button
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
@@ -697,7 +718,8 @@
                                     type="text"
                                     class="input-big"
                                     placeholder="__ __ ____"
-                                    v-model:value="documentsData.pass_ser_num"
+                                    v-model:value="passNumber"
+
                                 />
                             </div>
 
@@ -737,7 +759,8 @@
                                     type="text"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
-                                    v-model:value="documentsData.snils"
+                                    v-model:value="snils"
+                                    :error="snils"
                                 />
                             </div>
                             <div class="form-field">
@@ -749,7 +772,8 @@
                                     type="text"
                                     class="input-big mask-inn"
                                     placeholder="AA 999999999"
-                                    v-model:value="documentsData.inn"
+                                    v-model:value="inn"
+                                    :error="inn"
                                 />
                             </div>
                             <div class="form-field">
@@ -758,6 +782,8 @@
                                     name="work_book"
                                     type="text"
                                     class="input-big mask-workbook"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="AA 999999999"
                                     v-model:value="documentsData.work_book_num"
                                 />
@@ -768,6 +794,8 @@
                                     name="foreign-pass"
                                     type="text"
                                     class="input-big mask-foreign-pass"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="AA 999999999"
                                     v-model:value="documentsData.international_pass"
                                 />
@@ -777,6 +805,8 @@
                                 <sortByEducation
                                     class="select-big"
                                     v-model="selectedMilitary"
+                                    vmaska
+                                    maska="AA ##########"
                                     :options="militaryDocs"
                                 ></sortByEducation>
                             </div>
@@ -789,6 +819,8 @@
                                     name="military-id"
                                     type="text"
                                     class="input-big mask-military"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="AA 999999999"
                                     v-model:value="documentsData.mil_reg_doc_ser_num"
                                 />
@@ -808,6 +840,7 @@
                                     type="text"
                                     class="input-full"
                                     placeholder="документ"
+                                    v-model:value="v.foreignDoc"
                                 />
                             </div>
 
@@ -821,6 +854,7 @@
                                     type="date"
                                     name="pass-date"
                                     class="input-small"
+                                    v-model:value="foreignDocDate"
                                 />
                             </div>
 
@@ -830,7 +864,10 @@
                                     type="text"
                                     id="pass-id"
                                     class="input-small pass-masked"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="__ ___ ____"
+                                    v-model:value="foreignDocNum"
                                 />
                             </div>
                             <div class="form-field one">
@@ -844,17 +881,10 @@
                                     id="org-id"
                                     class="input-full"
                                     placeholder="оуфмс по моковской обл"
+                                    v-model:value="foreignDocOrg"
+
                                 />
                             </div>
-                            <!-- <div class="NoPass one"></div>
-                          <div class="one">
-                                   <Button
-                            class="add-doc-foreign"
-                            onclick="add_document_field_NoPass()"
-                          >
-                            +Добавить документ
-                          </Button>
-                          </div> -->
                             <div class="form-field">
                                 <label for="work-book-foreign"
                                     >Трудовая книжка
@@ -863,9 +893,11 @@
                                     type="text"
                                     id="work-book-foreign"
                                     class="input-big mask-workbook"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="AA 999999999"
+                                    v-model:value="foreingWorkbook"
                                 />
-                                <div class="error"></div>
                             </div>
                             <div class="form-field">
                                 <label for="INN-id-foreign">ИНН</label>
@@ -873,9 +905,11 @@
                                     type="text"
                                     id="INN-id-foreign"
                                     class="input-big mask-inn"
+                                    vmaska
+                                    maska="AA ##########"
                                     placeholder="AA 999999999"
+                                    v-model:value="foreingINN"
                                 />
-                                <div class="error"></div>
                             </div>
                             <div class="form-field">
                                 <label for="snils-id-foreign"
@@ -884,20 +918,25 @@
                                 <Input
                                     type="text"
                                     id="snils-id-foreign"
+                                    vmaska
+                                    maska="AA ##########"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
+                                    v-model:value="foreingSNILS"
                                 />
                             </div>
                         </div>
                     </div>
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
                         ></Button>
                         <Button
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
@@ -971,12 +1010,14 @@
                     </div>
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
                         ></Button>
                         <Button
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
@@ -1009,59 +1050,23 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-statement">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z"
-                                                fill="#1F7CC0"
-                                            />
-                                            <path
-                                                d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
-                                                stroke="#1F7CC0"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/download.svg"
+                                            alt="download"
+                                        />
                                         <button
                                             id="statement"
                                             class="download-blanks"
-                                            type="button"
-                                            @click="downloadBlank"
                                         >
                                             Скачать бланк
                                         </button>
@@ -1074,54 +1079,17 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+
                                         <p id="file-chosen-personal">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z"
-                                                fill="#1F7CC0"
-                                            />
-                                            <path
-                                                d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
-                                                stroke="#1F7CC0"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/download.svg"
+                                            alt="download"
+                                        />
                                         <button
                                             id="statement"
                                             class="download-blanks"
@@ -1142,54 +1110,20 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-children">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z"
-                                                fill="#1F7CC0"
-                                            />
-                                            <path
-                                                d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
-                                                stroke="#1F7CC0"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/download.svg"
+                                            alt="download"
+                                        />
                                         <button
                                             id="statement"
                                             class="download-blanks"
@@ -1213,22 +1147,11 @@
                                     class="download-blanks"
                                     onclick="downloadAll()"
                                 >
-                                    <svg
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z"
-                                            fill="#1F7CC0"
-                                        />
-                                        <path
-                                            d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
-                                            stroke="#1F7CC0"
-                                        />
-                                    </svg>
+                                    <img
+                                        src="@app/assets/icon/download.svg"
+                                        alt="download"
+                                    />
+
                                     Скачать все бланки
                                 </button>
                             </div>
@@ -1247,32 +1170,10 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-pass">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1290,32 +1191,10 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-parent-pass">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1335,32 +1214,10 @@
                                 <p class="statement-title">СНИЛС</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-snils">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1373,32 +1230,10 @@
                                 <p class="statement-title">Военный билет</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-military">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1411,32 +1246,10 @@
                                 <p class="statement-title">ИНН</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-INN">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1449,32 +1262,10 @@
                                 <p class="statement-title">Загранпаспорт</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-foreign-pass">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1487,32 +1278,10 @@
                                 <p class="statement-title">Трудовая книжка</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-workbook">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1539,12 +1308,14 @@
 
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
                         ></Button>
                         <Button
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
@@ -1552,7 +1323,10 @@
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-expansion-panel class="yes-RSO" v-else="selectedAnswer == 'Да'">
+            <v-expansion-panel
+                class="yes-RSO"
+                v-else-if="selectedAnswer == 'Да'"
+            >
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -1574,32 +1348,10 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-pass">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1617,32 +1369,10 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-parent-pass">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1662,32 +1392,10 @@
                                 <p class="statement-title">СНИЛС</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-snils">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1700,32 +1408,10 @@
                                 <p class="statement-title">Военный билет</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-military">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1738,32 +1424,10 @@
                                 <p class="statement-title">ИНН</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-INN">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1776,32 +1440,10 @@
                                 <p class="statement-title">Загранпаспорт</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-foreign-pass">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1814,32 +1456,10 @@
                                 <p class="statement-title">Трудовая книжка</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-workbook">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -1853,12 +1473,14 @@
 
                     <v-card-actions class="nav-btn__wrapper">
                         <Button
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
                         ></Button>
                         <Button
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
@@ -1868,7 +1490,7 @@
             </v-expansion-panel>
             <v-expansion-panel
                 class="no-RSO-foreign"
-                v-if="selectedAnswer == 'Нет' && selectedPass == 'Нет'"
+                v-else-if="selectedAnswer == 'Нет' && selectedPass == 'Нет'"
             >
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
@@ -1894,54 +1516,20 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-statement">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z"
-                                                fill="#1F7CC0"
-                                            />
-                                            <path
-                                                d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
-                                                stroke="#1F7CC0"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/download.svg"
+                                            alt="download"
+                                        />
                                         <button
                                             id="statement"
                                             class="download-blanks"
@@ -1957,54 +1545,20 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-personal">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z"
-                                                fill="#1F7CC0"
-                                            />
-                                            <path
-                                                d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
-                                                stroke="#1F7CC0"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/download.svg"
+                                            alt="download"
+                                        />
                                         <button
                                             id="consent-personal"
                                             class="download-blanks"
@@ -2020,22 +1574,10 @@
                                     class="download-blanks"
                                     onclick="downloadAll()"
                                 >
-                                    <svg
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z"
-                                            fill="#1F7CC0"
-                                        />
-                                        <path
-                                            d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
-                                            stroke="#1F7CC0"
-                                        />
-                                    </svg>
+                                    <img
+                                        src="@app/assets/icon/download.svg"
+                                        alt="download"
+                                    />
                                     Скачать все бланки
                                 </button>
                             </div>
@@ -2053,32 +1595,10 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-pass">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -2098,32 +1618,10 @@
                                 <p class="statement-title">СНИЛС</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-snils">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -2136,32 +1634,10 @@
                                 <p class="statement-title">ИНН</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-INN">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -2174,32 +1650,10 @@
                                 <p class="statement-title">Трудовая книжка</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-workbook">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -2232,6 +1686,7 @@
                             size="large"
                         ></Button>
                         <Button
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
@@ -2241,7 +1696,7 @@
             </v-expansion-panel>
             <v-expansion-panel
                 class="yes-RSO-foreign"
-                v-else="selectedAnswer == 'Да' && selectedPass == 'Нет'"
+                v-else-if="selectedAnswer == 'Да' && selectedPass == 'Нет'"
             >
                 <v-expansion-panel-title v-slot="{ open }">
                     <v-row no-gutters>
@@ -2266,32 +1721,10 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-pass">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -2309,32 +1742,10 @@
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-parent-pass">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -2354,32 +1765,10 @@
                                 <p class="statement-title">СНИЛС</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-snils">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -2392,32 +1781,10 @@
                                 <p class="statement-title">ИНН</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-INN">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -2430,32 +1797,10 @@
                                 <p class="statement-title">Вид на жительство</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-foreign-pass">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -2468,32 +1813,10 @@
                                 <p class="statement-title">Трудовая книжка</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1716 3H9C7.11438 3 6.17157 3 5.58579 3.58579C5 4.17157 5 5.11438 5 7V17C5 18.8856 5 19.8284 5.58579 20.4142C6.17157 21 7.11438 21 9 21H15C16.8856 21 17.8284 21 18.4142 20.4142C19 19.8284 19 18.8856 19 17V8.82843C19 8.41968 19 8.2153 18.9239 8.03153C18.8478 7.84776 18.7032 7.70324 18.4142 7.41421L14.5858 3.58579C14.2968 3.29676 14.1522 3.15224 13.9685 3.07612C13.7847 3 13.5803 3 13.1716 3Z"
-                                                stroke="#35383F"
-                                            />
-                                            <path
-                                                d="M9 13L15 13"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M9 17L13 17"
-                                                stroke="#35383F"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M13 3V7C13 7.94281 13 8.41421 13.2929 8.70711C13.5858 9 14.0572 9 15 9H19"
-                                                stroke="#35383F"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="@app/assets/icon/file.svg"
+                                            alt="file"
+                                        />
                                         <p id="file-chosen-workbook">
                                             Файл в формате pdf, png, jpeg
                                             размером не более 7 мб
@@ -2521,9 +1844,7 @@
                 </v-expansion-panel-text>
             </v-expansion-panel>
             <v-card-actions class="form__button-group">
-                <button class="form__button">
-                    Отправить данные на верификацию
-                </button>
+                <Button label="Отправить данные на верификацию"></Button>
             </v-card-actions>
         </v-expansion-panels>
     </form>
@@ -2533,6 +1854,7 @@ import { ref, computed, onMounted, reactive, inject } from 'vue';
 import { RadioButton } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { FileUpload } from '@features/Upload/components';
+// import { vMaska } from 'maska';
 import { useVuelidate } from '@vuelidate/core';
 import { useRouter } from 'vue-router';
 import { SelectRegion, sortByEducation } from '@shared/components/selects';
@@ -2755,7 +2077,6 @@ const passport = reactive([
 
 const years = ref(null);
 
-const birth = ref(user.date_of_birth);
 
 const ageValid = (birth) => {
     if (!birth) return;
@@ -2796,8 +2117,6 @@ const PassIdParent = ref('');
 const localParent = ref('');
 const passDateP = ref('');
 const AddresParent = ref('');
-// const phoneContact = ref('');
-// const emailContact = ref('');
 const localityContact = ref('');
 const regionContact = ref('');
 const socialsVk = ref('');
@@ -2814,109 +2133,6 @@ const inn = ref('');
 const foreignPass = ref('');
 const workbook = ref('');
 const militaryNumber = ref('');
-
-// const rules = computed(() => ({
-//     surname: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         minLength: helpers.withMessage(
-//             `Минимальная длина: 2 символа`,
-//             minLength(2),
-//         ),
-//     },
-//     surnameParent: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         minLength: helpers.withMessage(
-//             `Минимальная длина: 2 символа`,
-//             minLength(2),
-//         ),
-//     },
-//     name: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         minLength: helpers.withMessage(
-//             `Минимальная длина: 2 символа`,
-//             minLength(2),
-//         ),
-//     },
-//     nameParent: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         minLength: helpers.withMessage(
-//             `Минимальная длина: 2 символа`,
-//             minLength(2),
-//         ),
-//     },
-//     birth: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     birthParent: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     phoneParent: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     AddresParent: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     localParent: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     passDateP: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     passInputP: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     PassIdParent: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     phoneContact: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     emailContact: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         email: helpers.withMessage('Вы ввели неверный email', emailContact),
-//     },
 
 //     regionContact: {
 //         required: helpers.withMessage(
@@ -2978,39 +2194,9 @@ const militaryNumber = ref('');
 //             required,
 //         ),
 //     },
-// }));
-
-// const v = useVuelidate(rules, {
-//     surname,
-//     name,
-//     birth,
-//     birthParent,
-//     nameParent,
-//     surnameParent,
-//     phoneParent,
-//     passDateP,
-//     passInputP,
-//     localParent,
-//     AddresParent,
-//     PassIdParent,
-//     phoneContact,
-//     emailContact,
-//     regionContact,
-//     localityContact,
-//     addresContact,
-//     passNumber,
-//     passDate,
-//     snils,
-//     inn,
-//     passOrg,
-//     educationOrg,
-//     course,
 // });
 
-// const  = async () => {
-//     // v.value.$touch();
 
-// };
 </script>
 <style lang="scss" scoped>
 .accordion {
@@ -3230,12 +2416,21 @@ const militaryNumber = ref('');
     }
 }
 
-.no-RSO-foreign {
-    display: none;
-}
+// .no-RSO-foreign {
 
-.yes-RSO-foreign {
-    display: none;
+// }
+
+// .yes-RSO-foreign {
+//     display: none;
+// }
+
+.date {
+    border: 2px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 12px;
+    padding: 10px 16px 10px 16px;
+    margin-bottom: 20px;
 }
 </style>
 // 6S3-7s!7A}@t
