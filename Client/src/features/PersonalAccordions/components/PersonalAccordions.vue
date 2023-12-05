@@ -1060,6 +1060,8 @@
                                         <button
                                             id="statement"
                                             class="download-blanks"
+                                            type="button"
+                                            @click="downloadBlank"
                                         >
                                             Скачать бланк
                                         </button>
@@ -1121,8 +1123,10 @@
                                             />
                                         </svg>
                                         <button
-                                            id="consent-personal"
+                                            id="statement"
                                             class="download-blanks"
+                                            type="button"
+                                            @click="downloadBlank"
                                         >
                                             Скачать бланк
                                         </button>
@@ -1187,8 +1191,10 @@
                                             />
                                         </svg>
                                         <button
-                                            id="consent-child"
+                                            id="statement"
                                             class="download-blanks"
+                                            type="button"
+                                            @click="downloadBlank"
                                         >
                                             Скачать бланк
                                         </button>
@@ -1196,7 +1202,6 @@
                                     <FileUpload
                                         mode="basic"
                                         name="demo[]"
-                                        url="/api/upload"
                                         accept="image/*"
                                         customUpload
                                         @uploader="customBase64Uploader"
@@ -2543,6 +2548,7 @@ import {
 import axios from 'axios';
 
 let education = ref(null);
+const router = useRouter();
 
 let endpoints =  [
     'api/v1/users/me/education/',
@@ -2606,7 +2612,24 @@ const getUser = async () => {
 
 getUser();
 
-
+const downloadBlank = async () => {
+    await axios
+        .get('api/v1/users/me/statement/download_membership_statement_file/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            console.log(response, 'success');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
+downloadBlank(
+    window.open('api/v1/users/me/statement/download_membership_statement_file/')
+)
 
 const addData = async () => {
     // axios
@@ -2656,6 +2679,7 @@ const addData = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
+            router.push('/UserPage');
         })
 
         .catch((error) => {
