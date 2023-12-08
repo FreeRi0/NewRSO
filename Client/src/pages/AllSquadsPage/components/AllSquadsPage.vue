@@ -12,11 +12,11 @@
                 >
                 <v-btn
                     class="squads-tabs__item"
-                    :class="{ active: picked === category }"
-                    v-for="category in categories"
-                    :key="category"
-                    @click="picked = category"
-                    >{{ category }}</v-btn
+                    :class="{ active: picked === area.id }"
+                    v-for="area in categories"
+                    :key="area"
+                    @click="picked = area.id"
+                    >{{ area.name }}</v-btn
                 >
             </div>
             <div class="squads-search">
@@ -45,9 +45,10 @@
             </div>
             <div class="squads-sort">
                 <div class="sort-layout">
-                    <Button icon="switch" color="white" @click="showVertical">
+                    <Button class="switchV" icon="switch" color="white" @click="showVertical">
                     </Button>
                     <Button
+                    class="switchH"
                         icon="switch"
                         color="white"
                         @click="showVertical"
@@ -70,10 +71,13 @@
                     </div>
 
                     <Button
+                    type="button"
+                    class="ascend"
+                    icon="switch"
                         @click="ascending = !ascending"
-                        icon="icon"
                         color="white"
                     ></Button>
+                    <p>{{ ascending }}</p>
                 </div>
             </div>
 
@@ -107,17 +111,49 @@ import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 // import squads from '@entities/Squads/squads';
 
-
 const squads = ref([]);
+const categories = ref([]);
+const educations = ref([]);
 
-const getSquads = async() => {
-    await HTTP
-        .get('/detachments/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
+const getCategories = async () => {
+    await HTTP.get('/areas/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            categories.value = response.data;
+            console.log(response);
         })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const getEducations = async () => {
+    await HTTP.get('/eduicational_institutions/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            educations.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const getSquads = async () => {
+    await HTTP.get('/detachments/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
         .then((response) => {
             squads.value = response.data;
             console.log(response);
@@ -125,10 +161,12 @@ const getSquads = async() => {
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
+};
 
 onMounted(() => {
     getSquads();
+    getCategories();
+    getEducations();
 });
 const squadsVisible = ref(12);
 
@@ -139,16 +177,6 @@ const sortBy = ref('alphabetically');
 
 const picked = ref('');
 
-const categories = ref([
-    'Проводников',
-    'Строительные',
-    'Педагогические',
-    'Сельскохозяйственные',
-    'Сервисные',
-    'Медицинские',
-    'Путинные',
-]);
-
 const vertical = ref(true);
 
 const searchSquads = ref('');
@@ -157,16 +185,6 @@ const showVertical = () => {
     vertical.value = !vertical.value;
 };
 
-const educations = ref([
-    {
-        value: 'Амурская государственная медицинская академия',
-        name: 'Амурская государственная медицинская академия',
-    },
-    { value: 'Университет имени Баумана', name: 'Университет имени Баумана' },
-    { value: 'РГГУ', name: 'РГГУ' },
-    { value: 'МГУ', name: 'МГУ' },
-]);
-
 const selectedSort = ref(0);
 
 const sortOptionss = ref([
@@ -174,8 +192,8 @@ const sortOptionss = ref([
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'createdAt', name: 'Дате создания отряда' },
-    { value: 'peoples', name: 'Количеству участников' },
+    { value: 'founding_date', name: 'Дате создания отряда' },
+    { value: 'members_count', name: 'Количеству участников' },
 ]);
 
 const sortedSquads = computed(() => {
@@ -183,9 +201,11 @@ const sortedSquads = computed(() => {
 
     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-    // tempSquads = tempSquads.filter((item) => {
-    //     return selectedSort.value == 0 || item.education == selectedSort.value;
-    // });
+    tempSquads = tempSquads.filter((item) => {
+        // console.log(educational_institution.id);
+        return selectedSort.value == 0 || item.educational_institution == selectedSort.value;
+
+    });
 
     tempSquads = tempSquads.filter((item) => {
         return item.name
@@ -216,20 +236,22 @@ const sortedSquads = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'members') {
+        } else if (sortBy.value == 'members_count') {
             return a.members - b.members;
         }
     });
+
+
+    if (!ascending.value) {
+        tempSquads.reverse();
+    }
+
 
     if (!picked.value) {
         return tempSquads;
     }
 
-    tempSquads = tempSquads.filter((item) => item.category === picked.value);
-
-    if (!ascending.value) {
-        tempSquads.reverse();
-    }
+    tempSquads = tempSquads.filter((item) => item.area === picked.value);
 
     return tempSquads;
 });
@@ -238,6 +260,26 @@ const sortedSquads = computed(() => {
 body {
     border: 1px solid red;
 }
+
+.switchV {
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.switchH {
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.ascend {
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .squads {
     padding: 60px 0px 60px 0px;
     &-title {
@@ -316,6 +358,7 @@ body {
         border: 1px solid black;
     }
 }
+
 
 .education {
     width: 305px;

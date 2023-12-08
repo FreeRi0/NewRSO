@@ -119,58 +119,81 @@
                         url="/assets/avatar-user.svg"
                         desc="Фотография пользователя"
                     />
+                    <Button v-if="user" @click="LogOut" label="Выйти"></Button>
+                    <p v-else>Not auth</p>
                 </div>
             </nav>
         </header>
     </div>
 </template>
 
-<script>
+<script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
+import { HTTP } from '@app/http';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default {
-    components: {
-        Dropdown,
-        Button,
-        Input,
-    },
-    data() {
-        return {
-            pages: [
-                { title: 'ЛСО', link: '/allSquads' },
-                { title: 'Штабы СО ОО', link: '/AllHeadquarters' },
-                { title: 'Местные штабы', link: '#' },
-                { title: 'Региональные штабы', link: '#' },
-                { title: 'Окружные штабы', link: '#' },
-                { title: 'Центральный штаб', link: '#' },
-            ],
-            userPages: [
-                { title: 'Моя страница', link: '/UserPage' },
-                { title: 'Мой отряд', link: '#' },
-                { title: 'Штаб СО ОО', link: '#' },
-                { title: 'Местный штаб', link: '#' },
-                { title: 'Региональный штаб', link: '#' },
-                { title: 'Окружной штаб', link: '#' },
-                { title: 'Активные заявки', link: '#' },
-                { title: 'Поиск участников', link: '#' },
-                { title: 'Членский взнос', link: '#' },
-                { title: 'Оформление справок', link: '#' },
-                { title: 'Настройки профиля', link: '#' },
-                { title: 'Выйти из ЛК', link: '#' },
-            ],
-            show: false,
-            isOpen: false,
-        };
-    },
-    methods: {
-        removeClass() {
-            const menu = this.$refs.navMenu;
-            menu.classList.toggle('no-visible');
-        },
-    },
+const router = useRouter();
+const pages = ref([
+    { title: 'ЛСО', link: '/allSquads' },
+    { title: 'Штабы СО ОО', link: '/AllHeadquarters' },
+    { title: 'Местные штабы', link: '#' },
+    { title: 'Региональные штабы', link: '#' },
+    { title: 'Окружные штабы', link: '#' },
+    { title: 'Центральный штаб', link: '#' },
+]);
+
+const userPages = ref([
+    { title: 'Моя страница', link: '/UserPage' },
+    { title: 'Мой отряд', link: '#' },
+    { title: 'Штаб СО ОО', link: '#' },
+    { title: 'Местный штаб', link: '#' },
+    { title: 'Региональный штаб', link: '#' },
+    { title: 'Окружной штаб', link: '#' },
+    { title: 'Активные заявки', link: '#' },
+    { title: 'Поиск участников', link: '#' },
+    { title: 'Членский взнос', link: '#' },
+    { title: 'Оформление справок', link: '#' },
+    { title: 'Настройки профиля', link: '#' },
+    { title: 'Выйти из ЛК', link: '#' },
+]);
+
+const show = ref(false);
+
+const isOpen = ref(false);
+const user = ref(null);
+
+const removeClass = () => {
+    const menu = navMenu.value;
+    menu.classList.toggle('no-visible');
 };
+
+const LogOut = () => {
+    localStorage.removeItem('Token');
+    router.push('/');
+};
+
+const getUser = async () => {
+    await HTTP.get('/users/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    getUser()
+})
 </script>
 
 <style lang="scss">

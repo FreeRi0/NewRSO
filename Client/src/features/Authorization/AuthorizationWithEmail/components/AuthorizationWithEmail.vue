@@ -14,12 +14,13 @@
                     name="name"
                     v-model:value="data.username"
                 />
+                 <p v-if="isError">{{ isError}}</p>
                 <PasswordInputVue
                     placeholder="Пароль"
                     name="password"
                     v-model:value="data.password"
                 ></PasswordInputVue>
-
+                <p v-if="isError">{{ isError}}</p>
                 <Button
                     type="submit"
                     label="Войти"
@@ -49,7 +50,7 @@ const data = ref({
     username: '',
     password: '',
 });
-
+const isError = ref(null);
 const isLoading = ref(false);
 const swal = inject('$swal');
 const router = useRouter();
@@ -71,8 +72,9 @@ const LoginUser = async () => {
             router.push('/UserPage');
         })
 
-        .catch((error) => {
-            console.error('There was an error!', error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
             isLoading.value = false;
             swal.fire({
                 position: 'top-center',

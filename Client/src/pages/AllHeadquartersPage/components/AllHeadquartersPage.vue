@@ -110,8 +110,9 @@ import {
 } from '@features/Headquarters/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed } from 'vue';
-import headquarters from '@entities/HeadquartersData/headquarters';
+// import headquarters from '@entities/HeadquartersData/headquarters';
 
+const headquarters = ref([]);
 
 const headquartersVisible = ref(12);
 
@@ -172,7 +173,7 @@ const sortOptionss = ref([
 ]);
 
 const sortedHeadquarters = computed(() => {
-    let tempHeadquartes = headquarters;
+    let tempHeadquartes = headquarters.value;
 
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
 

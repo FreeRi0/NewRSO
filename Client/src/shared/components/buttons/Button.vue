@@ -13,7 +13,7 @@
         @click="clickOnButton"
     >
         <span v-if="icon">
-            <img :src="`assets/icon/${res}.svg`" alt="icon" />
+            
         </span>
         <span v-else>{{ label }}</span>
         <v-progress-circular indeterminate v-if="loaded"></v-progress-circular>

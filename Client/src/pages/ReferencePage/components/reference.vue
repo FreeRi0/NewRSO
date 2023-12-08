@@ -732,13 +732,16 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .references-sort__all {
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse;
-    padding: 11px 15px;
-    height: 46px;
+    padding: 11px 12px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
+    height: 48px;
+    margin: 0px 12px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
 }
 .filter {
     margin-top: 20px;

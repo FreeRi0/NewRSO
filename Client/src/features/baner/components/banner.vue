@@ -2,22 +2,29 @@
     <div class="user-metric">
         <bannerPhoto></bannerPhoto>
         <Avatar></Avatar>
+        <!-- <testUpload></testUpload> -->
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
-                <div class="user-data__name">
-                    <h4 v-if="user">{{ user.first_name}}</h4>
-                    <h4 v-if="user">{{ user.last_name}}</h4>
-
+                <div v-if="user" class="user-data__name">
+                    <h4>{{ user.first_name }}</h4>
+                    <h4>{{ user.last_name }}</h4>
                 </div>
-                <h4 v-if="user">{{ user.email}}</h4>
-                <h4 v-if="education">{{ education.study_faculty}}</h4>
-                <h4 v-if="education">{{ education.study_specialty}}</h4>
-                <h4 v-if="education">{{ education.study_year}} Курс</h4>
+                <h4 v-if="user">{{ user.email }}</h4>
+                <div></div>
+
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
-
+                        <li v-if="education">
+                            <p>{{ education.study_faculty }}</p>
+                        </li>
+                        <li v-if="education">
+                            <p>{{ education.study_specialty }}</p>
+                        </li>
+                        <li v-if="education">
+                            <p>Курс{{ education.study_year }}</p>
+                        </li>
                         <li v-if="user" class="user-data__regional-office">
                             <p>{{ user.region }}</p>
                         </li>
@@ -29,30 +36,28 @@
 
             <!--DQ2>uME143Da-->
 
+
+            <!--IvanovIvan-->
+
+            <!--'u2,l7C!\2J4-->
         </div>
-        <!-- <div v-for="item in users" :key="user.id">
-        <p>{{ item.email }}</p>
-           <p>{{ item.first_name }}</p>
-           <p>{{ item.last_name }}</p>
-        </div> -->
     </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import { Avatar } from '@shared/components/imagescomp';
+import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
-const users = ref([]);
 let user = ref(null);
 let education = ref(null);
+let region = ref(null);
 const getUser = async () => {
-    await HTTP
-        .get('/users/me/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+    await HTTP.get('/users/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
         .then((response) => {
             user.value = response.data;
             console.log(user.value);
@@ -62,16 +67,13 @@ const getUser = async () => {
         });
 };
 
-getUser();
-
 const getEducation = async () => {
-    await HTTP
-        .get('users/me/education', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+    await HTTP.get('users/me/education', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
         .then((response) => {
             education.value = response.data;
             console.log(education.value);
@@ -81,43 +83,27 @@ const getEducation = async () => {
         });
 };
 
-getEducation();
+onMounted(() => {
+    getUser();
+    getEducation();
+});
 
-// const getUsers = async () => {
-//     axios
-//         .get('api/v1/users/', users.value, {
+// const getRegion = async (id) => {
+//     await HTTP
+//         .get('regions/{id}/', {
 //             headers: {
 //                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
 //             },
 //         })
 //         .then((response) => {
-//             users.value = response.data;
-//             console.log(response.data);
-//             swal.fire({
-//                 position: 'top-center',
-//                 icon: 'success',
-//                 title: 'успешно',
-//                 showConfirmButton: false,
-//                 timer: 1500,
-//             });
-//             router.push('/UserPage');
+//             region.value = response.data;
+//             console.log(region.value);
 //         })
-
-//         .catch((error) => {
-//             console.error('There was an error!', error);
-//             isLoading.value = false;
-//             swal.fire({
-//                 position: 'top-center',
-//                 icon: 'error',
-//                 title: 'ошибка',
-//                 showConfirmButton: false,
-//                 timer: 1500,
-//             });
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
 //         });
-// }
-
-// getUsers()
-
+// };
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {

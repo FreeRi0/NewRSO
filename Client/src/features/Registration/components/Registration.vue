@@ -52,6 +52,7 @@
                     v-model:value.trim="form.re_password"
                 ></PasswordInputVue>
                 <v-checkbox
+                v-model="form.personal_data_agreement"
                     label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных*."
                 ></v-checkbox>
 
@@ -110,6 +111,7 @@ const form = ref({
     username: '',
     password: '',
     re_password: '',
+    personal_data_agreement: null
 });
 
 const isLoading = ref(false);

@@ -135,7 +135,7 @@
                                 type="date"
                                 name="date_of_birth"
                                 class="input-small"
-                                v-model="user.date_of_birth"
+                                v-model:value="user.date_of_birth"
                             />
                         </div>
                     </div>
@@ -155,7 +155,7 @@
                                         name="surname-parent"
                                         class="input-big"
                                         placeholder="Введите фамилию"
-                                        v-model:value="surnameParent"
+                                        v-model:value="parentData.parent_last_name"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -166,9 +166,11 @@
                                     >
                                     <sortByEducation
                                         class="input-small"
-                                        v-model="selectedParent"
+                                        v-model="parentData.relationship"
                                         :options="parents"
                                     ></sortByEducation>
+
+
                                 </div>
 
                                 <div class="form-field">
@@ -179,7 +181,7 @@
                                         class="input-big"
                                         name="patronomyc-parent"
                                         placeholder="Введите Отчество"
-                                        v-model="patronomycParent"
+                                        v-model:value="parentData.parent_patronymic_name"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -192,7 +194,7 @@
                                         type="date"
                                         name="date-parent"
                                         class="input-small"
-                                        v-model:value="birthParent"
+                                        v-model:value="parentData.parent_date_of_birth"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -205,7 +207,7 @@
                                         name="name-parent"
                                         class="input-big"
                                         placeholder="Введите имя"
-                                        v-model:value="nameParent"
+                                        v-model:value="parentData.parent_first_name"
                                     />
                                 </div>
 
@@ -222,7 +224,7 @@
                                         name="phone-parent"
                                         class="input-small phone"
                                         placeholder="+7(__) __ __ _"
-                                        v-model:value="phoneParent"
+                                        v-model:value="parentData.parent_phone_number"
                                     />
                                 </div>
                             </div>
@@ -253,6 +255,7 @@
                                                 selectedPassParent
                                             "
                                         />
+                                        <!-- {{ selectedPassParent }} -->
                                     </div>
                                 </div>
                                 <div
@@ -281,7 +284,7 @@
                                         vmaska
                                         maska="####-######"
                                         placeholder="__ __ ____"
-                                        v-model:value="passInputP"
+                                        v-model:value="parentData.passport_number"
                                     />
                                 </div>
 
@@ -306,7 +309,7 @@
                                         type="date"
                                         name="pass-date-parent"
                                         class="input-small"
-                                        v-model:value="passDateP"
+                                        v-model:value="parentData.passport_date"
                                     />
                                 </div>
 
@@ -320,7 +323,7 @@
                                         name="locality-parent"
                                         class="input-big"
                                         placeholder="Москва"
-                                        v-model:value="localParent"
+                                        v-model:value="parentData.city"
                                     />
                                 </div>
 
@@ -334,7 +337,7 @@
                                         name="pass-id-parent"
                                         class="input-big"
                                         placeholder="Название организации"
-                                        v-model:value="PassIdParent"
+                                        v-model:value="parentData.passport_authority"
                                     />
                                 </div>
 
@@ -349,7 +352,7 @@
                                         name="addres-parent"
                                         class="input-big"
                                         placeholder="Москва"
-                                        v-model:value="AddresParent"
+                                        v-model:value="parentData.address"
                                     />
                                 </div>
                             </div>
@@ -491,8 +494,6 @@
                                 placeholder="+7(__) __ __ _"
                                 v-model:value="user.phone_number"
                             />
-
-                            \
                         </div>
                         <div class="form-field">
                             <label for="regionContact"
@@ -820,7 +821,7 @@
                                     type="text"
                                     class="input-full"
                                     placeholder="документ"
-                                    v-model:value="v.foreignDoc"
+                                    v-model:value="foreign.name"
                                 />
                             </div>
 
@@ -834,7 +835,7 @@
                                     type="date"
                                     name="pass-date"
                                     class="input-small"
-                                    v-model:value="foreignDocDate"
+                                    v-model:value="foreign.foreign_pass_date"
                                 />
                             </div>
 
@@ -847,7 +848,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="__ ___ ____"
-                                    v-model:value="foreignDocNum"
+                                    v-model:value="foreign.foreign_pass_num"
                                 />
                             </div>
                             <div class="form-field one">
@@ -861,7 +862,7 @@
                                     id="org-id"
                                     class="input-full"
                                     placeholder="оуфмс по моковской обл"
-                                    v-model:value="foreignDocOrg"
+                                    v-model:value="foreign.foreign_pass_whom"
                                 />
                             </div>
                             <div class="form-field">
@@ -875,7 +876,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="foreingWorkbook"
+                                    v-model:value="foreign.work_book_num"
                                 />
                             </div>
                             <div class="form-field">
@@ -887,7 +888,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="foreingINN"
+                                    v-model:value="foreign.inn"
                                 />
                             </div>
                             <div class="form-field">
@@ -901,7 +902,7 @@
                                     maska="AA ##########"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
-                                    v-model:value="foreingSNILS"
+                                    v-model:value="foreign.snils"
                                 />
                             </div>
                         </div>
@@ -1044,8 +1045,10 @@
                                             alt="download"
                                         />
                                         <button
+                                            type="button"
                                             id="statement"
                                             class="download-blanks"
+                                            @click="downloadBlankMembership"
                                         >
                                             Скачать бланк
                                         </button>
@@ -1072,7 +1075,7 @@
                                             id="statement"
                                             class="download-blanks"
                                             type="button"
-                                            @click="downloadBlank"
+                                            @click="downloadBlankParent"
                                         >
                                             Скачать бланк
                                         </button>
@@ -1106,7 +1109,7 @@
                                             id="statement"
                                             class="download-blanks"
                                             type="button"
-                                            @click="downloadBlank"
+                                            @click="downloadBlankPersonal"
                                         >
                                             Скачать бланк
                                         </button>
@@ -1849,6 +1852,7 @@ import {
     sameAs,
 } from '@vuelidate/validators';
 import { HTTP } from '@app/http';
+import axios from 'axios';
 
 let education = ref(null);
 const router = useRouter();
@@ -1880,6 +1884,32 @@ const regionData = ref({
     reg_region_id: 1,
 });
 
+const foreign = ref({
+    name: '',
+    foreign_pass_num: '',
+    foreign_pass_whom: '',
+    foreign_pass_date: '',
+    snils: '',
+    inn: '',
+    work_book_num: '',
+});
+
+const parentData = ref({
+    parent_last_name: '',
+    parent_first_name: '',
+    parent_patronymic_name: '',
+    parent_date_of_birth: '',
+    relationship: '',
+    parent_phone_number: '',
+    russian_passport: true,
+    passport_number: '',
+    passport_date: '',
+    passport_authority: '',
+    region: 1,
+    city: '',
+    address: '',
+});
+
 const swal = inject('$swal');
 
 let user = ref(null);
@@ -1902,39 +1932,143 @@ const getUser = async () => {
 
 getUser();
 
-// const downloadBlank = async () => {
-//     await axios
-//         .get('api/v1/users/me/statement/download_membership_statement_file/', {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         })
-//         .then((response) => {
-//             console.log(response, 'success');
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// }
-// downloadBlank(
-//     window.open('api/v1/users/me/statement/download_membership_statement_file/')
-// )
+const downloadBlankPersonal = async () => {
+    await HTTP.get(
+        '/users/me/statement/download_consent_to_the_processing_of_personal_data/',
+        {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+            responseType: 'blob',
+        },
+    )
+        .then((response) => {
+            var FILE = window.URL.createObjectURL(new Blob([response.data]));
+
+            var docUrl = document.createElement('a');
+            docUrl.href = FILE;
+            docUrl.setAttribute('download', 'persnal.pdf');
+            document.body.appendChild(docUrl);
+            docUrl.click();
+            console.log(response, 'success');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const downloadBlankMembership = async () => {
+    await HTTP.get('/users/me/statement/download_membership_statement_file/', {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+        responseType: 'blob',
+    })
+        .then((response) => {
+            var FILE = window.URL.createObjectURL(new Blob([response.data]));
+
+            var docUrl = document.createElement('a');
+            docUrl.href = FILE;
+            docUrl.setAttribute('download', 'membership.pdf');
+            document.body.appendChild(docUrl);
+            docUrl.click();
+            console.log(response, 'success');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+const downloadBlankParent = async () => {
+    await HTTP.get(
+        '/users/me/statement/download_parent_consent_to_the_processing_of_personal_data/',
+        {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+            responseType: 'blob',
+        },
+    )
+        .then((response) => {
+            var FILE = window.URL.createObjectURL(new Blob([response.data]));
+
+            var docUrl = document.createElement('a');
+            docUrl.href = FILE;
+            docUrl.setAttribute('download', 'parent.pdf');
+            document.body.appendChild(docUrl);
+            docUrl.click();
+            console.log(response, 'success');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
 const addData = async () => {
-    // const axiosrequest1 = axios.post('api/v1/users/me/region/');
-    // const axiosrequest2 = axios.post('api/v1/users/me/documents/');
-    // const axiosrequest3 = axios.post('api/v1/users/me/education/');
-    // // you could also use destructuring to have an array of responses
-    // await axios.all([axiosrequest1, axiosrequest2, axiosrequest3]).then(
-    //     axios.spread(function (res1, res2, res3) {
-    //         console.log(res1);
-    //         console.log(res2);
-    //         console.log(res3);
-    //     }),
-    // );
-    // axios
-    // .post('api/v1/users/me/region/', regionData.value, {
+    const axiosrequest1 = HTTP.post('/users/me/region/', regionData.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+    const axiosrequest2 = HTTP.post(
+        '/users/me/documents/',
+        documentsData.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    );
+    const axiosrequest3 = HTTP.post(
+        '/users/me/education/',
+        educationData.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    );
+
+    // const requests = ref([
+    //     '/users/me/region/',
+    //     ''
+    // ])
+    // you could also use destructuring to have an array of responses
+    await HTTP.all([axiosrequest1, axiosrequest2, axiosrequest3])
+        .then(
+            axios.spread(function (res1, res2, res3) {
+                regionData.value = res1.data;
+                documentsData.value = res2.data;
+                educationData.value = res3.data;
+                console.log(res1);
+                console.log(res2);
+                console.log(res3);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }),
+        )
+        .catch((error) => {
+            console.error('There was an error!', error);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+    // HTTP
+    // .post('/users/me/region/', regionData.value, {
     //     headers: {
     //         'Content-Type': 'application/json',
     //         Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -1951,7 +2085,6 @@ const addData = async () => {
     //         timer: 1500,
     //     });
     // })
-
     // .catch((error) => {
     //     console.error('There was an error!', error);
     //     swal.fire({
@@ -1962,34 +2095,62 @@ const addData = async () => {
     //         timer: 1500,
     //     });
     // });
-    HTTP.post('/users/me/documents/', documentsData.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            documentsData.value = response.data;
-            console.log(response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        })
 
-        .catch((error) => {
-            console.error('There was an error!', error);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
+    // HTTP
+    // .post('/users/me/foreign_documents/', foreign.value, {
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Token ' + localStorage.getItem('Token'),
+    //     },
+    // })
+    // .then((response) => {
+    //     foreign.value = response.data;
+    //     console.log(response.data);
+    //     swal.fire({
+    //         position: 'top-center',
+    //         icon: 'success',
+    //         title: 'успешно',
+    //         showConfirmButton: false,
+    //         timer: 1500,
+    //     });
+    // })
+    // .catch((error) => {
+    //     console.error('There was an error!', error);
+    //     swal.fire({
+    //         position: 'top-center',
+    //         icon: 'error',
+    //         title: 'ошибка',
+    //         showConfirmButton: false,
+    //         timer: 1500,
+    //     });
+    // });
+    // HTTP.post('/users/me/documents/', documentsData.value, {
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Token ' + localStorage.getItem('Token'),
+    //     },
+    // })
+    //     .then((response) => {
+    //         documentsData.value = response.data;
+    //         console.log(response.data);
+    //         swal.fire({
+    //             position: 'top-center',
+    //             icon: 'success',
+    //             title: 'успешно',
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //         });
+    //     })
+    //     .catch((error) => {
+    //         console.error('There was an error!', error);
+    //         swal.fire({
+    //             position: 'top-center',
+    //             icon: 'error',
+    //             title: 'ошибка',
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //         });
+    //     });
     // axios
     //     .post('api/v1/users/me/education/', educationData.value, {
     //         headers: {
@@ -2000,7 +2161,6 @@ const addData = async () => {
     //     .then((response) => {
     //         educationData.value = response.data;
     //         console.log(response.data);
-
     //         swal.fire({
     //             position: 'top-center',
     //             icon: 'success',
@@ -2010,7 +2170,6 @@ const addData = async () => {
     //         });
     //         router.push('/UserPage');
     //     })
-
     //     .catch((error) => {
     //         console.error('There was an error!', error);
     //         swal.fire({
@@ -2075,7 +2234,6 @@ const birthParent = ref('');
 const phoneParent = ref('');
 const patronomycParent = ref('');
 const selectedMilitary = ref(0);
-const selectedParent = ref(0);
 const passInputP = ref('');
 const PassIdParent = ref('');
 const localParent = ref('');
