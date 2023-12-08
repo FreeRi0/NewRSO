@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--lso">ЛСО</h1>
-        <BannerComp class="user-metric mt-3">
+        <h1 class="title title--hq">Штаб</h1>
+        <BannerComp class="mt-3">
             <template #banner>
                 <div class="user-data__wrapper">
                     <div class="Squad-HQ__name">
@@ -58,39 +58,37 @@
                             </div>
                         </div>
                         <router-link to="/" class="user-data__link"
-                            >Редактировать страницу</router-link
+                            >Редактировать штаб</router-link
                         >
                     </div>
                 </div>
             </template>
         </BannerComp>
-        <AboutSquad></AboutSquad>
-        <v-row class="mt-8">
-            <v-col v-for="n in 4" :key="n" class="d-flex">
-                <photos></photos>
-            </v-col>
-        </v-row>
-        <SquadParticipants></SquadParticipants>
+        <AboutHQ></AboutHQ>
+        <ManagementHQ></ManagementHQ>
+        <DetachmentsHQ></DetachmentsHQ>
     </div>
 </template>
+
 <script setup>
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerComp } from '@features/baner/components';
-import AboutSquad from './components/AboutSquad.vue';
-import { photos } from '@shared/components/imagescomp';
-import SquadParticipants from './components/SquadParticipants.vue';
+import AboutHQ from './components/AboutHQ.vue';
+import ManagementHQ from './components/ManagementHQ.vue';
+import DetachmentsHQ from './components/DetachmentsHQ.vue';
 import { ref } from 'vue';
 
+const pages = [
+    { pageTitle: 'Структура', href: '#' },
+    { pageTitle: 'Штабы', href: '#' },
+    { pageTitle: 'Штаб СО КГПИ', href: '#' },
+];
+
 const squadHQ = ref({
-    name: 'СCО «Инвар»',
+    name: 'Штаб КГПИ',
     slogan: 'Через тернии к звездам!',
     university: 'Коми государственный педагогический институт',
 });
-
-const pages = [
-    { pageTitle: 'Личный кабинет', href: '#' },
-    { pageTitle: 'ССО «Инвар»', href: '#' },
-];
 </script>
 <style scoped lang="scss">
 .title {
@@ -101,14 +99,14 @@ const pages = [
     font-weight: 700;
     color: #35383f;
 
-    &--lso {
+    &--hq {
         margin-bottom: 50px;
     }
 }
 .user-data__wrapper {
     margin: 20px 0 12px 298px;
 }
-/* Данные отряда */
+
 .Squad-HQ__name {
     font-family: 'Akrobat';
     font-size: 32px;

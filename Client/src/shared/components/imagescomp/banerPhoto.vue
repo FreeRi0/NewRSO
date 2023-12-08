@@ -163,4 +163,10 @@ const deleteFile = () => {
     grid-row-end: 3;
     margin: 0 16px 16px 0;
 }
+
+@media (max-width: 690px) {
+    .user-metric__top {
+        grid-template-rows: 16px 100px;
+    }
+}
 </style>

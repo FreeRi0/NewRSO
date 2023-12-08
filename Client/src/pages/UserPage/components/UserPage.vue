@@ -22,14 +22,10 @@
                 ></Button
             ></router-link>
 
-            <TextArea  class="mt-14"></TextArea>
+            <TextArea class="mt-14"></TextArea>
             <v-row class="mt-8">
-                <v-col
-                    v-for="n in 4"
-                    :key="n"
-                    class="d-flex"
-                >
-                   <photos></photos>
+                <v-col v-for="n in 4" :key="n" class="d-flex">
+                    <photos></photos>
                 </v-col>
             </v-row>
         </div>

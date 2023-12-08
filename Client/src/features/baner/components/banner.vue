@@ -4,9 +4,12 @@
         <Avatar></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
-            <div class="user-data__wrapper">
-                <div class="user-data__name">
-                    <h4>Иванов Иван Иванович</h4>
+            <slot name="banner"></slot>
+            <!-- <div class="user-data__name">
+                    <h4>л</h4>
+                </div>
+                <div class="slogan">
+                    <p>з</p>
                 </div>
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
@@ -16,9 +19,8 @@
                             <p>Ленинградское отделение</p>
                         </li>
                     </ul>
-                </div>
-                <!-- Контакты пользователя  -->
-            </div>
+                    Контакты пользователя 
+                </div> -->
         </div>
     </div>
 </template>
@@ -35,7 +37,7 @@ import { bannerPhoto } from '@shared/components/imagescomp';
 
 .user-metric {
     display: grid;
-    grid-template-columns: 30px 135px 135px 2fr 64px;
+    grid-template-columns: 30px 135px 135px 2fr 16px;
     grid-template-rows: 100px 100px 112px auto;
     margin-bottom: 40px;
     /*  */
@@ -94,7 +96,6 @@ import { bannerPhoto } from '@shared/components/imagescomp';
 }
 
 .user-metric__bottom {
-    display: grid;
     grid-column-start: 1;
     grid-column-end: 5;
     grid-row-start: 3;

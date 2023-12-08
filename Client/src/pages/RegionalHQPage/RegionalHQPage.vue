@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--lso">ЛСО</h1>
-        <BannerComp class="user-metric mt-3">
+        <h1 class="title title--hq">Региональный штаб</h1>
+        <BannerComp class="mt-3">
             <template #banner>
                 <div class="user-data__wrapper">
                     <div class="Squad-HQ__name">
@@ -10,27 +10,20 @@
                     </div>
                     <div class="slogan">
                         <p>{{ squadHQ.slogan }}</p>
+                        <p>{{ squadHQ.slogan2 }}</p>
                     </div>
                     <div class="user-data__list-wrapper">
                         <ul class="Squad-HQ__list">
-                            <li class="Squad-HQ__university">
-                                <p>{{ squadHQ.university }}</p>
-                            </li>
                             <li class="Squad-HQ__date">
-                                <p>Дата создания ЛСО</p>
-                                <img
-                                    src="@/app/assets/icon/calendar.svg"
-                                    alt="calendar"
-                                />
-                                <time datetime="2022-09-10">10.09.2022</time>
+                                <p>{{ squadHQ.date }}</p>
+                            </li>
+                            <li class="Squad-HQ__participants">
+                                <p>{{ squadHQ.participants }}</p>
                             </li>
                         </ul>
                     </div>
                     <div class="squad-data__contacts-wrapper">
                         <div class="squad-data__contacts">
-                            <div class="squad-data__participant-counter">
-                                <span>356 участников</span>
-                            </div>
                             <div class="squad-data__social-network">
                                 <div class="squad-data__link-vk">
                                     <a href="https://vk.com" target="_blank">
@@ -58,39 +51,44 @@
                             </div>
                         </div>
                         <router-link to="/" class="user-data__link"
-                            >Редактировать страницу</router-link
+                            >Редактировать штаб</router-link
                         >
                     </div>
                 </div>
             </template>
         </BannerComp>
-        <AboutSquad></AboutSquad>
-        <v-row class="mt-8">
-            <v-col v-for="n in 4" :key="n" class="d-flex">
-                <photos></photos>
-            </v-col>
-        </v-row>
-        <SquadParticipants></SquadParticipants>
+        <AboutHQ
+            head="Описание  регионального штаба"
+            description="Режим работы: пн-пт с 9:00 до 17:30. 
+        Наши контакты: +7 (863) 285-35-04 sto@mail.ru 
+        г. Казань, ул. Красных Зорь, 64"
+        ></AboutHQ>
+        <ManagementHQ head="Руководство регионального штаба"></ManagementHQ>
+        <HQandSquad></HQandSquad>
     </div>
 </template>
+
 <script setup>
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerComp } from '@features/baner/components';
-import AboutSquad from './components/AboutSquad.vue';
-import { photos } from '@shared/components/imagescomp';
-import SquadParticipants from './components/SquadParticipants.vue';
+import AboutHQ from '../HQPage/components/AboutHQ.vue';
+import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
+import HQandSquad from './components/HQandSquad.vue';
 import { ref } from 'vue';
 
-const squadHQ = ref({
-    name: 'СCО «Инвар»',
-    slogan: 'Через тернии к звездам!',
-    university: 'Коми государственный педагогический институт',
-});
-
 const pages = [
-    { pageTitle: 'Личный кабинет', href: '#' },
-    { pageTitle: 'ССО «Инвар»', href: '#' },
+    { pageTitle: 'Структура', href: '#' },
+    { pageTitle: 'Региональные штабы', href: '#' },
+    { pageTitle: ' Татарстанский региональный штаб', href: '#' },
 ];
+
+const squadHQ = ref({
+    name: 'Татарстанский региональный штаб',
+    slogan: 'Через тернии к звездам!',
+    slogan2: '100 лет на благо страны!',
+    date: '12.10.2005 — дата учредительной конференции РШ',
+    participants: '2000 участников',
+});
 </script>
 <style scoped lang="scss">
 .title {
@@ -101,14 +99,14 @@ const pages = [
     font-weight: 700;
     color: #35383f;
 
-    &--lso {
+    &--hq {
         margin-bottom: 50px;
     }
 }
 .user-data__wrapper {
-    margin: 20px 0 12px 298px;
+    margin: 32px 0 16px 298px;
 }
-/* Данные отряда */
+
 .Squad-HQ__name {
     font-family: 'Akrobat';
     font-size: 32px;
@@ -118,29 +116,27 @@ const pages = [
 }
 .slogan {
     margin-top: 20px;
-    margin-bottom: 9.5px;
+    margin-bottom: 5.5px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5.5px;
 }
 .Squad-HQ__list {
     margin-bottom: 20px;
     display: grid;
-    grid-template-columns: 380px 300px;
+    grid-template-columns: 410px 300px;
 }
 .Squad-HQ__list li {
     border-right: none;
     height: 20px;
     margin: 0;
 }
-.Squad-HQ__university p {
+.Squad-HQ__date p {
     border-right: 1px solid #35383f;
     margin-right: 8px;
     padding-right: 8px;
 }
-.Squad-HQ__date {
-    display: flex;
-}
-.Squad-HQ__date p {
-    margin-right: 22px;
-}
+
 .user-data__link {
     border-radius: 10px;
     background: #39bfbf;
@@ -167,6 +163,7 @@ const pages = [
 }
 .squad-data__social-network {
     display: flex;
+    gap: 12px;
     justify-content: space-between;
     margin: 16px 16px 0px 0px;
 }
@@ -220,6 +217,9 @@ const pages = [
     }
     .Squad-HQ__list li {
         justify-content: center;
+    }
+    .Squad-HQ__name {
+        text-align: center;
     }
     .squad-data__contacts {
         align-self: center;
