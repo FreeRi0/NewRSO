@@ -29,7 +29,6 @@
                             type="email"
                             v-model:value="data.email"
                         />
-                        <p>{{ data.email }}</p>
                         <Button
                             label="Отправить"
                             color="primary"
