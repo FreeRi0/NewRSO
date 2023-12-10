@@ -74,9 +74,9 @@ const routes: RouteRecordRaw[] = [
                 name: 'userpage',
                 component: () =>
                     import('@pages/UserPage/components/UserPage.vue'),
-                    meta: {
-                        requiresAuth: true
-                    }
+                meta: {
+                    requiresAuth: true,
+                },
             },
             {
                 path: '/CreateLSO',
@@ -146,7 +146,9 @@ const routes: RouteRecordRaw[] = [
                 path: '/referenceForYou',
                 name: 'referenceForYou',
                 component: () =>
-                    import('@pages/ReferencePage/components/referenceForYou.vue'),
+                    import(
+                        '@pages/ReferencePage/components/referenceForYou.vue'
+                    ),
             },
 
             {
@@ -159,9 +161,16 @@ const routes: RouteRecordRaw[] = [
                 path: '/contributorPay',
                 name: 'contributorPay',
                 component: () =>
-                    import('@pages/ContributionPage/components/ContributorPay.vue'),
+                    import(
+                        '@pages/ContributionPage/components/ContributorPay.vue'
+                    ),
             },
-
+            {
+                path: '/CreationOfRS',
+                name: 'CreationOfRS',
+                component: () =>
+                    import('@pages/CreationOfRS/components/CreationOfRS.vue'),
+            },
         ],
     },
 ];
