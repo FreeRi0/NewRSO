@@ -1,7 +1,10 @@
 <template>
     <div class="container">
         <div class="headquarters">
-            <bannerCreate></bannerCreate>
+            <bannerCreate
+                desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
+                label="Создать штаб"
+            ></bannerCreate>
             <h2 class="headquarters-title">Штабы СО ОО</h2>
             <div class="headquarters-search">
                 <input
@@ -29,9 +32,36 @@
             </div>
             <div class="headquarters-sort">
                 <div class="sort-layout">
-                    <Button icon="icon" color="white" @click="showVertical">
+                    <Button
+                        v-if="vertical"
+                        type="button"
+                        class="dashboard"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
                     </Button>
                     <Button
+                        v-else="!vertical"
+                        type="button"
+                        class="dashboardD"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
+                    </Button>
+                    <Button
+                        v-if="!vertical"
+                        type="button"
+                        class="menuuA"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    ></Button>
+                    <Button
+                        v-else="vertical"
+                        type="button"
+                        class="menuu"
                         icon="icon"
                         color="white"
                         @click="showVertical"
@@ -49,7 +79,7 @@
                     <div class="sort-select">
                         <sortByEducation
                             v-model="selectedSortRegion"
-                            :options="region"
+                            :options="regional"
                             class="filter-region"
                         ></sortByEducation>
                     </div>
@@ -69,6 +99,8 @@
                     </div>
 
                     <Button
+                        type="button"
+                        class="ascend"
                         @click="ascending = !ascending"
                         icon="icon"
                         color="white"
@@ -109,7 +141,8 @@ import {
     horizontalHeadquarters,
 } from '@features/Headquarters/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { HTTP } from '@app/http';
 // import headquarters from '@entities/HeadquartersData/headquarters';
 
 const headquarters = ref([]);
@@ -129,46 +162,75 @@ const showVertical = () => {
     vertical.value = !vertical.value;
 };
 
-const local = ref([
-    {
-        value: 'Дальневосточный федеральный округ',
-        name: 'Дальневосточный федеральный округ',
-    },
-    {
-        value: 'Приволжский федеральный округ',
-        name: 'Приволжский федеральный округ',
-    },
-    {
-        value: 'Северо-Западный федеральный округ',
-        name: 'Северо-Западный федеральный округ',
-    },
-    {
-        value: 'Северо-Кавказский федеральный округ',
-        name: 'Северо-Кавказский федеральный округ',
-    },
-    {
-        value: 'Сибирский федеральный округ',
-        name: 'Сибирский федеральный округ',
-    },
-    {
-        value: 'Уральский федеральный округ',
-        name: 'Уральский федеральный округ',
-    },
-    {
-        value: 'Центральный федеральный округ',
-        name: 'Центральный федеральный округ',
-    },
-    { value: 'Южный федеральный округ', name: 'Южный федеральный округ' },
-]);
+const local = ref([]);
+const district = ref([]);
+const regional = ref([]);
+
+const getLocals = async () => {
+    await HTTP.get('/locals/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            local.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const getRegional = async () => {
+    await HTTP.get('/regionals/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regional.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const getDistrict = async () => {
+    await HTTP.get('/districts/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            district.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    getLocals();
+    getRegional();
+    getDistrict();
+});
 
 const selectedSort = ref(0);
+const selectedSortLocal = ref(0);
+const selectedSortRegion = ref(0);
+const selectedSortDistrict = ref(0);
 
 const sortOptionss = ref([
     {
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'createdAt', name: 'Дате создания отряда' },
+    { value: 'createdAt', name: 'Дате создания штаба' },
     { value: 'peoples', name: 'Количеству участников' },
 ]);
 
@@ -237,9 +299,9 @@ const sortedHeadquarters = computed(() => {
         justify-content: space-between;
         align-items: flex-end;
         @media screen and (max-width: 768px) {
-        flex-direction: column-reverse;
-        align-items: flex-start;
-    }
+            flex-direction: column-reverse;
+            align-items: flex-start;
+        }
     }
     &-search {
         position: relative;
@@ -299,18 +361,45 @@ const sortedHeadquarters = computed(() => {
 }
 
 .horizontal {
-  margin-top: 40px;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-row-gap: 16px;
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-row-gap: 16px;
 }
 
+.dashboard {
+    background-image: url('@app/assets/icon/darhboard-active.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.dashboardD {
+    background-image: url('@app/assets/icon/darhboard-disable.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.menuuA {
+    background-image: url('@app/assets/icon/MenuA.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.menuu {
+    background-image: url('@app/assets/icon/Menu.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.ascend {
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
 .sort-filters {
     @media screen and (max-width: 768px) {
         margin-top: 40px;
-       display: flex;
-       flex-wrap: wrap;
-       margin-bottom: 60px;
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 60px;
     }
 }
 

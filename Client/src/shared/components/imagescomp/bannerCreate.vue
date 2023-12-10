@@ -1,17 +1,29 @@
 <template>
     <div class="squads-banner">
         <div class="squads-banner__text">
-            Студенческие отряды — это больше, чем работа. Километры впечатлений,
-            тысячи друзей и лето с пользой!
+           {{ desc}}
         </div>
-        <Button label="Создать отряд" color="create" v-if="admin"
-            ><router-link to="/"></router-link
-        ></Button>
+        <router-link :to="{link: link}"><p class="create">{{ label }}</p></router-link>
     </div>
 </template>
 <script setup>
-import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
+
+
+const props = defineProps({
+    label: {
+        type: String,
+        default: 'lorem ipsum',
+    },
+    link: {
+        type: String,
+        default: '/',
+    },
+    desc: {
+        type: String,
+        default: 'lorem ipsum s',
+    }
+});
 
 const admin = ref(true);
 </script>
@@ -53,7 +65,9 @@ const admin = ref(true);
     }
 }
 
-.btn {
-    color: #35383f;
+.create {
+   background-color: #ffffff;
+   padding: 16px 40px;
+   border-radius: 10px;
 }
 </style>

@@ -14,12 +14,14 @@
                     name="name"
                     v-model:value="data.username"
                 />
+           
                  <p v-if="isError">{{ isError}}</p>
                 <PasswordInputVue
                     placeholder="Пароль"
                     name="password"
                     v-model:value="data.password"
                 ></PasswordInputVue>
+
                 <p v-if="isError">{{ isError}}</p>
                 <Button
                     type="submit"
@@ -85,5 +87,4 @@ const LoginUser = async () => {
             });
         });
 };
-
 </script>

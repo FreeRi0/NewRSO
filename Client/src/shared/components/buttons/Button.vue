@@ -1,5 +1,5 @@
 <template>
-    <v-btn
+    <button
         :class="[
             'btn',
             `btn_${color}`,
@@ -13,11 +13,11 @@
         @click="clickOnButton"
     >
         <span v-if="icon">
-            
+
         </span>
         <span v-else>{{ label }}</span>
         <v-progress-circular indeterminate v-if="loaded"></v-progress-circular>
-    </v-btn>
+    </button>
 </template>
 <script setup>
 import { ref, computed} from 'vue';
@@ -90,7 +90,7 @@ const clickOnButton = () => {
     display: block;
     margin: 20px auto;
     padding: 16px 32px;
-    min-height: 52px;
+    // height: 52px;
     color: white;
     box-shadow: none;
     border-radius: 10px;
@@ -139,11 +139,12 @@ const clickOnButton = () => {
     }
     &_icon {
         border: 1px solid #35383f;
-        border-radius: 10px;
-        min-height: 32px;
+        border-radius: 5px;
+        height: 32px;
         width: 32px;
         margin: 0px;
         margin-right: 8px;
+        padding: 0;
     }
     &_large {
         height: 52px;

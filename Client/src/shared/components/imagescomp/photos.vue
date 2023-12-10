@@ -3,9 +3,9 @@
         <!-- Заглушка по умолчанию  -->
         <div class="avatar-preview my_photo__plug">
             <img
-                :src="imgPhotoUrl"
+                :src="squad.photo2"
                 alt="Фото пользователя"
-                v-if="imgPhotoUrl"
+                v-if="squad.photo2"
                 v-show="true"
             />
 
@@ -33,7 +33,7 @@
         </div>
         <!-- Добавить фото -->
         <div class="avatar-edit my_photo__add">
-            <v-menu min-width="200px" rounded v-if="!imgPhotoUrl">
+            <v-menu min-width="200px" rounded v-if="!squad.photo2">
                 <template v-slot:activator="{ props }">
                     <v-btn class="user-metric__baner-add" icon v-bind="props">
                         <v-avatar size="large">
@@ -88,7 +88,11 @@
 <script setup>
 import { ref, computed } from 'vue';
 import myUpload from 'vue-image-crop-upload';
-
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+const squad = ref({});
+const route = useRoute();
+const id = route.params.id;
 const showPhoto = ref(false);
 
 const params = ref({
@@ -101,6 +105,24 @@ const headers = ref({
 });
 
 const imgPhotoUrl = ref(null);
+
+const viewPhoto = async () => {
+    await HTTP.get(`/detachments/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            squad.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+viewPhoto();
 
 const addPhoto = () => {
     showPhoto.value = !showPhoto.value;
@@ -130,7 +152,7 @@ const deletePhoto = () => {
 };
 </script>
 <style lang="scss">
- .my_photo__edit {
+.my_photo__edit {
     display: grid;
     grid-template-columns: 1fr 68px;
     grid-template-rows: 1fr 68px;

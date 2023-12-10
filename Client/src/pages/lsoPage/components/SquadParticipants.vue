@@ -21,24 +21,25 @@
                         <ul class="already_in_squad">
                             <li
                                 class="squad-participant"
-                                v-for="participant in participants.slice(0, 6)"
+                                v-for="participant in member.slice(0, 6)"
+                                v-if="member.length > 0"
                             >
                                 <div
                                     class="squad-participant_box"
-                                    v-if="participant.category == 1"
+                                    v-if="participant.is_trusted == true"
                                 >
                                     <img
-                                        :src="
-                                            './assets/lso/' + participant.image
-                                        "
+                                        :src="participant.username"
                                         alt="avatar"
                                     />
                                     <h5 id="name_length">
-                                        {{ participant.name }}
+                                        {{ participant.user.username }}
                                     </h5>
-                                    <p>{{ participant.status }}</p>
+                                    <p>{{ participant.position }}</p>
                                 </div>
+
                             </li>
+                            <h2 v-else>Участников не найдено...</h2>
                         </ul>
                         <div class="squad-participants__link">
                             <a href="#">Показать всех</a>
@@ -50,14 +51,12 @@
                         <ul class="wait_squad">
                             <li
                                 class="squad-participant"
-                                v-for="participant in participants.slice(
-                                    lastCategoryIndex,
-                                    lastCategoryIndex + 6,
-                                )"
+                                v-for="participant in member.slice(0, 6)"
+                                v-if="member.length > 0"
                             >
                                 <div
                                     class="squad-participant_box"
-                                    v-if="participant.category == 2"
+                                    v-if="participant.is_trusted == false"
                                 >
                                     <img
                                         :src="
@@ -66,11 +65,13 @@
                                         alt="avatar"
                                     />
                                     <h5 id="name_length">
-                                        {{ participant.name }}
+                                        {{ participant.user.last_name }}
                                     </h5>
-                                    <p>{{ participant.status }}</p>
+                                    <p>{{ participant.position }}</p>
                                 </div>
+
                             </li>
+                            <h2 v-else>Участников не найдено...</h2>
                         </ul>
                         <div class="squad-participants__link">
                             <a href="#">Показать всех</a>
@@ -83,85 +84,113 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-const participants = ref([
-    {
-        name: 'Андрей',
-        status: 'Командир',
-        image: 'squad-participant.png',
-        category: 2,
-    },
-    {
-        name: 'Мария',
-        status: 'Комиссар',
-        image: 'squad-participant2.png',
-        category: 1,
-    },
-    {
-        name: 'Екатерина',
-        status: 'Мастер',
-        image: 'squad-participant3.png',
-        category: 1,
-    },
-    {
-        name: 'Иван',
-        status: 'Медик',
-        image: 'squad-participant4.png',
-        category: 1,
-    },
-    {
-        name: 'Елена',
-        status: 'Флагоносец',
-        image: 'squad-participant5.png',
-        category: 1,
-    },
-    {
-        name: 'Анна',
-        status: 'Боец',
-        image: 'squad-participant6.png',
-        category: 1,
-    },
-    {
-        name: 'Артём',
-        status: 'Боец',
-        image: 'squad-participant.png',
-        category: 2,
-    },
-    {
-        name: 'Алла',
-        status: 'Боец',
-        image: 'squad-participant2.png',
-        category: 2,
-    },
-    {
-        name: 'Маргарита',
-        status: 'Боец',
-        image: 'squad-participant3.png',
-        category: 2,
-    },
-    {
-        name: 'Сергей',
-        status: 'Боец',
-        image: 'squad-participant4.png',
-        category: 2,
-    },
-    {
-        name: 'Алёна',
-        status: 'Боец',
-        image: 'squad-participant5.png',
-        category: 2,
-    },
-    {
-        name: 'Виктория',
-        status: 'Боец',
-        image: 'squad-participant6.png',
-        category: 1,
-    },
-]);
-participants.value = participants.value.sort((a, b) => a.category - b.category);
-const lastCategoryIndex = participants.value.findIndex(
-    (item) => item.category === 2,
+import { ref, onMounted } from 'vue';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+
+const member = ref([]);
+const route = useRoute();
+const id = route.params.id;
+
+const aboutMembers = async () => {
+    await HTTP.get(`/detachments/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            member.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+onMounted(() => {
+    aboutMembers();
+});
+// const participants = ref([
+//     {
+//         name: 'Андрей',
+//         status: 'Командир',
+//         image: 'squad-participant.png',
+//         category: 2,
+//     },
+//     {
+//         name: 'Мария',
+//         status: 'Комиссар',
+//         image: 'squad-participant2.png',
+//         category: 1,
+//     },
+//     {
+//         name: 'Екатерина',
+//         status: 'Мастер',
+//         image: 'squad-participant3.png',
+//         category: 1,
+//     },
+//     {
+//         name: 'Иван',
+//         status: 'Медик',
+//         image: 'squad-participant4.png',
+//         category: 1,
+//     },
+//     {
+//         name: 'Елена',
+//         status: 'Флагоносец',
+//         image: 'squad-participant5.png',
+//         category: 1,
+//     },
+//     {
+//         name: 'Анна',
+//         status: 'Боец',
+//         image: 'squad-participant6.png',
+//         category: 1,
+//     },
+//     {
+//         name: 'Артём',
+//         status: 'Боец',
+//         image: 'squad-participant.png',
+//         category: 2,
+//     },
+//     {
+//         name: 'Алла',
+//         status: 'Боец',
+//         image: 'squad-participant2.png',
+//         category: 2,
+//     },
+//     {
+//         name: 'Маргарита',
+//         status: 'Боец',
+//         image: 'squad-participant3.png',
+//         category: 2,
+//     },
+//     {
+//         name: 'Сергей',
+//         status: 'Боец',
+//         image: 'squad-participant4.png',
+//         category: 2,
+//     },
+//     {
+//         name: 'Алёна',
+//         status: 'Боец',
+//         image: 'squad-participant5.png',
+//         category: 2,
+//     },
+//     {
+//         name: 'Виктория',
+//         status: 'Боец',
+//         image: 'squad-participant6.png',
+//         category: 1,
+//     },
+// ]);
+
+member.value = member.value.sort((a, b) => a.is_trusted - b.is_trusted);
+const lastCategoryIndex = member.value.findIndex(
+    (item) => item.is_trusted === false,
 );
+
+// member.value = member.value.filter((item) => item.is_trusted === false)
 </script>
 
 <style scoped lang="scss">

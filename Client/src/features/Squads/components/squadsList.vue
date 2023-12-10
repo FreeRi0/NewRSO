@@ -2,8 +2,9 @@
     <div
         class="squads-wrapper__item"
         v-for="squad in squads"
-
+        v-if="squads.length > 0"
     >
+      <router-link  :to="{name:'lso', params: {id: squad.id}}">
         <div class="round-img">
             <img :src="squad.emblem" alt="logo" />
         </div>
@@ -15,8 +16,10 @@
                 {{ squad.name }}
             </p>
         </div>
-    </div>
+      </router-link>
 
+    </div>
+    <h2 v-else>Отряд не найден...</h2>
 </template>
 <script setup>
 import {ref} from 'vue';

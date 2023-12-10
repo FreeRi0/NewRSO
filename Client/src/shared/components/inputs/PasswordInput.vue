@@ -23,10 +23,38 @@
         </TransitionGroup>
     </div>
 </template>
-<script>
-export default {
+<script setup>
+const emit = defineEmits(['update:value']);
+const props = defineProps({
+    error: {
+        type: Array,
+        required: false,
+    },
+    value: {
+        type: String,
+        default: '',
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        default: 'text',
+    },
+    placeholder: {
+        type: String,
+        required: false,
+    },
+    width: {
+        type: String,
+        default: '',
+    },
 
-}
+});
+const updateValue = (e) => {
+    emit('update:value', e.target.value);
+};
 </script>
 <style lang="scss" scoped>
 .error-wrapper {

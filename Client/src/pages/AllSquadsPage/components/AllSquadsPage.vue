@@ -1,7 +1,8 @@
 <template>
     <div class="container">
         <div class="squads">
-            <bannerCreate></bannerCreate>
+            <bannerCreate desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
+                label="Создать отряд" link="/CreateLSO"></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
             <div class="squads-tabs">
                 <v-btn
@@ -45,11 +46,23 @@
             </div>
             <div class="squads-sort">
                 <div class="sort-layout">
-                    <Button class="switchV" icon="switch" color="white" @click="showVertical">
+                    <Button   v-if="vertical"   type="button" class="dashboard" icon="icon" color="white" @click="showVertical">
+                    </Button>
+                    <Button    v-else="!vertical"  type="button" class="dashboardD" icon="icon" color="white" @click="showVertical">
                     </Button>
                     <Button
-                    class="switchH"
-                        icon="switch"
+                    v-if="!vertical"
+                    type="button"
+                    class="menuuA"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    ></Button>
+                    <Button
+                    v-else="vertical"
+                    type="button"
+                    class="menuu"
+                        icon="icon"
                         color="white"
                         @click="showVertical"
                     ></Button>
@@ -261,16 +274,26 @@ body {
     border: 1px solid red;
 }
 
-.switchV {
-    background-image: url('@app/assets/icon/switch.svg');
+.dashboard {
+    background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
-    background-position: center;
+    background-size: cover;
 }
 
-.switchH {
-    background-image: url('@app/assets/icon/switch.svg');
+.dashboardD {
+    background-image: url('@app/assets/icon/darhboard-disable.svg');
     background-repeat: no-repeat;
-    background-position: center;
+    background-size: cover;
+}
+.menuuA {
+    background-image: url('@app/assets/icon/MenuA.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.menuu {
+    background-image: url('@app/assets/icon/Menu.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 

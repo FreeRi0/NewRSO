@@ -1,5 +1,5 @@
 <template>
-    <div class="horizontal-item" v-for="headquarter in headquarters">
+    <div class="horizontal-item" v-for="headquarter in headquarters" v-if="headquarters.length > 0">
         <div class="horizontal-img">
             <img :src="'./assets/logo/' + headquarter.image" alt="logo" />
         </div>
@@ -9,6 +9,8 @@
             </p>
         </div>
     </div>
+
+    <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
 const props = defineProps({

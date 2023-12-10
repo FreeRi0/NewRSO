@@ -4,17 +4,20 @@
         <h1 class="title title--lso">ЛСО</h1>
         <BannerComp class="user-metric mt-3">
             <template #banner>
-                <div class="user-data__wrapper">
+
+            </template>
+        </BannerComp>
+        <div class="user-data__wrapper">
                     <div class="Squad-HQ__name">
-                        <h4>{{ squadHQ.name }}</h4>
+                        <h4>{{ squad.name }}</h4>
                     </div>
                     <div class="slogan">
-                        <p>{{ squadHQ.slogan }}</p>
+                        <p>{{ squad.slogan }}</p>
                     </div>
                     <div class="user-data__list-wrapper">
                         <ul class="Squad-HQ__list">
                             <li class="Squad-HQ__university">
-                                <p>{{ squadHQ.university }}</p>
+                                <p>{{ educt.name}}</p>
                             </li>
                             <li class="Squad-HQ__date">
                                 <p>Дата создания ЛСО</p>
@@ -22,14 +25,14 @@
                                     src="@/app/assets/icon/calendar.svg"
                                     alt="calendar"
                                 />
-                                <time datetime="2022-09-10">10.09.2022</time>
+                                <time datetime="2022-09-10">{{ squad.founding_date }}</time>
                             </li>
                         </ul>
                     </div>
                     <div class="squad-data__contacts-wrapper">
                         <div class="squad-data__contacts">
                             <div class="squad-data__participant-counter">
-                                <span>356 участников</span>
+                                <span>{{ member.length }} участников</span>
                             </div>
                             <div class="squad-data__social-network">
                                 <div class="squad-data__link-vk">
@@ -55,6 +58,7 @@
                                         />
                                     </a>
                                 </div>
+                                <!-- <p>{{ squad.members }}</p> -->
                             </div>
                         </div>
                         <router-link to="/" class="user-data__link"
@@ -62,8 +66,6 @@
                         >
                     </div>
                 </div>
-            </template>
-        </BannerComp>
         <AboutSquad></AboutSquad>
         <v-row class="mt-8">
             <v-col v-for="n in 4" :key="n" class="d-flex">
@@ -79,18 +81,76 @@ import { BannerComp } from '@features/baner/components';
 import AboutSquad from './components/AboutSquad.vue';
 import { photos } from '@shared/components/imagescomp';
 import SquadParticipants from './components/SquadParticipants.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router'
 
-const squadHQ = ref({
-    name: 'СCО «Инвар»',
-    slogan: 'Через тернии к звездам!',
-    university: 'Коми государственный педагогический институт',
-});
+const squad = ref({});
+const member = ref({});
+const educt = ref({});
+const route = useRoute();
+const id = route.params.id;
+
+
+
+const aboutSquad = async() => {
+    await HTTP.get(`/detachments/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            squad.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
+
+const aboutEduc = async() => {
+    await HTTP.get(`/eduicational_institutions/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+           educt.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
+
+const aboutMembers = async() => {
+    await HTTP.get(`/detachments/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            member.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
+onMounted(() => {
+    aboutSquad();
+    aboutMembers();
+    aboutEduc();
+})
 
 const pages = [
-    { pageTitle: 'Личный кабинет', href: '#' },
-    { pageTitle: 'ССО «Инвар»', href: '#' },
+    { pageTitle: 'Личный кабинет', href: '/UserPage' },
+    { pageTitle: `${squad.name}`, href: '#' },
 ];
+
 </script>
 <style scoped lang="scss">
 .title {

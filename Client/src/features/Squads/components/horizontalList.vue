@@ -1,7 +1,7 @@
 <template>
-    <div class="horizontal-item" v-for="squad in squads">
+    <div class="horizontal-item" v-for="squad in squads" v-if="squads.length > 0" >
         <div class="horizontal-img">
-            <img :src="squads.emblem" alt="logo" />
+            <img :src="squad.emblem" alt="logo" />
         </div>
         <div class="containerHorizontal">
             <p class="squads-wrapper__item-category-full">
@@ -10,6 +10,7 @@
             <p class="squads-wrapper__item-title">"{{ squad.name}}"</p>
         </div>
     </div>
+    <h2 v-else>Отряд не найден...</h2>
 </template>
 <script setup>
 const props = defineProps({
