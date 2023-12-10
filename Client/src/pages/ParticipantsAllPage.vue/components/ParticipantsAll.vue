@@ -38,10 +38,23 @@
             </div>
             <div class="participants-sort">
                 <div class="sort-layout">
-                    <Button icon="switch" color="white" @click="showVertical">
+                    <Button   v-if="vertical"   type="button" class="dashboard" icon="icon" color="white" @click="showVertical">
+                    </Button>
+                    <Button    v-else="!vertical"  type="button" class="dashboardD" icon="icon" color="white" @click="showVertical">
                     </Button>
                     <Button
-                        icon="switch"
+                    v-if="!vertical"
+                    type="button"
+                    class="menuuA"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    ></Button>
+                    <Button
+                    v-else="vertical"
+                    type="button"
+                    class="menuu"
+                        icon="icon"
                         color="white"
                         @click="showVertical"
                     ></Button>
@@ -55,6 +68,7 @@
                     </div>
 
                     <Button
+                    class="ascend"
                         @click="ascending = !ascending"
                         icon="icon"
                         color="white"
@@ -93,19 +107,44 @@ import {
     horizontalParticipantsList,
 } from '@features/Participants/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed } from 'vue';
-import participants from '@entities/Participants/participants';
+import { ref, computed, onMounted } from 'vue';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+// import participants from '@entities/Participants/participants';
 
+const participants = ref([]);
 const participantsVisible = ref(12);
 
 const step = ref(12);
 
+const route = useRoute();
+const id = route.params.id;
+
+const aboutMembers = async () => {
+    await HTTP.get(`/detachments/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            participants.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+onMounted(() => {
+    aboutMembers();
+});
+
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const picked = ref('');
+// const picked = ref('');
 
-const categories = ref(['В отряде', 'Ожидают одобрения']);
+// const categories = ref(['В отряде', 'Ожидают одобрения']);
 
 const vertical = ref(true);
 
@@ -125,20 +164,20 @@ const sortOptionss = ref([
 ]);
 
 const sortedParticipants = computed(() => {
-    let tempParticipants = participants;
+    let tempParticipants = participants.value;
 
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
     tempParticipants = tempParticipants.filter((item) => {
-        return item.name
+        return item.user.last_name
             .toUpperCase()
             .includes(searchParticipants.value.toUpperCase());
     });
 
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa = a.user.last_name.toLowerCase(),
+                fb = b.user.last_name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -147,9 +186,9 @@ const sortedParticipants = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'birthdate') {
-            let fc = a.birthdate,
-                fn = b.birthdate;
+        } else if (sortBy.value == 'date_of_birth') {
+            let fc = a.user.date_of_birth,
+                fn = b.user.date_of_birth;
 
             if (fc < fn) {
                 return -1;
@@ -247,6 +286,35 @@ const sortedParticipants = computed(() => {
         color: white;
         border: 1px solid #1c5c94;
     }
+
+    .dashboard {
+    background-image: url('@app/assets/icon/darhboard-active.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.dashboardD {
+    background-image: url('@app/assets/icon/darhboard-disable.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.menuuA {
+    background-image: url('@app/assets/icon/MenuA.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.menuu {
+    background-image: url('@app/assets/icon/Menu.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.ascend {
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
 
     .horizontallso {
         padding-top: 40px;

@@ -5,11 +5,11 @@
         v-if="participants.length > 0"
     >
         <div class="round-img">
-            <img :src="'./assets/' + participant.image" alt="logo" />
+            <img :src="participant.user.avatar.photo" alt="logo" />
         </div>
         <div class="container-participants">
             <p class="participants-wrapper__item-name">
-                {{ participant.name }}
+                {{ participant.user.last_name }}
             </p>
             <p class="participants-wrapper__item-position">
                 {{ participant.position }}
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <h2 v-else>Участник не найден...</h2>
+    <h2 v-else>Участники не найдены...</h2>
 </template>
 <script setup>
 const props = defineProps({

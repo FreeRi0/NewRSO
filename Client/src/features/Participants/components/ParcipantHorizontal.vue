@@ -12,12 +12,12 @@
             />
         </div>
         <div class="containerHorizontal">
-            <p class="horizontallso-item__list-full">{{ participant.name }}</p>
+            <p class="horizontallso-item__list-full">{{ participant.user.last_name }}</p>
             <div class="horizontallso-item__list-date">
                 <span
                     style="border-left: 2px solid #b6b6b6; padding-right: 8px"
                 ></span>
-                <p>{{ participant.birthdate }}</p>
+                <p>{{ participant.user.date_of_birth }}</p>
             </div>
         </div>
     </div>

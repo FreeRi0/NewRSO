@@ -3,69 +3,67 @@
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--lso">ЛСО</h1>
         <BannerComp class="user-metric mt-3">
-            <template #banner>
-
-            </template>
+            <template #banner> </template>
         </BannerComp>
         <div class="user-data__wrapper">
-                    <div class="Squad-HQ__name">
-                        <h4>{{ squad.name }}</h4>
+            <div class="Squad-HQ__name">
+                <h4>{{ squad.name }}</h4>
+            </div>
+            <div class="slogan">
+                <p>{{ squad.slogan }}</p>
+            </div>
+            <div class="user-data__list-wrapper">
+                <ul class="Squad-HQ__list">
+                    <li class="Squad-HQ__university">
+                        <p>{{ educt.name }}</p>
+                    </li>
+                    <li class="Squad-HQ__date">
+                        <p>Дата создания ЛСО</p>
+                        <img
+                            src="@/app/assets/icon/calendar.svg"
+                            alt="calendar"
+                        />
+                        <time datetime="2022-09-10">{{
+                            squad.founding_date
+                        }}</time>
+                    </li>
+                </ul>
+            </div>
+            <div class="squad-data__contacts-wrapper">
+                <div class="squad-data__contacts">
+                    <div class="squad-data__participant-counter">
+                        <span>{{ member.length }} участников</span>
                     </div>
-                    <div class="slogan">
-                        <p>{{ squad.slogan }}</p>
-                    </div>
-                    <div class="user-data__list-wrapper">
-                        <ul class="Squad-HQ__list">
-                            <li class="Squad-HQ__university">
-                                <p>{{ educt.name}}</p>
-                            </li>
-                            <li class="Squad-HQ__date">
-                                <p>Дата создания ЛСО</p>
-                                <img
-                                    src="@/app/assets/icon/calendar.svg"
-                                    alt="calendar"
-                                />
-                                <time datetime="2022-09-10">{{ squad.founding_date }}</time>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="squad-data__contacts-wrapper">
-                        <div class="squad-data__contacts">
-                            <div class="squad-data__participant-counter">
-                                <span>{{ member.length }} участников</span>
-                            </div>
-                            <div class="squad-data__social-network">
-                                <div class="squad-data__link-vk">
-                                    <a href="https://vk.com" target="_blank">
-                                        <img
-                                            src="@/app/assets/icon/vk-blue.svg"
-                                        />
-                                    </a>
-                                </div>
-                                <div class="squad-data__link-telegram">
-                                    <a href="https://t.me" target="_blank">
-                                        <img
-                                            src="@/app/assets/icon/telegram-blue.svg"
-                                            alt=""
-                                        />
-                                    </a>
-                                </div>
-                                <div class="squad-data__link-share-link">
-                                    <a href="#" target="_blank">
-                                        <img
-                                            src="@/app/assets/icon/to-share-link.svg"
-                                            alt=""
-                                        />
-                                    </a>
-                                </div>
-                                <!-- <p>{{ squad.members }}</p> -->
-                            </div>
+                    <div class="squad-data__social-network">
+                        <div class="squad-data__link-vk">
+                            <a href="https://vk.com" target="_blank">
+                                <img src="@/app/assets/icon/vk-blue.svg" />
+                            </a>
                         </div>
-                        <router-link to="/" class="user-data__link"
-                            >Редактировать страницу</router-link
-                        >
+                        <div class="squad-data__link-telegram">
+                            <a href="https://t.me" target="_blank">
+                                <img
+                                    src="@/app/assets/icon/telegram-blue.svg"
+                                    alt=""
+                                />
+                            </a>
+                        </div>
+                        <div class="squad-data__link-share-link">
+                            <a href="#" target="_blank">
+                                <img
+                                    src="@/app/assets/icon/to-share-link.svg"
+                                    alt=""
+                                />
+                            </a>
+                        </div>
+                        <!-- <p>{{ squad.members }}</p> -->
                     </div>
                 </div>
+                <router-link to="/" class="user-data__link"
+                    >Редактировать страницу</router-link
+                >
+            </div>
+        </div>
         <AboutSquad></AboutSquad>
         <v-row class="mt-8">
             <v-col v-for="n in 4" :key="n" class="d-flex">
@@ -73,6 +71,16 @@
             </v-col>
         </v-row>
         <SquadParticipants></SquadParticipants>
+        <router-link
+            :to="{
+                name: 'allparticipants',
+                params: { id: squad.id },
+            }"
+        >
+            <div class="squad-participants__link">
+                Показать всех
+            </div></router-link
+        >
     </div>
 </template>
 <script setup>
@@ -83,7 +91,7 @@ import { photos } from '@shared/components/imagescomp';
 import SquadParticipants from './components/SquadParticipants.vue';
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router'
+import { useRoute } from 'vue-router';
 
 const squad = ref({});
 const member = ref({});
@@ -91,9 +99,7 @@ const educt = ref({});
 const route = useRoute();
 const id = route.params.id;
 
-
-
-const aboutSquad = async() => {
+const aboutSquad = async () => {
     await HTTP.get(`/detachments/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -107,9 +113,9 @@ const aboutSquad = async() => {
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
+};
 
-const aboutEduc = async() => {
+const aboutEduc = async () => {
     await HTTP.get(`/eduicational_institutions/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -117,15 +123,15 @@ const aboutEduc = async() => {
         },
     })
         .then((response) => {
-           educt.value = response.data;
+            educt.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
+};
 
-const aboutMembers = async() => {
+const aboutMembers = async () => {
     await HTTP.get(`/detachments/${id}/members/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -139,18 +145,17 @@ const aboutMembers = async() => {
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
+};
 onMounted(() => {
     aboutSquad();
     aboutMembers();
     aboutEduc();
-})
+});
 
 const pages = [
     { pageTitle: 'Личный кабинет', href: '/UserPage' },
     { pageTitle: `${squad.name}`, href: '#' },
 ];
-
 </script>
 <style scoped lang="scss">
 .title {

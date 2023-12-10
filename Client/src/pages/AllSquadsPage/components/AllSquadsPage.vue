@@ -90,7 +90,6 @@
                         @click="ascending = !ascending"
                         color="white"
                     ></Button>
-                    <p>{{ ascending }}</p>
                 </div>
             </div>
 

@@ -4,7 +4,7 @@
             <!-- Заглушка Банер -->
 
             <img
-                :src="imgDataUrl"
+                :src="imgDataUrl.banner"
                 alt="Баннер личной страницы"
                 v-if="imgDataUrl"
                 v-show="true"
@@ -15,17 +15,18 @@
                 alt="Баннер личной страницы(пусто)"
                 v-else
             />
+            <!-- url="http://127.0.0.1:8000/api/v1/users/me/media/" -->
 
             <my-upload
-                field="baner"
+                field="banner"
                 @crop-success="cropSuccess"
                 @crop-upload-success="cropUploadSuccess"
                 @crop-upload-fail="cropUploadFail"
-                v-model="banner"
+                v-model="show"
                 :width="1100"
                 :height="200"
-                url="api/v1/users/me/media/"
                 :params="params"
+                url="/users/me/media/"
                 :headers="headers"
                 :no-circle="true"
                 img-format="jpg"
@@ -85,12 +86,37 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import myUpload from 'vue-image-crop-upload';
-const banner = ref(false);
+import { HTTP } from '@app/http';
+
+const imgDataUrl = ref(null);
+const show = ref(false);
+const file = ref(null);
+
+const viewBanner = async () => {
+    await HTTP.get('/users/me/media/', {
+        headers: {
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            imgDataUrl.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+viewBanner();
+
+// const onChangeFileUpload = (event) => {
+//     file.value = event.target.files[0];
+// };
 
 const params = ref({
-    name: 'avatar',
+    name: 'banner',
 });
 
 const headers = ref({
@@ -98,23 +124,34 @@ const headers = ref({
     token: 'Token ' + localStorage.getItem('Token'),
 });
 
-const imgDataUrl = ref(null);
-
 const toggleShow = () => {
-    banner.value = !banner.value;
+    show.value = !show.value;
 };
 
-const cropSuccess = (data, field) => {
+const cropSuccess = (field, data) => {
     console.log('-------- crop success --------');
-    if (field == 'baner') {
+    if (field == 'banner') {
         imgDataUrl.value = data;
+    //     let data = new FormData();
+    //     data.append('banner', file.value);
+    //     HTTP.post('/users/me/media/', data, {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data',
+    //             Authorization: 'Token ' + localStorage.getItem('Token'),
+    //         },
+    //     })
+    //         .then(function (response) {
+    //             console.log(response.data, 'sucsess');
+    //         })
+    //         .catch(function (error) {
+    //             console.log('FAILURE!!', error);
+    //         });
     }
 };
 
 const cropUploadSuccess = (data, field) => {
-    console.log('-------- upload success --------');
     console.log(data);
-    console.log('field: ' + field);
+    console.log('-------- upload success --------');
 };
 
 const cropUploadFail = (status, field) => {

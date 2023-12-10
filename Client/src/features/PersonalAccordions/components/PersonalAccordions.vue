@@ -2039,34 +2039,34 @@ const addData = async () => {
     //     ''
     // ])
     // you could also use destructuring to have an array of responses
-    await HTTP.all([axiosrequest1, axiosrequest2, axiosrequest3])
-        .then(
-            axios.spread(function (res1, res2, res3) {
-                regionData.value = res1.data;
-                documentsData.value = res2.data;
-                educationData.value = res3.data;
-                console.log(res1);
-                console.log(res2);
-                console.log(res3);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            }),
-        )
-        .catch((error) => {
-            console.error('There was an error!', error);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
+    // await HTTP.all([axiosrequest1, axiosrequest2, axiosrequest3])
+    //     .then(
+    //         axios.spread(function (res1, res2, res3) {
+    //             regionData.value = res1.data;
+    //             documentsData.value = res2.data;
+    //             educationData.value = res3.data;
+    //             console.log(res1);
+    //             console.log(res2);
+    //             console.log(res3);
+    //             swal.fire({
+    //                 position: 'top-center',
+    //                 icon: 'success',
+    //                 title: 'успешно',
+    //                 showConfirmButton: false,
+    //                 timer: 1500,
+    //             });
+    //         }),
+    //     )
+    //     .catch((error) => {
+    //         console.error('There was an error!', error);
+    //         swal.fire({
+    //             position: 'top-center',
+    //             icon: 'error',
+    //             title: 'ошибка',
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //         });
+    //     });
     // HTTP
     // .post('/users/me/region/', regionData.value, {
     //     headers: {
@@ -2151,35 +2151,35 @@ const addData = async () => {
     //             timer: 1500,
     //         });
     //     });
-    // axios
-    //     .post('api/v1/users/me/education/', educationData.value, {
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             Authorization: 'Token ' + localStorage.getItem('Token'),
-    //         },
-    //     })
-    //     .then((response) => {
-    //         educationData.value = response.data;
-    //         console.log(response.data);
-    //         swal.fire({
-    //             position: 'top-center',
-    //             icon: 'success',
-    //             title: 'успешно',
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //         });
-    //         router.push('/UserPage');
-    //     })
-    //     .catch((error) => {
-    //         console.error('There was an error!', error);
-    //         swal.fire({
-    //             position: 'top-center',
-    //             icon: 'error',
-    //             title: 'ошибка',
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //         });
-    //     });
+    axios
+        .post('api/v1/users/me/education/', educationData.value, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            educationData.value = response.data;
+            console.log(response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            router.push('/UserPage');
+        })
+        .catch((error) => {
+            console.error('There was an error!', error);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
 };
 
 const answers = ref([

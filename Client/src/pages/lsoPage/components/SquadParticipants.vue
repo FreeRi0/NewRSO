@@ -37,7 +37,6 @@
                                     </h5>
                                     <p>{{ participant.position }}</p>
                                 </div>
-
                             </li>
                             <h2 v-else>Участников не найдено...</h2>
                         </ul>
@@ -73,9 +72,7 @@
                             </li>
                             <h2 v-else>Участников не найдено...</h2>
                         </ul>
-                        <div class="squad-participants__link">
-                            <a href="#">Показать всех</a>
-                        </div>
+                        
                     </section>
                 </div>
             </nav>

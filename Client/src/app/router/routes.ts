@@ -109,7 +109,7 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
-                path: '/AllParticipants',
+                path: '/AllParticipants/:id',
                 name: 'allparticipants',
                 component: () =>
                     import(
