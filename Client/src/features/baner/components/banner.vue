@@ -9,6 +9,7 @@
                 <div v-if="user" class="user-data__name">
                     <h4>{{ user.first_name }}</h4>
                     <h4>{{ user.last_name }}</h4>
+            <!-- <slot name="banner"></slot> -->
                 </div>
                 <h4 v-if="user">{{ user.email }}</h4>
                 <div></div>
@@ -40,6 +41,7 @@
             <!--IvanovIvan-->
 
             <!--'u2,l7C!\2J4-->
+
         </div>
     </div>
 </template>
@@ -113,7 +115,7 @@ onMounted(() => {
 
 .user-metric {
     display: grid;
-    grid-template-columns: 30px 135px 135px 2fr 64px;
+    grid-template-columns: 30px 135px 135px 2fr 16px;
     grid-template-rows: 100px 100px 112px auto;
     margin-bottom: 40px;
     /*  */
@@ -172,7 +174,6 @@ onMounted(() => {
 }
 
 .user-metric__bottom {
-    display: grid;
     grid-column-start: 1;
     grid-column-end: 5;
     grid-row-start: 3;

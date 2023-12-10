@@ -3,7 +3,8 @@
         <v-card class="px-14 py-15" max-width="580">
             <v-card-title class="text-h4 text-center">Регистрация</v-card-title>
             <v-form action="#" method="post" @submit.prevent="RegisterUser">
-                <!-- <SelectRegion v-model:value="form.region"></SelectRegion> -->
+
+                <SelectRegion></SelectRegion>
                 <Input
                     placeholder="Фамилия"
                     name="surname"
@@ -99,7 +100,10 @@ import {
     sameAs,
 } from '@vuelidate/validators';
 import { IMaskDirective } from 'vue-imask';
-import { SelectRegion } from '@shared/components/selects';
+import {SelectRegion} from '@shared/components/selects'
+
+
+
 
 const form = ref({
     last_name: '',

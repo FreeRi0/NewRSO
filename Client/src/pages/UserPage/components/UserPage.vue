@@ -21,9 +21,7 @@
                 ></Button
             ></router-link>
 
-            <button v-if="user">Выйти</button>
-
-            <TextArea class="mt-14"></TextArea>
+            <TextArea  class="mt-14"></TextArea>
             <v-row class="mt-8">
                 <v-col v-for="n in 4" :key="n" class="d-flex">
                     <photos></photos>

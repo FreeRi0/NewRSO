@@ -1,0 +1,419 @@
+<template>
+    <section class="squad-participants">
+        <section class="squad-tabs">
+            <!--  Контейнер c вкладками   -->
+            <nav class="squad__navigation">
+                <h3 class="squad-participants__title">Участники</h3>
+                <input
+                    checked
+                    id="tab-btn-1"
+                    name="tab-btn"
+                    type="radio"
+                    value=""
+                />
+                <label class="tab-position" for="tab-btn-1">Уже в отряде</label>
+                <input id="tab-btn-2" name="tab-btn" type="radio" value="" />
+                <label class="position-tab" for="tab-btn-2"
+                    >Ожидают одобрения</label
+                >
+                <div class="tab-content" id="content-1">
+                    <section class="squad-participants__list">
+                        <ul class="already_in_squad">
+                            <li
+                                class="squad-participant"
+                                v-for="participant in participants.slice(0, 6)"
+                            >
+                                <div
+                                    class="squad-participant_box"
+                                    v-if="participant.category == 1"
+                                >
+                                    <img
+                                        :src="
+                                            './assets/lso/' + participant.image
+                                        "
+                                        alt="avatar"
+                                    />
+                                    <h5 id="name_length">
+                                        {{ participant.name }}
+                                    </h5>
+                                    <p>{{ participant.status }}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="squad-participants__link">
+                            <a href="#">Показать всех</a>
+                        </div>
+                    </section>
+                </div>
+                <div class="tab-content" id="content-2">
+                    <section class="squad-participants__list">
+                        <ul class="wait_squad">
+                            <li
+                                class="squad-participant"
+                                v-for="participant in participants.slice(
+                                    lastCategoryIndex,
+                                    lastCategoryIndex + 6,
+                                )"
+                            >
+                                <div
+                                    class="squad-participant_box"
+                                    v-if="participant.category == 2"
+                                >
+                                    <img
+                                        :src="
+                                            './assets/lso/' + participant.image
+                                        "
+                                        alt="avatar"
+                                    />
+                                    <h5 id="name_length">
+                                        {{ participant.name }}
+                                    </h5>
+                                    <p>{{ participant.status }}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="squad-participants__link">
+                            <a href="#">Показать всех</a>
+                        </div>
+                    </section>
+                </div>
+            </nav>
+        </section>
+    </section>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+const participants = ref([
+    {
+        name: 'Андрей',
+        status: 'Командир',
+        image: 'squad-participant.png',
+        category: 2,
+    },
+    {
+        name: 'Мария',
+        status: 'Комиссар',
+        image: 'squad-participant2.png',
+        category: 1,
+    },
+    {
+        name: 'Екатерина',
+        status: 'Мастер',
+        image: 'squad-participant3.png',
+        category: 1,
+    },
+    {
+        name: 'Иван',
+        status: 'Медик',
+        image: 'squad-participant4.png',
+        category: 1,
+    },
+    {
+        name: 'Елена',
+        status: 'Флагоносец',
+        image: 'squad-participant5.png',
+        category: 1,
+    },
+    {
+        name: 'Анна',
+        status: 'Боец',
+        image: 'squad-participant6.png',
+        category: 1,
+    },
+    {
+        name: 'Артём',
+        status: 'Боец',
+        image: 'squad-participant.png',
+        category: 2,
+    },
+    {
+        name: 'Алла',
+        status: 'Боец',
+        image: 'squad-participant2.png',
+        category: 2,
+    },
+    {
+        name: 'Маргарита',
+        status: 'Боец',
+        image: 'squad-participant3.png',
+        category: 2,
+    },
+    {
+        name: 'Сергей',
+        status: 'Боец',
+        image: 'squad-participant4.png',
+        category: 2,
+    },
+    {
+        name: 'Алёна',
+        status: 'Боец',
+        image: 'squad-participant5.png',
+        category: 2,
+    },
+    {
+        name: 'Виктория',
+        status: 'Боец',
+        image: 'squad-participant6.png',
+        category: 1,
+    },
+]);
+participants.value = participants.value.sort((a, b) => a.category - b.category);
+const lastCategoryIndex = participants.value.findIndex(
+    (item) => item.category === 2,
+);
+</script>
+
+<style scoped lang="scss">
+/* Табы */
+section.squad-tabs {
+    margin-bottom: 40px;
+}
+.squad__navigation {
+    margin-top: 60px;
+}
+section.squad-tabs .container {
+    display: flex;
+    flex-direction: column;
+}
+.squad-participants__list {
+    border-radius: 10px;
+    box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.05);
+}
+.squad-participants__title {
+    color: #212121;
+    font-family: 'Akrobat';
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 40px;
+}
+
+.squad__navigation ul {
+    list-style: none;
+    justify-items: center;
+}
+
+.squad__navigation a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    font-family: 'BertSans';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 100%;
+}
+
+/* ****************************************************************************************** */
+.squad__navigation > input[type='radio'] {
+    display: none;
+}
+
+#tab-btn-1:checked ~ #content-1,
+#tab-btn-2:checked ~ #content-2 {
+    display: block;
+}
+
+.tab-content {
+    display: none;
+    width: 100%;
+    margin-top: 40px;
+}
+
+.squad__navigation > label {
+    /*  */
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'BertSans';
+    color: #1f7cc0;
+    text-decoration: none;
+    line-height: 100%;
+    /*  */
+    padding: 6px 24px;
+    cursor: pointer;
+    transition:
+        color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out;
+    border: 2px solid #1f7cc0;
+    border-radius: 30px;
+}
+
+.squad__navigation > input[type='radio']:checked + label {
+    cursor: default;
+    color: #fff;
+    background-color: #1c5c94;
+    /*  */
+    border-radius: 30px;
+    border: 2px solid #1c5c94;
+}
+
+nav {
+    position: relative;
+}
+
+.tab-position {
+    position: absolute;
+    top: 1px;
+    right: 255px;
+    margin-right: -18px;
+}
+
+.position-tab {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+}
+// /////////////////
+.squad-participant {
+    list-style: none;
+}
+
+.squad-participants__list {
+    margin-bottom: 40px;
+}
+
+.already_in_squad,
+.wait_squad {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(183.2px, 1fr));
+    margin-bottom: 40px;
+    padding: 24px;
+    height: 252px;
+    overflow: hidden;
+}
+
+.squad-participants__list .container {
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.05);
+}
+
+.squad-participant_box {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.squad-participant_box img {
+    margin-bottom: 32px;
+    padding: 19.5px 20px 0px 20px;
+}
+
+.squad-participant_box h5 {
+    color: #35383f;
+    text-align: center;
+    font-family: 'BertSans';
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    /* видимость текста */
+    width: 161px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    //
+    margin-bottom: 5px;
+}
+
+.squad-participant_box p {
+    color: #676767;
+    font-family: 'BertSans';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.48px;
+}
+
+.squad-participants__link {
+    display: flex;
+    justify-content: center;
+}
+
+.squad-participants__link a {
+    /* оформление ссылки */
+    color: #5e5c5c;
+    font-family: 'Montserrat';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%;
+    letter-spacing: -0.4px;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    /* расстояние */
+    margin-bottom: 24px;
+}
+// //////////////////////////////////////////////////////////////////////////
+
+@media (max-width: 660px) {
+    .position-tab,
+    .tab-position {
+        position: static;
+        margin-right: 8px;
+    }
+}
+@media (max-width: 646px) {
+    .already_in_squad,
+    .wait_squad {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        height: 253px;
+    }
+}
+
+@media (max-width: 612px) {
+    .already_in_squad,
+    .wait_squad {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        height: 212px;
+    }
+    .squad-participant_box img {
+        padding: 8px 16px 0px 16px;
+        max-width: 130px;
+    }
+    .squad-participant_box h5 {
+        font-size: 20px;
+        width: 130px;
+    }
+}
+
+@media (max-width: 493px) {
+    .already_in_squad,
+    .wait_squad {
+        grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+        height: 169px;
+        padding: 16px;
+    }
+    .squad-participant_box h5 {
+        font-size: 20px;
+        width: 95.5px;
+    }
+
+    .squad-participant_box p {
+        font-size: 13px;
+    }
+
+    .squad-participant_box img {
+        padding: 8px 16px 0px 16px;
+        max-width: 95.5px;
+    }
+}
+@media (max-width: 450px) {
+    .squad__navigation > label {
+        font-size: 16px;
+        padding: 8px 15px;
+    }
+}
+@media (max-width: 393px) {
+    .already_in_squad,
+    .wait_squad {
+        grid-template-columns: repeat(auto-fill, minmax(95.5px, 1fr));
+        padding: 16px 7.5px;
+    }
+}
+
+// /////////////////////////////////////////////////////////////////////////////////////
+</style>
