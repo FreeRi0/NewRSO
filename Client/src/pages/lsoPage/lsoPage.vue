@@ -64,29 +64,24 @@
                 >
             </div>
         </div>
-        <AboutSquad></AboutSquad>
+        <section class="about-squad">
+            <h3>Об отряде</h3>
+            <p>
+                {{ squad.about }}
+            </p>
+        </section>
         <v-row class="mt-8">
             <v-col v-for="n in 4" :key="n" class="d-flex">
                 <photos></photos>
             </v-col>
         </v-row>
         <SquadParticipants></SquadParticipants>
-        <router-link
-            :to="{
-                name: 'allparticipants',
-                params: { id: squad.id },
-            }"
-        >
-            <div class="squad-participants__link">
-                Показать всех
-            </div></router-link
-        >
+       
     </div>
 </template>
 <script setup>
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerComp } from '@features/baner/components';
-import AboutSquad from './components/AboutSquad.vue';
 import { photos } from '@shared/components/imagescomp';
 import SquadParticipants from './components/SquadParticipants.vue';
 import { ref, onMounted } from 'vue';
@@ -234,6 +229,31 @@ const pages = [
     display: flex;
     justify-content: space-between;
     margin: 16px 16px 0px 0px;
+}
+
+section.about-squad {
+    margin-top: 60px;
+}
+.about-squad h3 {
+    color: #35383f;
+    font-family: 'Akrobat';
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.about-squad p {
+    /* отступы */
+    margin-top: 40px;
+    margin-bottom: 40px;
+    /*  */
+    color: #1e1e1e;
+    font-family: 'BertSans';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 @media (max-width: 1110px) {

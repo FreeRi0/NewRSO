@@ -5,11 +5,11 @@
         v-if="headquarters.length > 0"
     >
         <div class="round-img">
-            <img :src="'./assets/logo/' + headquarter.image" alt="logo" />
+            <img :src="headquarter.regional_headquarters.emblem" alt="logo" />
         </div>
         <div class="container-headquarters">
             <p class="headquarters-wrapper__item-title">
-                {{ headquarter.desc }}
+                {{ headquarter.regional_headquarters.name }}
             </p>
         </div>
     </div>

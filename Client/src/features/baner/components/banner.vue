@@ -1,8 +1,8 @@
 <template>
     <div class="user-metric">
         <bannerPhoto></bannerPhoto>
-        <Avatar></Avatar>
-        <!-- <testUpload></testUpload> -->
+        <!-- <Avatar></Avatar> -->
+        <testUpload></testUpload>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
@@ -26,22 +26,13 @@
                         <li v-if="education">
                             <p>Курс{{ education.study_year }}</p>
                         </li>
-                        <li v-if="user" class="user-data__regional-office">
-                            <p>{{ user.region }}</p>
+                        <li v-if="region" class="user-data__regional-office">
+                            <p>{{ region.name }}</p>
                         </li>
                     </ul>
                 </div>
                 <!-- Контакты пользователя  -->
             </div>
-            <!--alferovsergio-->
-
-            <!--DQ2>uME143Da-->
-
-
-            <!--IvanovIvan-->
-
-            <!--'u2,l7C!\2J4-->
-
         </div>
     </div>
 </template>
@@ -50,11 +41,15 @@ import { ref, onMounted } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
-let user = ref(null);
+import { useRoute } from 'vue-router';
+
+let user = ref({});
 let education = ref(null);
 let region = ref(null);
+const route = useRoute();
+const id = route.params.id;
 const getUser = async () => {
-    await HTTP.get('/users/me/', {
+    await HTTP.get(`/users/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -70,7 +65,7 @@ const getUser = async () => {
 };
 
 const getEducation = async () => {
-    await HTTP.get('users/me/education', {
+    await HTTP.get('/users/me/education', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -85,9 +80,26 @@ const getEducation = async () => {
         });
 };
 
+const getRegion = async () => {
+    await HTTP.get('/regions/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            region.value = response.data;
+            console.log(region.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
+
 onMounted(() => {
     getUser();
     getEducation();
+    getRegion();
 });
 
 // const getRegion = async (id) => {

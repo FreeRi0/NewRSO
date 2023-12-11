@@ -24,6 +24,8 @@
     </div>
 </template>
 <script setup>
+import {ref} from 'vue';
+const showPassword = ref(false);
 const emit = defineEmits(['update:value']);
 const props = defineProps({
     error: {

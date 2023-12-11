@@ -1,6 +1,7 @@
 <template>
     <div class="container">
         <div class="participants">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="participants-title">Участники ЛСО</h2>
             <div class="participants-tabs">
                 <v-btn
@@ -109,14 +110,17 @@ import {
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { useRoute } from 'vue-router';
 // import participants from '@entities/Participants/participants';
 
 const participants = ref([]);
 const participantsVisible = ref(12);
 
-const step = ref(12);
 
+
+const step = ref(12);
+const position = ref({});
 const route = useRoute();
 const id = route.params.id;
 
@@ -135,9 +139,17 @@ const aboutMembers = async () => {
             console.log('an error occured ' + error);
         });
 };
+
 onMounted(() => {
     aboutMembers();
 });
+
+const pages = [
+    { pageTitle: 'Структура', href: '/UserPage' },
+    { pageTitle: 'ЛСО', href: '/AllSquads' },
+    { pageTitle: 'Отряд', href: '/lso/:id' },
+    { pageTitle: 'Участники отряда', href: '#' },
+];
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');

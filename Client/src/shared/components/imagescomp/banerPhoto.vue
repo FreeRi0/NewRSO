@@ -3,17 +3,16 @@
         <div class="user-metric__top-img-wrapper">
             <!-- Заглушка Банер -->
 
-            <img
+            <!-- <img
                 :src="imgDataUrl.banner"
                 alt="Баннер личной страницы"
                 v-if="imgDataUrl"
                 v-show="true"
-            />
+            /> -->
 
             <img
                 src="@/app/assets/user-banner.jpg"
                 alt="Баннер личной страницы(пусто)"
-                v-else
             />
             <!-- url="http://127.0.0.1:8000/api/v1/users/me/media/" -->
 
@@ -24,9 +23,9 @@
                 @crop-upload-fail="cropUploadFail"
                 v-model="show"
                 :width="1100"
+                @change="onChangeFileUpload"
                 :height="200"
                 :params="params"
-                url="/users/me/media/"
                 :headers="headers"
                 :no-circle="true"
                 img-format="jpg"
@@ -109,11 +108,11 @@ const viewBanner = async () => {
         });
 };
 
-viewBanner();
+// viewBanner();
 
-// const onChangeFileUpload = (event) => {
-//     file.value = event.target.files[0];
-// };
+const onChangeFileUpload = (event) => {
+    file.value = event.target.files[0];
+};
 
 const params = ref({
     name: 'banner',
@@ -126,26 +125,26 @@ const headers = ref({
 
 const toggleShow = () => {
     show.value = !show.value;
+    let data = new FormData();
+    data.append('banner', file.value);
+    HTTP.post('/users/me/media/', data, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then(function (response) {
+            console.log(response.data, 'sucsess');
+        })
+        .catch(function (error) {
+            console.log('FAILURE!!', error);
+        });
 };
 
 const cropSuccess = (field, data) => {
     console.log('-------- crop success --------');
     if (field == 'banner') {
         imgDataUrl.value = data;
-    //     let data = new FormData();
-    //     data.append('banner', file.value);
-    //     HTTP.post('/users/me/media/', data, {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data',
-    //             Authorization: 'Token ' + localStorage.getItem('Token'),
-    //         },
-    //     })
-    //         .then(function (response) {
-    //             console.log(response.data, 'sucsess');
-    //         })
-    //         .catch(function (error) {
-    //             console.log('FAILURE!!', error);
-    //         });
     }
 };
 

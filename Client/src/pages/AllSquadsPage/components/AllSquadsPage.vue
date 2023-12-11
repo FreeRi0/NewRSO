@@ -1,6 +1,8 @@
 <template>
     <div class="container">
+
         <div class="squads">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
                 label="Создать отряд" link="/CreateLSO"></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
@@ -119,6 +121,7 @@ import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import { sortByEducation } from '@shared/components/selects';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 // import squads from '@entities/Squads/squads';
@@ -126,6 +129,11 @@ import { HTTP } from '@app/http';
 const squads = ref([]);
 const categories = ref([]);
 const educations = ref([]);
+
+const pages = ref([
+    { pageTitle: 'Структура', href: '#' },
+    { pageTitle: 'Отряды', href: '/AllSquads' },
+]);
 
 const getCategories = async () => {
     await HTTP.get('/areas/', {
@@ -303,7 +311,7 @@ body {
 }
 
 .squads {
-    padding: 60px 0px 60px 0px;
+    padding: 40px 0px 60px 0px;
     &-title {
         font-size: 52px;
         @media screen and (max-width: 575px) {

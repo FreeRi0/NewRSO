@@ -119,8 +119,8 @@
                         url="/assets/avatar-user.svg"
                         desc="Фотография пользователя"
                     />
-                    <Button v-if="user" @click="LogOut" label="Выйти"></Button>
-                    <p v-else>Not auth</p>
+                    <!-- <Button v-if="user" @click="LogOut" label="Выйти"></Button>
+                    <p v-else>Not auth</p> -->
                 </div>
             </nav>
         </header>

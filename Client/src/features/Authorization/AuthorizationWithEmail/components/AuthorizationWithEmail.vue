@@ -13,8 +13,9 @@
                     placeholder="Имя"
                     name="name"
                     v-model:value="data.username"
+                    class="username-input"
                 />
-           
+
                  <p v-if="isError">{{ isError}}</p>
                 <PasswordInputVue
                     placeholder="Пароль"

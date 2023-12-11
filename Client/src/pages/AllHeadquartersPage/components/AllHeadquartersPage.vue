@@ -1,6 +1,8 @@
 <template>
     <div class="container">
+
         <div class="headquarters">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
@@ -110,13 +112,13 @@
 
             <div class="headquarters-wrapper" v-show="vertical">
                 <HeadquartersList
-                    :headquarters="sortedHeadquarters"
+                    :headquarters="headquarters"
                 ></HeadquartersList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalHeadquarters
-                    :headquarters="sortedHeadquarters"
+                    :headquarters="headquarters"
                 ></horizontalHeadquarters>
             </div>
             <Button
@@ -142,10 +144,16 @@ import {
 } from '@features/Headquarters/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 // import headquarters from '@entities/HeadquartersData/headquarters';
 
 const headquarters = ref([]);
+
+const pages = ref([
+    { pageTitle: 'Структура', href: '#' },
+    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
+]);
 
 const headquartersVisible = ref(12);
 
@@ -165,6 +173,22 @@ const showVertical = () => {
 const local = ref([]);
 const district = ref([]);
 const regional = ref([]);
+
+const getHeadquarters = async() => {
+    await HTTP.get('/structural_units/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            headquarters.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
 
 const getLocals = async () => {
     await HTTP.get('/locals/', {
@@ -218,6 +242,7 @@ onMounted(() => {
     getLocals();
     getRegional();
     getDistrict();
+    getHeadquarters();
 });
 
 const selectedSort = ref(0);
@@ -286,7 +311,7 @@ const sortedHeadquarters = computed(() => {
 </script>
 <style lang="scss" scoped>
 .headquarters {
-    padding: 60px 0px 60px 0px;
+    padding: 40px 0px 60px 0px;
     &-title {
         margin-bottom: 40px;
         font-size: 52px;

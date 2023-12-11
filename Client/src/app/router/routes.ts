@@ -70,7 +70,16 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/RegionalHQPage/RegionalHQPage.vue'),
             },
             {
-                path: 'UserPage',
+                path: '/UserPage',
+                name: 'userpagemY',
+                component: () =>
+                    import('@pages/UserPage/components/UserPage.vue'),
+                    meta: {
+                        requiresAuth: true
+                    }
+            },
+            {
+                path: '/UserPage/:id',
                 name: 'userpage',
                 component: () =>
                     import('@pages/UserPage/components/UserPage.vue'),

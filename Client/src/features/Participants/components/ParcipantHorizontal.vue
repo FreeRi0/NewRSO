@@ -4,15 +4,21 @@
         v-for="participant in participants"
     >
         <div class="horizontallso-img">
-            <img :src="'./assets/' + participant.image" alt="logo" />
-            <img v-if="participant.useIcon"
-                class="horizontallso-item__list-img-status"
-                :src="'./assets/icon/' + participant.icon"
-                alt="icon"
+            <img
+                :src="participant.user.avatar.photo"
+                alt="photo"
+                v-if="participant.user.avatar"
+            />
+            <img
+                src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                alt="photo"
+                v-else
             />
         </div>
         <div class="containerHorizontal">
-            <p class="horizontallso-item__list-full">{{ participant.user.last_name }}</p>
+            <p class="horizontallso-item__list-full">
+                {{ participant.user.last_name }}
+            </p>
             <div class="horizontallso-item__list-date">
                 <span
                     style="border-left: 2px solid #b6b6b6; padding-right: 8px"
@@ -23,8 +29,6 @@
     </div>
 </template>
 <script setup>
-
-
 const props = defineProps({
     participants: {
         type: Array,
@@ -54,10 +58,13 @@ const props = defineProps({
 }
 
 .horizontallso-img {
-    align-items: center;
-    width: 36px;
-    height: 36px;
-    justify-content: start;
+    img {
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 100%;
+        justify-content: start;
+    }
 }
 
 .horizontallso-item img {
