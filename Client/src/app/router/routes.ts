@@ -165,6 +165,7 @@ const routes: RouteRecordRaw[] = [
                         '@pages/ContributionPage/components/ContributorPay.vue'
                     ),
             },
+            // CreateLSO
             {
                 path: '/CreationOfRS',
                 name: 'CreationOfRS',

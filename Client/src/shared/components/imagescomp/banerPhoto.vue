@@ -84,6 +84,7 @@
         </v-menu>
     </div>
 </template>
+
 <script setup>
 import { ref } from 'vue';
 import myUpload from 'vue-image-crop-upload';
@@ -127,6 +128,7 @@ const deleteFile = () => {
     imgDataUrl.value = '';
 };
 </script>
+
 <style lang="scss">
 .user-metric__top {
     display: grid;

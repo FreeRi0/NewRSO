@@ -12,7 +12,6 @@
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
                             </v-col>
-                            <!-- <div v-if="">обязательно для заполнения</div> -->
                         </v-row>
                     </template>
                     <template v-slot:actions="{ expanded }">
@@ -81,49 +80,13 @@
                                 class="form__input"
                                 placeholder="Например, Штаб СО Алтайского государственного медицинского университета (Штаб СО АГМУ)"
                                 name="name_hq"
-                                v-model:value="v.title.$model"
-                                :error="v.title.$errors"
+                                v-model:value="title"
                                 :maxlength="100"
+                                :clearable="true"
                             />
                             <div class="form__counter">
                                 {{ counterTitle }} / 100
                             </div>
-                        </div>
-                        <div class="form__field">
-                            <label for="select-institution"
-                                >Выберите учебное заведение
-                                <sup class="valid-red">*</sup>
-                            </label>
-                            <Select
-                                variant="outlined"
-                                clearable
-                                :items="institutions"
-                                name="select_institution"
-                                id="select-institution"
-                                placeholder="Например, Алтайский государственный медицинский университет"
-                                v-model:value="v.institution.$model"
-                                :error="v.institution.$errors"
-                            ></Select>
-                        </div>
-
-                        <div class="form__field">
-                            <label for="create-date">Дата основания </label>
-                            <!-- <input
-                                id="create-date"
-                                label="Дата основания"
-                                name="create_date"
-                                type="date"
-                                placeholder=""
-                                ::value="v.date.$model"
-                                :error="v.date.$errors"
-                            /> -->
-                            <Input
-                                class="form__input"
-                                id="create-date"
-                                name="create_date"
-                                type="date"
-                                v-model:value="date"
-                            />
                         </div>
 
                         <div class="form__field">
@@ -138,8 +101,7 @@
                                 name="select_regional-office"
                                 id="select-regional-office"
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
-                                v-model:value="v.regional.$model"
-                                :error="v.regional.$errors"
+                                v-model:value="regional"
                             ></Select>
                         </div>
 
@@ -156,15 +118,15 @@
 
                         <div class="form__field">
                             <label for="beast"
-                                >Командир штаба СО ОО:
+                                >Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
+
                             <Dropdown
                                 :options="leaders"
                                 id="beast"
                                 name="edit_beast"
-                                v-model="v.beast.$model"
-                                :error="v.beast.$errors"
+                                v-model="beast"
                                 :filterPlaceholder="'Поиск по ФИО'"
                                 :resetFilterOnHide="true"
                                 @update:value="changeValue"
@@ -272,36 +234,6 @@
                                 v-model:value="te"
                             />
                         </div>
-
-                        <div class="form__field" v-if="participants">
-                            <p>
-                                Участники отряда
-                                <sup class="valid-red">*</sup>
-                            </p>
-                            <v-text-field
-                                class="form__field-search"
-                                variant="outlined"
-                                type="text"
-                                placeholder="Поиск по ФИО"
-                                v-model="searchMembers"
-                            >
-                                <template #prepend-inner>
-                                    <Icon
-                                        icon="clarity-search-line"
-                                        color="#222222"
-                                        width="24"
-                                        height="24"
-                                    >
-                                    </Icon>
-                                </template>
-                            </v-text-field>
-                            <MembersList
-                                :items="sortedMembers"
-                                :validate="v"
-                                :submited="submited"
-                                @updateMember="onUpdateMember"
-                            ></MembersList>
-                        </div>
                     </div>
 
                     <v-card-actions class="form__button-group">
@@ -386,6 +318,174 @@
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
+                         <!-- /////////////////////////////////////////////// -->
+
+                        <div class="test">
+                            <div class="form__field form_width">
+                            <label for="rs-ofDate"
+                                >Официальная дата (год) появления студенческих
+                                отрядов в регионе
+                            </label>
+                            <Input
+                                class="form__input"
+                                type="number"
+                                id="rs-ofYear"
+                                placeholder="1971"
+                                name="rs-ofYear"
+                                v-model:value="ofYear"
+                                :minlength="4"
+                                :maxlength="4"
+                            />
+                        </div>
+
+                        <div class="form__field form_width">
+                            <label for="rs-confDate"
+                                >Дата учредительной конференции регионального
+                                штаба
+                            </label>
+                            <Input
+                                class="form__input"
+                                type="date"
+                                value="2005-10-12"
+                                id="rs-confDate"
+                                name="rs-confDate"
+                                v-model:value="confDate"
+                            />
+                        </div>
+
+                        <div class="form__field form_width">
+                            <label for="rs-regNumber"
+                                >Регистрационный номер в реестре молодежных и
+                                детских общественных объединений, пользующихся
+                                государственной поддержкой
+                            </label>
+                            <Input
+                                class="form__input"
+                                type="number"
+                                placeholder="б/н"
+                                id="rs-regNumber"
+                                name="rs-regNumber"
+                                v-model:value="regNumber"
+                            />
+                        </div>
+
+                        <div class="form__field form_width">
+                            <label for="rs-registryDate"
+                                >Дата регистрации в реестре молодежных и детских
+                                общественных объединений, пользующихся
+                                государственной поддержкой
+                            </label>
+                            <Input
+                                class="form__input"
+                                type="date"
+                                value="2020-08-21"
+                                id="rs-registryDate"
+                                name="rs-registryDate"
+                                v-model:value="registryDate"
+                            />
+                        </div>
+                        </div>
+
+                         <!-- /////////////////////////////////////////////// -->
+                        <div class="form__field">
+                            <label for="rs-regNameI"
+                                >Наименование регионального отделения в
+                                Именительном падеже (для справок)
+                            </label>
+                            <Input
+                                class="form__input"
+                                type="text"
+                                id="rs-regNameI"
+                                placeholder="Например, Новосибирское региональное отделение"
+                                name="rs-regNameI"
+                                v-model:value="regNameI"
+                                :maxlength="100"
+                            />
+                            <div class="form__counter">
+                                {{ counterRegNameI }} / 100
+                            </div>
+                        </div>
+                        <div class="form__field">
+                            <label for="rs-regNameP"
+                                >Наименование регионального отделения в
+                                Предложном падеже (для справок)
+                            </label>
+                            <Input
+                                class="form__input"
+                                type="text"
+                                id="rs-regNameP"
+                                placeholder="Например, Новосибирское региональное отделение"
+                                name="rs-regNameP"
+                                v-model:value="regNameP"
+                                :maxlength="100"
+                            />
+                            <div class="form__counter">
+                                {{ counterRegNameP }} / 100
+                            </div>
+                        </div>
+                        <div class="form__field">
+                            <label for="rs-address"
+                                >Юридический адрес регионального отделения (для
+                                справок)
+                            </label>
+                            <Input
+                                class="form__input"
+                                type="text"
+                                id="rs-address"
+                                placeholder="Например, 630005, г. Новосибирск, ул. Некрасова, д. 48, тел/факс (383)-210-38-71, электронная почта studnso@mail.ru."
+                                name="rs-address"
+                                v-model:value="address"
+                                :maxlength="200"
+                            />
+                            <div class="form__counter">
+                                {{ counterAddress }} / 200
+                            </div>
+                        </div>
+                        <!-- <div class="form__field">
+                            <label for="rs-requisites"
+                                >Реквизиты регионального отделения (для справок)
+                            </label>
+
+                            <Input
+                                class="form__input"
+                                type="text"
+                                id="rs-requisites"
+                                placeholder="Например, Расчетный счет 40703810695240700029 в филиале Сибирский ПАО Банк «ФК Открытие» г. Новосибирск, к/с 30101810250040000867, БИК 045004867, ИНН/КПП 5406970383/540601001, ОГРН 1115400003201."
+                                name="rs-requisites"
+                                v-model:value="requisites"
+                                :maxlength="500"
+                            />
+                            <textarea
+                                class="form_textarea scroll"
+                                name="rs-requisites"
+                                id="rs-requisites"
+                                rows="2"
+                                placeholder="Например, Расчетный счет 40703810695240700029 в филиале Сибирский ПАО Банк «ФК Открытие» г. Новосибирск, к/с 30101810250040000867, БИК 045004867, ИНН/КПП 5406970383/540601001, ОГРН 1115400003201."
+                                :maxlength="500"
+                                v-model="requisites"
+                            ></textarea>
+
+                            <div class="form__counter">
+                                {{ counterRequisites }} / 500
+                            </div>
+                        </div> -->
+
+                        <div class="form__field">
+                            <label for="rs-requisites">Реквизиты регионального отделения (для справок)</label>
+                            <TextareaAbout
+                                :rows="2"
+                                maxlength="500"
+                                class="form__textarea"
+                                id="rs-requisites"
+                                placeholder="Например, Расчетный счет 40703810695240700029 в филиале Сибирский ПАО Банк «ФК Открытие» г. Новосибирск, к/с 30101810250040000867, БИК 045004867, ИНН/КПП 5406970383/540601001, ОГРН 1115400003201."
+                                name="rs-requisites"
+                                v-model:value="requisites"
+                            ></TextareaAbout>
+                            <div class="form__counter">
+                                {{ counterRequisites }} / 500
+                            </div>
+                        </div>
+
                         <div class="form__field">
                             <label for="hq-slogan">Девиз штаба</label>
                             <Input
@@ -401,6 +501,7 @@
                                 {{ counterSlogan }} / 100
                             </div>
                         </div>
+
                         <div class="form__field">
                             <label for="about-hq">О штабе</label>
                             <TextareaAbout
@@ -408,12 +509,12 @@
                                 maxlength="500"
                                 class="form__textarea"
                                 id="about-hq"
-                                placeholder="Расскажите о штабе"
+                                placeholder="Описание регионального штаба"
                                 name="about_hq"
                                 v-model:value="about"
                             ></TextareaAbout>
                             <div class="form__counter">
-                                {{ counterAbout }} / 500
+                                {{ counterAbout }} / 1000
                             </div>
                         </div>
 
@@ -505,8 +606,6 @@ const props = defineProps({
 const submited = ref(false);
 
 const title = ref(props.unit.title);
-const date = ref(props.unit.date);
-const institution = ref(props.unit.institution);
 const city = ref(props.unit.city);
 const regional = ref(props.unit.regional);
 const beast = ref(props.unit.beast);
@@ -514,15 +613,19 @@ const vk = ref(props.unit.vk);
 const te = ref(props.unit.te);
 const slogan = ref(props.unit.slogan);
 const about = ref(props.unit.about);
-
 const avatar = ref(props.unit.avatar);
 const banner = ref(props.unit.banner);
+const regNameI = ref(props.unit.regNameI);
+const regNameP = ref(props.unit.regNameP);
+const address = ref(props.unit.address);
+const requisites = ref(props.unit.requisites);
+const ofYear = ref(props.unit.ofYear);
+const confDate = ref(props.unit.confDate);
+const regNumber = ref(props.unit.regNumber);
+const registryDate = ref(props.unit.registryDate);
 
 const rules = computed(() => ({
     title: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    institution: {
         required: helpers.withMessage(`* обязательно для заполнения`, required),
     },
     regional: {
@@ -535,7 +638,6 @@ const rules = computed(() => ({
 
 const v = useVuelidate(rules, {
     title,
-    institution,
     regional,
     beast,
 });
@@ -564,7 +666,6 @@ const UploadData = async () => {
 
 //----------------------------------------------------------------------------------------------------------
 const counterTitle = computed(() => {
-    // console.log(title.value.length);
     return title.value.length || 0;
 });
 
@@ -575,6 +676,23 @@ const counterSlogan = computed(() => {
 const counterAbout = computed(() => {
     return about.value.length || 0;
 });
+
+const counterRegNameI = computed(() => {
+    return regNameI.value.length || 0;
+});
+
+const counterRegNameP = computed(() => {
+    return regNameP.value.length || 0;
+});
+
+const counterAddress = computed(() => {
+    return address.value.length || 0;
+});
+
+const counterRequisites = computed(() => {
+    return requisites.value.length || 0;
+});
+
 //----------------------------------------------------------------------------------------------------------
 const panel = ref();
 
@@ -593,18 +711,6 @@ const openPanelThree = () => {
 const showButtonPrev = computed(() => {
     return panel.value === 'panelThree';
 });
-
-const institutions = ref([
-    { title: 'Алтайский государственный медицинский университет' },
-    { title: 'Амурская государственная медицинская академия' },
-    { title: 'Амурский государственный университет' },
-    { title: 'Владивостокский государственный медицинский университет' },
-    {
-        title: 'Владивостокский государственный университет экономики и сервиса',
-    },
-    { title: 'Дальневосточный государственный технический университет' },
-    { title: 'Дальневосточный федеральный университет' },
-]);
 
 const regionalOffices = ref([
     { title: 'Карачаево-Черкесское региональное отделение' },
@@ -830,5 +936,56 @@ const changeValue = (event) => {
         border: 2px solid #35383f;
         background-color: #ffffff;
     }
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.form_textarea {
+    border: 2px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 12px;
+    padding: 10px 16px 10px 16px;
+    margin-bottom: 20px;
+    width: 100%;
+    resize: none;
+}
+
+.scroll {
+    &::-webkit-scrollbar {
+        /*стили полосы прокрутки */
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        /*стили зоны отслеживания */
+        background: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #898989;
+        margin: 4px 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        /*стили бегунка */
+        width: 8px;
+        border-radius: 10px;
+        border: 1px solid #ffffff;
+        background-color: #35383f;
+    }
+}
+
+.test {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.form_width {
+    width: 46%;
 }
 </style>
