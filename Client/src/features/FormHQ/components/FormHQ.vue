@@ -97,12 +97,12 @@
                             <Select
                                 variant="outlined"
                                 clearable
-                                :items="institutions"
                                 name="select_institution"
                                 id="select-institution"
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model:value="v.institution.$model"
                                 :error="v.institution.$errors"
+                                address="api/v1/regions/"
                             ></Select>
                         </div>
 
@@ -134,12 +134,12 @@
                             <Select
                                 variant="outlined"
                                 clearable
-                                :items="regionalOffices"
                                 name="select_regional-office"
                                 id="select-regional-office"
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
                                 v-model:value="v.regional.$model"
                                 :error="v.regional.$errors"
+                                address="api/v1/regions/"
                             ></Select>
                         </div>
 
