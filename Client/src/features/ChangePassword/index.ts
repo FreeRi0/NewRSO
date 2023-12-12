@@ -1,0 +1,1 @@
+export { default as changePassword} from './components/changePassword.vue';

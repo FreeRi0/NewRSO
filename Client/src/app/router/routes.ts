@@ -54,13 +54,45 @@ const routes: RouteRecordRaw[] = [
                 path: '/AllHeadquarters',
                 name: 'allheadquarters',
                 component: () =>
-                    import('@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'),
+                    import(
+                        '@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'
+                    ),
             },
             {
                 path: '/AllParticipants',
                 name: 'allparticipants',
                 component: () =>
-                    import('@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'),
+                    import(
+                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                    ),
+            },
+            {
+                path: '/ChangeData',
+                name: 'changeData',
+                component: () =>
+                    import('@pages/ChangeData/components/changeData.vue'),
+            },
+            {
+                path: '/PrivateProfileData',
+                name: 'privateProfileData',
+                component: () =>
+                    import(
+                        '@pages/PrivateProfileData/components/privateProfileData.vue'
+                    ),
+            },
+            {
+                path: '/HelpInfoData',
+                name: 'HelpInfoData',
+                component: () =>
+                    import('@pages/HelpInfoData/components/HelpInfoData.vue'),
+            },
+            {
+                path: '/ActiveApplicationsData',
+                name: 'ActiveApplicationsData',
+                component: () =>
+                    import(
+                        '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'
+                    ),
             },
         ],
     },
