@@ -13,7 +13,11 @@
         </template>
 
         <template v-slot:item="{ props, item }">
-            <v-list-item v-bind="props" :title="item?.raw?.name"></v-list-item>
+            <v-list-item
+                v-bind="props"
+                :title="item?.raw?.name"
+                class="form__select-item"
+            ></v-list-item>
         </template>
     </v-select>
     <!-- <TransitionGroup>

@@ -2,7 +2,7 @@
     <form
         class="form"
         enctype="multipart/form-data"
-        @submit.prevent="UploadData"
+        @submit.prevent="createHeadquarter"
     >
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
@@ -81,8 +81,7 @@
                                 class="form__input"
                                 placeholder="Например, Штаб СО Алтайского государственного медицинского университета (Штаб СО АГМУ)"
                                 name="name_hq"
-                                v-model:value="v.title.$model"
-                                :error="v.title.$errors"
+                                v-model:value="headquarter.name"
                                 :maxlength="100"
                             />
                             <div class="form__counter">
@@ -100,9 +99,10 @@
                                 name="select_institution"
                                 id="select-institution"
                                 placeholder="Например, Алтайский государственный медицинский университет"
-                                v-model:value="v.institution.$model"
-                                :error="v.institution.$errors"
-                                address="api/v1/regions/"
+                                v-model:value="
+                                    headquarter.educational_institution
+                                "
+                                address="api/v1/eduicational_institutions/"
                             ></Select>
                         </div>
 
@@ -122,10 +122,11 @@
                                 id="create-date"
                                 name="create_date"
                                 type="date"
-                                v-model:value="date"
+                                v-model:value="headquarter.founding_date"
                             />
                         </div>
 
+                        <!-- создать api и поле для регионального отделения -->
                         <div class="form__field">
                             <label for="select-regional-office"
                                 >Выберите региональное отделение
@@ -137,9 +138,10 @@
                                 name="select_regional-office"
                                 id="select-regional-office"
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
-                                v-model:value="v.regional.$model"
-                                :error="v.regional.$errors"
-                                address="api/v1/regions/"
+                                v-model:value="
+                                    headquarter.educational_institution
+                                "
+                                address="api/v1/regionals/"
                             ></Select>
                         </div>
 
@@ -150,7 +152,7 @@
                                 id="city"
                                 placeholder="Например, Барнаул"
                                 name="edit_city"
-                                v-model:value="city"
+                                v-model:value="headquarter.city"
                             />
                         </div>
 
@@ -160,14 +162,11 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
-                                :options="leaders"
                                 id="beast"
                                 name="edit_beast"
-                                v-model="v.beast.$model"
-                                :error="v.beast.$errors"
-                                :filterPlaceholder="'Поиск по ФИО'"
-                                :resetFilterOnHide="true"
+                                v-model="headquarter.commander"
                                 @update:value="changeValue"
+                                address="api/v1/users/"
                             ></Dropdown>
                         </div>
                     </div>
@@ -175,6 +174,7 @@
                     <v-card-actions class="form__button-group">
                         <Button
                             variant="text"
+                            type="button"
                             class="form-button form-button--next"
                             label="Далее"
                             size="large"
@@ -256,7 +256,7 @@
                                 id="social-media-vk"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
-                                v-model:value="vk"
+                                v-model:value="headquarter.social_vk"
                             />
                         </div>
 
@@ -269,7 +269,7 @@
                                 id="social-media-te"
                                 placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                 name="social_media_te"
-                                v-model:value="te"
+                                v-model:value="headquarter.social_tg"
                             />
                         </div>
 
@@ -308,6 +308,7 @@
                         <Button
                             class="form-button form-button--prev"
                             variant="text"
+                            type="button"
                             label="Назад"
                             size="large"
                             @click="openPanelOne"
@@ -315,6 +316,7 @@
                         <Button
                             class="form-button form-button--next"
                             variant="text"
+                            type="button"
                             label="Далее"
                             size="large"
                             @click="openPanelThree"
@@ -394,7 +396,7 @@
                                 id="hq-slogan"
                                 placeholder="Например, через тернии к звездам"
                                 name="hq_slogan"
-                                v-model:value="slogan"
+                                v-model:value="headquarter.slogan"
                                 :maxlength="100"
                             />
                             <div class="form__counter">
@@ -410,19 +412,19 @@
                                 id="about-hq"
                                 placeholder="Расскажите о штабе"
                                 name="about_hq"
-                                v-model:value="about"
+                                v-model:value="headquarter.about"
                             ></TextareaAbout>
                             <div class="form__counter">
                                 {{ counterAbout }} / 500
                             </div>
                         </div>
 
-                        <div class="form__field">
+                        <!-- <div class="form__field">
                             <label for="upload-logo">Добавьте логотип</label>
                             <Avatar
                                 name="upload_logo"
                                 id="upload-logo"
-                                v-model:value="avatar"
+                                v-model:value="headquarter.emblem"
                             />
                             <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
@@ -434,12 +436,12 @@
                             <bannerPhoto
                                 name="upload_banner"
                                 id="upload-banner"
-                                v-model:value="banner"
+                                v-model:value="headquarter.banner"
                             />
                             <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
-                        </div>
+                        </div> -->
                     </div>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -448,12 +450,13 @@
                     v-show="showButtonPrev"
                     class="form-button form-button--prev"
                     variant="text"
+                    type="button"
                     label="Назад"
                     size="large"
                     @click="openPanelTwo"
                 ></Button>
                 <Button
-                    type="text"
+                    type="submit"
                     class="form-button"
                     variant="text"
                     label="Сохранить"
@@ -496,84 +499,132 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    unit: {
-        type: Object,
-        default: () => ({}),
-    },
+    // unit: {
+    //     type: Object,
+    //     default: () => ({}),
+    // },
 });
 
-const submited = ref(false);
-
-const title = ref(props.unit.title);
-const date = ref(props.unit.date);
-const institution = ref(props.unit.institution);
-const city = ref(props.unit.city);
-const regional = ref(props.unit.regional);
-const beast = ref(props.unit.beast);
-const vk = ref(props.unit.vk);
-const te = ref(props.unit.te);
-const slogan = ref(props.unit.slogan);
-const about = ref(props.unit.about);
-
-const avatar = ref(props.unit.avatar);
-const banner = ref(props.unit.banner);
-
-const rules = computed(() => ({
-    title: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    institution: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    regional: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    beast: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-}));
-
-const v = useVuelidate(rules, {
-    title,
-    institution,
-    regional,
-    beast,
+const headquarter = ref({
+    name: '',
+    founding_date: '',
+    city: '',
+    educational_institution: null,
+    //региональное отделение??????????? : null,
+    commander: null,
+    social_vk: '',
+    social_tg: '',
+    slogan: '',
+    about: '',
+    emblem: '',
+    banner: '',
 });
 
 const swal = inject('$swal');
 
-const UploadData = async () => {
-    v.value.$touch();
-    if (v.value.$error) {
-        swal.fire({
-            icon: 'error',
-            title: 'Упсс...',
-            text: 'Что-то пошло не так!',
+const createHeadquarter = async () => {
+    axios
+        .post('api/v1/educationals/', headquarter.value, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            headquarter.value = response.data;
+            console.log(response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        })
+        .catch((error) => {
+            console.error('There was an error!', error);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
-    } else {
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'Данные успешно сохранены',
-            showConfirmButton: false,
-            timer: 1500,
-        });
-        // функция очистки полей формы после успешной отправки данных на сервер
-    }
 };
+
+const submited = ref(false);
+
+// const title = ref(props.unit.title);
+// const date = ref(props.unit.date);
+// const institution = ref(props.unit.institution);
+// const city = ref(props.unit.city);
+// const regional = ref(props.unit.regional);
+// const beast = ref(props.unit.beast);
+// const vk = ref(props.unit.vk);
+// const te = ref(props.unit.te);
+// const slogan = ref(props.unit.slogan);
+// const about = ref(props.unit.about);
+
+// const avatar = ref(props.unit.avatar);
+// const banner = ref(props.unit.banner);
+
+// const rules = computed(() => ({
+//     title: {
+//         required: helpers.withMessage(`* обязательно для заполнения`, required),
+//     },
+//     institution: {
+//         required: helpers.withMessage(`* обязательно для заполнения`, required),
+//     },
+//     regional: {
+//         required: helpers.withMessage(`* обязательно для заполнения`, required),
+//     },
+//     beast: {
+//         required: helpers.withMessage(`* обязательно для заполнения`, required),
+//     },
+// }));
+
+// const v = useVuelidate(rules, {
+//     title,
+//     institution,
+//     regional,
+//     beast,
+// });
+
+// const swal = inject('$swal');
+
+// const UploadData = async () => {
+//     v.value.$touch();
+//     if (v.value.$error) {
+//         swal.fire({
+//             icon: 'error',
+//             title: 'Упсс...',
+//             text: 'Что-то пошло не так!',
+//         });
+//     } else {
+//         swal.fire({
+//             position: 'top-center',
+//             icon: 'success',
+//             title: 'Данные успешно сохранены',
+//             showConfirmButton: false,
+//             timer: 1500,
+//         });
+//         // функция очистки полей формы после успешной отправки данных на сервер
+//     }
+// };
 
 //----------------------------------------------------------------------------------------------------------
 const counterTitle = computed(() => {
     // console.log(title.value.length);
-    return title.value.length || 0;
+    return headquarter.value.name.length || 0;
 });
 
 const counterSlogan = computed(() => {
-    return slogan.value.length || 0;
+    return headquarter.value.slogan.length || 0;
 });
 
 const counterAbout = computed(() => {
-    return about.value.length || 0;
+    return headquarter.value.about.length || 0;
 });
 //----------------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -815,7 +866,7 @@ const changeValue = (event) => {
 .form-button {
     width: 132px;
     min-height: 52px;
-    margin: 0;
+    margin: 0 10px;
     padding: 16px 32px;
     font-family: 'Bert Sans';
     font-size: 16px;

@@ -89,12 +89,15 @@ const changeValue = (e) => {
 }
 
 .form-input input {
-    border: 2px solid #a3a3a3;
-  border-radius: 10px;
-  display: block;
-  font-size: 12px;
-  padding: 10px 16px 10px 16px;
-  margin-bottom: 20px;
-  width: 100%;
+    border: 1px solid #a3a3a3;
+    box-sizing: border-box;
+    border-radius: 10px;
+    display: block;
+    font-size: 16px;
+    line-height: 24px;
+    padding: 8px 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-height: 40px;
 }
 </style>

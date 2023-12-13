@@ -1,61 +1,37 @@
 <template>
-    <Dropdown
+    <v-autocomplete
         v-model="selected"
-        :options="items"
-        showClear
-        filter
-        :filterPlaceholder="filterPlaceholder"
-        :resetFilterOnHide="resetFilterOnHide"
-        optionLabel="title"
-        placeholder="Поиск по ФИО"
+        :items="items"
+        chips
+        clearable
+        variant="outlined"
+        item-title="last_name"
+        item-value="id"
+        :custom-filter="customFilter"
         v-bind="$attrs"
         @update:value="changeValue"
+        :address="address"
+        :no-data-text="noDataText"
+        class="option"
     >
-        <template #value="slotProps">
-            <div v-if="slotProps.value" class="option__content">
-                <div class="option__image">
-                    <img
-                        v-if="slotProps.value.img"
-                        :src="
-                            './assets/foto-leader-squad/' +
-                            slotProps.value.srcImg
-                        "
-                        alt="Фото бойца"
-                    />
-                    <img
-                        v-else
-                        src="@app/assets/foto-leader-squad/foto-leader-squad-stub.png"
-                        alt="'Фото бойца (заглушка)'"
-                    />
-                </div>
-                <div class="option__status" v-if="slotProps.value.logo">
-                    <img
-                        :src="
-                            './assets/icon/icon-status/' +
-                            slotProps.value.iconStatus
-                        "
-                        alt="Статус бойца"
-                    />
-                </div>
-                <div class="option__wrapper">
-                    <p class="option__title">{{ slotProps.value.title }}</p>
-                    <p class="option__date">{{ slotProps.value.date }}</p>
-                </div>
-            </div>
-
-            <span v-else>
-                {{ slotProps.placeholder }}
-            </span>
+        <template #prepend-inner>
+            <Icon
+                icon="clarity-search-line"
+                color="#222222"
+                width="24"
+                height="24"
+                class="option__icon"
+            >
+            </Icon>
         </template>
-        <template #option="slotProps">
+        <template v-slot:chip="{ props, item }">
             <div class="option__content">
-                <div class="option__image">
+                <!-- Не работает код ниже, картинка не подгружается -->
+
+                <!-- <div class="option__image">
                     <img
-                        v-if="slotProps.option.img"
-                        :src="
-                            './assets/foto-leader-squad/' +
-                            slotProps.option.srcImg
-                        "
+                        v-if="item?.raw?.media.photo"
+                        :src="item?.raw?.media.photo"
                         alt="Фото бойца"
                     />
                     <img
@@ -63,33 +39,70 @@
                         :src="'./assets/foto-leader-squad/foto-leader-squad-stub.png'"
                         alt="'Фото бойца (заглушка)'"
                     />
-                </div>
-                <div class="option__status" v-if="slotProps.option.logo">
-                    <img
-                        :src="
-                            './assets/icon/icon-status/' +
-                            slotProps.option.iconStatus
-                        "
-                        alt="Статус бойца"
-                    />
-                </div>
+                </div> -->
                 <div class="option__wrapper">
-                    <p class="option__title">{{ slotProps.option.title }}</p>
-                    <p class="option__date">{{ slotProps.option.date }}</p>
+                    <p class="option__title">
+                        {{
+                            item.raw.last_name +
+                            item.raw.first_name +
+                            item.raw.patronymic_name
+                        }}
+                    </p>
+                    <p class="option__date">
+                        {{ item.raw.date_of_birth }}
+                    </p>
                 </div>
             </div>
+            <!-- <span v-else>
+                {{ item.placeholder }}
+                
+            </span> -->
         </template>
-    </Dropdown>
-    <TransitionGroup>
+
+        <template v-slot:item="{ props, item }">
+            <v-container v-bind="props">
+                <div class="option__content">
+                    <!-- Не работает код ниже, картинка не подгружается -->
+
+                    <!-- <div class="option__image">
+                        <img
+                            v-if="item?.raw?.media.photo"
+                            :src="item?.raw?.media.photo"
+                            alt="Фото бойца"
+                        />
+                        <img
+                            v-else
+                            :src="'./assets/foto-leader-squad/foto-leader-squad-stub.png'"
+                            alt="'Фото бойца (заглушка)'"
+                        />
+                    </div> -->
+                    <div class="option__wrapper">
+                        <p class="option__title">
+                            {{
+                                item?.raw?.last_name +
+                                item?.raw?.first_name +
+                                item?.raw?.patronymic_name
+                            }}
+                        </p>
+                        <p class="option__date">
+                            {{ item?.raw?.date_of_birth }}
+                        </p>
+                    </div>
+                </div>
+            </v-container>
+        </template>
+    </v-autocomplete>
+    <!-- <TransitionGroup>
         <div class="error-wrapper" v-for="element of error" :key="element.$uid">
             <div class="form-error__message">{{ element.$message }}</div>
         </div>
-    </TransitionGroup>
+    </TransitionGroup> -->
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import Dropdown from 'primevue/dropdown';
+import { ref, onMounted } from 'vue';
+import { Icon } from '@iconify/vue';
+import axios from 'axios';
 
 defineOptions({
     inheritAttrs: false,
@@ -98,32 +111,60 @@ defineOptions({
 const emit = defineEmits(['update:value']);
 
 const props = defineProps({
-    error: {
+    // error: {
+    //     type: Array,
+    //     required: false,
+    // },
+
+    items: {
         type: Array,
-        required: false,
+        default: () => [],
     },
-    filterPlaceholder: {
+    address: {
         type: String,
         default: '',
     },
-    resetFilterOnHide: {
-        type: Boolean,
-        default: false,
-    },
-    filtericon: {
-        type: Boolean,
-        default: true,
+    noDataText: {
+        type: String,
+        default: 'Ничего не найдено...',
     },
 });
 
 const selected = ref(null);
 
-const items = ref([]);
-
 const changeValue = (event) => {
     console.log(event);
     emit('update:value', event);
 };
+
+const customFilter = (itemTitle, queryText, item) => {
+    const textOne = item.raw.last_name.toLowerCase();
+    const textTwo = item.raw.first_name.toLowerCase();
+
+    const searchText = queryText.toLowerCase();
+
+    return textOne.indexOf(searchText) > -1 || textTwo.indexOf(searchText) > -1;
+};
+
+const items = ref(props.items);
+
+const onChangeItem = async () => {
+    await axios
+        .get(props.address)
+
+        .then((res) => {
+            // console.log(props.address);
+            items.value = res.data;
+            console.log(res.data);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    onChangeItem();
+});
 </script>
 
 <style lang="scss">
@@ -269,6 +310,19 @@ const changeValue = (event) => {
     // max-height: 100px;
     // overflow-y: auto;
     background-color: #ffffff;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    box-sizing: border-box;
+    // max-height: 40px;
+
+    .v-field__input {
+        padding: 1px 0;
+        min-height: 40px;
+        // max-height: 40px;
+    }
+    // &__icon {
+
+    // }
 
     &__content {
         width: 100%;
