@@ -4,7 +4,8 @@
 
         <h1 class="title title--lso">Создание штаба СО ОО</h1>
 
-        <FormHQ :unit="unit"></FormHQ>
+        <!-- <FormHQ :unit="unit"></FormHQ> -->
+        <FormHQ></FormHQ>
     </div>
 </template>
 
@@ -19,20 +20,20 @@ const pages = ref([
     { pageTitle: 'Создание штаба СО ОО', href: '#' },
 ]);
 
-const unit = ref({
-    title: '',
-    institution: null,
-    date: '',
-    regional: null,
-    city: '',
-    beast: '',
-    vk: '',
-    te: '',
-    slogan: '',
-    about: '',
-    avatar: '',
-    banner: '',
-});
+// const unit = ref({
+//     title: '',
+//     institution: null,
+//     date: '',
+//     regional: null,
+//     city: '',
+//     beast: '',
+//     vk: '',
+//     te: '',
+//     slogan: '',
+//     about: '',
+//     avatar: '',
+//     banner: '',
+// });
 </script>
 
 <style lang="scss"></style>
