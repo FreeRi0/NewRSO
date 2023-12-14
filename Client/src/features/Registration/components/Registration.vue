@@ -3,8 +3,15 @@
         <v-card class="px-14 py-15" max-width="580">
             <v-card-title class="text-h4 text-center">Регистрация</v-card-title>
             <v-form action="#" method="post" @submit.prevent="RegisterUser">
-
-                <SelectRegion></SelectRegion>
+                <Select
+                    variant="outlined"
+                    clearable
+                    name="select_region"
+                    id="select-region"
+                    placeholder="Москва"
+                    v-model="form.region"
+                    address="api/v1/regions/"
+                ></Select>
                 <Input
                     placeholder="Фамилия"
                     name="surname"
@@ -53,7 +60,7 @@
                     v-model:value.trim="form.re_password"
                 ></PasswordInputVue>
                 <v-checkbox
-                v-model="form.personal_data_agreement"
+                    v-model="form.personal_data_agreement"
                     label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных*."
                 ></v-checkbox>
 
@@ -64,7 +71,7 @@
                     type="submit"
                     color="primary"
                 >
-              </Button>
+                </Button>
 
                 <v-card-text class="text-center">
                     <router-link to="/"
@@ -100,12 +107,10 @@ import {
     sameAs,
 } from '@vuelidate/validators';
 import { IMaskDirective } from 'vue-imask';
-import {SelectRegion} from '@shared/components/selects'
-
-
-
+import { Select } from '@shared/components/selects';
 
 const form = ref({
+    region: null,
     last_name: '',
     first_name: '',
     patronymic_name: '',
@@ -115,7 +120,7 @@ const form = ref({
     username: '',
     password: '',
     re_password: '',
-    personal_data_agreement: null
+    personal_data_agreement: null,
 });
 
 const isLoading = ref(false);
@@ -201,12 +206,11 @@ const swal = inject('$swal');
 
 const RegisterUser = async () => {
     isLoading.value = true;
-    HTTP
-        .post('/register/', form.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
+    HTTP.post('/register/', form.value, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
         .then((response) => {
             form.value = response.data;
             console.log(response.data);
@@ -219,7 +223,6 @@ const RegisterUser = async () => {
                 timer: 1500,
             });
             router.push('/');
-
         })
 
         .catch((error) => {

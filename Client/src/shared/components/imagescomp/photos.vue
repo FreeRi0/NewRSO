@@ -3,9 +3,9 @@
         <!-- Заглушка по умолчанию  -->
         <div class="avatar-preview my_photo__plug">
             <img
-                :src="squad.photo2"
+                :src="userPhotoUrl.media.photo2"
                 alt="Фото пользователя"
-                v-if="squad.photo2"
+                v-if="userPhotoUrl"
                 v-show="true"
             />
 
@@ -14,26 +14,10 @@
                 alt="Фото пользователя(пусто)"
                 v-else
             />
-
-            <my-upload
-                field="photo"
-                @crop-success="cropSuccess"
-                @crop-upload-success="cropUploadSuccess"
-                @crop-upload-fail="cropUploadFail"
-                v-model="showPhoto"
-                :width="280"
-                :height="370"
-                url="https://httpbin.org/post"
-                :params="params"
-                :headers="headers"
-                :no-circle="true"
-                img-format="jpg"
-                langType="ru"
-            ></my-upload>
         </div>
         <!-- Добавить фото -->
         <div class="avatar-edit my_photo__add">
-            <v-menu min-width="200px" rounded v-if="!squad.photo2">
+            <v-menu min-width="200px" rounded v-if="!userPhotoUrl">
                 <template v-slot:activator="{ props }">
                     <v-btn class="user-metric__baner-add" icon v-bind="props">
                         <v-avatar size="large">
@@ -87,34 +71,23 @@
 </template>
 <script setup>
 import { ref, computed } from 'vue';
-import myUpload from 'vue-image-crop-upload';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-const squad = ref({});
+const userPhotoUrl = ref(null);
 const route = useRoute();
 const id = route.params.id;
 const showPhoto = ref(false);
 
-const params = ref({
-    token: '123456798',
-    name: 'image',
-});
 
-const headers = ref({
-    smail: '*_~',
-});
-
-const imgPhotoUrl = ref(null);
-
-const viewPhoto = async () => {
-    await HTTP.get(`/detachments/${id}/`, {
+const viewUsersPhoto = async () => {
+    await HTTP.get(`/rsousers/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            squad.value = response.data;
+            userPhotoUrl.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
@@ -122,34 +95,8 @@ const viewPhoto = async () => {
         });
 };
 
-viewPhoto();
+viewUsersPhoto();
 
-const addPhoto = () => {
-    showPhoto.value = !showPhoto.value;
-};
-
-const cropSuccess = (data, field) => {
-    console.log('-------- crop success --------');
-    if (field == 'photo') {
-        imgPhotoUrl.value = data;
-    }
-};
-
-const cropUploadSuccess = (data, field) => {
-    console.log('-------- upload success --------');
-    console.log(data);
-    console.log('field: ' + field);
-};
-
-const cropUploadFail = (status, field) => {
-    console.log('-------- upload fail --------');
-    console.log(status);
-    console.log('field: ' + field);
-};
-
-const deletePhoto = () => {
-    imgPhotoUrl.value = '';
-};
 </script>
 <style lang="scss">
 .my_photo__edit {

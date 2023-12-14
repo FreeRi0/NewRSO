@@ -6,31 +6,7 @@
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
             ></bannerCreate>
-            <h2 class="headquarters-title">Штабы СО ОО</h2>
-            <div class="headquarters-search">
-                <input
-                    type="text"
-                    id="search"
-                    class="headquarters-search__input"
-                    v-model="searchHeadquartes"
-                    placeholder="Начните вводить название штаба образовательной организации."
-                />
-                <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 28 28"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z"
-                        stroke="#898989"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-                </svg>
-            </div>
+            <h2 class="headquarters-title">Окружные штабы</h2>
             <div class="headquarters-sort">
                 <div class="sort-layout">
                     <Button
@@ -70,78 +46,20 @@
                 </div>
 
                 <div class="sort-filters">
-                    <div class="sort-select">
-                        <Select
-                            variant="outlined"
-                            clearable
-                            name="select_district"
-                            id="select-district"
-                            v-model="selectedSortDistrict"
-                            class="filter-district"
-                            address="api/v1/districts/"
-                        ></Select>
-                    </div>
-                    <div class="sort-select">
-                        <Select
-                            variant="outlined"
-                            clearable
-                            name="select_region"
-                            id="select-region"
-                            v-model="selectedSortRegion"
-                            class="filter-region"
-                            address="api/v1/regionals/"
-                        ></Select>
-                    </div>
-                    <div class="sort-select">
-                        <Select
-                            variant="outlined"
-                            clearable
-                            name="select_local"
-                            id="select-local"
-                            v-model="selectedSortLocal"
-                            class="filter-local"
-                            address="api/v1/locals/"
-                        ></Select>
-                    </div>
-                    <div class="sort-select">
-                        <sortByEducation
-                            v-model="sortBy"
-                            :options="sortOptionss"
-                            class="sort-alphabet"
-                        ></sortByEducation>
-                    </div>
-
-                    <Button
-                        type="button"
-                        class="ascend"
-                        @click="ascending = !ascending"
-                        icon="icon"
-                        color="white"
-                    ></Button>
                 </div>
             </div>
 
             <div class="headquarters-wrapper" v-show="vertical">
                 <HeadquartersList
-                    :headquarters="sortedHeadquarters"
+                    :headquarters="districtHeadquarters"
                 ></HeadquartersList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalHeadquarters
-                    :headquarters="sortedHeadquarters"
+                    :headquarters="districtHeadquarters"
                 ></horizontalHeadquarters>
             </div>
-            <Button
-                @click="headquartersVisible += step"
-                v-if="headquartersVisible < headquarters.length"
-                label="Показать еще"
-            ></Button>
-            <Button
-                @click="headquartersVisible -= step"
-                v-else
-                label="Свернуть все"
-            ></Button>
         </div>
     </div>
 </template>
@@ -159,41 +77,29 @@ import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 // import headquarters from '@entities/HeadquartersData/headquarters';
 
-const headquarters = ref([]);
+const districtHeadquarters = ref([]);
 
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
+    { pageTitle: 'Окружные штабы', href: '/AllHeadquarters' },
 ]);
-
-const headquartersVisible = ref(12);
-
-const step = ref(10);
-
-const ascending = ref(true);
-const sortBy = ref('alphabetically');
 
 const vertical = ref(true);
 
-const searchHeadquartes = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
 
-const local = ref([]);
-const district = ref([]);
-const regional = ref([]);
-
-const getHeadquarters = async () => {
-    await HTTP.get('/educationals/', {
+const getDistrictHeadquarters = async () => {
+    await HTTP.get('/districts/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            headquarters.value = response.data;
+            districtHeadquarters.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
@@ -202,76 +108,9 @@ const getHeadquarters = async () => {
 };
 
 onMounted(() => {
-    getHeadquarters();
+    getDistrictHeadquarters();
 });
 
-const selectedSort = ref(0);
-const selectedSortLocal = ref(0);
-const selectedSortRegion = ref(0);
-const selectedSortDistrict = ref(0);
-
-const sortOptionss = ref([
-    {
-        value: 'alphabetically',
-        name: 'Алфавиту от А - Я',
-    },
-    { value: 'founding_date', name: 'Дате создания штаба' },
-    { value: 'members_count', name: 'Количеству участников' },
-]);
-
-const sortedHeadquarters = computed(() => {
-    let tempHeadquartes = headquarters.value;
-
-    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
-    tempHeadquartes = tempHeadquartes.filter((item) => {
-        // console.log(educational_institution.id);
-        return (
-            selectedSortRegion.value == null && selectedSortLocal.value == null ||
-            item.regional_headquarter == selectedSortRegion.value && item.local_headquarter == selectedSortLocal.value
-        );
-    });
-
-
-    tempHeadquartes = tempHeadquartes.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchHeadquartes.value.toUpperCase());
-    });
-
-    tempHeadquartes = tempHeadquartes.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'founding_date') {
-            let fc = a.founding_date,
-                fn = b.founding_date;
-
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'members_count') {
-            return a.members - b.members;
-        }
-    });
-
-    if (!ascending.value) {
-        tempHeadquartes.reverse();
-    }
-
-    return tempHeadquartes;
-});
 </script>
 <style lang="scss">
 .headquarters {

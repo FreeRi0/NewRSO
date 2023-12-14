@@ -1,36 +1,19 @@
 <template>
     <div class="container">
-        <div class="squads">
+        <div class="headquarters">
             <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
-                desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
-                label="Создать отряд"
-                link="/CreateLSO"
+                desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
+                label="Создать штаб"
             ></bannerCreate>
-            <h2 class="squads-title">Студенческие отряды</h2>
-            <div class="squads-tabs">
-                <v-btn
-                    class="squads-tabs__item"
-                    :class="{ active: picked === '' }"
-                    @click="picked = ''"
-                    >Все</v-btn
-                >
-                <v-btn
-                    class="squads-tabs__item"
-                    :class="{ active: picked === area.id }"
-                    v-for="area in categories"
-                    :key="area"
-                    @click="picked = area.id"
-                    >{{ area.name }}</v-btn
-                >
-            </div>
-            <div class="squads-search">
+            <h2 class="headquarters-title">Местные штабы</h2>
+            <div class="headquarters-search">
                 <input
                     type="text"
                     id="search"
-                    class="squads-search__input"
-                    v-model="searchSquads"
-                    placeholder="Поищем отряд?"
+                    class="headquarters-search__input"
+                    v-model="searchLocalHeadquarters"
+                    placeholder="Начните вводить название штаба."
                 />
                 <svg
                     width="28"
@@ -48,7 +31,7 @@
                     />
                 </svg>
             </div>
-            <div class="squads-sort">
+            <div class="headquarters-sort">
                 <div class="sort-layout">
                     <Button
                         v-if="vertical"
@@ -91,43 +74,60 @@
                         <Select
                             variant="outlined"
                             clearable
-                            name="select_education"
-                            id="select-education"
-                            v-model="selectedSort"
-                            address="api/v1/eduicational_institutions/"
+                            name="select_district"
+                            id="select-district"
+                            v-model="selectedSortDistrict"
+                            class="filter-district"
+                            address="api/v1/districts/"
+                        ></Select>
+                    </div>
+                    <div class="sort-select">
+                        <Select
+                            variant="outlined"
+                            clearable
+                            name="select_region"
+                            id="select-region"
+                            v-model="selectedSortRegion"
+                            class="filter-region"
+                            address="api/v1/regionals/"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <sortByEducation
                             v-model="sortBy"
                             :options="sortOptionss"
+                            class="sort-alphabet"
                         ></sortByEducation>
                     </div>
 
                     <Button
                         type="button"
                         class="ascend"
-                        icon="switch"
                         @click="ascending = !ascending"
+                        icon="icon"
                         color="white"
                     ></Button>
                 </div>
             </div>
 
-            <div class="squads-wrapper" v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
+            <div class="headquarters-wrapper" v-show="vertical">
+                <HeadquartersList
+                    :headquarters="sortedHeadquarters"
+                ></HeadquartersList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
+                <horizontalHeadquarters
+                    :headquarters="sortedHeadquarters"
+                ></horizontalHeadquarters>
             </div>
             <Button
-                @click="squadsVisible += step"
-                v-if="squadsVisible < squads.length"
+                @click="headquartersVisible += step"
+                v-if="headquartersVisible < localHeadquarters.length"
                 label="Показать еще"
             ></Button>
             <Button
-                @click="squadsVisible -= step"
+                @click="headquartersVisible -= step"
                 v-else
                 label="Свернуть все"
             ></Button>
@@ -138,48 +138,50 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { squadsList, horizontalList } from '@features/Squads/components';
+import {
+    HeadquartersList,
+    horizontalHeadquarters,
+} from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { ref, computed, onMounted } from 'vue';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
-// import squads from '@entities/Squads/squads';
+// import headquarters from '@entities/HeadquartersData/headquarters';
 
-const squads = ref([]);
-const categories = ref([]);
-const educations = ref([]);
+const localHeadquarters = ref([]);
 
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Отряды', href: '/AllSquads' },
+    { pageTitle: 'Местные штабы', href: '/AllHeadquarters' },
 ]);
 
-const getCategories = async () => {
-    await HTTP.get('/areas/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            categories.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+const headquartersVisible = ref(12);
+
+const step = ref(10);
+
+const ascending = ref(true);
+const sortBy = ref('alphabetically');
+
+const vertical = ref(true);
+
+const searchLocalHeadquarters = ref('');
+
+const showVertical = () => {
+    vertical.value = !vertical.value;
 };
 
+const district = ref([]);
+const regional = ref([]);
 
-const getSquads = async () => {
-    await HTTP.get('/detachments/', {
+const getLocalHeadquarters = async () => {
+    await HTTP.get('/locals/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            squads.value = response.data;
+            localHeadquarters.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
@@ -188,57 +190,41 @@ const getSquads = async () => {
 };
 
 onMounted(() => {
-    getSquads();
-    getCategories();
+    getLocalHeadquarters();
 });
-const squadsVisible = ref(12);
 
-const step = ref(10);
-
-const ascending = ref(true);
-const sortBy = ref('alphabetically');
-
-const picked = ref('');
-
-const vertical = ref(true);
-
-const searchSquads = ref('');
-
-const showVertical = () => {
-    vertical.value = !vertical.value;
-};
-
-const selectedSort = ref(null);
+const selectedSort = ref(0);
+const selectedSortRegion = ref(null);
+const selectedSortDistrict = ref(null);
 
 const sortOptionss = ref([
     {
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'founding_date', name: 'Дате создания отряда' },
+    { value: 'founding_date', name: 'Дате создания штаба' },
     { value: 'members_count', name: 'Количеству участников' },
 ]);
 
-const sortedSquads = computed(() => {
-    let tempSquads = squads.value;
+const sortedHeadquarters = computed(() => {
+    let tempHeadquartes = localHeadquarters.value;
 
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
-
-    tempSquads = tempSquads.filter((item) => {
+    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
+    tempHeadquartes = tempHeadquartes.filter((item) => {
         // console.log(educational_institution.id);
         return (
-            selectedSort.value == null ||
-            item.educational_institution == selectedSort.value
+            selectedSortRegion.value == null ||
+            item.regional_headquarter == selectedSortRegion.value
         );
     });
 
-    tempSquads = tempSquads.filter((item) => {
+    tempHeadquartes = tempHeadquartes.filter((item) => {
         return item.name
             .toUpperCase()
-            .includes(searchSquads.value.toUpperCase());
+            .includes(searchLocalHeadquarters.value.toUpperCase());
     });
 
-    tempSquads = tempSquads.sort((a, b) => {
+    tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
             let fa = a.name.toLowerCase(),
                 fb = b.name.toLowerCase();
@@ -267,23 +253,98 @@ const sortedSquads = computed(() => {
     });
 
     if (!ascending.value) {
-        tempSquads.reverse();
+        tempHeadquartes.reverse();
     }
 
-    if (!picked.value) {
-        return tempSquads;
-    }
-
-    tempSquads = tempSquads.filter((item) => item.area === picked.value);
-
-    return tempSquads;
+    return tempHeadquartes;
 });
 </script>
-<style lang="scss" scoped>
-body {
-    border: 1px solid red;
+<style lang="scss">
+.headquarters {
+    padding: 40px 0px 60px 0px;
+    &-title {
+        margin-bottom: 40px;
+        font-size: 52px;
+        @media screen and (max-width: 575px) {
+            font-size: 40px;
+        }
+    }
+    &-sort {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        @media screen and (max-width: 768px) {
+            flex-direction: column-reverse;
+            align-items: flex-start;
+        }
+    }
+    &-search {
+        position: relative;
+        box-sizing: border-box;
+        svg {
+            position: absolute;
+            top: 10px;
+            left: 16px;
+        }
+        &__input {
+            width: 100%;
+            padding: 13px 0px 10px 60px;
+            border-radius: 10px;
+            border: 1px solid black;
+        }
+    }
+    &-wrapper {
+        padding: 60px 0px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-row-gap: 40px;
+        /* box-shadow: 1em 2em 2.5em rgba(1, 2, 68, 0.08); */
+        @media screen and (max-width: 1024px) {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 575px) {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+}
+.headquarters-wrapper__item {
+    margin: 0px auto;
+    width: 180px;
+    &-category {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 20px;
+        font-family: 'Akrobat';
+        color: #1e1e1e;
+        &-full {
+            text-align: center;
+            font-size: 20px;
+            font-family: 'Akrobat';
+            margin-left: 20px;
+            margin-right: 5px;
+            color: #1e1e1e;
+        }
+    }
+    &-title {
+        text-align: center;
+        font-size: 20px;
+        font-family: 'Akrobat';
+        color: #1e1e1e;
+    }
 }
 
+.horizontal {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-row-gap: 16px;
+}
+.form__select {
+    margin-bottom: 0px;
+    margin-right: 8px;
+}
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
@@ -311,96 +372,26 @@ body {
     background-repeat: no-repeat;
     background-position: center;
 }
-
-.squads {
-    padding: 40px 0px 60px 0px;
-    &-title {
-        font-size: 52px;
-        @media screen and (max-width: 575px) {
-            font-size: 32px;
-        }
-    }
-    &-wrapper {
-        padding: 60px 0px;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        grid-row-gap: 40px;
-        @media screen and (max-width: 1024px) {
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-        @media screen and (max-width: 575px) {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-    &-sort {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-    }
-    &-tabs {
-        margin-top: 20px;
-        margin-bottom: 40px;
+.sort-filters {
+    @media screen and (max-width: 768px) {
+        margin-top: 40px;
         display: flex;
         flex-wrap: wrap;
-        &__item {
-            padding: 6px 24px;
-            border: 1px solid black;
-            border-radius: 30px;
-            text-align: center;
-            font-size: 20px;
-            background-color: white;
-            font-family: 'Bert Sans';
-            margin: 20px 20px 0px 0px;
-            cursor: pointer;
-            text-transform: none;
-            box-shadow: none;
-            @media screen and (max-width: 768px) {
-                font-size: 14px;
-                padding: 8px 8px;
-                margin: 20px 8px 0px 0px;
-            }
-        }
+        margin-bottom: 60px;
     }
 }
 
-.horizontal {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-row-gap: 16px;
-    margin-top: 40px;
-}
-
-.active {
-    background-color: #1c5c94;
-    color: white;
-    border: 1px solid #1c5c94;
-}
-.squads-search {
-    position: relative;
-    box-sizing: border-box;
-    svg {
-        position: absolute;
-        top: 10px;
-        left: 16px;
+.filter {
+    &-local {
+        width: 186px;
     }
-    &__input {
-        width: 100%;
-        padding: 13px 0px 10px 60px;
-        border-radius: 10px;
-        border: 1px solid black;
+    &-region {
+        width: 227px;
     }
-}
 
-.education {
-    width: 305px;
-    @media screen and (max-width: 768px) {
-        width: 100%;
+    &-district {
+        width: 193px;
     }
-}
-
-.form__select {
-  margin-bottom: 0px;
-  margin-right: 8px;
 }
 
 @media (max-width: 575px) {

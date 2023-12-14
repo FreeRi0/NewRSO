@@ -27,6 +27,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
+
 defineOptions({
     inheritAttrs: false,
 });
@@ -52,10 +53,10 @@ const props = defineProps({
     //     type: Array,
     //     required: false,
     // },
-    // placeholder: {
-    //     type: String,
-    //     default: '',
-    // },
+    placeholder: {
+        type: String,
+        default: '',
+    },
     address: {
         type: String,
         default: '',

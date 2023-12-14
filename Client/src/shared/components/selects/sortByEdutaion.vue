@@ -13,6 +13,20 @@
             {{ option.name }}
         </option>
     </select>
+
+    <!-- <v-select
+        clearable
+        label="Select"
+        :items="[
+            'California',
+            'Colorado',
+            'Florida',
+            'Georgia',
+            'Texas',
+            'Wyoming',
+        ]"
+        variant="outlined"
+    ></v-select> -->
 </template>
 <script setup>
 const props = defineProps({
@@ -25,8 +39,8 @@ const props = defineProps({
     },
     selected: {
         type: String,
-        default: ''
-    }
+        default: '',
+    },
 });
 
 const emit = defineEmits(['update:modelValue']);
