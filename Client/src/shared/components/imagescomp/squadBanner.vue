@@ -6,14 +6,14 @@
             <img
                 :src="imgDataSquadUrl.banner"
                 alt="Баннер отряда"
-                v-if="imgDataSquadUrl"
+                v-if="imgDataSquadUrl.banner"
                 v-show="true"
             />
 
             <img
                 src="@/app/assets/user-banner.jpg"
                 alt="Баннер отряда(пусто)"
-                v-else
+                v-else-if="!imgDataSquadUrl.banner"
             />
 
         </div>
@@ -24,7 +24,7 @@ import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
-const imgDataSquadUrl = ref(null);
+const imgDataSquadUrl = ref('');
 const route = useRoute();
 const id = route.params.id;
 

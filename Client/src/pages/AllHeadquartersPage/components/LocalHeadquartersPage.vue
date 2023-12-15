@@ -79,6 +79,7 @@
                             v-model="selectedSortDistrict"
                             class="filter-district"
                             address="api/v1/districts/"
+                            placeholder="Окружные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
@@ -93,7 +94,10 @@
                         ></Select>
                     </div>
                     <div class="sort-select">
+
                         <sortByEducation
+                        variant="outlined"
+                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
@@ -367,6 +371,9 @@ const sortedHeadquarters = computed(() => {
     background-size: cover;
 }
 
+// .v-label {
+//     margin-top: 20px;
+// }
 .ascend {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;

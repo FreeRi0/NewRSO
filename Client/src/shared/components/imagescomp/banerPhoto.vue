@@ -6,17 +6,17 @@
             <img
                 :src="imgDataUrl.media.banner"
                 alt="Баннер личной страницы"
-                v-if="imgDataUrl"
+                v-if="imgDataUrl.media.banner"
                 v-show="true"
             />
 
             <img
                 src="@/app/assets/user-banner.jpg"
                 alt="Баннер личной страницы(пусто)"
-                v-else
+                v-else-if="!imgDataUrl.media.banner"
             />
         </div>
-        <v-menu min-width="200px" rounded v-if="!imgDataUrl">
+        <v-menu min-width="200px" rounded v-if="!file">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -172,7 +172,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const id = route.params.id;
 const dialog = ref(false);
-const imgDataUrl = ref(null);
+const imgDataUrl = ref('');
 const preview = ref(null);
 const file = ref(null);
 

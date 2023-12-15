@@ -99,6 +99,8 @@
                     </div>
                     <div class="sort-select">
                         <sortByEducation
+                        variant="outlined"
+                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
                         ></sortByEducation>

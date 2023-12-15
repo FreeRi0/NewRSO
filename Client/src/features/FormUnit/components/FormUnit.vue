@@ -539,7 +539,7 @@ import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
-import { photos } from '@shared/components/imagescomp';
+// import { photos } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';

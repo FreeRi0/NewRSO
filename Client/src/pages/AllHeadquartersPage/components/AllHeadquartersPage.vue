@@ -105,6 +105,8 @@
                     </div>
                     <div class="sort-select">
                         <sortByEducation
+                            variant="outlined"
+                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
@@ -226,11 +228,12 @@ const sortedHeadquarters = computed(() => {
     tempHeadquartes = tempHeadquartes.filter((item) => {
         // console.log(educational_institution.id);
         return (
-            selectedSortRegion.value == null && selectedSortLocal.value == null ||
-            item.regional_headquarter == selectedSortRegion.value && item.local_headquarter == selectedSortLocal.value
+            (selectedSortRegion.value == null &&
+                selectedSortLocal.value == null) ||
+            (item.regional_headquarter == selectedSortRegion.value &&
+                item.local_headquarter == selectedSortLocal.value)
         );
     });
-
 
     tempHeadquartes = tempHeadquartes.filter((item) => {
         return item.name

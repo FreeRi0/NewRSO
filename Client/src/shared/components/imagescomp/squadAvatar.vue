@@ -3,12 +3,12 @@
       <div class="user-metric__avatar">
           <!-- Аватар отряда  -->
 
-          <img :src="imageSquadUrl.emblem" alt="Эмблема" v-if="imageSquadUrl" />
+          <img :src="imageSquadUrl.emblem" alt="Эмблема" v-if="imageSquadUrl.emblem" />
           <img
               id="profile-pic"
               src="@app/assets/user-avatar.png"
               alt="Аватарка(пусто)"
-              v-else
+              v-else-if="!imageSquadUrl.emblem"
           />
       </div>
   </div>
@@ -18,7 +18,7 @@ import { ref } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
-const imageSquadUrl = ref(null);
+const imageSquadUrl = ref('');
 const route = useRoute();
 const id = route.params.id;
 

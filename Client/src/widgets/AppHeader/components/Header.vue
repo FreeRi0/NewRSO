@@ -139,19 +139,19 @@ const router = useRouter();
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
     { title: 'Штабы СО ОО', link: '/AllHeadquarters' },
-    { title: 'Местные штабы', link: '#' },
-    { title: 'Региональные штабы', link: '#' },
-    { title: 'Окружные штабы', link: '#' },
+    { title: 'Местные штабы', link: '/LocalHeadquarters' },
+    { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
+    { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
     { title: 'Центральный штаб', link: '#' },
 ]);
 
 const userPages = ref([
     { title: 'Моя страница', link: '/UserPage' },
     { title: 'Мой отряд', link: '#' },
-    { title: 'Штаб СО ОО', link: '#' },
-    { title: 'Местный штаб', link: '#' },
-    { title: 'Региональный штаб', link: '#' },
-    { title: 'Окружной штаб', link: '#' },
+    { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
+    { title: 'Местный штаб', link: '/LocalHeadquarters' },
+    { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
+    { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
     { title: 'Активные заявки', link: '#' },
     { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', link: '#' },

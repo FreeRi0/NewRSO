@@ -5,14 +5,14 @@
             <img
                 :src="squadPhotosUrl.photo2"
                 alt="Фото отряда"
-                v-if="squadPhotosUrl"
+                v-if="squadPhotosUrl.photo2"
                 v-show="true"
             />
 
             <img
                 src="@/app/assets/user-banner.jpg"
                 alt="Фото отряда(пусто)"
-                v-else
+                v-else-if="!squadPhotosUrl.photo2"
             />
         </div>
     </div>
@@ -22,7 +22,7 @@ import { ref, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
-const squadPhotosUrl = ref(null);
+const squadPhotosUrl = ref('');
 const route = useRoute();
 const id = route.params.id;
 

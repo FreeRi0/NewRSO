@@ -21,10 +21,13 @@
                 ></Button
             ></router-link>
 
-            <TextArea  class="mt-14"></TextArea>
+            <TextArea class="mt-14"></TextArea>
             <v-row class="mt-8">
-                <v-col v-for="n in 4" :key="n" class="d-flex">
-                    <photos></photos>
+                <v-col class="d-flex">
+                    <userPhoto></userPhoto>
+                    <userPhoto2></userPhoto2>
+                    <userPhoto3></userPhoto3>
+                    <userPhoto4></userPhoto4>
                 </v-col>
             </v-row>
         </div>
@@ -34,10 +37,9 @@
 import { Button } from '@shared/components/buttons';
 import { BannerComp } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
-import { photos } from '@shared/components/imagescomp';
+import { userPhoto, userPhoto2, userPhoto3, userPhoto4 } from '@shared/components/imagescomp';
 
 import { ref, computed } from 'vue';
-
 </script>
 <style lang="scss">
 .user-wrapper {

@@ -3,7 +3,7 @@
         <div class="user-metric__avatar">
             <!-- Аватар пользователя  -->
 
-            <img :src="imageUrl.media.photo" alt="avatarka" v-if="imageUrl" />
+            <img :src="imageUrl.media.photo" alt="avatarka" v-if="imageUrl.media.photo" />
             <img
                 id="profile-pic"
                 src="@app/assets/user-avatar.png"
@@ -13,7 +13,7 @@
         </div>
 
         <!-- Иконки редактирования аватар -->
-        <v-menu min-width="200px" rounded v-if="!imageUrl">
+        <v-menu min-width="200px" rounded v-if="!file">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -168,7 +168,7 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
 const file = ref(null);
-const imageUrl = ref(null);
+const imageUrl = ref('');
 const route = useRoute();
 const dialog = ref(false);
 const preview = ref(null);
@@ -239,7 +239,6 @@ const updateAvatar = async () => {
 const deleteAvatar = async () => {
     await HTTP.delete('/rsousers/me/media/', {
         headers: {
-            'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
