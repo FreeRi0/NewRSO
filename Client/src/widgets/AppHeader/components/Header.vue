@@ -40,7 +40,7 @@
                             </div>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="#">Мероприятия</a>
+                            <a class="header__nav-link" href="/actionSquads">Мероприятия</a>
                         </li>
                         <li class="header__nav-item">
                             <a class="header__nav-link" href="#"
