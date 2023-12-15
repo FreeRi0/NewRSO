@@ -2,68 +2,10 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--lso">ЛСО</h1>
-        <BannerComp class="user-metric mt-3">
-            <template #banner> </template>
-        </BannerComp>
-        <div class="user-data__wrapper">
-            <div class="Squad-HQ__name">
-                <h4>{{ squad.name }}</h4>
-            </div>
-            <div class="slogan">
-                <p>{{ squad.slogan }}</p>
-            </div>
-            <div class="user-data__list-wrapper">
-                <ul class="Squad-HQ__list">
-                    <li class="Squad-HQ__university">
-                        <p>{{ educt.name }}</p>
-                    </li>
-                    <li class="Squad-HQ__date">
-                        <p>Дата создания ЛСО</p>
-                        <img
-                            src="@/app/assets/icon/calendar.svg"
-                            alt="calendar"
-                        />
-                        <time datetime="2022-09-10">{{
-                            squad.founding_date
-                        }}</time>
-                    </li>
-                </ul>
-            </div>
-            <div class="squad-data__contacts-wrapper">
-                <div class="squad-data__contacts">
-                    <div class="squad-data__participant-counter">
-                        <span>{{ member.length }} участников</span>
-                    </div>
-                    <div class="squad-data__social-network">
-                        <div class="squad-data__link-vk">
-                            <a href="https://vk.com" target="_blank">
-                                <img src="@/app/assets/icon/vk-blue.svg" />
-                            </a>
-                        </div>
-                        <div class="squad-data__link-telegram">
-                            <a href="https://t.me" target="_blank">
-                                <img
-                                    src="@/app/assets/icon/telegram-blue.svg"
-                                    alt=""
-                                />
-                            </a>
-                        </div>
-                        <div class="squad-data__link-share-link">
-                            <a href="#" target="_blank">
-                                <img
-                                    src="@/app/assets/icon/to-share-link.svg"
-                                    alt=""
-                                />
-                            </a>
-                        </div>
-                        <!-- <p>{{ squad.members }}</p> -->
-                    </div>
-                </div>
-                <router-link to="/" class="user-data__link"
-                    >Редактировать страницу</router-link
-                >
-            </div>
-        </div>
+        <!-- <BannerComp class="user-metric mt-3">
+
+        </BannerComp> -->
+        <BannerSquad></BannerSquad>
         <section class="about-squad">
             <h3>Об отряде</h3>
             <p>
@@ -72,17 +14,17 @@
         </section>
         <v-row class="mt-8">
             <v-col v-for="n in 4" :key="n" class="d-flex">
-                <photos></photos>
+                <squadPhotos></squadPhotos>
             </v-col>
         </v-row>
         <SquadParticipants></SquadParticipants>
-       
+
     </div>
 </template>
 <script setup>
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { BannerComp } from '@features/baner/components';
-import { photos } from '@shared/components/imagescomp';
+import { BannerSquad } from '@features/baner/components';
+import { squadPhotos } from '@shared/components/imagescomp';
 import SquadParticipants from './components/SquadParticipants.vue';
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
@@ -165,9 +107,9 @@ const pages = [
         margin-bottom: 50px;
     }
 }
-.user-data__wrapper {
-    margin: 20px 0 12px 298px;
-}
+// .user-data__wrapper {
+//     margin: 20px 0 12px 298px;
+// }
 /* Данные отряда */
 .Squad-HQ__name {
     font-family: 'Akrobat';

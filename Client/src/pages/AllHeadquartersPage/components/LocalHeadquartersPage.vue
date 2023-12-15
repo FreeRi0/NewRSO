@@ -6,14 +6,14 @@
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
             ></bannerCreate>
-            <h2 class="headquarters-title">Штабы СО ОО</h2>
+            <h2 class="headquarters-title">Местные штабы</h2>
             <div class="headquarters-search">
                 <input
                     type="text"
                     id="search"
                     class="headquarters-search__input"
-                    v-model="searchHeadquartes"
-                    placeholder="Начните вводить название штаба образовательной организации."
+                    v-model="searchLocalHeadquarters"
+                    placeholder="Начните вводить название штаба."
                 />
                 <svg
                     width="28"
@@ -79,6 +79,7 @@
                             v-model="selectedSortDistrict"
                             class="filter-district"
                             address="api/v1/districts/"
+                            placeholder="Окружные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
@@ -93,19 +94,9 @@
                         ></Select>
                     </div>
                     <div class="sort-select">
-                        <Select
-                            variant="outlined"
-                            clearable
-                            name="select_local"
-                            id="select-local"
-                            v-model="selectedSortLocal"
-                            class="filter-local"
-                            address="api/v1/locals/"
-                        ></Select>
-                    </div>
-                    <div class="sort-select">
+
                         <sortByEducation
-                            variant="outlined"
+                        variant="outlined"
                             clearable
                             v-model="sortBy"
                             :options="sortOptionss"
@@ -136,7 +127,7 @@
             </div>
             <Button
                 @click="headquartersVisible += step"
-                v-if="headquartersVisible < headquarters.length"
+                v-if="headquartersVisible < localHeadquarters.length"
                 label="Показать еще"
             ></Button>
             <Button
@@ -161,11 +152,11 @@ import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 // import headquarters from '@entities/HeadquartersData/headquarters';
 
-const headquarters = ref([]);
+const localHeadquarters = ref([]);
 
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
+    { pageTitle: 'Местные штабы', href: '/AllHeadquarters' },
 ]);
 
 const headquartersVisible = ref(12);
@@ -177,25 +168,24 @@ const sortBy = ref('alphabetically');
 
 const vertical = ref(true);
 
-const searchHeadquartes = ref('');
+const searchLocalHeadquarters = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
 
-const local = ref([]);
 const district = ref([]);
 const regional = ref([]);
 
-const getHeadquarters = async () => {
-    await HTTP.get('/educationals/', {
+const getLocalHeadquarters = async () => {
+    await HTTP.get('/locals/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            headquarters.value = response.data;
+            localHeadquarters.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
@@ -204,13 +194,12 @@ const getHeadquarters = async () => {
 };
 
 onMounted(() => {
-    getHeadquarters();
+    getLocalHeadquarters();
 });
 
 const selectedSort = ref(0);
-const selectedSortLocal = ref(0);
-const selectedSortRegion = ref(0);
-const selectedSortDistrict = ref(0);
+const selectedSortRegion = ref(null);
+const selectedSortDistrict = ref(null);
 
 const sortOptionss = ref([
     {
@@ -222,23 +211,21 @@ const sortOptionss = ref([
 ]);
 
 const sortedHeadquarters = computed(() => {
-    let tempHeadquartes = headquarters.value;
+    let tempHeadquartes = localHeadquarters.value;
 
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     tempHeadquartes = tempHeadquartes.filter((item) => {
         // console.log(educational_institution.id);
         return (
-            (selectedSortRegion.value == null &&
-                selectedSortLocal.value == null) ||
-            (item.regional_headquarter == selectedSortRegion.value &&
-                item.local_headquarter == selectedSortLocal.value)
+            selectedSortRegion.value == null ||
+            item.regional_headquarter == selectedSortRegion.value
         );
     });
 
     tempHeadquartes = tempHeadquartes.filter((item) => {
         return item.name
             .toUpperCase()
-            .includes(searchHeadquartes.value.toUpperCase());
+            .includes(searchLocalHeadquarters.value.toUpperCase());
     });
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
@@ -384,6 +371,9 @@ const sortedHeadquarters = computed(() => {
     background-size: cover;
 }
 
+// .v-label {
+//     margin-top: 20px;
+// }
 .ascend {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;

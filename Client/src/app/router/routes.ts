@@ -123,6 +123,30 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
+                path: '/LocalHeadquarters',
+                name: 'localHeadquarters',
+                component: () =>
+                    import(
+                        '@pages/AllHeadquartersPage/components/LocalHeadquartersPage.vue'
+                    ),
+            },
+            {
+                path: '/RegionalHeadquarters',
+                name: 'regionalHeadquarters',
+                component: () =>
+                    import(
+                        '@pages/AllHeadquartersPage/components/RegionalHeadquarters.vue'
+                    ),
+            },
+            {
+                path: '/DistrictHeadquarters',
+                name: 'districtHeadquarters',
+                component: () =>
+                    import(
+                        '@pages/AllHeadquartersPage/components/DistrictsHeadquartersPage.vue'
+                    ),
+            },
+            {
                 path: '/AllParticipants/:id',
                 name: 'allparticipants',
                 component: () =>

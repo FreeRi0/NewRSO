@@ -1,13 +1,14 @@
 <template>
-    <div class='container'>
-
-        <div class='squads'>
-            <Breadcrumbs :items='pages'></Breadcrumbs>
+    <div class="container">
+        <div class="squads">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
-                desc='Быть в движении, это значит быть успешным, ярким, дерзким!'
-                label='Создать отряд' link='/CreateAction'></bannerCreate>
-            <h2 class='squads-title'>Студенческие отряды</h2>
-            <div class='squads-tabs'>
+                desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
+                label="Создать отряд"
+                link="/CreateLSO"
+            ></bannerCreate>
+            <h2 class="squads-title">Студенческие отряды</h2>
+            <div class="squads-tabs">
                 <v-btn
                     class='squads-tabs__item'
                     :class="{ active: picked === '' }"
@@ -83,10 +84,61 @@
                             :options='educations'
                         ></sortByEducation>
                     </div>
+            <div class="squads-sort">
+                <div class="sort-layout">
+                    <Button
+                        v-if="vertical"
+                        type="button"
+                        class="dashboard"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
+                    </Button>
+                    <Button
+                        v-else="!vertical"
+                        type="button"
+                        class="dashboardD"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
+                    </Button>
+                    <Button
+                        v-if="!vertical"
+                        type="button"
+                        class="menuuA"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    ></Button>
+                    <Button
+                        v-else="vertical"
+                        type="button"
+                        class="menuu"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    ></Button>
+                </div>
+
+                <div class="sort-filters">
+                    <div class="sort-select">
+                        <Select
+                            variant="outlined"
+                            clearable
+                            name="select_education"
+                            id="select-education"
+                            v-model="selectedSort"
+                            address="api/v1/eduicational_institutions/"
+                        ></Select>
+                    </div>
                     <div class='sort-select'>
                         <sortByEducation
-                            v-model='sortBy'
-                            :options='sortOptionss'
+                        variant="outlined"
+                            clearable
+                            v-model="sortBy"
+                            :options="sortOptionss"
                         ></sortByEducation>
                     </div>
 
@@ -125,7 +177,7 @@ import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
-import { sortByEducation } from '@shared/components/selects';
+import { sortByEducation, Select } from '@shared/components/selects';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
@@ -191,7 +243,6 @@ const getSquads = async () => {
 onMounted(() => {
     getSquads();
     getCategories();
-    getEducations();
 });
 const squadsVisible = ref(12);
 
@@ -210,7 +261,7 @@ const showVertical = () => {
     vertical.value = !vertical.value;
 };
 
-const selectedSort = ref(0);
+const selectedSort = ref(null);
 
 const sortOptionss = ref([
     {
@@ -228,8 +279,10 @@ const sortedSquads = computed(() => {
 
     tempSquads = tempSquads.filter((item) => {
         // console.log(educational_institution.id);
-        return selectedSort.value == 0 || item.educational_institution == selectedSort.value;
-
+        return (
+            selectedSort.value == null ||
+            item.educational_institution == selectedSort.value
+        );
     });
 
     tempSquads = tempSquads.filter((item) => {
@@ -266,11 +319,9 @@ const sortedSquads = computed(() => {
         }
     });
 
-
     if (!ascending.value) {
         tempSquads.reverse();
     }
-
 
     if (!picked.value) {
         return tempSquads;
@@ -281,7 +332,7 @@ const sortedSquads = computed(() => {
     return tempSquads;
 });
 </script>
-<style lang='scss'>
+<style lang="scss" scoped>
 body {
   border: 1px solid red;
 }
@@ -309,7 +360,6 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
-
 
 .ascend {
   background-image: url('@app/assets/icon/switch.svg');
@@ -404,12 +454,16 @@ body {
   }
 }
 
-
 .education {
   width: 305px;
   @media screen and (max-width: 768px) {
     width: 100%;
   }
+}
+
+.form__select {
+  margin-bottom: 0px;
+  margin-right: 8px;
 }
 
 @media (max-width: 575px) {
