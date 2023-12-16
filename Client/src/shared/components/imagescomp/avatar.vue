@@ -3,12 +3,16 @@
         <div class="user-metric__avatar">
             <!-- Аватар пользователя  -->
 
-            <img :src="imageUrl.media.photo" alt="avatarka" v-if="imageUrl.media.photo" />
             <img
+                v-if="imageUrl?.media?.photo"
+                :src="imageUrl.media.photo"
+                alt="avatarka"
+            />
+            <img
+                v-else
                 id="profile-pic"
                 src="@app/assets/user-avatar.png"
                 alt="Аватарка(пусто)"
-                v-else
             />
         </div>
 

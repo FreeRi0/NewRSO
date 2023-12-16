@@ -83,11 +83,10 @@ const aboutMembers = async () => {
             console.log('an error occured ' + error);
         });
 };
-onMounted(() => {
     aboutSquad();
     aboutMembers();
     aboutEduc();
-});
+
 
 const pages = [
     { pageTitle: 'Личный кабинет', href: '/UserPage' },

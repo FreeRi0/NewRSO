@@ -5,8 +5,22 @@
             <img
                 :src="userPhotoUrl.media.photo1"
                 alt="Фото пользователя"
-                v-if="userPhotoUrl.media.photo1"
-                v-show="true"
+                v-if="userPhotoUrl?.media?.photo1"
+            />
+            <img
+                :src="userPhotoUrl.media.photo2"
+                alt="Фото пользователя"
+                v-else-if="userPhotoUrl?.media?.photo2"
+            />
+            <img
+                :src="userPhotoUrl.media.photo3"
+                alt="Фото пользователя"
+                v-if="userPhotoUrl?.media?.photo3"
+            />
+            <img
+                :src="userPhotoUrl.media.photo4"
+                alt="Фото пользователя"
+                v-if="userPhotoUrl?.media?.photo4"
             />
 
             <img

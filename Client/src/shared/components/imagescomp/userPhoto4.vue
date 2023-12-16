@@ -5,7 +5,7 @@
           <img
               :src="userPhotoUrl.media.photo4"
               alt="Фото пользователя"
-              v-if="userPhotoUrl.media.photo4"
+              v-if="userPhotoUrl?.media?.photo4"
               v-show="true"
           />
 

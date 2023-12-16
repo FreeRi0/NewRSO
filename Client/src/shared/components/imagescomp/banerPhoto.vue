@@ -4,16 +4,15 @@
             <!-- Заглушка Банер -->
 
             <img
+                v-if="imgDataUrl?.media?.banner"
                 :src="imgDataUrl.media.banner"
                 alt="Баннер личной страницы"
-                v-if="imgDataUrl.media.banner"
-                v-show="true"
             />
 
             <img
+                v-else
                 src="@/app/assets/user-banner.jpg"
                 alt="Баннер личной страницы(пусто)"
-                v-else-if="!imgDataUrl.media.banner"
             />
         </div>
         <v-menu min-width="200px" rounded v-if="!file">
@@ -172,7 +171,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const id = route.params.id;
 const dialog = ref(false);
-const imgDataUrl = ref('');
+const imgDataUrl = ref(null);
 const preview = ref(null);
 const file = ref(null);
 
@@ -198,7 +197,7 @@ const selectBanner = (event) => {
     preview.value = URL.createObjectURL(file.value);
 };
 
-const uploadBanner= async () => {
+const uploadBanner = async () => {
     dialog.value = true;
     const formData = new FormData();
     formData.append('banner', file.value);
@@ -219,7 +218,6 @@ const uploadBanner= async () => {
 };
 
 const updateBanner = async () => {
-
     const fd = new FormData();
     fd.append('banner', file.value);
     dialog.value = true;
@@ -237,9 +235,9 @@ const updateBanner = async () => {
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
+};
 
-const deleteBanner = async() => {
+const deleteBanner = async () => {
     await HTTP.delete('/rsousers/me/media/', {
         headers: {
             Authorization: 'Token ' + localStorage.getItem('Token'),
