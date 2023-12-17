@@ -57,7 +57,7 @@
                             <!-- <p>{{ squad.members }}</p> -->
                         </div>
                     </div>
-                    <router-link to="/" class="user-data__link"
+                    <router-link to="/EditLSO" class="user-data__link"
                         >Редактировать страницу</router-link
                     >
                 </div>

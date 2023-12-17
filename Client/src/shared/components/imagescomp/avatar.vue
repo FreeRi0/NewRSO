@@ -4,7 +4,7 @@
             <!-- Аватар пользователя  -->
 
             <img
-                v-if="imageUrl?.media?.photo"
+                v-if="imageUrl"
                 :src="imageUrl.media.photo"
                 alt="avatarka"
             />
@@ -17,7 +17,7 @@
         </div>
 
         <!-- Иконки редактирования аватар -->
-        <v-menu min-width="200px" rounded v-if="!file">
+        <v-menu min-width="200px" rounded v-if="!imageUrl">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -172,7 +172,7 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
 const file = ref(null);
-const imageUrl = ref('');
+const imageUrl = ref(null);
 const route = useRoute();
 const dialog = ref(false);
 const preview = ref(null);
@@ -241,7 +241,9 @@ const updateAvatar = async () => {
 };
 
 const deleteAvatar = async () => {
-    await HTTP.delete('/rsousers/me/media/', {
+    let fd = new FormData();
+    fd.append('photo', file.value);
+    await HTTP.put('/rsousers/me/media/', fd, {
         headers: {
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },

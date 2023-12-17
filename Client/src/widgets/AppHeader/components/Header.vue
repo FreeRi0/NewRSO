@@ -154,7 +154,7 @@ const userPages = ref([
     { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
     { title: 'Активные заявки', link: '#' },
     { title: 'Поиск участников', link: '#' },
-    { title: 'Членский взнос', link: '#' },
+    { title: 'Членский взнос', link: '/contributorPay' },
     { title: 'Оформление справок', link: '#' },
     { title: 'Настройки профиля', link: '#' },
     { title: 'Выйти из ЛК', link: '#' },

@@ -4,7 +4,7 @@
             <!-- Заглушка Банер -->
 
             <img
-                v-if="imgDataUrl?.media?.banner"
+                v-if="imgDataUrl"
                 :src="imgDataUrl.media.banner"
                 alt="Баннер личной страницы"
             />

@@ -9,7 +9,7 @@
                 <div v-if="user" class="user-data__name">
                     <h4>{{ user.first_name }}</h4>
                     <h4>{{ user.last_name }}</h4>
-            <!-- <slot name="banner"></slot> -->
+                    <!-- <slot name="banner"></slot> -->
                 </div>
                 <h4 v-if="user">{{ user.email }}</h4>
                 <div></div>
@@ -37,17 +37,22 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 let user = ref({});
 let education = ref(null);
 let region = ref(null);
 const route = useRoute();
 const id = route.params.id;
+
+
+// const props = defineProps({
+//     id: String
+// })
 const getUser = async () => {
     await HTTP.get(`/users/${id}/`, {
         headers: {
@@ -64,43 +69,53 @@ const getUser = async () => {
         });
 };
 
-const getEducation = async () => {
-    await HTTP.get('/users/me/education', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            education.value = response.data;
-            console.log(education.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const getEducation = async () => {
+//     await HTTP.get('/users/me/education', {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             education.value = response.data;
+//             console.log(education.value);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
-const getRegion = async () => {
-    await HTTP.get('/regions/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            region.value = response.data;
-            console.log(region.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-}
+// const getRegion = async () => {
+//     await HTTP.get('/regions/', {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             region.value = response.data;
+//             console.log(region.value);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+
+
+
+// onBeforeRouteUpdate((to, from) => {
+//     getUser(to.params.id);
+// })
+
+
 
 onMounted(() => {
-    getUser();
-    getEducation();
-    getRegion();
+    getUser()
+    // getEducation();
+    // getRegion();
 });
+
+
 
 // const getRegion = async (id) => {
 //     await HTTP

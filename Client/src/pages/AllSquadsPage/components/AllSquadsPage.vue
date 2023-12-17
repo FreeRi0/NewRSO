@@ -5,7 +5,7 @@
             <bannerCreate
                 desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
                 label="Создать отряд"
-                link="/CreateLSO"
+                name="CreateLSO"
             ></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
             <div class="squads-tabs">

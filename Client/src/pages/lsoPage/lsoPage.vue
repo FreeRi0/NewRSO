@@ -18,7 +18,6 @@
             </v-col>
         </v-row>
         <SquadParticipants></SquadParticipants>
-
     </div>
 </template>
 <script setup>
@@ -26,15 +25,19 @@ import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerSquad } from '@features/baner/components';
 import { squadPhotos } from '@shared/components/imagescomp';
 import SquadParticipants from './components/SquadParticipants.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 const squad = ref({});
 const member = ref({});
 const educt = ref({});
 const route = useRoute();
 const id = route.params.id;
+
+// const props = defineProps({
+//     id: String
+// })
 
 const aboutSquad = async () => {
     await HTTP.get(`/detachments/${id}/`, {
@@ -83,10 +86,20 @@ const aboutMembers = async () => {
             console.log('an error occured ' + error);
         });
 };
+
+// watch(
+//     () => route.params.id,
+
+//     (newId, oldId) => {
+//         aboutSquad(route.params.id);
+//     },
+// );
+
+onMounted(() => {
     aboutSquad();
     aboutMembers();
     aboutEduc();
-
+});
 
 const pages = [
     { pageTitle: 'Личный кабинет', href: '/UserPage' },

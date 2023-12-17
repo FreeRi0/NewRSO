@@ -5,33 +5,34 @@
             <img
                 :src="userPhotoUrl.media.photo1"
                 alt="Фото пользователя"
-                v-if="userPhotoUrl?.media?.photo1"
+                v-if="userPhotoUrl"
+            />
+            <!-- <img
+                :src="userPhotoUrl2.media.photo2"
+                alt="Фото пользователя"
+                v-else-if="userPhotoUrl2"
             />
             <img
-                :src="userPhotoUrl.media.photo2"
+                :src="userPhotoUrl3.media.photo3"
                 alt="Фото пользователя"
-                v-else-if="userPhotoUrl?.media?.photo2"
+                v-else-if="userPhotoUrl3"
             />
             <img
-                :src="userPhotoUrl.media.photo3"
+                :src="userPhotoUrl4.media.photo4"
                 alt="Фото пользователя"
-                v-if="userPhotoUrl?.media?.photo3"
-            />
-            <img
-                :src="userPhotoUrl.media.photo4"
-                alt="Фото пользователя"
-                v-if="userPhotoUrl?.media?.photo4"
-            />
+                v-else-if="userPhotoUrl4"
+            /> -->
 
             <img
                 src="@/app/assets/user-banner.jpg"
                 alt="Фото пользователя(пусто)"
                 v-else
+
             />
         </div>
         <!-- Добавить фото -->
         <div class="avatar-edit my_photo__add">
-            <v-menu min-width="200px" rounded v-if="!file">
+            <v-menu min-width="200px" rounded v-if="!userPhotoUrl">
                 <template v-slot:activator="{ props }">
                     <v-btn class="user-metric__baner-add" icon v-bind="props">
                         <v-avatar size="large">
@@ -194,7 +195,7 @@
 import { ref, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-const userPhotoUrl = ref('');
+const userPhotoUrl = ref(null);
 const route = useRoute();
 const dialog = ref(false);
 const preview = ref(null);

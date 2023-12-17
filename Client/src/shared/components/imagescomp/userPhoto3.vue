@@ -3,9 +3,9 @@
       <!-- Заглушка по умолчанию  -->
       <div class="avatar-preview my_photo__plug">
           <img
-              :src="userPhotoUrl.media.photo3"
+              :src="userPhotoUrl3.media.photo3"
               alt="Фото пользователя"
-              v-if="userPhotoUrl?.media?.photo3"
+              v-if="userPhotoUrl3"
               v-show="true"
           />
 
@@ -180,7 +180,7 @@
 import { ref, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-const userPhotoUrl = ref('');
+const userPhotoUrl3 = ref(null);
 const route = useRoute();
 const dialog = ref(false);
 const preview = ref(null);
@@ -196,7 +196,7 @@ const viewUsersPhoto = async () => {
       },
   })
       .then((response) => {
-          userPhotoUrl.value = response.data;
+          userPhotoUrl3.value = response.data;
           console.log(response);
       })
       .catch(function (error) {
