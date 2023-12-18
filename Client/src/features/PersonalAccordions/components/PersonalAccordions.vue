@@ -155,7 +155,9 @@
                                         name="surname-parent"
                                         class="input-big"
                                         placeholder="Введите фамилию"
-                                        v-model:value="parentData.parent_last_name"
+                                        v-model:value="
+                                            parentData.parent_last_name
+                                        "
                                     />
                                 </div>
                                 <div class="form-field">
@@ -164,13 +166,13 @@
                                             >*</span
                                         ></label
                                     >
-                                    <sortByEducation
+                                    <Select
                                         class="input-small"
+                                        variant="outlined"
+                                    clearable
                                         v-model="parentData.relationship"
-                                        :options="parents"
-                                    ></sortByEducation>
-
-
+                                        :names="parents"
+                                    ></Select>
                                 </div>
 
                                 <div class="form-field">
@@ -181,7 +183,9 @@
                                         class="input-big"
                                         name="patronomyc-parent"
                                         placeholder="Введите Отчество"
-                                        v-model:value="parentData.parent_patronymic_name"
+                                        v-model:value="
+                                            parentData.parent_patronymic_name
+                                        "
                                     />
                                 </div>
                                 <div class="form-field">
@@ -194,7 +198,9 @@
                                         type="date"
                                         name="date-parent"
                                         class="input-small"
-                                        v-model:value="parentData.parent_date_of_birth"
+                                        v-model:value="
+                                            parentData.parent_date_of_birth
+                                        "
                                     />
                                 </div>
                                 <div class="form-field">
@@ -207,7 +213,9 @@
                                         name="name-parent"
                                         class="input-big"
                                         placeholder="Введите имя"
-                                        v-model:value="parentData.parent_first_name"
+                                        v-model:value="
+                                            parentData.parent_first_name
+                                        "
                                     />
                                 </div>
 
@@ -224,7 +232,9 @@
                                         name="phone-parent"
                                         class="input-small phone"
                                         placeholder="+7(__) __ __ _"
-                                        v-model:value="parentData.parent_phone_number"
+                                        v-model:value="
+                                            parentData.parent_phone_number
+                                        "
                                     />
                                 </div>
                             </div>
@@ -284,7 +294,9 @@
                                         vmaska
                                         maska="####-######"
                                         placeholder="__ __ ____"
-                                        v-model:value="parentData.passport_number"
+                                        v-model:value="
+                                            parentData.passport_number
+                                        "
                                     />
                                 </div>
 
@@ -294,9 +306,12 @@
                                             >*</span
                                         ></label
                                     >
-                                    <SelectRegion
+                                    <Select
                                         class="input-big"
-                                    ></SelectRegion>
+                                        variant="outlined"
+                                        clearable
+                                        address="api/v1/regions/"
+                                    ></Select>
                                 </div>
 
                                 <div class="form-field" id="pass-no-date">
@@ -337,7 +352,9 @@
                                         name="pass-id-parent"
                                         class="input-big"
                                         placeholder="Название организации"
-                                        v-model:value="parentData.passport_authority"
+                                        v-model:value="
+                                            parentData.passport_authority
+                                        "
                                     />
                                 </div>
 
@@ -499,9 +516,12 @@
                             <label for="regionContact"
                                 >Регион<span class="valid-red">*</span></label
                             >
-                            <SelectRegion
+                            <Select
+                                variant="outlined"
+                                clearable
                                 v-model:value="regionData.reg_region_id"
-                            ></SelectRegion>
+                                address="api/v1/regions/"
+                            ></Select>
                         </div>
                         <div class="form-field">
                             <label for="email-contact"
@@ -604,9 +624,12 @@
                             </p>
                             <div class="form-field">
                                 <label for="">Регион</label>
-                                <SelectRegion
+                                <Select
+                                    variant="outlined"
+                                    clearable
                                     v-model="regionFact"
-                                ></SelectRegion>
+                                    address="api/v1/regions/"
+                                ></Select>
                             </div>
                             <div class="form-field">
                                 <label for="locality-fact"
@@ -781,13 +804,13 @@
                             </div>
                             <div class="form-field">
                                 <label for="">Документ воинского учета</label>
-                                <sortByEducation
+                                <Select
+                                    variant="outlined"
+                                    clearable
                                     class="select-big"
                                     v-model="selectedMilitary"
-                                    vmaska
-                                    maska="AA ##########"
-                                    :options="militaryDocs"
-                                ></sortByEducation>
+                                    :names="militaryDocs"
+                                ></Select>
                             </div>
                             <div class="form-field">
                                 <label for="military-id"
@@ -1841,7 +1864,7 @@ import { FileUpload } from '@features/Upload/components';
 // import { vMaska } from 'maska';
 import { useVuelidate } from '@vuelidate/core';
 import { useRouter } from 'vue-router';
-import { SelectRegion, sortByEducation } from '@shared/components/selects';
+import { Select } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import {
     helpers,
@@ -2553,5 +2576,3 @@ const militaryNumber = ref('');
     margin-bottom: 20px;
 }
 </style>
-// 6S3-7s!7A}@t
-@shared/components/selects/inputs
