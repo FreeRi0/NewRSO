@@ -420,3 +420,4 @@ body {
     }
 }
 </style>
+@shared/components/selects/inputs

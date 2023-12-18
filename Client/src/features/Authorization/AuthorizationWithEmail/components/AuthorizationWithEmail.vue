@@ -75,6 +75,7 @@ const LoginUser = async () => {
                 timer: 1500,
             });
             router.push('/UserPage');
+            // router.push({ name: 'userpage'});
         })
 
         .catch(({ response }) => {
@@ -107,3 +108,4 @@ const LoginUser = async () => {
     padding-bottom: 2rem;
 }
 </style>
+@shared/components/selects/inputs

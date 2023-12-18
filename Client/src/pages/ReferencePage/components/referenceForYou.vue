@@ -774,3 +774,4 @@ input[type='number']::-webkit-outer-spin-button {
     display: none;
 }
 </style>
+@shared/components/selects/inputs

@@ -763,3 +763,4 @@ input[type='number']::-webkit-outer-spin-button {
     color: white;
 }
 </style>
+@shared/components/selects/inputs

@@ -54,7 +54,7 @@ const id = route.params.id;
 //     id: String
 // })
 const getUser = async () => {
-    await HTTP.get(`/users/${id}/`, {
+    await HTTP.get(`/rsousers/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -68,6 +68,22 @@ const getUser = async () => {
             console.log('an error occured ' + error);
         });
 };
+
+const getAuthUser = async () => {
+    await HTTP.get('/rsousers/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
 
 // const getEducation = async () => {
 //     await HTTP.get('/users/me/education', {
@@ -111,6 +127,7 @@ const getUser = async () => {
 
 onMounted(() => {
     getUser()
+    getAuthUser()
     // getEducation();
     // getRegion();
 });

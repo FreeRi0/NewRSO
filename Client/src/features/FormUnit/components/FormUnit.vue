@@ -1020,3 +1020,4 @@ const changeValue = (event) => {
     }
 }
 </style>
+@shared/components/selects/inputs@shared/components/selects/inputs

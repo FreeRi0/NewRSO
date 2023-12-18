@@ -133,3 +133,4 @@ p {
     padding: 16px 32px;
 }
 </style>
+@shared/components/selects/inputs

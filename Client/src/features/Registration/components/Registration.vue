@@ -238,3 +238,4 @@ const RegisterUser = async () => {
         });
 };
 </script>
+@shared/components/selects/inputs

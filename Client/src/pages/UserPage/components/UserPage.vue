@@ -23,11 +23,8 @@
 
             <TextArea class="mt-14"></TextArea>
             <v-row class="mt-8">
-                <v-col class="d-flex">
-                    <userPhoto></userPhoto>
-                    <userPhoto2></userPhoto2>
-                    <userPhoto3></userPhoto3>
-                    <userPhoto4></userPhoto4>
+                <v-col v-for="n in 4" :key="n" class="d-flex">
+                  <userPhoto></userPhoto>
                 </v-col>
             </v-row>
         </div>
@@ -37,7 +34,9 @@
 import { Button } from '@shared/components/buttons';
 import { BannerComp } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
-import { userPhoto, userPhoto2, userPhoto3, userPhoto4 } from '@shared/components/imagescomp';
+import {
+    userPhoto,
+} from '@shared/components/imagescomp';
 
 import { ref, computed } from 'vue';
 </script>
@@ -64,3 +63,4 @@ import { ref, computed } from 'vue';
     height: 52px;
 }
 </style>
+@shared/components/selects/inputs

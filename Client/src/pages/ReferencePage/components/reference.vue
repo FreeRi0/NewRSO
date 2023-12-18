@@ -801,3 +801,4 @@ input[type='number']::-webkit-outer-spin-button {
     }
 }
 </style>
+@shared/components/selects/inputs

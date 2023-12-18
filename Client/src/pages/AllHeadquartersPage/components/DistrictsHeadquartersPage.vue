@@ -262,3 +262,4 @@ onMounted(() => {
     }
 }
 </style>
+@shared/components/selects/inputs

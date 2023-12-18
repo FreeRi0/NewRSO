@@ -71,7 +71,7 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/UserPage',
-                name: 'userpagemY',
+                name: 'userpaage',
                 component: () =>
                     import('@pages/UserPage/components/UserPage.vue'),
                     meta: {

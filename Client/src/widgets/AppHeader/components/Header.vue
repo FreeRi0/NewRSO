@@ -147,7 +147,7 @@ const pages = ref([
 
 const userPages = ref([
     { title: 'Моя страница', link: '/UserPage' },
-    { title: 'Мой отряд', link: '#' },
+    { title: 'Мой отряд', link:  '/allSquads' },
     { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
     { title: 'Местный штаб', link: '/LocalHeadquarters' },
     { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
@@ -156,7 +156,7 @@ const userPages = ref([
     { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', link: '/contributorPay' },
     { title: 'Оформление справок', link: '#' },
-    { title: 'Настройки профиля', link: '#' },
+    { title: 'Настройки профиля', link: '/PersonalData' },
     { title: 'Выйти из ЛК', link: '#' },
 ]);
 
@@ -577,3 +577,4 @@ onMounted(() => {
     font-weight: 600;
 }
 </style>
+@shared/components/selects/inputs

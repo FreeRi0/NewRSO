@@ -398,3 +398,4 @@ const sortedHeadquarters = computed(() => {
   }
 }
 </style>
+@shared/components/selects/inputs
