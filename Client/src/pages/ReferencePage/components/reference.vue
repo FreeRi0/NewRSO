@@ -384,14 +384,18 @@
                         <div class="sort-filters">
                             <div class="sort-select">
                                 <sortByEducation
+                                    variant="outlined"
+                                    clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
                                 ></sortByEducation>
                             </div>
 
                             <Button
+                                type="button"
+                                class="ascend"
+                                icon="switch"
                                 @click="ascending = !ascending"
-                                icon="icon"
                                 color="white"
                             ></Button>
                         </div>
@@ -723,7 +727,7 @@ input[type='number']::-webkit-outer-spin-button {
 .input-big {
     width: 465px;
     @media screen and (max-width: 768px) {
-       width: 100%;
+        width: 100%;
     }
 }
 
@@ -736,7 +740,6 @@ input[type='number']::-webkit-outer-spin-button {
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     height: 48px;
-    margin: 0px 12px;
     width: 48px;
     input {
         width: 24px;
@@ -747,6 +750,7 @@ input[type='number']::-webkit-outer-spin-button {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
 .filters-title {
     font-size: 24px;
     font-weight: 600;
@@ -801,4 +805,4 @@ input[type='number']::-webkit-outer-spin-button {
     }
 }
 </style>
-@shared/components/selects/inputs
+

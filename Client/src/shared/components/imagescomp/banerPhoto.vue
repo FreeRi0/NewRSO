@@ -15,7 +15,7 @@
                 alt="Баннер личной страницы(пусто)"
             />
         </div>
-        <v-menu min-width="200px" rounded v-if="!file">
+        <v-menu min-width="200px" rounded v-if="!media">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -68,7 +68,7 @@
                                         Закрыть
                                     </v-btn>
                                     <v-btn
-                                        :disabled="!file"
+                                        :disabled="!media"
                                         color="blue-darken-1"
                                         variant="text"
                                         type="submit"
@@ -141,7 +141,7 @@
                                             Закрыть
                                         </v-btn>
                                         <v-btn
-                                            :disabled="!file"
+                                            :disabled="!media"
                                             color="blue-darken-1"
                                             variant="text"
                                             type="submit"
@@ -173,7 +173,10 @@ const id = route.params.id;
 const dialog = ref(false);
 const imgDataUrl = ref(null);
 const preview = ref(null);
-const file = ref(null);
+// const file = ref(null);
+const media = ref({
+    banner: null,
+});
 
 const viewBanner = async () => {
     await HTTP.get(`/rsousers/${id}/`, {
@@ -193,14 +196,14 @@ const viewBanner = async () => {
 viewBanner();
 
 const selectBanner = (event) => {
-    file.value = event.target.files[0];
-    preview.value = URL.createObjectURL(file.value);
+    media.value = event.target.files[0];
+    preview.value = URL.createObjectURL(media.value);
 };
 
 const uploadBanner = async () => {
     dialog.value = true;
     const formData = new FormData();
-    formData.append('banner', file.value);
+    formData.append('banner', media.value);
     await HTTP.post('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -219,7 +222,7 @@ const uploadBanner = async () => {
 
 const updateBanner = async () => {
     const fd = new FormData();
-    fd.append('banner', file.value);
+    fd.append('banner', media.value);
     dialog.value = true;
     await HTTP.put('/rsousers/me/media/', fd, {
         headers: {
@@ -238,12 +241,14 @@ const updateBanner = async () => {
 };
 
 const deleteBanner = async () => {
-    await HTTP.delete('/rsousers/me/media/', {
+    await HTTP.put('/rsousers/me/media/', media.value, {
         headers: {
+            'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
+            viewBanner();
             console.log(response, 'deleted');
         })
         .catch(function (error) {

@@ -402,7 +402,6 @@ body {
 
 .form__select {
   margin-bottom: 0px;
-  margin-right: 8px;
 }
 
 @media (max-width: 575px) {

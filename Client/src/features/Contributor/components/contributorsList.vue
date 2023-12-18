@@ -44,6 +44,8 @@
 
         <div class="sort-select mx-3">
             <sortByEducation
+                variant="outlined"
+                clearable
                 v-model="payed"
                 :options="filteredPayed"
             ></sortByEducation>
@@ -58,7 +60,7 @@ import { ref } from 'vue';
 import { sortByEducation } from '@shared/components/selects';
 
 const emit = defineEmits(['change']);
-const payed = ref([]);
+const payed = ref(null);
 
 const filteredPayed = ref([
     {
@@ -182,7 +184,13 @@ const selectedPeoples = ref([]);
     height: 46px;
 }
 
-.sort-select__input {
-  padding: 9px 16px 10px 16px;
+.sort-select {
+    height: 46px;
+}
+
+.form__select {
+    margin-bottom: 0px;
+    margin-right: 8px;
+    border: none;
 }
 </style>

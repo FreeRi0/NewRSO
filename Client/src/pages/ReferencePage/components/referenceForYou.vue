@@ -2,7 +2,7 @@
     <div class="container">
         <div class="references">
             <h2 class="references-title">
-              Справка о членстве в РСО (для внутреннего пользования)
+                Справка о членстве в РСО (для внутреннего пользования)
             </h2>
             <div class="references-search">
                 <input
@@ -384,14 +384,18 @@
                         <div class="sort-filters">
                             <div class="sort-select">
                                 <sortByEducation
+                                    variant="outlined"
+                                    clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
                                 ></sortByEducation>
                             </div>
 
                             <Button
+                                type="button"
+                                class="ascend"
+                                icon="switch"
                                 @click="ascending = !ascending"
-                                icon="icon"
                                 color="white"
                             ></Button>
                         </div>
@@ -651,6 +655,13 @@ input[type='number']::-webkit-outer-spin-button {
     margin: 0;
 }
 
+.ascend {
+    margin-left: 5px;
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .references {
     padding: 60px 0px 60px 0px;
     &-title {
@@ -714,14 +725,17 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .references-sort__all {
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse;
-    padding: 11px 15px;
-    height: 46px;
+    padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
+    height: 48px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
 }
+
 .filter {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -735,6 +749,12 @@ input[type='number']::-webkit-outer-spin-button {
     margin-top: 60px;
     h3 {
         margin-bottom: 40px;
+    }
+}
+
+.sort {
+    &-filters {
+        align-items: flex-start;
     }
 }
 

@@ -1,5 +1,6 @@
 <template>
     <div class="user-metric__avatar-wrapper">
+
         <div class="user-metric__avatar">
             <!-- Аватар пользователя  -->
 
@@ -16,8 +17,10 @@
             />
         </div>
 
+
+
         <!-- Иконки редактирования аватар -->
-        <v-menu min-width="200px" rounded v-if="!imageUrl">
+        <v-menu min-width="200px" rounded v-if="!media">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -70,7 +73,7 @@
                                         Закрыть
                                     </v-btn>
                                     <v-btn
-                                        :disabled="!file"
+                                        :disabled="!media"
                                         color="blue-darken-1"
                                         variant="text"
                                         type="submit"
@@ -144,7 +147,7 @@
                                             Закрыть
                                         </v-btn>
                                         <v-btn
-                                            :disabled="!file"
+                                            :disabled="!media"
                                             color="blue-darken-1"
                                             variant="text"
                                             type="submit"
@@ -157,6 +160,7 @@
                             </v-dialog>
                         </v-row>
                         <v-divider class="my-3"></v-divider>
+
                         <v-btn rounded variant="text" @click="deleteAvatar()">
                             Удалить фото
                         </v-btn>
@@ -170,8 +174,11 @@
 import { ref } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
+const media = ref({
+    photo: null,
+})
 
-const file = ref(null);
+// const photo = ref(null);
 const imageUrl = ref(null);
 const route = useRoute();
 const dialog = ref(false);
@@ -197,15 +204,15 @@ const viewAvatar = async () => {
 viewAvatar();
 
 const selectFile = (event) => {
-    file.value = event.target.files[0];
-    preview.value = URL.createObjectURL(file.value);
+    media.value = event.target.files[0];
+    preview.value = URL.createObjectURL(media.value);
 };
 
 const uploadAvatar = async () => {
     dialog.value = true;
     const formData = new FormData();
-    formData.append('photo', file.value);
-    await HTTP.post('/rsousers/me/media/', formData, {
+    formData.append('photo', media.value);
+    await HTTP.put('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -222,7 +229,7 @@ const uploadAvatar = async () => {
 };
 const updateAvatar = async () => {
     let fd = new FormData();
-    fd.append('photo', file.value);
+    fd.append('photo', media.value);
     dialog.value = true;
     await HTTP.put('/rsousers/me/media/', fd, {
         headers: {
@@ -241,10 +248,9 @@ const updateAvatar = async () => {
 };
 
 const deleteAvatar = async () => {
-    let fd = new FormData();
-    fd.append('photo', file.value);
-    await HTTP.put('/rsousers/me/media/', fd, {
+    await HTTP.put('/rsousers/me/media/', media.value, {
         headers: {
+            'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })

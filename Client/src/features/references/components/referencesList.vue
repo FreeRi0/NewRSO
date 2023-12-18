@@ -181,7 +181,6 @@ watch(
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     height: 48px;
-    margin: 0px 12px;
     width: 48px;
     input {
         width: 24px;

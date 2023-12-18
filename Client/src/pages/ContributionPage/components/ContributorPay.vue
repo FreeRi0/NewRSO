@@ -413,14 +413,18 @@
                             <div class="sort-filters">
                                 <div class="sort-select">
                                     <sortByEducation
+                                        variant="outlined"
+                                        clearable
                                         v-model="sortBy"
                                         :options="sortOptionss"
                                     ></sortByEducation>
                                 </div>
 
                                 <Button
+                                    type="button"
+                                    class="ascend"
+                                    icon="switch"
                                     @click="ascending = !ascending"
-                                    icon="icon"
                                     color="white"
                                 ></Button>
                             </div>
@@ -574,6 +578,8 @@ const sortedParticipants = computed(() => {
         }
     });
 
+    tempParticipants = tempParticipants.filter((item) => item.is_trusted === picked.value);
+
     if (!ascending.value) {
         tempParticipants.reverse();
     }
@@ -683,6 +689,13 @@ input[type='number']::-webkit-outer-spin-button {
     width: 465px;
 }
 
+.ascend {
+    margin-left: 5px;
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .input-full {
     width: 100%;
 }
@@ -704,11 +717,18 @@ input[type='number']::-webkit-outer-spin-button {
     font-size: 24px;
     font-weight: 600;
     line-height: 31px;
+    margin-bottom: 24px;
 }
 .selectedItems {
     margin-top: 60px;
     h3 {
         margin-bottom: 40px;
+    }
+}
+.sort {
+    &-filters {
+        align-items: flex-start;
+
     }
 }
 
@@ -751,16 +771,15 @@ input[type='number']::-webkit-outer-spin-button {
 .contributorBtn {
     border-radius: 30px;
     background-color: white;
-    color: #1C5C94;
-    border: 1px solid #1C5C94;
+    color: #1c5c94;
+    border: 1px solid #1c5c94;
     margin: 0px;
     padding: 10px 24px;
     margin: 7px;
 }
 
 .active {
-    background-color: #1C5C94;
+    background-color: #1c5c94;
     color: white;
 }
 </style>
-@shared/components/selects/inputs
