@@ -1,7 +1,7 @@
 <template>
-    <div class="d-flex justify-end">
-        <v-card class="px-14 py-15" max-width="586">
-            <v-card-title class="text-h4 text-center"
+    <div class="d-flex justify-end align-self-center">
+        <v-card class=""  height="535px">
+            <v-card-title class="text-center"
                 >Вход в личный кабинет</v-card-title
             >
 
@@ -11,20 +11,21 @@
                     <router-link to="/Register">Зарегистрироваться</router-link>
                 </v-card-text>
                 <Input
-                    placeholder="Имя"
+                    placeholder="Логин"
                     name="name"
                     v-model:value="data.username"
                     class="username-input"
                 />
 
-                <p v-if="isError">{{ isError }}</p>
-                <PasswordInputVue
+                <p v-if="isError">{{ isError.username }}</p>
+                <Input
+                    type="password"
                     placeholder="Пароль"
                     name="password"
                     v-model:value="data.password"
-                ></PasswordInputVue>
+                ></Input>
 
-                <p v-if="isError">{{ isError }}</p>
+                <p v-if="isError">{{ isError.password }}</p>
                 <Button
                     class="login_btn"
                     type="submit"
@@ -36,7 +37,7 @@
 
                 <v-card-text class="text-center"
                     >Забыли пароль?
-                    <router-link to="/">Восстановить</router-link></v-card-text
+                    <router-link to="/RecoveryPass">Восстановить</router-link></v-card-text
                 >
             </v-form>
         </v-card>
@@ -55,7 +56,7 @@ const data = ref({
     username: '',
     password: '',
 });
-const isError = ref(null);
+const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 const router = useRouter();
@@ -99,13 +100,25 @@ const LoginUser = async () => {
 }
 
 .v-card-title {
-    padding: 0rem 1rem;
-    padding-top: 2rem;
+   padding: 0rem 1rem;
+   font-size: 40px;
+   font-weight: 600;
+   font-family: Akrobat;
+   padding-top: 0rem;
 }
-
 .v-card-text {
     padding: 0;
-    padding-bottom: 2rem;
+    margin-bottom: 20px;
+    font-size: 18px;
 }
+
+.v-card {
+   padding: 105px 98px;
+ }
+
+a {
+   text-decoration: underline;
+   font-weight: bold;
+   font-size: 18px;
+ }
 </style>
-@shared/components/selects/inputs

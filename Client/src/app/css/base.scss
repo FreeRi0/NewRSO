@@ -48,6 +48,13 @@ body div[id='app'] {
     }
 }
 
+.ascend {
+    border: 1px solid #35383F !important;
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+
+ }
 
 ul {
     list-style: none;
@@ -60,6 +67,7 @@ a {
     color: var(--primary-color);
     text-decoration: none;
 }
+
 
 img {
     display: block;

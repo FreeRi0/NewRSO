@@ -34,7 +34,7 @@
                 <div ref="navMenu" class="header__nav-container no-visible">
                     <div class="header__overlay" @click="removeClass()"></div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item">
+                        <li class="header__nav-item" v-if="user">
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
@@ -65,7 +65,7 @@
                     <div class="nav-user__quantity"></div>
                 </div>
 
-                <div class="nav-user__location">
+                <div class="nav-user__location" v-if="user">
                     <button class="nav-user__button" @click="show = !show">
                         <!--прописать в span кнопки логику изменения ее названия-->
                         <span>Карачаево-Черкесское региональное отделение</span>
@@ -112,15 +112,15 @@
                     </div>
                 </div>
 
-                <div class="nav-user__menu user-menu">
+                <div class="nav-user__menu user-menu" v-if="user">
                     <Dropdown
                         :items="userPages"
                         :image="true"
                         url="/assets/avatar-user.svg"
                         desc="Фотография пользователя"
                     />
-                    <!-- <Button v-if="user" @click="LogOut" label="Выйти"></Button>
-                    <p v-else>Not auth</p> -->
+                    <Button v-if="user" @click="LogOut" label="Выйти"></Button>
+                    <p v-else>Not auth</p>
                 </div>
             </nav>
         </header>
@@ -155,7 +155,7 @@ const userPages = ref([
     { title: 'Активные заявки', link: '#' },
     { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', link: '/contributorPay' },
-    { title: 'Оформление справок', link: '#' },
+    { title: 'Оформление справок', link: '/references' },
     { title: 'Настройки профиля', link: '/PersonalData' },
     { title: 'Выйти из ЛК', link: '#' },
 ]);
@@ -176,7 +176,7 @@ const LogOut = () => {
 };
 
 const getUser = async () => {
-    await HTTP.get('/users/me/', {
+    await HTTP.get('/rsousers/me/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

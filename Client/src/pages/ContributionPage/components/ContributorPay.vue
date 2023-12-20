@@ -3,28 +3,30 @@
         <div class="contributor">
             <h2 class="contributor-title">Членский взнос</h2>
             <div class="d-flex mt-7">
-                <Button
+                <button
                     type="button"
-                    label="Мой членский взнос"
+
                     class="contributorBtn"
                     :class="{ active: picked === true }"
                     @click="picked = true"
-                ></Button>
+                >Мой членский взнос</button>
 
-                <Button
+                <button
                     type="button"
-                    label="Данные об оплате членского взноса пользователями системы"
                     class="contributorBtn"
                     :class="{ active: picked === false }"
                     @click="picked = false"
-                ></Button>
+                >Данные об оплате членского взноса пользователями системы</button>
             </div>
 
-            <!-- <Search v-model="searchParticipants" /> -->
-
-            <div v-if="picked === true">
+            <div class="contributor-info" v-if="picked === true && user.membership_fee === false">
                 Уважаемый пользователь, ваш членский взнос не оплачен.
             </div>
+
+            <div class="contributor-info" v-else-if="picked === true && user.membership_fee === true">
+                Уважаемый пользователь, ваш членский взнос оплачен.
+            </div>
+
             <div v-else="picked === false">
                 <div class="contributor-search">
                     <input
@@ -91,7 +93,7 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <div class="contributor-search filter">
+                                    <!-- <div class="contributor-search filter">
                                         <input
                                             type="text"
                                             id="search"
@@ -103,7 +105,16 @@
                                             src="@app/assets/icon/search.svg"
                                             alt="search"
                                         />
-                                    </div>
+                                    </div> -->
+                                    <Select
+                                        variant="outlined"
+                                        clearable
+                                        name="select_district"
+                                        id="select-district"
+                                        v-model="searchHeadquarter"
+                                        class="filter-district"
+                                        address="api/v1/districts/"
+                                    ></Select>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
                             <v-expansion-panel>
@@ -120,7 +131,7 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <div class="contributor-search filter">
+                                    <!-- <div class="contributor-search filter">
                                         <input
                                             type="text"
                                             id="search"
@@ -132,7 +143,16 @@
                                             src="@app/assets/icon/search.svg"
                                             alt="search"
                                         />
-                                    </div>
+                                    </div> -->
+                                    <Select
+                                        variant="outlined"
+                                        clearable
+                                        name="select_region"
+                                        id="select-region"
+                                        v-model="searchHeadquarterRegion"
+                                        class="filter-region"
+                                        address="api/v1/regionals/"
+                                    ></Select>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
                             <v-expansion-panel>
@@ -149,7 +169,7 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <div class="contributor-search filter">
+                                    <!-- <div class="contributor-search filter">
                                         <input
                                             type="text"
                                             id="search"
@@ -161,7 +181,16 @@
                                             src="@app/assets/icon/search.svg"
                                             alt="search"
                                         />
-                                    </div>
+                                    </div> -->
+                                    <Select
+                                        variant="outlined"
+                                        clearable
+                                        name="select_local"
+                                        id="select-local"
+                                        v-model="searchHeadquarterLocal"
+                                        class="filter-local"
+                                        address="api/v1/locals/"
+                                    ></Select>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
                             <v-expansion-panel>
@@ -178,7 +207,7 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <div class="contributor-search filter">
+                                    <!-- <div class="contributor-search filter">
                                         <input
                                             type="text"
                                             id="search"
@@ -190,7 +219,16 @@
                                             src="@app/assets/icon/search.svg"
                                             alt="search"
                                         />
-                                    </div>
+                                    </div> -->
+                                    <Select
+                                        variant="outlined"
+                                        clearable
+                                        name="select_educ"
+                                        id="select-educ"
+                                        v-model="searchEducation"
+                                        class="filter-educ"
+                                        address="api/v1/eduicational_institutions/"
+                                    ></Select>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
                             <v-expansion-panel>
@@ -242,7 +280,7 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <div class="contributor-search filter">
+                                    <!-- <div class="contributor-search filter">
                                         <input
                                             type="text"
                                             id="search"
@@ -254,7 +292,16 @@
                                             src="@app/assets/icon/search.svg"
                                             alt="search"
                                         />
-                                    </div>
+                                    </div> -->
+                                    <Select
+                                        variant="outlined"
+                                        clearable
+                                        name="select_detachments"
+                                        id="select-detachments"
+                                        v-model="searchLSO"
+                                        class="filter-detachments"
+                                        address="api/v1/detachments/"
+                                    ></Select>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
                         </v-expansion-panels>
@@ -431,7 +478,6 @@
                         </div>
                         <div class="contributor-wrapper">
                             <contributorsList
-                                @change="changePeoples"
                                 :participants="sortedParticipants"
                             ></contributorsList>
                         </div>
@@ -453,27 +499,30 @@
 </template>
 //
 <script setup>
-import participants from '@entities/Participants/participants';
+//    @change="changePeoples"
 import { Button } from '@shared/components/buttons';
 import { RadioButton } from '@shared/components/buttons';
 import { Dropdown } from '@shared/components/dropdown';
 import { Input } from '@shared/components/inputs';
 import { contributorsList } from '@features/Contributor/components';
-import { sortByEducation } from '@shared/components/selects';
-import { ref, computed } from 'vue';
+import { sortByEducation, Select } from '@shared/components/selects';
+import { ref, computed, onMounted } from 'vue';
+import { HTTP } from '@app/http';
 
+const participants = ref([]);
 const participantsVisible = ref(12);
+const user = ref({});
 
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
 const selectedSex = ref('Все');
 const selectedStatus = ref('Все');
 const selectedPay = ref('Все');
-const searchHeadquarter = ref('');
-const searchHeadquarterLocal = ref('');
-const searchHeadquarterRegion = ref('');
-const searchLSO = ref('');
-const searchEducation = ref('');
+const searchHeadquarter = ref(null);
+const searchHeadquarterLocal = ref(null);
+const searchHeadquarterRegion = ref(null);
+const searchLSO = ref(null);
+const searchEducation = ref(null);
 const minAge = ref('');
 const maxAge = ref('');
 const picked = ref(false);
@@ -486,6 +535,43 @@ const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
+const viewParticipants = async () => {
+    await HTTP.get('/rsousers/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            participants.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const isMembership = async () => {
+    await HTTP.get('/rsousers/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    viewParticipants();
+    isMembership();
+});
+
 const select = () => {
     selectedPeoples.value = [];
 
@@ -496,9 +582,9 @@ const select = () => {
     }
 };
 const searchParticipants = ref('');
-const changePeoples = (selectedHumans) => {
-    selectedPeoples.value = selectedHumans;
-};
+// const changePeoples = (selectedHumans) => {
+//     selectedPeoples.value = selectedHumans;
+// };
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
 
@@ -535,25 +621,24 @@ const sortOptionss = ref([
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'birthdate', name: 'По дате вступления в РСО' },
-    { value: 'days', name: 'Популярности' },
+    { value: 'date_of_birth', name: 'По дате вступления в РСО' },
 ]);
 
 const sortedParticipants = computed(() => {
-    let tempParticipants = participants;
+    let tempParticipants = participants.value;
 
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
     tempParticipants = tempParticipants.filter((item) => {
-        return item.name
+        return item.first_name
             .toUpperCase()
             .includes(searchParticipants.value.toUpperCase());
     });
 
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa = a.first_name.toLowerCase(),
+                fb = b.first_name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -562,9 +647,9 @@ const sortedParticipants = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'birthdate') {
-            let fc = a.birthdate,
-                fn = b.birthdate;
+        } else if (sortBy.value == 'date_of_birth') {
+            let fc = a.date_of_birth,
+                fn = b.date_of_birth;
 
             if (fc < fn) {
                 return -1;
@@ -573,12 +658,8 @@ const sortedParticipants = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'days') {
-            return a.days - b.days;
         }
     });
-
-    tempParticipants = tempParticipants.filter((item) => item.is_trusted === picked.value);
 
     if (!ascending.value) {
         tempParticipants.reverse();
@@ -586,20 +667,20 @@ const sortedParticipants = computed(() => {
 
     const rangeSexes = {
         Все: () => true,
-        Мужской: (participant) => participant.sex == 'Мужской',
-        Женский: (participant) => participant.sex == 'Женский',
+        Мужской: (participant) => participant.gender == 'male',
+        Женский: (participant) => participant.gender == 'female',
     };
 
     const rangeStatus = {
         Все: () => true,
-        Верифицированный: (participant) => participant.verify == true,
-        Неверифицированный: (participant) => participant.verify == false,
+        Верифицированный: (participant) => participant.is_verified == true,
+        Неверифицированный: (participant) => participant.is_verified == false,
     };
 
     const rangePayed = {
         Все: () => true,
-        Оплачен: (participant) => participant.payed == true,
-        'Не оплачен': (participant) => participant.payed == false,
+        Оплачен: (participant) => participant.membership_fee == true,
+        'Не оплачен': (participant) => participant.membership_fee == false,
     };
 
     tempParticipants = tempParticipants.filter((item) => {
@@ -618,17 +699,35 @@ const sortedParticipants = computed(() => {
         return tempParticipants;
     }
     tempParticipants = tempParticipants.filter((item) => {
-        return item.days >= minAge.value && item.days <= maxAge.value;
+        return (
+            item.date_of_birth >= minAge.value &&
+            item.date_of_birth <= maxAge.value
+        );
     });
 
     return tempParticipants;
 });
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.contributorBtn {
+    border-radius: 30px;
+    background-color: white;
+    color: #1c5c94;
+    border: 1px solid #1c5c94;
+    margin: 0px;
+    padding: 10px 24px;
+    margin: 7px;
+}
+
+.active {
+    background-color: #1c5c94;
+    color: white;
 }
 
 .contributor {
@@ -663,6 +762,11 @@ input[type='number']::-webkit-outer-spin-button {
             border: 1px solid black;
         }
     }
+    &-info{
+        font-size: 18px;
+        font-weight: 400;
+        margin-top: 60px;
+    }
     &-wrapper {
         padding-top: 40px;
     }
@@ -685,6 +789,10 @@ input[type='number']::-webkit-outer-spin-button {
     margin-bottom: 8px;
 }
 
+.form__select {
+    border: 1px solid #35383F;
+}
+
 .input-big {
     width: 465px;
 }
@@ -701,14 +809,18 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .contributor-sort__all {
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse;
-    padding: 11px 15px;
-    height: 46px;
+    padding: 11px 12px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
+    height: 48px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
 }
+
+
 .filter {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -728,7 +840,6 @@ input[type='number']::-webkit-outer-spin-button {
 .sort {
     &-filters {
         align-items: flex-start;
-
     }
 }
 
@@ -751,7 +862,6 @@ input[type='number']::-webkit-outer-spin-button {
     }
 
     .v-expansion-panel-title {
-        // padding: 16px 0;
         max-height: 60px;
         font-family: 'Akrobat';
         font-size: 20px;
@@ -766,20 +876,5 @@ input[type='number']::-webkit-outer-spin-button {
 
 .v-expansion-panel:not(:first-child)::after {
     display: none;
-}
-
-.contributorBtn {
-    border-radius: 30px;
-    background-color: white;
-    color: #1c5c94;
-    border: 1px solid #1c5c94;
-    margin: 0px;
-    padding: 10px 24px;
-    margin: 7px;
-}
-
-.active {
-    background-color: #1c5c94;
-    color: white;
 }
 </style>

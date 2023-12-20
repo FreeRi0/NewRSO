@@ -22,18 +22,72 @@
             Для вступления в РСО внесите ниже персональные данные
         </p>
 
-        <p>{{ selectedAnswer }}</p>
+        <!-- <p>{{ selectedAnswer }}</p>
         <p>{{ selectedPass }}</p>
-        <p>{{ selectedAnswer == 'Нет' && selectedPass == 'Нет' }}</p>
-        <v-expansion-panels>
-            <v-expansion-panel>
+        <p>{{ selectedAnswer == 'Нет' && selectedPass == 'Нет' }}</p> -->
+        <v-expansion-panels v-model="panel">
+            <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
-                    <template v-slot:default="{ expanded }">
+                    <template v-slot="{ expanded }">
                         <v-row no-gutters>
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
                             </v-col>
+                            <!-- <div v-if="">обязательно для заполнения</div> -->
                         </v-row>
+                    </template>
+                    <template v-slot:actions="{ expanded }">
+                        <v-icon v-if="!expanded">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                        <v-icon v-else>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    transform="rotate(-180 16 16)"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
                     </template>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
@@ -169,7 +223,7 @@
                                     <Select
                                         class="input-small"
                                         variant="outlined"
-                                    clearable
+                                        clearable
                                         v-model="parentData.relationship"
                                         :names="parents"
                                     ></Select>
@@ -310,6 +364,7 @@
                                         class="input-big"
                                         variant="outlined"
                                         clearable
+                                        v-model="parentData.region"
                                         address="api/v1/regions/"
                                     ></Select>
                                 </div>
@@ -481,18 +536,72 @@
                             class="btn"
                             label="Далее"
                             size="large"
+                            @click="openPanelTwo"
                         ></Button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
 
-            <v-expansion-panel>
-                <v-expansion-panel-title v-slot="{ open }">
+            <v-expansion-panel value="panelTwo">
+                <v-expansion-panel-title>
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Адрес и контакты
                         </v-col>
                     </v-row>
+                    <template v-slot:actions="{ expanded }">
+                        <v-icon v-if="!expanded">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                        <v-icon v-else>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    transform="rotate(-180 16 16)"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                    </template>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
                     <div class="data-form none">
@@ -513,13 +622,14 @@
                             />
                         </div>
                         <div class="form-field">
-                            <label for="regionContact"
+                            <label for=""
                                 >Регион<span class="valid-red">*</span></label
                             >
                             <Select
                                 variant="outlined"
                                 clearable
-                                v-model:value="regionData.reg_region_id"
+                                v-model="regionData.reg_region_id"
+                                placeholder="Например, Карачаево-Черкесское региональное отделение"
                                 address="api/v1/regions/"
                             ></Select>
                         </div>
@@ -662,6 +772,7 @@
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
+                            @click="openPanelOne"
                             size="large"
                         ></Button>
                         <Button
@@ -669,19 +780,74 @@
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
+                            @click="openPanelThree"
                         ></Button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
 
-            <v-expansion-panel>
-                <v-expansion-panel-title v-slot="{ open }">
+            <v-expansion-panel value="panelThree">
+                <v-expansion-panel-title>
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Документы (паспорт, СНИЛС, ИНН, сведения о трудовой
                             деятельности, документ воинского учета)
                         </v-col>
+
                     </v-row>
+                    <template v-slot:actions="{ expanded }">
+                        <v-icon v-if="!expanded">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                        <v-icon v-else>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    transform="rotate(-180 16 16)"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                    </template>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="data-form docs">
@@ -937,23 +1103,80 @@
                             variant="text"
                             label="Назад"
                             size="large"
+                            @click="openPanelTwo"
                         ></Button>
                         <Button
                             type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
+                            @click="openPanelFour"
                         ></Button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-expansion-panel>
-                <v-expansion-panel-title v-slot="{ open }">
+            <v-expansion-panel value="panelFour">
+                <v-expansion-panel-title >
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Информация об образовании
                         </v-col>
+
                     </v-row>
+                    <template v-slot:actions="{ expanded }">
+                        <v-icon v-if="!expanded">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                        <v-icon v-else>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    transform="rotate(-180 16 16)"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                    </template>
+
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="data-form simple" id="simplee">
@@ -1018,23 +1241,83 @@
                             variant="text"
                             label="Назад"
                             size="large"
+                            @click="openPanelThree"
                         ></Button>
                         <Button
                             type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
+                            @click="openPanelFive"
                         ></Button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-expansion-panel class="no-RSO" v-if="selectedAnswer == 'Нет'">
-                <v-expansion-panel-title v-slot="{ open }">
+            <v-expansion-panel
+                value="panelFive"
+                class="no-RSO"
+                v-if="selectedAnswer == 'Нет'"
+            >
+                <v-expansion-panel-title>
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Заявление о вступлении в РСО и скан-копии документов
                         </v-col>
+
                     </v-row>
+                    <template v-slot:actions="{ expanded }">
+                        <v-icon v-if="!expanded">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                        <v-icon v-else>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    transform="rotate(-180 16 16)"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                    </template>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="RSO-blanks RSO" id="Blanks">
@@ -1317,6 +1600,7 @@
                             variant="text"
                             label="Назад"
                             size="large"
+                            @click="openPanelFour"
                         ></Button>
                         <Button
                             type="button"
@@ -1331,12 +1615,66 @@
                 class="yes-RSO"
                 v-else-if="selectedAnswer == 'Да'"
             >
-                <v-expansion-panel-title v-slot="{ open }">
+                <v-expansion-panel-title >
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Скан-копии документов
                         </v-col>
+
                     </v-row>
+                    <template v-slot:actions="{ expanded }">
+                        <v-icon v-if="!expanded">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                        <v-icon v-else>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    transform="rotate(-180 16 16)"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                    </template>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="RSO-blanks RSO" id="Blanks">
@@ -1496,12 +1834,65 @@
                 class="no-RSO-foreign"
                 v-else-if="selectedAnswer == 'Нет' && selectedPass == 'Нет'"
             >
-                <v-expansion-panel-title v-slot="{ open }">
+                <v-expansion-panel-title>
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Заявление о вступлении в РСО и скан-копии документов
                         </v-col>
                     </v-row>
+                    <template v-slot:actions="{ expanded }">
+                        <v-icon v-if="!expanded">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                        <v-icon v-else>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    transform="rotate(-180 16 16)"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                    </template>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="RSO-blanks RSO" id="Blanks">
@@ -1702,12 +2093,65 @@
                 class="yes-RSO-foreign"
                 v-else-if="selectedAnswer == 'Да' && selectedPass == 'Нет'"
             >
-                <v-expansion-panel-title v-slot="{ open }">
+                <v-expansion-panel-title>
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Скан-копии документов
                         </v-col>
                     </v-row>
+                    <template v-slot:actions="{ expanded }">
+                        <v-icon v-if="!expanded">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                        <v-icon v-else>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    transform="rotate(-180 16 16)"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                    </template>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="RSO-blanks RSO" id="Blanks">
@@ -1880,6 +2324,28 @@ import axios from 'axios';
 let education = ref(null);
 const router = useRouter();
 
+const panel = ref();
+
+const openPanelOne = () => {
+    panel.value = 'panelOne';
+};
+
+const openPanelTwo = () => {
+    panel.value = 'panelTwo';
+};
+
+const openPanelThree = () => {
+    panel.value = 'panelThree';
+};
+
+const openPanelFour = () => {
+    panel.value = 'panelFour';
+};
+
+const openPanelFive = () => {
+    panel.value = 'panelFive';
+};
+
 // let endpoints = ['api/v1/users/me/education/', 'api/v1/users/me/documents/'];
 
 const educationData = ref({
@@ -1904,7 +2370,7 @@ const regionData = ref({
     reg_town: '',
     reg_house: '',
     reg_fact_same_address: true,
-    reg_region_id: 1,
+    reg_region_id: null,
 });
 
 const foreign = ref({
@@ -1922,13 +2388,13 @@ const parentData = ref({
     parent_first_name: '',
     parent_patronymic_name: '',
     parent_date_of_birth: '',
-    relationship: '',
+    relationship: null,
     parent_phone_number: '',
     russian_passport: true,
     passport_number: '',
     passport_date: '',
     passport_authority: '',
-    region: 1,
+    region: null,
     city: '',
     address: '',
 });
@@ -1938,7 +2404,7 @@ const swal = inject('$swal');
 let user = ref(null);
 
 const getUser = async () => {
-    await HTTP.get('/users/me/', {
+    await HTTP.get('/rsousers/me/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -1957,7 +2423,7 @@ getUser();
 
 const downloadBlankPersonal = async () => {
     await HTTP.get(
-        '/users/me/statement/download_consent_to_the_processing_of_personal_data/',
+        '/rsousers/me/statement/download_consent_to_the_processing_of_personal_data/',
         {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -1982,13 +2448,16 @@ const downloadBlankPersonal = async () => {
 };
 
 const downloadBlankMembership = async () => {
-    await HTTP.get('/users/me/statement/download_membership_statement_file/', {
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+    await HTTP.get(
+        '/rsousers/me/statement/download_membership_statement_file/',
+        {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+            responseType: 'blob',
         },
-        responseType: 'blob',
-    })
+    )
         .then((response) => {
             var FILE = window.URL.createObjectURL(new Blob([response.data]));
 
@@ -2005,7 +2474,7 @@ const downloadBlankMembership = async () => {
 };
 const downloadBlankParent = async () => {
     await HTTP.get(
-        '/users/me/statement/download_parent_consent_to_the_processing_of_personal_data/',
+        '/rsousers/me/statement/download_parent_consent_to_the_processing_of_personal_data/',
         {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -2030,14 +2499,14 @@ const downloadBlankParent = async () => {
 };
 
 const addData = async () => {
-    const axiosrequest1 = HTTP.post('/users/me/region/', regionData.value, {
+    const axiosrequest1 = HTTP.post('/rsousers/me/region/', regionData.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
     const axiosrequest2 = HTTP.post(
-        '/users/me/documents/',
+        '/rsousers/me/documents/',
         documentsData.value,
         {
             headers: {
@@ -2047,7 +2516,7 @@ const addData = async () => {
         },
     );
     const axiosrequest3 = HTTP.post(
-        '/users/me/education/',
+        '/rsousers/me/education/',
         educationData.value,
         {
             headers: {
@@ -2175,7 +2644,7 @@ const addData = async () => {
     //         });
     //     });
     axios
-        .post('api/v1/users/me/education/', educationData.value, {
+        .post('api/v1/rsousers/me/education/', educationData.value, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -2267,7 +2736,7 @@ const regionContact = ref('');
 const socialsVk = ref('');
 const socialsTg = ref('');
 const addresContact = ref('');
-const regionFact = ref('');
+const regionFact = ref(null);
 const addresFact = ref('');
 const localityFact = ref('');
 const passNumber = ref('');
@@ -2278,73 +2747,10 @@ const inn = ref('');
 const foreignPass = ref('');
 const workbook = ref('');
 const militaryNumber = ref('');
-
-//     regionContact: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     localityContact: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     addresContact: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     passNumber: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     passDate: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     snils: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     inn: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     passOrg: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     educationOrg: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     course: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-// });
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .accordion {
-    &-form {
-    }
+    color: #35383f;
     &-title {
         font-size: 20px;
         color: #35383f;
@@ -2358,6 +2764,11 @@ const militaryNumber = ref('');
     width: 300px;
     padding: 40px;
     border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.v-col-4 {
+    flex: none;
+    max-width: 100%;
 }
 .checkbox {
     font-size: 16px;
@@ -2410,16 +2821,24 @@ const militaryNumber = ref('');
     justify-content: center;
     padding-bottom: 40px;
 }
-.btn {
-    background-color: white;
+.form-button {
+    width: 132px;
+    min-height: 52px;
+    margin: 0;
+    padding: 16px 32px;
+    font-family: 'Bert Sans';
     font-size: 16px;
-    color: #35383f;
-    border-radius: 10px;
-    padding: 16px 40px 16px 40px;
-    border: 2px solid #35383f;
-    margin-right: 20px;
-    cursor: pointer;
-    margin: 0px;
+    font-weight: 600;
+    line-height: 20px;
+    text-transform: none;
+
+    &--next,
+    &--prev {
+        width: 131px;
+        color: #35383f;
+        border: 2px solid #35383f;
+        background-color: #ffffff;
+    }
 }
 .parents {
     padding: 30px;
@@ -2475,9 +2894,6 @@ const militaryNumber = ref('');
     font-size: 16px;
     color: #898989;
     margin-bottom: 20px;
-    background: url(../images/icons/angel-down.svg) no-repeat right;
-    appearance: none;
-    background-position-x: calc(100% - 16px);
 }
 
 .select-big {
@@ -2492,9 +2908,6 @@ const militaryNumber = ref('');
     font-size: 16px;
     color: #898989;
     margin-bottom: 20px;
-    background: url(../images/icons/angel-down.svg) no-repeat right;
-    appearance: none;
-    background-position-x: calc(100% - 16px);
 }
 
 .how {
@@ -2566,6 +2979,44 @@ const militaryNumber = ref('');
 // .yes-RSO-foreign {
 //     display: none;
 // }
+
+.v-expansion-panel {
+    &__shadow {
+        box-shadow: none;
+    }
+
+    &--active,
+    &--after-active {
+        margin: 0;
+    }
+
+    &--active:not(:first-child) {
+        margin: 0;
+    }
+
+    &--active + .v-expansion-panel {
+        margin: 0;
+    }
+
+    .v-expansion-panel-title {
+        max-height: 60px;
+        font-family: 'Akrobat';
+        font-size: 24px;
+        font-weight: 600;
+        background-color: transparent;
+        border-bottom: 1px solid #939393;
+        color: #35383f;
+        padding: 16px 0px;
+
+        &__overlay {
+            display: none;
+        }
+    }
+}
+
+.v-expansion-panel:not(:first-child)::after {
+    display: none;
+}
 
 .date {
     border: 2px solid #a3a3a3;

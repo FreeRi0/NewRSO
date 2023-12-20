@@ -1,6 +1,6 @@
 <template>
     <div class="AuthWrapper">
-        <v-container>
+        <div class="container">
             <div class="d-flex justify-end">
                 <v-card class="px-14 py-15" max-width="580">
                     <img
@@ -37,7 +37,7 @@
                     </v-form>
                 </v-card>
             </div>
-        </v-container>
+        </div>
     </div>
 </template>
 <script setup>

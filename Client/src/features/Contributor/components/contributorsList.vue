@@ -1,34 +1,21 @@
 <template>
-    <!-- <div class="references-sort__all">
-      <input type="checkbox" @click="select" v-model="checkboxAll" />
-  </div> -->
     <div
         class="horizontallso"
         v-for="participant in participants"
         :key="participant.id"
     >
-        <!-- <div class="horizontallso__confidant">
-          <input
-              type="checkbox"
-              v-model="selectedPeoples"
-              :value="participant"
-              @change="updateCheck"
-          />
-      </div> -->
-
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img :src="'./assets/' + participant.image" alt="logo" />
+                <img :src="participant.media.photo" alt="logo" v-if="participants.media" />
                 <img
-                    v-if="participant.useIcon"
-                    class="horizontallso-item__list-img-status"
-                    :src="'./assets/icon/' + participant.icon"
-                    alt="icon"
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+                    v-else
                 />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ participant.name }}
+                    {{ participant.first_name }}
                 </p>
                 <div class="horizontallso-item__list-date">
                     <span
@@ -37,18 +24,20 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.birthdate }}</p>
+                    <p>{{ participant.date_of_birth }}</p>
                 </div>
             </div>
         </div>
 
         <div class="sort-select mx-3">
-            <sortByEducation
+            <Select
                 variant="outlined"
+                :value="participant"
                 clearable
                 v-model="payed"
-                :options="filteredPayed"
-            ></sortByEducation>
+                @change="updateMembership"
+                :names="filteredPayed"
+            ></Select>
         </div>
     </div>
 </template>
@@ -57,7 +46,7 @@
 // import referenceItem from '@entities/ReferencesPeoples/components';
 
 import { ref } from 'vue';
-import { sortByEducation } from '@shared/components/selects';
+import { Select } from '@shared/components/selects';
 
 const emit = defineEmits(['change']);
 const payed = ref(null);
@@ -70,7 +59,7 @@ const filteredPayed = ref([
     { value: 'payed', name: 'Не оплачен' },
 ]);
 
-const updateCheck = (e) => {
+const updateMembership = (e) => {
     console.log('dddddd');
     emit('change', selectedPeoples.value);
 };
@@ -79,11 +68,15 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    selectedParticipants: {
+        type: Array,
+        default: () => []
+    },
 });
 
 // const checkboxAll = ref(false);
 
-const selectedPeoples = ref([]);
+const selectedPeoples = ref(props.selectedParticipants);
 
 // const select = () => {
 //     selectedPeoples.value = [];
@@ -123,7 +116,6 @@ const selectedPeoples = ref([]);
     border: 1px solid #b6b6b6;
     background: #fff;
     margin-bottom: 12px;
-    margin-left: 12px;
     width: 100%;
 }
 
@@ -145,9 +137,9 @@ const selectedPeoples = ref([]);
 }
 
 .horizontallso-item__list-date {
-    width: 95px;
+    // width: 95px;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
+    grid-template-columns: auto 1fr 0fr;
 }
 
 .horizontallso-item__list-img-status {

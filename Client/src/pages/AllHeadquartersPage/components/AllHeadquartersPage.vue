@@ -362,6 +362,7 @@ const sortedHeadquarters = computed(() => {
 .form__select {
     margin-bottom: 0px;
     margin-right: 8px;
+    border: 1px solid #35383F;
 }
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
@@ -385,11 +386,6 @@ const sortedHeadquarters = computed(() => {
     background-size: cover;
 }
 
-.ascend {
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
 .sort-filters {
     @media screen and (max-width: 768px) {
         margin-top: 40px;

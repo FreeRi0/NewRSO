@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex justify-end">
-        <v-card class="px-14 py-15" max-width="580">
+        <v-card class="py-15" max-width="580">
             <v-card-title class="text-h4 text-center">Регистрация</v-card-title>
             <v-form action="#" method="post" @submit.prevent="RegisterUser">
                 <Select
@@ -49,19 +49,21 @@
                     name="login"
                     v-model:value.trim="form.username"
                 />
-                <PasswordInputVue
+                <Input
+                    type="password"
                     placeholder="Придумайте пароль"
                     name="password"
                     v-model:value.trim="form.password"
-                ></PasswordInputVue>
-                <PasswordInputVue
+                ></Input>
+                <Input
+                    type="password"
                     placeholder="Повторите пароль"
                     name="confirm"
                     v-model:value.trim="form.re_password"
-                ></PasswordInputVue>
+                ></Input>
                 <v-checkbox
                     v-model="form.personal_data_agreement"
-                    label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных*."
+                    label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных."
                 ></v-checkbox>
 
                 <Button
@@ -88,6 +90,23 @@
     margin: 60px auto;
     margin-bottom: 15px;
 }
+
+.v-card {
+   padding-left: 100px;
+   padding-right: 100px;
+ }
+ .v-card-title {
+   padding: 0rem 1rem;
+   font-size: 40px;
+   font-weight: 600;
+   font-family: Akrobat;
+}
+
+a {
+   text-decoration: underline;
+   font-weight: bold;
+   font-size: 18px;
+ }
 </style>
 
 <script setup>
@@ -238,4 +257,4 @@ const RegisterUser = async () => {
         });
 };
 </script>
-@shared/components/selects/inputs
+

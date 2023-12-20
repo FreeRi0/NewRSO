@@ -4,12 +4,15 @@
    background-size: cover;
    background-repeat: no-repeat;
    background-position: center bottom;
-   padding-top: 100px;
+   padding-top: 60px;
+   padding-bottom: 60px;
 }
 
-.LoginForm {
-   width: 384px;
-}
+// .LoginForm {
+//    width: 384px;
+// }
+
+
 
 .v-card--variant-elevated {
    box-shadow: none;
@@ -29,7 +32,6 @@
 }
 
 
-
 .v-form {
  margin-top: 40px;
 }
@@ -45,3 +47,4 @@
    display: flex;
    align-items: flex-end;
 }
+

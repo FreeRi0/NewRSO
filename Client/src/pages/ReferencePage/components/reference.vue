@@ -403,7 +403,7 @@
                     <div class="references-wrapper">
                         <referencesList
                             @change="changePeoples"
-                            :participants="sortedParticipants"
+                            :participants="participants"
                             :selectedParticipants="selectedPeoples"
                         ></referencesList>
                     </div>
@@ -476,7 +476,6 @@
     </div>
 </template>
 <script setup>
-import participants from '@entities/Participants/participants';
 import { Button } from '@shared/components/buttons';
 import { RadioButton } from '@shared/components/buttons';
 import { Dropdown } from '@shared/components/dropdown';
@@ -487,10 +486,33 @@ import {
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
+import { HTTP } from '@app/http';
 
 const participantsVisible = ref(12);
+
+const participants = ref([]);
+
+const viewParticipants = async () => {
+    await HTTP.get('/rsousers/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            participants.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    viewParticipants();
+});
 
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
@@ -565,25 +587,24 @@ const sortOptionss = ref([
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'birthdate', name: 'По дате вступления в РСО' },
-    { value: 'days', name: 'Популярности' },
+    { value: 'date_of_birth', name: 'По дате вступления в РСО' },
 ]);
 
 const sortedParticipants = computed(() => {
-    let tempParticipants = participants;
+    let tempParticipants = participants.value;
 
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
     tempParticipants = tempParticipants.filter((item) => {
-        return item.name
+        return item.first_name
             .toUpperCase()
             .includes(searchParticipants.value.toUpperCase());
     });
 
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa = a.first_name.toLowerCase(),
+                fb = b.first_name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -592,9 +613,9 @@ const sortedParticipants = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'birthdate') {
-            let fc = a.birthdate,
-                fn = b.birthdate;
+        } else if (sortBy.value == 'date_of_birth') {
+            let fc = a.date_of_birth,
+                fn = b.date_of_birth;
 
             if (fc < fn) {
                 return -1;
@@ -603,8 +624,6 @@ const sortedParticipants = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'days') {
-            return a.days - b.days;
         }
     });
 
@@ -614,20 +633,20 @@ const sortedParticipants = computed(() => {
 
     const rangeSexes = {
         Все: () => true,
-        Мужской: (participant) => participant.sex == 'Мужской',
-        Женский: (participant) => participant.sex == 'Женский',
+        Мужской: (participant) => participant.gender == 'male',
+        Женский: (participant) => participant.gender == 'female',
     };
 
     const rangeStatus = {
         Все: () => true,
-        Верифицированный: (participant) => participant.verify == true,
-        Неверифицированный: (participant) => participant.verify == false,
+        Верифицированный: (participant) => participant.is_verified == true,
+        Неверифицированный: (participant) => participant.is_verified == false,
     };
 
     const rangePayed = {
         Все: () => true,
-        Оплачен: (participant) => participant.payed == true,
-        'Не оплачен': (participant) => participant.payed == false,
+        Оплачен: (participant) => participant.membership_fee == true,
+        'Не оплачен': (participant) => participant.membership_fee == false,
     };
 
     tempParticipants = tempParticipants.filter((item) => {
@@ -646,13 +665,13 @@ const sortedParticipants = computed(() => {
         return tempParticipants;
     }
     tempParticipants = tempParticipants.filter((item) => {
-        return item.days >= minAge.value && item.days <= maxAge.value;
+        return item.date_of_birth >= minAge.value && item.date_of_birth <= maxAge.value;
     });
 
     return tempParticipants;
 });
 </script>
-<style lang="scss">
+<style lang="scss" >
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -805,4 +824,3 @@ input[type='number']::-webkit-outer-spin-button {
     }
 }
 </style>
-

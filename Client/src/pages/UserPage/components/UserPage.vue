@@ -63,4 +63,3 @@ import { ref, computed } from 'vue';
     height: 52px;
 }
 </style>
-@shared/components/selects/inputs
