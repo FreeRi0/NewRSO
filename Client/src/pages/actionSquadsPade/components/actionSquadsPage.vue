@@ -1,7 +1,7 @@
 <template>
     <div class='container'>
         <bannerCreate desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
-                      label="Создать мероприятие" link="/CreateLSO"></bannerCreate>
+                      label="Создать мероприятие" link="createAction"></bannerCreate>
         <h2 class='action-title'>Мероприятия</h2>
         <div class='searcher'>
             <div class='squads-search'>

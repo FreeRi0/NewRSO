@@ -104,7 +104,12 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/actionSquads',
                 name: 'actionSquads',
-                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue'),
+                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
+            },
+            {
+                path: "/createAction",
+                name: "createAction",
+                component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
             },
             {
                 path: '/EditLSO',

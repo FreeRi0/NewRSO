@@ -6,6 +6,8 @@ export * as termsPage from './terms_of_use';
 
 export * as UserPage from './UserPage';
 
+export * as CreationActionsPage from './CreationActionsPage';
+
 export * as CreationOfDetachment from './CreationOfDetachment';
 
 export * as EditingDetachment from './EditingDetachment';
