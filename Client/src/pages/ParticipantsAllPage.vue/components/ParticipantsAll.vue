@@ -39,22 +39,36 @@
             </div>
             <div class="participants-sort">
                 <div class="sort-layout">
-                    <Button   v-if="vertical"   type="button" class="dashboard" icon="icon" color="white" @click="showVertical">
-                    </Button>
-                    <Button    v-else="!vertical"  type="button" class="dashboardD" icon="icon" color="white" @click="showVertical">
+                    <Button
+                        v-if="vertical"
+                        type="button"
+                        class="dashboard"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
                     </Button>
                     <Button
-                    v-if="!vertical"
-                    type="button"
-                    class="menuuA"
+                        v-else="!vertical"
+                        type="button"
+                        class="dashboardD"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
+                    </Button>
+                    <Button
+                        v-if="!vertical"
+                        type="button"
+                        class="menuuA"
                         icon="icon"
                         color="white"
                         @click="showVertical"
                     ></Button>
                     <Button
-                    v-else="vertical"
-                    type="button"
-                    class="menuu"
+                        v-else="vertical"
+                        type="button"
+                        class="menuu"
                         icon="icon"
                         color="white"
                         @click="showVertical"
@@ -63,13 +77,16 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <sortByEducation
+                            variant="outlined"
+                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
+                            class="sort-alphabet"
                         ></sortByEducation>
                     </div>
 
                     <Button
-                    class="ascend"
+                        class="ascend"
                         @click="ascending = !ascending"
                         icon="icon"
                         color="white"
@@ -107,7 +124,7 @@ import {
     ParticipantsList,
     horizontalParticipantsList,
 } from '@features/Participants/components';
-import { sortByEducation } from '@shared/components/selects';
+import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
@@ -116,8 +133,6 @@ import { useRoute } from 'vue-router';
 
 const participants = ref([]);
 const participantsVisible = ref(12);
-
-
 
 const step = ref(12);
 const position = ref({});
@@ -298,35 +313,38 @@ const sortedParticipants = computed(() => {
         color: white;
         border: 1px solid #1c5c94;
     }
+    .form__select {
+        margin-bottom: 0px;
+        margin-right: 8px;
+    }
 
     .dashboard {
-    background-image: url('@app/assets/icon/darhboard-active.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+        background-image: url('@app/assets/icon/darhboard-active.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 
-.dashboardD {
-    background-image: url('@app/assets/icon/darhboard-disable.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-.menuuA {
-    background-image: url('@app/assets/icon/MenuA.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-.menuu {
-    background-image: url('@app/assets/icon/Menu.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+    .dashboardD {
+        background-image: url('@app/assets/icon/darhboard-disable.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .menuuA {
+        background-image: url('@app/assets/icon/MenuA.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .menuu {
+        background-image: url('@app/assets/icon/Menu.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 
-
-.ascend {
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
+    .ascend {
+        background-image: url('@app/assets/icon/switch.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+    }
 
     .horizontallso {
         padding-top: 40px;

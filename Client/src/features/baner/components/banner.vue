@@ -1,8 +1,8 @@
 <template>
     <div class="user-metric">
         <bannerPhoto></bannerPhoto>
-        <!-- <Avatar></Avatar> -->
-        <testUpload></testUpload>
+        <Avatar></Avatar>
+        <!-- <testUpload></testUpload> -->
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
@@ -136,39 +136,6 @@ onMounted(() => {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     background: rgba(244, 244, 244, 0);
-}
-
-.breadcrumbs-container ul {
-    display: flex;
-    list-style: none;
-}
-
-.breadcrumbs-slesh {
-    margin: 0 4px;
-}
-
-.breadcrumbs-container a {
-    display: block;
-    text-decoration: none;
-    /* хлебные_крошки */
-    font-family: 'Akrobat';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    color: #35383f;
-}
-
-.breadcrumbs-container a.active {
-    display: block;
-    text-decoration: none;
-    /* хлебные_крошки */
-    font-family: Akrobat;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    color: #1f7cc0;
 }
 
 .ps__title {

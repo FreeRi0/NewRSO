@@ -1,25 +1,32 @@
 <template>
     <v-select
         class="form__select"
-        :items="items"
+        :model-value="object"
+        :items="names"
         @update:model-value="changeOption"
         v-bind="$attrs"
-        :model-value="value"
-        :placeholder="placeholder"
+        item-title="name"
+        item-value="id"
     >
-        <template #item:item="{ props }">
-            <v-list-item v-bind="props"> </v-list-item>
+        <template #selection="{ item }">
+            <span>{{ item.raw.name }}</span>
+        </template>
+
+        <template v-slot:item="{ props, item }">
+            <v-list-item v-bind="props" :title="item?.raw?.name"></v-list-item>
         </template>
     </v-select>
-    <TransitionGroup>
+    <!-- <TransitionGroup>
         <div class="error-wrapper" v-for="element of error" :key="element.$uid">
             <div class="form-error__message">{{ element.$message }}</div>
         </div>
-    </TransitionGroup>
+    </TransitionGroup> -->
 </template>
 
 <script setup>
-// import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
 
 defineOptions({
     inheritAttrs: false,
@@ -30,26 +37,58 @@ const props = defineProps({
         type: String,
         default: '',
     },
-    items: {
+    object: {
         type: Array,
         default: () => [],
     },
+    // object: {
+    //     type: Number,
+    //     default: null,
+    // },
+    names: {
+        type: Array,
+        default: () => [],
+    },
+    // error: {
+    //     type: Array,
+    //     required: false,
+    // },
     placeholder: {
         type: String,
-        required: false,
+        default: '',
     },
-    error: {
-        type: Array,
-        required: false,
+    address: {
+        type: String,
+        default: '',
     },
 });
 
 const emit = defineEmits(['update:value']);
 
 const changeOption = (event) => {
-    // console.log(event);
+    console.log(event);
     emit('update:value', event);
 };
+
+const names = ref(props.names);
+
+const onChangeItem = async () => {
+    await axios
+        .get(props.address)
+
+        .then((res) => {
+            // console.log(props.address);
+            names.value = res.data;
+            // console.log(res.data);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    onChangeItem();
+});
 </script>
 
 <style lang="scss" scoped>

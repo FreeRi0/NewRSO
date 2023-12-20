@@ -1,31 +1,36 @@
 <template>
-    <div
-        class="horizontallso-item__wrapper"
-        v-for="participant in participants"
-    >
-        <div class="horizontallso-img">
-            <img
-                :src="participant.user.avatar.photo"
-                alt="photo"
-                v-if="participant.user.avatar"
-            />
-            <img
-                src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                alt="photo"
-                v-else
-            />
-        </div>
-        <div class="containerHorizontal">
-            <p class="horizontallso-item__list-full">
-                {{ participant.user.last_name }}
-            </p>
-            <div class="horizontallso-item__list-date">
-                <span
-                    style="border-left: 2px solid #b6b6b6; padding-right: 8px"
-                ></span>
-                <p>{{ participant.user.date_of_birth }}</p>
+    <div v-for="participant in participants">
+        <router-link
+            class="horizontallso-item__wrapper"
+            :to="{ name: 'userpage', params: { id: participant.id } }"
+        >
+            <div class="horizontallso-img">
+                <img
+                    :src="participant.user.avatar.photo"
+                    alt="photo"
+                    v-if="participant.user.avatar"
+                />
+                <img
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+                    v-else
+                />
             </div>
-        </div>
+            <div class="containerHorizontal">
+                <p class="horizontallso-item__list-full">
+                    {{ participant.user.last_name }}
+                </p>
+                <div class="horizontallso-item__list-date">
+                    <span
+                        style="
+                            border-left: 2px solid #b6b6b6;
+                            padding-right: 8px;
+                        "
+                    ></span>
+                    <p>{{ participant.user.date_of_birth }}</p>
+                </div>
+            </div>
+        </router-link>
     </div>
 </template>
 <script setup>

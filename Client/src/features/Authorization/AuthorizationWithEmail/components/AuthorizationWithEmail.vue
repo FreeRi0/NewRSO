@@ -4,11 +4,12 @@
             <v-card-title class="text-h4 text-center"
                 >Вход в личный кабинет</v-card-title
             >
-            <v-card-text class="text-center"
-                >У вас еще нет аккаунта?
-                <router-link to="/Register">Зарегистрироваться</router-link>
-            </v-card-text>
+
             <v-form action="#" method="post" @submit.prevent="LoginUser">
+                <v-card-text class="text-center"
+                    >У вас еще нет аккаунта?
+                    <router-link to="/Register">Зарегистрироваться</router-link>
+                </v-card-text>
                 <Input
                     placeholder="Имя"
                     name="name"
@@ -16,15 +17,16 @@
                     class="username-input"
                 />
 
-                 <p v-if="isError">{{ isError}}</p>
+                <p v-if="isError">{{ isError }}</p>
                 <PasswordInputVue
                     placeholder="Пароль"
                     name="password"
                     v-model:value="data.password"
                 ></PasswordInputVue>
 
-                <p v-if="isError">{{ isError}}</p>
+                <p v-if="isError">{{ isError }}</p>
                 <Button
+                    class="login_btn"
                     type="submit"
                     label="Войти"
                     :loaded="isLoading"
@@ -89,3 +91,19 @@ const LoginUser = async () => {
         });
 };
 </script>
+
+<style lang="scss" scoped>
+.login_btn {
+    margin-top: 40px;
+}
+
+.v-card-title {
+    padding: 0rem 1rem;
+    padding-top: 2rem;
+}
+
+.v-card-text {
+    padding: 0;
+    padding-bottom: 2rem;
+}
+</style>
