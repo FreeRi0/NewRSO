@@ -4,16 +4,16 @@
             <!-- Заглушка Банер -->
 
             <img
-                :src="imgDataSquadUrl.banner"
+                :src="banner"
                 alt="Баннер отряда"
-                v-if="imgDataSquadUrl.banner"
+                v-if="banner"
                 v-show="true"
             />
 
             <img
                 src="@/app/assets/user-banner.jpg"
                 alt="Баннер отряда(пусто)"
-                v-else-if="!imgDataSquadUrl.banner"
+                v-else
             />
 
         </div>
@@ -27,22 +27,27 @@ import { useRoute } from 'vue-router';
 const imgDataSquadUrl = ref('');
 const route = useRoute();
 const id = route.params.id;
+const props = defineProps({
+    banner: String
+})
 
-const viewBanner = async () => {
-    await HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            imgDataSquadUrl.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
-viewBanner();
+
+// const viewBanner = async () => {
+//     await HTTP.get(`/detachments/${id}/`, {
+//         headers: {
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             imgDataSquadUrl.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+
+// viewBanner();
 </script>
 <style lang="scss"></style>

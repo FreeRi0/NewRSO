@@ -4,6 +4,14 @@
         v-for="participant in participants"
         :key="participant.id"
     >
+    <div class="horizontallso__confidant mr-3">
+            <input
+                type="checkbox"
+                v-model="selectedPeoples"
+                :value="participant"
+                @change="updateMembership"
+            />
+        </div>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img :src="participant.media.photo" alt="logo" v-if="participants.media" />
@@ -30,14 +38,9 @@
         </div>
 
         <div class="sort-select mx-3">
-            <Select
-                variant="outlined"
-                :value="participant"
-                clearable
-                v-model="payed"
-                @change="updateMembership"
-                :names="filteredPayed"
-            ></Select>
+            <p v-if="participant.membership_fee">Оплачен</p>
+            <p v-else>Не оплачен</p>
+
         </div>
     </div>
 </template>
@@ -45,22 +48,22 @@
 <script setup>
 // import referenceItem from '@entities/ReferencesPeoples/components';
 
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Select } from '@shared/components/selects';
 
 const emit = defineEmits(['change']);
-const payed = ref(null);
+// const payed = ref(null);
 
-const filteredPayed = ref([
-    {
-        value: 'payed',
-        name: 'Оплачен',
-    },
-    { value: 'payed', name: 'Не оплачен' },
-]);
+// const filteredPayed = ref([
+//     {
+//         value: 'payed',
+//         name: 'Оплачен',
+//     },
+//     { value: 'payed', name: 'Не оплачен' },
+// ]);
 
 const updateMembership = (e) => {
-    console.log('dddddd');
+    console.log('ddddddrrr');
     emit('change', selectedPeoples.value);
 };
 const props = defineProps({
@@ -77,6 +80,14 @@ const props = defineProps({
 // const checkboxAll = ref(false);
 
 const selectedPeoples = ref(props.selectedParticipants);
+
+watch(
+    () => props.selectedParticipants,
+    (newChecked) => {
+        if (!newChecked) return;
+        selectedPeoples.value = newChecked;
+    },
+);
 
 // const select = () => {
 //     selectedPeoples.value = [];
@@ -180,9 +191,9 @@ const selectedPeoples = ref(props.selectedParticipants);
     height: 46px;
 }
 
-.form__select {
-    margin-bottom: 0px;
-    margin-right: 8px;
-    border: none;
-}
+// .form__select {
+//     margin-bottom: 0px;
+//     margin-right: 8px;
+//     border: none;
+// }
 </style>

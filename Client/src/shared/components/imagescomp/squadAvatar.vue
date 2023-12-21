@@ -22,6 +22,10 @@ const imageSquadUrl = ref('');
 const route = useRoute();
 const id = route.params.id;
 
+const props = defineProps({
+  emblem: String
+})
+
 const viewEmblem = async () => {
   await HTTP.get(`/detachments/${id}/`, {
       headers: {

@@ -5,25 +5,34 @@
             <div class="d-flex mt-7">
                 <button
                     type="button"
-
                     class="contributorBtn"
                     :class="{ active: picked === true }"
                     @click="picked = true"
-                >Мой членский взнос</button>
+                >
+                    Мой членский взнос
+                </button>
 
                 <button
                     type="button"
                     class="contributorBtn"
                     :class="{ active: picked === false }"
                     @click="picked = false"
-                >Данные об оплате членского взноса пользователями системы</button>
+                >
+                    Данные об оплате членского взноса пользователями системы
+                </button>
             </div>
 
-            <div class="contributor-info" v-if="picked === true && user.membership_fee === false">
+            <div
+                class="contributor-info"
+                v-if="picked === true && user.membership_fee === false"
+            >
                 Уважаемый пользователь, ваш членский взнос не оплачен.
             </div>
 
-            <div class="contributor-info" v-else-if="picked === true && user.membership_fee === true">
+            <div
+                class="contributor-info"
+                v-else-if="picked === true && user.membership_fee === true"
+            >
                 Уважаемый пользователь, ваш членский взнос оплачен.
             </div>
 
@@ -478,7 +487,9 @@
                         </div>
                         <div class="contributor-wrapper">
                             <contributorsList
+                                @change="changePeoples"
                                 :participants="sortedParticipants"
+                                :selectedParticipants="selectedPeoples"
                             ></contributorsList>
                         </div>
                         <Button
@@ -493,18 +504,27 @@
                         ></Button>
                     </div>
                 </div>
+                <div class="selectedItems" v-if="selectedPeoples.length > 0">
+                    <h3>Итого: {{ selectedPeoples.length }}</h3>
+
+                    <checkedContributors
+                        @change="changeSelected"
+                        :participants="selectedPeoples"
+                    ></checkedContributors>
+                </div>
             </div>
         </div>
     </div>
 </template>
-//
 <script setup>
-//    @change="changePeoples"
 import { Button } from '@shared/components/buttons';
 import { RadioButton } from '@shared/components/buttons';
 import { Dropdown } from '@shared/components/dropdown';
 import { Input } from '@shared/components/inputs';
-import { contributorsList } from '@features/Contributor/components';
+import {
+    contributorsList,
+    checkedContributors,
+} from '@features/Contributor/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
@@ -575,16 +595,20 @@ onMounted(() => {
 const select = () => {
     selectedPeoples.value = [];
 
-    if (!checkboxAll.value) {
-        for (item in participants) {
-            selectedPeoples.push(participants[item]);
+    if (checkboxAll.value) {
+        for (let item in participants) {
+            selectedPeoples.value.push(participants[item]);
         }
     }
 };
 const searchParticipants = ref('');
-// const changePeoples = (selectedHumans) => {
-//     selectedPeoples.value = selectedHumans;
-// };
+const changePeoples = (selectedHumans) => {
+    selectedPeoples.value = selectedHumans;
+};
+
+const changeSelected = (changePeoples) => {
+    selectedPeoples.value = changePeoples;
+};
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
 
@@ -762,7 +786,7 @@ input[type='number']::-webkit-outer-spin-button {
             border: 1px solid black;
         }
     }
-    &-info{
+    &-info {
         font-size: 18px;
         font-weight: 400;
         margin-top: 60px;
@@ -790,7 +814,7 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .form__select {
-    border: 1px solid #35383F;
+    border: 1px solid #35383f;
 }
 
 .input-big {
@@ -819,7 +843,6 @@ input[type='number']::-webkit-outer-spin-button {
         height: 24px;
     }
 }
-
 
 .filter {
     margin-top: 20px;

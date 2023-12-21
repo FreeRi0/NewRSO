@@ -5,12 +5,13 @@
         <!-- <BannerComp class="user-metric mt-3">
 
         </BannerComp> -->
-        <BannerSquad></BannerSquad>
+        <BannerSquad :banner="squad.banner" :emblem="squad.emblem" :squad="name"></BannerSquad>
         <section class="about-squad">
             <h3>Об отряде</h3>
             <p>
                 {{ squad.about }}
             </p>
+            <p>222{{ squad }}</p>
         </section>
         <v-row class="mt-8">
             <v-col v-for="n in 4" :key="n" class="d-flex">
@@ -33,7 +34,7 @@ const squad = ref({});
 const member = ref({});
 const educt = ref({});
 const route = useRoute();
-const id = route.params.id;
+let id = route.params.id;
 
 // const props = defineProps({
 //     id: String
@@ -87,13 +88,24 @@ const aboutMembers = async () => {
         });
 };
 
-// watch(
-//     () => route.params.id,
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) {
+        aboutSquad();
+        aboutMembers();
+        aboutEduc();
+    }
+});
 
-//     (newId, oldId) => {
-//         aboutSquad(route.params.id);
-//     },
-// );
+watch(
+    () => route.params.id,
+
+    (newId, oldId) => {
+        id = newId
+        aboutSquad();
+        aboutMembers();
+        aboutEduc();
+    },
+);
 
 onMounted(() => {
     aboutSquad();

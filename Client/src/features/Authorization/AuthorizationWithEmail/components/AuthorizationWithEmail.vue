@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex justify-end align-self-center">
-        <v-card class=""  height="535px">
+        <v-card class="" height="535px">
             <v-card-title class="text-center"
                 >Вход в личный кабинет</v-card-title
             >
@@ -37,7 +37,9 @@
 
                 <v-card-text class="text-center"
                     >Забыли пароль?
-                    <router-link to="/RecoveryPass">Восстановить</router-link></v-card-text
+                    <router-link to="/RecoveryPass"
+                        >Восстановить</router-link
+                    ></v-card-text
                 >
             </v-form>
         </v-card>
@@ -56,16 +58,34 @@ const data = ref({
     username: '',
     password: '',
 });
+
+// const user = ref({});
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 const router = useRouter();
 const LoginUser = async () => {
     isLoading.value = true;
-    HTTP.post('/token/login/', data.value)
+    await HTTP.post('/token/login/', data.value)
         .then((response) => {
             data.value = response.data;
             localStorage.setItem('Token', response.data.auth_token);
+            HTTP.get(`/rsousers/me/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            })
+                .then((response) => {
+                    console.log(response);
+                    router.push({
+                        name: 'userpage',
+                        params: { id: response.data.id },
+                    });
+                })
+                .catch(function (error) {
+                    console.log('an error occured ' + error);
+                });
             console.log(response.data);
             isLoading.value = false;
             swal.fire({
@@ -75,8 +95,8 @@ const LoginUser = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            router.push('/UserPage');
-            // router.push({ name: 'userpage'});
+
+            // router.push({ name: 'userpage', params: {id: response.data.id}});
         })
 
         .catch(({ response }) => {
@@ -100,11 +120,11 @@ const LoginUser = async () => {
 }
 
 .v-card-title {
-   padding: 0rem 1rem;
-   font-size: 40px;
-   font-weight: 600;
-   font-family: Akrobat;
-   padding-top: 0rem;
+    padding: 0rem 1rem;
+    font-size: 40px;
+    font-weight: 600;
+    font-family: Akrobat;
+    padding-top: 0rem;
 }
 .v-card-text {
     padding: 0;
@@ -113,12 +133,12 @@ const LoginUser = async () => {
 }
 
 .v-card {
-   padding: 105px 98px;
- }
+    padding: 105px 98px;
+}
 
 a {
-   text-decoration: underline;
-   font-weight: bold;
-   font-size: 18px;
- }
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 18px;
+}
 </style>

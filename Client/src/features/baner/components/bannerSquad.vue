@@ -1,7 +1,7 @@
 <template>
     <div class="squad-metric">
-        <squadBanner></squadBanner>
-        <squadAvatar></squadAvatar>
+        <squadBanner :banner="squad.banner"></squadBanner>
+        <squadAvatar :emblem="squad.emblem"></squadAvatar>
         <div class="squad-metric__bottom">
             <div class="squad-data__wrapper">
                 <div class="Squad-HQ__name">
@@ -77,58 +77,73 @@ const educt = ref({});
 
 const route = useRoute();
 const id = route.params.id;
-const aboutSquad = async () => {
-    await HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squad.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+const props = defineProps({
+    banner: {
+        type: String
+    },
+    emblem: {
+        type: String
+    },
+    squad: {
+       type: Object,
+       default: () => ({}),
+    }
 
-const aboutMembers = async () => {
-    await HTTP.get(`/detachments/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            member.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-onMounted(() => {
-    aboutSquad();
-    aboutMembers();
-    aboutEduc();
-});
+})
+// const aboutSquad = async () => {
+//     await HTTP.get(`/detachments/${id}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             squad.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+
+// const aboutEduc = async () => {
+//     await HTTP.get(`/eduicational_institutions/${id}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             educt.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+
+// const aboutMembers = async () => {
+//     await HTTP.get(`/detachments/${id}/members/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             member.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+// onMounted(() => {
+//     aboutSquad();
+//     aboutMembers();
+//     aboutEduc();
+// });
+
 </script>
 <style lang="scss" scoped>
 // .profile-settings-top {
