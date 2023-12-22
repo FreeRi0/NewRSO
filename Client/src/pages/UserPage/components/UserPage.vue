@@ -1,9 +1,10 @@
 <template>
     <div class="container">
         <div class="user-wrapper">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="page-title">Моя страница</h2>
-            <BannerComp class="mt-3"></BannerComp>
-            <div class="user-verify" v-if="is_verified">
+            <BannerComp :user="user" :education="education"   class="mt-3"></BannerComp>
+            <div class="user-verify" v-if="user.is_verified">
                 <p class="user-verify__title">Верификация данных</p>
                 <div class="user-verify__desc">
                     Уважаемый пользователь, для того, чтобы использовать полный
@@ -11,19 +12,21 @@
                     верификацию. Верификация — это документальное подтверждение
                     ваших личных данных. Она займет всего несколько минут.
                 </div>
-            </div>
-
-            <router-link to="/PersonalData" v-else-if="is_verified">
+                <router-link to="/PersonalData">
                 <Button
+                class="user-verify__btn"
                     name="verify-btn"
                     label="Пройти верификацию"
                     color="primary"
                 ></Button
             ></router-link>
+            </div>
 
-            <TextArea class="mt-14"></TextArea>
+
+
+            <TextArea class="mt-14" v-if="!user.is_verified"></TextArea >
             <v-row class="mt-8">
-                <v-col v-for="n in 4" :key="n" class="d-flex">
+                <v-col v-for="n in 4" :key="n" class="d-flex" v-if="!user.is_verified">
                   <userPhoto></userPhoto>
                 </v-col>
             </v-row>
@@ -38,20 +41,29 @@ import {
     userPhoto,
 } from '@shared/components/imagescomp';
 
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+const pages = ref([
+    { pageTitle: 'Личный кабинет', href: '#' },
+    { pageTitle: 'Моя страница', href: '#' },
+]);
 
 const user = ref({})
+const education = ref({})
+const route = useRoute();
+let id = route.params.id;
 
 const getUser = async() => {
-    await HTTP.get('/rsousers/me/', {
+    await HTTP.get(`/rsousers/${id}/`, {
         headers: {
+            'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
             user.value = response.data;
-
             console.log(response.data);
         })
         .catch(function (error) {
@@ -59,11 +71,26 @@ const getUser = async() => {
         });
 }
 
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) {
+        getUser()
+    }
+});
+
+watch(
+    () => route.params.id,
+
+    (newId, oldId) => {
+        id = newId
+        getUser()
+    },
+);
+
 onMounted(() => {
     getUser()
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .user-wrapper {
     padding: 60px 0px 80px 0px;
 }
@@ -79,10 +106,12 @@ onMounted(() => {
         font-weight: 40;
         margin-top: 40px;
         width: 835px;
+        margin-bottom: 40px;
     }
 }
 .btn {
     margin: 0px;
+    padding: 12px 62px;
     height: 52px;
 }
 </style>

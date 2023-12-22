@@ -193,9 +193,9 @@ onMounted(() => {
     getSquads();
     getCategories();
 });
-const squadsVisible = ref(12);
+const squadsVisible = ref(1);
 
-const step = ref(10);
+const step = ref(1);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');

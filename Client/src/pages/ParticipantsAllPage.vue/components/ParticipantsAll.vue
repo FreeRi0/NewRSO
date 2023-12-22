@@ -13,7 +13,7 @@
                     >{{ category }}</v-btn
                 > -->
 
-                <div class="d-flex">
+                <!-- <div class="d-flex">
                     <Button
                         type="button"
                         label="Уже в отряде"
@@ -29,7 +29,7 @@
                         :class="{ active: picked === !is_trusted }"
                         @click="picked = !is_trusted"
                     ></Button>
-                </div>
+                </div> -->
             </div>
             <div class="participants-search">
                 <input
@@ -151,7 +151,7 @@ import { useRoute } from 'vue-router';
 
 const participants = ref([]);
 const participantsVisible = ref(12);
-const picked = ref(null);
+// const picked = ref(null);
 
 const step = ref(12);
 const position = ref({});
@@ -245,7 +245,7 @@ const sortedParticipants = computed(() => {
         }
     });
 
-    tempParticipants = tempParticipants.filter((item) => item.is_trusted === picked.value);
+    // tempParticipants = tempParticipants.filter((item) => item.is_trusted === picked.value);
     // tempParticipants = tempParticipants.sort((a, b) => a.is_trusted - b.is_trusted);
 
     if (!ascending.value) {

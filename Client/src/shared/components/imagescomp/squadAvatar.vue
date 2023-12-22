@@ -3,12 +3,12 @@
       <div class="user-metric__avatar">
           <!-- Аватар отряда  -->
 
-          <img :src="imageSquadUrl.emblem" alt="Эмблема" v-if="imageSquadUrl.emblem" />
+          <img :src="emblem" alt="Эмблема" v-if="emblem" />
           <img
               id="profile-pic"
               src="@app/assets/user-avatar.png"
               alt="Аватарка(пусто)"
-              v-else-if="!imageSquadUrl.emblem"
+              v-else
           />
       </div>
   </div>
@@ -26,22 +26,22 @@ const props = defineProps({
   emblem: String
 })
 
-const viewEmblem = async () => {
-  await HTTP.get(`/detachments/${id}/`, {
-      headers: {
-          Authorization: 'Token ' + localStorage.getItem('Token'),
-      },
-  })
-      .then((response) => {
-        imageSquadUrl.value = response.data;
-          console.log(response.data);
-      })
-      .catch(function (error) {
-          console.log('an error occured ' + error);
-      });
-};
+// const viewEmblem = async () => {
+//   await HTTP.get(`/detachments/${id}/`, {
+//       headers: {
+//           Authorization: 'Token ' + localStorage.getItem('Token'),
+//       },
+//   })
+//       .then((response) => {
+//         imageSquadUrl.value = response.data;
+//           console.log(response.data);
+//       })
+//       .catch(function (error) {
+//           console.log('an error occured ' + error);
+//       });
+// };
 
-viewEmblem();
+// viewEmblem();
 
 </script>
 

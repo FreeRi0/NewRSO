@@ -5,8 +5,8 @@
             <!-- Аватар пользователя  -->
 
             <img
-                v-if="imageUrl"
-                :src="imageUrl.media.photo"
+                v-if="avatar"
+                :src="avatar"
                 alt="avatarka"
             />
             <img
@@ -174,34 +174,37 @@
 import { ref } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
+const props = defineProps({
+ avatar: String
+})
 const media = ref({
     photo: null,
 })
 
 // const photo = ref(null);
-const imageUrl = ref(null);
+// const imageUrl = ref(null);
 const route = useRoute();
 const dialog = ref(false);
 const preview = ref(null);
-const id = route.params.id;
+// const id = route.params.id;
 
-const viewAvatar = async () => {
-    await HTTP.get(`/rsousers/${id}/`, {
-        headers: {
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            imageUrl.value = response.data;
+// const viewAvatar = async () => {
+//     await HTTP.get(`/rsousers/${id}/`, {
+//         headers: {
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             imageUrl.value = response.data;
 
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log('failed ' + error);
-        });
-};
+//             console.log(response.data);
+//         })
+//         .catch(function (error) {
+//             console.log('failed ' + error);
+//         });
+// };
 
-viewAvatar();
+// viewAvatar();
 
 const selectFile = (event) => {
     media.value = event.target.files[0];
@@ -212,7 +215,7 @@ const uploadAvatar = async () => {
     dialog.value = true;
     const formData = new FormData();
     formData.append('photo', media.value);
-    await HTTP.put('/rsousers/me/media/', formData, {
+    await HTTP.post('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -220,7 +223,7 @@ const uploadAvatar = async () => {
     })
         .then((response) => {
             dialog.value = false;
-            viewAvatar();
+
             console.log(response, 'avatar uploaded');
         })
         .catch(function (error) {
@@ -239,7 +242,7 @@ const updateAvatar = async () => {
     })
         .then((response) => {
             dialog.value = false;
-            viewAvatar();
+
             console.log(response, 'updated');
         })
         .catch(function (error) {
@@ -255,7 +258,7 @@ const deleteAvatar = async () => {
         },
     })
         .then((response) => {
-            viewAvatar();
+
             console.log(response, 'deleted');
         })
         .catch(function (error) {

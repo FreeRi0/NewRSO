@@ -119,7 +119,7 @@ const selectedPeoples = ref(props.participants);
 .checked-item__list-date {
     width: 95px;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
+    grid-template-columns: auto 1fr 0fr;
 }
 
 .checked-item__list-img-status {
@@ -168,6 +168,7 @@ const selectedPeoples = ref(props.participants);
     border: 1px solid black;
     width: 168px;
     height: 48px;
+    padding: 12px 32px;
     span {
         font-size: 16px;
     }

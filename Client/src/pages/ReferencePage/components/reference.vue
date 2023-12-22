@@ -722,6 +722,10 @@ input[type='number']::-webkit-outer-spin-button {
     }
 }
 
+p {
+    color: #898989;
+}
+
 .refer {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
@@ -816,6 +820,9 @@ input[type='number']::-webkit-outer-spin-button {
 
 .v-expansion-panel:not(:first-child)::after {
     display: none;
+}
+.sort-filters {
+    align-items: flex-start;
 }
 
 .sort-filters {

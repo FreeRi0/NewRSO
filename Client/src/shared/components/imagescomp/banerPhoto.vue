@@ -4,8 +4,8 @@
             <!-- Заглушка Банер -->
 
             <img
-                v-if="imgDataUrl"
-                :src="imgDataUrl.media.banner"
+                v-if="banner"
+                :src="banner"
                 alt="Баннер личной страницы"
             />
 
@@ -165,35 +165,38 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import myUpload from 'vue-image-crop-upload';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-const route = useRoute();
-const id = route.params.id;
+// const route = useRoute();
+// const id = route.params.id;
 const dialog = ref(false);
 const imgDataUrl = ref(null);
 const preview = ref(null);
+
+const props = defineProps({
+    banner: String
+})
 // const file = ref(null);
 const media = ref({
     banner: null,
 });
 
-const viewBanner = async () => {
-    await HTTP.get(`/rsousers/${id}/`, {
-        headers: {
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            imgDataUrl.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const viewBanner = async () => {
+//     await HTTP.get(`/rsousers/${id}/`, {
+//         headers: {
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             imgDataUrl.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
-viewBanner();
+// viewBanner();
 
 const selectBanner = (event) => {
     media.value = event.target.files[0];
@@ -212,7 +215,7 @@ const uploadBanner = async () => {
     })
         .then((response) => {
             dialog.value = false;
-            viewBanner();
+
             console.log(response, 'banner uploaded');
         })
         .catch(function (error) {
@@ -232,7 +235,7 @@ const updateBanner = async () => {
     })
         .then((response) => {
             dialog.value = false;
-            viewBanner();
+
             console.log(response, 'banner updated');
         })
         .catch(function (error) {
@@ -248,7 +251,7 @@ const deleteBanner = async () => {
         },
     })
         .then((response) => {
-            viewBanner();
+           
             console.log(response, 'deleted');
         })
         .catch(function (error) {

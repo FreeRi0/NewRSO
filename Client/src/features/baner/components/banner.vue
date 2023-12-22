@@ -1,8 +1,7 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto></bannerPhoto>
-        <Avatar></Avatar>
-        <!-- <testUpload></testUpload> -->
+        <bannerPhoto :banner="user?.media?.banner"></bannerPhoto>
+        <Avatar :avatar="user?.media?.photo"></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
@@ -37,53 +36,66 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-
-let user = ref({});
-let education = ref(null);
-let region = ref(null);
-const route = useRoute();
-const id = route.params.id;
+import { useRoute} from 'vue-router';
 
 
-// const props = defineProps({
-//     id: String
-// })
-const getUser = async () => {
-    await HTTP.get(`/rsousers/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// let user = ref({});
+// let education = ref(null);
+// let region = ref(null);
+// const route = useRoute();
+// const id = route.params.id;
 
-const getAuthUser = async () => {
-    await HTTP.get('/rsousers/me/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-}
+
+const props = defineProps({
+    banner: {
+        type: String
+    },
+    avatar: {
+        type: String
+    },
+
+    user: {
+        type: Object,
+    },
+    education: {
+        type: Object,
+    }
+})
+// const getUser = async () => {
+//     await HTTP.get(`/rsousers/${id}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             user.value = response.data;
+//             console.log(user.value);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+
+// const getAuthUser = async () => {
+//     await HTTP.get('/rsousers/me/', {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             user.value = response.data;
+//             console.log(user.value);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// }
 
 // const getEducation = async () => {
 //     await HTTP.get('/users/me/education', {
@@ -119,18 +131,15 @@ const getAuthUser = async () => {
 
 
 
-// onBeforeRouteUpdate((to, from) => {
-//     getUser(to.params.id);
-// })
 
 
 
-onMounted(() => {
-    getUser()
-    getAuthUser()
-    // getEducation();
-    // getRegion();
-});
+// onMounted(() => {
+//     // getUser()
+//     // getAuthUser()
+//     // getEducation();
+//     // getRegion();
+// });
 
 
 

@@ -100,42 +100,60 @@ import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
-const member = ref([]);
-const squad = ref({});
+// const members = ref([]);
+// const squad = ref({});
 const position = ref({});
-const route = useRoute();
-const id = route.params.id;
+// const route = useRoute();
+// const id = route.params.id;
 
-const aboutMembers = async () => {
-    await HTTP.get(`/detachments/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            member.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-const aboutSquad = async () => {
-    await HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squad.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+const props = defineProps({
+    // name: {
+    //     type: String
+    // },
+
+    member : {
+        type: Array
+    },
+    squad: {
+       type: Object,
+       required: true
+    },
+    position: {
+        type: Object
+    }
+
+})
+
+// const aboutMembers = async () => {
+//     await HTTP.get(`/detachments/${id}/members/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             member.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+// const aboutSquad = async () => {
+//     await HTTP.get(`/detachments/${id}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             squad.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
 const aboutPosition = async () => {
     await HTTP.get(`/positions/${id}/`, {
@@ -153,15 +171,15 @@ const aboutPosition = async () => {
         });
 };
 onMounted(() => {
-    aboutMembers();
-    aboutSquad();
+    // aboutMembers();
+    // aboutSquad();
     aboutPosition();
 });
 
-member.value = member.value.sort((a, b) => a.is_trusted - b.is_trusted);
-const lastCategoryIndex = member.value.findIndex(
-    (item) => item.is_trusted === false,
-);
+// member.value = member.value.sort((a, b) => a.is_trusted - b.is_trusted);
+// const lastCategoryIndex = member.value.findIndex(
+//     (item) => item.is_trusted === false,
+// );
 
 // member.value = member.value.filter((item) => item.is_trusted === false)
 </script>

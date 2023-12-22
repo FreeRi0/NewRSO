@@ -2,7 +2,7 @@
     <div class="avatar-upload my_photo__edit">
         <!-- Заглушка по умолчанию  -->
         <div class="avatar-preview my_photo__plug">
-            <img
+            <!-- <img
                 :src="userPhotoUrl.media.photo1"
                 alt="Фото пользователя"
                 v-if="userPhotoUrl"
@@ -28,7 +28,7 @@
                 alt="Фото пользователя(пусто)"
                 v-else
 
-            />
+            /> -->
         </div>
         <!-- Добавить фото -->
         <div class="avatar-edit my_photo__add">
@@ -213,22 +213,22 @@ const media = ref({
     // photo4: null
 })
 
-const viewUsersPhoto = async () => {
-    await HTTP.get(`/rsousers/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            userPhotoUrl.value = response.data;
+// const viewUsersPhoto = async () => {
+//     await HTTP.get(`/rsousers/${id}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             userPhotoUrl.value = response.data;
 
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
 // const viewUsersPhoto2 = async () => {
 //     await HTTP.get(`/rsousers/${id}/`, {
@@ -282,7 +282,7 @@ const viewUsersPhoto = async () => {
 // };
 
 onMounted(() => {
-    viewUsersPhoto();
+    // viewUsersPhoto();
 // viewUsersPhoto2();
 // viewUsersPhoto3();
 // viewUsersPhoto4();

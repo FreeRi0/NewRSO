@@ -144,7 +144,7 @@ watch(
 .horizontallso-item__list-date {
     width: 95px;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
+    grid-template-columns: auto 1fr 0fr;
 }
 
 .horizontallso-item__list-img-status {

@@ -33,14 +33,14 @@
                 </div>
             </div>
         </div>
-        <div class="sort-select mx-3">
+        <div class="sort-select ml-3">
             <Select
                 variant="outlined"
                 v-model="usersData.membership_fee"
                 :names="filteredPayed"
             ></Select>
         </div>
-        <div class="checked__confidant">
+        <div class="checked__confidant ml-3">
             <input
                 type="checkbox"
                 v-model="selectedPeoples"
@@ -48,7 +48,8 @@
                 @change="(event) => updateMembership(participant, event)"
             />
         </div>
-        <Button class="preview" type="submit" label="Сохранить"></Button>
+        <Button class="save" type="submit" label="Сохранить"></Button>
+        <!-- <Button @click="DeleteStatus()" label="Удалить"></Button> -->
     </form>
 </template>
 <script setup>
@@ -110,6 +111,23 @@ const ChangeStatus = async (id) => {
             console.error('There was an error!', error);
         });
 };
+
+// const DeleteStatus = async (id) => {
+//     HTTP.delete(`rsousers/${id}/membership_fee_status/`, usersData.value,  {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             usersData.value = response.data;
+//             console.log(response.data);
+//         })
+
+//         .catch((error) => {
+//             console.error('There was an error!', error);
+//         });
+// }
 </script>
 <style lang="scss" scoped>
 .checked {
@@ -138,7 +156,7 @@ const ChangeStatus = async (id) => {
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
-    margin-left: 12px;
+
     width: 100%;
 }
 
@@ -162,15 +180,7 @@ const ChangeStatus = async (id) => {
 .checked-item__list-date {
     width: 95px;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
-}
-
-.checked-item__list-img-status {
-    position: absolute;
-    width: 18px;
-    max-height: 18px;
-    top: -17px;
-    right: -15px;
+    grid-template-columns: auto 1fr 0fr;
 }
 
 .checked-itemo__list-img {
@@ -205,24 +215,29 @@ const ChangeStatus = async (id) => {
     }
 }
 
-.preview {
-    background-color: white;
-    color: #35383f;
-    border: 1px solid black;
+.save {
+    // background-color: white;
+    // color: #35383f;
+    // border: 1px solid black;
     width: 168px;
     height: 48px;
+    padding: 12px 32px;
+    margin: 0px;
     span {
         font-size: 16px;
     }
 }
 
+.v-field {
+    border-radius: 10px;
+}
 .sort-select {
     height: 46px;
+    width: 185px;
 }
 
 .form__select {
     margin-bottom: 0px;
-    margin-right: 8px;
     border: none;
 }
 </style>

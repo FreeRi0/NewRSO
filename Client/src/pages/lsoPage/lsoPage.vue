@@ -5,20 +5,20 @@
         <!-- <BannerComp class="user-metric mt-3">
 
         </BannerComp> -->
-        <BannerSquad :banner="squad.banner" :emblem="squad.emblem" :squad="name"></BannerSquad>
+        <BannerSquad :squad="squad" :edict="educt" :member="member"></BannerSquad>
         <section class="about-squad">
             <h3>Об отряде</h3>
             <p>
                 {{ squad.about }}
             </p>
-            <p>222{{ squad }}</p>
+            <!-- <p>222{{ squad }}</p> -->
         </section>
         <v-row class="mt-8">
             <v-col v-for="n in 4" :key="n" class="d-flex">
                 <squadPhotos></squadPhotos>
             </v-col>
         </v-row>
-        <SquadParticipants></SquadParticipants>
+        <SquadParticipants :squad="squad" :member="member"></SquadParticipants>
     </div>
 </template>
 <script setup>
@@ -31,7 +31,7 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 const squad = ref({});
-const member = ref({});
+const member = ref([]);
 const educt = ref({});
 const route = useRoute();
 let id = route.params.id;

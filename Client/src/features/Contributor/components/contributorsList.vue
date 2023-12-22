@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="sort-select mx-3">
+        <div class="horizontallso-info mx-3">
             <p v-if="participant.membership_fee">Оплачен</p>
             <p v-else>Не оплачен</p>
 
@@ -46,21 +46,11 @@
 </template>
 
 <script setup>
-// import referenceItem from '@entities/ReferencesPeoples/components';
 
 import { ref, watch } from 'vue';
 import { Select } from '@shared/components/selects';
 
 const emit = defineEmits(['change']);
-// const payed = ref(null);
-
-// const filteredPayed = ref([
-//     {
-//         value: 'payed',
-//         name: 'Оплачен',
-//     },
-//     { value: 'payed', name: 'Не оплачен' },
-// ]);
 
 const updateMembership = (e) => {
     console.log('ddddddrrr');
@@ -112,6 +102,18 @@ watch(
             display: flex;
             position: relative;
             align-items: center;
+        }
+    }
+    &-info {
+        border: 1px solid #B6B6B6;
+        border-radius: 10px;
+        padding: 10px 48px;
+        height: 46px;
+        p {
+            display: block;
+            font-size: 16px;
+            font-weight: 400;
+            color: #35383F;
         }
     }
 }
@@ -181,10 +183,15 @@ watch(
 }
 
 .horizontallso__confidant {
-    padding: 11px 15px;
+    padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
-    height: 46px;
+    height: 48px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 .sort-select {

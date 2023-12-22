@@ -7,7 +7,6 @@
                 :src="banner"
                 alt="Баннер отряда"
                 v-if="banner"
-                v-show="true"
             />
 
             <img

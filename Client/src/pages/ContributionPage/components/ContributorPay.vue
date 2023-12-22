@@ -1,6 +1,7 @@
 <template>
     <div class="container">
         <div class="contributor">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="contributor-title">Членский взнос</h2>
             <div class="d-flex mt-7">
                 <button
@@ -527,11 +528,17 @@ import {
 } from '@features/Contributor/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 
 const participants = ref([]);
 const participantsVisible = ref(12);
 const user = ref({});
+
+const pages = ref([
+    { pageTitle: 'Личный кабинет', href: '#' },
+    { pageTitle: 'Членский взнос', href: '/contributorPay' },
+]);
 
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
@@ -737,6 +744,10 @@ input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+p {
+    color: #898989;
 }
 
 .contributorBtn {

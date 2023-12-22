@@ -132,10 +132,11 @@ import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, onBeforeRouteUpdate } from 'vue-router';
 
 const router = useRouter();
+
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
     { title: 'Штабы СО ОО', link: '/AllHeadquarters' },
@@ -146,8 +147,8 @@ const pages = ref([
 ]);
 
 const userPages = ref([
-    { title: 'Моя страница', link: '/UserPage' },
-    { title: 'Мой отряд', link:  '/allSquads' },
+    { title: 'Моя страница', link: '/UserPage/' },
+    { title: 'Мой отряд', link: '/allSquads' },
     { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
     { title: 'Местный штаб', link: '/LocalHeadquarters' },
     { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
@@ -165,15 +166,12 @@ const show = ref(false);
 const isOpen = ref(false);
 const user = ref(null);
 
+
 const removeClass = () => {
     const menu = navMenu.value;
     menu.classList.toggle('no-visible');
 };
 
-const LogOut = () => {
-    localStorage.removeItem('Token');
-    router.push('/');
-};
 
 const getUser = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -191,9 +189,30 @@ const getUser = async () => {
         });
 };
 
+const LogOut = () => {
+    localStorage.removeItem('Token');
+    router.push('/');
+};
+
+
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         getUser();
+//     }
+// });
+
+// watch(
+//     () => router.params.id,
+
+//     (newId, oldId) => {
+//         id = newId;
+//         getUser();
+//     },
+// );
+
 onMounted(() => {
-    getUser()
-})
+    getUser();
+});
 </script>
 
 <style lang="scss">

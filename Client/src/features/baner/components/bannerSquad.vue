@@ -13,7 +13,7 @@
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
                         <li class="Squad-HQ__university">
-                            <p>{{ educt.name }}</p>
+                            <p>{{ edict.name }}</p>
                         </li>
                         <li class="Squad-HQ__date">
                             <p>Дата создания ЛСО</p>
@@ -71,12 +71,12 @@ import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-const squad = ref({});
-const member = ref({});
-const educt = ref({});
+// const squad = ref({});
+// const member = ref({});
+// const educt = ref({});
 
-const route = useRoute();
-const id = route.params.id;
+// const route = useRoute();
+// const id = route.params.id;
 
 const props = defineProps({
     banner: {
@@ -87,7 +87,13 @@ const props = defineProps({
     },
     squad: {
        type: Object,
-       default: () => ({}),
+       required: true
+    },
+    edict: {
+        type: Object,
+    },
+    member: {
+        type: Object,
     }
 
 })

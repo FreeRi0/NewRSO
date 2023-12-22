@@ -193,6 +193,16 @@ const routes: RouteRecordRaw[] = [
                     meta: {
                         requiresAuth: true
                     }
+            },    {
+                path: '/PersonalData/:id',
+                name: 'PersonalData',
+                component: () =>
+                    import(
+                        '@pages/PersonalDataPage/components/PersonalData.vue'
+                    ),
+                    meta: {
+                        requiresAuth: true
+                    }
             },
             {
                 path: '/createhq',
