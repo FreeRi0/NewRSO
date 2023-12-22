@@ -26,12 +26,10 @@
         </template>
         <template v-slot:chip="{ props, item }">
             <div class="option__content">
-                <!-- Не работает код ниже, картинка не подгружается -->
-
-                <!-- <div class="option__image">
+                <div class="option__image">
                     <img
-                        v-if="item?.raw?.media.photo"
-                        :src="item?.raw?.media.photo"
+                        v-if="item.raw.media"
+                        :src="item.raw.media.photo"
                         alt="Фото бойца"
                     />
                     <img
@@ -39,12 +37,15 @@
                         :src="'./assets/foto-leader-squad/foto-leader-squad-stub.png'"
                         alt="'Фото бойца (заглушка)'"
                     />
-                </div> -->
+                </div>
+
                 <div class="option__wrapper">
                     <p class="option__title">
                         {{
                             item.raw.last_name +
+                            ' ' +
                             item.raw.first_name +
+                            ' ' +
                             item.raw.patronymic_name
                         }}
                     </p>
@@ -53,20 +54,14 @@
                     </p>
                 </div>
             </div>
-            <!-- <span v-else>
-                {{ item.placeholder }}
-                
-            </span> -->
         </template>
 
         <template v-slot:item="{ props, item }">
             <v-container v-bind="props">
                 <div class="option__content">
-                    <!-- Не работает код ниже, картинка не подгружается -->
-
-                    <!-- <div class="option__image">
+                    <div class="option__image">
                         <img
-                            v-if="item?.raw?.media.photo"
+                            v-if="item?.raw?.media"
                             :src="item?.raw?.media.photo"
                             alt="Фото бойца"
                         />
@@ -75,12 +70,14 @@
                             :src="'./assets/foto-leader-squad/foto-leader-squad-stub.png'"
                             alt="'Фото бойца (заглушка)'"
                         />
-                    </div> -->
+                    </div>
                     <div class="option__wrapper">
                         <p class="option__title">
                             {{
                                 item?.raw?.last_name +
+                                ' ' +
                                 item?.raw?.first_name +
+                                ' ' +
                                 item?.raw?.patronymic_name
                             }}
                         </p>
@@ -168,7 +165,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-//-----отсутствует атрибут scoped, чтобы стилизовать Dropdown
+//-----отсутствует атрибут scoped, чтобы отрабатывала высота поля
 .error-wrapper {
     position: relative;
 }
@@ -177,133 +174,6 @@ onMounted(() => {
     right: 0;
     color: var(--danger);
     font-size: 12px;
-}
-
-.p-dropdown {
-    display: flex;
-    // padding: 8px 20px 8px 54px;
-    padding: 1px 20px 1px 54px;
-    min-height: 40px;
-    background-image: url('@app/assets/icon/search.svg');
-    background-position: 20px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    align-self: stretch;
-    border-radius: 10px;
-    border: 1px solid #b6b6b6;
-
-    .p-dropdown-trigger-icon {
-        width: 24px;
-        height: 24px;
-        fill: none;
-        stroke: #898989;
-        stroke-width: 0.75px;
-        stroke-miterlimit: 10;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
-
-    .p-dropdown-clear-icon {
-        position: relative;
-        width: 24px;
-        height: 24px;
-
-        // &::after {
-        //     position: absolute;
-        //     content: '';
-        //     width: 19px;
-        //     height: 19px;
-        //     top: 50%;
-        //     left: 50%;
-        //     border-radius: 50%;
-        //     border: 1px solid #898989;
-        // }
-    }
-}
-
-.p-dropdown-filter-container {
-    svg {
-        display: none;
-    }
-}
-.p-dropdown-panel {
-    // margin-top: -42px;
-    // padding: 55px 20px 20px 20px;
-    // padding: 30px 20px 20px 20px;
-    padding: 13px 20px 20px 20px;
-    border-radius: 0 0 10px 10px;
-    // border-radius: 10px;
-    border: 1px solid #b6b6b6;
-    border-top: none;
-    // background-image: linear-gradient(to top, #ffffff 80%, transparent 20%);
-    background-color: #ffffff;
-    // transform-origin: center top;
-
-    .p-dropdown-header {
-        // margin-bottom: 20px;
-        // width: calc(100% - 24px);
-
-        input {
-            // height: 100%;
-            position: absolute;
-            left: 34px;
-            margin-top: -45px;
-            width: calc(100% - 86px);
-
-            &:focus {
-                background-color: white;
-            }
-        }
-    }
-
-    .p-dropdown-items-wrapper {
-        // min-height: 400px;
-
-        &::-webkit-scrollbar {
-            /*стили полосы прокрутки */
-            width: 8px;
-        }
-
-        &::-webkit-scrollbar-track {
-            /*стили зоны отслеживания */
-            background: #ffffff;
-            border-radius: 10px;
-            border: 1px solid #898989;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            /*стили бегунка */
-            width: 8px;
-            // height: 108px;
-            border-radius: 10px;
-            border: 1px solid #ffffff;
-            background-color: #35383f;
-        }
-    }
-
-    .p-dropdown-items {
-        display: grid;
-        grid-template-columns: 1fr;
-        row-gap: 12px;
-        width: calc(100% - 16px);
-    }
-
-    .p-dropdown-item {
-        display: flex;
-        height: 48px;
-        padding: 5px 20px;
-        // justify-content: center;
-        // align-items: center;
-        gap: 10px;
-        border-radius: 10px;
-        border: 1px solid #b6b6b6;
-
-        @media (max-width: 768px) {
-            height: 56px;
-            padding: 8px;
-        }
-    }
 }
 
 .option {
@@ -404,7 +274,8 @@ onMounted(() => {
 
     img {
         width: 100%;
-        height: auto;
+        // height: auto;
+        height: 100%;
     }
 }
 </style>
