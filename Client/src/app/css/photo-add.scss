@@ -1,0 +1,155 @@
+//Стили для блока добавления и редактирования логотипа, баннера, фотографий отряда/штаба
+.photo-add {
+    &__container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      column-gap: 20px;
+    }
+  
+    &__box {
+      position: relative;
+      width: 100%;
+      height: 347px;
+  
+      &--logo {
+        width: 144px;
+        height: 144px;
+      }
+  
+      &--banner {
+        height: 144px;
+      }
+  
+      &:hover {
+        .photo-add__edit-group {
+          width: 127px;
+          height: 58px;
+          padding: 4px;
+          border-radius: 8px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          background-image: none;
+          background-color: #ffffff;
+        }
+        .photo-add__label-edit,
+        .photo-add__button-clear {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+        }
+      }
+    }
+  
+    &__img {
+      width: 100%;
+      height: 347px;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.10);
+  
+      &--logo {
+        width: 144px;
+        height: 144px;
+        border-radius: 50%;
+        background-color: #c7e3fa;
+      }
+  
+      &--banner {
+        height: 144px;
+      }
+    }
+  
+    &__img img {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  
+    &__label {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      border-radius: 10%;
+      cursor: pointer;
+  
+      &--logo {
+        border-radius: 50%;
+      }
+  
+      &--position {
+        svg {
+          position: absolute;
+          bottom: 8px;
+          right: 8px;
+        }
+      }
+    }
+  
+    &__edit-group {
+      position: absolute;
+  
+      display: grid;
+      grid-template-columns: 1fr;
+      row-gap: 2px;
+  
+      width: 48px;
+      height: 48px;
+      bottom: 8px;
+      right: 8px;
+      color: #1f7cc0;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.4);
+      background-image: url("@app/assets/icon/pen-circle.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+  
+      &--position {
+        bottom: 0;
+        right: 0;
+      }
+    }
+  
+    &__label-edit,
+    &__button-clear {
+      display: none;
+      margin: 0;
+      padding: 0 8px 0 32px;
+      width: 119px;
+      height: 24px;
+      border-radius: 6px;
+      text-align: start;
+      color: #1f7cc0;
+      font-family: "Akrobat", sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 17px;
+      font-style: normal;
+      background-color: #ffffff;
+      background-repeat: no-repeat;
+      background-position: 4px;
+      cursor: pointer;
+    }
+  
+    &__button-clear {
+      background-image: url("@app/assets/icon/basket.svg");
+    }
+  
+    &__label-edit {
+      background-image: url("@app/assets/icon/edit_duotone_line.svg");
+    }
+  
+    &__label-edit:hover,
+    &__button-clear:hover {
+      background-color: #e2eff7;
+    }
+  }

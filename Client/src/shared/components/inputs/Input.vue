@@ -10,9 +10,9 @@
             :data-maska="maska"
             :v-maska="vmaska"
             @input="updateValue"
-            @change="changeValue"
             variant="outlined"
             class="mb-2 text-field"
+            v-bind="$attrs"
         />
         <TransitionGroup>
             <div
@@ -28,6 +28,11 @@
 
 <script setup>
 // import { vmaska } from 'maska';
+
+defineOptions({
+    inheritAttrs: false,
+});
+
 const emit = defineEmits(['update:value']);
 const props = defineProps({
     error: {
@@ -70,10 +75,6 @@ const props = defineProps({
 const updateValue = (e) => {
     emit('update:value', e.target.value);
 };
-
-const changeValue = (e) => {
-    emit('change', e.target.value);
-};
 </script>
 
 <style lang="scss" scoped>
@@ -89,12 +90,15 @@ const changeValue = (e) => {
 }
 
 .form-input input {
-    border: 2px solid #a3a3a3;
-  border-radius: 10px;
-  display: block;
-  font-size: 12px;
-  padding: 10px 16px 10px 16px;
-  margin-bottom: 20px;
-  width: 100%;
+    border: 1px solid #a3a3a3;
+    box-sizing: border-box;
+    border-radius: 10px;
+    display: block;
+    font-size: 16px;
+    line-height: 24px;
+    padding: 8px 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-height: 40px;
 }
 </style>

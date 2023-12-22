@@ -2,7 +2,7 @@
     <form
         class="form"
         enctype="multipart/form-data"
-        @submit.prevent="createDetachment"
+        @submit.prevent="changeDetachment"
     >
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
@@ -72,7 +72,7 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="name-squad"
+                            <label class="form__label" for="name-squad"
                                 >Название отряда
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -90,7 +90,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="select-direction"
+                            <label class="form__label" for="select-direction"
                                 >Выберите направление
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="create-date"
+                            <label class="form__label" for="create-date"
                                 >Дата основания
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -140,7 +140,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="select-region"
+                            <label class="form__label" for="select-region"
                                 >Выберите регион
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -156,7 +156,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="city">Город </label>
+                            <label class="form__label" for="city">Город </label>
                             <Input
                                 class="form__input"
                                 id="city"
@@ -167,7 +167,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="select-institution"
+                            <label class="form__label" for="select-institution"
                                 >Выберите учебное заведение
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -182,8 +182,8 @@
                             ></Select>
                         </div>
 
-                        <div class="form__field">
-                            <label for="beast"
+                        <div class="form__field form__field--commander">
+                            <label class="form__label" for="beast"
                                 >Командир отряда:
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -193,7 +193,7 @@
                                 placeholder="Поиск по ФИО"
                                 v-model="detachment.commander"
                                 @update:value="changeValue"
-                                address="api/v1/users/"
+                                address="api/v1/rsousers/"
                             ></Dropdown>
                             <!-- <p>{{ detachment.commander }}</p> -->
                         </div>
@@ -276,13 +276,14 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="social-media-vk"
+                            <label class="form__label" for="social-media-vk"
                                 >Группа отряда ВКонтакте
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Input
                                 class="form__input"
                                 id="social-media-vk"
+                                :maxlength="50"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
                                 v-model:value="detachment.social_vk"
@@ -290,13 +291,14 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="social-media-te"
+                            <label class="form__label" for="social-media-te"
                                 >Группа отряда в Телеграмме
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Input
                                 class="form__input"
                                 id="social-media-te"
+                                :maxlength="50"
                                 placeholder="Например, https://t.me/cco_monolit"
                                 name="social_media_te"
                                 v-model:value="detachment.social_tg"
@@ -304,7 +306,7 @@
                         </div>
 
                         <div class="form__field" v-if="participants">
-                            <p>
+                            <p class="form__label">
                                 Участники отряда
                                 <sup class="valid-red">*</sup>
                             </p>
@@ -327,9 +329,8 @@
                             </v-text-field>
                             <MembersList
                                 :items="sortedMembers"
-                                :validate="v"
                                 :submited="submited"
-                                @updateMember="onUpdateMember"
+                                @update-member="onUpdateMember"
                             ></MembersList>
                         </div>
                     </div>
@@ -419,7 +420,7 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="squad-slogan"
+                            <label class="form__label" for="squad-slogan"
                                 >Девиз отряда
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -438,7 +439,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="about-squad"
+                            <label class="form__label" for="about-squad"
                                 >Об отряде
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -456,57 +457,753 @@
                             </div>
                         </div>
 
-                        <!-- <div class="form__field">
-                            <label for="upload-logo">Добавьте логотип</label>
-                            <Avatar
-                                name="upload_logo"
-                                id="upload-logo"
-                                v-model:value="detachment.emblem"
-                            />
-                            <span class="form__footnote"
+                        <div class="form__field photo-add">
+                            <p class="form__label">Добавьте логотип</p>
+                            <div class="photo-add__box photo-add__box--logo">
+                                <div
+                                    class="photo-add__img photo-add__img--logo"
+                                >
+                                    <img v-if="urlEmblem" :src="urlEmblem" />
+                                </div>
+
+                                <div class="photo-add__input">
+                                    <label
+                                        class="photo-add__label photo-add__label--logo"
+                                        for="upload-logo"
+                                        v-show="!urlEmblem"
+                                    >
+                                        <svg
+                                            class="logo-add__svg"
+                                            aria-hidden="true"
+                                            focusable="false"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="48"
+                                            height="48"
+                                            viewBox="0 0 48 48"
+                                            fill="none"
+                                        >
+                                            <g
+                                                filter="url(#filter0_b_2686_15482)"
+                                            >
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="24"
+                                                    fill="black"
+                                                    fill-opacity="0.4"
+                                                />
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="23"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                />
+                                            </g>
+                                            <path
+                                                d="M24.1328 15.1328L24.1328 33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <path
+                                                d="M15.1328 24.1328H33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <defs>
+                                                <filter
+                                                    id="filter0_b_2686_15482"
+                                                    x="-36.9643"
+                                                    y="-36.9643"
+                                                    width="121.929"
+                                                    height="121.929"
+                                                    filterUnits="userSpaceOnUse"
+                                                    color-interpolation-filters="sRGB"
+                                                >
+                                                    <feFlood
+                                                        flood-opacity="0"
+                                                        result="BackgroundImageFix"
+                                                    />
+                                                    <feGaussianBlur
+                                                        in="BackgroundImageFix"
+                                                        stdDeviation="18.4821"
+                                                    />
+                                                    <feComposite
+                                                        in2="SourceAlpha"
+                                                        operator="in"
+                                                        result="effect1_backgroundBlur_2686_15482"
+                                                    />
+                                                    <feBlend
+                                                        mode="normal"
+                                                        in="SourceGraphic"
+                                                        in2="effect1_backgroundBlur_2686_15482"
+                                                        result="shape"
+                                                    />
+                                                </filter>
+                                            </defs>
+                                        </svg>
+                                    </label>
+                                    <input
+                                        type="file"
+                                        id="upload-logo"
+                                        name="squad-logo"
+                                        accept="image/*,image/jpeg"
+                                        hidden
+                                        @change="selectFile"
+                                    />
+                                    <div
+                                        class="photo-add__edit-group photo-add__edit-group--position"
+                                        v-show="urlEmblem"
+                                    >
+                                        <label
+                                            class="photo-add__label-edit"
+                                            for="upload-logo"
+                                        >
+                                            <span class="photo-add__label-text"
+                                                >Изменить фото</span
+                                            >
+                                        </label>
+                                        <button
+                                            class="photo-add__button-clear"
+                                            type="reset"
+                                            @click="resetEmblem"
+                                        >
+                                            Удалить фото
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="form-field__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
-                        </div> -->
+                        </div>
 
-                        <!-- <div class="form__field">
-                            <label for="upload-banner">Добавьте баннер</label>
-                            <bannerPhoto
-                                name="upload_banner"
-                                id="upload-banner"
-                                v-model:value="detachment.banner"
-                            />
-                            <span class="form__footnote"
+                        <div class="form__field photo-add">
+                            <p class="form__label">Добавьте баннер</p>
+                            <div class="photo-add__box photo-add__box--banner">
+                                <div
+                                    class="photo-add__img photo-add__img--banner"
+                                >
+                                    <img v-if="urlBanner" :src="urlBanner" />
+                                    <img
+                                        v-else
+                                        src="@app/assets/banner-stub.png"
+                                        alt="Баннер отряда(пусто)"
+                                    />
+                                </div>
+
+                                <div class="photo-add__input">
+                                    <label
+                                        class="photo-add__label"
+                                        for="upload-banner"
+                                        v-show="!urlBanner"
+                                    >
+                                        <svg
+                                            class=""
+                                            aria-hidden="true"
+                                            focusable="false"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="48"
+                                            height="48"
+                                            viewBox="0 0 48 48"
+                                            fill="none"
+                                        >
+                                            <g
+                                                filter="url(#filter0_b_2686_15482)"
+                                            >
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="24"
+                                                    fill="black"
+                                                    fill-opacity="0.4"
+                                                />
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="23"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                />
+                                            </g>
+                                            <path
+                                                d="M24.1328 15.1328L24.1328 33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <path
+                                                d="M15.1328 24.1328H33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <defs>
+                                                <filter
+                                                    id="filter0_b_2686_15482"
+                                                    x="-36.9643"
+                                                    y="-36.9643"
+                                                    width="121.929"
+                                                    height="121.929"
+                                                    filterUnits="userSpaceOnUse"
+                                                    color-interpolation-filters="sRGB"
+                                                >
+                                                    <feFlood
+                                                        flood-opacity="0"
+                                                        result="BackgroundImageFix"
+                                                    />
+                                                    <feGaussianBlur
+                                                        in="BackgroundImageFix"
+                                                        stdDeviation="18.4821"
+                                                    />
+                                                    <feComposite
+                                                        in2="SourceAlpha"
+                                                        operator="in"
+                                                        result="effect1_backgroundBlur_2686_15482"
+                                                    />
+                                                    <feBlend
+                                                        mode="normal"
+                                                        in="SourceGraphic"
+                                                        in2="effect1_backgroundBlur_2686_15482"
+                                                        result="shape"
+                                                    />
+                                                </filter>
+                                            </defs>
+                                        </svg>
+                                    </label>
+                                    <input
+                                        type="file"
+                                        id="upload-banner"
+                                        name="squad-banner"
+                                        accept="image/*,image/jpeg"
+                                        hidden
+                                        @change="selectBanner"
+                                    />
+                                    <div
+                                        class="photo-add__edit-group"
+                                        v-show="urlBanner"
+                                    >
+                                        <label
+                                            class="photo-add__label-edit"
+                                            for="upload-banner"
+                                        >
+                                            <span class="photo-add__label-text"
+                                                >Изменить фото</span
+                                            >
+                                        </label>
+                                        <button
+                                            class="photo-add__button-clear"
+                                            type="reset"
+                                            @click="resetBanner"
+                                        >
+                                            Удалить фото
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="form-field__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
-                        </div> -->
+                        </div>
 
-                        <!-- <div class="form__field">
-                            <label for="upload-photo"
-                                >Добавьте фотографии</label
-                            >
-                            <div class="form__photo-wrapper">
-                                <photos
-                                    name="upload_photo"
-                                    id="upload-photo"
-                                    v-model:value="photoOne"
-                                />
-                                <photos
-                                    name="upload_photo"
-                                    id="upload-photo"
-                                    v-model:value="photoTwo"
-                                />
-                                <photos
-                                    name="upload_photo"
-                                    id="upload-photo"
-                                    v-model:value="photoThree"
-                                />
-                                <photos
-                                    name="upload_photo"
-                                    id="upload-photo"
-                                    v-model:value="photoFour"
-                                />
+                        <div class="form-field photo-add">
+                            <p class="form__label">Добавьте фотографии</p>
+                            <div class="photo-add__container">
+                                <div class="photo-add__box">
+                                    <div class="photo-add__img">
+                                        <img
+                                            v-if="urlPhotoOne"
+                                            :src="urlPhotoOne"
+                                        />
+                                        <img
+                                            v-else
+                                            src="@app/assets/photo-stub.png"
+                                            alt="Фотография отряда(пусто)"
+                                        />
+                                    </div>
+
+                                    <div class="photo-add__input">
+                                        <label
+                                            class="photo-add__label photo-add__label--position"
+                                            for="upload-photo-one"
+                                            v-show="!urlPhotoOne"
+                                        >
+                                            <svg
+                                                class=""
+                                                aria-hidden="true"
+                                                focusable="false"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="48"
+                                                height="48"
+                                                viewBox="0 0 48 48"
+                                                fill="none"
+                                            >
+                                                <g
+                                                    filter="url(#filter0_b_2686_15482)"
+                                                >
+                                                    <circle
+                                                        cx="24"
+                                                        cy="24"
+                                                        r="24"
+                                                        fill="black"
+                                                        fill-opacity="0.4"
+                                                    />
+                                                    <circle
+                                                        cx="24"
+                                                        cy="24"
+                                                        r="23"
+                                                        stroke="white"
+                                                        stroke-width="2"
+                                                    />
+                                                </g>
+                                                <path
+                                                    d="M24.1328 15.1328L24.1328 33.1328"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                />
+                                                <path
+                                                    d="M15.1328 24.1328H33.1328"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                />
+                                                <defs>
+                                                    <filter
+                                                        id="filter0_b_2686_15482"
+                                                        x="-36.9643"
+                                                        y="-36.9643"
+                                                        width="121.929"
+                                                        height="121.929"
+                                                        filterUnits="userSpaceOnUse"
+                                                        color-interpolation-filters="sRGB"
+                                                    >
+                                                        <feFlood
+                                                            flood-opacity="0"
+                                                            result="BackgroundImageFix"
+                                                        />
+                                                        <feGaussianBlur
+                                                            in="BackgroundImageFix"
+                                                            stdDeviation="18.4821"
+                                                        />
+                                                        <feComposite
+                                                            in2="SourceAlpha"
+                                                            operator="in"
+                                                            result="effect1_backgroundBlur_2686_15482"
+                                                        />
+                                                        <feBlend
+                                                            mode="normal"
+                                                            in="SourceGraphic"
+                                                            in2="effect1_backgroundBlur_2686_15482"
+                                                            result="shape"
+                                                        />
+                                                    </filter>
+                                                </defs>
+                                            </svg>
+                                        </label>
+                                        <input
+                                            type="file"
+                                            id="upload-photo-one"
+                                            accept="image/*,image/jpeg"
+                                            hidden
+                                            @change="selectPhotoOne"
+                                        />
+                                        <div
+                                            class="photo-add__edit-group"
+                                            v-show="urlPhotoOne"
+                                        >
+                                            <label
+                                                class="photo-add__label-edit"
+                                                for="upload-photo-one"
+                                            >
+                                                <span
+                                                    class="photo-add__label-text"
+                                                    >Изменить фото</span
+                                                >
+                                            </label>
+                                            <button
+                                                class="photo-add__button-clear"
+                                                type="reset"
+                                                @click="resetPhotoOne"
+                                            >
+                                                Удалить фото
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="photo-add__box">
+                                    <div class="photo-add__img">
+                                        <img
+                                            v-if="urlPhotoTwo"
+                                            :src="urlPhotoTwo"
+                                        />
+                                        <img
+                                            v-else
+                                            src="@app/assets/photo-stub.png"
+                                            alt="Фотография отряда(пусто)"
+                                        />
+                                    </div>
+
+                                    <div class="photo-add__input">
+                                        <label
+                                            class="photo-add__label photo-add__label--position"
+                                            for="upload-photo-two"
+                                            v-show="!urlPhotoTwo"
+                                        >
+                                            <svg
+                                                class=""
+                                                aria-hidden="true"
+                                                focusable="false"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="48"
+                                                height="48"
+                                                viewBox="0 0 48 48"
+                                                fill="none"
+                                            >
+                                                <g
+                                                    filter="url(#filter0_b_2686_15482)"
+                                                >
+                                                    <circle
+                                                        cx="24"
+                                                        cy="24"
+                                                        r="24"
+                                                        fill="black"
+                                                        fill-opacity="0.4"
+                                                    />
+                                                    <circle
+                                                        cx="24"
+                                                        cy="24"
+                                                        r="23"
+                                                        stroke="white"
+                                                        stroke-width="2"
+                                                    />
+                                                </g>
+                                                <path
+                                                    d="M24.1328 15.1328L24.1328 33.1328"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                />
+                                                <path
+                                                    d="M15.1328 24.1328H33.1328"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                />
+                                                <defs>
+                                                    <filter
+                                                        id="filter0_b_2686_15482"
+                                                        x="-36.9643"
+                                                        y="-36.9643"
+                                                        width="121.929"
+                                                        height="121.929"
+                                                        filterUnits="userSpaceOnUse"
+                                                        color-interpolation-filters="sRGB"
+                                                    >
+                                                        <feFlood
+                                                            flood-opacity="0"
+                                                            result="BackgroundImageFix"
+                                                        />
+                                                        <feGaussianBlur
+                                                            in="BackgroundImageFix"
+                                                            stdDeviation="18.4821"
+                                                        />
+                                                        <feComposite
+                                                            in2="SourceAlpha"
+                                                            operator="in"
+                                                            result="effect1_backgroundBlur_2686_15482"
+                                                        />
+                                                        <feBlend
+                                                            mode="normal"
+                                                            in="SourceGraphic"
+                                                            in2="effect1_backgroundBlur_2686_15482"
+                                                            result="shape"
+                                                        />
+                                                    </filter>
+                                                </defs>
+                                            </svg>
+                                        </label>
+                                        <input
+                                            type="file"
+                                            id="upload-photo-two"
+                                            accept="image/*,image/jpeg"
+                                            hidden
+                                            @change="selectPhotoTwo"
+                                        />
+                                        <div
+                                            class="photo-add__edit-group"
+                                            v-show="urlPhotoTwo"
+                                        >
+                                            <label
+                                                class="photo-add__label-edit"
+                                                for="upload-photo-two"
+                                            >
+                                                <span
+                                                    class="photo-add__label-text"
+                                                    >Изменить фото</span
+                                                >
+                                            </label>
+                                            <button
+                                                class="photo-add__button-clear"
+                                                type="reset"
+                                                @click="resetPhotoTwo"
+                                            >
+                                                Удалить фото
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="photo-add__box">
+                                    <div class="photo-add__img">
+                                        <img
+                                            v-if="urlPhotoThree"
+                                            :src="urlPhotoThree"
+                                        />
+                                        <img
+                                            v-else
+                                            src="@app/assets/photo-stub.png"
+                                            alt="Фотография отряда(пусто)"
+                                        />
+                                    </div>
+
+                                    <div class="photo-add__input">
+                                        <label
+                                            class="photo-add__label photo-add__label--position"
+                                            for="upload-photo-three"
+                                            v-show="!urlPhotoThree"
+                                        >
+                                            <svg
+                                                class=""
+                                                aria-hidden="true"
+                                                focusable="false"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="48"
+                                                height="48"
+                                                viewBox="0 0 48 48"
+                                                fill="none"
+                                            >
+                                                <g
+                                                    filter="url(#filter0_b_2686_15482)"
+                                                >
+                                                    <circle
+                                                        cx="24"
+                                                        cy="24"
+                                                        r="24"
+                                                        fill="black"
+                                                        fill-opacity="0.4"
+                                                    />
+                                                    <circle
+                                                        cx="24"
+                                                        cy="24"
+                                                        r="23"
+                                                        stroke="white"
+                                                        stroke-width="2"
+                                                    />
+                                                </g>
+                                                <path
+                                                    d="M24.1328 15.1328L24.1328 33.1328"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                />
+                                                <path
+                                                    d="M15.1328 24.1328H33.1328"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                />
+                                                <defs>
+                                                    <filter
+                                                        id="filter0_b_2686_15482"
+                                                        x="-36.9643"
+                                                        y="-36.9643"
+                                                        width="121.929"
+                                                        height="121.929"
+                                                        filterUnits="userSpaceOnUse"
+                                                        color-interpolation-filters="sRGB"
+                                                    >
+                                                        <feFlood
+                                                            flood-opacity="0"
+                                                            result="BackgroundImageFix"
+                                                        />
+                                                        <feGaussianBlur
+                                                            in="BackgroundImageFix"
+                                                            stdDeviation="18.4821"
+                                                        />
+                                                        <feComposite
+                                                            in2="SourceAlpha"
+                                                            operator="in"
+                                                            result="effect1_backgroundBlur_2686_15482"
+                                                        />
+                                                        <feBlend
+                                                            mode="normal"
+                                                            in="SourceGraphic"
+                                                            in2="effect1_backgroundBlur_2686_15482"
+                                                            result="shape"
+                                                        />
+                                                    </filter>
+                                                </defs>
+                                            </svg>
+                                        </label>
+                                        <input
+                                            type="file"
+                                            id="upload-photo-three"
+                                            accept="image/*,image/jpeg"
+                                            hidden
+                                            @change="selectPhotoThree"
+                                        />
+                                        <div
+                                            class="photo-add__edit-group"
+                                            v-show="urlPhotoThree"
+                                        >
+                                            <label
+                                                class="photo-add__label-edit"
+                                                for="upload-photo-three"
+                                            >
+                                                <span
+                                                    class="photo-add__label-text"
+                                                    >Изменить фото</span
+                                                >
+                                            </label>
+                                            <button
+                                                class="photo-add__button-clear"
+                                                type="reset"
+                                                @click="resetPhotoThree"
+                                            >
+                                                Удалить фото
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="photo-add__box">
+                                    <div class="photo-add__img">
+                                        <img
+                                            v-if="urlPhotoFour"
+                                            :src="urlPhotoFour"
+                                        />
+                                        <img
+                                            v-else
+                                            src="@app/assets/photo-stub.png"
+                                            alt="Фотография отряда(пусто)"
+                                        />
+                                    </div>
+
+                                    <div class="photo-add__input">
+                                        <label
+                                            class="photo-add__label photo-add__label--position"
+                                            for="upload-photo-four"
+                                            v-show="!urlPhotoFour"
+                                        >
+                                            <svg
+                                                class=""
+                                                aria-hidden="true"
+                                                focusable="false"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="48"
+                                                height="48"
+                                                viewBox="0 0 48 48"
+                                                fill="none"
+                                            >
+                                                <g
+                                                    filter="url(#filter0_b_2686_15482)"
+                                                >
+                                                    <circle
+                                                        cx="24"
+                                                        cy="24"
+                                                        r="24"
+                                                        fill="black"
+                                                        fill-opacity="0.4"
+                                                    />
+                                                    <circle
+                                                        cx="24"
+                                                        cy="24"
+                                                        r="23"
+                                                        stroke="white"
+                                                        stroke-width="2"
+                                                    />
+                                                </g>
+                                                <path
+                                                    d="M24.1328 15.1328L24.1328 33.1328"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                />
+                                                <path
+                                                    d="M15.1328 24.1328H33.1328"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                />
+                                                <defs>
+                                                    <filter
+                                                        id="filter0_b_2686_15482"
+                                                        x="-36.9643"
+                                                        y="-36.9643"
+                                                        width="121.929"
+                                                        height="121.929"
+                                                        filterUnits="userSpaceOnUse"
+                                                        color-interpolation-filters="sRGB"
+                                                    >
+                                                        <feFlood
+                                                            flood-opacity="0"
+                                                            result="BackgroundImageFix"
+                                                        />
+                                                        <feGaussianBlur
+                                                            in="BackgroundImageFix"
+                                                            stdDeviation="18.4821"
+                                                        />
+                                                        <feComposite
+                                                            in2="SourceAlpha"
+                                                            operator="in"
+                                                            result="effect1_backgroundBlur_2686_15482"
+                                                        />
+                                                        <feBlend
+                                                            mode="normal"
+                                                            in="SourceGraphic"
+                                                            in2="effect1_backgroundBlur_2686_15482"
+                                                            result="shape"
+                                                        />
+                                                    </filter>
+                                                </defs>
+                                            </svg>
+                                        </label>
+                                        <input
+                                            type="file"
+                                            id="upload-photo-four"
+                                            accept="image/*,image/jpeg"
+                                            hidden
+                                            @change="selectPhotoFour"
+                                        />
+                                        <div
+                                            class="photo-add__edit-group"
+                                            v-show="urlPhotoFour"
+                                        >
+                                            <label
+                                                class="photo-add__label-edit"
+                                                for="upload-photo-four"
+                                            >
+                                                <span
+                                                    class="photo-add__label-text"
+                                                    >Изменить фото</span
+                                                >
+                                            </label>
+                                            <button
+                                                class="photo-add__button-clear"
+                                                type="reset"
+                                                @click="resetPhotoFour"
+                                            >
+                                                Удалить фото
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -533,9 +1230,8 @@
 </template>
 
 <script setup>
-import { ref, computed, inject } from 'vue';
+import { ref, computed, inject, onMounted } from 'vue';
 import { Input } from '@shared/components/inputs';
-// import { SelectRegion } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
@@ -543,7 +1239,6 @@ import { bannerPhoto } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
-
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
 
@@ -560,87 +1255,67 @@ import {
     sameAs,
 } from '@vuelidate/validators';
 
-// const emit = defineEmits(['update:value']);
-
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:value', 'changeDetachment', 'selectFile']);
 
 const props = defineProps({
     participants: {
         type: Boolean,
         default: false,
     },
-    // unit: {
-    //     type: Object,
-    //     default: () => ({}),
-    // },
+    detachment: {
+        type: Object,
+        default: () => ({}),
+    },
+    submited: {
+        type: Boolean,
+        default: false,
+    },
+    //   media: {
+    //     fileEmblem: {
+    //       type: String,
+    //       default: null,
+    //     },
+    //     fileBanner: {
+    //       type: String,
+    //       default: null,
+    //     },
+    //     filePhotoOne: {
+    //       type: String,
+    //       default: null,
+    //     },
+    //     filePhotoTwo: {
+    //       type: String,
+    //       default: null,
+    //     },
+    //     filePhotoThree: {
+    //       type: String,
+    //       default: null,
+    //     },
+    //     filePhotoFour: {
+    //       type: String,
+    //       default: null,
+    //     },
+    //   },
+    fileEmblem: {
+        // type: String,
+        default: null,
+    },
 });
 
-const detachment = ref({
-    name: '',
-    area: null,
-    founding_date: '',
-    region: null,
-    city: '',
-    educational_institution: null,
-    commander: null,
-    social_vk: '',
-    social_tg: '',
-    slogan: '',
-    about: '',
-    // emblem: '',
-    // banner: '',
-    // photo1: '',
-    // photo2: '',
-    // photo3: '',
-    // photo4: '',
-});
+const detachment = ref(props.detachment);
 
-const swal = inject('$swal');
-
-const createDetachment = async () => {
-    axios
-        .post('api/v1/detachments/', detachment.value, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-        .then((response) => {
-            detachment.value = response.data;
-            console.log(response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        })
-        .catch((error) => {
-            console.error('There was an error!', error);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
-};
-
-const submited = ref(false);
-
-// const squad = ref(props.unit.squad);
-// const direction = ref(props.unit.direction);
-// const date = ref(props.unit.date);
-// const region = ref(props.unit.region);
-// const city = ref(props.unit.city);
-// const institution = ref(props.unit.institution);
-// const beast = ref(props.unit.beast);
-// const vk = ref(props.unit.vk);
-// const te = ref(props.unit.te);
-// const slogan = ref(props.unit.slogan);
-// const about = ref(props.unit.about);
+//-------------------------------------Валидация полей-------------------------------------------
+// const name = ref(props.detachment.name);
+// const area = ref(props.detachment.area);
+// const founding_date = ref(props.detachment.founding_date);
+// const region = ref(props.detachment.region);
+// const city = ref(props.detachment.city);
+// const educational_institution = ref(props.detachment.educational_institution);
+// const commander = ref(props.detachment.commandert);
+// const social_vk = ref(props.detachment.social_vk);
+// const social_tg = ref(props.detachment.social_tg);
+// const slogan = ref(props.detachment.slogan);
+// const about = ref(props.detachment.about);
 // const avatar = ref(props.unit.avatar);
 // const banner = ref(props.unit.banner);
 // const photoOne = ref(props.unit.photoOne);
@@ -648,31 +1323,29 @@ const submited = ref(false);
 // const photoThree = ref(props.unit.photoThree);
 // const photoFour = ref(props.unit.photoFour);
 
-// const membersList = ref([]);
-
 // const rules = computed(() => ({
-//     squad: {
+//     name: {
 //         required: helpers.withMessage(`* обязательно для заполнения`, required),
 //     },
-//     direction: {
+//     area: {
 //         required: helpers.withMessage(`* обязательно для заполнения`, required),
 //     },
-//     date: {
+//     founding_date: {
 //         required: helpers.withMessage(`* обязательно для заполнения`, required),
 //     },
 //     region: {
 //         required: helpers.withMessage(`* обязательно для заполнения`, required),
 //     },
-//     institution: {
+//     educational_institution: {
 //         required: helpers.withMessage(`* обязательно для заполнения`, required),
 //     },
-//     beast: {
+//     commander: {
 //         required: helpers.withMessage(`* обязательно для заполнения`, required),
 //     },
-//     vk: {
+//     social_vk: {
 //         required: helpers.withMessage(`* обязательно для заполнения`, required),
 //     },
-//     te: {
+//     social_tg: {
 //         required: helpers.withMessage(`* обязательно для заполнения`, required),
 //     },
 //     slogan: {
@@ -682,7 +1355,7 @@ const submited = ref(false);
 //         required: helpers.withMessage(`* обязательно для заполнения`, required),
 //     },
 //     // membersList: {
-//     //     //--------------------------------------------------------------------------------------
+//     //     //--------------------------------
 //     //     // required,
 //     //     $each: helpers.forEach({
 //     //         position: {
@@ -696,17 +1369,17 @@ const submited = ref(false);
 // }));
 
 // const v = useVuelidate(rules, {
-//     squad,
-//     direction,
-//     date,
+//     name,
+//     area,
+//     founding_date,
 //     region,
-//     institution,
-//     beast,
-//     vk,
-//     te,
+//     educational_institution,
+//     commander,
+//     social_vk,
+//     social_tg,
 //     slogan,
 //     about,
-//     // membersList, //-----------------------------------
+//     // membersList, //-------------------
 // });
 
 // const swal = inject('$swal');
@@ -735,17 +1408,14 @@ const submited = ref(false);
 //------------------------------------------------------------------------------------------------
 
 const counterSquad = computed(() => {
-    // return squad.value.length || 0;
     return detachment.value.name.length || 0;
 });
 
 const counterSlogan = computed(() => {
-    // return slogan.value.length || 0;
     return detachment.value.slogan.length || 0;
 });
 
 const counterAbout = computed(() => {
-    // return about.value.length || 0;
     return detachment.value.about.length || 0;
 });
 
@@ -768,219 +1438,71 @@ const showButtonPrev = computed(() => {
     return panel.value === 'panelThree';
 });
 
-const directions = ref([
-    { title: 'ССО' },
-    { title: 'СПО' },
-    { title: 'СОП' },
-    { title: 'ССервО' },
-    { title: 'ССхО' },
-    { title: 'СМО' },
-]);
+const members = ref([]);
 
-const institutions = ref([
-    { title: 'Алтайский государственный медицинский университет' },
-    { title: 'Амурская государственная медицинская академия' },
-    { title: 'Амурский государственный университет' },
-    { title: 'Владивостокский государственный медицинский университет' },
-    {
-        title: 'Владивостокский государственный университет экономики и сервиса',
-    },
-    { title: 'Дальневосточный государственный технический университет' },
-    { title: 'Дальневосточный федеральный университет' },
-]);
+const getMembers = async () => {
+    await axios
+        .get('api/v1/detachments/1/members/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            members.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
-const leaders = ref([
-    {
-        id: 1,
-        first_name: 'ffffffffffffffffffffff',
-        last_name: 'rrrrrrrrrrrrrrrrrrrrr',
-        patronymic_name: 'ddddddddd',
-        date_of_birth: '00-01-0123',
-    },
-    {
-        id: 52,
-        first_name: 'gbhfhhy',
-        last_name: 'ghhgygh',
-        patronymic_name: 'lmk;ok',
-        date_of_birth: '10-10-0110',
-    },
-    // {
-    //     id: 1,
-    //     img: true,
-    //     srcImg: 'foto-leader-squad-01.png',
-    //     logo: true,
-    //     iconStatus: 'icon-status-01.svg',
-    //     title: 'Васильев Андрей Владимирович',
-    //     date: '13.07.2000',
-    // },
-    // {
-    //     id: 2,
-    //     img: true,
-    //     srcImg: 'foto-leader-squad-02.png',
-    //     logo: true,
-    //     iconStatus: 'icon-status-02.svg',
-    //     title: 'Иванов Александр Петрович',
-    //     date: '13.07.2000',
-    // },
-    // {
-    //     id: 3,
-    //     img: true,
-    //     srcImg: 'foto-leader-squad-03.png',
-    //     logo: true,
-    //     iconStatus: 'icon-status-03.svg',
-    //     title: 'Сидоров Дмитрий Олегович',
-    //     date: '13.07.2000',
-    // },
-    // {
-    //     id: 4,
-    //     img: true,
-    //     srcImg: 'foto-leader-squad-04.png',
-    //     logo: true,
-    //     iconStatus: 'icon-status-04.svg',
-    //     title: 'Петрова Анастасия Владимировна',
-    //     date: '13.07.2000',
-    // },
-    // {
-    //     id: 5,
-    //     img: true,
-    //     srcImg: 'foto-leader-squad-05.png',
-    //     logo: false,
-    //     iconStatus: '',
-    //     title: 'Петров Петр Петрович',
-    //     date: '13.07.2000',
-    // },
-    // {
-    //     id: 6,
-    //     img: true,
-    //     srcImg: 'foto-leader-squad-06.png',
-    //     logo: false,
-    //     iconStatus: '',
-    //     title: 'Смирнова Елена Дмитриевна',
-    //     date: '13.07.2000',
-    // },
-    // {
-    //     id: 7,
-    //     img: false,
-    //     srcImg: '',
-    //     logo: false,
-    //     iconStatus: '',
-    //     title: 'Николаева Ольга Васильевна',
-    //     date: '13.07.2000',
-    // },
-    // {
-    //     id: 8,
-    //     img: true,
-    //     srcImg: 'foto-leader-squad-08.png',
-    //     logo: false,
-    //     iconStatus: '',
-    //     title: 'Васильев Михаил Владимирович',
-    //     date: '13.07.2000',
-    // },
-    // {
-    //     id: 9,
-    //     img: true,
-    //     srcImg: 'foto-leader-squad-09.png',
-    //     logo: false,
-    //     iconStatus: '',
-    //     title: 'Олегов Иван Иванович',
-    //     date: '13.07.2000',
-    // },
-    // {
-    //     id: 10,
-    //     img: true,
-    //     srcImg: 'foto-leader-squad-10.png',
-    //     logo: false,
-    //     iconStatus: '',
-    //     title: 'Певцов Дмитрий Владимирович',
-    //     date: '13.07.2000',
-    // },
-]);
+onMounted(() => {
+    getMembers();
+});
 
-const members = ref([
-    {
-        id: 1,
-        img: true,
-        srcImg: 'foto-leader-squad-01.png',
-        logo: true,
-        iconStatus: 'icon-status-01.svg',
-        title: 'Васильев Андрей Владимирович',
-        date: '13.07.2000',
-        position: null,
-        confidant: false,
-    },
-    {
-        id: 2,
-        img: true,
-        srcImg: 'foto-leader-squad-02.png',
-        logo: true,
-        iconStatus: 'icon-status-02.svg',
-        title: 'Иванов Александр Петрович',
-        date: '13.07.2000',
-        position: null,
-        confidant: true,
-    },
-    {
-        id: 3,
-        img: true,
-        srcImg: 'foto-leader-squad-03.png',
-        logo: true,
-        iconStatus: 'icon-status-03.svg',
-        title: 'Сидоров Дмитрий Олегович',
-        date: '13.07.2000',
-        position: null,
-        confidant: true,
-    },
-    {
-        id: 4,
-        img: true,
-        srcImg: 'foto-leader-squad-04.png',
-        logo: true,
-        iconStatus: 'icon-status-04.svg',
-        title: 'Петрова Анастасия Владимировна',
-        date: '13.07.2000',
-        position: null,
-        confidant: false,
-    },
-    {
-        id: 5,
-        img: true,
-        srcImg: 'foto-leader-squad-05.png',
-        logo: false,
-        iconStatus: '',
-        title: 'Петров Петр Петрович',
-        date: '13.07.2000',
-        position: null,
-        confidant: false,
-    },
-    {
-        id: 6,
-        img: true,
-        srcImg: 'foto-leader-squad-06.png',
-        logo: false,
-        iconStatus: '',
-        title: 'Смирнова Елена Дмитриевна',
-        date: '13.07.2000',
-        position: null,
-        confidant: false,
-    },
-    {
-        id: 7,
-        img: false,
-        srcImg: '',
-        logo: false,
-        iconStatus: '',
-        title: 'Николаева Ольга Васильевна',
-        date: '13.07.2000',
-        position: null,
-        confidant: false,
-    },
-]);
+// const members = ref([
+//     {
+//         id: 1,
+//         user: {
+//             first_name: 'Василий',
+//             last_name: 'Петров',
+//             patronymic_name: 'Иванович',
+//         },
+//         date_of_birth: '2019-08-24',
+//         position: 0,
+//         is_trusted: false,
+//     },
+//     {
+//         id: 2,
+//         user: {
+//             first_name: 'Djhjyt;crb',
+//             last_name: 'Lvhhbq',
+//             patronymic_name: 'Lvbnhbtdbx',
+//         },
+//         date_of_birth: '2000-08-01',
+//         position: 2,
+//         is_trusted: true,
+//     },
+//     {
+//         id: 3,
+//         user: {
+//             first_name: 'Петр',
+//             last_name: 'Сидоров',
+//             patronymic_name: 'Иванович',
+//         },
+//         date_of_birth: '2019-08-24',
+//         position: 1,
+//         is_trusted: false,
+//     },
+// ]);
 
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
     return members.value.filter((item) => {
-        return item.title
+        // return item.title
+        return item.user.last_name
             .toUpperCase()
             .includes(searchMembers.value.toUpperCase());
     });
@@ -996,6 +1518,74 @@ const onUpdateMember = (event, id) => {
 const changeValue = (event) => {
     console.log(event);
     emit('update:value', event);
+};
+
+//--Добавление логотипа-----------------------------------------------------------------------------
+
+const fileEmblem = ref(props.fileEmblem);
+console.log(fileEmblem);
+const urlEmblem = ref(null);
+
+const selectFile = (event) => {
+    fileEmblem.value = event.target.files[0];
+    console.log(fileEmblem.value);
+    urlEmblem.value = URL.createObjectURL(fileEmblem.value);
+};
+
+const resetEmblem = () => {
+    urlEmblem.value = null;
+};
+//--Добавление баннера-----------------------------------------------------------------------------
+const fileBanner = ref(null);
+const urlBanner = ref(null);
+
+const selectBanner = (event) => {
+    fileBanner.value = event.target.files[0];
+    urlBanner.value = URL.createObjectURL(fileBanner.value);
+};
+
+const resetBanner = () => {
+    urlBanner.value = null;
+};
+//--Добавление фото-----------------------------------------------------------------------------
+const filePhotoOne = ref(null);
+const urlPhotoOne = ref(null);
+const selectPhotoOne = (event) => {
+    filePhotoOne.value = event.target.files[0];
+    urlPhotoOne.value = URL.createObjectURL(filePhotoOne.value);
+};
+const resetPhotoOne = () => {
+    urlPhotoOne.value = null;
+};
+
+const filePhotoTwo = ref(null);
+const urlPhotoTwo = ref(null);
+const selectPhotoTwo = (event) => {
+    filePhotoTwo.value = event.target.files[0];
+    urlPhotoTwo.value = URL.createObjectURL(filePhotoTwo.value);
+};
+const resetPhotoTwo = () => {
+    urlPhotoTwo.value = null;
+};
+
+const filePhotoThree = ref(null);
+const urlPhotoThree = ref(null);
+const selectPhotoThree = (event) => {
+    filePhotoThree.value = event.target.files[0];
+    urlPhotoThree.value = URL.createObjectURL(filePhotoThree.value);
+};
+const resetPhotoThree = () => {
+    urlPhotoThree.value = null;
+};
+
+const filePhotoFour = ref(null);
+const urlPhotoFour = ref(null);
+const selectPhotoFour = (event) => {
+    filePhotoFour.value = event.target.files[0];
+    urlPhotoFour.value = URL.createObjectURL(filePhotoFour.value);
+};
+const resetPhotoFour = () => {
+    urlPhotoFour.value = null;
 };
 </script>
 

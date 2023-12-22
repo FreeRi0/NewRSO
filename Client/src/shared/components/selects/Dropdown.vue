@@ -1,61 +1,35 @@
 <template>
-    <Dropdown
+    <v-autocomplete
         v-model="selected"
-        :options="items"
-        showClear
-        filter
-        :filterPlaceholder="filterPlaceholder"
-        :resetFilterOnHide="resetFilterOnHide"
-        optionLabel="title"
-        placeholder="Поиск по ФИО"
+        :items="items"
+        chips
+        clearable
+        variant="outlined"
+        item-title="last_name"
+        item-value="id"
+        :custom-filter="customFilter"
         v-bind="$attrs"
         @update:value="changeValue"
+        :address="address"
+        :no-data-text="noDataText"
+        class="option"
     >
-        <template #value="slotProps">
-            <div v-if="slotProps.value" class="option__content">
-                <div class="option__image">
-                    <img
-                        v-if="slotProps.value.img"
-                        :src="
-                            './assets/foto-leader-squad/' +
-                            slotProps.value.srcImg
-                        "
-                        alt="Фото бойца"
-                    />
-                    <img
-                        v-else
-                        src="@app/assets/foto-leader-squad/foto-leader-squad-stub.png"
-                        alt="'Фото бойца (заглушка)'"
-                    />
-                </div>
-                <div class="option__status" v-if="slotProps.value.logo">
-                    <img
-                        :src="
-                            './assets/icon/icon-status/' +
-                            slotProps.value.iconStatus
-                        "
-                        alt="Статус бойца"
-                    />
-                </div>
-                <div class="option__wrapper">
-                    <p class="option__title">{{ slotProps.value.title }}</p>
-                    <p class="option__date">{{ slotProps.value.date }}</p>
-                </div>
-            </div>
-
-            <span v-else>
-                {{ slotProps.placeholder }}
-            </span>
+        <template #prepend-inner>
+            <Icon
+                icon="clarity-search-line"
+                color="#222222"
+                width="24"
+                height="24"
+                class="option__icon"
+            >
+            </Icon>
         </template>
-        <template #option="slotProps">
+        <template v-slot:chip="{ props, item }">
             <div class="option__content">
                 <div class="option__image">
                     <img
-                        v-if="slotProps.option.img"
-                        :src="
-                            './assets/foto-leader-squad/' +
-                            slotProps.option.srcImg
-                        "
+                        v-if="item.raw.media"
+                        :src="item.raw.media.photo"
                         alt="Фото бойца"
                     />
                     <img
@@ -64,32 +38,68 @@
                         alt="'Фото бойца (заглушка)'"
                     />
                 </div>
-                <div class="option__status" v-if="slotProps.option.logo">
-                    <img
-                        :src="
-                            './assets/icon/icon-status/' +
-                            slotProps.option.iconStatus
-                        "
-                        alt="Статус бойца"
-                    />
-                </div>
+
                 <div class="option__wrapper">
-                    <p class="option__title">{{ slotProps.option.title }}</p>
-                    <p class="option__date">{{ slotProps.option.date }}</p>
+                    <p class="option__title">
+                        {{
+                            item.raw.last_name +
+                            ' ' +
+                            item.raw.first_name +
+                            ' ' +
+                            item.raw.patronymic_name
+                        }}
+                    </p>
+                    <p class="option__date">
+                        {{ item.raw.date_of_birth }}
+                    </p>
                 </div>
             </div>
         </template>
-    </Dropdown>
-    <TransitionGroup>
+
+        <template v-slot:item="{ props, item }">
+            <v-container v-bind="props">
+                <div class="option__content">
+                    <div class="option__image">
+                        <img
+                            v-if="item?.raw?.media"
+                            :src="item?.raw?.media.photo"
+                            alt="Фото бойца"
+                        />
+                        <img
+                            v-else
+                            :src="'./assets/foto-leader-squad/foto-leader-squad-stub.png'"
+                            alt="'Фото бойца (заглушка)'"
+                        />
+                    </div>
+                    <div class="option__wrapper">
+                        <p class="option__title">
+                            {{
+                                item?.raw?.last_name +
+                                ' ' +
+                                item?.raw?.first_name +
+                                ' ' +
+                                item?.raw?.patronymic_name
+                            }}
+                        </p>
+                        <p class="option__date">
+                            {{ item?.raw?.date_of_birth }}
+                        </p>
+                    </div>
+                </div>
+            </v-container>
+        </template>
+    </v-autocomplete>
+    <!-- <TransitionGroup>
         <div class="error-wrapper" v-for="element of error" :key="element.$uid">
             <div class="form-error__message">{{ element.$message }}</div>
         </div>
-    </TransitionGroup>
+    </TransitionGroup> -->
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import Dropdown from 'primevue/dropdown';
+import { ref, onMounted } from 'vue';
+import { Icon } from '@iconify/vue';
+import axios from 'axios';
 
 defineOptions({
     inheritAttrs: false,
@@ -98,36 +108,64 @@ defineOptions({
 const emit = defineEmits(['update:value']);
 
 const props = defineProps({
-    error: {
+    // error: {
+    //     type: Array,
+    //     required: false,
+    // },
+
+    items: {
         type: Array,
-        required: false,
+        default: () => [],
     },
-    filterPlaceholder: {
+    address: {
         type: String,
         default: '',
     },
-    resetFilterOnHide: {
-        type: Boolean,
-        default: false,
-    },
-    filtericon: {
-        type: Boolean,
-        default: true,
+    noDataText: {
+        type: String,
+        default: 'Ничего не найдено...',
     },
 });
 
 const selected = ref(null);
 
-const items = ref([]);
-
 const changeValue = (event) => {
     console.log(event);
     emit('update:value', event);
 };
+
+const customFilter = (itemTitle, queryText, item) => {
+    const textOne = item.raw.last_name.toLowerCase();
+    const textTwo = item.raw.first_name.toLowerCase();
+
+    const searchText = queryText.toLowerCase();
+
+    return textOne.indexOf(searchText) > -1 || textTwo.indexOf(searchText) > -1;
+};
+
+const items = ref(props.items);
+
+const onChangeItem = async () => {
+    await axios
+        .get(props.address)
+
+        .then((res) => {
+            // console.log(props.address);
+            items.value = res.data;
+            console.log(res.data);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    onChangeItem();
+});
 </script>
 
 <style lang="scss">
-//-----отсутствует атрибут scoped, чтобы стилизовать Dropdown
+//-----отсутствует атрибут scoped, чтобы отрабатывала высота поля
 .error-wrapper {
     position: relative;
 }
@@ -138,137 +176,23 @@ const changeValue = (event) => {
     font-size: 12px;
 }
 
-.p-dropdown {
-    display: flex;
-    // padding: 8px 20px 8px 54px;
-    padding: 1px 20px 1px 54px;
-    min-height: 40px;
-    background-image: url('@app/assets/icon/search.svg');
-    background-position: 20px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    align-self: stretch;
-    border-radius: 10px;
-    border: 1px solid #b6b6b6;
-
-    .p-dropdown-trigger-icon {
-        width: 24px;
-        height: 24px;
-        fill: none;
-        stroke: #898989;
-        stroke-width: 0.75px;
-        stroke-miterlimit: 10;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
-
-    .p-dropdown-clear-icon {
-        position: relative;
-        width: 24px;
-        height: 24px;
-
-        // &::after {
-        //     position: absolute;
-        //     content: '';
-        //     width: 19px;
-        //     height: 19px;
-        //     top: 50%;
-        //     left: 50%;
-        //     border-radius: 50%;
-        //     border: 1px solid #898989;
-        // }
-    }
-}
-
-.p-dropdown-filter-container {
-    svg {
-        display: none;
-    }
-}
-.p-dropdown-panel {
-    // margin-top: -42px;
-    // padding: 55px 20px 20px 20px;
-    // padding: 30px 20px 20px 20px;
-    padding: 13px 20px 20px 20px;
-    border-radius: 0 0 10px 10px;
-    // border-radius: 10px;
-    border: 1px solid #b6b6b6;
-    border-top: none;
-    // background-image: linear-gradient(to top, #ffffff 80%, transparent 20%);
-    background-color: #ffffff;
-    // transform-origin: center top;
-
-    .p-dropdown-header {
-        // margin-bottom: 20px;
-        // width: calc(100% - 24px);
-
-        input {
-            // height: 100%;
-            position: absolute;
-            left: 34px;
-            margin-top: -45px;
-            width: calc(100% - 86px);
-
-            &:focus {
-                background-color: white;
-            }
-        }
-    }
-
-    .p-dropdown-items-wrapper {
-        // min-height: 400px;
-
-        &::-webkit-scrollbar {
-            /*стили полосы прокрутки */
-            width: 8px;
-        }
-
-        &::-webkit-scrollbar-track {
-            /*стили зоны отслеживания */
-            background: #ffffff;
-            border-radius: 10px;
-            border: 1px solid #898989;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            /*стили бегунка */
-            width: 8px;
-            // height: 108px;
-            border-radius: 10px;
-            border: 1px solid #ffffff;
-            background-color: #35383f;
-        }
-    }
-
-    .p-dropdown-items {
-        display: grid;
-        grid-template-columns: 1fr;
-        row-gap: 12px;
-        width: calc(100% - 16px);
-    }
-
-    .p-dropdown-item {
-        display: flex;
-        height: 48px;
-        padding: 5px 20px;
-        // justify-content: center;
-        // align-items: center;
-        gap: 10px;
-        border-radius: 10px;
-        border: 1px solid #b6b6b6;
-
-        @media (max-width: 768px) {
-            height: 56px;
-            padding: 8px;
-        }
-    }
-}
-
 .option {
     // max-height: 100px;
     // overflow-y: auto;
     background-color: #ffffff;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    box-sizing: border-box;
+    // max-height: 40px;
+
+    .v-field__input {
+        padding: 1px 0;
+        min-height: 40px;
+        // max-height: 40px;
+    }
+    // &__icon {
+
+    // }
 
     &__content {
         width: 100%;
@@ -350,7 +274,8 @@ const changeValue = (event) => {
 
     img {
         width: 100%;
-        height: auto;
+        // height: auto;
+        height: 100%;
     }
 }
 </style>

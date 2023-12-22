@@ -4,47 +4,86 @@
 
         <h1 class="title title--lso">Редактирование штаба СО ОО</h1>
 
-        <FormHQ :participants="true" :unit="unit"></FormHQ>
+        <FormHQ
+            :participants="true"
+            :headquarter="headquarter"
+            v-if="headquarter"
+            @submit.prevent="changeHeadquarter"
+        ></FormHQ>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormHQ } from '@features/FormHQ';
+import axios from 'axios';
 
 const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '#' },
+    { pageTitle: 'Структура' },
+    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
     { pageTitle: 'Штаб КГПИ', href: '#' },
     { pageTitle: 'Редактирование штаба СО ОО', href: '#' },
 ]);
 
-const imgAvatarUrl = ref('@app/assets/lso/logo-invar');
-const imgDataUrl = ref('@app/assets/lso/banner-invar');
+const submited = ref(false);
 
-const unit = ref({
-    title: 'Штаб СО Алтайского государственного медицинского университета (Штаб СО АГМУ)',
-    institution: 'Алтайский государственный медицинский университет',
-    date: '2010-10-10',
-    regional: 'Алтайское региональное отделение',
-    city: 'Барнаул',
-    beast: {
-        id: 5,
-        img: true,
-        srcImg: 'foto-leader-squad-05.png',
-        logo: false,
-        iconStatus: '',
-        title: 'Петров Петр Петрович',
-        date: '13.07.2000',
-    },
-    vk: 'https://vk.com/regionalHQ',
-    te: 'https://t.me/regionalHQ',
-    slogan: 'Через тернии к звездам!',
-    about: 'Основной целью деятельности Штаба является развитие деятельности студенческих отрядов в Университете. Развитие традиций движения, организация обучения руководителей студенческих отрядов, организация досуговых мероприятий и поддержка творческих коллективов. ',
-    avatar: imgAvatarUrl,
-    banner: imgDataUrl,
+const headquarter = ref(null);
+
+const getHeadquarter = async () => {
+    await axios
+        .get('api/v1/educationals/1', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            headquarter.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    getHeadquarter();
 });
+
+const swal = inject('$swal');
+
+const changeHeadquarter = async () => {
+    axios
+        .put('api/v1/educationals/1/', headquarter.value, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            submited.value = true;
+            headquarter.value = response.data;
+            console.log(response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        })
+        .catch((error) => {
+            console.error('There was an error!', error);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+};
 </script>
 
 <style lang="scss"></style>
