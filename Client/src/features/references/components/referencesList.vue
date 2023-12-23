@@ -13,20 +13,18 @@
                 @change="updateCheck"
             />
         </div>
-
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img :src="'./assets/' + participant.image" alt="logo" />
+                <img :src="participant.media.photo" alt="logo" v-if="participants.media" />
                 <img
-                    v-if="participant.useIcon"
-                    class="horizontallso-item__list-img-status"
-                    :src="'./assets/icon/' + participant.icon"
-                    alt="icon"
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+                    v-else
                 />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ participant.name }}
+                    {{ participant.first_name }}
                 </p>
                 <div class="horizontallso-item__list-date">
                     <span
@@ -35,7 +33,7 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.birthdate }}</p>
+                    <p>{{ participant.date_of_birth }}</p>
                 </div>
             </div>
         </div>
@@ -146,7 +144,7 @@ watch(
 .horizontallso-item__list-date {
     width: 95px;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
+    grid-template-columns: auto 1fr 0fr;
 }
 
 .horizontallso-item__list-img-status {
@@ -181,7 +179,6 @@ watch(
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     height: 48px;
-    margin: 0px 12px;
     width: 48px;
     input {
         width: 24px;

@@ -29,21 +29,33 @@
                                     v-if="participant.is_trusted == true"
                                 >
                                     <img
-                                        :src="participant.username"
-                                        alt="avatar"
+                                        :src="participant.user.avatar.photo"
+                                        alt="photo"
+                                        v-if="participant.user.avatar"
+                                    />
+                                    <img
+                                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                                        alt="photo"
+                                        v-else
                                     />
                                     <h5 id="name_length">
                                         {{ participant.user.username }}
                                     </h5>
-                                    <p>{{ participant.position }}</p>
+                                    <p>{{ position.name }}</p>
                                 </div>
-
                             </li>
                             <h2 v-else>Участников не найдено...</h2>
                         </ul>
-                        <div class="squad-participants__link">
-                            <a href="#">Показать всех</a>
-                        </div>
+                        <router-link
+                            :to="{
+                                name: 'allparticipants',
+                                params: { id: squad.id },
+                            }"
+                        >
+                            <div class="squad-participants__link">
+                                Показать всех
+                            </div></router-link
+                        >
                     </section>
                 </div>
                 <div class="tab-content" id="content-2">
@@ -59,23 +71,23 @@
                                     v-if="participant.is_trusted == false"
                                 >
                                     <img
-                                        :src="
-                                            './assets/lso/' + participant.image
-                                        "
-                                        alt="avatar"
+                                        :src="participant.user.avatar.photo"
+                                        alt="photo"
+                                        v-if="participant.user.avatar"
+                                    />
+                                    <img
+                                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                                        alt="photo"
+                                        v-else
                                     />
                                     <h5 id="name_length">
                                         {{ participant.user.last_name }}
                                     </h5>
-                                    <p>{{ participant.position }}</p>
+                                    <p>{{ position.name }}</p>
                                 </div>
-
                             </li>
                             <h2 v-else>Участников не найдено...</h2>
                         </ul>
-                        <div class="squad-participants__link">
-                            <a href="#">Показать всех</a>
-                        </div>
                     </section>
                 </div>
             </nav>
@@ -88,19 +100,70 @@ import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
-const member = ref([]);
-const route = useRoute();
-const id = route.params.id;
+// const members = ref([]);
+// const squad = ref({});
+const position = ref({});
+// const route = useRoute();
+// const id = route.params.id;
 
-const aboutMembers = async () => {
-    await HTTP.get(`/detachments/${id}/members/`, {
+const props = defineProps({
+    // name: {
+    //     type: String
+    // },
+
+    member : {
+        type: Array
+    },
+    squad: {
+       type: Object,
+       required: true
+    },
+    position: {
+        type: Object
+    }
+
+})
+
+// const aboutMembers = async () => {
+//     await HTTP.get(`/detachments/${id}/members/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             member.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+// const aboutSquad = async () => {
+//     await HTTP.get(`/detachments/${id}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             squad.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+
+const aboutPosition = async () => {
+    await HTTP.get(`/positions/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            member.value = response.data;
+            position.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
@@ -108,87 +171,15 @@ const aboutMembers = async () => {
         });
 };
 onMounted(() => {
-    aboutMembers();
+    // aboutMembers();
+    // aboutSquad();
+    aboutPosition();
 });
-// const participants = ref([
-//     {
-//         name: 'Андрей',
-//         status: 'Командир',
-//         image: 'squad-participant.png',
-//         category: 2,
-//     },
-//     {
-//         name: 'Мария',
-//         status: 'Комиссар',
-//         image: 'squad-participant2.png',
-//         category: 1,
-//     },
-//     {
-//         name: 'Екатерина',
-//         status: 'Мастер',
-//         image: 'squad-participant3.png',
-//         category: 1,
-//     },
-//     {
-//         name: 'Иван',
-//         status: 'Медик',
-//         image: 'squad-participant4.png',
-//         category: 1,
-//     },
-//     {
-//         name: 'Елена',
-//         status: 'Флагоносец',
-//         image: 'squad-participant5.png',
-//         category: 1,
-//     },
-//     {
-//         name: 'Анна',
-//         status: 'Боец',
-//         image: 'squad-participant6.png',
-//         category: 1,
-//     },
-//     {
-//         name: 'Артём',
-//         status: 'Боец',
-//         image: 'squad-participant.png',
-//         category: 2,
-//     },
-//     {
-//         name: 'Алла',
-//         status: 'Боец',
-//         image: 'squad-participant2.png',
-//         category: 2,
-//     },
-//     {
-//         name: 'Маргарита',
-//         status: 'Боец',
-//         image: 'squad-participant3.png',
-//         category: 2,
-//     },
-//     {
-//         name: 'Сергей',
-//         status: 'Боец',
-//         image: 'squad-participant4.png',
-//         category: 2,
-//     },
-//     {
-//         name: 'Алёна',
-//         status: 'Боец',
-//         image: 'squad-participant5.png',
-//         category: 2,
-//     },
-//     {
-//         name: 'Виктория',
-//         status: 'Боец',
-//         image: 'squad-participant6.png',
-//         category: 1,
-//     },
-// ]);
 
-member.value = member.value.sort((a, b) => a.is_trusted - b.is_trusted);
-const lastCategoryIndex = member.value.findIndex(
-    (item) => item.is_trusted === false,
-);
+// member.value = member.value.sort((a, b) => a.is_trusted - b.is_trusted);
+// const lastCategoryIndex = member.value.findIndex(
+//     (item) => item.is_trusted === false,
+// );
 
 // member.value = member.value.filter((item) => item.is_trusted === false)
 </script>
@@ -295,7 +286,7 @@ nav {
     top: 1px;
     right: 1px;
 }
-// /////////////////
+
 .squad-participant {
     list-style: none;
 }
@@ -328,7 +319,9 @@ nav {
 
 .squad-participant_box img {
     margin-bottom: 32px;
-    padding: 19.5px 20px 0px 20px;
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
 }
 
 .squad-participant_box h5 {
@@ -360,10 +353,6 @@ nav {
 .squad-participants__link {
     display: flex;
     justify-content: center;
-}
-
-.squad-participants__link a {
-    /* оформление ссылки */
     color: #5e5c5c;
     font-family: 'Montserrat';
     font-size: 16px;
@@ -374,9 +363,8 @@ nav {
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
     /* расстояние */
-    margin-bottom: 24px;
+    padding-bottom: 24px;
 }
-// //////////////////////////////////////////////////////////////////////////
 
 @media (max-width: 660px) {
     .position-tab,

@@ -1,6 +1,6 @@
 <template>
     <div class="form-input" :style="{ width: width }">
-        <v-text-field
+        <input
             :name="name"
             :id="name"
             :placeholder="placeholder"
@@ -10,9 +10,10 @@
             :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append-inner="showPassword = !showPassword"
             variant="outlined"
-            class="mb-2 text-field"
-        ></v-text-field>
-        <TransitionGroup>
+            class="mb-2 password-field"
+        />
+
+        <!-- <TransitionGroup>
             <div
                 class="error-wrapper"
                 v-for="element of error"
@@ -20,10 +21,13 @@
             >
                 <div class="form-error__message">{{ element.$message }}</div>
             </div>
-        </TransitionGroup>
+        </TransitionGroup> -->
     </div>
 </template>
 <script setup>
+import { ref } from 'vue';
+
+const showPassword = ref(false);
 const emit = defineEmits(['update:value']);
 const props = defineProps({
     error: {
@@ -50,7 +54,6 @@ const props = defineProps({
         type: String,
         default: '',
     },
-
 });
 const updateValue = (e) => {
     emit('update:value', e.target.value);
@@ -60,30 +63,26 @@ const updateValue = (e) => {
 .error-wrapper {
     margin-bottom: 5px;
 }
+
+.v-field {
+    border-radius: 10px !important;
+    display: block;
+    font-size: 12px;
+    height: 42px;
+    width: 100%;
+    --v-field-input-padding-top: 0px;
+    --v-field-input-padding-bottom: 11px;
+}
+
+.v-input {
+    --v-input-chips-margin-top: 11px;
+}
+.v-field__input {
+    min-height: 42px;
+    padding-top: 0px;
+}
 .form-error__message {
     color: var(--danger);
     font-size: 12px;
-}
-
-.v-field {
-    display: grid;
-    grid-template-areas: 'prepend-inner field clear append-inner';
-    grid-template-columns: min-content minmax(0, 1fr) min-content min-content;
-    font-size: 14px;
-    padding: 10px;
-    letter-spacing: 0.009375em;
-    max-width: 100%;
-    border-radius: 10px;
-    contain: layout;
-    flex: 1 0;
-    grid-area: control;
-    position: relative;
-    --v-field-padding-start: 16px;
-    --v-field-padding-end: 16px;
-    --v-field-padding-top: 0px;
-    --v-field-padding-bottom: 0px;
-
-    --v-field-input-padding-top: calc(var(0px) + var());
-    --v-field-input-padding-bottom: var(0px);
 }
 </style>

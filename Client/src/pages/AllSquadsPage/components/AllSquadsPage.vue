@@ -1,8 +1,12 @@
 <template>
     <div class="container">
         <div class="squads">
-            <bannerCreate desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
-                label="Создать отряд" link="/CreateLSO"></bannerCreate>
+            <Breadcrumbs :items="pages"></Breadcrumbs>
+            <bannerCreate
+                desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
+                label="Создать отряд"
+                name="CreateLSO"
+            ></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
             <div class="squads-tabs">
                 <v-btn
@@ -46,22 +50,36 @@
             </div>
             <div class="squads-sort">
                 <div class="sort-layout">
-                    <Button   v-if="vertical"   type="button" class="dashboard" icon="icon" color="white" @click="showVertical">
-                    </Button>
-                    <Button    v-else="!vertical"  type="button" class="dashboardD" icon="icon" color="white" @click="showVertical">
+                    <Button
+                        v-if="vertical"
+                        type="button"
+                        class="dashboard"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
                     </Button>
                     <Button
-                    v-if="!vertical"
-                    type="button"
-                    class="menuuA"
+                        v-else="!vertical"
+                        type="button"
+                        class="dashboardD"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
+                    </Button>
+                    <Button
+                        v-if="!vertical"
+                        type="button"
+                        class="menuuA"
                         icon="icon"
                         color="white"
                         @click="showVertical"
                     ></Button>
                     <Button
-                    v-else="vertical"
-                    type="button"
-                    class="menuu"
+                        v-else="vertical"
+                        type="button"
+                        class="menuu"
                         icon="icon"
                         color="white"
                         @click="showVertical"
@@ -70,27 +88,31 @@
 
                 <div class="sort-filters">
                     <div class="sort-select">
-                        <sortByEducation
-                            class="education"
+                        <Select
+                            variant="outlined"
+                            clearable
+                            name="select_education"
+                            id="select-education"
                             v-model="selectedSort"
-                            :options="educations"
-                        ></sortByEducation>
+                            address="api/v1/eduicational_institutions/"
+                        ></Select>
                     </div>
                     <div class="sort-select">
                         <sortByEducation
+                        variant="outlined"
+                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
                         ></sortByEducation>
                     </div>
 
                     <Button
-                    type="button"
-                    class="ascend"
-                    icon="switch"
+                        type="button"
+                        class="ascend"
+                        icon="switch"
                         @click="ascending = !ascending"
                         color="white"
                     ></Button>
-                    <p>{{ ascending }}</p>
                 </div>
             </div>
 
@@ -119,7 +141,8 @@ import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
-import { sortByEducation } from '@shared/components/selects';
+import { sortByEducation, Select } from '@shared/components/selects';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 // import squads from '@entities/Squads/squads';
@@ -127,6 +150,11 @@ import { HTTP } from '@app/http';
 const squads = ref([]);
 const categories = ref([]);
 const educations = ref([]);
+
+const pages = ref([
+    { pageTitle: 'Структура', href: '#' },
+    { pageTitle: 'Отряды', href: '/AllSquads' },
+]);
 
 const getCategories = async () => {
     await HTTP.get('/areas/', {
@@ -144,21 +172,6 @@ const getCategories = async () => {
         });
 };
 
-const getEducations = async () => {
-    await HTTP.get('/eduicational_institutions/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educations.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
 const getSquads = async () => {
     await HTTP.get('/detachments/', {
@@ -179,11 +192,10 @@ const getSquads = async () => {
 onMounted(() => {
     getSquads();
     getCategories();
-    getEducations();
 });
-const squadsVisible = ref(12);
+const squadsVisible = ref(1);
 
-const step = ref(10);
+const step = ref(1);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -198,7 +210,7 @@ const showVertical = () => {
     vertical.value = !vertical.value;
 };
 
-const selectedSort = ref(0);
+const selectedSort = ref(null);
 
 const sortOptionss = ref([
     {
@@ -216,8 +228,10 @@ const sortedSquads = computed(() => {
 
     tempSquads = tempSquads.filter((item) => {
         // console.log(educational_institution.id);
-        return selectedSort.value == 0 || item.educational_institution == selectedSort.value;
-
+        return (
+            selectedSort.value == null ||
+            item.educational_institution == selectedSort.value
+        );
     });
 
     tempSquads = tempSquads.filter((item) => {
@@ -254,11 +268,9 @@ const sortedSquads = computed(() => {
         }
     });
 
-
     if (!ascending.value) {
         tempSquads.reverse();
     }
-
 
     if (!picked.value) {
         return tempSquads;
@@ -269,7 +281,7 @@ const sortedSquads = computed(() => {
     return tempSquads;
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 body {
     border: 1px solid red;
 }
@@ -296,7 +308,6 @@ body {
     background-size: cover;
 }
 
-
 .ascend {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
@@ -304,7 +315,7 @@ body {
 }
 
 .squads {
-    padding: 60px 0px 60px 0px;
+    padding: 40px 0px 60px 0px;
     &-title {
         font-size: 52px;
         @media screen and (max-width: 575px) {
@@ -382,12 +393,17 @@ body {
     }
 }
 
-
 .education {
     width: 305px;
     @media screen and (max-width: 768px) {
         width: 100%;
     }
+}
+
+.form__select {
+  margin-bottom: 0px;
+  margin-left: 8px;
+  border: 1px solid #35383F;
 }
 
 @media (max-width: 575px) {
@@ -405,3 +421,4 @@ body {
     }
 }
 </style>
+@shared/components/selects/inputs
