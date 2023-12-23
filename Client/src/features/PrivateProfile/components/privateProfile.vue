@@ -4,7 +4,9 @@
             <div class="privateProfile-sort">
                 <div class="privateProfile-filters">
                     <div class="privateProfile-select">
-                        <div>Кто видит мой номер телефона</div>
+                        <div class="privateProfile-text">
+                            Кто видит мой номер телефона
+                        </div>
                         <sortByEducation
                             class="education"
                             v-model="selectedPhone"
@@ -12,7 +14,9 @@
                         ></sortByEducation>
                     </div>
                     <div class="privateProfile-select">
-                        <div>Кто видит мою электронную почту</div>
+                        <div class="privateProfile-text">
+                            Кто видит мою электронную почту
+                        </div>
                         <sortByEducation
                             class="education"
                             v-model="selectedMail"
@@ -20,7 +24,9 @@
                         ></sortByEducation>
                     </div>
                     <div class="privateProfile-select">
-                        <div>Кто видит мои ссылки на соцсети</div>
+                        <div class="privateProfile-text">
+                            Кто видит мои ссылки на соцсети
+                        </div>
                         <sortByEducation
                             class="education"
                             v-model="selectedMedia"
@@ -28,7 +34,9 @@
                         ></sortByEducation>
                     </div>
                     <div class="privateProfile-select">
-                        <div>Кто видит информацию обо мне</div>
+                        <div class="privateProfile-text">
+                            Кто видит информацию обо мне
+                        </div>
                         <sortByEducation
                             class="education"
                             v-model="selectedInfo"
@@ -36,7 +44,9 @@
                         ></sortByEducation>
                     </div>
                     <div class="privateProfile-select">
-                        <div>Кто видит мои фотографии</div>
+                        <div class="privateProfile-text">
+                            Кто видит мои фотографии
+                        </div>
                         <sortByEducation
                             class="education"
                             v-model="selectedPhoto"
@@ -70,5 +80,19 @@ const selectedPhoto = ref(0);
 .privateProfile-select {
     display: flex;
     justify-content: space-between;
+    padding-bottom: 28px;
+    align-items: center;
+}
+
+.privateProfile-filters {
+    border-radius: 10px;
+    border: 1px solid var(--__, #dee2e5);
+    background: #fff;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    margin-bottom: 80px;
+    margin-top: 40px;
 }
 </style>

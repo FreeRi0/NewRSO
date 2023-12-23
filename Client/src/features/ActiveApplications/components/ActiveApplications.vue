@@ -1,4 +1,5 @@
 <template>
+    <h1 class="act_title">Активные заявки</h1>
     <div class="container_top">
         <div class="checkborder_top">
             <input type="checkbox" v-model="model" :value="value" />
@@ -98,6 +99,7 @@ const selectedPhone = ref(0);
     border-left: 1px solid #939393;
     margin-top: 11px;
     margin-bottom: 13px;
+    padding-left: 10px;
 }
 
 .container_top {
@@ -138,5 +140,9 @@ const selectedPhone = ref(0);
 input[type='checkbox'] {
     width: 24px;
     height: 44px;
+}
+
+.act_title {
+    padding-bottom: 40px;
 }
 </style>
