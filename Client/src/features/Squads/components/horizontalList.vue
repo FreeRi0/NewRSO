@@ -1,14 +1,20 @@
 <template>
-    <div class="horizontal-item" v-for="squad in squads" v-if="squads.length > 0" >
-        <div class="horizontal-img">
-            <img :src="squad.emblem" alt="logo" />
-        </div>
-        <div class="containerHorizontal">
-            <p class="squads-wrapper__item-category-full">
-                {{ squad.about }}
-            </p>
-            <p class="squads-wrapper__item-title">"{{ squad.name}}"</p>
-        </div>
+    <div
+
+        v-for="squad in squads"
+        v-if="squads.length > 0"
+    >
+        <router-link  class="horizontal-item" :to="{name:'lso', params: {id: squad.id}}">
+            <div class="horizontal-img">
+                <img :src="squad.emblem" alt="logo" />
+            </div>
+            <div class="containerHorizontal">
+                <p class="squads-wrapper__item-category-full">
+                    {{ squad.about }}
+                </p>
+                <p class="squads-wrapper__item-title">"{{ squad.name }}"</p>
+            </div>
+        </router-link>
     </div>
     <h2 v-else>Отряд не найден...</h2>
 </template>

@@ -10,4 +10,4 @@ import {TextArea} from '@shared/components/inputs'
 </script>
 <style lang="scss">
 
-</style>
+</style>@shared/components/selects/inputs

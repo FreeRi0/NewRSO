@@ -259,3 +259,4 @@ input[type='number']::-webkit-outer-spin-button {
     margin-bottom: 20px;
 }
 </style>
+@shared/components/selects/inputs

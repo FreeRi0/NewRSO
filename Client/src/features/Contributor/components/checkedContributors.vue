@@ -1,12 +1,17 @@
 <template>
-    <div
+    <form
+        @submit.prevent="ChangeStatus(participant.id)"
         class="checked"
         v-for="participant in participants"
         :key="participant.id"
     >
         <div class="checked-item__wrapper">
             <div class="checked-img">
-                <img :src="participant.media.photo" alt="logo" v-if="participants.media" />
+                <img
+                    :src="participant.media.photo"
+                    alt="logo"
+                    v-if="participants.media"
+                />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
                     alt="photo"
@@ -28,27 +33,51 @@
                 </div>
             </div>
         </div>
-        <div class="checked__confidant">
+        <div class="sort-select ml-3">
+            <Select
+                variant="outlined"
+                v-model="usersData.membership_fee"
+                :names="filteredPayed"
+            ></Select>
+        </div>
+        <div class="checked__confidant ml-3">
             <input
                 type="checkbox"
                 v-model="selectedPeoples"
                 :value="participant"
-                @change="(event) => updateCheck(participant, event)"
-
+                @change="(event) => updateMembership(participant, event)"
             />
         </div>
-        <Button class="preview" type="button" label="Предпросмотр"></Button>
-
-    </div>
+        <Button class="save" type="submit" label="Сохранить"></Button>
+        <!-- <Button @click="DeleteStatus()" label="Удалить"></Button> -->
+    </form>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
+import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, watch } from 'vue';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+
 const emit = defineEmits(['change']);
 
+const route = useRoute();
+const id = route.params.id;
 
-const updateCheck = (participant, event) => {
-    console.log('dddddddf', participant, event);
+const usersData = ref({
+    membership_fee: null,
+});
+
+const filteredPayed = ref([
+    {
+        value: 'membership_fee',
+        name: 'Оплачен',
+    },
+    { value: 'membership_fee', name: 'Не оплачен' },
+]);
+
+const updateMembership = (participant, event) => {
+    console.log('dddddddft', participant, event);
     // emit('change', participant, event);
 };
 
@@ -57,16 +86,48 @@ const props = defineProps({
         type: Array,
         required: true,
     },
-
 });
 const selectedPeoples = ref(props.participants);
 
- watch(selectedPeoples,
- (newChecked) =>{
-    if(!newChecked) return;
-    emit('change', selectedPeoples)
+watch(selectedPeoples, (newChecked) => {
+    if (!newChecked) return;
+    emit('change', selectedPeoples);
     console.log(newChecked);
- })
+});
+
+const ChangeStatus = async (id) => {
+    HTTP.post(`rsousers/${id}/membership_fee_status/`, usersData.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            usersData.value = response.data;
+            console.log(response.data);
+        })
+
+        .catch((error) => {
+            console.error('There was an error!', error);
+        });
+};
+
+// const DeleteStatus = async (id) => {
+//     HTTP.delete(`rsousers/${id}/membership_fee_status/`, usersData.value,  {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             usersData.value = response.data;
+//             console.log(response.data);
+//         })
+
+//         .catch((error) => {
+//             console.error('There was an error!', error);
+//         });
+// }
 </script>
 <style lang="scss" scoped>
 .checked {
@@ -95,7 +156,7 @@ const selectedPeoples = ref(props.participants);
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
-    margin-left: 12px;
+
     width: 100%;
 }
 
@@ -120,14 +181,6 @@ const selectedPeoples = ref(props.participants);
     width: 95px;
     display: grid;
     grid-template-columns: auto 1fr 0fr;
-}
-
-.checked-item__list-img-status {
-    position: absolute;
-    width: 18px;
-    max-height: 18px;
-    top: -17px;
-    right: -15px;
 }
 
 .checked-itemo__list-img {
@@ -162,15 +215,29 @@ const selectedPeoples = ref(props.participants);
     }
 }
 
-.preview {
-    background-color: white;
-    color: #35383f;
-    border: 1px solid black;
+.save {
+    // background-color: white;
+    // color: #35383f;
+    // border: 1px solid black;
     width: 168px;
     height: 48px;
     padding: 12px 32px;
+    margin: 0px;
     span {
         font-size: 16px;
     }
+}
+
+.v-field {
+    border-radius: 10px;
+}
+.sort-select {
+    height: 46px;
+    width: 185px;
+}
+
+.form__select {
+    margin-bottom: 0px;
+    border: none;
 }
 </style>

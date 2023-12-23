@@ -138,12 +138,11 @@ const clickOnButton = () => {
         }
     }
     &_icon {
-        border: 1px solid #35383f;
         border-radius: 5px;
-        height: 32px;
-        width: 32px;
+        height: 40px;
+        width: 40px;
         margin: 0px;
-        margin-right: 8px;
+        margin-left: 8px;
         padding: 0;
     }
     &_large {

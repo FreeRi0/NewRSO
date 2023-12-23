@@ -1,15 +1,14 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto></bannerPhoto>
-        <Avatar></Avatar>
-        <!-- <testUpload></testUpload> -->
+        <bannerPhoto :banner="user?.media?.banner"></bannerPhoto>
+        <Avatar :avatar="user?.media?.photo"></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
                 <div v-if="user" class="user-data__name">
                     <h4>{{ user.first_name }}</h4>
                     <h4>{{ user.last_name }}</h4>
-            <!-- <slot name="banner"></slot> -->
+                    <!-- <slot name="banner"></slot> -->
                 </div>
                 <h4 v-if="user">{{ user.email }}</h4>
                 <div></div>
@@ -18,30 +17,21 @@
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
                         <li v-if="education">
-                            <p>{{ education.study_faculty }}</p>
+                            <p>{{ user?.education?.study_faculty }}</p>
                         </li>
                         <li v-if="education">
-                            <p>{{ education.study_specialty }}</p>
+                            <p>{{ user?.education?.study_specialty }}</p>
                         </li>
                         <li v-if="education">
-                            <p>Курс{{ education.study_year }}</p>
+                            <p>Курс{{ user?.education?.study_year }}</p>
                         </li>
-                        <li v-if="user" class="user-data__regional-office">
-                            <p>{{ user.region }}</p>
+                        <li class="user-data__regional-office">
+                            <p>{{ user?.user_region?.reg_town}}</p>
                         </li>
                     </ul>
                 </div>
                 <!-- Контакты пользователя  -->
             </div>
-            <!--alferovsergio-->
-
-            <!--DQ2>uME143Da-->
-
-
-            <!--IvanovIvan-->
-
-            <!--'u2,l7C!\2J4-->
-
         </div>
     </div>
 </template>
@@ -50,62 +40,28 @@ import { ref, onMounted } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
-let user = ref(null);
-let education = ref(null);
-let region = ref(null);
-const getUser = async () => {
-    await HTTP.get('/users/me/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+import { useRoute} from 'vue-router';
 
-const getEducation = async () => {
-    await HTTP.get('users/me/education', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            education.value = response.data;
-            console.log(education.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
-onMounted(() => {
-    getUser();
-    getEducation();
-});
+const props = defineProps({
+    banner: {
+        type: String
+    },
+    avatar: {
+        type: String
+    },
 
-// const getRegion = async (id) => {
-//     await HTTP
-//         .get('regions/{id}/', {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         })
-//         .then((response) => {
-//             region.value = response.data;
-//             console.log(region.value);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
+    user: {
+        type: Object,
+    },
+    education: {
+        type: Object,
+    },
+    user_region: {
+        type: Object,
+    }
+})
+
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {
@@ -124,39 +80,6 @@ onMounted(() => {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     background: rgba(244, 244, 244, 0);
-}
-
-.breadcrumbs-container ul {
-    display: flex;
-    list-style: none;
-}
-
-.breadcrumbs-slesh {
-    margin: 0 4px;
-}
-
-.breadcrumbs-container a {
-    display: block;
-    text-decoration: none;
-    /* хлебные_крошки */
-    font-family: 'Akrobat';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    color: #35383f;
-}
-
-.breadcrumbs-container a.active {
-    display: block;
-    text-decoration: none;
-    /* хлебные_крошки */
-    font-family: Akrobat;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    color: #1f7cc0;
 }
 
 .ps__title {

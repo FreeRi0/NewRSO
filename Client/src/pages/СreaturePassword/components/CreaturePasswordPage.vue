@@ -174,3 +174,4 @@ p {
     font-size: 40px;
 }
 </style>
+@shared/components/selects/inputs
