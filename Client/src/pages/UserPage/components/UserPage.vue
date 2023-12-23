@@ -3,8 +3,8 @@
         <div class="user-wrapper">
             <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="page-title">Моя страница</h2>
-            <BannerComp :user="user" :education="education"   class="mt-3"></BannerComp>
-            <div class="user-verify" v-if="user.is_verified">
+            <BannerComp :user="user" :education="education" :user_region="region"   class="mt-3"></BannerComp>
+            <div class="user-verify" v-if="!user.is_verified">
                 <p class="user-verify__title">Верификация данных</p>
                 <div class="user-verify__desc">
                     Уважаемый пользователь, для того, чтобы использовать полный
@@ -12,7 +12,7 @@
                     верификацию. Верификация — это документальное подтверждение
                     ваших личных данных. Она займет всего несколько минут.
                 </div>
-                <router-link to="/PersonalData">
+                <router-link :to="{ name: 'PersonalData', params: { id: user.id } }">
                 <Button
                 class="user-verify__btn"
                     name="verify-btn"
@@ -24,10 +24,10 @@
 
 
 
-            <TextArea class="mt-14" v-if="!user.is_verified"></TextArea >
+            <div class="mt-14" v-if="user.is_verified">{{ user.bio }}</div>
             <v-row class="mt-8">
-                <v-col v-for="n in 4" :key="n" class="d-flex" v-if="!user.is_verified">
-                  <userPhoto></userPhoto>
+                <v-col v-for="n in 4" :key="n" class="d-flex" v-if="user.is_verified">
+                  <userPhoto :photos="user?.media?.photo1" :add="false"></userPhoto>
                 </v-col>
             </v-row>
         </div>
@@ -52,6 +52,7 @@ const pages = ref([
 
 const user = ref({})
 const education = ref({})
+const region = ref({})
 const route = useRoute();
 let id = route.params.id;
 

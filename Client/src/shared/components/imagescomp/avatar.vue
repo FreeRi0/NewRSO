@@ -1,4 +1,4 @@
-<template>
+// <template>
     <div class="user-metric__avatar-wrapper">
 
         <div class="user-metric__avatar">
@@ -181,30 +181,10 @@ const media = ref({
     photo: null,
 })
 
-// const photo = ref(null);
-// const imageUrl = ref(null);
 const route = useRoute();
 const dialog = ref(false);
 const preview = ref(null);
-// const id = route.params.id;
 
-// const viewAvatar = async () => {
-//     await HTTP.get(`/rsousers/${id}/`, {
-//         headers: {
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             imageUrl.value = response.data;
-
-//             console.log(response.data);
-//         })
-//         .catch(function (error) {
-//             console.log('failed ' + error);
-//         });
-// };
-
-// viewAvatar();
 
 const selectFile = (event) => {
     media.value = event.target.files[0];

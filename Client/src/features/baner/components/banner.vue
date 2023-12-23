@@ -17,16 +17,16 @@
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
                         <li v-if="education">
-                            <p>{{ education.study_faculty }}</p>
+                            <p>{{ user?.education?.study_faculty }}</p>
                         </li>
                         <li v-if="education">
-                            <p>{{ education.study_specialty }}</p>
+                            <p>{{ user?.education?.study_specialty }}</p>
                         </li>
                         <li v-if="education">
-                            <p>Курс{{ education.study_year }}</p>
+                            <p>Курс{{ user?.education?.study_year }}</p>
                         </li>
-                        <li v-if="region" class="user-data__regional-office">
-                            <p>{{ region.name }}</p>
+                        <li class="user-data__regional-office">
+                            <p>{{ user?.user_region?.reg_town}}</p>
                         </li>
                     </ul>
                 </div>
@@ -43,13 +43,6 @@ import { HTTP } from '@app/http';
 import { useRoute} from 'vue-router';
 
 
-// let user = ref({});
-// let education = ref(null);
-// let region = ref(null);
-// const route = useRoute();
-// const id = route.params.id;
-
-
 const props = defineProps({
     banner: {
         type: String
@@ -63,102 +56,12 @@ const props = defineProps({
     },
     education: {
         type: Object,
+    },
+    user_region: {
+        type: Object,
     }
 })
-// const getUser = async () => {
-//     await HTTP.get(`/rsousers/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             user.value = response.data;
-//             console.log(user.value);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
 
-// const getAuthUser = async () => {
-//     await HTTP.get('/rsousers/me/', {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             user.value = response.data;
-//             console.log(user.value);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// }
-
-// const getEducation = async () => {
-//     await HTTP.get('/users/me/education', {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             education.value = response.data;
-//             console.log(education.value);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// const getRegion = async () => {
-//     await HTTP.get('/regions/', {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             region.value = response.data;
-//             console.log(region.value);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-
-
-
-
-
-// onMounted(() => {
-//     // getUser()
-//     // getAuthUser()
-//     // getEducation();
-//     // getRegion();
-// });
-
-
-
-// const getRegion = async (id) => {
-//     await HTTP
-//         .get('regions/{id}/', {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         })
-//         .then((response) => {
-//             region.value = response.data;
-//             console.log(region.value);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {

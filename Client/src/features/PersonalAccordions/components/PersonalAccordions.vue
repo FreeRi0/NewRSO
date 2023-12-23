@@ -33,7 +33,6 @@
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
                             </v-col>
-                            <!-- <div v-if="">обязательно для заполнения</div> -->
                         </v-row>
                     </template>
                     <template v-slot:actions="{ expanded }">
@@ -793,7 +792,6 @@
                             Документы (паспорт, СНИЛС, ИНН, сведения о трудовой
                             деятельности, документ воинского учета)
                         </v-col>
-
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -888,7 +886,7 @@
                                     type="text"
                                     class="input-big"
                                     placeholder="__ __ ____"
-                                    v-model:value="documentsData.pass_ser_num"
+                                    v-model:value="documents.pass_ser_num"
                                 />
                             </div>
 
@@ -902,7 +900,7 @@
                                     type="date"
                                     name="pass_date"
                                     class="input-small"
-                                    v-model:value="documentsData.pass_date"
+                                    v-model:value="documents.pass_date"
                                 />
                             </div>
 
@@ -913,7 +911,7 @@
                                     type="text"
                                     class="input-full"
                                     placeholder="Название организации"
-                                    v-model:value="documentsData.pass_whom"
+                                    v-model:value="documents.pass_whom"
                                 />
                             </div>
                             <div class="form-field">
@@ -927,7 +925,7 @@
                                     type="text"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
-                                    v-model:value="documentsData.snils"
+                                    v-model:value="documents.snils"
                                 />
                             </div>
                             <div class="form-field">
@@ -939,7 +937,7 @@
                                     type="text"
                                     class="input-big mask-inn"
                                     placeholder="AA 999999999"
-                                    v-model:value="documentsData.inn"
+                                    v-model:value="documents.inn"
                                 />
                             </div>
                             <div class="form-field">
@@ -951,7 +949,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="documentsData.work_book_num"
+                                    v-model:value="documents.work_book_num"
                                 />
                             </div>
                             <div class="form-field">
@@ -963,9 +961,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="
-                                        documentsData.international_pass
-                                    "
+                                    v-model:value="documents.international_pass"
                                 />
                             </div>
                             <div class="form-field">
@@ -974,7 +970,7 @@
                                     variant="outlined"
                                     clearable
                                     class="select-big"
-                                    v-model="selectedMilitary"
+                                    v-model="documents.mil_reg_doc_type"
                                     :names="militaryDocs"
                                 ></Select>
                             </div>
@@ -991,7 +987,7 @@
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
                                     v-model:value="
-                                        documentsData.mil_reg_doc_ser_num
+                                        documents.mil_reg_doc_ser_num
                                     "
                                 />
                             </div>
@@ -1116,12 +1112,11 @@
                 </v-expansion-panel-text>
             </v-expansion-panel>
             <v-expansion-panel value="panelFour">
-                <v-expansion-panel-title >
+                <v-expansion-panel-title>
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Информация об образовании
                         </v-col>
-
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -1176,7 +1171,6 @@
                             </svg>
                         </v-icon>
                     </template>
-
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="data-form simple" id="simplee">
@@ -1193,7 +1187,7 @@
                                 id="education-org"
                                 class="input-full"
                                 placeholder="Введите название образовательной организации"
-                                v-model:value="educationData.study_institution"
+                                v-model:value="education.study_institution"
                             />
                         </div>
                         <div class="form-field">
@@ -1204,7 +1198,7 @@
                                 id="facultet"
                                 class="input-full"
                                 placeholder="Ввведите название факультета"
-                                v-model:value="educationData.study_faculty"
+                                v-model:value="education.study_faculty"
                             />
                         </div>
                         <div class="form-field">
@@ -1219,7 +1213,7 @@
                                 id="course"
                                 class="input-full"
                                 placeholder="1 курс"
-                                v-model:value="educationData.study_year"
+                                v-model:value="education.study_year"
                             />
                         </div>
                         <div class="form-field">
@@ -1230,7 +1224,7 @@
                                 id="speciality"
                                 class="input-full"
                                 placeholder="Введите название специальности"
-                                v-model:value="educationData.study_specialty"
+                                v-model:value="education.study_specialty"
                             />
                         </div>
                     </div>
@@ -1263,7 +1257,6 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Заявление о вступлении в РСО и скан-копии документов
                         </v-col>
-
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -1615,12 +1608,11 @@
                 class="yes-RSO"
                 v-else-if="selectedAnswer == 'Да'"
             >
-                <v-expansion-panel-title >
+                <v-expansion-panel-title>
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Скан-копии документов
                         </v-col>
-
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -2321,7 +2313,6 @@ import {
 import { HTTP } from '@app/http';
 import axios from 'axios';
 
-let education = ref(null);
 const router = useRouter();
 
 const panel = ref();
@@ -2345,26 +2336,6 @@ const openPanelFour = () => {
 const openPanelFive = () => {
     panel.value = 'panelFive';
 };
-
-// let endpoints = ['api/v1/users/me/education/', 'api/v1/users/me/documents/'];
-
-const educationData = ref({
-    study_institution: '',
-    study_faculty: '',
-    study_year: '',
-    study_specialty: '',
-});
-
-const documentsData = ref({
-    snils: '',
-    inn: '',
-    pass_ser_num: '',
-    pass_whom: '',
-    pass_date: '',
-    work_book_num: '',
-    international_pass: '',
-    mil_reg_doc_ser_num: '',
-});
 
 const regionData = ref({
     reg_town: '',
@@ -2401,7 +2372,72 @@ const parentData = ref({
 
 const swal = inject('$swal');
 
-let user = ref(null);
+const user = ref({
+    first_name: '',
+    last_name: '',
+    patronymic_name: '',
+    date_of_birth: '',
+});
+
+const education = ref({
+    study_institution: '',
+    study_faculty: '',
+    study_year: '',
+    study_specialty: '',
+});
+
+const documents = ref({
+    snils: '',
+    inn: '',
+    pass_ser_num: '',
+    pass_town: '',
+    pass_whom: '',
+    pass_date: '',
+    pass_code: '',
+    pass_address: '',
+    work_book_num: '',
+    international_pass: '',
+    mil_reg_doc_type: '',
+    mil_reg_doc_ser_num: '',
+});
+
+
+// const getData = async () => {
+//     const axiosrequestGet1 = HTTP.get('/rsousers/me/', user.value, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             // Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     });
+//     const axiosrequestGet2 = HTTP.get('/rsousers/me/documents/', documents.value, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             // Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     });
+//     const axiosrequestGet3 = HTTP.get('/rsousers/me/education/', education.value, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             // Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     });
+
+//     await axios
+//         .all([axiosrequestGet1, axiosrequestGet2, axiosrequestGet3])
+//         .then(
+//             axios.spread(function (response1, response2, response3) {
+//                 user.value = response1.data;
+//                 documents.value = response2.data;
+//                 education.value = response3.data;
+//                 console.log(response1.data);
+//                 console.log(response2.data);
+//                 console.log(response3.data);
+//             }),
+//         )
+//         .catch((error) => {
+//             console.error('There was an error!', error);
+//         });
+// }
 
 const getUser = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -2419,7 +2455,40 @@ const getUser = async () => {
         });
 };
 
+const getEducation = async () => {
+    await HTTP.get('/rsousers/me/education/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            education.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+const getDocuments = async () => {
+    await HTTP.get('/rsousers/me/documents/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            documents.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
 getUser();
+getEducation();
+getDocuments();
 
 const downloadBlankPersonal = async () => {
     await HTTP.get(
@@ -2499,169 +2568,44 @@ const downloadBlankParent = async () => {
 };
 
 const addData = async () => {
-    const axiosrequest1 = HTTP.post('/rsousers/me/region/', regionData.value, {
+    const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
-    const axiosrequest2 = HTTP.post(
-        '/rsousers/me/documents/',
-        documentsData.value,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
+    const axiosrequest2 = HTTP.put('/rsousers/me/documents/', documents.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
         },
-    );
-    const axiosrequest3 = HTTP.post(
-        '/rsousers/me/education/',
-        educationData.value,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
+    });
+    const axiosrequest3 = HTTP.put('/rsousers/me/education/', education.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
         },
-    );
+    });
 
-    // const requests = ref([
-    //     '/users/me/region/',
-    //     ''
-    // ])
-    // you could also use destructuring to have an array of responses
-    // await HTTP.all([axiosrequest1, axiosrequest2, axiosrequest3])
-    //     .then(
-    //         axios.spread(function (res1, res2, res3) {
-    //             regionData.value = res1.data;
-    //             documentsData.value = res2.data;
-    //             educationData.value = res3.data;
-    //             console.log(res1);
-    //             console.log(res2);
-    //             console.log(res3);
-    //             swal.fire({
-    //                 position: 'top-center',
-    //                 icon: 'success',
-    //                 title: 'успешно',
-    //                 showConfirmButton: false,
-    //                 timer: 1500,
-    //             });
-    //         }),
-    //     )
-    //     .catch((error) => {
-    //         console.error('There was an error!', error);
-    //         swal.fire({
-    //             position: 'top-center',
-    //             icon: 'error',
-    //             title: 'ошибка',
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //         });
-    //     });
-    // HTTP
-    // .post('/users/me/region/', regionData.value, {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Token ' + localStorage.getItem('Token'),
-    //     },
-    // })
-    // .then((response) => {
-    //     regionData.value = response.data;
-    //     console.log(response.data);
-    //     swal.fire({
-    //         position: 'top-center',
-    //         icon: 'success',
-    //         title: 'успешно',
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //     });
-    // })
-    // .catch((error) => {
-    //     console.error('There was an error!', error);
-    //     swal.fire({
-    //         position: 'top-center',
-    //         icon: 'error',
-    //         title: 'ошибка',
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //     });
-    // });
-
-    // HTTP
-    // .post('/users/me/foreign_documents/', foreign.value, {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Token ' + localStorage.getItem('Token'),
-    //     },
-    // })
-    // .then((response) => {
-    //     foreign.value = response.data;
-    //     console.log(response.data);
-    //     swal.fire({
-    //         position: 'top-center',
-    //         icon: 'success',
-    //         title: 'успешно',
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //     });
-    // })
-    // .catch((error) => {
-    //     console.error('There was an error!', error);
-    //     swal.fire({
-    //         position: 'top-center',
-    //         icon: 'error',
-    //         title: 'ошибка',
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //     });
-    // });
-    // HTTP.post('/users/me/documents/', documentsData.value, {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Token ' + localStorage.getItem('Token'),
-    //     },
-    // })
-    //     .then((response) => {
-    //         documentsData.value = response.data;
-    //         console.log(response.data);
-    //         swal.fire({
-    //             position: 'top-center',
-    //             icon: 'success',
-    //             title: 'успешно',
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //         });
-    //     })
-    //     .catch((error) => {
-    //         console.error('There was an error!', error);
-    //         swal.fire({
-    //             position: 'top-center',
-    //             icon: 'error',
-    //             title: 'ошибка',
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //         });
-    //     });
-    axios
-        .post('api/v1/rsousers/me/education/', educationData.value, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-        .then((response) => {
-            educationData.value = response.data;
-            console.log(response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            router.push('/UserPage');
-        })
+    await axios
+        .all([axiosrequest1, axiosrequest2, axiosrequest3])
+        .then(
+            axios.spread(function (res1, res2, res3) {
+                user.value = res1.data;
+                documents.value = res2.data;
+                education.value = res3.data;
+                console.log(res1.data);
+                console.log(res2.data);
+                console.log(res3.data);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }),
+        )
         .catch((error) => {
             console.error('There was an error!', error);
             swal.fire({

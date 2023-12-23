@@ -2,12 +2,8 @@
     <div class="avatar-upload my_photo__edit">
         <!-- Заглушка по умолчанию  -->
         <div class="avatar-preview my_photo__plug">
-            <!-- <img
-                :src="userPhotoUrl.media.photo1"
-                alt="Фото пользователя"
-                v-if="userPhotoUrl"
-            />
-            <img
+            <img :src="photos" alt="Фото пользователя" v-if="photos" />
+            <!--<img
                 :src="userPhotoUrl2.media.photo2"
                 alt="Фото пользователя"
                 v-else-if="userPhotoUrl2"
@@ -21,18 +17,18 @@
                 :src="userPhotoUrl4.media.photo4"
                 alt="Фото пользователя"
                 v-else-if="userPhotoUrl4"
-            />
+            />-->
 
             <img
                 src="@/app/assets/user-banner.jpg"
                 alt="Фото пользователя(пусто)"
                 v-else
 
-            /> -->
+            />
         </div>
         <!-- Добавить фото -->
-        <div class="avatar-edit my_photo__add">
-            <v-menu min-width="200px" rounded v-if="!media">
+        <div class="avatar-edit my_photo__add" v-if="add">
+            <v-menu min-width="200px" rounded v-if="!media" >
                 <template v-slot:activator="{ props }">
                     <v-btn class="user-metric__baner-add" icon v-bind="props">
                         <v-avatar size="large">
@@ -192,103 +188,24 @@
     </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
-const userPhotoUrl = ref(null);
-// const userPhotoUrl2 = ref(null);
-// const userPhotoUrl3 = ref(null);
-// const userPhotoUrl4 = ref(null);
-const route = useRoute();
+
 const dialog = ref(false);
 const preview = ref(null);
-// const file = ref(null);
-const id = route.params.id;
 const showPhoto = ref(false);
+
+const props = defineProps({
+    photos: String,
+    add: Boolean
+});
 
 const media = ref({
     photo1: null,
     // photo2: null,
     // photo3: null,
     // photo4: null
-})
-
-// const viewUsersPhoto = async () => {
-//     await HTTP.get(`/rsousers/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             userPhotoUrl.value = response.data;
-
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// const viewUsersPhoto2 = async () => {
-//     await HTTP.get(`/rsousers/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             userPhotoUrl2.value = response.data;
-
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// const viewUsersPhoto3 = async () => {
-//     await HTTP.get(`/rsousers/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             userPhotoUrl3.value = response.data;
-
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// const viewUsersPhoto4 = async () => {
-//     await HTTP.get(`/rsousers/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             userPhotoUrl4.value = response.data;
-
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-onMounted(() => {
-    // viewUsersPhoto();
-// viewUsersPhoto2();
-// viewUsersPhoto3();
-// viewUsersPhoto4();
 });
-
-
 
 const selectFile = (event) => {
     media.value = event.target.files[0];
@@ -307,7 +224,6 @@ const uploadPhoto = async () => {
     })
         .then((response) => {
             dialog.value = false;
-            viewUsersPhoto();
             console.log(response, 'photo uploaded');
         })
         .catch(function (error) {
@@ -326,7 +242,6 @@ const updatePhoto = async () => {
     })
         .then((response) => {
             dialog.value = false;
-           viewUsersPhoto();
             console.log(response, 'updated');
         })
         .catch(function (error) {
@@ -335,14 +250,13 @@ const updatePhoto = async () => {
 };
 
 const deletePhoto = async () => {
-    await HTTP.put('/rsousers/me/media/', media.value,  {
+    await HTTP.put('/rsousers/me/media/', media.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            viewUsersPhoto();
             console.log(response, 'deleted');
         })
         .catch(function (error) {

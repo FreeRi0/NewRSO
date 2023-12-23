@@ -2,7 +2,11 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h2 class="profile-title">Настройки профиля</h2>
-        <BannerComp></BannerComp>
+        <BannerComp
+            :user="user"
+            :education="education"
+            class="mt-3"
+        ></BannerComp>
         <!--Табы-->
         <div class="d-flex mt-9 mb-9">
             <button
@@ -28,11 +32,53 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { AccordionsPersonal } from '@features/PersonalAccordions/components';
 import { BannerComp } from '@features/baner/components';
+import { HTTP } from '@app/http';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import {userData} from '@features/userData/components'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { userData } from '@features/userData/components';
+
+const user = ref({});
+const education = ref({});
+const route = useRoute();
+let id = route.params.id;
+
+const getUser = async () => {
+    await HTTP.get(`/rsousers/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+};
+
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) {
+        getUser();
+    }
+});
+
+watch(
+    () => route.params.id,
+
+    (newId, oldId) => {
+        id = newId;
+        getUser();
+    },
+);
+
+onMounted(() => {
+    getUser();
+});
 
 const picked = ref(false);
 const pages = ref([
@@ -60,5 +106,4 @@ const pages = ref([
     background-color: #1c5c94;
     color: white;
 }
-
 </style>

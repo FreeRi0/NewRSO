@@ -10,14 +10,15 @@
                     >У вас еще нет аккаунта?
                     <router-link to="/Register">Зарегистрироваться</router-link>
                 </v-card-text>
+
                 <Input
                     placeholder="Логин"
-                    name="name"
+                    name="login"
                     v-model:value="data.username"
                     class="username-input"
                 />
 
-                <p v-if="isError">{{ isError.username }}</p>
+
                 <Input
                     type="password"
                     placeholder="Пароль"
@@ -25,7 +26,8 @@
                     v-model:value="data.password"
                 ></Input>
 
-                <p v-if="isError">{{ isError.password }}</p>
+                <!-- <p v-if="isError">{{ isError.non_field_errors }}</p> -->
+                <p class="error" v-if="isError">{{ isError.non_field_errors }}</p>
                 <Button
                     class="login_btn"
                     type="submit"
@@ -47,7 +49,7 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, PasswordInputVue } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
@@ -130,6 +132,14 @@ const LoginUser = async () => {
     padding: 0;
     margin-bottom: 20px;
     font-size: 18px;
+}
+.error {
+    color: #DB0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 10px;
+    text-align: center;
 }
 
 .v-card {

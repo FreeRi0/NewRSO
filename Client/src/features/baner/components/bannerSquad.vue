@@ -71,12 +71,7 @@ import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-// const squad = ref({});
-// const member = ref({});
-// const educt = ref({});
 
-// const route = useRoute();
-// const id = route.params.id;
 
 const props = defineProps({
     banner: {
@@ -97,65 +92,10 @@ const props = defineProps({
     }
 
 })
-// const aboutSquad = async () => {
-//     await HTTP.get(`/detachments/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             squad.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// const aboutEduc = async () => {
-//     await HTTP.get(`/eduicational_institutions/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             educt.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// const aboutMembers = async () => {
-//     await HTTP.get(`/detachments/${id}/members/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             member.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-// onMounted(() => {
-//     aboutSquad();
-//     aboutMembers();
-//     aboutEduc();
-// });
 
 </script>
 <style lang="scss" scoped>
-// .profile-settings-top {
-//     padding-top: 40px;
-//     margin-bottom: 40px;
-// }
+
 
 .squad-metric {
     display: grid;
