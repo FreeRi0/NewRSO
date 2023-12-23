@@ -64,6 +64,18 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('@pages/HQPage/HQPage.vue'),
             },
             {
+                path: '/DistrictHQ',
+                name: 'DistrictHQ',
+                component: () =>
+                    import('@pages/DistrictHQPage/DistrictHQPage.vue'),
+            },
+            {
+                path: '/CentralHQ',
+                name: 'CentralHQ',
+                component: () =>
+                    import('@pages/CentralHQPage/CentralHQPage.vue'),
+            },
+            {
                 path: '/RegionalHQ',
                 name: 'RegionalHQ',
                 component: () =>

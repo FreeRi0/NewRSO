@@ -13,16 +13,17 @@
                     placeholder="Имя"
                     name="name"
                     v-model:value="data.username"
+                    class="username-input"
                 />
-           
-                 <p v-if="isError">{{ isError}}</p>
+
+                <p v-if="isError">{{ isError }}</p>
                 <PasswordInputVue
                     placeholder="Пароль"
                     name="password"
                     v-model:value="data.password"
                 ></PasswordInputVue>
 
-                <p v-if="isError">{{ isError}}</p>
+                <p v-if="isError">{{ isError }}</p>
                 <Button
                     type="submit"
                     label="Войти"
