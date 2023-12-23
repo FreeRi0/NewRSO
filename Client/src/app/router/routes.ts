@@ -59,7 +59,7 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('@pages/lsoPage/lsoPage.vue'),
             },
             {
-                path: '/HQ',
+                path: '/HQ/:id',
                 name: 'HQ',
                 component: () => import('@pages/HQPage/HQPage.vue'),
             },
