@@ -43,7 +43,7 @@
                             <a class="header__nav-link" href="#">Мероприятия</a>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="#"
+                            <a class="header__nav-link" href="/FAQ"
                                 >Полезная информация</a
                             >
                         </li>

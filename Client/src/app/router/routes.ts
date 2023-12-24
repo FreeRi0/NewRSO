@@ -259,6 +259,15 @@ const routes: RouteRecordRaw[] = [
                         requiresAuth: true
                     }
             },
+            {
+                path: '/FAQ',
+                name: 'faq',
+                component: () =>
+                    import('@pages/HelpInfoData/components/helpInfoData.vue'),
+                    meta: {
+                        requiresAuth: true
+                    }
+            },
 
         ],
     },

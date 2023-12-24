@@ -10,30 +10,25 @@
         <!--Табы-->
         <div class="d-flex mt-9 mb-9">
             <button
-                type="button"
                 class="contributorBtn"
-                :class="{ active: picked === true }"
-                @click="picked = true"
+                :class="{ active: picked === tab.name }"
+                v-for="tab in tabs"
+                :key="tab.id"
+                @click="picked = tab.name"
+                >{{ tab.name }}</button
             >
-                Моя страница
-            </button>
-
-            <button
-                type="button"
-                class="contributorBtn"
-                :class="{ active: picked === false }"
-                @click="picked = false"
-            >
-                Персональные данные
-            </button>
         </div>
-        <AccordionsPersonal v-if="picked === false"></AccordionsPersonal>
-        <userData v-else="picked === true"></userData>
+        <AccordionsPersonal v-if="picked == 'Персональные данные'"></AccordionsPersonal>
+        <userData v-else-if="picked == 'Моя страница' || picked == ''"></userData>
+        <privateProfile v-else-if="picked == 'Настройки приватности'"></privateProfile>
+        <!-- <changePassword></changePassword> -->
     </div>
 </template>
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { AccordionsPersonal } from '@features/PersonalAccordions/components';
+import { privateProfile } from '@features/PrivateProfile/components';
+// import { changePassword } from '@features/ChangePassword/components';
 import { BannerComp } from '@features/baner/components';
 import { HTTP } from '@app/http';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
@@ -80,7 +75,21 @@ onMounted(() => {
     getUser();
 });
 
-const picked = ref(false);
+const picked = ref('');
+const tabs = ref([
+    {
+        id: '1',
+        name: 'Моя страница',
+    },
+    {
+        id: '2',
+        name: 'Персональные данные',
+    },
+    {
+        id: '3',
+        name: 'Настройки приватности',
+    },
+]);
 const pages = ref([
     { pageTitle: 'Личный кабинет', href: '#' },
     { pageTitle: 'Настройка профиля', href: '#' },
