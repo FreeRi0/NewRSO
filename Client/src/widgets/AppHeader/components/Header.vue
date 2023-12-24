@@ -136,6 +136,7 @@ import { ref, onMounted, watch } from 'vue';
 import { useRouter, onBeforeRouteUpdate } from 'vue-router';
 
 const router = useRouter();
+const navMenu = ref('')
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },

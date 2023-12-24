@@ -1,21 +1,23 @@
 <template>
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--lso">Создание регионального штаба</h1>
-        <FormRS></FormRS>
-        <!-- <FormRS :participants="true" :unit="unit"></FormRS> -->
+
+        <h1 class="title title--lso">Редактирование окружного штаба</h1>
+        <FormDH :participants="true"></FormDH>
+        <!-- <FormDH :participants="true" :unit="unit"></FormDH> -->
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { FormRS } from '@features/FormRS';
+import { FormDH } from '@features/FormDH';
 
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Региональные штабы', href: '#' },
-    { pageTitle: 'Создание регионального штаба', href: '#' },
+    { pageTitle: 'Окружные штабы', href: '#' },
+    { pageTitle: 'Штаб Центрального федерального округа', href: '#' },
+    { pageTitle: 'Редактирование', href: '#' },
 ]);
 
 // const unit = ref({
@@ -36,3 +38,4 @@ const pages = ref([
 //     ofDate: '',
 // });
 </script>
+

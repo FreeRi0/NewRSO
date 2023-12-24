@@ -281,7 +281,6 @@ const routes: RouteRecordRaw[] = [
                         '@pages/ContributionPage/components/ContributorPay.vue'
                     ),
             },
-            // CreateLSO
             {
                 path: '/CreationOfRS',
                 name: 'CreationOfRS',
@@ -292,10 +291,55 @@ const routes: RouteRecordRaw[] = [
                 },
             },
             {
+                path: '/EditingOfCentral',
+                name: 'FormDH',
+                component: () =>
+                    import('@pages/EditingOfCentral/components/EditingOfCentral.vue'),
+                meta: {
+                    requiresAuth: true,
+                },
+            },
+            {
+                path: '/EditingOfDH',
+                name: 'FormLocal',
+                component: () =>
+                    import('@pages/EditingOfDH/components/EditingOfDH.vue'),
+                meta: {
+                    requiresAuth: true,
+                },
+            },
+            {
+                path: '/EditingOfRS',
+                name: 'EditingOfRS',
+                component: () =>
+                    import('@pages/EditingOfRS/components/EditingOfRS.vue'),
+                meta: {
+                    requiresAuth: true,
+                },
+            },
+            {
+                path: '/EditingOfLocal',
+                name: 'FormLocal',
+                component: () =>
+                    import('@pages/EditingOfLocal/components/EditingOfLocal.vue'),
+                meta: {
+                    requiresAuth: true,
+                },
+            },
+            {
                 path: '/FAQ',
                 name: 'faq',
                 component: () =>
                     import('@pages/HelpInfoData/components/helpInfoData.vue'),
+                    meta: {
+                        requiresAuth: true
+                    }
+            },
+            {
+                path: '/Event',
+                name: 'faq',
+                component: () =>
+                    import('@pages/Event/components/Event.vue'),
                     meta: {
                         requiresAuth: true
                     }

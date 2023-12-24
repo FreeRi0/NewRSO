@@ -1,7 +1,8 @@
 <template>
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--lso">Создание регионального штаба</h1>
+
+        <h1 class="title title--lso">Редактирование регионального штаба</h1>
         <FormRS></FormRS>
         <!-- <FormRS :participants="true" :unit="unit"></FormRS> -->
     </div>
@@ -15,7 +16,8 @@ import { FormRS } from '@features/FormRS';
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
     { pageTitle: 'Региональные штабы', href: '#' },
-    { pageTitle: 'Создание регионального штаба', href: '#' },
+    { pageTitle: 'Татарстанский региональный штаб', href: '#' },
+    { pageTitle: 'Редактирование', href: '#' },
 ]);
 
 // const unit = ref({
@@ -36,3 +38,5 @@ const pages = ref([
 //     ofDate: '',
 // });
 </script>
+
+<style lang="scss"></style>
