@@ -109,7 +109,7 @@ onMounted(() => {
 const pages = [
     { pageTitle: 'Структура', href: '#' },
     { pageTitle: 'Штабы', href: '/AllHeadquarters' },
-    { pageTitle: `${hq.name}`, href: '#' },
+    { pageTitle: `${headquarter.name}`, href: '#' },
 ];
 </script>
 <style scoped lang="scss">

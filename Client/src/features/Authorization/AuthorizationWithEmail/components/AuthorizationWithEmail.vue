@@ -18,24 +18,22 @@
                     class="username-input"
                 />
 
-
                 <p v-if="isError">{{ isError }}</p>
-                <PasswordInputVue
-
 
                 <Input
                     type="password"
->
                     placeholder="Пароль"
                     name="password"
                     v-model:value="data.password"
-                ></Input>
-
+                >
+                </Input>
 
                 <p v-if="isError">{{ isError }}</p>
 
                 <!-- <p v-if="isError">{{ isError.non_field_errors }}</p> -->
-                <p class="error" v-if="isError">{{ isError.non_field_errors }}</p>
+                <p class="error" v-if="isError">
+                    {{ isError.non_field_errors }}
+                </p>
 
                 <Button
                     class="login_btn"
@@ -143,7 +141,7 @@ const LoginUser = async () => {
     font-size: 18px;
 }
 .error {
-    color: #DB0000;
+    color: #db0000;
     font-size: 14px;
     font-weight: 600;
     font-family: 'Acrobat';

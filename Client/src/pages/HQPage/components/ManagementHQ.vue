@@ -79,29 +79,6 @@ const aboutPosition = async () => {
 onMounted(() => {
     aboutPosition();
 });
-
-// const managers = ref([
-//     {
-//         name: 'Александрова Вероника Александровна',
-//         status: 'Командир',
-//         image: 'manager.png',
-//     },
-//     {
-//         name: 'Александров Александр Александрович',
-//         status: 'Комиссар',
-//         image: 'manager2.png',
-//     },
-//     {
-//         name: 'Александрова Катерина Александровна',
-//         status: 'Мастер-методист',
-//         image: 'manager3.png',
-//     },
-//     {
-//         name: 'Петрова Александра Александровна',
-//         status: 'Медик',
-//         image: 'manager4.png',
-//     },
-// ]);
 </script>
 
 <style scoped lang="scss">
