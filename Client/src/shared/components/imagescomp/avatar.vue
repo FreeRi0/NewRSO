@@ -1,4 +1,4 @@
-// <template>
+<template>
     <div class="user-metric__avatar-wrapper">
 
         <div class="user-metric__avatar">
@@ -20,7 +20,7 @@
 
 
         <!-- Иконки редактирования аватар -->
-        <v-menu min-width="200px" rounded v-if="!media">
+        <v-menu min-width="200px" rounded v-if="!avatar">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">

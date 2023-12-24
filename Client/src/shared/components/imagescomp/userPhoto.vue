@@ -28,7 +28,7 @@
         </div>
         <!-- Добавить фото -->
         <div class="avatar-edit my_photo__add" v-if="add">
-            <v-menu min-width="200px" rounded v-if="!media" >
+            <v-menu min-width="200px" rounded v-if="!photos" >
                 <template v-slot:activator="{ props }">
                     <v-btn class="user-metric__baner-add" icon v-bind="props">
                         <v-avatar size="large">

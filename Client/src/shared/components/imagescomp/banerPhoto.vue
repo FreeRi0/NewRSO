@@ -15,7 +15,7 @@
                 alt="Баннер личной страницы(пусто)"
             />
         </div>
-        <v-menu min-width="200px" rounded v-if="!media">
+        <v-menu min-width="200px" rounded v-if="!banner">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -251,7 +251,7 @@ const deleteBanner = async () => {
         },
     })
         .then((response) => {
-           
+
             console.log(response, 'deleted');
         })
         .catch(function (error) {

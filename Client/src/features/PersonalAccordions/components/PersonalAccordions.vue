@@ -110,7 +110,7 @@
                                 clearable
                                 placeholder="familia"
                                 name="surname-lat"
-                                v-model:value="user.last_name"
+                                v-model:value="user.last_name_lat"
                             />
                         </div>
                         <div class="form-field">
@@ -132,7 +132,7 @@
                                 clearable
                                 placeholder="name"
                                 name="name-lat"
-                                v-model:value="user.first_name"
+                                v-model:value="user.first_name_lat"
                             />
                         </div>
                         <div class="form-field">
@@ -154,7 +154,7 @@
                                 clearable
                                 placeholder="patronomyc"
                                 name="patronomyc-lat"
-                                v-model:value="patronomycLat"
+                                v-model:value="patronymic_lat"
                             />
                         </div>
                         <div class="checkbox-wrapper">
@@ -172,10 +172,9 @@
                                     :id="sex.id"
                                     :checked="sex.checked"
                                     name="sex"
-                                    v-model:checkedValue="selectedSex"
+                                    v-model:checkedValue="user.gender"
                                 />
                             </div>
-                            {{ user.gender }}
                         </div>
 
                         <div class="form-field">
@@ -2377,6 +2376,9 @@ const user = ref({
     last_name: '',
     patronymic_name: '',
     date_of_birth: '',
+    last_name_lat: '',
+    first_name_lat: '',
+    patronymic_lat: '',
 });
 
 const education = ref({
@@ -2574,13 +2576,13 @@ const addData = async () => {
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
-    const axiosrequest2 = HTTP.put('/rsousers/me/documents/', documents.value, {
+    const axiosrequest2 = HTTP.patch('/rsousers/me/documents/', documents.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
-    const axiosrequest3 = HTTP.put('/rsousers/me/education/', education.value, {
+    const axiosrequest3 = HTTP.patch('/rsousers/me/education/', education.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
