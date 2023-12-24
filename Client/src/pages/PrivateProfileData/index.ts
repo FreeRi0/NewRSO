@@ -1,0 +1,1 @@
+export { default as privateProfileData } from './components/privateProfileData.vue';

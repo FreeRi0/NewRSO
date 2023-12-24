@@ -57,12 +57,12 @@
                 </div>
             </template>
         </BannerComp>
-        <AboutHQ
+        <!-- <AboutHQ
             head="Описание  регионального штаба"
-            description="Режим работы: пн-пт с 9:00 до 17:30. 
-        Наши контакты: +7 (863) 285-35-04 sto@mail.ru 
+            description="Режим работы: пн-пт с 9:00 до 17:30.
+        Наши контакты: +7 (863) 285-35-04 sto@mail.ru
         г. Казань, ул. Красных Зорь, 64"
-        ></AboutHQ>
+        ></AboutHQ> -->
         <ManagementHQ head="Руководство регионального штаба"></ManagementHQ>
         <HQandSquad></HQandSquad>
     </div>
@@ -71,7 +71,7 @@
 <script setup>
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerComp } from '@features/baner/components';
-import AboutHQ from '../HQPage/components/AboutHQ.vue';
+// import AboutHQ from '../HQPage/components/AboutHQ.vue';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import HQandSquad from './components/HQandSquad.vue';
 import { ref } from 'vue';

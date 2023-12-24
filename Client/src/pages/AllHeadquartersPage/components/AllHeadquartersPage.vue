@@ -1,9 +1,11 @@
 <template>
     <div class="container">
         <div class="headquarters">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
+                name="createhq"
             ></bannerCreate>
             <h2 class="headquarters-title">Штабы СО ОО</h2>
             <div class="headquarters-search">
@@ -70,28 +72,42 @@
 
                 <div class="sort-filters">
                     <div class="sort-select">
-                        <sortByEducation
+                        <Select
+                            variant="outlined"
+                            clearable
+                            name="select_district"
+                            id="select-district"
                             v-model="selectedSortDistrict"
-                            :options="district"
                             class="filter-district"
-                        ></sortByEducation>
+                            address="api/v1/districts/"
+                        ></Select>
                     </div>
                     <div class="sort-select">
-                        <sortByEducation
+                        <Select
+                            variant="outlined"
+                            clearable
+                            name="select_region"
+                            id="select-region"
                             v-model="selectedSortRegion"
-                            :options="regional"
                             class="filter-region"
-                        ></sortByEducation>
+                            address="api/v1/regionals/"
+                        ></Select>
                     </div>
                     <div class="sort-select">
-                        <sortByEducation
+                        <Select
+                            variant="outlined"
+                            clearable
+                            name="select_local"
+                            id="select-local"
                             v-model="selectedSortLocal"
-                            :options="local"
                             class="filter-local"
-                        ></sortByEducation>
+                            address="api/v1/locals/"
+                        ></Select>
                     </div>
                     <div class="sort-select">
                         <sortByEducation
+                            variant="outlined"
+                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
@@ -140,12 +156,18 @@ import {
     HeadquartersList,
     horizontalHeadquarters,
 } from '@features/Headquarters/components';
-import { sortByEducation } from '@shared/components/selects';
+import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 // import headquarters from '@entities/HeadquartersData/headquarters';
 
 const headquarters = ref([]);
+
+const pages = ref([
+    { pageTitle: 'Структура', href: '#' },
+    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
+]);
 
 const headquartersVisible = ref(12);
 
@@ -166,47 +188,15 @@ const local = ref([]);
 const district = ref([]);
 const regional = ref([]);
 
-const getLocals = async () => {
-    await HTTP.get('/locals/', {
+const getHeadquarters = async () => {
+    await HTTP.get('/educationals/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            local.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getRegional = async () => {
-    await HTTP.get('/regionals/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regional.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getDistrict = async () => {
-    await HTTP.get('/districts/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            district.value = response.data;
+            headquarters.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
@@ -215,9 +205,7 @@ const getDistrict = async () => {
 };
 
 onMounted(() => {
-    getLocals();
-    getRegional();
-    getDistrict();
+    getHeadquarters();
 });
 
 const selectedSort = ref(0);
@@ -230,29 +218,34 @@ const sortOptionss = ref([
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'createdAt', name: 'Дате создания штаба' },
-    { value: 'peoples', name: 'Количеству участников' },
+    { value: 'founding_date', name: 'Дате создания штаба' },
+    { value: 'members_count', name: 'Количеству участников' },
 ]);
 
 const sortedHeadquarters = computed(() => {
     let tempHeadquartes = headquarters.value;
 
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
-
-    // tempSquads = tempSquads.filter((item) => {
-    //     return selectedSort.value == 0 || item.education == selectedSort.value;
-    // });
+    tempHeadquartes = tempHeadquartes.filter((item) => {
+        // console.log(educational_institution.id);
+        return (
+            (selectedSortRegion.value == null &&
+                selectedSortLocal.value == null) ||
+            (item.regional_headquarter == selectedSortRegion.value &&
+                item.local_headquarter == selectedSortLocal.value)
+        );
+    });
 
     tempHeadquartes = tempHeadquartes.filter((item) => {
-        return item.desc
+        return item.name
             .toUpperCase()
             .includes(searchHeadquartes.value.toUpperCase());
     });
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.desc.toLowerCase(),
-                fb = b.desc.toLowerCase();
+            let fa = a.name.toLowerCase(),
+                fb = b.name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -261,9 +254,9 @@ const sortedHeadquarters = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'createdAt') {
-            let fc = a.createdAt,
-                fn = b.createdAt;
+        } else if (sortBy.value == 'founding_date') {
+            let fc = a.founding_date,
+                fn = b.founding_date;
 
             if (fc < fn) {
                 return -1;
@@ -272,8 +265,8 @@ const sortedHeadquarters = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'peoples') {
-            return a.peoples - b.peoples;
+        } else if (sortBy.value == 'members_count') {
+            return a.members - b.members;
         }
     });
 
@@ -284,9 +277,9 @@ const sortedHeadquarters = computed(() => {
     return tempHeadquartes;
 });
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .headquarters {
-    padding: 60px 0px 60px 0px;
+    padding: 40px 0px 60px 0px;
     &-title {
         margin-bottom: 40px;
         font-size: 52px;
@@ -366,7 +359,11 @@ const sortedHeadquarters = computed(() => {
     grid-template-columns: 1fr;
     grid-row-gap: 16px;
 }
-
+.form__select {
+    margin-bottom: 0px;
+    margin-right: 8px;
+    border: 1px solid #35383F;
+}
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
@@ -389,11 +386,6 @@ const sortedHeadquarters = computed(() => {
     background-size: cover;
 }
 
-.ascend {
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
 .sort-filters {
     @media screen and (max-width: 768px) {
         margin-top: 40px;
@@ -431,3 +423,4 @@ const sortedHeadquarters = computed(() => {
     }
 }
 </style>
+@shared/components/selects/inputs

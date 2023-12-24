@@ -2,98 +2,42 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--lso">ЛСО</h1>
-        <BannerComp class="user-metric mt-3">
-            <template #banner>
+        <!-- <BannerComp class="user-metric mt-3">
 
-            </template>
-        </BannerComp>
-        <div class="user-data__wrapper">
-                    <div class="Squad-HQ__name">
-                        <h4>{{ squad.name }}</h4>
-                    </div>
-                    <div class="slogan">
-                        <p>{{ squad.slogan }}</p>
-                    </div>
-                    <div class="user-data__list-wrapper">
-                        <ul class="Squad-HQ__list">
-                            <li class="Squad-HQ__university">
-                                <p>{{ educt.name}}</p>
-                            </li>
-                            <li class="Squad-HQ__date">
-                                <p>Дата создания ЛСО</p>
-                                <img
-                                    src="@/app/assets/icon/calendar.svg"
-                                    alt="calendar"
-                                />
-                                <time datetime="2022-09-10">{{ squad.founding_date }}</time>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="squad-data__contacts-wrapper">
-                        <div class="squad-data__contacts">
-                            <div class="squad-data__participant-counter">
-                                <span>{{ member.length }} участников</span>
-                            </div>
-                            <div class="squad-data__social-network">
-                                <div class="squad-data__link-vk">
-                                    <a href="https://vk.com" target="_blank">
-                                        <img
-                                            src="@/app/assets/icon/vk-blue.svg"
-                                        />
-                                    </a>
-                                </div>
-                                <div class="squad-data__link-telegram">
-                                    <a href="https://t.me" target="_blank">
-                                        <img
-                                            src="@/app/assets/icon/telegram-blue.svg"
-                                            alt=""
-                                        />
-                                    </a>
-                                </div>
-                                <div class="squad-data__link-share-link">
-                                    <a href="#" target="_blank">
-                                        <img
-                                            src="@/app/assets/icon/to-share-link.svg"
-                                            alt=""
-                                        />
-                                    </a>
-                                </div>
-                                <!-- <p>{{ squad.members }}</p> -->
-                            </div>
-                        </div>
-                        <router-link to="/" class="user-data__link"
-                            >Редактировать страницу</router-link
-                        >
-                    </div>
-                </div>
-        <AboutSquad></AboutSquad>
+        </BannerComp> -->
+        <BannerSquad :squad="squad" :edict="educt" :member="member"></BannerSquad>
+        <section class="about-squad">
+            <h3>Об отряде</h3>
+            <p>
+                {{ squad.about }}
+            </p>
+            <!-- <p>222{{ squad }}</p> -->
+        </section>
         <v-row class="mt-8">
             <v-col v-for="n in 4" :key="n" class="d-flex">
-                <photos></photos>
+                <squadPhotos :squad-photos="squad.photo1"></squadPhotos>
             </v-col>
         </v-row>
-        <SquadParticipants></SquadParticipants>
+        <SquadParticipants :squad="squad" :member="member"></SquadParticipants>
     </div>
 </template>
 <script setup>
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { BannerComp } from '@features/baner/components';
-import AboutSquad from './components/AboutSquad.vue';
-import { photos } from '@shared/components/imagescomp';
+import { BannerSquad } from '@features/baner/components';
+import { squadPhotos } from '@shared/components/imagescomp';
 import SquadParticipants from './components/SquadParticipants.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 const squad = ref({});
-const member = ref({});
+const member = ref([]);
 const educt = ref({});
 const route = useRoute();
-const id = route.params.id;
+let id = route.params.id;
 
 
-
-const aboutSquad = async() => {
+const aboutSquad = async () => {
     await HTTP.get(`/detachments/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -107,9 +51,9 @@ const aboutSquad = async() => {
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
+};
 
-const aboutEduc = async() => {
+const aboutEduc = async () => {
     await HTTP.get(`/eduicational_institutions/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -117,15 +61,15 @@ const aboutEduc = async() => {
         },
     })
         .then((response) => {
-           educt.value = response.data;
+            educt.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
+};
 
-const aboutMembers = async() => {
+const aboutMembers = async () => {
     await HTTP.get(`/detachments/${id}/members/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -139,18 +83,37 @@ const aboutMembers = async() => {
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
+};
+
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) {
+        aboutSquad();
+        aboutMembers();
+        aboutEduc();
+    }
+});
+
+watch(
+    () => route.params.id,
+
+    (newId, oldId) => {
+        id = newId
+        aboutSquad();
+        aboutMembers();
+        aboutEduc();
+    },
+);
+
 onMounted(() => {
     aboutSquad();
     aboutMembers();
     aboutEduc();
-})
+});
 
 const pages = [
     { pageTitle: 'Личный кабинет', href: '/UserPage' },
     { pageTitle: `${squad.name}`, href: '#' },
 ];
-
 </script>
 <style scoped lang="scss">
 .title {
@@ -165,9 +128,9 @@ const pages = [
         margin-bottom: 50px;
     }
 }
-.user-data__wrapper {
-    margin: 20px 0 12px 298px;
-}
+// .user-data__wrapper {
+//     margin: 20px 0 12px 298px;
+// }
 /* Данные отряда */
 .Squad-HQ__name {
     font-family: 'Akrobat';
@@ -229,6 +192,31 @@ const pages = [
     display: flex;
     justify-content: space-between;
     margin: 16px 16px 0px 0px;
+}
+
+section.about-squad {
+    margin-top: 60px;
+}
+.about-squad h3 {
+    color: #35383f;
+    font-family: 'Akrobat';
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.about-squad p {
+    /* отступы */
+    margin-top: 40px;
+    margin-bottom: 40px;
+    /*  */
+    color: #1e1e1e;
+    font-family: 'BertSans';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 @media (max-width: 1110px) {

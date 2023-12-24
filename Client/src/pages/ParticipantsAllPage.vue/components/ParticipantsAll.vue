@@ -1,16 +1,35 @@
 <template>
     <div class="container">
         <div class="participants">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="participants-title">Участники ЛСО</h2>
             <div class="participants-tabs">
-                <v-btn
+                <!-- <v-btn
                     class="participants-tabs__item"
                     :class="{ active: checked === category }"
                     v-for="category in categories"
                     :key="category"
                     @click="checked = category"
                     >{{ category }}</v-btn
-                >
+                > -->
+
+                <!-- <div class="d-flex">
+                    <Button
+                        type="button"
+                        label="Уже в отряде"
+                        class="contributorBtn"
+                        :class="{ active: picked === is_trusted }"
+                        @click="picked = is_trusted"
+                    ></Button>
+
+                    <Button
+                        type="button"
+                        label="Ожидают одобрение"
+                        class="contributorBtn"
+                        :class="{ active: picked === !is_trusted }"
+                        @click="picked = !is_trusted"
+                    ></Button>
+                </div> -->
             </div>
             <div class="participants-search">
                 <input
@@ -38,10 +57,37 @@
             </div>
             <div class="participants-sort">
                 <div class="sort-layout">
-                    <Button icon="switch" color="white" @click="showVertical">
+                    <Button
+                        v-if="vertical"
+                        type="button"
+                        class="dashboard"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
                     </Button>
                     <Button
-                        icon="switch"
+                        v-else="!vertical"
+                        type="button"
+                        class="dashboardD"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
+                    </Button>
+                    <Button
+                        v-if="!vertical"
+                        type="button"
+                        class="menuuA"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    ></Button>
+                    <Button
+                        v-else="vertical"
+                        type="button"
+                        class="menuu"
+                        icon="icon"
                         color="white"
                         @click="showVertical"
                     ></Button>
@@ -49,12 +95,16 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <sortByEducation
+                            variant="outlined"
+                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
+                            class="sort-alphabet"
                         ></sortByEducation>
                     </div>
 
                     <Button
+                        class="ascend"
                         @click="ascending = !ascending"
                         icon="icon"
                         color="white"
@@ -92,20 +142,52 @@ import {
     ParticipantsList,
     horizontalParticipantsList,
 } from '@features/Participants/components';
-import { sortByEducation } from '@shared/components/selects';
-import { ref, computed } from 'vue';
-import participants from '@entities/Participants/participants';
+import { sortByEducation, Select } from '@shared/components/selects';
+import { ref, computed, onMounted } from 'vue';
+import { HTTP } from '@app/http';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
+import { useRoute } from 'vue-router';
+// import participants from '@entities/Participants/participants';
 
+const participants = ref([]);
 const participantsVisible = ref(12);
+// const picked = ref(null);
 
 const step = ref(12);
+const position = ref({});
+const route = useRoute();
+const id = route.params.id;
+
+const aboutMembers = async () => {
+    await HTTP.get(`/detachments/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            participants.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    aboutMembers();
+});
+
+const pages = [
+    { pageTitle: 'Структура', href: '/UserPage' },
+    { pageTitle: 'ЛСО', href: '/AllSquads' },
+    { pageTitle: 'Отряд', href: '/lso/:id' },
+    { pageTitle: 'Участники отряда', href: '#' },
+];
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const picked = ref('');
-
-const categories = ref(['В отряде', 'Ожидают одобрения']);
 
 const vertical = ref(true);
 
@@ -125,20 +207,20 @@ const sortOptionss = ref([
 ]);
 
 const sortedParticipants = computed(() => {
-    let tempParticipants = participants;
+    let tempParticipants = participants.value;
 
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
     tempParticipants = tempParticipants.filter((item) => {
-        return item.name
+        return item.user.last_name
             .toUpperCase()
             .includes(searchParticipants.value.toUpperCase());
     });
 
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa = a.user.last_name.toLowerCase(),
+                fb = b.user.last_name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -147,9 +229,9 @@ const sortedParticipants = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'birthdate') {
-            let fc = a.birthdate,
-                fn = b.birthdate;
+        } else if (sortBy.value == 'date_of_birth') {
+            let fc = a.user.date_of_birth,
+                fn = b.user.date_of_birth;
 
             if (fc < fn) {
                 return -1;
@@ -163,7 +245,8 @@ const sortedParticipants = computed(() => {
         }
     });
 
-    // tempParticipants = tempParticipants.filter((item) => item.inSquad === picked.value);
+    // tempParticipants = tempParticipants.filter((item) => item.is_trusted === picked.value);
+    // tempParticipants = tempParticipants.sort((a, b) => a.is_trusted - b.is_trusted);
 
     if (!ascending.value) {
         tempParticipants.reverse();
@@ -242,10 +325,53 @@ const sortedParticipants = computed(() => {
         }
     }
 
+    .contributorBtn {
+        border-radius: 30px;
+        background-color: white;
+        color: #1c5c94;
+        border: 1px solid #1c5c94;
+        margin: 0px;
+        padding: 10px 24px;
+        margin: 7px;
+    }
+
     .active {
         background-color: #1c5c94;
         color: white;
         border: 1px solid #1c5c94;
+    }
+
+    .form__select {
+        margin-bottom: 0px;
+        margin-right: 8px;
+    }
+
+    .dashboard {
+        background-image: url('@app/assets/icon/darhboard-active.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .dashboardD {
+        background-image: url('@app/assets/icon/darhboard-disable.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .menuuA {
+        background-image: url('@app/assets/icon/MenuA.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .menuu {
+        background-image: url('@app/assets/icon/Menu.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .ascend {
+        background-image: url('@app/assets/icon/switch.svg');
+        background-repeat: no-repeat;
+        background-position: center;
     }
 
     .horizontallso {

@@ -1,34 +1,29 @@
 <template>
-    <!-- <div class="references-sort__all">
-      <input type="checkbox" @click="select" v-model="checkboxAll" />
-  </div> -->
     <div
         class="horizontallso"
         v-for="participant in participants"
         :key="participant.id"
     >
-        <!-- <div class="horizontallso__confidant">
-          <input
-              type="checkbox"
-              v-model="selectedPeoples"
-              :value="participant"
-              @change="updateCheck"
-          />
-      </div> -->
-
+    <div class="horizontallso__confidant mr-3">
+            <input
+                type="checkbox"
+                v-model="selectedPeoples"
+                :value="participant"
+                @change="updateMembership"
+            />
+        </div>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img :src="'./assets/' + participant.image" alt="logo" />
+                <img :src="participant.media.photo" alt="logo" v-if="participants.media" />
                 <img
-                    v-if="participant.useIcon"
-                    class="horizontallso-item__list-img-status"
-                    :src="'./assets/icon/' + participant.icon"
-                    alt="icon"
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+                    v-else
                 />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ participant.name }}
+                    {{ participant.first_name }}
                 </p>
                 <div class="horizontallso-item__list-date">
                     <span
@@ -37,39 +32,28 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.birthdate }}</p>
+                    <p>{{ participant.date_of_birth }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="sort-select mx-3">
-            <sortByEducation
-                v-model="payed"
-                :options="filteredPayed"
-            ></sortByEducation>
+        <div class="horizontallso-info mx-3">
+            <p v-if="participant.membership_fee">Оплачен</p>
+            <p v-else>Не оплачен</p>
+
         </div>
     </div>
 </template>
 
 <script setup>
-// import referenceItem from '@entities/ReferencesPeoples/components';
 
-import { ref } from 'vue';
-import { sortByEducation } from '@shared/components/selects';
+import { ref, watch } from 'vue';
+import { Select } from '@shared/components/selects';
 
 const emit = defineEmits(['change']);
-const payed = ref([]);
 
-const filteredPayed = ref([
-    {
-        value: 'payed',
-        name: 'Оплачен',
-    },
-    { value: 'payed', name: 'Не оплачен' },
-]);
-
-const updateCheck = (e) => {
-    console.log('dddddd');
+const updateMembership = (e) => {
+    console.log('ddddddrrr');
     emit('change', selectedPeoples.value);
 };
 const props = defineProps({
@@ -77,11 +61,23 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    selectedParticipants: {
+        type: Array,
+        default: () => []
+    },
 });
 
 // const checkboxAll = ref(false);
 
-const selectedPeoples = ref([]);
+const selectedPeoples = ref(props.selectedParticipants);
+
+watch(
+    () => props.selectedParticipants,
+    (newChecked) => {
+        if (!newChecked) return;
+        selectedPeoples.value = newChecked;
+    },
+);
 
 // const select = () => {
 //     selectedPeoples.value = [];
@@ -108,6 +104,18 @@ const selectedPeoples = ref([]);
             align-items: center;
         }
     }
+    &-info {
+        border: 1px solid #B6B6B6;
+        border-radius: 10px;
+        padding: 10px 48px;
+        height: 46px;
+        p {
+            display: block;
+            font-size: 16px;
+            font-weight: 400;
+            color: #35383F;
+        }
+    }
 }
 .horizontallso-item__wrapper {
     display: grid;
@@ -121,7 +129,6 @@ const selectedPeoples = ref([]);
     border: 1px solid #b6b6b6;
     background: #fff;
     margin-bottom: 12px;
-    margin-left: 12px;
     width: 100%;
 }
 
@@ -143,9 +150,9 @@ const selectedPeoples = ref([]);
 }
 
 .horizontallso-item__list-date {
-    width: 95px;
+    // width: 95px;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
+    grid-template-columns: auto 1fr 0fr;
 }
 
 .horizontallso-item__list-img-status {
@@ -176,13 +183,24 @@ const selectedPeoples = ref([]);
 }
 
 .horizontallso__confidant {
-    padding: 11px 15px;
+    padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
+    height: 48px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.sort-select {
     height: 46px;
 }
 
-.sort-select__input {
-  padding: 9px 16px 10px 16px;
-}
+// .form__select {
+//     margin-bottom: 0px;
+//     margin-right: 8px;
+//     border: none;
+// }
 </style>
