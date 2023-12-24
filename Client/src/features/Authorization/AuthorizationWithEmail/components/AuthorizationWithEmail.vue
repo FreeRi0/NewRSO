@@ -18,8 +18,8 @@
                     class="username-input"
                 />
 
-                <p v-if="isError">{{ isError }}</p>
-
+                <p class="error" v-if="isError.username">{{ isError.username }}</p>
+                <!-- <p v-if="isError">{{ isError.username }}</p> -->
                 <Input
                     type="password"
                     placeholder="Пароль"
@@ -28,10 +28,10 @@
                 >
                 </Input>
 
-                <p v-if="isError">{{ isError }}</p>
+                <p class="error" v-if="isError.password">{{ isError.password }}</p>
 
                 <!-- <p v-if="isError">{{ isError.non_field_errors }}</p> -->
-                <p class="error" v-if="isError">
+                <p class="error" v-if="isError.non_field_errors">
                     {{ isError.non_field_errors }}
                 </p>
 
@@ -69,7 +69,7 @@ const data = ref({
 });
 
 // const user = ref({});
-const isError = ref([]);
+const isError = ref('');
 const isLoading = ref(false);
 const swal = inject('$swal');
 const router = useRouter();

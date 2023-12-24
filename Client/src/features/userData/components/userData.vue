@@ -6,7 +6,7 @@
                 class="mt-2"
                 name="about"
                 placeholder="Напиши что нибудь"
-                v-model:value="user.bio"
+                v-model:value="userBio.bio"
             ></TextArea>
             <Button
                 :loaded="isLoading"
@@ -37,7 +37,7 @@ import { HTTP } from '@app/http';
 // const data = ref({
 //     bio: '',
 // });
-const user = ref({
+const userBio = ref({
     bio: ''
 });
 const isError = ref([]);
@@ -54,7 +54,7 @@ const getUser = async () => {
         },
     })
         .then((response) => {
-            user.value = response.data;
+            userBio.value = response.data;
             console.log(response.data);
         })
         .catch(function (error) {
@@ -64,7 +64,7 @@ const getUser = async () => {
 
 const AddAbout = async () => {
     isLoading.value = true;
-    await HTTP.patch(`/rsousers/me/`, user.value, {
+    await HTTP.patch(`/rsousers/me/`, userBio.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -79,7 +79,7 @@ const AddAbout = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            user.value = response.data;
+            userBio.value = response.data;
             console.log(response.data);
         })
         .catch(({ response }) => {

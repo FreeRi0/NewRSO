@@ -21,14 +21,14 @@
         <AccordionsPersonal v-if="picked == 'Персональные данные'"></AccordionsPersonal>
         <userData v-else-if="picked == 'Моя страница' || picked == ''"></userData>
         <privateProfile v-else-if="picked == 'Настройки приватности'"></privateProfile>
-        <!-- <changePassword></changePassword> -->
+        <changePassword v-else-if="picked == 'Логин и пароль'"></changePassword>
     </div>
 </template>
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { AccordionsPersonal } from '@features/PersonalAccordions/components';
 import { privateProfile } from '@features/PrivateProfile/components';
-// import { changePassword } from '@features/ChangePassword/components';
+import { changePassword } from '@features/ChangePassword/components';
 import { BannerComp } from '@features/baner/components';
 import { HTTP } from '@app/http';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
@@ -37,11 +37,11 @@ import { userData } from '@features/userData/components';
 
 const user = ref({});
 const education = ref({});
-const route = useRoute();
-let id = route.params.id;
+// const route = useRoute();
+// let id = route.params.id;
 
 const getUser = async () => {
-    await HTTP.get(`/rsousers/${id}/`, {
+    await HTTP.get('/rsousers/me/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -56,20 +56,20 @@ const getUser = async () => {
         });
 };
 
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        getUser();
-    }
-});
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         getUser();
+//     }
+// });
 
-watch(
-    () => route.params.id,
+// watch(
+//     () => route.params.id,
 
-    (newId, oldId) => {
-        id = newId;
-        getUser();
-    },
-);
+//     (newId, oldId) => {
+//         id = newId;
+//         getUser();
+//     },
+// );
 
 onMounted(() => {
     getUser();
@@ -88,6 +88,10 @@ const tabs = ref([
     {
         id: '3',
         name: 'Настройки приватности',
+    },
+    {
+        id: '4',
+        name: 'Логин и пароль',
     },
 ]);
 const pages = ref([

@@ -2284,8 +2284,15 @@
             </v-expansion-panel>
             <v-card-actions class="form__button-group">
                 <Button
+                v-if="saveData"
                     type="submit"
                     label="Отправить данные на верификацию"
+                ></Button>
+                <Button
+                v-else
+                    @click="updateData"
+                    type="submit"
+                    label="Обновить данные"
                 ></Button>
             </v-card-actions>
         </v-expansion-panels>
@@ -2311,6 +2318,8 @@ import {
 } from '@vuelidate/validators';
 import { HTTP } from '@app/http';
 import axios from 'axios';
+
+const saveData = ref(true)
 
 const router = useRouter();
 
@@ -2576,6 +2585,61 @@ const addData = async () => {
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
+    const axiosrequest2 = HTTP.post('/rsousers/me/documents/', documents.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+    const axiosrequest3 = HTTP.post('/rsousers/me/education/', education.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+
+    await axios
+        .all([axiosrequest1, axiosrequest2, axiosrequest3])
+        .then(
+            axios.spread(function (res1, res2, res3) {
+                user.value = res1.data;
+                documents.value = res2.data;
+                education.value = res3.data;
+                console.log(res1.data);
+                console.log(res2.data);
+                console.log(res3.data);
+                saveData.value = false;
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }),
+        )
+        .catch((error) => {
+            console.error('There was an error!', error);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+
+
+};
+
+const updateData = async() => {
+
+    const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
     const axiosrequest2 = HTTP.patch('/rsousers/me/documents/', documents.value, {
         headers: {
             'Content-Type': 'application/json',
@@ -2599,6 +2663,7 @@ const addData = async () => {
                 console.log(res1.data);
                 console.log(res2.data);
                 console.log(res3.data);
+                saveData.value = true;
                 swal.fire({
                     position: 'top-center',
                     icon: 'success',
@@ -2618,7 +2683,7 @@ const addData = async () => {
                 timer: 1500,
             });
         });
-};
+}
 
 const answers = ref([
     { name: 'Да', id: 'f1' },

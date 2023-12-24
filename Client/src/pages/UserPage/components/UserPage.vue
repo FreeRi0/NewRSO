@@ -12,7 +12,7 @@
                     верификацию. Верификация — это документальное подтверждение
                     ваших личных данных. Она займет всего несколько минут.
                 </div>
-                <router-link :to="{ name: 'PersonalData', params: { id: user.id } }">
+                <router-link to='/PersonalData'>
                 <Button
                 class="user-verify__btn"
                     name="verify-btn"
