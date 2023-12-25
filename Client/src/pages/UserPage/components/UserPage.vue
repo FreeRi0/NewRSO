@@ -2,8 +2,9 @@
     <div class="container">
         <div class="user-wrapper">
             <Breadcrumbs :items="pages"></Breadcrumbs>
-            <h2 class="page-title">Моя страница</h2>
-            <BannerComp :user="user" :education="education" :user_region="region"   class="mt-3"></BannerComp>
+            <h2 class="page-title" v-if="currentUser">Моя страница</h2>
+            <h2 class="page-title" v-else>Пользователь: {{ user.first_name }}</h2>
+            <BannerComp :user="user"  :education="education" :user_region="region" :edited="false" class="mt-3"></BannerComp>
             <div class="user-verify" v-if="!user.is_verified">
                 <p class="user-verify__title">Верификация данных</p>
                 <div class="user-verify__desc">
@@ -26,7 +27,7 @@
 
             <div class="mt-14" v-if="user.is_verified">{{ user.bio }}</div>
             <v-row class="mt-8">
-                <v-col v-for="n in 4" :key="n" class="d-flex" v-if="user.is_verified">
+                <v-col v-for="photo in 4" :key="n" class="d-flex" v-if="user.is_verified">
                   <userPhoto :photos="user?.media?.photo1" :add="false"></userPhoto>
                 </v-col>
             </v-row>
@@ -51,6 +52,7 @@ const pages = ref([
 ]);
 
 const user = ref({})
+const currentUser = ref(null)
 const education = ref({})
 const region = ref({})
 const route = useRoute();
@@ -65,6 +67,21 @@ const getUser = async() => {
     })
         .then((response) => {
             user.value = response.data;
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+}
+const getCurrentUser = async() => {
+    await HTTP.get('/rsousers/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            currentUser.value = response.data;
             console.log(response.data);
         })
         .catch(function (error) {
@@ -89,6 +106,7 @@ watch(
 
 onMounted(() => {
     getUser()
+    getCurrentUser()
 })
 </script>
 <style lang="scss" scoped>

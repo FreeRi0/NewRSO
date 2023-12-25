@@ -168,9 +168,9 @@
                             >
                                 <RadioButton
                                     :value="sex.name"
-                                    :label="sex.name"
+                                    :label="sex.id"
                                     :id="sex.id"
-                                    :checked="sex.checked"
+                                    :checked="sex.name"
                                     name="sex"
                                     v-model:checkedValue="user.gender"
                                 />
@@ -667,7 +667,7 @@
                                         name="socials"
                                         class="input-big mask-vk"
                                         placeholder="https://vk.com/danya_porg"
-                                        v-model:value="socialsVk"
+                                        v-model:value="user.social_vk"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -678,7 +678,7 @@
                                         name="socials"
                                         class="input-big mask-tg"
                                         placeholder="https://t.me/allenom"
-                                        v-model:value="socialsTg"
+                                        v-model:value="user.social_tg"
                                     />
                                 </div>
                             </div>
@@ -713,11 +713,13 @@
                             >
                                 <RadioButton
                                     :value="addr.name"
-                                    :label="addr.name"
+                                    :label="addr.id"
                                     :id="addr.id"
-                                    :checked="addr.checked"
+                                    :checked="addr.name"
                                     name="address"
-                                    v-model:checkedValue="selectedAddress"
+                                    v-model:checkedValue="
+                                        regionData.reg_fact_same_address
+                                    "
                                 />
                             </div>
                         </div>
@@ -725,7 +727,7 @@
                         <div
                             class="addr-fact__wrapper"
                             id="addr-fact"
-                            v-if="selectedAddress === 'Нет'"
+                            v-if="regionData.reg_fact_same_address == false"
                         >
                             <p class="accordion-block-title small">
                                 Адрес фактического проживания
@@ -735,7 +737,7 @@
                                 <Select
                                     variant="outlined"
                                     clearable
-                                    v-model="regionFact"
+                                    v-model="regionData.fact_region"
                                     address="api/v1/regions/"
                                 ></Select>
                             </div>
@@ -747,7 +749,7 @@
                                     name="locality-fact"
                                     class="input-big"
                                     placeholder="Москва"
-                                    v-model:value="localityFact"
+                                    v-model:value="regionData.fact_town"
                                 />
                             </div>
                             <div class="form-field">
@@ -759,7 +761,7 @@
                                     name="addres-fact"
                                     class="input-big"
                                     placeholder="ул. Комсомольская, д. 42, кв. 56"
-                                    v-model:value="addresFact"
+                                    v-model:value="regionData.fact_house"
                                 />
                             </div>
                         </div>
@@ -1351,7 +1353,23 @@
                                             Скачать бланк
                                         </button>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-wrapper">
+                                        <div class="statement-item">
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                customUpload
+                                                @uploader="customBase64Uploader"
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
@@ -1378,7 +1396,40 @@
                                             Скачать бланк
                                         </button>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-wrapper">
+                                        <div class="statement-item">
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <!-- <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                customUpload
+                                                @uploader="selectPersonal"
+                                                chooseLabel="Выбрать файл"
+                                            /> -->
+                                            <v-btn
+                                                color="primary"
+                                                rounded
+                                                dark
+                                                :loading="isSelecting"
+                                                @click="handleFileImport"
+                                            >
+                                                Upload File
+                                            </v-btn>
+                                            <v-file-input
+                                                class="d-none"
+                                                id="selectPersonal"
+                                                @uploader="selectPersonal"
+                                                accept=".pdf, .jpeg, .png"
+                                            ></v-file-input>
+
+                                            <p>{{ consent_personal_data }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <p class="statement-title">
                                     Согласие законного представителя на
@@ -1412,13 +1463,23 @@
                                             Скачать бланк
                                         </button>
                                     </div>
-                                    <FileUpload
-                                        mode="basic"
-                                        name="demo[]"
-                                        accept="image/*"
-                                        customUpload
-                                        @uploader="customBase64Uploader"
-                                    />
+                                    <div class="statement-wrapper">
+                                        <div class="statement-item">
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                customUpload
+                                                @uploader="selectParentPersonal"
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="dowmload-all">
@@ -1458,7 +1519,23 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-wrapper">
+                                        <div class="statement-item">
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                customUpload
+                                                @uploader="selectPass"
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="pass-details__item">
@@ -1479,7 +1556,23 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-wrapper">
+                                        <div class="statement-item">
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                customUpload
+                                                @uploader="selectParentPass"
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2284,12 +2377,12 @@
             </v-expansion-panel>
             <v-card-actions class="form__button-group">
                 <Button
-                v-if="saveData"
+                    v-if="saveData"
                     type="submit"
                     label="Отправить данные на верификацию"
                 ></Button>
                 <Button
-                v-else
+                    v-else
                     @click="updateData"
                     type="submit"
                     label="Обновить данные"
@@ -2302,7 +2395,7 @@
 import { ref, computed, onMounted, reactive, inject } from 'vue';
 import { RadioButton } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
-import { FileUpload } from '@features/Upload/components';
+// import { FileUpload } from '@features/Upload/components';
 // import { vMaska } from 'maska';
 import { useVuelidate } from '@vuelidate/core';
 import { useRouter } from 'vue-router';
@@ -2319,11 +2412,25 @@ import {
 import { HTTP } from '@app/http';
 import axios from 'axios';
 
-const saveData = ref(true)
+const saveData = ref(true);
 
 const router = useRouter();
 
 const panel = ref();
+const isSelecting = ref(false);
+
+const handleFileImport = () => {
+    isSelecting.value = true;
+
+    window.addEventListener(
+        'focus',
+        () => {
+            isSelecting.value = false;
+            uploader.click();
+        },
+        { once: true },
+    );
+};
 
 const openPanelOne = () => {
     panel.value = 'panelOne';
@@ -2348,8 +2455,11 @@ const openPanelFive = () => {
 const regionData = ref({
     reg_town: '',
     reg_house: '',
-    reg_fact_same_address: true,
-    reg_region_id: null,
+    reg_fact_same_address: null,
+    reg_region: null,
+    fact_region: null,
+    fact_town: '',
+    fact_house: '',
 });
 
 const foreign = ref({
@@ -2388,6 +2498,11 @@ const user = ref({
     last_name_lat: '',
     first_name_lat: '',
     patronymic_lat: '',
+    gender: null,
+    email: '',
+    social_vk: '',
+    social_tg: '',
+    phone_number: '',
 });
 
 const education = ref({
@@ -2412,43 +2527,29 @@ const documents = ref({
     mil_reg_doc_ser_num: '',
 });
 
+const statement = ref(null);
+const consent_personal_data = ref(null);
+const consent_personal_data_representative = ref(null);
+const passportUpload = ref(null);
+const passport_representative = ref(null);
+const customBase64Uploader = (event) => {
+    statement.value = event.files[0];
+};
 
-// const getData = async () => {
-//     const axiosrequestGet1 = HTTP.get('/rsousers/me/', user.value, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             // Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     });
-//     const axiosrequestGet2 = HTTP.get('/rsousers/me/documents/', documents.value, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             // Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     });
-//     const axiosrequestGet3 = HTTP.get('/rsousers/me/education/', education.value, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             // Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     });
+const selectPersonal = (event) => {
+    consent_personal_data.value = event.target.files[0];
+};
 
-//     await axios
-//         .all([axiosrequestGet1, axiosrequestGet2, axiosrequestGet3])
-//         .then(
-//             axios.spread(function (response1, response2, response3) {
-//                 user.value = response1.data;
-//                 documents.value = response2.data;
-//                 education.value = response3.data;
-//                 console.log(response1.data);
-//                 console.log(response2.data);
-//                 console.log(response3.data);
-//             }),
-//         )
-//         .catch((error) => {
-//             console.error('There was an error!', error);
-//         });
-// }
+const selectParentPersonal = (event) => {
+    consent_personal_data_representative.value = event.target.files[0];
+};
+
+const selectPass = (event) => {
+    passportUpload.value = event.target.files[0];
+};
+const selectParentPass = (event) => {
+    passport_representative.value = event.target.files[0];
+};
 
 const getUser = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -2497,9 +2598,26 @@ const getDocuments = async () => {
         });
 };
 
+const getUserRegions = async () => {
+    await HTTP.get('/rsousers/me/region/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regionData.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
 getUser();
 getEducation();
 getDocuments();
+getUserRegions();
 
 const downloadBlankPersonal = async () => {
     await HTTP.get(
@@ -2579,35 +2697,67 @@ const downloadBlankParent = async () => {
 };
 
 const addData = async () => {
+    let fd = new FormData();
+    fd.append('statement', statement.value);
+    // fd.append('consent_personal_data', consent_personal_data.value);
+    // fd.append(
+    //     'consent_personal_data_representative ',
+    //     consent_personal_data_representative.value,
+    // );
+    // fd.append('passport', passportUpload.value);
+    // fd.append('passport_representative', passport_representative.value);
     const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
-    const axiosrequest2 = HTTP.post('/rsousers/me/documents/', documents.value, {
+    const axiosrequest2 = HTTP.patch('/rsousers/me/region/', regionData.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
-    const axiosrequest3 = HTTP.post('/rsousers/me/education/', education.value, {
+    const axiosrequest3 = HTTP.patch(
+        '/rsousers/me/documents/',
+        documents.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    );
+    const axiosrequest4 = HTTP.patch(
+        '/rsousers/me/education/',
+        education.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    );
+
+    const axiosrequest5 = HTTP.patch('/rsousers/me/statement/', fd, {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
 
     await axios
-        .all([axiosrequest1, axiosrequest2, axiosrequest3])
+        .all([axiosrequest1, axiosrequest2, axiosrequest3, axiosrequest3])
         .then(
-            axios.spread(function (res1, res2, res3) {
+            axios.spread(function (res1, res2, res3, res4) {
                 user.value = res1.data;
-                documents.value = res2.data;
-                education.value = res3.data;
+                regionData.value = res2.data;
+                documents.value = res3.data;
+                education.value = res4.data;
                 console.log(res1.data);
                 console.log(res2.data);
                 console.log(res3.data);
+                console.log(res4.data);
                 saveData.value = false;
                 swal.fire({
                     position: 'top-center',
@@ -2628,30 +2778,35 @@ const addData = async () => {
                 timer: 1500,
             });
         });
-
-
 };
 
-const updateData = async() => {
-
+const updateData = async () => {
     const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
-    const axiosrequest2 = HTTP.patch('/rsousers/me/documents/', documents.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+    const axiosrequest2 = HTTP.patch(
+        '/rsousers/me/documents/',
+        documents.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         },
-    });
-    const axiosrequest3 = HTTP.patch('/rsousers/me/education/', education.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+    );
+    const axiosrequest3 = HTTP.patch(
+        '/rsousers/me/education/',
+        education.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         },
-    });
+    );
 
     await axios
         .all([axiosrequest1, axiosrequest2, axiosrequest3])
@@ -2663,7 +2818,6 @@ const updateData = async() => {
                 console.log(res1.data);
                 console.log(res2.data);
                 console.log(res3.data);
-                saveData.value = true;
                 swal.fire({
                     position: 'top-center',
                     icon: 'success',
@@ -2683,7 +2837,7 @@ const updateData = async() => {
                 timer: 1500,
             });
         });
-}
+};
 
 const answers = ref([
     { name: 'Да', id: 'f1' },
@@ -2691,8 +2845,8 @@ const answers = ref([
 ]);
 
 const gender = ref([
-    { name: 'male', id: 's1', checked: true },
-    { name: 'female', id: 's2' },
+    { name: 'male', value: 'male', id: 'Мужской' },
+    { name: 'female', value: 'female', id: 'Женский' },
 ]);
 
 const passportParent = ref([
@@ -2716,8 +2870,8 @@ const militaryDocs = ref([
 ]);
 
 const address = reactive([
-    { name: 'Да', id: 'addr1' },
-    { name: 'Нет', id: 'addr2', checked: true },
+    { name: true, value: 'reg_fact_same_address', id: 'Да' },
+    { name: false, value: 'reg_fact_same_address', id: 'Нет' },
 ]);
 
 const passport = reactive([
@@ -2728,36 +2882,7 @@ const passport = reactive([
 // const selectedSex = ref(user.gender);
 const selectedAnswer = ref('Нет');
 const selectedPassParent = ref('Да');
-const selectedAddress = ref('Нет');
 const selectedPass = ref('Да');
-
-const nameParent = ref('');
-const surnameParent = ref('');
-const birthParent = ref('');
-const phoneParent = ref('');
-const patronomycParent = ref('');
-const selectedMilitary = ref(0);
-const passInputP = ref('');
-const PassIdParent = ref('');
-const localParent = ref('');
-const passDateP = ref('');
-const AddresParent = ref('');
-const localityContact = ref('');
-const regionContact = ref('');
-const socialsVk = ref('');
-const socialsTg = ref('');
-const addresContact = ref('');
-const regionFact = ref(null);
-const addresFact = ref('');
-const localityFact = ref('');
-const passNumber = ref('');
-const passDate = ref('');
-const passOrg = ref('');
-const snils = ref('');
-const inn = ref('');
-const foreignPass = ref('');
-const workbook = ref('');
-const militaryNumber = ref('');
 </script>
 <style lang="scss">
 .accordion {
@@ -3029,6 +3154,10 @@ const militaryNumber = ref('');
     display: none;
 }
 
+.fileInput {
+    width: 100px;
+}
+
 .date {
     border: 2px solid #a3a3a3;
     border-radius: 10px;
@@ -3036,5 +3165,40 @@ const militaryNumber = ref('');
     font-size: 12px;
     padding: 10px 16px 10px 16px;
     margin-bottom: 20px;
+}
+.statement-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.statement-item {
+    display: flex;
+    margin-top: 12px;
+    margin-right: 30px;
+}
+
+.statement-item p,
+.statement-item a {
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    margin-left: 8px;
+}
+
+.statement-item a {
+    color: #1c5c94;
+}
+.statement-wrapper {
+    display: flex;
+    margin-bottom: 40px;
+    align-items: flex-start;
+}
+
+.p-icon {
+    display: none;
+}
+
+.p-button-label {
+    color: #1c5c94;
 }
 </style>

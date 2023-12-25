@@ -36,7 +36,7 @@
         <div class="sort-select ml-3">
             <Select
                 variant="outlined"
-                v-model="usersData.membership_fee"
+                v-model="participant.membership_fee"
                 :names="filteredPayed"
             ></Select>
         </div>
@@ -48,6 +48,7 @@
                 @change="(event) => updateMembership(participant, event)"
             />
         </div>
+        <!-- <pre>{{ selectedPeoples }}</pre> -->
         <Button class="save" type="submit" label="Сохранить"></Button>
         <!-- <Button @click="DeleteStatus()" label="Удалить"></Button> -->
     </form>
@@ -64,16 +65,16 @@ const emit = defineEmits(['change']);
 const route = useRoute();
 const id = route.params.id;
 
-const usersData = ref({
+const participant = ref({
     membership_fee: null,
 });
 
 const filteredPayed = ref([
     {
         value: 'membership_fee',
-        name: 'Оплачен',
+        name: true,
     },
-    { value: 'membership_fee', name: 'Не оплачен' },
+    { value: 'membership_fee', name: false },
 ]);
 
 const updateMembership = (participant, event) => {
@@ -91,19 +92,19 @@ const selectedPeoples = ref(props.participants);
 
 watch(selectedPeoples, (newChecked) => {
     if (!newChecked) return;
-    emit('change', selectedPeoples);
+    emit('change', selectedPeoples.value);
     console.log(newChecked);
 });
 
 const ChangeStatus = async (id) => {
-    HTTP.post(`rsousers/${id}/membership_fee_status/`, usersData.value, {
+    HTTP.post(`rsousers/${id}/membership_fee_status/`, participant.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            usersData.value = response.data;
+           participant.value = response.data;
             console.log(response.data);
         })
 

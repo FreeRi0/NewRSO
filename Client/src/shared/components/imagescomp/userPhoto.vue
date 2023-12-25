@@ -3,21 +3,7 @@
         <!-- Заглушка по умолчанию  -->
         <div class="avatar-preview my_photo__plug">
             <img :src="photos" alt="Фото пользователя" v-if="photos" />
-            <!--<img
-                :src="userPhotoUrl2.media.photo2"
-                alt="Фото пользователя"
-                v-else-if="userPhotoUrl2"
-            />
-            <img
-                :src="userPhotoUrl3.media.photo3"
-                alt="Фото пользователя"
-                v-else-if="userPhotoUrl3"
-            />
-            <img
-                :src="userPhotoUrl4.media.photo4"
-                alt="Фото пользователя"
-                v-else-if="userPhotoUrl4"
-            />-->
+
 
             <img
                 src="@/app/assets/user-banner.jpg"
@@ -28,7 +14,7 @@
         </div>
         <!-- Добавить фото -->
         <div class="avatar-edit my_photo__add" v-if="add">
-            <v-menu min-width="200px" rounded v-if="!media" >
+            <v-menu min-width="200px" rounded v-if="!props.photos" >
                 <template v-slot:activator="{ props }">
                     <v-btn class="user-metric__baner-add" icon v-bind="props">
                         <v-avatar size="large">
@@ -85,7 +71,7 @@
                                             Закрыть
                                         </v-btn>
                                         <v-btn
-                                            :disabled="!media"
+                                            :disabled="!userPhotos"
                                             color="blue-darken-1"
                                             variant="text"
                                             type="submit"
@@ -160,7 +146,7 @@
                                                 Закрыть
                                             </v-btn>
                                             <v-btn
-                                                :disabled="!media"
+                                                :disabled="!userPhotos"
                                                 color="blue-darken-1"
                                                 variant="text"
                                                 type="submit"
@@ -196,11 +182,11 @@ const preview = ref(null);
 const showPhoto = ref(false);
 
 const props = defineProps({
-    photos: String,
+    photos: Array,
     add: Boolean
 });
 
-const media = ref({
+const userPhotos = ref({
     photo1: null,
     // photo2: null,
     // photo3: null,
@@ -208,14 +194,14 @@ const media = ref({
 });
 
 const selectFile = (event) => {
-    media.value = event.target.files[0];
-    preview.value = URL.createObjectURL(media.value);
+   userPhotos.value = event.target.files[0];
+    preview.value = URL.createObjectURL(userPhotos.value);
 };
 
 const uploadPhoto = async () => {
     dialog.value = true;
     const formData = new FormData();
-    formData.append('photo1', media.value);
+    formData.append('photo1', userPhotos.value);
     await HTTP.post('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -232,7 +218,7 @@ const uploadPhoto = async () => {
 };
 const updatePhoto = async () => {
     let fd = new FormData();
-    fd.append('photo1', media.value);
+    fd.append('photo1', userPhotos.value);
     dialog.value = true;
     await HTTP.put('/rsousers/me/media/', fd, {
         headers: {
@@ -250,7 +236,7 @@ const updatePhoto = async () => {
 };
 
 const deletePhoto = async () => {
-    await HTTP.put('/rsousers/me/media/', media.value, {
+    await HTTP.put('/rsousers/me/media/', userPhotos.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

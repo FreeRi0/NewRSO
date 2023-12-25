@@ -1,16 +1,17 @@
 <template>
     <div class="user-metric">
         <bannerPhoto :banner="user?.media?.banner"></bannerPhoto>
-        <Avatar :avatar="user?.media?.photo"></Avatar>
+        <Avatar :avatar="user?.media?.photo" :edited="false"></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
                 <div v-if="user" class="user-data__name">
-                    <h4>{{ user.first_name }}</h4>
-                    <h4>{{ user.last_name }}</h4>
+                    <p>{{ user.first_name }}</p>
+                    <p>{{ user.last_name }}</p>
+                    <p>{{ user.patronymic_name }}</p>
                     <!-- <slot name="banner"></slot> -->
                 </div>
-                <h4 v-if="user">{{ user.email }}</h4>
+                <!-- <h4 v-if="user">{{ user.email }}</h4> -->
                 <div></div>
 
                 <div class="user-data__list-wrapper">
@@ -23,7 +24,7 @@
                             <p>{{ user?.education?.study_specialty }}</p>
                         </li>
                         <li v-if="education">
-                            <p>Курс{{ user?.education?.study_year }}</p>
+                            <p>Курс {{ user?.education?.study_year }}</p>
                         </li>
                         <li class="user-data__regional-office">
                             <p>{{ user?.user_region?.reg_town}}</p>
@@ -50,8 +51,14 @@ const props = defineProps({
     avatar: {
         type: String
     },
+    edited: {
+        type: Boolean
+    },
 
     user: {
+        type: Object,
+    },
+    currentUser: {
         type: Object,
     },
     education: {
@@ -112,10 +119,11 @@ const props = defineProps({
 }
 
 .user-data__name {
+    display: flex;
     margin-bottom: 32px;
 }
 
-.user-data__name h4 {
+.user-data__name p {
     color: #35383f;
     /* Desktop/H-3 */
     font-family: 'Akrobat';
@@ -124,6 +132,7 @@ const props = defineProps({
     font-weight: 600;
     line-height: normal;
     color: #35383f;
+    margin-right: 8px;
 }
 
 .user-data__list-wrapper {
@@ -145,7 +154,7 @@ const props = defineProps({
 .user-data__list-wrapper li {
     border-right: 1px solid #35383f;
     height: 20px;
-    margin: auto 5px;
+    margin: auto 3px;
 }
 
 .user-data__list p,

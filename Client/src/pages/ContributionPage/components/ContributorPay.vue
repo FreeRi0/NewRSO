@@ -599,12 +599,14 @@ onMounted(() => {
     isMembership();
 });
 
-const select = () => {
+const select = (event) => {
     selectedPeoples.value = [];
-
-    if (checkboxAll.value) {
-        for (let item in participants) {
-            selectedPeoples.value.push(participants[item]);
+    console.log('fffss',checkboxAll.value, event)
+    if (event.target.checked) {
+        console.log('fffss',checkboxAll.value, event)
+        for (let index in participants.value) {
+            console.log('arr', selectedPeoples.value)
+            selectedPeoples.value.push(participants.value[index]);
         }
     }
 };
@@ -614,6 +616,7 @@ const changePeoples = (selectedHumans) => {
 };
 
 const changeSelected = (changePeoples) => {
+    console.log('fff', changePeoples)
     selectedPeoples.value = changePeoples;
 };
 

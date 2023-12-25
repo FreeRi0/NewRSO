@@ -15,7 +15,7 @@
                 alt="Баннер личной страницы(пусто)"
             />
         </div>
-        <v-menu min-width="200px" rounded v-if="!media.banner">
+        <v-menu min-width="200px" rounded v-if="!props.banner">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">

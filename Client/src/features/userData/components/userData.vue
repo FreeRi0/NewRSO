@@ -6,7 +6,7 @@
                 class="mt-2"
                 name="about"
                 placeholder="Напиши что нибудь"
-                v-model:value="userBio.bio"
+                v-model:value="user.bio"
             ></TextArea>
             <Button
                 :loaded="isLoading"
@@ -37,7 +37,7 @@ import { HTTP } from '@app/http';
 // const data = ref({
 //     bio: '',
 // });
-const userBio = ref({
+const user = ref({
     bio: ''
 });
 const isError = ref([]);
@@ -47,14 +47,14 @@ const route = useRoute();
 let id = route.params.id;
 
 const getUser = async () => {
-    await HTTP.get(`/rsousers/${id}/`, {
+    await HTTP.get(`/rsousers/me/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            userBio.value = response.data;
+            user.value = response.data;
             console.log(response.data);
         })
         .catch(function (error) {
@@ -79,7 +79,7 @@ const AddAbout = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            userBio.value = response.data;
+            user.value = response.data;
             console.log(response.data);
         })
         .catch(({ response }) => {
@@ -96,20 +96,20 @@ const AddAbout = async () => {
         });
 };
 
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        getUser();
-    }
-});
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         getUser();
+//     }
+// });
 
-watch(
-    () => route.params.id,
+// watch(
+//     () => route.params.id,
 
-    (newId, oldId) => {
-        id = newId;
-        getUser();
-    },
-);
+//     (newId, oldId) => {
+//         id = newId;
+//         getUser();
+//     },
+// );
 
 onMounted(() => {
     getUser();

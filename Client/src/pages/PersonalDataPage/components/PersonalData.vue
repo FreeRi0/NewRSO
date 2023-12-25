@@ -6,6 +6,7 @@
             :user="user"
             :education="education"
             class="mt-3"
+            :edited="true"
         ></BannerComp>
         <!--Табы-->
         <div class="d-flex mt-9 mb-9">
@@ -37,6 +38,7 @@ import { userData } from '@features/userData/components';
 
 const user = ref({});
 const education = ref({});
+
 // const route = useRoute();
 // let id = route.params.id;
 

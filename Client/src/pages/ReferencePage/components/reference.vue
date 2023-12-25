@@ -535,12 +535,12 @@ const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const select = () => {
+const select = (event) => {
     selectedPeoples.value = [];
 
-    if (checkboxAll.value) {
-        for (let item in participants) {
-            selectedPeoples.value.push(participants[item]);
+    if (event.target.checked) {
+        for (let item in participants.value) {
+            selectedPeoples.value.push(participants.value[item]);
         }
     }
 };

@@ -1,8 +1,7 @@
 <template>
     <div class="container">
         <div class="headquarters">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
-            <bannerCreate
+            <Breadcrumbs :items="pages"></Breadcrumbs> <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
                 name="createhq"
