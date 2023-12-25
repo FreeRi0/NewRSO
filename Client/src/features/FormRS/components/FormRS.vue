@@ -362,12 +362,12 @@
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
-                        <!-- НОВОЕ -->
                         <div class="test">
                             <div class="form__field form_width">
                                 <label for="founding_date"
                                     >Официальная дата (год) появления
                                     студенческих отрядов в регионе
+                                    <sup class="valid-red">*</sup>
                                 </label>
                                 <Input
                                     class="form__input"
@@ -385,11 +385,11 @@
                                 <label for="conference_date"
                                     >Дата учредительной конференции
                                     регионального штаба
+                                    <sup class="valid-red">*</sup>
                                 </label>
                                 <Input
                                     class="form__input"
                                     type="date"
-                                    value="2005-10-12"
                                     id="conference_date"
                                     name="conference_date"
                                     v-model:value="conference_date"
@@ -419,7 +419,6 @@
                                 <Input
                                     class="form__input"
                                     type="date"
-                                    value="2020-08-21"
                                     id="registry_date"
                                     name="registry_date"
                                     v-model:value="registry_date"
@@ -530,14 +529,133 @@
                                 {{ counterAbout }} / 1000
                             </div>
                         </div>
-
                         <div class="form__field">
                             <label for="upload-logo">Добавьте логотип</label>
-                            <Avatar
-                                name="upload_logo"
-                                id="upload-logo"
-                                v-model:value="avatar"
-                            />
+                            <div class="user-metric__avatar-wrapper">
+                                <div class="user-metric__avatar">
+                                    <!-- Аватар пользователя  -->
+
+                                    <img
+                                        v-if="urlEmblem"
+                                        :src="urlEmblem"
+                                        alt="avatarka"
+                                    />
+                                    <img
+                                        v-else
+                                        id="profile-pic"
+                                        src="@app/assets/user-avatar.png"
+                                        alt="Аватарка(пусто)"
+                                    />
+                                </div>
+                                <!-- Иконки редактирования аватар -->
+                                <v-menu min-width="200px" rounded>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn
+                                            class="user-metric__avatar-add"
+                                            icon
+                                            v-bind="props"
+                                        >
+                                            <v-avatar size="large">
+                                                <v-icon
+                                                    icon="mdi-plus"
+                                                ></v-icon>
+                                            </v-avatar>
+                                        </v-btn>
+                                    </template>
+                                    <v-card>
+                                        <v-card-text>
+                                            <v-row justify="center">
+                                                <v-dialog
+                                                    v-model="dialog"
+                                                    width="1024"
+                                                >
+                                                    <template
+                                                        v-slot:activator="{
+                                                            props,
+                                                        }"
+                                                    >
+                                                        <v-btn
+                                                            rounded
+                                                            variant="text"
+                                                            v-bind="props"
+                                                        >
+                                                            Добавить логотип
+                                                        </v-btn>
+                                                    </template>
+                                                    <v-card
+                                                        class="uploadEmblem_wrap p-dropdown-items-wrapper"
+                                                    >
+                                                        <v-card-title>
+                                                            <span
+                                                                class="text-h5"
+                                                                >Загрузите ваше
+                                                                фото</span
+                                                            >
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-container>
+                                                                <v-row>
+                                                                    <v-file-input
+                                                                        @change="
+                                                                            selectFile
+                                                                        "
+                                                                        show-size
+                                                                        prepend-icon="mdi-camera"
+                                                                        counter
+                                                                    ></v-file-input>
+                                                                </v-row>
+                                                                <v-row>
+                                                                    <v-card
+                                                                        class="mt-5 mx-auto"
+                                                                    >
+                                                                        <img
+                                                                            class="uploadEmblem_img"
+                                                                            v-if="
+                                                                                urlEmblem
+                                                                            "
+                                                                            :src="
+                                                                                urlEmblem
+                                                                            "
+                                                                        />
+                                                                    </v-card>
+                                                                </v-row>
+                                                            </v-container>
+                                                        </v-card-text>
+                                                        <v-card-actions
+                                                            class="uploadBtn"
+                                                        >
+                                                            <v-btn
+                                                                color="blue-darken-1"
+                                                                variant="text"
+                                                                @click="
+                                                                    dialog = false;
+                                                                    urlEmblem =
+                                                                        null;
+                                                                "
+                                                            >
+                                                                Закрыть
+                                                            </v-btn>
+                                                            <v-btn
+                                                                :disabled="
+                                                                    !fileEmblem
+                                                                "
+                                                                color="blue-darken-1"
+                                                                variant="text"
+                                                                type="submit"
+                                                                @click="
+                                                                    uploadAvatar()
+                                                                "
+                                                            >
+                                                                Загрузить
+                                                            </v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-dialog>
+                                            </v-row>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-menu>
+                            </div>
                             <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
@@ -545,16 +663,131 @@
 
                         <div class="form__field">
                             <label for="upload-banner">Добавьте баннер</label>
-                            <bannerPhoto
-                                name="upload_banner"
-                                id="upload-banner"
-                                v-model:value="banner"
-                            />
+                            <div class="user-metric__top">
+                                <div class="user-metric__top-img-wrapper">
+                                    <!-- Заглушка Банер -->
+                                    <img
+                                        v-if="urlBanner"
+                                        :src="urlBanner"
+                                        alt="Баннер личной страницы"
+                                    />
+
+                                    <img
+                                        v-else
+                                        src="@/app/assets/user-banner.jpg"
+                                        alt="Баннер личной страницы(пусто)"
+                                    />
+                                </div>
+                                <v-menu min-width="200px" rounded>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn
+                                            class="user-metric__avatar-add"
+                                            icon
+                                            v-bind="props"
+                                        >
+                                            <v-avatar size="large">
+                                                <v-icon
+                                                    icon="mdi-plus"
+                                                ></v-icon>
+                                            </v-avatar>
+                                        </v-btn>
+                                    </template>
+                                    <v-card>
+                                        <v-card-text>
+                                            <v-row justify="center">
+                                                <v-dialog
+                                                    v-model="dialog"
+                                                    width="1024"
+                                                >
+                                                    <template
+                                                        v-slot:activator="{
+                                                            props,
+                                                        }"
+                                                    >
+                                                        <v-btn
+                                                            rounded
+                                                            variant="text"
+                                                            v-bind="props"
+                                                        >
+                                                            Добавить баннер
+                                                        </v-btn>
+                                                    </template>
+                                                    <v-card
+                                                        class="uploadEmblem_wrap p-dropdown-items-wrapper"
+                                                    >
+                                                        <v-card-title>
+                                                            <span
+                                                                class="text-h5"
+                                                                >Загрузите ваш
+                                                                баннер</span
+                                                            >
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-container>
+                                                                <v-row>
+                                                                    <v-file-input
+                                                                        @change="
+                                                                            selectBanner
+                                                                        "
+                                                                        show-size
+                                                                        prepend-icon="mdi-camera"
+                                                                        counter
+                                                                    ></v-file-input>
+                                                                </v-row>
+                                                                <v-row>
+                                                                    <v-card
+                                                                        class="mt-5 mx-auto"
+                                                                    >
+                                                                        <img
+                                                                            v-if="
+                                                                                urlBanner
+                                                                            "
+                                                                            :src="
+                                                                                urlBanner
+                                                                            "
+                                                                        />
+                                                                    </v-card>
+                                                                </v-row>
+                                                            </v-container>
+                                                        </v-card-text>
+                                                        <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn
+                                                                color="blue-darken-1"
+                                                                variant="text"
+                                                                @click="
+                                                                    dialog = false;
+                                                                    urlBanner =
+                                                                        null;
+                                                                "
+                                                            >
+                                                                Закрыть
+                                                            </v-btn>
+                                                            <v-btn
+                                                                :disabled="
+                                                                    !fileBanner
+                                                                "
+                                                                color="blue-darken-1"
+                                                                variant="text"
+                                                                type="submit"
+                                                                @click="
+                                                                    uploadBanner()
+                                                                "
+                                                            >
+                                                                Загрузить
+                                                            </v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-dialog>
+                                            </v-row>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-menu>
+                            </div>
                             <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
-                        <!-- СТАРОЕ -->
                     </div>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -694,7 +927,7 @@ const UploadData = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            router.push('/AllHeadquarters');
+            router.push('/RegionalHeadquarters');
             // router.push({ name: 'user', params: { userId: '123' } })
         })
         .catch((error) => {
@@ -882,7 +1115,9 @@ const changeValue = (event) => {
     resize: none;
 }
 
-.scroll {
+.p-dropdown-items-wrapper {
+    // min-height: 400px;
+
     &::-webkit-scrollbar {
         /*стили полосы прокрутки */
         width: 8px;
@@ -893,12 +1128,12 @@ const changeValue = (event) => {
         background: #ffffff;
         border-radius: 10px;
         border: 1px solid #898989;
-        margin: 4px 0;
     }
 
     &::-webkit-scrollbar-thumb {
         /*стили бегунка */
         width: 8px;
+        // height: 108px;
         border-radius: 10px;
         border: 1px solid #ffffff;
         background-color: #35383f;
