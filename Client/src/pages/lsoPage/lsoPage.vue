@@ -15,7 +15,7 @@
         </section>
         <v-row class="mt-8">
             <v-col v-for="n in 4" :key="n" class="d-flex">
-                <squadPhotos></squadPhotos>
+                <squadPhotos :squad-photos="squad.photo1"></squadPhotos>
             </v-col>
         </v-row>
         <SquadParticipants :squad="squad" :member="member"></SquadParticipants>
@@ -36,9 +36,6 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
-// const props = defineProps({
-//     id: String
-// })
 
 const aboutSquad = async () => {
     await HTTP.get(`/detachments/${id}/`, {

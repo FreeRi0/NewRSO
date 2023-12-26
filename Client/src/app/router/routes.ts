@@ -66,6 +66,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
+
                 children: [
                     {
                         path: ':id/:name',
@@ -90,6 +91,7 @@ const routes: RouteRecordRaw[] = [
                         ],
                     },
                 ],
+
             },
             // {
             //     path: '/HQ',
@@ -100,6 +102,7 @@ const routes: RouteRecordRaw[] = [
             //     }
             // },
             {
+
                 path: '/HQ',
                 meta: {
                     requiresAuth: true,
@@ -128,6 +131,21 @@ const routes: RouteRecordRaw[] = [
                         ],
                     },
                 ],
+
+                
+            },
+            {
+                path: '/DistrictHQ',
+                name: 'DistrictHQ',
+                component: () =>
+                    import('@pages/DistrictHQPage/DistrictHQPage.vue'),
+            },
+            {
+                path: '/CentralHQ',
+                name: 'CentralHQ',
+                component: () =>
+                    import('@pages/CentralHQPage/CentralHQPage.vue'),
+
             },
             {
                 path: '/RegionalHQ',
@@ -137,6 +155,16 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
+
+            },
+            {
+                path: '/LocalHQ',
+                name: 'LocalHQ',
+                component: () => import('@pages/LocalHQPage/LocalHQPage.vue'),
+                meta: {
+                    requiresAuth: true,
+                },
+
             },
             {
                 path: '/UserPage',
@@ -274,6 +302,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
+
             },
             // {
             //     path: '/edithq/:id',
@@ -321,9 +350,26 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/ContributionPage/components/ContributorPay.vue'
                     ),
+
+            },
+            {
+                path: '/CreationOfRS',
+                name: 'CreationOfRS',
+                component: () =>
+                    import('@pages/CreationOfRS/components/CreationOfRS.vue'),
                 meta: {
                     requiresAuth: true,
                 },
+            },
+            {
+                path: '/FAQ',
+                name: 'faq',
+                component: () =>
+                    import('@pages/HelpInfoData/components/helpInfoData.vue'),
+                    meta: {
+                        requiresAuth: true
+                    }
+
             },
         ],
     },

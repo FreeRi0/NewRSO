@@ -2,39 +2,100 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h2 class="profile-title">Настройки профиля</h2>
-        <BannerComp></BannerComp>
+        <BannerComp
+            :user="user"
+            :education="education"
+            class="mt-3"
+            :edited="true"
+        ></BannerComp>
         <!--Табы-->
         <div class="d-flex mt-9 mb-9">
             <button
-                type="button"
                 class="contributorBtn"
-                :class="{ active: picked === true }"
-                @click="picked = true"
+                :class="{ active: picked === tab.name }"
+                v-for="tab in tabs"
+                :key="tab.id"
+                @click="picked = tab.name"
+                >{{ tab.name }}</button
             >
-                Моя страница
-            </button>
-
-            <button
-                type="button"
-                class="contributorBtn"
-                :class="{ active: picked === false }"
-                @click="picked = false"
-            >
-                Персональные данные
-            </button>
         </div>
-        <AccordionsPersonal v-if="picked === false"></AccordionsPersonal>
-        <userData v-else="picked === true"></userData>
+        <AccordionsPersonal v-if="picked == 'Персональные данные'"></AccordionsPersonal>
+        <userData v-else-if="picked == 'Моя страница' || picked == ''"></userData>
+        <privateProfile v-else-if="picked == 'Настройки приватности'"></privateProfile>
+        <changePassword v-else-if="picked == 'Логин и пароль'"></changePassword>
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { AccordionsPersonal } from '@features/PersonalAccordions/components';
+import { privateProfile } from '@features/PrivateProfile/components';
+import { changePassword } from '@features/ChangePassword/components';
 import { BannerComp } from '@features/baner/components';
+import { HTTP } from '@app/http';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import {userData} from '@features/userData/components'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { userData } from '@features/userData/components';
 
-const picked = ref(false);
+const user = ref({});
+const education = ref({});
+
+// const route = useRoute();
+// let id = route.params.id;
+
+const getUser = async () => {
+    await HTTP.get('/rsousers/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+};
+
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         getUser();
+//     }
+// });
+
+// watch(
+//     () => route.params.id,
+
+//     (newId, oldId) => {
+//         id = newId;
+//         getUser();
+//     },
+// );
+
+onMounted(() => {
+    getUser();
+});
+
+const picked = ref('');
+const tabs = ref([
+    {
+        id: '1',
+        name: 'Моя страница',
+    },
+    {
+        id: '2',
+        name: 'Персональные данные',
+    },
+    {
+        id: '3',
+        name: 'Настройки приватности',
+    },
+    {
+        id: '4',
+        name: 'Логин и пароль',
+    },
+]);
 const pages = ref([
     { pageTitle: 'Личный кабинет', href: '#' },
     { pageTitle: 'Настройка профиля', href: '#' },
@@ -60,5 +121,4 @@ const pages = ref([
     background-color: #1c5c94;
     color: white;
 }
-
 </style>

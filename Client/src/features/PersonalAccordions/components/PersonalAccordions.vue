@@ -33,7 +33,6 @@
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
                             </v-col>
-                            <!-- <div v-if="">обязательно для заполнения</div> -->
                         </v-row>
                     </template>
                     <template v-slot:actions="{ expanded }">
@@ -111,7 +110,7 @@
                                 clearable
                                 placeholder="familia"
                                 name="surname-lat"
-                                v-model:value="user.last_name"
+                                v-model:value="user.last_name_lat"
                             />
                         </div>
                         <div class="form-field">
@@ -133,7 +132,7 @@
                                 clearable
                                 placeholder="name"
                                 name="name-lat"
-                                v-model:value="user.first_name"
+                                v-model:value="user.first_name_lat"
                             />
                         </div>
                         <div class="form-field">
@@ -155,7 +154,7 @@
                                 clearable
                                 placeholder="patronomyc"
                                 name="patronomyc-lat"
-                                v-model:value="patronomycLat"
+                                v-model:value="patronymic_lat"
                             />
                         </div>
                         <div class="checkbox-wrapper">
@@ -169,14 +168,13 @@
                             >
                                 <RadioButton
                                     :value="sex.name"
-                                    :label="sex.name"
+                                    :label="sex.id"
                                     :id="sex.id"
-                                    :checked="sex.checked"
+                                    :checked="sex.name"
                                     name="sex"
-                                    v-model:checkedValue="selectedSex"
+                                    v-model:checkedValue="user.gender"
                                 />
                             </div>
-                            {{ user.gender }}
                         </div>
 
                         <div class="form-field">
@@ -669,7 +667,7 @@
                                         name="socials"
                                         class="input-big mask-vk"
                                         placeholder="https://vk.com/danya_porg"
-                                        v-model:value="socialsVk"
+                                        v-model:value="user.social_vk"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -680,7 +678,7 @@
                                         name="socials"
                                         class="input-big mask-tg"
                                         placeholder="https://t.me/allenom"
-                                        v-model:value="socialsTg"
+                                        v-model:value="user.social_tg"
                                     />
                                 </div>
                             </div>
@@ -715,11 +713,13 @@
                             >
                                 <RadioButton
                                     :value="addr.name"
-                                    :label="addr.name"
+                                    :label="addr.id"
                                     :id="addr.id"
-                                    :checked="addr.checked"
+                                    :checked="addr.name"
                                     name="address"
-                                    v-model:checkedValue="selectedAddress"
+                                    v-model:checkedValue="
+                                        regionData.reg_fact_same_address
+                                    "
                                 />
                             </div>
                         </div>
@@ -727,7 +727,7 @@
                         <div
                             class="addr-fact__wrapper"
                             id="addr-fact"
-                            v-if="selectedAddress === 'Нет'"
+                            v-if="regionData.reg_fact_same_address == false"
                         >
                             <p class="accordion-block-title small">
                                 Адрес фактического проживания
@@ -737,7 +737,7 @@
                                 <Select
                                     variant="outlined"
                                     clearable
-                                    v-model="regionFact"
+                                    v-model="regionData.fact_region"
                                     address="api/v1/regions/"
                                 ></Select>
                             </div>
@@ -749,7 +749,7 @@
                                     name="locality-fact"
                                     class="input-big"
                                     placeholder="Москва"
-                                    v-model:value="localityFact"
+                                    v-model:value="regionData.fact_town"
                                 />
                             </div>
                             <div class="form-field">
@@ -761,7 +761,7 @@
                                     name="addres-fact"
                                     class="input-big"
                                     placeholder="ул. Комсомольская, д. 42, кв. 56"
-                                    v-model:value="addresFact"
+                                    v-model:value="regionData.fact_house"
                                 />
                             </div>
                         </div>
@@ -793,7 +793,6 @@
                             Документы (паспорт, СНИЛС, ИНН, сведения о трудовой
                             деятельности, документ воинского учета)
                         </v-col>
-
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -888,7 +887,7 @@
                                     type="text"
                                     class="input-big"
                                     placeholder="__ __ ____"
-                                    v-model:value="documentsData.pass_ser_num"
+                                    v-model:value="documents.pass_ser_num"
                                 />
                             </div>
 
@@ -902,7 +901,7 @@
                                     type="date"
                                     name="pass_date"
                                     class="input-small"
-                                    v-model:value="documentsData.pass_date"
+                                    v-model:value="documents.pass_date"
                                 />
                             </div>
 
@@ -913,7 +912,7 @@
                                     type="text"
                                     class="input-full"
                                     placeholder="Название организации"
-                                    v-model:value="documentsData.pass_whom"
+                                    v-model:value="documents.pass_whom"
                                 />
                             </div>
                             <div class="form-field">
@@ -927,7 +926,7 @@
                                     type="text"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
-                                    v-model:value="documentsData.snils"
+                                    v-model:value="documents.snils"
                                 />
                             </div>
                             <div class="form-field">
@@ -939,7 +938,7 @@
                                     type="text"
                                     class="input-big mask-inn"
                                     placeholder="AA 999999999"
-                                    v-model:value="documentsData.inn"
+                                    v-model:value="documents.inn"
                                 />
                             </div>
                             <div class="form-field">
@@ -951,7 +950,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="documentsData.work_book_num"
+                                    v-model:value="documents.work_book_num"
                                 />
                             </div>
                             <div class="form-field">
@@ -963,9 +962,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="
-                                        documentsData.international_pass
-                                    "
+                                    v-model:value="documents.international_pass"
                                 />
                             </div>
                             <div class="form-field">
@@ -974,7 +971,7 @@
                                     variant="outlined"
                                     clearable
                                     class="select-big"
-                                    v-model="selectedMilitary"
+                                    v-model="documents.mil_reg_doc_type"
                                     :names="militaryDocs"
                                 ></Select>
                             </div>
@@ -991,7 +988,7 @@
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
                                     v-model:value="
-                                        documentsData.mil_reg_doc_ser_num
+                                        documents.mil_reg_doc_ser_num
                                     "
                                 />
                             </div>
@@ -1116,12 +1113,11 @@
                 </v-expansion-panel-text>
             </v-expansion-panel>
             <v-expansion-panel value="panelFour">
-                <v-expansion-panel-title >
+                <v-expansion-panel-title>
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Информация об образовании
                         </v-col>
-
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -1176,7 +1172,6 @@
                             </svg>
                         </v-icon>
                     </template>
-
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="data-form simple" id="simplee">
@@ -1193,7 +1188,7 @@
                                 id="education-org"
                                 class="input-full"
                                 placeholder="Введите название образовательной организации"
-                                v-model:value="educationData.study_institution"
+                                v-model:value="education.study_institution"
                             />
                         </div>
                         <div class="form-field">
@@ -1204,7 +1199,7 @@
                                 id="facultet"
                                 class="input-full"
                                 placeholder="Ввведите название факультета"
-                                v-model:value="educationData.study_faculty"
+                                v-model:value="education.study_faculty"
                             />
                         </div>
                         <div class="form-field">
@@ -1219,7 +1214,7 @@
                                 id="course"
                                 class="input-full"
                                 placeholder="1 курс"
-                                v-model:value="educationData.study_year"
+                                v-model:value="education.study_year"
                             />
                         </div>
                         <div class="form-field">
@@ -1230,7 +1225,7 @@
                                 id="speciality"
                                 class="input-full"
                                 placeholder="Введите название специальности"
-                                v-model:value="educationData.study_specialty"
+                                v-model:value="education.study_specialty"
                             />
                         </div>
                     </div>
@@ -1263,7 +1258,6 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Заявление о вступлении в РСО и скан-копии документов
                         </v-col>
-
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -1359,7 +1353,23 @@
                                             Скачать бланк
                                         </button>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-wrapper">
+                                        <div class="statement-item">
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                customUpload
+                                                @uploader="customBase64Uploader"
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
@@ -1386,7 +1396,40 @@
                                             Скачать бланк
                                         </button>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-wrapper">
+                                        <div class="statement-item">
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <!-- <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                customUpload
+                                                @uploader="selectPersonal"
+                                                chooseLabel="Выбрать файл"
+                                            /> -->
+                                            <v-btn
+                                                color="primary"
+                                                rounded
+                                                dark
+                                                :loading="isSelecting"
+                                                @click="handleFileImport"
+                                            >
+                                                Upload File
+                                            </v-btn>
+                                            <v-file-input
+                                                class="d-none"
+                                                id="selectPersonal"
+                                                @uploader="selectPersonal"
+                                                accept=".pdf, .jpeg, .png"
+                                            ></v-file-input>
+
+                                            <p>{{ consent_personal_data }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <p class="statement-title">
                                     Согласие законного представителя на
@@ -1420,13 +1463,23 @@
                                             Скачать бланк
                                         </button>
                                     </div>
-                                    <FileUpload
-                                        mode="basic"
-                                        name="demo[]"
-                                        accept="image/*"
-                                        customUpload
-                                        @uploader="customBase64Uploader"
-                                    />
+                                    <div class="statement-wrapper">
+                                        <div class="statement-item">
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                customUpload
+                                                @uploader="selectParentPersonal"
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="dowmload-all">
@@ -1466,7 +1519,23 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-wrapper">
+                                        <div class="statement-item">
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                customUpload
+                                                @uploader="selectPass"
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="pass-details__item">
@@ -1487,7 +1556,23 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-wrapper">
+                                        <div class="statement-item">
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                customUpload
+                                                @uploader="selectParentPass"
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1615,12 +1700,11 @@
                 class="yes-RSO"
                 v-else-if="selectedAnswer == 'Да'"
             >
-                <v-expansion-panel-title >
+                <v-expansion-panel-title>
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
                             Скан-копии документов
                         </v-col>
-
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -2293,8 +2377,15 @@
             </v-expansion-panel>
             <v-card-actions class="form__button-group">
                 <Button
+                    v-if="saveData"
                     type="submit"
                     label="Отправить данные на верификацию"
+                ></Button>
+                <Button
+                    v-else
+                    @click="updateData"
+                    type="submit"
+                    label="Обновить данные"
                 ></Button>
             </v-card-actions>
         </v-expansion-panels>
@@ -2304,7 +2395,7 @@
 import { ref, computed, onMounted, reactive, inject } from 'vue';
 import { RadioButton } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
-import { FileUpload } from '@features/Upload/components';
+// import { FileUpload } from '@features/Upload/components';
 // import { vMaska } from 'maska';
 import { useVuelidate } from '@vuelidate/core';
 import { useRouter } from 'vue-router';
@@ -2321,10 +2412,25 @@ import {
 import { HTTP } from '@app/http';
 import axios from 'axios';
 
-let education = ref(null);
+const saveData = ref(true);
+
 const router = useRouter();
 
 const panel = ref();
+const isSelecting = ref(false);
+
+const handleFileImport = () => {
+    isSelecting.value = true;
+
+    window.addEventListener(
+        'focus',
+        () => {
+            isSelecting.value = false;
+            uploader.click();
+        },
+        { once: true },
+    );
+};
 
 const openPanelOne = () => {
     panel.value = 'panelOne';
@@ -2346,31 +2452,14 @@ const openPanelFive = () => {
     panel.value = 'panelFive';
 };
 
-// let endpoints = ['api/v1/users/me/education/', 'api/v1/users/me/documents/'];
-
-const educationData = ref({
-    study_institution: '',
-    study_faculty: '',
-    study_year: '',
-    study_specialty: '',
-});
-
-const documentsData = ref({
-    snils: '',
-    inn: '',
-    pass_ser_num: '',
-    pass_whom: '',
-    pass_date: '',
-    work_book_num: '',
-    international_pass: '',
-    mil_reg_doc_ser_num: '',
-});
-
 const regionData = ref({
     reg_town: '',
     reg_house: '',
-    reg_fact_same_address: true,
-    reg_region_id: null,
+    reg_fact_same_address: null,
+    reg_region: null,
+    fact_region: null,
+    fact_town: '',
+    fact_house: '',
 });
 
 const foreign = ref({
@@ -2401,7 +2490,66 @@ const parentData = ref({
 
 const swal = inject('$swal');
 
-let user = ref(null);
+const user = ref({
+    first_name: '',
+    last_name: '',
+    patronymic_name: '',
+    date_of_birth: '',
+    last_name_lat: '',
+    first_name_lat: '',
+    patronymic_lat: '',
+    gender: null,
+    email: '',
+    social_vk: '',
+    social_tg: '',
+    phone_number: '',
+});
+
+const education = ref({
+    study_institution: '',
+    study_faculty: '',
+    study_year: '',
+    study_specialty: '',
+});
+
+const documents = ref({
+    snils: '',
+    inn: '',
+    pass_ser_num: '',
+    pass_town: '',
+    pass_whom: '',
+    pass_date: '',
+    pass_code: '',
+    pass_address: '',
+    work_book_num: '',
+    international_pass: '',
+    mil_reg_doc_type: '',
+    mil_reg_doc_ser_num: '',
+});
+
+const statement = ref(null);
+const consent_personal_data = ref(null);
+const consent_personal_data_representative = ref(null);
+const passportUpload = ref(null);
+const passport_representative = ref(null);
+const customBase64Uploader = (event) => {
+    statement.value = event.files[0];
+};
+
+const selectPersonal = (event) => {
+    consent_personal_data.value = event.target.files[0];
+};
+
+const selectParentPersonal = (event) => {
+    consent_personal_data_representative.value = event.target.files[0];
+};
+
+const selectPass = (event) => {
+    passportUpload.value = event.target.files[0];
+};
+const selectParentPass = (event) => {
+    passport_representative.value = event.target.files[0];
+};
 
 const getUser = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -2419,7 +2567,57 @@ const getUser = async () => {
         });
 };
 
+const getEducation = async () => {
+    await HTTP.get('/rsousers/me/education/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            education.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+const getDocuments = async () => {
+    await HTTP.get('/rsousers/me/documents/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            documents.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const getUserRegions = async () => {
+    await HTTP.get('/rsousers/me/region/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regionData.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
 getUser();
+getEducation();
+getDocuments();
+getUserRegions();
 
 const downloadBlankPersonal = async () => {
     await HTTP.get(
@@ -2499,15 +2697,30 @@ const downloadBlankParent = async () => {
 };
 
 const addData = async () => {
-    const axiosrequest1 = HTTP.post('/rsousers/me/region/', regionData.value, {
+    let fd = new FormData();
+    fd.append('statement', statement.value);
+    // fd.append('consent_personal_data', consent_personal_data.value);
+    // fd.append(
+    //     'consent_personal_data_representative ',
+    //     consent_personal_data_representative.value,
+    // );
+    // fd.append('passport', passportUpload.value);
+    // fd.append('passport_representative', passport_representative.value);
+    const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
-    const axiosrequest2 = HTTP.post(
+    const axiosrequest2 = HTTP.patch('/rsousers/me/region/', regionData.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+    const axiosrequest3 = HTTP.patch(
         '/rsousers/me/documents/',
-        documentsData.value,
+        documents.value,
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -2515,9 +2728,9 @@ const addData = async () => {
             },
         },
     );
-    const axiosrequest3 = HTTP.post(
+    const axiosrequest4 = HTTP.patch(
         '/rsousers/me/education/',
-        educationData.value,
+        education.value,
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -2526,142 +2739,94 @@ const addData = async () => {
         },
     );
 
-    // const requests = ref([
-    //     '/users/me/region/',
-    //     ''
-    // ])
-    // you could also use destructuring to have an array of responses
-    // await HTTP.all([axiosrequest1, axiosrequest2, axiosrequest3])
-    //     .then(
-    //         axios.spread(function (res1, res2, res3) {
-    //             regionData.value = res1.data;
-    //             documentsData.value = res2.data;
-    //             educationData.value = res3.data;
-    //             console.log(res1);
-    //             console.log(res2);
-    //             console.log(res3);
-    //             swal.fire({
-    //                 position: 'top-center',
-    //                 icon: 'success',
-    //                 title: 'успешно',
-    //                 showConfirmButton: false,
-    //                 timer: 1500,
-    //             });
-    //         }),
-    //     )
-    //     .catch((error) => {
-    //         console.error('There was an error!', error);
-    //         swal.fire({
-    //             position: 'top-center',
-    //             icon: 'error',
-    //             title: 'ошибка',
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //         });
-    //     });
-    // HTTP
-    // .post('/users/me/region/', regionData.value, {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Token ' + localStorage.getItem('Token'),
-    //     },
-    // })
-    // .then((response) => {
-    //     regionData.value = response.data;
-    //     console.log(response.data);
-    //     swal.fire({
-    //         position: 'top-center',
-    //         icon: 'success',
-    //         title: 'успешно',
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //     });
-    // })
-    // .catch((error) => {
-    //     console.error('There was an error!', error);
-    //     swal.fire({
-    //         position: 'top-center',
-    //         icon: 'error',
-    //         title: 'ошибка',
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //     });
-    // });
+    const axiosrequest5 = HTTP.patch('/rsousers/me/statement/', fd, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
 
-    // HTTP
-    // .post('/users/me/foreign_documents/', foreign.value, {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Token ' + localStorage.getItem('Token'),
-    //     },
-    // })
-    // .then((response) => {
-    //     foreign.value = response.data;
-    //     console.log(response.data);
-    //     swal.fire({
-    //         position: 'top-center',
-    //         icon: 'success',
-    //         title: 'успешно',
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //     });
-    // })
-    // .catch((error) => {
-    //     console.error('There was an error!', error);
-    //     swal.fire({
-    //         position: 'top-center',
-    //         icon: 'error',
-    //         title: 'ошибка',
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //     });
-    // });
-    // HTTP.post('/users/me/documents/', documentsData.value, {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Token ' + localStorage.getItem('Token'),
-    //     },
-    // })
-    //     .then((response) => {
-    //         documentsData.value = response.data;
-    //         console.log(response.data);
-    //         swal.fire({
-    //             position: 'top-center',
-    //             icon: 'success',
-    //             title: 'успешно',
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //         });
-    //     })
-    //     .catch((error) => {
-    //         console.error('There was an error!', error);
-    //         swal.fire({
-    //             position: 'top-center',
-    //             icon: 'error',
-    //             title: 'ошибка',
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //         });
-    //     });
-    axios
-        .post('api/v1/rsousers/me/education/', educationData.value, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-        .then((response) => {
-            educationData.value = response.data;
-            console.log(response.data);
+    await axios
+        .all([axiosrequest1, axiosrequest2, axiosrequest3, axiosrequest3])
+        .then(
+            axios.spread(function (res1, res2, res3, res4) {
+                user.value = res1.data;
+                regionData.value = res2.data;
+                documents.value = res3.data;
+                education.value = res4.data;
+                console.log(res1.data);
+                console.log(res2.data);
+                console.log(res3.data);
+                console.log(res4.data);
+                saveData.value = false;
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }),
+        )
+        .catch((error) => {
+            console.error('There was an error!', error);
             swal.fire({
                 position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
+                icon: 'error',
+                title: 'ошибка',
                 showConfirmButton: false,
                 timer: 1500,
             });
-            router.push('/UserPage');
-        })
+        });
+};
+
+const updateData = async () => {
+    const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+    const axiosrequest2 = HTTP.patch(
+        '/rsousers/me/documents/',
+        documents.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    );
+    const axiosrequest3 = HTTP.patch(
+        '/rsousers/me/education/',
+        education.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    );
+
+    await axios
+        .all([axiosrequest1, axiosrequest2, axiosrequest3])
+        .then(
+            axios.spread(function (res1, res2, res3) {
+                user.value = res1.data;
+                documents.value = res2.data;
+                education.value = res3.data;
+                console.log(res1.data);
+                console.log(res2.data);
+                console.log(res3.data);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }),
+        )
         .catch((error) => {
             console.error('There was an error!', error);
             swal.fire({
@@ -2680,8 +2845,8 @@ const answers = ref([
 ]);
 
 const gender = ref([
-    { name: 'male', id: 's1', checked: true },
-    { name: 'female', id: 's2' },
+    { name: 'male', value: 'male', id: 'Мужской' },
+    { name: 'female', value: 'female', id: 'Женский' },
 ]);
 
 const passportParent = ref([
@@ -2705,8 +2870,8 @@ const militaryDocs = ref([
 ]);
 
 const address = reactive([
-    { name: 'Да', id: 'addr1' },
-    { name: 'Нет', id: 'addr2', checked: true },
+    { name: true, value: 'reg_fact_same_address', id: 'Да' },
+    { name: false, value: 'reg_fact_same_address', id: 'Нет' },
 ]);
 
 const passport = reactive([
@@ -2717,36 +2882,7 @@ const passport = reactive([
 // const selectedSex = ref(user.gender);
 const selectedAnswer = ref('Нет');
 const selectedPassParent = ref('Да');
-const selectedAddress = ref('Нет');
 const selectedPass = ref('Да');
-
-const nameParent = ref('');
-const surnameParent = ref('');
-const birthParent = ref('');
-const phoneParent = ref('');
-const patronomycParent = ref('');
-const selectedMilitary = ref(0);
-const passInputP = ref('');
-const PassIdParent = ref('');
-const localParent = ref('');
-const passDateP = ref('');
-const AddresParent = ref('');
-const localityContact = ref('');
-const regionContact = ref('');
-const socialsVk = ref('');
-const socialsTg = ref('');
-const addresContact = ref('');
-const regionFact = ref(null);
-const addresFact = ref('');
-const localityFact = ref('');
-const passNumber = ref('');
-const passDate = ref('');
-const passOrg = ref('');
-const snils = ref('');
-const inn = ref('');
-const foreignPass = ref('');
-const workbook = ref('');
-const militaryNumber = ref('');
 </script>
 <style lang="scss">
 .accordion {
@@ -3018,6 +3154,10 @@ const militaryNumber = ref('');
     display: none;
 }
 
+.fileInput {
+    width: 100px;
+}
+
 .date {
     border: 2px solid #a3a3a3;
     border-radius: 10px;
@@ -3025,5 +3165,40 @@ const militaryNumber = ref('');
     font-size: 12px;
     padding: 10px 16px 10px 16px;
     margin-bottom: 20px;
+}
+.statement-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.statement-item {
+    display: flex;
+    margin-top: 12px;
+    margin-right: 30px;
+}
+
+.statement-item p,
+.statement-item a {
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    margin-left: 8px;
+}
+
+.statement-item a {
+    color: #1c5c94;
+}
+.statement-wrapper {
+    display: flex;
+    margin-bottom: 40px;
+    align-items: flex-start;
+}
+
+.p-icon {
+    display: none;
+}
+
+.p-button-label {
+    color: #1c5c94;
 }
 </style>

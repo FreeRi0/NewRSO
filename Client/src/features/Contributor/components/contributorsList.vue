@@ -107,8 +107,11 @@ watch(
     &-info {
         border: 1px solid #B6B6B6;
         border-radius: 10px;
-        padding: 10px 48px;
+        padding: 11px 20px;
         height: 46px;
+        text-align: center;
+
+        width: 185px;
         p {
             display: block;
             font-size: 16px;

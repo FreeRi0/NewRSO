@@ -43,7 +43,7 @@
                             <a class="header__nav-link" href="#">Мероприятия</a>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="#"
+                            <a class="header__nav-link" href="/FAQ"
                                 >Полезная информация</a
                             >
                         </li>
@@ -68,7 +68,7 @@
                 <div class="nav-user__location" v-if="user">
                     <button class="nav-user__button" @click="show = !show">
                         <!--прописать в span кнопки логику изменения ее названия-->
-                        <span>Карачаево-Черкесское региональное отделение</span>
+                        <span>{{ user?.user_region?.reg_region }} региональное отделение</span>
                     </button>
 
                     <div
@@ -86,28 +86,32 @@
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <Input
+                        <!-- <Input
                             class="nav-user__input"
                             placeholder="Выберите свой регион"
                             name="your-region"
                             id="your-region"
                             type="text"
-                        />
+                        /> -->
+                        <Select
+                            variant="outlined"
+                            clearable
+                            name="select_education"
+                            id="select-education"
+                            v-model="user.region"
+                            address="api/v1/regions/"
+                        ></Select>
 
                         <div>
                             <Button
-                                class="nav-user__button-agree"
+                               type="submit"
+                                class="nav-user__button-agree mt-2 mx-auto"
                                 label="Да, все верно"
                                 color="primary"
                                 size="large"
-                                @click="show = !show"
+                                @click="updateRegion"
                             ></Button>
-                            <Button
-                                class="nav-user__button-change"
-                                label="Выбрать другой"
-                                size="large"
-                            ></Button
-                            ><!--если переход на другую страницу, то переделать на ссылку-->
+
                         </div>
                     </div>
                 </div>
@@ -131,6 +135,7 @@
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
+import { Select } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch } from 'vue';
 import { useRouter, onBeforeRouteUpdate } from 'vue-router';
@@ -164,14 +169,14 @@ const userPages = ref([
 const show = ref(false);
 
 const isOpen = ref(false);
-const user = ref(null);
-
+const user = ref({
+    region: null
+});
 
 const removeClass = () => {
     const menu = navMenu.value;
     menu.classList.toggle('no-visible');
 };
-
 
 const getUser = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -189,11 +194,27 @@ const getUser = async () => {
         });
 };
 
+const updateRegion = async () => {
+    await HTTP.patch('/rsousers/me/region/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            show = !show
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
+
 const LogOut = () => {
     localStorage.removeItem('Token');
     router.push('/');
 };
-
 
 // onBeforeRouteUpdate(async (to, from) => {
 //     if (to.params.id !== from.params.id) {
