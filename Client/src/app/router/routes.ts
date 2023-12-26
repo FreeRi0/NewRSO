@@ -299,6 +299,15 @@ const routes: RouteRecordRaw[] = [
                         requiresAuth: true
                     }
             },
+            {
+                path: '/individualrequest',
+                name: 'IndividualRequest',
+                component: () =>
+                    import('@pages/IndividualRequestPage/components/IndividualRequestPage.vue'),
+                    meta: {
+                        requiresAuth: true
+                    }
+            },
         ],
     },
 ];

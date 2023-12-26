@@ -6,9 +6,9 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, _from, next) => {
-    if (to.name !== 'Login' && to.name !== 'Register' && to.name !== 'RecoveryPassword' && !localStorage.getItem('Token')) next({ name: 'Login' })
-    else next()
-  })
+// router.beforeEach((to, _from, next) => {
+//     if (to.name !== 'Login' && to.name !== 'Register' && to.name !== 'RecoveryPassword' && !localStorage.getItem('Token')) next({ name: 'Login' })
+//     else next()
+//   })
 
 export default router;
