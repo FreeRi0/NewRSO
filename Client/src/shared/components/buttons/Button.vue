@@ -1,5 +1,5 @@
 <template>
-    <v-btn
+    <button
         :class="[
             'btn',
             `btn_${color}`,
@@ -9,13 +9,15 @@
             { btn_large: size === 'large' },
         ]"
         :disabled="disabled"
+        :loaded="loaded"
         @click="clickOnButton"
     >
         <span v-if="icon">
-            <img :src="`assets/icon/${res}.svg`" alt="icon" />
+
         </span>
         <span v-else>{{ label }}</span>
-    </v-btn>
+        <v-progress-circular indeterminate v-if="loaded"></v-progress-circular>
+    </button>
 </template>
 <script setup>
 import { ref, computed} from 'vue';
@@ -47,6 +49,10 @@ const props = defineProps({
         default: 'primary',
     },
     disabled: {
+        type: Boolean,
+        required: false,
+    },
+    loaded: {
         type: Boolean,
         required: false,
     },
@@ -84,7 +90,7 @@ const clickOnButton = () => {
     display: block;
     margin: 20px auto;
     padding: 16px 32px;
-    min-height: 52px;
+    // height: 52px;
     color: white;
     box-shadow: none;
     border-radius: 10px;
@@ -92,6 +98,7 @@ const clickOnButton = () => {
     cursor: pointer;
     font-size: 16px;
     transition: 0.2s;
+    text-transform: none;
     &_primary {
         background: var(--primary);
         border: 1px solid var(--primary);
@@ -131,12 +138,12 @@ const clickOnButton = () => {
         }
     }
     &_icon {
-        border: 1px solid #35383f;
-        border-radius: 10px;
-        min-height: 32px;
-        width: 32px;
+        border-radius: 5px;
+        height: 40px;
+        width: 40px;
         margin: 0px;
-        margin-right: 8px;
+        margin-left: 8px;
+        padding: 0;
     }
     &_large {
         height: 52px;

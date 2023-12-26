@@ -34,7 +34,7 @@
                 <div ref="navMenu" class="header__nav-container no-visible">
                     <div class="header__overlay" @click="removeClass()"></div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item">
+                        <li class="header__nav-item" v-if="user">
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
@@ -43,7 +43,7 @@
                             <a class="header__nav-link" href="#">Мероприятия</a>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="#"
+                            <a class="header__nav-link" href="/FAQ"
                                 >Полезная информация</a
                             >
                         </li>
@@ -65,10 +65,10 @@
                     <div class="nav-user__quantity"></div>
                 </div>
 
-                <div class="nav-user__location">
+                <div class="nav-user__location" v-if="user">
                     <button class="nav-user__button" @click="show = !show">
                         <!--прописать в span кнопки логику изменения ее названия-->
-                        <span>Карачаево-Черкесское региональное отделение</span>
+                        <span>{{ user?.user_region?.reg_region }} региональное отделение</span>
                     </button>
 
                     <div
@@ -86,91 +86,154 @@
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <Input
+                        <!-- <Input
                             class="nav-user__input"
                             placeholder="Выберите свой регион"
                             name="your-region"
                             id="your-region"
                             type="text"
-                        />
+                        /> -->
+                        <Select
+                            variant="outlined"
+                            clearable
+                            name="select_education"
+                            id="select-education"
+                            v-model="user.region"
+                            address="api/v1/regions/"
+                        ></Select>
 
                         <div>
                             <Button
-                                class="nav-user__button-agree"
+                               type="submit"
+                                class="nav-user__button-agree mt-2 mx-auto"
                                 label="Да, все верно"
                                 color="primary"
                                 size="large"
-                                @click="show = !show"
+                                @click="updateRegion"
                             ></Button>
-                            <Button
-                                class="nav-user__button-change"
-                                label="Выбрать другой"
-                                size="large"
-                            ></Button
-                            ><!--если переход на другую страницу, то переделать на ссылку-->
+
                         </div>
                     </div>
                 </div>
 
-                <div class="nav-user__menu user-menu">
+                <div class="nav-user__menu user-menu" v-if="user">
                     <Dropdown
                         :items="userPages"
                         :image="true"
                         url="/assets/avatar-user.svg"
                         desc="Фотография пользователя"
                     />
+                    <Button v-if="user" @click="LogOut" label="Выйти"></Button>
+                    <p v-else>Not auth</p>
                 </div>
             </nav>
         </header>
     </div>
 </template>
 
-<script>
+<script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
+import { Select } from '@shared/components/selects';
+import { HTTP } from '@app/http';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, onBeforeRouteUpdate } from 'vue-router';
 
-export default {
-    components: {
-        Dropdown,
-        Button,
-        Input,
-    },
-    data() {
-        return {
-            pages: [
-                { title: 'ЛСО', link: '/allSquads' },
-                { title: 'Штабы СО ОО', link: '/AllHeadquarters' },
-                { title: 'Местные штабы', link: '#' },
-                { title: 'Региональные штабы', link: '#' },
-                { title: 'Окружные штабы', link: '#' },
-                { title: 'Центральный штаб', link: '#' },
-            ],
-            userPages: [
-                { title: 'Моя страница', link: '/UserPage' },
-                { title: 'Мой отряд', link: '#' },
-                { title: 'Штаб СО ОО', link: '#' },
-                { title: 'Местный штаб', link: '#' },
-                { title: 'Региональный штаб', link: '#' },
-                { title: 'Окружной штаб', link: '#' },
-                { title: 'Активные заявки', link: '#' },
-                { title: 'Поиск участников', link: '#' },
-                { title: 'Членский взнос', link: '#' },
-                { title: 'Оформление справок', link: '#' },
-                { title: 'Настройки профиля', link: '#' },
-                { title: 'Выйти из ЛК', link: '#' },
-            ],
-            show: false,
-            isOpen: false,
-        };
-    },
-    methods: {
-        removeClass() {
-            const menu = this.$refs.navMenu;
-            menu.classList.toggle('no-visible');
-        },
-    },
+const router = useRouter();
+
+const pages = ref([
+    { title: 'ЛСО', link: '/allSquads' },
+    { title: 'Штабы СО ОО', link: '/AllHeadquarters' },
+    { title: 'Местные штабы', link: '/LocalHeadquarters' },
+    { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
+    { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
+    { title: 'Центральный штаб', link: '#' },
+]);
+
+const userPages = ref([
+    { title: 'Моя страница', link: '/UserPage/' },
+    { title: 'Мой отряд', link: '/allSquads' },
+    { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
+    { title: 'Местный штаб', link: '/LocalHeadquarters' },
+    { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
+    { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
+    { title: 'Активные заявки', link: '#' },
+    { title: 'Поиск участников', link: '#' },
+    { title: 'Членский взнос', link: '/contributorPay' },
+    { title: 'Оформление справок', link: '/references' },
+    { title: 'Настройки профиля', link: '/PersonalData' },
+    { title: 'Выйти из ЛК', link: '#' },
+]);
+
+const show = ref(false);
+
+const isOpen = ref(false);
+const user = ref({
+    region: null
+});
+
+const removeClass = () => {
+    const menu = navMenu.value;
+    menu.classList.toggle('no-visible');
 };
+
+const getUser = async () => {
+    await HTTP.get('/rsousers/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const updateRegion = async () => {
+    await HTTP.patch('/rsousers/me/region/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            show = !show
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
+
+const LogOut = () => {
+    localStorage.removeItem('Token');
+    router.push('/');
+};
+
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         getUser();
+//     }
+// });
+
+// watch(
+//     () => router.params.id,
+
+//     (newId, oldId) => {
+//         id = newId;
+//         getUser();
+//     },
+// );
+
+onMounted(() => {
+    getUser();
+});
 </script>
 
 <style lang="scss">
@@ -554,3 +617,4 @@ export default {
     font-weight: 600;
 }
 </style>
+@shared/components/selects/inputs

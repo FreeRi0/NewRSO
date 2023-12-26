@@ -4,37 +4,20 @@
             <!-- Заглушка Банер -->
 
             <img
-                :src="imgDataUrl"
+                v-if="banner"
+                :src="banner"
                 alt="Баннер личной страницы"
-                v-if="imgDataUrl"
-                v-show="true"
             />
 
             <img
+                v-else
                 src="@/app/assets/user-banner.jpg"
                 alt="Баннер личной страницы(пусто)"
-                v-else
             />
-
-            <my-upload
-                field="baner"
-                @crop-success="cropSuccess"
-                @crop-upload-success="cropUploadSuccess"
-                @crop-upload-fail="cropUploadFail"
-                v-model="show"
-                :width="1100"
-                :height="200"
-                url="https://httpbin.org/post"
-                :params="params"
-                :headers="headers"
-                :no-circle="true"
-                img-format="jpg"
-                langType="ru"
-            ></my-upload>
         </div>
-        <v-menu min-width="200px" rounded v-if="!imgDataUrl">
+        <v-menu min-width="200px" rounded v-if="!props.banner">
             <template v-slot:activator="{ props }">
-                <v-btn class="user-metric__baner-add" icon v-bind="props">
+                <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
                         <v-icon icon="mdi-plus"></v-icon>
                     </v-avatar>
@@ -42,22 +25,67 @@
             </template>
             <v-card>
                 <v-card-text>
-                    <div class="mx-auto text-center">
-                        <v-btn
-                            class="btn"
-                            rounded
-                            variant="text"
-                            @click="toggleShow"
-                        >
-                            Добавить банер
-                        </v-btn>
-                    </div>
+                    <v-row justify="center">
+                        <v-dialog v-model="dialog" width="1024">
+                            <template v-slot:activator="{ props }">
+                                <v-btn rounded variant="text" v-bind="props">
+                                    Добавить баннер
+                                </v-btn>
+                            </template>
+                            <v-card>
+                                <v-card-title>
+                                    <span class="text-h5"
+                                        >Загрузите ваш баннер</span
+                                    >
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-container>
+                                        <v-row>
+                                            <v-file-input
+                                                @change="selectBanner"
+                                                show-size
+                                                prepend-icon="mdi-camera"
+                                                counter
+                                            ></v-file-input>
+                                        </v-row>
+                                        <v-row>
+                                            <v-card class="mt-5 mx-auto">
+                                                <img
+                                                    v-if="preview"
+                                                    :src="preview"
+                                                />
+                                            </v-card>
+                                        </v-row>
+                                    </v-container>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        color="blue-darken-1"
+                                        variant="text"
+                                        @click="dialog = false"
+                                    >
+                                        Закрыть
+                                    </v-btn>
+                                    <v-btn
+                                        :disabled="!media"
+                                        color="blue-darken-1"
+                                        variant="text"
+                                        type="submit"
+                                        @click="uploadBanner()"
+                                    >
+                                        Загрузить
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </v-row>
                 </v-card-text>
             </v-card>
         </v-menu>
         <v-menu min-width="200px" rounded v-else>
             <template v-slot:activator="{ props }">
-                <v-btn class="user-metric__baner-add" icon v-bind="props">
+                <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
                         <v-icon icon="mdi-pencil"></v-icon>
                     </v-avatar>
@@ -66,17 +94,68 @@
             <v-card>
                 <v-card-text>
                     <div class="mx-auto text-center">
-                        <v-btn
-                            class="btn"
-                            rounded
-                            variant="text"
-                            @click="toggleShow"
-                        >
-                            Редактировать банер
-                        </v-btn>
+                        <v-row justify="center">
+                            <v-dialog v-model="dialog" width="1024">
+                                <template v-slot:activator="{ props }">
+                                    <v-btn
+                                        rounded
+                                        variant="text"
+                                        v-bind="props"
+                                    >
+                                        Редактировать баннер
+                                    </v-btn>
+                                </template>
+                                <v-card>
+                                    <v-card-title>
+                                        <span class="text-h5"
+                                            >Загрузите ваш банер</span
+                                        >
+                                    </v-card-title>
+                                    <v-card-text>
+                                        <v-container>
+                                            <v-row>
+                                                <v-file-input
+                                                    @change="selectBanner"
+                                                    show-size
+                                                    prepend-icon="mdi-camera"
+                                                    counter
+                                                ></v-file-input>
+                                            </v-row>
+                                            <v-row>
+                                                <v-card class="mt-5 mx-auto">
+                                                    <img
+                                                        v-if="preview"
+                                                        :src="preview"
+                                                    />
+                                                </v-card>
+                                            </v-row>
+                                        </v-container>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                            color="blue-darken-1"
+                                            variant="text"
+                                            @click="dialog = false"
+                                        >
+                                            Закрыть
+                                        </v-btn>
+                                        <v-btn
+                                            :disabled="!media"
+                                            color="blue-darken-1"
+                                            variant="text"
+                                            type="submit"
+                                            @click="updateBanner()"
+                                        >
+                                            Загрузить
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-row>
                         <v-divider class="my-3"></v-divider>
-                        <v-btn rounded variant="text" @click="deleteFile()">
-                            Удалить банер
+                        <v-btn rounded variant="text" @click="deleteBanner()">
+                            Удалить баннер
                         </v-btn>
                     </div>
                 </v-card-text>
@@ -85,46 +164,99 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
-import myUpload from 'vue-image-crop-upload';
-const show = ref(false);
-
-const params = ref({
-    token: '123456798',
-    name: 'avatar',
-});
-
-const headers = ref({
-    smail: '*_~',
-});
-
+import { ref, onMounted } from 'vue';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+// const route = useRoute();
+// const id = route.params.id;
+const dialog = ref(false);
 const imgDataUrl = ref(null);
+const preview = ref(null);
 
-const toggleShow = () => {
-    show.value = !show.value;
+const props = defineProps({
+    banner: String
+})
+// const file = ref(null);
+const media = ref({
+    banner: null,
+});
+
+// const viewBanner = async () => {
+//     await HTTP.get(`/rsousers/${id}/`, {
+//         headers: {
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             imgDataUrl.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+
+// viewBanner();
+
+const selectBanner = (event) => {
+    media.value = event.target.files[0];
+    preview.value = URL.createObjectURL(media.value);
 };
 
-const cropSuccess = (data, field) => {
-    console.log('-------- crop success --------');
-    if (field == 'baner') {
-        imgDataUrl.value = data;
-    }
+const uploadBanner = async () => {
+    dialog.value = true;
+    const formData = new FormData();
+    formData.append('banner', media.value);
+    await HTTP.post('/rsousers/me/media/', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            dialog.value = false;
+
+            console.log(response, 'banner uploaded');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
 };
 
-const cropUploadSuccess = (data, field) => {
-    console.log('-------- upload success --------');
-    console.log(data);
-    console.log('field: ' + field);
+const updateBanner = async () => {
+    const fd = new FormData();
+    fd.append('banner', media.value);
+    dialog.value = true;
+    await HTTP.put('/rsousers/me/media/', fd, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            dialog.value = false;
+
+            console.log(response, 'banner updated');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
 };
 
-const cropUploadFail = (status, field) => {
-    console.log('-------- upload fail --------');
-    console.log(status);
-    console.log('field: ' + field);
-};
+const deleteBanner = async () => {
+    await HTTP.put('/rsousers/me/media/', media.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
 
-const deleteFile = () => {
-    imgDataUrl.value = '';
+            console.log(response, 'deleted');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
 };
 </script>
 <style lang="scss">
@@ -162,5 +294,11 @@ const deleteFile = () => {
     grid-row-start: 2;
     grid-row-end: 3;
     margin: 0 16px 16px 0;
+}
+
+@media (max-width: 690px) {
+    .user-metric__top {
+        grid-template-rows: 16px 100px;
+    }
 }
 </style>

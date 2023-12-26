@@ -1,14 +1,16 @@
 <template>
-    <div class="horizontal-item" v-for="headquarter in headquarters">
+    <div class="horizontal-item" v-for="headquarter in headquarters" v-if="headquarters.length > 0">
         <div class="horizontal-img">
-            <img :src="'./assets/logo/' + headquarter.image" alt="logo" />
+            <img :src="headquarter.emblem" alt="logo" />
         </div>
         <div class="containerHorizontal">
             <p class="headquarters-wrapper__item-category-full">
-                {{ headquarter.full }}
+                {{ headquarter.name }}
             </p>
         </div>
     </div>
+
+    <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
 const props = defineProps({

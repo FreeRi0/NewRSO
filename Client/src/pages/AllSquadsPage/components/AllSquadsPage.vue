@@ -1,22 +1,29 @@
 <template>
     <div class="container">
         <div class="squads">
-            <bannerCreate></bannerCreate>
+            <Breadcrumbs :items="pages"></Breadcrumbs>
+            <bannerCreate
+                desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
+                label="Создать отряд"
+                name="CreateLSO"
+            ></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
-
             <div class="squads-tabs">
-                <!-- <Button label="все"></Button> -->
-                <v-btn  @click="picked = ''">Все</v-btn>
                 <v-btn
-                    :class="{ active: picked === category }"
-                    v-for="category in categories"
-                    :key="category"
-                    @click="picked = category"
-                    >{{ category }}</v-btn
+                    class="squads-tabs__item"
+                    :class="{ active: picked === '' }"
+                    @click="picked = ''"
+                    >Все</v-btn
                 >
-                <!-- <Button :value="category">{{ cat }}</Button> -->
+                <v-btn
+                    class="squads-tabs__item"
+                    :class="{ active: picked === area.id }"
+                    v-for="area in categories"
+                    :key="area"
+                    @click="picked = area.id"
+                    >{{ area.name }}</v-btn
+                >
             </div>
-            <!--  -->
             <div class="squads-search">
                 <input
                     type="text"
@@ -43,10 +50,37 @@
             </div>
             <div class="squads-sort">
                 <div class="sort-layout">
-                    <Button icon="switch" color="white" @click="showVertical">
+                    <Button
+                        v-if="vertical"
+                        type="button"
+                        class="dashboard"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
                     </Button>
                     <Button
-                        icon="switch"
+                        v-else="!vertical"
+                        type="button"
+                        class="dashboardD"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
+                    </Button>
+                    <Button
+                        v-if="!vertical"
+                        type="button"
+                        class="menuuA"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    ></Button>
+                    <Button
+                        v-else="vertical"
+                        type="button"
+                        class="menuu"
+                        icon="icon"
                         color="white"
                         @click="showVertical"
                     ></Button>
@@ -54,22 +88,29 @@
 
                 <div class="sort-filters">
                     <div class="sort-select">
-                        <sortByEducation
-                            class="education"
+                        <Select
+                            variant="outlined"
+                            clearable
+                            name="select_education"
+                            id="select-education"
                             v-model="selectedSort"
-                            :options="educations"
-                        ></sortByEducation>
+                            address="api/v1/eduicational_institutions/"
+                        ></Select>
                     </div>
                     <div class="sort-select">
                         <sortByEducation
+                        variant="outlined"
+                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
                         ></sortByEducation>
                     </div>
 
                     <Button
+                        type="button"
+                        class="ascend"
+                        icon="switch"
                         @click="ascending = !ascending"
-                        icon="icon"
                         color="white"
                     ></Button>
                 </div>
@@ -100,250 +141,66 @@ import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
-import { sortByEducation } from '@shared/components/selects';
-import { ref, computed } from 'vue';
+import { sortByEducation, Select } from '@shared/components/selects';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
+import { ref, computed, onMounted } from 'vue';
+import { HTTP } from '@app/http';
+// import squads from '@entities/Squads/squads';
 
-const squads = ref([
-    {
-        title: 'Инвар',
-        category: 'Строительные',
-        desc: 'ССО',
-        full: 'Студенческий строительный отряд',
-        image: 'squad-logo.png',
-        peoples: 12,
-        createdAt: '2022-12-10',
-        education: 'Амурская государственная медицинская академия',
-    },
-    {
-        title: 'Звездочки',
-        category: 'Проводников',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 19,
-        createdAt: '2023-02-10',
-        education: 'Амурский государственный университет',
-    },
-    {
-        title: 'Помощь рядом',
-        category: 'Медицинские',
-        desc: 'ССО',
-        full: 'Студенческий строительный отряд',
-        image: 'squad-logo.png',
-        peoples: 5,
-        createdAt: '2021-12-01',
-        education: 'МГУ',
-    },
-    {
-        title: 'Мафия',
-        category: 'Педагогические',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 8,
-        createdAt: '2020-11-10',
-        education: 'Университет имени Баумана',
-    },
-    {
-        title: 'Юмористы',
-        category: 'Строительные',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 7,
-        createdAt: '2021-02-12',
-        education: 'Амурская государственная медицинская академия',
-    },
-    {
-        title: 'Сокол',
-        category: 'Сервисные',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 14,
-        createdAt: '2012-12-01',
-        education: 'Амурский государственный университет',
-    },
-    {
-        title: 'Гиена',
-        category: 'Сельскохозяйственные',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 12,
-        createdAt: '2020-12-18',
-        education: 'МГУ',
-    },
-    {
-        title: 'Санитары',
-        category: 'Медицинские',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 22,
-        createdAt: '2021-04-13',
-        education: 'Университет имени Баумана',
-    },
-    {
-        title: 'Ежики',
-        category: 'Педагогические',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 12,
-        createdAt: '2022-12-10',
-        education: 'Амурская государственная медицинская академия',
-    },
-    {
-        title: 'Бригада',
-        category: 'Путинные',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 2,
-        createdAt: '2022-12-10',
-        education: 'Амурский государственный университет',
-    },
-    {
-        title: 'Юниоры',
-        category: 'Сервисные',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 5,
-        createdAt: '2022-12-10',
-        education: 'МГУ',
-    },
-    {
-        title: 'Студенты МГИМО',
-        category: 'Строительные',
-        desc: 'ССО',
-        full: 'Студенческий строительный отряд',
-        image: 'squad-logo.png',
-        peoples: 14,
-        createdAt: '2022-12-10',
-        education: 'Университет имени Баумана',
-    },
-    {
-        title: 'Барбарики',
-        category: 'Проводников',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 22,
-        createdAt: '2022-12-10',
-        education: 'Амурская государственная медицинская академия',
-    },
-    {
-        title: 'Спортсмены МГУ',
-        category: 'Медицинские',
-        desc: 'ССО',
-        full: 'Студенческий строительный отряд',
-        image: 'squad-logo.png',
-        peoples: 10,
-        createdAt: '2022-12-10',
-        education: 'Амурский государственный университет',
-    },
-    {
-        title: 'Ковбои',
-        category: 'Педагогические',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 4,
-        createdAt: '2022-12-10',
-        education: 'МГУ',
-    },
-    {
-        title: 'Пришельцы',
-        category: 'Сельскохозяйственные',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 6,
-        createdAt: '2022-12-10',
-        education: 'Университет имени Баумана',
-    },
-    {
-        title: 'Луч света',
-        category: 'Сельскохозяйственные',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 25,
-        createdAt: '2022-12-10',
-        education: 'Амурская государственная медицинская академия',
-    },
-    {
-        title: 'Мираж',
-        category: 'Сельскохозяйственные',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 11,
-        createdAt: '2022-12-10',
-        education: 'Амурский государственный университет',
-    },
-    {
-        title: 'Градусники',
-        category: 'Медицинские',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 17,
-        createdAt: '2022-12-10',
-        education: 'МГУ',
-    },
-    {
-        title: 'Студенты РГСУ',
-        category: 'Педагогические',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 15,
-        createdAt: '2022-12-10',
-        education: 'РГГУ',
-    },
-    {
-        title: 'Топ',
-        category: 'Путинные',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 10,
-        createdAt: '2022-12-10',
-        education: 'Амурская государственная медицинская академия',
-    },
-    {
-        title: 'Белки',
-        category: 'Сервисные',
-        desc: 'СОП-1',
-        full: 'Студенческий отряд проводников',
-        image: 'squad-logo.png',
-        peoples: 12,
-        createdAt: '2022-12-10',
-        education: 'Амурский государственный университет',
-    },
+const squads = ref([]);
+const categories = ref([]);
+const educations = ref([]);
+
+const pages = ref([
+    { pageTitle: 'Структура', href: '#' },
+    { pageTitle: 'Отряды', href: '/AllSquads' },
 ]);
 
-const squadsVisible = ref(12);
+const getCategories = async () => {
+    await HTTP.get('/areas/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            categories.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
-const step = ref(10);
+
+const getSquads = async () => {
+    await HTTP.get('/detachments/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            squads.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    getSquads();
+    getCategories();
+});
+const squadsVisible = ref(1);
+
+const step = ref(1);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
 const picked = ref('');
-
-const categories = ref([
-    'Проводников',
-    'Строительные',
-    'Педагогические',
-    'Сельскохозяйственные',
-    'Сервисные',
-    'Медицинские',
-    'Путинные',
-]);
 
 const vertical = ref(true);
 
@@ -353,25 +210,15 @@ const showVertical = () => {
     vertical.value = !vertical.value;
 };
 
-const educations = ref([
-    {
-        value: 'Амурская государственная медицинская академия',
-        name: 'Амурская государственная медицинская академия',
-    },
-    { value: 'Университет имени Баумана', name: 'Университет имени Баумана' },
-    { value: 'РГГУ', name: 'РГГУ' },
-    { value: 'МГУ', name: 'МГУ' },
-]);
-
-const selectedSort = ref(0);
+const selectedSort = ref(null);
 
 const sortOptionss = ref([
     {
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'createdAt', name: 'Дате создания отряда' },
-    { value: 'peoples', name: 'Количеству участников' },
+    { value: 'founding_date', name: 'Дате создания отряда' },
+    { value: 'members_count', name: 'Количеству участников' },
 ]);
 
 const sortedSquads = computed(() => {
@@ -379,22 +226,24 @@ const sortedSquads = computed(() => {
 
     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-
-
     tempSquads = tempSquads.filter((item) => {
-        return selectedSort.value == 0 || item.education == selectedSort.value;
+        // console.log(educational_institution.id);
+        return (
+            selectedSort.value == null ||
+            item.educational_institution == selectedSort.value
+        );
     });
 
     tempSquads = tempSquads.filter((item) => {
-        return item.title
+        return item.name
             .toUpperCase()
             .includes(searchSquads.value.toUpperCase());
     });
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.title.toLowerCase(),
-                fb = b.title.toLowerCase();
+            let fa = a.name.toLowerCase(),
+                fb = b.name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -403,9 +252,9 @@ const sortedSquads = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'createdAt') {
-            let fc = a.createdAt,
-                fn = b.createdAt;
+        } else if (sortBy.value == 'founding_date') {
+            let fc = a.founding_date,
+                fn = b.founding_date;
 
             if (fc < fn) {
                 return -1;
@@ -414,36 +263,76 @@ const sortedSquads = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'peoples') {
-            return a.peoples - b.peoples;
+        } else if (sortBy.value == 'members_count') {
+            return a.members - b.members;
         }
     });
-
-    if (!picked.value) {
-        return tempSquads;
-    }
-
-    tempSquads = tempSquads.filter((item) => item.category === picked.value);
-
 
     if (!ascending.value) {
         tempSquads.reverse();
     }
 
+    if (!picked.value) {
+        return tempSquads;
+    }
+
+    tempSquads = tempSquads.filter((item) => item.area === picked.value);
+
     return tempSquads;
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+body {
+    border: 1px solid red;
+}
+
+.dashboard {
+    background-image: url('@app/assets/icon/darhboard-active.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.dashboardD {
+    background-image: url('@app/assets/icon/darhboard-disable.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.menuuA {
+    background-image: url('@app/assets/icon/MenuA.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.menuu {
+    background-image: url('@app/assets/icon/Menu.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.ascend {
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .squads {
-    padding: 60px 0px 60px 0px;
+    padding: 40px 0px 60px 0px;
     &-title {
         font-size: 52px;
+        @media screen and (max-width: 575px) {
+            font-size: 32px;
+        }
     }
     &-wrapper {
         padding: 60px 0px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+        @media screen and (max-width: 1024px) {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 575px) {
+            grid-template-columns: 1fr 1fr;
+        }
     }
     &-sort {
         display: flex;
@@ -456,8 +345,8 @@ const sortedSquads = computed(() => {
         display: flex;
         flex-wrap: wrap;
         &__item {
-            padding: 10px 24px;
-            border: 2px solid black;
+            padding: 6px 24px;
+            border: 1px solid black;
             border-radius: 30px;
             text-align: center;
             font-size: 20px;
@@ -465,6 +354,13 @@ const sortedSquads = computed(() => {
             font-family: 'Bert Sans';
             margin: 20px 20px 0px 0px;
             cursor: pointer;
+            text-transform: none;
+            box-shadow: none;
+            @media screen and (max-width: 768px) {
+                font-size: 14px;
+                padding: 8px 8px;
+                margin: 20px 8px 0px 0px;
+            }
         }
     }
 }
@@ -477,9 +373,10 @@ const sortedSquads = computed(() => {
 }
 
 .active {
-    background-color: blue;
+    background-color: #1c5c94;
+    color: white;
+    border: 1px solid #1c5c94;
 }
-
 .squads-search {
     position: relative;
     box-sizing: border-box;
@@ -498,5 +395,30 @@ const sortedSquads = computed(() => {
 
 .education {
     width: 305px;
+    @media screen and (max-width: 768px) {
+        width: 100%;
+    }
+}
+
+.form__select {
+  margin-bottom: 0px;
+  margin-left: 8px;
+  border: 1px solid #35383F;
+}
+
+@media (max-width: 575px) {
+    .squads-sort {
+        flex-direction: column-reverse;
+    }
+    .sort-filters {
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+        align-items: end;
+    }
+
+    .sort-select {
+        margin-top: 12px;
+    }
 }
 </style>
+@shared/components/selects/inputs

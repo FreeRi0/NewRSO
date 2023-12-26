@@ -28,35 +28,39 @@ body div[id='app'] {
 }
 
 .sort {
-  &-filters {
-      display: flex;
-      box-sizing: border-box;
-      align-items: center;
-      margin-top: 60px;
-  }
-  &-select {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-  }
+    &-filters {
+        display: flex;
+        box-sizing: border-box;
+        align-items: center;
+        margin-top: 60px;
+    }
+    &-select {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
 
-  &-layout {
-      display: flex;
-  }
-  &-alphabet {
-    width: 212px;
-  }
+    &-layout {
+        display: flex;
+    }
+    &-alphabet {
+        width: 212px;
+    }
 }
 
+.ascend {
+    border: 1px solid #35383F !important;
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
 
+ }
 
 ul {
     list-style: none;
 }
 .v-btn.v-btn--density-default {
-
-  height: 52px;
-
+    height: 52px;
 }
 
 a {
@@ -66,10 +70,9 @@ a {
 
 
 img {
-  display: block;
-  max-width: 100%;
-  }
-
+    display: block;
+    max-width: 100%;
+}
 
 .page-title {
     font-size: 52px;

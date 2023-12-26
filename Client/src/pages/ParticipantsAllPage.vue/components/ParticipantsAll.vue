@@ -1,15 +1,35 @@
 <template>
     <div class="container">
         <div class="participants">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="participants-title">Участники ЛСО</h2>
             <div class="participants-tabs">
-                <v-btn
+                <!-- <v-btn
+                    class="participants-tabs__item"
                     :class="{ active: checked === category }"
                     v-for="category in categories"
                     :key="category"
                     @click="checked = category"
                     >{{ category }}</v-btn
-                >
+                > -->
+
+                <!-- <div class="d-flex">
+                    <Button
+                        type="button"
+                        label="Уже в отряде"
+                        class="contributorBtn"
+                        :class="{ active: picked === is_trusted }"
+                        @click="picked = is_trusted"
+                    ></Button>
+
+                    <Button
+                        type="button"
+                        label="Ожидают одобрение"
+                        class="contributorBtn"
+                        :class="{ active: picked === !is_trusted }"
+                        @click="picked = !is_trusted"
+                    ></Button>
+                </div> -->
             </div>
             <div class="participants-search">
                 <input
@@ -37,10 +57,37 @@
             </div>
             <div class="participants-sort">
                 <div class="sort-layout">
-                    <Button icon="switch" color="white" @click="showVertical">
+                    <Button
+                        v-if="vertical"
+                        type="button"
+                        class="dashboard"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
                     </Button>
                     <Button
-                        icon="switch"
+                        v-else="!vertical"
+                        type="button"
+                        class="dashboardD"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    >
+                    </Button>
+                    <Button
+                        v-if="!vertical"
+                        type="button"
+                        class="menuuA"
+                        icon="icon"
+                        color="white"
+                        @click="showVertical"
+                    ></Button>
+                    <Button
+                        v-else="vertical"
+                        type="button"
+                        class="menuu"
+                        icon="icon"
                         color="white"
                         @click="showVertical"
                     ></Button>
@@ -48,12 +95,16 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <sortByEducation
+                            variant="outlined"
+                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
+                            class="sort-alphabet"
                         ></sortByEducation>
                     </div>
 
                     <Button
+                        class="ascend"
                         @click="ascending = !ascending"
                         icon="icon"
                         color="white"
@@ -68,7 +119,9 @@
             </div>
 
             <div class="horizontallso" v-show="!vertical">
-                <horizontalParticipantsList :participants="sortedParticipants"></horizontalParticipantsList>
+                <horizontalParticipantsList
+                    :participants="sortedParticipants"
+                ></horizontalParticipantsList>
             </div>
             <Button
                 @click="participantsVisible += step"
@@ -85,216 +138,56 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ParticipantsList, horizontalParticipantsList } from '@features/Participants/components';
-import { sortByEducation } from '@shared/components/selects';
-import { ref, computed } from 'vue';
+import {
+    ParticipantsList,
+    horizontalParticipantsList,
+} from '@features/Participants/components';
+import { sortByEducation, Select } from '@shared/components/selects';
+import { ref, computed, onMounted } from 'vue';
+import { HTTP } from '@app/http';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
+import { useRoute } from 'vue-router';
+// import participants from '@entities/Participants/participants';
 
-const participants = ref([
-    {
-        name: 'Виктор',
-        position: 'Командир',
-        image: 'avatar.png',
-        icon: 'commandir.svg',
-        birthdate: '03.07.2003',
-        days: 30,
-        inSquad: true,
-        useIcon: true
-    },
-    {
-        name: 'Александр',
-        position: 'Коммисар',
-        image: 'avatar.png',
-        icon: 'commisar.svg',
-        birthdate: '06.07.2005',
-        days: 21,
-        inSquad: true,
-        useIcon: true
-    },
-    {
-        name: 'Екатерина',
-        position: 'Мастер',
-        image: 'avatar.png',
-        icon: 'master.svg',
-        birthdate: '13.11.2001',
-        days: 22,
-        inSquad: true,
-        useIcon: true
-    },
-    {
-        name: 'Александр',
-        position: 'Медик',
-        image: 'avatar.png',
-        icon: 'medic.svg',
-        birthdate: '11.12.2002',
-        days: 25,
-        inSquad: true,
-        useIcon: true
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Командир',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Виктор',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 15,
-        inSquad: true,
-        useIcon: false
-    },
-    {
-        name: 'Алекс',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 0,
-        inSquad: false,
-        useIcon: false
-    },
-    {
-        name: 'Степан',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 0,
-        inSquad: false,
-        useIcon: false
-    },
-    {
-        name: 'Алла',
-        position: 'Боец',
-        image: 'avatar.png',
-        birthdate: '03.07.2003',
-        days: 0,
-        inSquad: false,
-        useIcon: false
-    },
-]);
-
+const participants = ref([]);
 const participantsVisible = ref(12);
+// const picked = ref(null);
 
 const step = ref(12);
+const position = ref({});
+const route = useRoute();
+const id = route.params.id;
+
+const aboutMembers = async () => {
+    await HTTP.get(`/detachments/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            participants.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    aboutMembers();
+});
+
+const pages = [
+    { pageTitle: 'Структура', href: '/UserPage' },
+    { pageTitle: 'ЛСО', href: '/AllSquads' },
+    { pageTitle: 'Отряд', href: '/lso/:id' },
+    { pageTitle: 'Участники отряда', href: '#' },
+];
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const picked = ref('');
-
-const categories = ref(['В отряде', 'Ожидают одобрения']);
 
 const vertical = ref(true);
 
@@ -319,15 +212,15 @@ const sortedParticipants = computed(() => {
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
     tempParticipants = tempParticipants.filter((item) => {
-        return item.name
+        return item.user.last_name
             .toUpperCase()
             .includes(searchParticipants.value.toUpperCase());
     });
 
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa = a.user.last_name.toLowerCase(),
+                fb = b.user.last_name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -336,9 +229,9 @@ const sortedParticipants = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'birthdate') {
-            let fc = a.birthdate,
-                fn = b.birthdate;
+        } else if (sortBy.value == 'date_of_birth') {
+            let fc = a.user.date_of_birth,
+                fn = b.user.date_of_birth;
 
             if (fc < fn) {
                 return -1;
@@ -352,7 +245,8 @@ const sortedParticipants = computed(() => {
         }
     });
 
-    // tempParticipants = tempParticipants.filter((item) => item.inSquad === picked.value);
+    // tempParticipants = tempParticipants.filter((item) => item.is_trusted === picked.value);
+    // tempParticipants = tempParticipants.sort((a, b) => a.is_trusted - b.is_trusted);
 
     if (!ascending.value) {
         tempParticipants.reverse();
@@ -366,12 +260,24 @@ const sortedParticipants = computed(() => {
     padding: 60px 0px 60px 0px;
     &-title {
         font-size: 52px;
+        @media screen and (max-width: 575px) {
+            font-size: 40px;
+        }
     }
     &-wrapper {
         padding: 60px 0px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+        @media screen and (max-width: 1024px) {
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 768px) {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 575px) {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
     }
     &-sort {
         display: flex;
@@ -399,8 +305,9 @@ const sortedParticipants = computed(() => {
         display: flex;
         flex-wrap: wrap;
         &__item {
-            padding: 10px 24px;
-            border: 2px solid black;
+            color: #1c5c94;
+            padding: 6px 24px;
+            border: 1px solid #1c5c94;
             border-radius: 30px;
             text-align: center;
             font-size: 20px;
@@ -408,15 +315,67 @@ const sortedParticipants = computed(() => {
             font-family: 'Bert Sans';
             margin: 20px 20px 0px 0px;
             cursor: pointer;
+            text-transform: none;
+            box-shadow: none;
+            @media screen and (max-width: 768px) {
+                font-size: 14px;
+                padding: 8px 8px;
+                margin: 20px 8px 0px 0px;
+            }
         }
     }
 
+    .contributorBtn {
+        border-radius: 30px;
+        background-color: white;
+        color: #1c5c94;
+        border: 1px solid #1c5c94;
+        margin: 0px;
+        padding: 10px 24px;
+        margin: 7px;
+    }
+
     .active {
-        background-color: blue;
+        background-color: #1c5c94;
+        color: white;
+        border: 1px solid #1c5c94;
+    }
+
+    .form__select {
+        margin-bottom: 0px;
+        margin-right: 8px;
+    }
+
+    .dashboard {
+        background-image: url('@app/assets/icon/darhboard-active.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .dashboardD {
+        background-image: url('@app/assets/icon/darhboard-disable.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .menuuA {
+        background-image: url('@app/assets/icon/MenuA.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .menuu {
+        background-image: url('@app/assets/icon/Menu.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .ascend {
+        background-image: url('@app/assets/icon/switch.svg');
+        background-repeat: no-repeat;
+        background-position: center;
     }
 
     .horizontallso {
-      padding-top: 40px;
+        padding-top: 40px;
     }
 }
 </style>

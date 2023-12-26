@@ -1,19 +1,33 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto></bannerPhoto>
-        <Avatar></Avatar>
+        <bannerPhoto :banner="user?.media?.banner"></bannerPhoto>
+        <Avatar :avatar="user?.media?.photo" :edited="false"></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
-                <div class="user-data__name">
-                    <h4>Иванов Иван Иванович</h4>
+                <div v-if="user" class="user-data__name">
+                    <p>{{ user.first_name }}</p>
+                    <p>{{ user.last_name }}</p>
+                    <p>{{ user.patronymic_name }}</p>
+                    <!-- <slot name="banner"></slot> -->
                 </div>
+                <!-- <h4 v-if="user">{{ user.email }}</h4> -->
+                <div></div>
+
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
-
+                        <li v-if="education">
+                            <p>{{ user?.education?.study_faculty }}</p>
+                        </li>
+                        <li v-if="education">
+                            <p>{{ user?.education?.study_specialty }}</p>
+                        </li>
+                        <li v-if="education">
+                            <p>Курс {{ user?.education?.study_year }}</p>
+                        </li>
                         <li class="user-data__regional-office">
-                            <p>Ленинградское отделение</p>
+                            <p>{{ user?.user_region?.reg_town}}</p>
                         </li>
                     </ul>
                 </div>
@@ -23,9 +37,38 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
-import { Avatar } from '@shared/components/imagescomp';
+import { ref, onMounted } from 'vue';
+import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
+import { HTTP } from '@app/http';
+import { useRoute} from 'vue-router';
+
+
+const props = defineProps({
+    banner: {
+        type: String
+    },
+    avatar: {
+        type: String
+    },
+    edited: {
+        type: Boolean
+    },
+
+    user: {
+        type: Object,
+    },
+    currentUser: {
+        type: Object,
+    },
+    education: {
+        type: Object,
+    },
+    user_region: {
+        type: Object,
+    }
+})
+
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {
@@ -35,7 +78,7 @@ import { bannerPhoto } from '@shared/components/imagescomp';
 
 .user-metric {
     display: grid;
-    grid-template-columns: 30px 135px 135px 2fr 64px;
+    grid-template-columns: 30px 135px 135px 2fr 16px;
     grid-template-rows: 100px 100px 112px auto;
     margin-bottom: 40px;
     /*  */
@@ -44,39 +87,6 @@ import { bannerPhoto } from '@shared/components/imagescomp';
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     background: rgba(244, 244, 244, 0);
-}
-
-.breadcrumbs-container ul {
-    display: flex;
-    list-style: none;
-}
-
-.breadcrumbs-slesh {
-    margin: 0 4px;
-}
-
-.breadcrumbs-container a {
-    display: block;
-    text-decoration: none;
-    /* хлебные_крошки */
-    font-family: 'Akrobat';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    color: #35383f;
-}
-
-.breadcrumbs-container a.active {
-    display: block;
-    text-decoration: none;
-    /* хлебные_крошки */
-    font-family: Akrobat;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    color: #1f7cc0;
 }
 
 .ps__title {
@@ -94,7 +104,6 @@ import { bannerPhoto } from '@shared/components/imagescomp';
 }
 
 .user-metric__bottom {
-    display: grid;
     grid-column-start: 1;
     grid-column-end: 5;
     grid-row-start: 3;
@@ -110,10 +119,11 @@ import { bannerPhoto } from '@shared/components/imagescomp';
 }
 
 .user-data__name {
+    display: flex;
     margin-bottom: 32px;
 }
 
-.user-data__name h4 {
+.user-data__name p {
     color: #35383f;
     /* Desktop/H-3 */
     font-family: 'Akrobat';
@@ -122,6 +132,7 @@ import { bannerPhoto } from '@shared/components/imagescomp';
     font-weight: 600;
     line-height: normal;
     color: #35383f;
+    margin-right: 8px;
 }
 
 .user-data__list-wrapper {
@@ -143,7 +154,7 @@ import { bannerPhoto } from '@shared/components/imagescomp';
 .user-data__list-wrapper li {
     border-right: 1px solid #35383f;
     height: 20px;
-    margin: auto 5px;
+    margin: auto 3px;
 }
 
 .user-data__list p,

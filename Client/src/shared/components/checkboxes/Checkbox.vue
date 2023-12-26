@@ -1,26 +1,41 @@
 <template>
-   <input type="checkbox" v-model="model" :value="value" />
-  <span>{{ label }}</span>
-</template>
-<script setup>
-export default {
-    props:{
-      modelValue: { type: [Array, Boolean] },
-      value: { type: [Boolean, Object] },
-      label: { type: String }
-    },
-    computed:{
-      model:{
-         get() {
-            return this.modelValue;
-          },
-          set(value) {
-            this.$emit("update:modelValue", value);
-          }
-      }
-    }
-  }
-</script>
-<style lang="scss" scoped>
+    <label :for="id">{{ label }}</label>
+    <!-- <input
+        type="checkbox"
+        :name="name"
+        :id="id"
+        :value="value"
+        :checked="checked"
+        @input="handleClick($event)"
+    /> -->
 
-</style>
+    <input
+        variant="outlined"
+        type="checkbox"
+        :name="name"
+        :id="id"
+        :value="value"
+        :checked="checked"
+        @input="handleClick($event)"
+    />
+    <!-- <v-checkbox
+            :label="label"
+            type="checkbox"
+            :name="name"
+            :id="id"
+            :model-value="value"
+            :checked="checked"
+            @input="handleClick($event)"
+        /> -->
+
+    <!-- <div class="card flex justify-content-center">
+        <label>{{ label }}</label>
+        <Checkbox v-model="checked" :binary="true" />
+    </div> -->
+</template>
+
+<script setup>
+
+</script>
+
+<style lang="scss"></style>

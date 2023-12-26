@@ -1,8 +1,7 @@
 <template>
     <div class="container">
-         <!-- Страница Пользовательское соглашение -->
-    <section class="user-agreement">
-        <div class="container">
+        <!-- Страница Пользовательское соглашение -->
+        <section class="user-agreement">
             <div class="user-agreement__container">
                 <!-- Общая информация о соглашении -->
                 <h2>Пользовательское соглашение</h2>
@@ -142,10 +141,9 @@
                     </li>
                 </ol>
             </div>
-        </div>
-    </section>
+        </section>
     </div>
-
+    
 </template>
 
 <script setup>
@@ -153,139 +151,6 @@
 </script>
 
 <style scoped lang="scss">
-    /* base-потом удалить */ 
-* {
-    margin: 0;
-    padding: 0;
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: inherit;
-}
-
-img {
-    display: block;
-    max-width: 100%;
-}
-
-body {
-    margin: 0;
-    font-family: 'BertSans', sans-serif;
-    font-family: 'Akrobat', sans-serif;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-    padding: 0;
-    margin: 0;
-}
-
-
-h2 {
-    /* Desktop/H-2 */
-    font-family: 'Akrobat';
-    font-size: 40px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    color: #35383F;
-}
-
-p {
-    /* text */
-    font-family: 'BertSans';
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    color: #35383F;
-}
-
-a {
-    /* link */
-    font-family: 'BertSans';
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    text-decoration-line: underline;
-}
-
-::placeholder {
-    color: #898989;
-    font-family: 'BertSans';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-}
-
-button a {
-    color: #ffffff;
-    /* button_text */
-    font-family: 'BertSans';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 20px;
-    text-decoration: none;
-}
-
-.container {
-    margin: 0 auto;
-    max-width: 1180px;
-}
-
-.form-field {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.form-field input {
-    border: 2px solid #a3a3a3;
-    border-radius: 10px;
-    display: block;
-    font-size: 12px;
-    padding: 10px 0px 10px 16px;
-}
-
-.form-field input:focus {
-    outline: 0;
-}
-
-.form-field.success input {
-    border-color: green;
-}
-
-.form-field.error input {
-    border-color: red;
-}
-
-.form-field .error {
-    color: red;
-    font-size: 11px;
-    height: 18px;
-}
-
-.form__wrapper {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.form__title {
-    font-weight: 600;
-    margin-bottom: 40px;
-}
-
-
 /* Страница Пользовательское соглашение */
 .user-agreement {
     min-height: 623px;
@@ -302,11 +167,25 @@ button a {
 .user-agreement h2 {
     text-align: center;
     margin-bottom: 60px;
+    /* Desktop/H-2 */
+    font-family: 'Akrobat';
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    color: #35383F;
 }
 
 .user-agreement p {
     font-size: 16px;
     margin-bottom: 10px;
+     /* text */
+     font-family: 'BertSans';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color: #35383F;
 }
 
 .user-agreement a {
@@ -315,6 +194,12 @@ button a {
     text-decoration-line: none;
     border-bottom: 1px solid #1F7CC0;
     padding-bottom: 1px;
+    /* link */
+    font-family: 'BertSans';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 
 .user-agreement__conditions {
@@ -342,6 +227,7 @@ button a {
     font-weight: 400;
     list-style-type: "— ";
     margin-bottom: 10px;
+    list-style-position: inside;
 }
 
 .enumeration-indent {

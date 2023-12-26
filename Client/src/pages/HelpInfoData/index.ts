@@ -1,1 +1,1 @@
-export { default as helpInfoData } from './components/helpInfoData';
+export { default as helpInfoData } from './components/helpInfoData.vue';

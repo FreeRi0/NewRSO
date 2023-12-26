@@ -1,30 +1,39 @@
 <template>
-    <div
-        class="horizontallso-item__wrapper"
-        v-for="participant in participants"
-    >
-        <div class="horizontallso-img">
-            <img :src="'./assets/' + participant.image" alt="logo" />
-            <img
-                class="horizontallso-item__list-img-status"
-                :src="'./assets/icon/' + participant.icon"
-                alt="icon"
-            />
-        </div>
-        <div class="containerHorizontal">
-            <p class="horizontallso-item__list-full">{{ participant.name }}</p>
-            <div class="horizontallso-item__list-date">
-                <span
-                    style="border-left: 2px solid #b6b6b6; padding-right: 8px"
-                ></span>
-                <p>{{ participant.birthdate }}</p>
+    <div v-for="participant in participants">
+        <router-link
+            class="horizontallso-item__wrapper"
+            :to="{ name: 'userpage', params: { id: participant.id } }"
+        >
+            <div class="horizontallso-img">
+                <img
+                    :src="participant.user.avatar.photo"
+                    alt="photo"
+                    v-if="participant.user.avatar"
+                />
+                <img
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+                    v-else
+                />
             </div>
-        </div>
+            <div class="containerHorizontal">
+                <p class="horizontallso-item__list-full">
+                    {{ participant.user.last_name }}
+                </p>
+                <div class="horizontallso-item__list-date">
+                    <span
+                        style="
+                            border-left: 2px solid #b6b6b6;
+                            padding-right: 8px;
+                        "
+                    ></span>
+                    <p>{{ participant.user.date_of_birth }}</p>
+                </div>
+            </div>
+        </router-link>
     </div>
 </template>
 <script setup>
-
-
 const props = defineProps({
     participants: {
         type: Array,
@@ -44,6 +53,7 @@ const props = defineProps({
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
+    margin-bottom: 12px;
 }
 
 .containerHorizontal {
@@ -53,10 +63,13 @@ const props = defineProps({
 }
 
 .horizontallso-img {
-    align-items: center;
-    width: 50px;
-    height: 40px;
-    justify-content: start;
+    img {
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 100%;
+        justify-content: start;
+    }
 }
 
 .horizontallso-item img {
@@ -99,6 +112,7 @@ const props = defineProps({
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
     font-weight: 400;
+    margin-left: 10px;
 }
 
 .horizontallso-item__list-date p {
