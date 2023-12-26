@@ -53,21 +53,86 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/404Page/components/404Page.vue'),
             },
+            // {
+            //     path: '/lso/:id',
+            //     name: 'lso',
+            //     component: () => import('@pages/lsoPage/lsoPage.vue'),
+            //     meta: {
+            //         requiresAuth: true
+            //     }
+            // },
             {
-                path: '/lso/:id',
-                name: 'lso',
-                component: () => import('@pages/lsoPage/lsoPage.vue'),
+                path: '/lso',
                 meta: {
                     requiresAuth: true,
                 },
+
+                children: [
+                    {
+                        path: ':id/:name',
+                        meta: {
+                            label: 'title',
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'lso',
+                                component: () =>
+                                    import('@pages/lsoPage/lsoPage.vue'),
+                            },
+                            {
+                                path: 'EditLSO',
+                                name: 'EditLSO',
+                                component: () =>
+                                    import(
+                                        '@pages/EditingDetachment/components/EditingDetachment.vue'
+                                    ),
+                            },
+                        ],
+                    },
+                ],
+
             },
+            // {
+            //     path: '/HQ',
+            //     name: 'HQ',
+            //     component: () => import('@pages/HQPage/HQPage.vue'),
+            //     meta: {
+            //         requiresAuth: true
+            //     }
+            // },
             {
-                path: '/HQ/:id',
-                name: 'HQ',
-                component: () => import('@pages/HQPage/HQPage.vue'),
+
+                path: '/HQ',
                 meta: {
                     requiresAuth: true,
                 },
+                children: [
+                    {
+                        path: ':id/:name',
+                        meta: {
+                            label: 'title',
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'HQ',
+                                component: () =>
+                                    import('@pages/HQPage/HQPage.vue'),
+                            },
+                            {
+                                path: 'EditHQ',
+                                name: 'EditHQ',
+                                component: () =>
+                                    import(
+                                        '@pages/EditingHQ/components/EditingHQ.vue'
+                                    ),
+                            },
+                        ],
+                    },
+                ],
+
+                
             },
             {
                 path: '/DistrictHQ',
@@ -80,6 +145,7 @@ const routes: RouteRecordRaw[] = [
                 name: 'CentralHQ',
                 component: () =>
                     import('@pages/CentralHQPage/CentralHQPage.vue'),
+
             },
             {
                 path: '/RegionalHQ',
@@ -89,6 +155,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
+
             },
             {
                 path: '/LocalHQ',
@@ -97,6 +164,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
+
             },
             {
                 path: '/UserPage',
@@ -137,17 +205,18 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
-            {
-                path: '/EditLSO',
-                name: 'EditLSO',
-                component: () =>
-                    import(
-                        '@pages/EditingDetachment/components/EditingDetachment.vue'
-                    ),
-                meta: {
-                    requiresAuth: true,
-                },
-            },
+            // {
+            //     // path: '/lso/:id/EditLSO',
+            //     path: '/:id',
+            //     name: 'EditLSO',
+            //     component: () =>
+            //         import(
+            //             '@pages/EditingDetachment/components/EditingDetachment.vue'
+            //         ),
+            //         meta: {
+            //             requiresAuth: true
+            //         }
+            // },
             {
                 path: '/AllHeadquarters',
                 name: 'allheadquarters',
@@ -233,16 +302,17 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
+
             },
-            {
-                path: '/edithq',
-                name: 'edithq',
-                component: () =>
-                    import('@pages/EditingHQ/components/EditingHQ.vue'),
-                meta: {
-                    requiresAuth: true,
-                },
-            },
+            // {
+            //     path: '/edithq/:id',
+            //     name: 'edithq',
+            //     component: () =>
+            //         import('@pages/EditingHQ/components/EditingHQ.vue'),
+            //         meta: {
+            //             requiresAuth: true
+            //         }
+            // },
             {
                 path: '/reference',
                 name: 'reference',
@@ -280,6 +350,7 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/ContributionPage/components/ContributorPay.vue'
                     ),
+
             },
             {
                 path: '/CreationOfRS',
@@ -298,6 +369,7 @@ const routes: RouteRecordRaw[] = [
                     meta: {
                         requiresAuth: true
                     }
+
             },
         ],
     },
