@@ -12,7 +12,7 @@
             />
         </div>
 
-            <!-- Иконки редактирования аватар -->
+            <!-- Иконка добавления аватара -->
             <v-menu min-width="200px" rounded v-if="!props.avatar">
                 <template v-slot:activator="{ props }">
                     <v-btn class="user-metric__avatar-add" icon v-bind="props">
