@@ -4,7 +4,22 @@
 
     <h1 class="title title--lso">Создание ЛСО</h1>
 
-    <FormUnit :detachment="detachment" @submit.prevent="changeDetachment"></FormUnit>
+    <FormUnit
+      :detachment="detachment"
+      @submit.prevent="changeDetachment"
+      @select-file="onSelectFile"
+      @reset-file="onResetFile"
+      @select-banner="onSelectBanner"
+      @reset-banner="onResetBanner"
+      @select-photo-one="onSelectPhotoOne"
+      @reset-phot-one="onResetPhotoOne"
+      @select-photo-two="onSelectPhotoTwo"
+      @reset-photo-two="onResetPhotoTwo"
+      @select-photo-three="onSelectPhotoThree"
+      @reset-photo-three="onResetPhotoThree"
+      @select-photo-four="onSelectPhotoFour"
+      @reset-photo-four="onResetPhotoFour"
+    ></FormUnit>
   </div>
 </template>
 
@@ -13,6 +28,10 @@ import { ref, inject } from "vue";
 import { Breadcrumbs } from "@shared/components/breadcrumbs";
 import { FormUnit } from "@features/FormUnit";
 import axios from "axios";
+import { HTTP } from "@app/http";
+import { useRoute, onBeforeRouteUpdate } from "vue-router";
+
+const router = useRoute();
 
 const pages = ref([
   { pageTitle: "Структура" },
@@ -40,9 +59,51 @@ const detachment = ref({
   photo4: null,
 });
 
-const fileEmblem = ref(null);
-
 const submited = ref(false);
+
+const fileEmblem = ref(null);
+const fileBanner = ref(null);
+const filePhotoOne = ref(null);
+const filePhotoTwo = ref(null);
+const filePhotoThree = ref(null);
+const filePhotoFour = ref(null);
+
+const onSelectFile = (file) => {
+  fileEmblem.value = file;
+};
+const onResetFile = (file) => {
+  fileEmblem.value = file;
+};
+const onSelectBanner = (file) => {
+  fileBanner.value = file;
+};
+const onResetBanner = (file) => {
+  fileBanner.value = file;
+};
+const onSelectPhotoOne = (file) => {
+  filePhotoOne.value = file;
+};
+const onResetPhotoOne = (file) => {
+  filePhotoOne.value = file;
+};
+const onSelectPhotoTwo = (file) => {
+  filePhotoTwo.value = file;
+};
+const onResetPhotoTwo = (file) => {
+  filePhotoTwo.value = file;
+};
+const onSelectPhotoThree = (file) => {
+  filePhotoThree.value = file;
+};
+const onResetPhotoThree = (file) => {
+  filePhotoThree.value = file;
+};
+const onSelectPhotoFour = (file) => {
+  filePhotoFour.value = file;
+};
+const onResetPhotoFour = (file) => {
+  filePhotoFour.value = file;
+};
 
 const swal = inject("$swal");
 
@@ -59,21 +120,18 @@ const changeDetachment = async () => {
   formData.append("social_tg", detachment.value.social_tg);
   formData.append("slogan", detachment.value.slogan);
   formData.append("about", detachment.value.about);
-
-  console.log(fileEmblem.value);
   formData.append("emblem", fileEmblem.value);
-  //   formData.append("banner", fileBanner.value);
-  //   formData.append("photo1", filePhotoOne.value);
-  //   formData.append("photo2", filePhotoTwo.value);
-  //   formData.append("photo3", filePhotoThree.value);
-  //   formData.append("photo4", filePhotoFour.value);
-  axios
-    .post("api/v1/detachments/", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: "Token " + localStorage.getItem("Token"),
-      },
-    })
+  formData.append("banner", fileBanner.value);
+  formData.append("photo1", filePhotoOne.value);
+  formData.append("photo2", filePhotoTwo.value);
+  formData.append("photo3", filePhotoThree.value);
+  formData.append("photo4", filePhotoFour.value);
+  HTTP.post("detachments/", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Token " + localStorage.getItem("Token"),
+    },
+  })
     .then((response) => {
       submited.value = true;
       //   formData = response.data;
@@ -85,7 +143,7 @@ const changeDetachment = async () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      //   router.push("/AllSquads");
+      // router.push("/AllSquads");
       // router.push({ name: 'user', params: { userId: '123' } })
     })
     .catch((error) => {

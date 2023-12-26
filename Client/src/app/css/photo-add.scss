@@ -45,6 +45,7 @@
       overflow: hidden;
       border-radius: 10px;
       border: 1px solid rgba(0, 0, 0, 0.10);
+      // position: relative;
   
       &--logo {
         width: 144px;
@@ -66,6 +67,11 @@
       object-fit: cover;
       object-position: center;
     }
+
+    // &__image {
+    //   position: absolute;
+    //   top: 0;
+    // }
   
     &__label {
       position: absolute;

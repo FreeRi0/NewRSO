@@ -100,6 +100,7 @@
 import { ref, onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 import axios from 'axios';
+import { HTTP } from '@app/http';
 
 defineOptions({
     inheritAttrs: false,
@@ -146,8 +147,7 @@ const customFilter = (itemTitle, queryText, item) => {
 const items = ref(props.items);
 
 const onChangeItem = async () => {
-    await axios
-        .get(props.address)
+    await HTTP.get(props.address)
 
         .then((res) => {
             // console.log(props.address);

@@ -57,7 +57,12 @@
                             <!-- <p>{{ squad.members }}</p> -->
                         </div>
                     </div>
-                    <router-link to="/EditLSO" class="user-data__link"
+                    <router-link
+                        :to="{
+                            name: 'EditLSO',
+                            params: { id: squad.id, name: squad.name },
+                        }"
+                        class="user-data__link"
                         >Редактировать страницу</router-link
                     >
                 </div>
@@ -80,23 +85,22 @@ import { useRoute } from 'vue-router';
 
 const props = defineProps({
     banner: {
-        type: String
+        type: String,
     },
     emblem: {
-        type: String
+        type: String,
     },
     squad: {
-       type: Object,
-       required: true
+        type: Object,
+        required: true,
     },
     edict: {
         type: Object,
     },
     member: {
         type: Object,
-    }
-
-})
+    },
+});
 // const aboutSquad = async () => {
 //     await HTTP.get(`/detachments/${id}/`, {
 //         headers: {
@@ -149,7 +153,6 @@ const props = defineProps({
 //     aboutMembers();
 //     aboutEduc();
 // });
-
 </script>
 <style lang="scss" scoped>
 // .profile-settings-top {

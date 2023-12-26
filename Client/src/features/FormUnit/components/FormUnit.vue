@@ -101,7 +101,7 @@
                                 id="select-direction"
                                 placeholder="Например, ССО"
                                 v-model="detachment.area"
-                                address="api/v1/areas/"
+                                address="areas/"
                             ></Select>
                             <!-- <p>{{ detachment.area }}</p> -->
                         </div>
@@ -151,7 +151,7 @@
                                 id="select-region"
                                 placeholder="Например, Алтайский край"
                                 v-model="detachment.region"
-                                address="api/v1/regions/"
+                                address="regions/"
                             ></Select>
                         </div>
 
@@ -178,7 +178,7 @@
                                 id="select-institution"
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="detachment.educational_institution"
-                                address="api/v1/eduicational_institutions/"
+                                address="eduicational_institutions/"
                             ></Select>
                         </div>
 
@@ -193,7 +193,7 @@
                                 placeholder="Поиск по ФИО"
                                 v-model="detachment.commander"
                                 @update:value="changeValue"
-                                address="api/v1/rsousers/"
+                                address="rsousers/"
                             ></Dropdown>
                             <!-- <p>{{ detachment.commander }}</p> -->
                         </div>
@@ -463,14 +463,18 @@
                                 <div
                                     class="photo-add__img photo-add__img--logo"
                                 >
-                                    <img v-if="urlEmblem" :src="urlEmblem" />
+                                    <img
+                                        class="photo-add__image"
+                                        :src="detachment.emblem ?? urlEmblem"
+                                    />
                                 </div>
+                                <!-- <div></div> -->
 
                                 <div class="photo-add__input">
                                     <label
                                         class="photo-add__label photo-add__label--logo"
                                         for="upload-logo"
-                                        v-show="!urlEmblem"
+                                        v-if="!detachment.emblem && !urlEmblem"
                                     >
                                         <svg
                                             class="logo-add__svg"
@@ -545,17 +549,9 @@
                                             </defs>
                                         </svg>
                                     </label>
-                                    <input
-                                        type="file"
-                                        id="upload-logo"
-                                        name="squad-logo"
-                                        accept="image/*,image/jpeg"
-                                        hidden
-                                        @change="selectFile"
-                                    />
                                     <div
                                         class="photo-add__edit-group photo-add__edit-group--position"
-                                        v-show="urlEmblem"
+                                        v-else
                                     >
                                         <label
                                             class="photo-add__label-edit"
@@ -567,12 +563,19 @@
                                         </label>
                                         <button
                                             class="photo-add__button-clear"
-                                            type="reset"
+                                            type="button"
                                             @click="resetEmblem"
                                         >
                                             Удалить фото
                                         </button>
                                     </div>
+                                    <input
+                                        type="file"
+                                        id="upload-logo"
+                                        name="squad-logo"
+                                        hidden
+                                        @change="selectFile"
+                                    />
                                 </div>
                             </div>
                             <span class="form-field__footnote"
@@ -586,7 +589,11 @@
                                 <div
                                     class="photo-add__img photo-add__img--banner"
                                 >
-                                    <img v-if="urlBanner" :src="urlBanner" />
+                                    <img
+                                        v-if="detachment.banner ?? urlBanner"
+                                        class="photo-add__image"
+                                        :src="detachment.banner ?? urlBanner"
+                                    />
                                     <img
                                         v-else
                                         src="@app/assets/banner-stub.png"
@@ -598,7 +605,7 @@
                                     <label
                                         class="photo-add__label"
                                         for="upload-banner"
-                                        v-show="!urlBanner"
+                                        v-if="!detachment.banner && !urlBanner"
                                     >
                                         <svg
                                             class=""
@@ -673,18 +680,7 @@
                                             </defs>
                                         </svg>
                                     </label>
-                                    <input
-                                        type="file"
-                                        id="upload-banner"
-                                        name="squad-banner"
-                                        accept="image/*,image/jpeg"
-                                        hidden
-                                        @change="selectBanner"
-                                    />
-                                    <div
-                                        class="photo-add__edit-group"
-                                        v-show="urlBanner"
-                                    >
+                                    <div class="photo-add__edit-group" v-else>
                                         <label
                                             class="photo-add__label-edit"
                                             for="upload-banner"
@@ -701,6 +697,13 @@
                                             Удалить фото
                                         </button>
                                     </div>
+                                    <input
+                                        type="file"
+                                        id="upload-banner"
+                                        name="squad-banner"
+                                        hidden
+                                        @change="selectBanner"
+                                    />
                                 </div>
                             </div>
                             <span class="form-field__footnote"
@@ -714,8 +717,13 @@
                                 <div class="photo-add__box">
                                     <div class="photo-add__img">
                                         <img
-                                            v-if="urlPhotoOne"
-                                            :src="urlPhotoOne"
+                                            v-if="
+                                                detachment.photo1 ?? urlPhotoOne
+                                            "
+                                            class="photo-add__image"
+                                            :src="
+                                                detachment.photo1 ?? urlPhotoOne
+                                            "
                                         />
                                         <img
                                             v-else
@@ -728,7 +736,10 @@
                                         <label
                                             class="photo-add__label photo-add__label--position"
                                             for="upload-photo-one"
-                                            v-show="!urlPhotoOne"
+                                            v-if="
+                                                !detachment.photo1 &&
+                                                !urlPhotoOne
+                                            "
                                         >
                                             <svg
                                                 class=""
@@ -803,16 +814,9 @@
                                                 </defs>
                                             </svg>
                                         </label>
-                                        <input
-                                            type="file"
-                                            id="upload-photo-one"
-                                            accept="image/*,image/jpeg"
-                                            hidden
-                                            @change="selectPhotoOne"
-                                        />
                                         <div
                                             class="photo-add__edit-group"
-                                            v-show="urlPhotoOne"
+                                            v-else
                                         >
                                             <label
                                                 class="photo-add__label-edit"
@@ -831,14 +835,25 @@
                                                 Удалить фото
                                             </button>
                                         </div>
+                                        <input
+                                            type="file"
+                                            id="upload-photo-one"
+                                            hidden
+                                            @change="selectPhotoOne"
+                                        />
                                     </div>
                                 </div>
 
                                 <div class="photo-add__box">
                                     <div class="photo-add__img">
                                         <img
-                                            v-if="urlPhotoTwo"
-                                            :src="urlPhotoTwo"
+                                            v-if="
+                                                detachment.photo2 ?? urlPhotoTwo
+                                            "
+                                            class="photo-add__image"
+                                            :src="
+                                                detachment.photo2 ?? urlPhotoTwo
+                                            "
                                         />
                                         <img
                                             v-else
@@ -851,7 +866,10 @@
                                         <label
                                             class="photo-add__label photo-add__label--position"
                                             for="upload-photo-two"
-                                            v-show="!urlPhotoTwo"
+                                            v-if="
+                                                !detachment.photo2 &&
+                                                !urlPhotoTwo
+                                            "
                                         >
                                             <svg
                                                 class=""
@@ -926,16 +944,9 @@
                                                 </defs>
                                             </svg>
                                         </label>
-                                        <input
-                                            type="file"
-                                            id="upload-photo-two"
-                                            accept="image/*,image/jpeg"
-                                            hidden
-                                            @change="selectPhotoTwo"
-                                        />
                                         <div
                                             class="photo-add__edit-group"
-                                            v-show="urlPhotoTwo"
+                                            v-else
                                         >
                                             <label
                                                 class="photo-add__label-edit"
@@ -954,14 +965,27 @@
                                                 Удалить фото
                                             </button>
                                         </div>
+                                        <input
+                                            type="file"
+                                            id="upload-photo-two"
+                                            hidden
+                                            @change="selectPhotoTwo"
+                                        />
                                     </div>
                                 </div>
 
                                 <div class="photo-add__box">
                                     <div class="photo-add__img">
                                         <img
-                                            v-if="urlPhotoThree"
-                                            :src="urlPhotoThree"
+                                            v-if="
+                                                detachment.photo3 ??
+                                                urlPhotoThree
+                                            "
+                                            class="photo-add__image"
+                                            :src="
+                                                detachment.photo3 ??
+                                                urlPhotoThree
+                                            "
                                         />
                                         <img
                                             v-else
@@ -974,7 +998,10 @@
                                         <label
                                             class="photo-add__label photo-add__label--position"
                                             for="upload-photo-three"
-                                            v-show="!urlPhotoThree"
+                                            v-if="
+                                                !detachment.photo3 &&
+                                                !urlPhotoThree
+                                            "
                                         >
                                             <svg
                                                 class=""
@@ -1049,16 +1076,9 @@
                                                 </defs>
                                             </svg>
                                         </label>
-                                        <input
-                                            type="file"
-                                            id="upload-photo-three"
-                                            accept="image/*,image/jpeg"
-                                            hidden
-                                            @change="selectPhotoThree"
-                                        />
                                         <div
                                             class="photo-add__edit-group"
-                                            v-show="urlPhotoThree"
+                                            v-else
                                         >
                                             <label
                                                 class="photo-add__label-edit"
@@ -1077,14 +1097,27 @@
                                                 Удалить фото
                                             </button>
                                         </div>
+                                        <input
+                                            type="file"
+                                            id="upload-photo-three"
+                                            hidden
+                                            @change="selectPhotoThree"
+                                        />
                                     </div>
                                 </div>
 
                                 <div class="photo-add__box">
                                     <div class="photo-add__img">
                                         <img
-                                            v-if="urlPhotoFour"
-                                            :src="urlPhotoFour"
+                                            v-if="
+                                                detachment.photo4 ??
+                                                urlPhotoFour
+                                            "
+                                            class="photo-add__image"
+                                            :src="
+                                                detachment.photo4 ??
+                                                urlPhotoFour
+                                            "
                                         />
                                         <img
                                             v-else
@@ -1097,7 +1130,10 @@
                                         <label
                                             class="photo-add__label photo-add__label--position"
                                             for="upload-photo-four"
-                                            v-show="!urlPhotoFour"
+                                            v-if="
+                                                !detachment.photo4 &&
+                                                !urlPhotoFour
+                                            "
                                         >
                                             <svg
                                                 class=""
@@ -1172,16 +1208,9 @@
                                                 </defs>
                                             </svg>
                                         </label>
-                                        <input
-                                            type="file"
-                                            id="upload-photo-four"
-                                            accept="image/*,image/jpeg"
-                                            hidden
-                                            @change="selectPhotoFour"
-                                        />
                                         <div
                                             class="photo-add__edit-group"
-                                            v-show="urlPhotoFour"
+                                            v-else
                                         >
                                             <label
                                                 class="photo-add__label-edit"
@@ -1200,6 +1229,12 @@
                                                 Удалить фото
                                             </button>
                                         </div>
+                                        <input
+                                            type="file"
+                                            id="upload-photo-four"
+                                            hidden
+                                            @change="selectPhotoFour"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -1241,6 +1276,7 @@ import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
+// import { UnitImage } from "@shared/components/imagescomp";
 
 import { useVuelidate } from '@vuelidate/core';
 import axios from 'axios';
@@ -1255,7 +1291,22 @@ import {
     sameAs,
 } from '@vuelidate/validators';
 
-const emit = defineEmits(['update:value', 'changeDetachment', 'selectFile']);
+const emit = defineEmits([
+    'update:value',
+    'changeDetachment',
+    'selectFile',
+    'resetEmblem',
+    'selectBanner',
+    'resetBanner',
+    'selectPhotoOne',
+    'resetPhotoOne',
+    'selectPhotoTwo',
+    'resetPhotoTwo',
+    'selectPhotoThree',
+    'resetPhotoThree',
+    'selectPhotoFour',
+    'resetPhotoFour',
+]);
 
 const props = defineProps({
     participants: {
@@ -1270,34 +1321,28 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    //   media: {
-    //     fileEmblem: {
-    //       type: String,
-    //       default: null,
-    //     },
-    //     fileBanner: {
-    //       type: String,
-    //       default: null,
-    //     },
-    //     filePhotoOne: {
-    //       type: String,
-    //       default: null,
-    //     },
-    //     filePhotoTwo: {
-    //       type: String,
-    //       default: null,
-    //     },
-    //     filePhotoThree: {
-    //       type: String,
-    //       default: null,
-    //     },
-    //     filePhotoFour: {
-    //       type: String,
-    //       default: null,
-    //     },
-    //   },
     fileEmblem: {
-        // type: String,
+        type: String,
+        default: null,
+    },
+    fileBanner: {
+        type: String,
+        default: null,
+    },
+    filePhotoOne: {
+        type: String,
+        default: null,
+    },
+    filePhotoTwo: {
+        type: String,
+        default: null,
+    },
+    filePhotoThree: {
+        type: String,
+        default: null,
+    },
+    filePhotoFour: {
+        type: String,
         default: null,
     },
 });
@@ -1461,42 +1506,6 @@ onMounted(() => {
     getMembers();
 });
 
-// const members = ref([
-//     {
-//         id: 1,
-//         user: {
-//             first_name: 'Василий',
-//             last_name: 'Петров',
-//             patronymic_name: 'Иванович',
-//         },
-//         date_of_birth: '2019-08-24',
-//         position: 0,
-//         is_trusted: false,
-//     },
-//     {
-//         id: 2,
-//         user: {
-//             first_name: 'Djhjyt;crb',
-//             last_name: 'Lvhhbq',
-//             patronymic_name: 'Lvbnhbtdbx',
-//         },
-//         date_of_birth: '2000-08-01',
-//         position: 2,
-//         is_trusted: true,
-//     },
-//     {
-//         id: 3,
-//         user: {
-//             first_name: 'Петр',
-//             last_name: 'Сидоров',
-//             patronymic_name: 'Иванович',
-//         },
-//         date_of_birth: '2019-08-24',
-//         position: 1,
-//         is_trusted: false,
-//     },
-// ]);
-
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
@@ -1519,73 +1528,114 @@ const changeValue = (event) => {
     console.log(event);
     emit('update:value', event);
 };
-
 //--Добавление логотипа-----------------------------------------------------------------------------
 
 const fileEmblem = ref(props.fileEmblem);
-console.log(fileEmblem);
+// console.log(fileEmblem);
+
 const urlEmblem = ref(null);
+// console.log("значение emblem до изм - ", urlEmblem);
 
 const selectFile = (event) => {
     fileEmblem.value = event.target.files[0];
-    console.log(fileEmblem.value);
+    // console.log("значение fileEmblem после изм - ", fileEmblem.value);
+
+    detachment.value.emblem = null;
     urlEmblem.value = URL.createObjectURL(fileEmblem.value);
+    //   console.log("значение emblem после изм - ", detachment.value.emblem);
+    emit('selectFile', fileEmblem.value);
 };
 
 const resetEmblem = () => {
+    // console.log(fileEmblem.value);
+    detachment.value.emblem = null;
     urlEmblem.value = null;
+
+    fileEmblem.value = null;
+    // console.log(fileEmblem.value);
+
+    emit('resetEmblem', fileEmblem.value);
 };
 //--Добавление баннера-----------------------------------------------------------------------------
-const fileBanner = ref(null);
+const fileBanner = ref(props.fileBanner);
 const urlBanner = ref(null);
 
 const selectBanner = (event) => {
     fileBanner.value = event.target.files[0];
+    detachment.value.banner = null;
     urlBanner.value = URL.createObjectURL(fileBanner.value);
+    emit('selectBanner', fileBanner.value);
 };
 
 const resetBanner = () => {
+    detachment.value.banner = null;
     urlBanner.value = null;
+    fileBanner.value = null;
+    emit('resetBanner', fileBanner.value);
 };
 //--Добавление фото-----------------------------------------------------------------------------
-const filePhotoOne = ref(null);
+const filePhotoOne = ref(props.filePhotoOne);
 const urlPhotoOne = ref(null);
 const selectPhotoOne = (event) => {
     filePhotoOne.value = event.target.files[0];
+    console.log('значение file после изм - ', filePhotoOne.value);
+    detachment.value.photo1 = null;
     urlPhotoOne.value = URL.createObjectURL(filePhotoOne.value);
+    emit('selectPhotoOne', filePhotoOne.value);
 };
 const resetPhotoOne = () => {
+    detachment.value.photo1 = null;
     urlPhotoOne.value = null;
+    filePhotoOne.value = null;
+    emit('resetPhotoOne', filePhotoOne.value);
 };
-
-const filePhotoTwo = ref(null);
+//-----------------------------------------------------------------------------
+const filePhotoTwo = ref(props.filePhotoTwo);
 const urlPhotoTwo = ref(null);
 const selectPhotoTwo = (event) => {
     filePhotoTwo.value = event.target.files[0];
+    console.log('значение file после изм - ', filePhotoTwo.value);
+    detachment.value.photo2 = null;
     urlPhotoTwo.value = URL.createObjectURL(filePhotoTwo.value);
+    emit('selectPhotoTwo', filePhotoTwo.value);
 };
 const resetPhotoTwo = () => {
+    detachment.value.photo2 = null;
     urlPhotoTwo.value = null;
+    filePhotoTwo.value = null;
+    emit('resetPhotoTwo', filePhotoTwo.value);
 };
-
-const filePhotoThree = ref(null);
+//----------------------------------------------------------------------------
+const filePhotoThree = ref(props.filePhotoThree);
 const urlPhotoThree = ref(null);
 const selectPhotoThree = (event) => {
     filePhotoThree.value = event.target.files[0];
+    console.log('значение file после изм - ', filePhotoThree.value);
+    detachment.value.photo3 = null;
     urlPhotoThree.value = URL.createObjectURL(filePhotoThree.value);
+    emit('selectPhotoThree', filePhotoThree.value);
 };
 const resetPhotoThree = () => {
+    detachment.value.photo3 = null;
     urlPhotoThree.value = null;
+    filePhotoThree.value = null;
+    emit('resetPhotoThree', filePhotoThree.value);
 };
-
-const filePhotoFour = ref(null);
+//---------------------------------------------------------------------------
+const filePhotoFour = ref(props.filePhotoFour);
 const urlPhotoFour = ref(null);
 const selectPhotoFour = (event) => {
     filePhotoFour.value = event.target.files[0];
+    console.log('значение file после изм - ', filePhotoFour.value);
+    detachment.value.photo4 = null;
     urlPhotoFour.value = URL.createObjectURL(filePhotoFour.value);
+    emit('selectPhotoFour', filePhotoFour.value);
 };
 const resetPhotoFour = () => {
+    detachment.value.photo4 = null;
     urlPhotoFour.value = null;
+    filePhotoFour.value = null;
+    emit('resetPhotoFour', filePhotoFour.value);
 };
 </script>
 
@@ -1611,3 +1661,4 @@ const resetPhotoFour = () => {
 }
 </style>
 @shared/components/selects/inputs@shared/components/selects/inputs
+<!-- <img v-if="detachment.emblem" :src="detachment.emblem" /> -->
