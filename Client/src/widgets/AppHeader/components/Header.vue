@@ -140,6 +140,7 @@ import { ref, onMounted, watch } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const router = useRouter();
+const navMenu = ref('')
 
 // const route = useRoute();
 // let id = route.params.id;

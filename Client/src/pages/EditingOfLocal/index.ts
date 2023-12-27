@@ -1,0 +1,1 @@
+export { default as EditingOfLocal } from './components/EditingOfLocal.vue';

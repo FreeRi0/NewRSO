@@ -1,25 +1,27 @@
 <template>
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--lso">Создание регионального штаба</h1>
-        <FormRS></FormRS>
-        <!-- <FormRS :participants="true" :unit="unit"></FormRS> -->
+
+        <h1 class="title title--lso">Редактирование центрального штаба</h1>
+
+        <FormCentr :participants="true"></FormCentr>
+        <!-- <FormCentr :participants="true" :unit="unit"></FormCentr> -->
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { FormRS } from '@features/FormRS';
+import { FormCentr } from '@features/FormCentr';
 
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Региональные штабы', href: '#' },
-    { pageTitle: 'Создание регионального штаба', href: '#' },
+    { pageTitle: 'Центральный штаб', href: '#' },
+    { pageTitle: 'Редактирование', href: '#' },
 ]);
 
 // const unit = ref({
-//     title: '',
+//     name: '',
 //     regional: null,
 //     city: '',
 //     beast: '',
@@ -36,3 +38,5 @@ const pages = ref([
 //     ofDate: '',
 // });
 </script>
+
+<style lang="scss"></style>

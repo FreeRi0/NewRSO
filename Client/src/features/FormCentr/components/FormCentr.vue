@@ -82,33 +82,37 @@
                                 {{ counterName }} / 100
                             </div>
                         </div>
-                        <div class="form__field">
-                            <label for="district_headquarter"
-                                >Выберите окружной штаб
-                                <sup class="valid-red">*</sup>
-                            </label>
-                            <Select
-                                clearable
-                                variant="outlined"
-                                name="district_headquarter"
-                                id="district_headquarter"
-                                v-model="district_headquarter"
-                                address="api/v1/districts/"
-                            ></Select>
-                        </div>
-                        <div class="form__field">
-                            <label for="region"
-                                >Выберите регион
-                                <sup class="valid-red">*</sup>
-                            </label>
-                            <Select
-                                clearable
-                                variant="outlined"
-                                name="region"
-                                id="region"
-                                v-model="region"
-                                address="api/v1/regions/"
-                            ></Select>
+
+                        <div class="date_central_wrap">
+                            <div class="form__field form_width">
+                                <label for="date_students"
+                                    >Дата появления студенческих отрядов в России (год)
+                                    <sup class="valid-red">*</sup>
+                                </label>
+                                <Input
+                                    class="form__input"
+                                    type="number"
+                                    id="date_students"
+                                    placeholder="1971"
+                                    name="date_students"
+                                    v-model:value="date_students"
+                                    :minlength="4"
+                                    :maxlength="4"
+                                />
+                            </div>
+                            <div class="form__field form_width">
+                                <label for="date_first"
+                                    >Дата первого учредительного съезда РСО
+                                    <sup class="valid-red">*</sup>
+                                </label>
+                                <Input
+                                    class="form__input"
+                                    type="date"
+                                    id="date_first"
+                                    name="date_first"
+                                    v-model:value="date_first"
+                                />
+                            </div>
                         </div>
 
                         <div class="form__field">
@@ -249,7 +253,7 @@
                                 v-model:value="social_tg"
                             />
                         </div>
-                        <div class="form__field" v-if="editDistrict">
+                        <div class="form__field" v-if="participants">
                             <p>
                                 Участники отряда
                                 <sup class="valid-red">*</sup>
@@ -273,11 +277,13 @@
                             </v-text-field>
                             <MembersList
                                 :items="sortedMembers"
+                                :validate="v"
                                 :submited="submited"
                                 @updateMember="onUpdateMember"
                             ></MembersList>
                         </div>
                     </div>
+
                     <v-card-actions class="form__button-group">
                         <Button
                             type="button"
@@ -362,142 +368,6 @@
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
-                        <div class="test">
-                            <div class="form__field form_width">
-                                <label for="founding_date"
-                                    >Официальная дата (год) появления
-                                    студенческих отрядов в регионе
-                                    <sup class="valid-red">*</sup>
-                                </label>
-                                <Input
-                                    class="form__input"
-                                    type="number"
-                                    id="founding_date"
-                                    placeholder="1971"
-                                    name="founding_date"
-                                    v-model:value="founding_date"
-                                    :minlength="4"
-                                    :maxlength="4"
-                                />
-                            </div>
-
-                            <div class="form__field form_width">
-                                <label for="conference_date"
-                                    >Дата учредительной конференции
-                                    регионального штаба
-                                    <sup class="valid-red">*</sup>
-                                </label>
-                                <Input
-                                    class="form__input"
-                                    type="date"
-                                    id="conference_date"
-                                    name="conference_date"
-                                    v-model:value="conference_date"
-                                />
-                            </div>
-                            <div class="form__field form_width">
-                                <label for="registry_number"
-                                    >Регистрационный номер в реестре молодежных
-                                    и детских общественных объединений,
-                                    пользующихся государственной поддержкой
-                                </label>
-                                <Input
-                                    class="form__input"
-                                    type="number"
-                                    placeholder="б/н"
-                                    id="registry_number"
-                                    name="registry_number"
-                                    v-model:value="registry_number"
-                                />
-                            </div>
-                            <div class="form__field form_width">
-                                <label for="registry_date"
-                                    >Дата регистрации в реестре молодежных и
-                                    детских общественных объединений,
-                                    пользующихся государственной поддержкой
-                                </label>
-                                <Input
-                                    class="form__input"
-                                    type="date"
-                                    id="registry_date"
-                                    name="registry_date"
-                                    v-model:value="registry_date"
-                                />
-                            </div>
-                        </div>
-                        <div class="form__field">
-                            <label for="name_for_certificates"
-                                >Наименование регионального отделения в
-                                Именительном падеже (для справок)
-                            </label>
-                            <Input
-                                class="form__input"
-                                type="text"
-                                id="name_for_certificates"
-                                placeholder="Например, Новосибирское региональное отделение"
-                                name="name_for_certificates"
-                                v-model:value="name_for_certificates"
-                                :maxlength="100"
-                            />
-                            <div class="form__counter">
-                                {{ counterNameForCertificates }} / 100
-                            </div>
-                        </div>
-                        <div class="form__field">
-                            <label for="case_name"
-                                >Наименование регионального отделения в
-                                Предложном падеже (для справок)
-                            </label>
-                            <Input
-                                class="form__input"
-                                type="text"
-                                id="case_name"
-                                placeholder="Например, Новосибирское региональное отделение"
-                                name="case_name"
-                                v-model:value="case_name"
-                                :maxlength="100"
-                            />
-                            <div class="form__counter">
-                                {{ counterCaseName }} / 100
-                            </div>
-                        </div>
-                        <div class="form__field">
-                            <label for="legal_address"
-                                >Юридический адрес регионального отделения (для
-                                справок)
-                            </label>
-                            <Input
-                                class="form__input"
-                                type="text"
-                                id="legal_address"
-                                placeholder="Например, 630005, г. Новосибирск, ул. Некрасова, д. 48, тел/факс (383)-210-38-71, электронная почта studnso@mail.ru."
-                                name="legal_address"
-                                v-model:value="legal_address"
-                                :maxlength="200"
-                            />
-                            <div class="form__counter">
-                                {{ counterLegalAddress }} / 200
-                            </div>
-                        </div>
-                        <div class="form__field">
-                            <label for="rs-requisites"
-                                >Реквизиты регионального отделения (для
-                                справок)</label
-                            >
-                            <TextareaAbout
-                                :rows="2"
-                                maxlength="500"
-                                class="form__textarea"
-                                id="requisites"
-                                placeholder="Например, Расчетный счет 40703810695240700029 в филиале Сибирский ПАО Банк «ФК Открытие» г. Новосибирск, к/с 30101810250040000867, БИК 045004867, ИНН/КПП 5406970383/540601001, ОГРН 1115400003201."
-                                name="requisites"
-                                v-model:value="requisites"
-                            ></TextareaAbout>
-                            <div class="form__counter">
-                                {{ counterRequisites }} / 500
-                            </div>
-                        </div>
-
                         <div class="form__field">
                             <label for="hq-slogan">Девиз штаба</label>
                             <Input
@@ -529,6 +399,7 @@
                                 {{ counterAbout }} / 1000
                             </div>
                         </div>
+
                         <div class="form__field">
                             <label for="upload-logo">Добавьте логотип</label>
                             <div class="user-metric__avatar-wrapper">
@@ -628,9 +499,7 @@
                                                                 color="blue-darken-1"
                                                                 variant="text"
                                                                 @click="
-                                                                    dialog = false;
-                                                                    urlEmblem =
-                                                                        null;
+                                                                    dialog = false
                                                                 "
                                                             >
                                                                 Закрыть
@@ -660,7 +529,6 @@
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
-
                         <div class="form__field">
                             <label for="upload-banner">Добавьте баннер</label>
                             <div class="user-metric__top">
@@ -712,9 +580,7 @@
                                                             Добавить баннер
                                                         </v-btn>
                                                     </template>
-                                                    <v-card
-                                                        class="uploadEmblem_wrap p-dropdown-items-wrapper"
-                                                    >
+                                                    <v-card>
                                                         <v-card-title>
                                                             <span
                                                                 class="text-h5"
@@ -756,9 +622,7 @@
                                                                 color="blue-darken-1"
                                                                 variant="text"
                                                                 @click="
-                                                                    dialog = false;
-                                                                    urlBanner =
-                                                                        null;
+                                                                    dialog = false
                                                                 "
                                                             >
                                                                 Закрыть
@@ -832,16 +696,16 @@ import { useRouter } from 'vue-router';
 const emit = defineEmits(['update:value']);
 const router = useRouter();
 
-// const props = defineProps({
-//     participants: {
-//         type: Boolean,
-//         default: false,
-//     },
-//     unit: {
-//         type: Object,
-//         default: () => ({}),
-//     },
-// });
+const props = defineProps({
+    participants: {
+        type: Boolean,
+        default: false,
+    },
+    unit: {
+        type: Object,
+        default: () => ({}),
+    },
+});
 
 const dialog = ref(false);
 const urlEmblem = ref(null);
@@ -850,31 +714,23 @@ const urlBanner = ref(null);
 const submited = ref(false);
 
 const name = ref('');
-const district_headquarter = ref(null);
-const region = ref(null);
-const founding_date = ref('');
+const date_students = ref('')
+const date_first = ref('')
 const city = ref('');
 const commander = ref(null);
 const social_vk = ref('');
 const social_tg = ref('');
-const conference_date = ref('');
-const registry_number = ref('');
-const registry_date = ref('');
-const name_for_certificates = ref('');
-const case_name = ref('');
-const legal_address = ref('');
-const requisites = ref('');
 const slogan = ref('');
 const about = ref('');
 const fileEmblem = ref(null);
 const fileBanner = ref(null);
 
-const selectFile = (event) => {
+const selectFile = event => {
     fileEmblem.value = event.target.files[0];
     urlEmblem.value = URL.createObjectURL(fileEmblem.value);
 };
 
-const selectBanner = (event) => {
+const selectBanner = event => {
     fileBanner.value = event.target.files[0];
     urlBanner.value = URL.createObjectURL(fileBanner.value);
 };
@@ -889,23 +745,16 @@ const uploadBanner = () => {
 
 const swal = inject('$swal');
 
+// отправка данных в бэк
 const UploadData = async () => {
     const formData = new FormData();
     formData.append('name', name.value);
-    formData.append('district_headquarter', district_headquarter.value);
-    formData.append('region', region.value);
-    formData.append('founding_date', founding_date.value);
+    formData.append('date_students', date_students.value);
+    formData.append('date_first', date_first.value)
     formData.append('city', city.value);
     formData.append('commander', commander.value);
     formData.append('social_vk', social_vk.value);
     formData.append('social_tg', social_tg.value);
-    formData.append('conference_date', conference_date.value);
-    formData.append('registry_number', registry_number.value);
-    formData.append('registry_date', registry_date.value);
-    formData.append('name_for_certificates', name_for_certificates.value);
-    formData.append('case_name', case_name.value);
-    formData.append('legal_address', legal_address.value);
-    formData.append('requisites', requisites.value);
     formData.append('slogan', slogan.value);
     formData.append('about', about.value);
     formData.append('emblem', fileEmblem.value);
@@ -917,7 +766,7 @@ const UploadData = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         })
-        .then((response) => {
+        .then(response => {
             // formData = response.data;
             console.log(response.data);
             swal.fire({
@@ -927,10 +776,10 @@ const UploadData = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            router.push('/RegionalHeadquarters');
+            router.push('/AllHeadquarters');
             // router.push({ name: 'user', params: { userId: '123' } })
         })
-        .catch((error) => {
+        .catch(error => {
             console.error('There was an error!', error);
             swal.fire({
                 position: 'top-center',
@@ -946,21 +795,11 @@ const UploadData = async () => {
 const counterName = computed(() => {
     return name.value.length || 0;
 });
-const counterNameForCertificates = computed(() => {
-    return name_for_certificates.value.length || 0;
-});
-const counterCaseName = computed(() => {
-    return case_name.value.length || 0;
-});
-const counterLegalAddress = computed(() => {
-    return legal_address.value.length || 0;
-});
-const counterRequisites = computed(() => {
-    return requisites.value.length || 0;
-});
+
 const counterSlogan = computed(() => {
     return slogan.value.length || 0;
 });
+
 const counterAbout = computed(() => {
     return about.value.length || 0;
 });
@@ -995,91 +834,16 @@ const searchMembers = ref('');
 // });
 
 const onUpdateMember = (event, id) => {
-    const targetMember = members.value.find((member) => member.id === id);
+    const targetMember = members.value.find(member => member.id === id);
 
     const firstkey = Object.keys(event)[0];
     targetMember[firstkey] = event[firstkey];
 };
 
-const changeValue = (event) => {
+const changeValue = event => {
     console.log(event);
     emit('update:value', event);
 };
-
-/* --------------------------------------------------------- Редактирование Штаба ------------------------------------------------------------ */
-
-/* Функция получения и вставки в инпут данных с сервера */
-
-// const districtid = route.params.id; /* Получим из URL параметра */
-// const editDistrict = route.params.editDistrict;
-// if (editDistrict) {
-//     editingProfileDistrict();
-// }
-// const editingProfileDistrict = () => {
-//     const getDataOfDistrict = async () => {
-//         await HTTP.get(`/regionals/${districtid}`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         })
-//             .then((response) => {
-//                 name = response.data.name;
-//                 // переменовать под себя
-//                 /* city = ref(props.unit.city);
-// regional = ref(props.unit.regional);
-// beast = ref(props.unit.beast);
-// vk = ref(props.unit.vk);
-// te = ref(props.unit.te);
-// slogan = ref(props.unit.slogan);
-// about = ref(props.unit.about);
-// avatar = ref(props.unit.avatar);
-// banner = ref(props.unit.banner);
-// regNameI = ref(props.unit.regNameI);
-// regNameP = ref(props.unit.regNameP);
-// address = ref(props.unit.address);
-// requisites = ref(props.unit.requisites);
-// ofYear = ref(props.unit.ofYear);
-// confDate = ref(props.unit.confDate);
-// regNumber = ref(props.unit.regNumber);
-// registryDate = ref(props.unit.registryDate); */
-//             }) /* Получаем данные с сервера и обновляем инпуты*/
-//             .catch(function (error) {
-//                 console.log('failed ' + error);
-//             });
-//     };
-// };
-
-// /* Ф-ия отправки изменных данных на сервер */
-
-// const sendEditingData = async () => {
-//     try {
-//         const formData = new FormData();
-//         formData.append('name', name.value);
-//         formData.append('founding_date', founding_date.value);
-//         formData.append('city', city.value);
-//         formData.append('commander', commander.value);
-//         formData.append('social_vk', social_vk.value);
-//         formData.append('social_tg', social_tg.value);
-//         formData.append('slogan', slogan.value);
-//         formData.append('about', about.value);
-//         formData.append('emblem', fileEmblem.value);
-//         formData.append('banner', fileBanner.value);
-
-//         await HTTP.patch(
-//             `/regionals/${districtid}`,
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//             formData,
-//         );
-//     } catch (err) {
-//         throw err;
-//     }
-// };
 </script>
 
 <style lang="scss" scoped>
@@ -1094,6 +858,9 @@ const changeValue = (event) => {
     font-weight: 600;
     line-height: 20px;
     text-transform: none;
+    display: flex;
+    justify-content: center;
+    margin-left: 20px;
 
     &--next,
     &--prev {
@@ -1113,6 +880,23 @@ const changeValue = (event) => {
     margin-bottom: 20px;
     width: 100%;
     resize: none;
+}
+
+.form_width {
+    width: 46%;
+}
+
+.uploadEmblem_wrap {
+    max-width: 800px;
+    margin: auto;
+}
+
+.uploadEmblem_img {
+    max-width: 500px;
+}
+
+.uploadBtn {
+    justify-content: center;
 }
 
 .p-dropdown-items-wrapper {
@@ -1140,14 +924,8 @@ const changeValue = (event) => {
     }
 }
 
-.test {
+.date_central_wrap {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
-    width: 100%;
-}
-
-.form_width {
-    width: 46%;
 }
 </style>
