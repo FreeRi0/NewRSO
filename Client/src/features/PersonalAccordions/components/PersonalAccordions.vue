@@ -3191,11 +3191,11 @@ const selectedPass = ref('Да');
 }
 
 .input-big {
-    width: 465px;
+    width: 465px !important;
 }
 
 .input-small {
-    width: 250px;
+    width: 250px !important;
 }
 
 .input-full {

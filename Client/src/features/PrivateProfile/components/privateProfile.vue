@@ -67,18 +67,17 @@
                     ></Select>
                 </div>
                 <Button
-                    v-if="isSave"
                     type="submit"
                     label="Сохранить"
                     color="primary"
                 ></Button>
-                <Button
+                <!-- <Button
                     v-else
-                    type="submit"
+                    type="button"
                     @click="updateChangePrivate"
                     label="Обновить"
                     color="primary"
-                ></Button>
+                ></Button> -->
             </form>
         </div>
     </div>

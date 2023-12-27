@@ -90,12 +90,15 @@ const updateValue = (e) => {
 }
 
 .form-input input {
+
+    box-sizing: border-box;
     border: 2px solid #a3a3a3;
   border-radius: 10px;
   display: block;
   font-size: 12px;
   padding: 10px 16px 10px 16px;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .form-input-requisites input {
