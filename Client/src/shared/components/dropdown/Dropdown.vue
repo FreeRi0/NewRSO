@@ -116,7 +116,9 @@ const props = defineProps({
 
     &__box-image img {
         width: 100%;
-        height: auto;
+        border-radius: 100%;
+        height: 56px;
+        // height: auto;
     }
 
     &__button-item {

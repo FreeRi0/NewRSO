@@ -68,10 +68,9 @@
                 <div class="nav-user__location" v-if="user">
                     <button class="nav-user__button" @click="show = !show">
                         <!--прописать в span кнопки логику изменения ее названия-->
-                        <span
-                            >{{ user?.user_region?.reg_region }} региональное
-                            отделение</span
-                        >
+
+                        <span>{{ user?.user_region?.reg_town }} региональное отделение</span>
+
                     </button>
 
                     <div
@@ -89,13 +88,6 @@
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <!-- <Input
-                            class="nav-user__input"
-                            placeholder="Выберите свой регион"
-                            name="your-region"
-                            id="your-region"
-                            type="text"
-                        /> -->
                         <Select
                             variant="outlined"
                             clearable
@@ -118,16 +110,18 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- <router-link  :to="{ name: 'userpage', params: { id: user.id } }"></router-link> -->
                 <div class="nav-user__menu user-menu" v-if="user">
                     <Dropdown
                         :items="userPages"
                         :image="true"
-                        url="/assets/avatar-user.svg"
+                        :url="user?.media?.photo"
                         desc="Фотография пользователя"
                     />
-                    <Button v-if="user" @click="LogOut" label="Выйти"></Button>
-                    <p v-else>Not auth</p>
+
+                    <!-- <img :src="user?.media?.photo" alt="userphoto"> -->
+<!--
+                    <Button v-if="user" @click="LogOut" label="Выйти"></Button> -->
                 </div>
             </nav>
         </header>
@@ -141,9 +135,13 @@ import { Button } from '@shared/components/buttons';
 import { Select } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch } from 'vue';
-import { useRouter, onBeforeRouteUpdate } from 'vue-router';
+import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const router = useRouter();
+
+// const route = useRoute();
+// let id = route.params.id;
+
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
@@ -155,7 +153,7 @@ const pages = ref([
 ]);
 
 const userPages = ref([
-    { title: 'Моя страница', link: '/UserPage/' },
+    { title: 'Моя страница', link: `/UserPage/` },
     { title: 'Мой отряд', link: '/allSquads' },
     { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
     { title: 'Местный штаб', link: '/LocalHeadquarters' },
@@ -182,6 +180,9 @@ const removeClass = () => {
     console.log(menu);
     menu.classList.toggle('no-visible');
 };
+
+const regions = ref({})
+
 
 const getUser = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -216,6 +217,22 @@ const updateRegion = async () => {
         });
 };
 
+const getRegions = async () => {
+    await HTTP.get(`/regions/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regions.value = response.data;
+            console.log(regions.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+}
+
 const LogOut = () => {
     localStorage.removeItem('Token');
     router.push('/');
@@ -238,6 +255,7 @@ const LogOut = () => {
 
 onMounted(() => {
     getUser();
+    getRegions();
 });
 </script>
 
@@ -462,6 +480,7 @@ onMounted(() => {
         &__box-image {
             margin-right: 12px;
             width: 56px;
+            border-radius: 100%;
 
             @media (max-width: 1024px) {
                 margin-right: 0;
@@ -630,4 +649,4 @@ onMounted(() => {
     font-weight: 600;
 }
 </style>
-@shared/components/selects/inputs
+
