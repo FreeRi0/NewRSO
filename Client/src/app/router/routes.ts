@@ -91,7 +91,6 @@ const routes: RouteRecordRaw[] = [
                         ],
                     },
                 ],
-
             },
             // {
             //     path: '/HQ',
@@ -102,7 +101,6 @@ const routes: RouteRecordRaw[] = [
             //     }
             // },
             {
-
                 path: '/HQ',
                 meta: {
                     requiresAuth: true,
@@ -131,8 +129,6 @@ const routes: RouteRecordRaw[] = [
                         ],
                     },
                 ],
-
-                
             },
             {
                 path: '/DistrictHQ',
@@ -145,7 +141,6 @@ const routes: RouteRecordRaw[] = [
                 name: 'CentralHQ',
                 component: () =>
                     import('@pages/CentralHQPage/CentralHQPage.vue'),
-
             },
             {
                 path: '/RegionalHQ',
@@ -155,7 +150,6 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
-
             },
             {
                 path: '/LocalHQ',
@@ -164,7 +158,6 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
-
             },
             {
                 path: '/UserPage',
@@ -302,7 +295,6 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
-
             },
             // {
             //     path: '/edithq/:id',
@@ -350,7 +342,6 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/ContributionPage/components/ContributorPay.vue'
                     ),
-
             },
             {
                 path: '/CreationOfRS',
@@ -366,10 +357,9 @@ const routes: RouteRecordRaw[] = [
                 name: 'faq',
                 component: () =>
                     import('@pages/HelpInfoData/components/helpInfoData.vue'),
-                    meta: {
-                        requiresAuth: true
-                    }
-
+                meta: {
+                    requiresAuth: true,
+                },
             },
         ],
     },

@@ -688,12 +688,23 @@
                     @click="openPanelTwo"
                 ></Button>
                 <Button
+                    v-if="!participants"
                     type="submit"
                     class="form-button"
                     variant="text"
                     label="Создать"
                     size="large"
-                ></Button>
+                >
+                </Button>
+                <Button
+                    v-else
+                    type="submit"
+                    class="form-button"
+                    variant="text"
+                    label="Сохранить"
+                    size="large"
+                >
+                </Button>
             </v-card-actions>
         </v-expansion-panels>
     </form>

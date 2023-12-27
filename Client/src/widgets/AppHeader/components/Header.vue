@@ -68,7 +68,10 @@
                 <div class="nav-user__location" v-if="user">
                     <button class="nav-user__button" @click="show = !show">
                         <!--прописать в span кнопки логику изменения ее названия-->
-                        <span>{{ user?.user_region?.reg_region }} региональное отделение</span>
+                        <span
+                            >{{ user?.user_region?.reg_region }} региональное
+                            отделение</span
+                        >
                     </button>
 
                     <div
@@ -98,20 +101,20 @@
                             clearable
                             name="select_education"
                             id="select-education"
+                            placeholder="Ваш регион"
                             v-model="user.region"
-                            address="api/v1/regions/"
+                            address="regions/"
                         ></Select>
 
                         <div>
                             <Button
-                               type="submit"
+                                type="submit"
                                 class="nav-user__button-agree mt-2 mx-auto"
                                 label="Да, все верно"
                                 color="primary"
                                 size="large"
                                 @click="updateRegion"
                             ></Button>
-
                         </div>
                     </div>
                 </div>
@@ -134,7 +137,7 @@
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
-import { Input } from '@shared/components/inputs';
+// import { Input } from '@shared/components/inputs';
 import { Select } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch } from 'vue';
@@ -158,23 +161,25 @@ const userPages = ref([
     { title: 'Местный штаб', link: '/LocalHeadquarters' },
     { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
     { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
+    { title: 'Центральный штаб', link: '/CentralHQ' },
     { title: 'Активные заявки', link: '#' },
     { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', link: '/contributorPay' },
     { title: 'Оформление справок', link: '/references' },
     { title: 'Настройки профиля', link: '/PersonalData' },
-    { title: 'Выйти из ЛК', link: '#' },
+    { title: 'Выйти из ЛК', button: true },
 ]);
 
-const show = ref(false);
+let show = ref(false);
 
 const isOpen = ref(false);
 const user = ref({
-    region: null
+    region: null,
 });
 
 const removeClass = () => {
     const menu = navMenu.value;
+    console.log(menu);
     menu.classList.toggle('no-visible');
 };
 
@@ -203,13 +208,13 @@ const updateRegion = async () => {
     })
         .then((response) => {
             user.value = response.data;
-            show = !show
+            show = !show;
             console.log(user.value);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
+};
 
 const LogOut = () => {
     localStorage.removeItem('Token');
@@ -246,6 +251,7 @@ onMounted(() => {
     padding: 15px 0;
     color: #35383f;
     position: relative;
+    // border-bottom: 1px solid red; //-------------------------------------
 
     &__overlay {
         position: fixed;
@@ -401,11 +407,12 @@ onMounted(() => {
         top: 100%;
         display: grid;
         row-gap: 8px;
-        padding: 8px 28px;
+        padding: 28px 28px;
         max-height: 820px; //---------------
+        width: 328px;
         overflow-y: auto;
-        border-radius: 0 0 10px 10px;
-        background-color: #ffffff;
+        border-radius: 10px;
+        background-color: #1f7cc0;
         z-index: 2;
 
         @media (max-width: 1024px) {
@@ -425,7 +432,7 @@ onMounted(() => {
             bottom: 0;
             right: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.2);
 
             @media (max-width: 1024px) {
                 background-color: rgba(255, 255, 255, 0.2);
@@ -439,8 +446,14 @@ onMounted(() => {
 
     &__link {
         display: block;
-        padding: 16px 0;
+        padding: 11px 0;
         width: max-content;
+    }
+}
+
+.nav-menu-item {
+    .dropdown__link {
+        color: #ffffff;
     }
 }
 
