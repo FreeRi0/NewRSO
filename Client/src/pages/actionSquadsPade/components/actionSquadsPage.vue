@@ -76,7 +76,7 @@
                     <Button class='settings-btm' label='Свернуть все'>Сохранить</Button>
                 </div>
             </div>
-            <div class='col'>
+            <div class='col' style='width: 100%'>
                 <div class='sort-container'>
                     <div class='sort-layout sort-types'>
                         <Button v-if='vertical' type='button' class='dashboard sort-button' icon='icon' color='white'
@@ -167,6 +167,9 @@ const getActions = async () => {
 </script>
 
 <style lang='scss' scoped>
+    .v-label{
+      width: 100% !important;
+    }
     //Общий стиль компонента
     .action{
         &-container{
@@ -188,7 +191,7 @@ const getActions = async () => {
     //Стили аккордеонов
     .settings{
         &-container{
-          width: 286px;
+          width: 320px;
           margin-right: 16px;
           margin-bottom: 20px;
         }

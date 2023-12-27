@@ -1,7 +1,9 @@
 <template lang>
     <div class='postcard'>
-        <img src="@app/assets/actions/action_1.png" class='postcard-image' alt='Изображение'/>
-        <p class='postcard-title'>Спевка</p>
+        <section class='postcard-counts'>
+            <img src="@app/assets/actions/action_1.png" class='postcard-image' alt='Изображение'/>
+            <p class='postcard-title'>Спевка</p>
+        </section>
         <section class='postcard-counts'>
             <div class='postcard-date'>29 февраля 2023</div>
             <div class='postcard-group'>20<img src="@app/assets/actions/Group_light.svg" alt=''/></div>
@@ -40,13 +42,13 @@ const props = defineProps({
 
 <style lang='scss' scoped>
 .postcard{
-  width: 100%;
   height: 48px;
     margin-bottom: 1px;
   padding-left: 10px;
   padding-right: 10px;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   border: 1px solid gray;
   border-radius: 5px;

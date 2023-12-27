@@ -45,7 +45,6 @@ const actions = [
         groupReq: '200',
         tags: "Всероссийское"
     }];
-//
 const actionLevel = [{
     id: 1,
     type: "Всероссийское",
