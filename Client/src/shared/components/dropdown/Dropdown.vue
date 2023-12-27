@@ -50,25 +50,52 @@
         <transition name="fade" appear>
             <ul class="dropdown__list" v-if="isOpen">
                 <li v-for="(item, i) in items" :key="i" class="dropdown__item">
-                    <a class="dropdown__link" :href="item.link">{{
-                        item.title
-                    }}</a>
+                    <a
+                        v-if="item.link"
+                        class="dropdown__link"
+                        :href="item.link"
+                        >{{ item.title }}</a
+                    >
+                    <button
+                        class="dropdown__button-item"
+                        v-if="item.button"
+                        @click="on"
+                    >
+                        {{ item.title }}
+                    </button>
                 </li>
             </ul>
         </transition>
     </div>
 </template>
 
-<script>
-export default {
-    name: 'dropdown',
-    props: ['title', 'items', 'image', 'url', 'desc'],
-    data() {
-        return {
-            isOpen: false,
-        };
+<script setup>
+const props = defineProps({
+    title: {
+        type: String,
+        default: '',
     },
-};
+    image: {
+        type: Boolean,
+        default: false,
+    },
+    url: {
+        type: String,
+        default: '',
+    },
+    desk: {
+        type: String,
+        default: '',
+    },
+    items: {
+        type: Array,
+        default: () => [],
+    },
+    isOpen: {
+        type: Boolean,
+        default: false,
+    },
+});
 </script>
 
 <style lang="scss">
@@ -92,6 +119,11 @@ export default {
         border-radius: 100%;
         height: 56px;
         // height: auto;
+    }
+
+    &__button-item {
+        color: #ffffff;
+        padding: 11px 0;
     }
 }
 

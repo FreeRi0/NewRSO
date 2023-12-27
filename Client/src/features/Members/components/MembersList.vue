@@ -5,7 +5,7 @@
                 <ItemMember
                     class="member__item"
                     v-for="item in items"
-                    :key="item.title"
+                    :key="item.id"
                     v-bind="item"
                     @update-member="onUpdateMember"
                 ></ItemMember>
