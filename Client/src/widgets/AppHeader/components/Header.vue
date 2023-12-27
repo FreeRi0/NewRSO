@@ -69,8 +69,10 @@
                     <button class="nav-user__button" @click="show = !show">
                         <!--прописать в span кнопки логику изменения ее названия-->
 
-                        <span>{{ user?.user_region?.reg_town }} региональное отделение</span>
-
+                        <span
+                            >{{ user?.user_region?.reg_town }} региональное
+                            отделение</span
+                        >
                     </button>
 
                     <div
@@ -120,7 +122,7 @@
                     />
 
                     <!-- <img :src="user?.media?.photo" alt="userphoto"> -->
-<!--
+                    <!--
                     <Button v-if="user" @click="LogOut" label="Выйти"></Button> -->
                 </div>
             </nav>
@@ -141,7 +143,6 @@ const router = useRouter();
 
 // const route = useRoute();
 // let id = route.params.id;
-
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
@@ -181,8 +182,7 @@ const removeClass = () => {
     menu.classList.toggle('no-visible');
 };
 
-const regions = ref({})
-
+const regions = ref({});
 
 const getUser = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -231,11 +231,6 @@ const getRegions = async () => {
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
-
-const LogOut = () => {
-    localStorage.removeItem('Token');
-    router.push('/');
 };
 
 // onBeforeRouteUpdate(async (to, from) => {
@@ -649,4 +644,3 @@ onMounted(() => {
     font-weight: 600;
 }
 </style>
-

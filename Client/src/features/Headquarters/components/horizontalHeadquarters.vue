@@ -1,7 +1,8 @@
 <template>
     <div class="horizontal-item" v-for="headquarter in headquarters" v-if="headquarters.length > 0">
         <div class="horizontal-img">
-            <img :src="headquarter.emblem" alt="logo" />
+            <img :src="headquarter.emblem" alt="logo" v-if="headquarters.emblem" />
+            <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
         </div>
         <div class="containerHorizontal">
             <p class="headquarters-wrapper__item-category-full">
