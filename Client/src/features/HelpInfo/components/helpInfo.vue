@@ -70,36 +70,40 @@
                         <v-list>
                             <v-list-group>
                                 <template v-slot:activator="{ props }">
-                                    
                                     <v-list-item
                                         v-bind="props"
                                         title="Что такое РСО?"
                                     ></v-list-item>
-                                    <v-iconчччччч>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
-                                <path
-                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                        </v-iconчччччч>
+                                    <!-- <v-icon>
+                                                                   
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="32"
+                                            height="32"
+                                            viewBox="0 0 32 32"
+                                            fill="none"
+                                        >
+                                                                           
+                                            <circle
+                                                cx="16"
+                                                cy="16"
+                                                r="15.5"
+                                                fill="#1F7CC0"
+                                                stroke="#1F7CC0"
+                                            />
+                                                                           
+                                            <path
+                                                d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                stroke="white"
+                                                stroke-width="1.5"
+                                                stroke-miterlimit="10"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                                                       
+                                        </svg>
+                                                               
+                                    </v-icon> -->
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">

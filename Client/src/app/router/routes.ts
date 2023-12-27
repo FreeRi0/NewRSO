@@ -399,7 +399,7 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/Event',
-                name: 'faq',
+                name: 'event',
                 component: () =>
                     import('@pages/Event/components/Event.vue'),
                     meta: {
