@@ -8,7 +8,8 @@
             :to="{ name: 'LocalHQ', params: { id: localHeadquarter.id } }"
         >
             <div class="round-img">
-                <img :src="localHeadquarter.emblem" alt="logo" />
+                <img :src="localHeadquarter.emblem" alt="logo" v-if="localHeadquarter.emblem" />
+                <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
             </div>
             <div class="container-headquarters">
                 <p class="headquarters-wrapper__item-title">

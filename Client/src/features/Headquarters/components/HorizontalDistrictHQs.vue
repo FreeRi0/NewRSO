@@ -5,7 +5,8 @@
         v-if="districtHeadquarters.length > 0"
     >
         <div class="horizontal-img">
-            <img :src="districtHeadquarter.emblem" alt="logo" />
+            <img :src="districtHeadquarter.emblem" alt="logo" v-if="districtHeadquarter.emblem"/>
+            <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
         </div>
         <div class="containerHorizontal">
             <p class="headquarters-wrapper__item-category-full">

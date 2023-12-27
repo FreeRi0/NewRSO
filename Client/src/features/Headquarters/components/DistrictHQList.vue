@@ -8,7 +8,8 @@
             :to="{ name: 'DistrictHQ', params: { id: districtHeadquarter.id } }"
         >
             <div class="round-img">
-                <img :src="districtHeadquarter.emblem" alt="logo" />
+                <img :src="districtHeadquarter.emblem" alt="logo" v-if="districtHeadquarter.emblem" />
+                <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
             </div>
             <div class="container-headquarters">
                 <p class="headquarters-wrapper__item-title">

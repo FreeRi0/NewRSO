@@ -363,7 +363,7 @@
                                         variant="outlined"
                                         clearable
                                         v-model="parentData.region"
-                                        address="api/v1/regions/"
+                                        address="/regions/"
                                     ></Select>
                                 </div>
 
@@ -630,7 +630,7 @@
                                 clearable
                                 v-model="regionData.reg_region_id"
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
-                                address="api/v1/regions/"
+                                address="/regions/"
                             ></Select>
                         </div>
                         <div class="form-field">
@@ -740,7 +740,7 @@
                                     variant="outlined"
                                     clearable
                                     v-model="regionData.fact_region"
-                                    address="api/v1/regions/"
+                                    address="/regions/"
                                 ></Select>
                             </div>
                             <div class="form-field">

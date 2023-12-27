@@ -78,7 +78,7 @@
                             id="select-district"
                             v-model="selectedSortDistrict"
                             class="filter-district"
-                            address="api/v1/districts/"
+                            address="/districts/"
                         ></Select>
                     </div>
                     <div class="sort-select">
@@ -88,7 +88,7 @@
                             id="select-region"
                             v-model="selectedSortRegion"
                             class="filter-region"
-                            address="api/v1/regionals/"
+                            address="/regionals/"
                         ></Select>
                     </div>
                     <div class="sort-select">
@@ -98,7 +98,7 @@
                             id="select-local"
                             v-model="selectedSortLocal"
                             class="filter-local"
-                            address="api/v1/locals/"
+                            address="/locals/"
                         ></Select>
                     </div>
                     <div class="sort-select">

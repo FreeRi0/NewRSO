@@ -94,7 +94,7 @@
                             name="select_education"
                             id="select-education"
                             v-model="selectedSort"
-                            address="api/v1/eduicational_institutions/"
+                            address="/eduicational_institutions/"
                         ></Select>
                     </div>
                     <div class="sort-select">

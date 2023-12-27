@@ -78,7 +78,7 @@
                             id="select-district"
                             v-model="selectedSortDistrict"
                             class="filter-district"
-                            address="api/v1/districts/"
+                            address="/districts/"
                             placeholder="Окружные штабы"
                         ></Select>
                     </div>
@@ -90,7 +90,7 @@
                             id="select-region"
                             v-model="selectedSortRegion"
                             class="filter-region"
-                            address="api/v1/regionals/"
+                            address="/regionals/"
                         ></Select>
                     </div>
                     <div class="sort-select">
