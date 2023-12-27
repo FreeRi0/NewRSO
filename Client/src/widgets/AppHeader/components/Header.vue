@@ -143,7 +143,7 @@ const pages = ref([
     { title: 'Местные штабы', link: '/LocalHeadquarters' },
     { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
     { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '#' },
+    { title: 'Центральный штаб', link: '/CentralHQ' },
 ]);
 
 const userPages = ref([
@@ -166,12 +166,10 @@ const show = ref(false);
 const isOpen = ref(false);
 const user = ref(null);
 
-
 const removeClass = () => {
     const menu = navMenu.value;
     menu.classList.toggle('no-visible');
 };
-
 
 const getUser = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -193,7 +191,6 @@ const LogOut = () => {
     localStorage.removeItem('Token');
     router.push('/');
 };
-
 
 // onBeforeRouteUpdate(async (to, from) => {
 //     if (to.params.id !== from.params.id) {

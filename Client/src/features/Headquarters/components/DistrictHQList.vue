@@ -1,15 +1,18 @@
 <template>
-    <div v-for="headquarter in headquarters" v-if="headquarters.length > 0">
+    <div
+        v-for="districtHeadquarter in districtHeadquarters"
+        v-if="districtHeadquarters.length > 0"
+    >
         <router-link
             class="headquarters-wrapper__item"
-            :to="{ name: 'HQ', params: { id: headquarter.id } }"
+            :to="{ name: 'DistrictHQ', params: { id: districtHeadquarter.id } }"
         >
             <div class="round-img">
-                <img :src="headquarter.emblem" alt="logo" />
+                <img :src="districtHeadquarter.emblem" alt="logo" />
             </div>
             <div class="container-headquarters">
                 <p class="headquarters-wrapper__item-title">
-                    {{ headquarter.name }}
+                    {{ districtHeadquarter.name }}
                 </p>
             </div>
         </router-link>
@@ -18,7 +21,7 @@
 </template>
 <script setup>
 const props = defineProps({
-    headquarters: {
+    districtHeadquarters: {
         type: Array,
         required: true,
     },

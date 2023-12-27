@@ -6,7 +6,7 @@
             <img :src="emblem" alt="Эмблема" v-if="emblem" />
             <img
                 id="profile-pic"
-                src="@app/assets/user-avatar.png"
+                src="@app/assets/hq-emblem.png"
                 alt="Аватарка(пусто)"
                 v-else
             />

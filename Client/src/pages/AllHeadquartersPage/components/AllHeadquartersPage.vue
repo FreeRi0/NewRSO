@@ -362,7 +362,7 @@ const sortedHeadquarters = computed(() => {
 .form__select {
     margin-bottom: 0px;
     margin-right: 8px;
-    border: 1px solid #35383F;
+    border: 1px solid #35383f;
 }
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');

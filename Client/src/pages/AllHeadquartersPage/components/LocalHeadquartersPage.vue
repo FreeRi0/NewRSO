@@ -94,9 +94,8 @@
                         ></Select>
                     </div>
                     <div class="sort-select">
-
                         <sortByEducation
-                        variant="outlined"
+                            variant="outlined"
                             clearable
                             v-model="sortBy"
                             :options="sortOptionss"
@@ -115,15 +114,15 @@
             </div>
 
             <div class="headquarters-wrapper" v-show="vertical">
-                <HeadquartersList
-                    :headquarters="sortedHeadquarters"
-                ></HeadquartersList>
+                <LocalHQList
+                    :localHeadquarters="sortedHeadquarters"
+                ></LocalHQList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalHeadquarters
-                    :headquarters="sortedHeadquarters"
-                ></horizontalHeadquarters>
+                <HorizontalLocalHQs
+                    :localHeadquarters="sortedHeadquarters"
+                ></HorizontalLocalHQs>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -143,8 +142,8 @@ import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import {
-    HeadquartersList,
-    horizontalHeadquarters,
+    LocalHQList,
+    HorizontalLocalHQs,
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
@@ -348,7 +347,7 @@ const sortedHeadquarters = computed(() => {
 .form__select {
     margin-bottom: 0px;
     margin-right: 8px;
-    border: 1px solid #35383F;
+    border: 1px solid #35383f;
 }
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');

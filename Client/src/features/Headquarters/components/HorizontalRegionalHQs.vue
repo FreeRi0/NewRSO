@@ -1,15 +1,15 @@
 <template>
     <div
         class="horizontal-item"
-        v-for="headquarter in headquarters"
-        v-if="headquarters.length > 0"
+        v-for="regionalHeadquarter in regionalHeadquarters"
+        v-if="regionalHeadquarters.length > 0"
     >
         <div class="horizontal-img">
-            <img :src="headquarter.emblem" alt="logo" />
+            <img :src="regionalHeadquarter.emblem" alt="logo" />
         </div>
         <div class="containerHorizontal">
             <p class="headquarters-wrapper__item-category-full">
-                {{ headquarter.name }}
+                {{ regionalHeadquarter.name }}
             </p>
         </div>
     </div>
@@ -18,7 +18,7 @@
 </template>
 <script setup>
 const props = defineProps({
-    headquarters: {
+    regionalHeadquarters: {
         type: Array,
         required: true,
     },
