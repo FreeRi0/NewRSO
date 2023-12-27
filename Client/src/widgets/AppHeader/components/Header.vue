@@ -176,9 +176,10 @@ const user = ref({
     region: null,
 });
 
+const navMenu = ref(null);
+
 const removeClass = () => {
     const menu = navMenu.value;
-    console.log(menu);
     menu.classList.toggle('no-visible');
 };
 
