@@ -4,9 +4,7 @@
         v-for="squad in squads"
         v-if="squads.length > 0"
     >
-        <router-link
-            :to="{ name: 'lso', params: { id: squad.id, name: squad.name } }"
-        >
+        <router-link :to="{ name: 'lso', params: { id: squad.id } }">
             <div class="round-img">
                 <img :src="squad.emblem" alt="logo" />
             </div>

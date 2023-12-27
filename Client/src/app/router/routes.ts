@@ -69,7 +69,7 @@ const routes: RouteRecordRaw[] = [
 
                 children: [
                     {
-                        path: ':id/:name',
+                        path: ':id',
                         meta: {
                             label: 'title',
                         },
@@ -107,7 +107,7 @@ const routes: RouteRecordRaw[] = [
                 },
                 children: [
                     {
-                        path: ':id/:name',
+                        path: ':id',
                         meta: {
                             label: 'title',
                         },

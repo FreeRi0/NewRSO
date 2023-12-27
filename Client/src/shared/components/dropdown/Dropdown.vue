@@ -114,11 +114,15 @@ const props = defineProps({
         left: 0;
     }
 
-    &__box-image img {
-        width: 100%;
-        border-radius: 100%;
+    &__box-image {
+        border-radius: 50%;
         height: 56px;
-        // height: auto;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: auto;
+        }
     }
 
     &__button-item {
