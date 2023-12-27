@@ -111,18 +111,17 @@ const props = defineProps({
     //     type: String
     // },
 
-    member : {
-        type: Array
+    member: {
+        type: Array,
     },
     squad: {
-       type: Object,
-       required: true
+        type: Object,
+        required: true,
     },
     position: {
-        type: Object
-    }
-
-})
+        type: Object,
+    },
+});
 
 // const aboutMembers = async () => {
 //     await HTTP.get(`/detachments/${id}/members/`, {

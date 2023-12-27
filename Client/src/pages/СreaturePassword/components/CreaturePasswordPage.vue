@@ -104,24 +104,42 @@ import { useVuelidate } from '@vuelidate/core';
 //         // Обработка случая, когда пароли не совпадают
 //     }
 // };
-
+const user = ref({});
 const new_password = ref('');
 const current_password = ref('');
+const token = localStorage.getItem('Token');
+
+const uid = user.value.id;
+
+const data = ref({
+    uid,
+    token,
+    new_password: new_password.value,
+});
+
+const getPrivate = async () => {
+    await HTTP.get('/rsousers/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+};
+
+getPrivate();
 
 const resetPasswordForm = async () => {
     if (new_password.value !== current_password.value) {
         console.error('Passwords do not match');
         return;
     }
-
-    const uid = 'uid';
-    const token = 'token';
-
-    const data = {
-        uid,
-        token,
-        new_password: new_password.value,
-    };
 
     try {
         const response = await axios.post(

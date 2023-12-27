@@ -150,7 +150,7 @@ const pages = ref([
     { title: 'Местные штабы', link: '/LocalHeadquarters' },
     { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
     { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '#' },
+    { title: 'Центральный штаб', link: '/CentralHQ' },
 ]);
 
 const userPages = ref([

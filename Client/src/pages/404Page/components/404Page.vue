@@ -1,27 +1,27 @@
 <template>
     <div class="container">
-       <!-- Страница Ошибка 404 -->
+        <!-- Страница Ошибка 404 -->
         <section class="error-404">
             <div class="container">
                 <div class="error-404__container">
                     <!-- Текстовая информация об ошибке -->
                     <h1>404</h1>
-                    <p>Такой страницы не существует или она перемещена по другому адресу</p>
+                    <p>
+                        Такой страницы не существует или она перемещена по
+                        другому адресу
+                    </p>
                     <!-- Кнопка с предложением вернуться в ЛК -->
                     <button class="error-404__button">
                         <a href="">Вернуться в личный кабинет</a>
                     </button>
                 </div>
             </div>
-            
         </section>
     </div>
 </template>
-<script setup>
-
-</script>
+<script setup></script>
 <style scoped lang="scss">
-    /* base- потом удалить*/
+/* base- потом удалить*/
 * {
     margin: 0;
     padding: 0;
@@ -55,7 +55,6 @@ p {
     margin: 0;
 }
 
-
 h2 {
     /* Desktop/H-2 */
     font-family: 'Akrobat';
@@ -63,7 +62,7 @@ h2 {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    color: #35383F;
+    color: #35383f;
 }
 
 p {
@@ -73,7 +72,7 @@ p {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    color: #35383F;
+    color: #35383f;
 }
 
 a {
@@ -163,19 +162,19 @@ button a {
     flex-direction: column;
     text-align: center;
     align-items: center;
-    padding-top: 172px;
+    padding-top: 100px;
     padding-bottom: 100px;
     max-width: 730px;
     min-height: 116px;
 }
 
 .error-404 h1 {
-    font-family: "Inter";
-    color: #91C9F7;
+    font-family: 'Inter';
+    color: #91c9f7;
     font-style: normal;
     font-size: 232px;
     font-weight: 700;
-    border: #39BFBF99;
+    border: #39bfbf99;
     margin-bottom: 40px;
 }
 
@@ -196,9 +195,8 @@ button a {
     width: 306px;
     min-height: 52px;
     border-radius: 10px;
-    background: #39BFBF;
+    background: #39bfbf;
     border: none;
     outline: none;
 }
-
 </style>

@@ -9,12 +9,8 @@
                     'align-left': index % 2 === 0,
                     'align-right': index % 2 !== 0,
                 }"
-                v-if="member.length > 0"
             >
-                <div
-                    class="manager-card__avatar"
-                    v-if="manager.is_trusted == true"
-                >
+                <div class="manager-card__avatar">
                     <img
                         :src="manager.user.avatar.photo"
                         alt="photo"
@@ -33,7 +29,6 @@
                     <p>{{ position.name }}</p>
                 </div>
             </div>
-            <h2 v-else>Руководство не найдено...</h2>
         </div>
     </section>
 </template>
@@ -42,6 +37,8 @@
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
+const route = useRoute();
+let id = route.params.id;
 
 const position = ref({});
 
@@ -49,15 +46,11 @@ const props = defineProps({
     member: {
         type: Array,
     },
-    headquarter: {
-        type: Object,
-        required: true,
-    },
     position: {
         type: Object,
     },
     head: {
-        default: 'Руководство штаба',
+        type: String,
     },
 });
 
@@ -117,6 +110,12 @@ section.headquarters-management h3 {
 .manager-card__avatar {
     display: flex;
     justify-content: center;
+}
+.manager-card__avatar img {
+    margin-bottom: 32px;
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
 }
 
 .manager-card__box {

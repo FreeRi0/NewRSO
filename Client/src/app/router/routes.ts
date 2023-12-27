@@ -131,7 +131,7 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             {
-                path: '/DistrictHQ',
+                path: '/DistrictHQ/:id',
                 name: 'DistrictHQ',
                 component: () =>
                     import('@pages/DistrictHQPage/DistrictHQPage.vue'),
@@ -143,7 +143,7 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/CentralHQPage/CentralHQPage.vue'),
             },
             {
-                path: '/RegionalHQ',
+                path: '/RegionalHQ/:id',
                 name: 'RegionalHQ',
                 component: () =>
                     import('@pages/RegionalHQPage/RegionalHQPage.vue'),
@@ -152,7 +152,7 @@ const routes: RouteRecordRaw[] = [
                 },
             },
             {
-                path: '/LocalHQ',
+                path: '/LocalHQ/:id',
                 name: 'LocalHQ',
                 component: () => import('@pages/LocalHQPage/LocalHQPage.vue'),
                 meta: {
