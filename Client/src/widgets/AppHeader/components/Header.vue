@@ -69,10 +69,18 @@
                     <button class="nav-user__button" @click="show = !show">
                         <!--прописать в span кнопки логику изменения ее названия-->
 
-                        <span
+                        <!-- <span
                             >{{ user?.user_region?.reg_town }} региональное
                             отделение</span
-                        >
+                        > -->
+
+                        <span v-if="user?.user_region?.reg_region"
+                            >{{
+                                regionals[user?.user_region?.reg_region - 1]
+                                    .name
+                            }}
+                        </span>
+                        <span v-else>Выберите региональное отделение</span>
                     </button>
 
                     <div
@@ -185,6 +193,8 @@ const removeClass = () => {
 
 const regions = ref({});
 
+const regionals = ref([]);
+
 const getUser = async () => {
     await HTTP.get('/rsousers/me/', {
         headers: {
@@ -234,6 +244,22 @@ const getRegions = async () => {
         });
 };
 
+const getRegionals = async () => {
+    await HTTP.get(`/regionals/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regionals.value = response.data;
+            console.log(regionals.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
 // onBeforeRouteUpdate(async (to, from) => {
 //     if (to.params.id !== from.params.id) {
 //         getUser();
@@ -252,6 +278,7 @@ const getRegions = async () => {
 onMounted(() => {
     getUser();
     getRegions();
+    getRegionals();
 });
 </script>
 
@@ -476,7 +503,14 @@ onMounted(() => {
         &__box-image {
             margin-right: 12px;
             width: 56px;
-            border-radius: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
             @media (max-width: 1024px) {
                 margin-right: 0;
