@@ -96,7 +96,6 @@ const updateValue = (e) => {
   font-size: 12px;
   padding: 10px 16px 10px 16px;
   margin-bottom: 20px;
-  width: 100%;
 }
 
 .form-input-requisites input {
