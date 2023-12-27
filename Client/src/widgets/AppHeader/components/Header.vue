@@ -234,11 +234,6 @@ const getRegions = async () => {
         });
 };
 
-const LogOut = () => {
-    localStorage.removeItem('Token');
-    router.push('/');
-};
-
 // onBeforeRouteUpdate(async (to, from) => {
 //     if (to.params.id !== from.params.id) {
 //         getUser();

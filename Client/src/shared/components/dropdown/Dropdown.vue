@@ -6,7 +6,12 @@
             <span>{{ title }}</span>
 
             <div v-if="image" class="dropdown__box-image">
-                <img :src="url" :alt="desc" />
+                <img v-if="url" :src="url" :alt="desc" />
+                <img
+                    v-else
+                    src="@app/assets/user-avatar.png"
+                    alt="Фото бойца (заглушка)"
+                />
             </div>
 
             <transition name="fade" appear>
@@ -59,7 +64,7 @@
                     <button
                         class="dropdown__button-item"
                         v-if="item.button"
-                        @click="on"
+                        @click="LogOut"
                     >
                         {{ item.title }}
                     </button>
@@ -70,6 +75,8 @@
 </template>
 
 <script setup>
+import { useRouter, useRoute } from 'vue-router';
+const router = useRouter();
 const props = defineProps({
     title: {
         type: String,
@@ -96,6 +103,12 @@ const props = defineProps({
         default: false,
     },
 });
+
+const LogOut = () => {
+    localStorage.removeItem('Token');
+    router.push('/');
+};
+
 </script>
 
 <style lang="scss">
