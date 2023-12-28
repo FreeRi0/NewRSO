@@ -5,6 +5,7 @@
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
+                name="CreationOfRS"
             ></bannerCreate>
             <h2 class="headquarters-title">Региональные штабы</h2>
             <div class="headquarters-search">

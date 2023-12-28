@@ -126,6 +126,25 @@ const routes: RouteRecordRaw[] = [
                                         '@pages/EditingHQ/components/EditingHQ.vue'
                                     ),
                             },
+                            {
+                                path: 'EditingOfLocal',
+                                name: 'FormLocal',
+                                component: () =>
+                                    import('@pages/EditingOfLocal/components/EditingOfLocal.vue'),
+                            },
+                            {
+                                path: 'EditingOfDH',
+                                name: 'FormDH',
+                                component: () =>
+                                    import('@pages/EditingOfDH/components/EditingOfDH.vue'),
+                            },
+                            {
+                                path: 'EditingOfRS',
+                                name: 'EditingOfRS',
+                                component: () =>
+                                    import('@pages/EditingOfRS/components/EditingOfRS.vue'),
+                            },
+
                         ],
                     },
                 ],
@@ -352,42 +371,16 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
+
             {
-                path: '/EditingOfCentral',
+                path: 'EditingOfCentral',
                 name: 'FormCentral',
                 component: () =>
                     import('@pages/EditingOfCentral/components/EditingOfCentral.vue'),
-                meta: {
-                    requiresAuth: true,
-                },
+
             },
-            {
-                path: '/EditingOfDH',
-                name: 'FormDH',
-                component: () =>
-                    import('@pages/EditingOfDH/components/EditingOfDH.vue'),
-                meta: {
-                    requiresAuth: true,
-                },
-            },
-            {
-                path: '/EditingOfRS',
-                name: 'EditingOfRS',
-                component: () =>
-                    import('@pages/EditingOfRS/components/EditingOfRS.vue'),
-                meta: {
-                    requiresAuth: true,
-                },
-            },
-            {
-                path: '/EditingOfLocal',
-                name: 'FormLocal',
-                component: () =>
-                    import('@pages/EditingOfLocal/components/EditingOfLocal.vue'),
-                meta: {
-                    requiresAuth: true,
-                },
-            },
+
+
             {
                 path: '/FAQ',
                 name: 'faq',
@@ -402,6 +395,16 @@ const routes: RouteRecordRaw[] = [
                 name: 'event',
                 component: () =>
                     import('@pages/Event/components/Event.vue'),
+                    meta: {
+                        requiresAuth: true
+                    }
+            },
+
+            {
+                path: '/active',
+                name: 'active',
+                component: () =>
+                    import('@pages/ActiveApplicationsData'),
                     meta: {
                         requiresAuth: true
                     }
