@@ -672,9 +672,10 @@ import { TextareaAbout } from '@shared/components/inputs';
 
 import { useVuelidate } from '@vuelidate/core';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const emit = defineEmits(['update:value']);
+const route = useRoute();
 const router = useRouter();
 
 const props = defineProps({
@@ -835,7 +836,7 @@ const getDataOfDistrict = async()=>{
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
-        },  
+        },
     })
         .then((response) => {
       name = response.data.name;
@@ -892,7 +893,7 @@ await HTTP.patch(`/regionals/${districtid}`, {
             Authorization: 'Token ' + localStorage.getItem('Token'),
         }
     },formData)
-    
+
     }
     catch(err){
         throw err

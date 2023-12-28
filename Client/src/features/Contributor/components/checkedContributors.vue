@@ -10,7 +10,7 @@
                 <img
                     :src="participant.media.photo"
                     alt="logo"
-                    v-if="participants.media"
+                    v-if="participant.media"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -72,9 +72,9 @@ const participant = ref({
 const filteredPayed = ref([
     {
         value: 'membership_fee',
-        name: true,
+        name: 'Оплачен',
     },
-    { value: 'membership_fee', name: false },
+    { value: 'membership_fee', name: 'Неоплачен' },
 ]);
 
 const updateMembership = (participant, event) => {
@@ -87,6 +87,7 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+
 });
 const selectedPeoples = ref(props.participants);
 

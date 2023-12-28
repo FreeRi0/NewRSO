@@ -120,7 +120,7 @@
                             </div>
                         </div>
                     </div>
-                    <router-link to="/edithq" class="hq-data__link"
+                    <router-link to="/EditingOfLocal" class="hq-data__link"
                         >Редактировать штаб</router-link
                     >
                 </div>
@@ -184,7 +184,7 @@
                             </div>
                         </div>
                     </div>
-                    <router-link to="/edithq" class="hq-data__link"
+                    <router-link to="/EditingOfDH" class="hq-data__link"
                         >Редактировать штаб</router-link
                     >
                 </div>
@@ -248,7 +248,7 @@
                             </div>
                         </div>
                     </div>
-                    <router-link to="/edithq" class="hq-data__link"
+                    <router-link to="/EditingOfRS" class="hq-data__link"
                         >Редактировать штаб</router-link
                     >
                 </div>
@@ -312,7 +312,7 @@
                             </div>
                         </div>
                     </div>
-                    <router-link to="/edithq" class="hq-data__link"
+                    <router-link to="/EditingOfCentral" class="hq-data__link"
                         >Редактировать штаб</router-link
                     >
                 </div>

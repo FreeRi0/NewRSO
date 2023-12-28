@@ -421,7 +421,10 @@
             </div>
 
             <div class="references-form" v-if="selectedPeoples.length > 0">
-                <form action="#">
+                <form
+                    action="#"
+                    @submit.prevent="SendReference()"
+                >
                     <div class="data-form refer">
                         <div class="form-field">
                             <label for="education-org"
@@ -434,6 +437,7 @@
                                 name="date_start"
                                 type="date"
                                 class="input-big"
+                                v-model:value="refData.cert_start_date"
                             />
                         </div>
                         <div class="form-field">
@@ -444,6 +448,7 @@
                                 name="date_end"
                                 type="date"
                                 class="input-big"
+                                v-model:value="refData.cert_end_date"
                             />
                         </div>
                     </div>
@@ -455,6 +460,7 @@
                         <Input
                             name="spravka-field"
                             type="text"
+                            v-model:value="refData.recipient"
                             id="course"
                             class="input-full"
                             placeholder="Ответ"
@@ -469,7 +475,7 @@
                         ></checkedReference>
                     </div>
 
-                    <Button label="Получить справки"></Button>
+                    <Button type="submit" label="Получить справки"></Button>
                 </form>
             </div>
         </div>
@@ -493,6 +499,16 @@ import { HTTP } from '@app/http';
 const participantsVisible = ref(12);
 
 const participants = ref([]);
+// const participant = ref({});
+
+const selectedPeoples = ref([]);
+
+const refData = ref({
+    cert_start_date: '',
+    cert_end_date: '',
+    ids: Array,
+    recipient: '',
+});
 
 const viewParticipants = async () => {
     await HTTP.get('/rsousers/', {
@@ -514,6 +530,22 @@ onMounted(() => {
     viewParticipants();
 });
 
+const SendReference = async () => {
+    await HTTP.post('/membership_certificates/external/', refData.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            refData.value = response.data
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
 const selectedSex = ref('Все');
@@ -530,7 +562,6 @@ const maxAge = ref('');
 const checkboxAll = ref(false);
 
 const step = ref(12);
-const selectedPeoples = ref([]);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -665,13 +696,16 @@ const sortedParticipants = computed(() => {
         return tempParticipants;
     }
     tempParticipants = tempParticipants.filter((item) => {
-        return item.date_of_birth >= minAge.value && item.date_of_birth <= maxAge.value;
+        return (
+            item.date_of_birth >= minAge.value &&
+            item.date_of_birth <= maxAge.value
+        );
     });
 
     return tempParticipants;
 });
 </script>
-<style lang="scss" >
+<style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;

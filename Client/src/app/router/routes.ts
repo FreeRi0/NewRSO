@@ -354,7 +354,7 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/EditingOfCentral',
-                name: 'FormDH',
+                name: 'FormCentral',
                 component: () =>
                     import('@pages/EditingOfCentral/components/EditingOfCentral.vue'),
                 meta: {
@@ -363,7 +363,7 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/EditingOfDH',
-                name: 'FormLocal',
+                name: 'FormDH',
                 component: () =>
                     import('@pages/EditingOfDH/components/EditingOfDH.vue'),
                 meta: {
