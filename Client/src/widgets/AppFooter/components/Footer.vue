@@ -5,7 +5,7 @@
                 <div class="footer__logo-wrapper">
                     <div class="footer__logo-rso">
                         <img
-                            src="../../../app/assets/logo/rso-white.svg"
+                            src="@app/assets/logo/rso-white.svg"
                             width="80"
                             height="72"
                             alt="Логотип сайта РСО"
@@ -19,7 +19,7 @@
                                 target="_blank"
                             >
                                 <img
-                                    src="../../../app/assets/logo/vk-white.svg"
+                                    src="@app/assets/logo/vk-white.svg"
                                     width="28"
                                     height="28"
                                     alt="Логотип группы Вконтакте"
@@ -30,7 +30,7 @@
                         <li class="footer__social-item">
                             <a href="https://t.me/rso_official" target="_blank">
                                 <img
-                                    src="../../../app/assets/logo/telegram-white.svg"
+                                    src="@app/assets/logo/telegram-white.svg"
                                     width="28"
                                     height="28"
                                     alt="Логотип канала в Телеграмм"
@@ -85,7 +85,7 @@
                         target="_blank"
                     >
                         <img
-                            src="../../../app/assets/logo/logo-1t.svg"
+                            src="@app/assets/logo/logo-1t.svg"
                             width="107"
                             height="24"
                             alt="Логотип команда 1Т Клуб"
