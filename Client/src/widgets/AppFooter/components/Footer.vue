@@ -85,7 +85,7 @@
                         target="_blank"
                     >
                         <img
-                            src="@app/assets/logo/logo-1t.svg"
+                            src="@app/assets/logo/logo-1T.svg"
                             width="107"
                             height="24"
                             alt="Логотип команда 1Т Клуб"
