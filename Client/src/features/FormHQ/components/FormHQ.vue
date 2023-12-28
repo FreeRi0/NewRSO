@@ -94,6 +94,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
+                                class="form__select--select"
                                 variant="outlined"
                                 clearable
                                 name="select_institution"
@@ -107,6 +108,7 @@
                         <div class="form__field">
                             <label class="form__label" for="create-date"
                                 >Дата основания
+                                <sup class="valid-red">*</sup>
                             </label>
                             <!-- <input
                                 id="create-date"
@@ -134,6 +136,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
+                                class="form__select--select"
                                 variant="outlined"
                                 clearable
                                 name="select_regional-office"
@@ -961,6 +964,9 @@ const resetBanner = () => {
     min-height: 52px;
     margin: 0 10px;
     padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-family: 'Bert Sans';
     font-size: 16px;
     font-weight: 600;
