@@ -149,6 +149,25 @@ const routes: RouteRecordRaw[] = [
                                     label: 'Редактирование',
                                 },
                             },
+                            {
+                                path: 'EditingOfLocal',
+                                name: 'FormLocal',
+                                component: () =>
+                                    import('@pages/EditingOfLocal/components/EditingOfLocal.vue'),
+                            },
+                            {
+                                path: 'EditingOfDH',
+                                name: 'FormDH',
+                                component: () =>
+                                    import('@pages/EditingOfDH/components/EditingOfDH.vue'),
+                            },
+                            {
+                                path: 'EditingOfRS',
+                                name: 'EditingOfRS',
+                                component: () =>
+                                    import('@pages/EditingOfRS/components/EditingOfRS.vue'),
+                            },
+
                         ],
                     },
                     {
@@ -349,6 +368,16 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
+
+            {
+                path: 'EditingOfCentral',
+                name: 'FormCentral',
+                component: () =>
+                    import('@pages/EditingOfCentral/components/EditingOfCentral.vue'),
+
+            },
+
+
             {
                 path: '/FAQ',
                 name: 'faq',
@@ -357,6 +386,25 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
+            },
+            {
+                path: '/Event',
+                name: 'event',
+                component: () =>
+                    import('@pages/Event/components/Event.vue'),
+                    meta: {
+                        requiresAuth: true
+                    }
+            },
+
+            {
+                path: '/active',
+                name: 'active',
+                component: () =>
+                    import('@pages/ActiveApplicationsData'),
+                    meta: {
+                        requiresAuth: true
+                    }
             },
         ],
     },

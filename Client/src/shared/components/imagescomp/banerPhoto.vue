@@ -163,6 +163,7 @@
         </v-menu>
     </div>
 </template>
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
@@ -259,6 +260,7 @@ const deleteBanner = async () => {
         });
 };
 </script>
+
 <style lang="scss">
 .user-metric__top {
     display: grid;

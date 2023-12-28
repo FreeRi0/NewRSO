@@ -363,7 +363,7 @@
                                         variant="outlined"
                                         clearable
                                         v-model="parentData.region"
-                                        address="api/v1/regions/"
+                                        address="/regions/"
                                     ></Select>
                                 </div>
 
@@ -628,9 +628,9 @@
                             <Select
                                 variant="outlined"
                                 clearable
-                                v-model="regionData.reg_region_id"
+                                v-model="regionData.reg_region"
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
-                                address="api/v1/regions/"
+                                address="/regions/"
                             ></Select>
                         </div>
                         <div class="form-field">
@@ -729,7 +729,7 @@
                         <div
                             class="addr-fact__wrapper"
                             id="addr-fact"
-                            v-if="regionData.reg_fact_same_address == false"
+                            v-if="regionData.reg_fact_same_address == 'Нет'"
                         >
                             <p class="accordion-block-title small">
                                 Адрес фактического проживания
@@ -740,7 +740,7 @@
                                     variant="outlined"
                                     clearable
                                     v-model="regionData.fact_region"
-                                    address="api/v1/regions/"
+                                    address="/regions/"
                                 ></Select>
                             </div>
                             <div class="form-field">
@@ -1906,7 +1906,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectPass"
+                                            @uploader="selectParentPersonal"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -1943,7 +1943,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectPass"
+                                            @uploader="selectSnils"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -1973,7 +1973,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectPass"
+                                            @uploader="selectMilitary"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -2003,7 +2003,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectPass"
+                                            @uploader="selectINN"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -2033,7 +2033,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectPass"
+                                            @uploader="selectIntPass"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -2063,7 +2063,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectPass"
+                                            @uploader="selectEmployment"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -2550,14 +2550,12 @@
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-card-actions class="form__button-group">
+            <v-card-actions class="form__button-group d-flex justify-space-between">
                 <Button
-                    v-if="!regionData && !documents && !education && !statement"
                     type="submit"
                     label="Отправить данные на верификацию"
                 ></Button>
                 <Button
-                    v-else
                     @click="updateData"
                     type="button"
                     label="Обновить данные"
@@ -2894,13 +2892,7 @@ const downloadAll = async () => {
         responseType: 'blob',
     })
         .then((response) => {
-            // var FILE = window.URL.createObjectURL(new Blob([response.data]));
 
-            // var docUrl = document.createElement('a');
-            // docUrl.href = FILE;
-            // docUrl.setAttribute('download', 'parent.pdf');
-            // document.body.appendChild(docUrl);
-            // docUrl.click();
 
             const url = new Blob([response.data], { type: 'application/zip' });
             const link = document.createElement('a');
@@ -3199,11 +3191,11 @@ const selectedPass = ref('Да');
 }
 
 .input-big {
-    width: 465px;
+    width: 465px !important;
 }
 
 .input-small {
-    width: 250px;
+    width: 250px !important;
 }
 
 .input-full {

@@ -5,7 +5,7 @@
         v-if="headquarters.length > 0"
     >
         <div class="horizontal-img">
-            <img :src="headquarter.emblem" alt="logo" v-if="headquarters.emblem" />
+            <img :src="headquarter.emblem" alt="logo" v-if="headquarter.emblem" />
             <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
         </div>
         <div class="containerHorizontal">

@@ -57,6 +57,9 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    participant: {
+        type: Object,
+    }
 
 });
 const selectedPeoples = ref(props.participants);

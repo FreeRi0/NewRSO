@@ -1,0 +1,1 @@
+export { default as FormCentr } from './components/FormCentr.vue';

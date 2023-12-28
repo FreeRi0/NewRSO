@@ -14,7 +14,7 @@
         </div>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img :src="participant.media.photo" alt="logo" v-if="participants.media" />
+                <img :src="participant.media.photo" alt="logo" v-if="participant.media" />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
                     alt="photo"

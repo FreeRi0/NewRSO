@@ -56,14 +56,21 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- <router-link to="/edithq" class="hq-data__link"
+
+                        >Редактировать штаб</router-link
+                    > -->
                     <router-link
+                    class="hq-data__link"
                         :to="{
                             name: 'EditHQ',
                             params: { id: headquarter.id },
                         }"
-                        class="hq-data__link"
-                        >Редактировать штаб</router-link
+                        >Редактировать страницу</router-link
                     >
+
+                    <!-- class="hq-data__link" -->
                 </div>
             </div>
         </div>
@@ -125,8 +132,13 @@
                             </div>
                         </div>
                     </div>
-                    <router-link to="/edithq" class="hq-data__link"
-                        >Редактировать штаб</router-link
+                    <router-link
+                    class="hq-data__link"
+                        :to="{
+                            name: 'FormLocal',
+                            params: { id: localHeadquarter.id },
+                        }"
+                        >Редактировать страницу</router-link
                     >
                 </div>
             </div>
@@ -189,8 +201,13 @@
                             </div>
                         </div>
                     </div>
-                    <router-link to="/edithq" class="hq-data__link"
-                        >Редактировать штаб</router-link
+                    <router-link
+                    class="hq-data__link"
+                        :to="{
+                            name: 'FormDH',
+                            params: { id: districtHeadquarter.id },
+                        }"
+                        >Редактировать страницу</router-link
                     >
                 </div>
             </div>
@@ -254,12 +271,14 @@
                         </div>
                     </div>
                     <router-link
+
+                    class="hq-data__link"
                         :to="{
-                            name: 'EditHQ',
+                            name: 'EditingOfRS',
                             params: { id: regionalHeadquarter.id },
                         }"
-                        class="hq-data__link"
-                        >Редактировать штаб</router-link
+                        >Редактировать страницу</router-link
+
                     >
                 </div>
             </div>
@@ -322,8 +341,12 @@
                             </div>
                         </div>
                     </div>
-                    <router-link to="/edithq" class="hq-data__link"
-                        >Редактировать штаб</router-link
+                    <router-link
+                    class="hq-data__link"
+                        :to="{
+                            name: 'FormCentral',
+                        }"
+                        >Редактировать страницу</router-link
                     >
                 </div>
             </div>

@@ -1,20 +1,13 @@
 <template>
-    <form
-        class="form"
-        enctype="multipart/form-data"
-        @submit.prevent="UploadData"
-    >
+    <form class="form" @submit.prevent="UploadData">
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
-                    <template v-slot="{ expanded }">
-                        <v-row no-gutters>
-                            <v-col cols="4" class="d-flex justify-start">
-                                Основная информация
-                            </v-col>
-                            <!-- <div v-if="">обязательно для заполнения</div> -->
-                        </v-row>
-                    </template>
+                    <v-row no-gutters>
+                        <v-col cols="4" class="d-flex justify-start">
+                            Основная информация
+                        </v-col>
+                    </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
                             <svg
@@ -81,65 +74,40 @@
                                 class="form__input"
                                 placeholder="Например, Штаб СО Алтайского государственного медицинского университета (Штаб СО АГМУ)"
                                 name="name_hq"
-                                v-model:value="v.title.$model"
-                                :error="v.title.$errors"
+                                v-model:value="name"
                                 :maxlength="100"
+                                :clearable="true"
                             />
                             <div class="form__counter">
-                                {{ counterTitle }} / 100
+                                {{ counterName }} / 100
                             </div>
                         </div>
                         <div class="form__field">
-                            <label for="select-institution"
-                                >Выберите учебное заведение
+                            <label for="district_headquarter"
+                                >Выберите окружной штаб
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
-                                variant="outlined"
                                 clearable
-                                :items="institutions"
-                                name="select_institution"
-                                id="select-institution"
-                                placeholder="Например, Алтайский государственный медицинский университет"
-                                v-model:value="v.institution.$model"
-                                :error="v.institution.$errors"
+                                variant="outlined"
+                                name="district_headquarter"
+                                id="district_headquarter"
+                                v-model="district_headquarter"
+                                address="api/v1/districts/"
                             ></Select>
                         </div>
-
                         <div class="form__field">
-                            <label for="create-date">Дата основания </label>
-                            <!-- <input
-                                id="create-date"
-                                label="Дата основания"
-                                name="create_date"
-                                type="date"
-                                placeholder=""
-                                ::value="v.date.$model"
-                                :error="v.date.$errors"
-                            /> -->
-                            <Input
-                                class="form__input"
-                                id="create-date"
-                                name="create_date"
-                                type="date"
-                                v-model:value="date"
-                            />
-                        </div>
-
-                        <div class="form__field">
-                            <label for="select-regional-office"
-                                >Выберите региональное отделение
+                            <label for="region"
+                                >Выберите регион
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
-                                variant="outlined"
                                 clearable
-                                :items="regionalOffices"
-                                name="select_regional-office"
-                                id="select-regional-office"
-                                placeholder="Например, Карачаево-Черкесское региональное отделение"
-                                v-model:value="v.regional.$model"
-                                :error="v.regional.$errors"
+                                variant="outlined"
+                                name="region"
+                                id="region"
+                                v-model="region"
+                                address="api/v1/regions/"
                             ></Select>
                         </div>
 
@@ -156,24 +124,33 @@
 
                         <div class="form__field">
                             <label for="beast"
-                                >Командир штаба СО ОО:
+                                >Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Dropdown
+
+                            <!-- <Dropdown
                                 :options="leaders"
-                                id="beast"
-                                name="edit_beast"
-                                v-model="v.beast.$model"
-                                :error="v.beast.$errors"
+                                id="commander"
+                                name="commander"
+                                v-model="detachment.commander"
                                 :filterPlaceholder="'Поиск по ФИО'"
                                 :resetFilterOnHide="true"
                                 @update:value="changeValue"
-                            ></Dropdown>
+                            ></Dropdown> -->
+
+                            <Select
+                                id="commander"
+                                name="commander"
+                                placeholder="Поиск по ФИО"
+                                v-model="commander"
+                                @update:value="changeValue"
+                                address="api/v1/rsousers/"
+                            ></Select>
                         </div>
                     </div>
-
                     <v-card-actions class="form__button-group">
                         <Button
+                            type="button"
                             variant="text"
                             class="form-button form-button--next"
                             label="Далее"
@@ -256,7 +233,7 @@
                                 id="social-media-vk"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
-                                v-model:value="vk"
+                                v-model:value="social_vk"
                             />
                         </div>
 
@@ -269,11 +246,10 @@
                                 id="social-media-te"
                                 placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                 name="social_media_te"
-                                v-model:value="te"
+                                v-model:value="social_tg"
                             />
                         </div>
-
-                        <div class="form__field" v-if="participants">
+                        <div class="form__field" v-if="editDistrict">
                             <p>
                                 Участники отряда
                                 <sup class="valid-red">*</sup>
@@ -297,15 +273,14 @@
                             </v-text-field>
                             <MembersList
                                 :items="sortedMembers"
-                                :validate="v"
                                 :submited="submited"
                                 @updateMember="onUpdateMember"
                             ></MembersList>
                         </div>
                     </div>
-
                     <v-card-actions class="form__button-group">
                         <Button
+                            type="button"
                             class="form-button form-button--prev"
                             variant="text"
                             label="Назад"
@@ -313,6 +288,7 @@
                             @click="openPanelOne"
                         ></Button>
                         <Button
+                            type="button"
                             class="form-button form-button--next"
                             variant="text"
                             label="Далее"
@@ -386,6 +362,142 @@
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
+                        <div class="test">
+                            <div class="form__field form_width">
+                                <label for="founding_date"
+                                    >Официальная дата (год) появления
+                                    студенческих отрядов в регионе
+                                    <sup class="valid-red">*</sup>
+                                </label>
+                                <Input
+                                    class="form__input"
+                                    type="number"
+                                    id="founding_date"
+                                    placeholder="1971"
+                                    name="founding_date"
+                                    v-model:value="founding_date"
+                                    :minlength="4"
+                                    :maxlength="4"
+                                />
+                            </div>
+
+                            <div class="form__field form_width">
+                                <label for="conference_date"
+                                    >Дата учредительной конференции
+                                    регионального штаба
+                                    <sup class="valid-red">*</sup>
+                                </label>
+                                <Input
+                                    class="form__input"
+                                    type="date"
+                                    id="conference_date"
+                                    name="conference_date"
+                                    v-model:value="conference_date"
+                                />
+                            </div>
+                            <div class="form__field form_width">
+                                <label for="registry_number"
+                                    >Регистрационный номер в реестре молодежных
+                                    и детских общественных объединений,
+                                    пользующихся государственной поддержкой
+                                </label>
+                                <Input
+                                    class="form__input"
+                                    type="number"
+                                    placeholder="б/н"
+                                    id="registry_number"
+                                    name="registry_number"
+                                    v-model:value="registry_number"
+                                />
+                            </div>
+                            <div class="form__field form_width">
+                                <label for="registry_date"
+                                    >Дата регистрации в реестре молодежных и
+                                    детских общественных объединений,
+                                    пользующихся государственной поддержкой
+                                </label>
+                                <Input
+                                    class="form__input"
+                                    type="date"
+                                    id="registry_date"
+                                    name="registry_date"
+                                    v-model:value="registry_date"
+                                />
+                            </div>
+                        </div>
+                        <div class="form__field">
+                            <label for="name_for_certificates"
+                                >Наименование регионального отделения в
+                                Именительном падеже (для справок)
+                            </label>
+                            <Input
+                                class="form__input"
+                                type="text"
+                                id="name_for_certificates"
+                                placeholder="Например, Новосибирское региональное отделение"
+                                name="name_for_certificates"
+                                v-model:value="name_for_certificates"
+                                :maxlength="100"
+                            />
+                            <div class="form__counter">
+                                {{ counterNameForCertificates }} / 100
+                            </div>
+                        </div>
+                        <div class="form__field">
+                            <label for="case_name"
+                                >Наименование регионального отделения в
+                                Предложном падеже (для справок)
+                            </label>
+                            <Input
+                                class="form__input"
+                                type="text"
+                                id="case_name"
+                                placeholder="Например, Новосибирское региональное отделение"
+                                name="case_name"
+                                v-model:value="case_name"
+                                :maxlength="100"
+                            />
+                            <div class="form__counter">
+                                {{ counterCaseName }} / 100
+                            </div>
+                        </div>
+                        <div class="form__field">
+                            <label for="legal_address"
+                                >Юридический адрес регионального отделения (для
+                                справок)
+                            </label>
+                            <Input
+                                class="form__input"
+                                type="text"
+                                id="legal_address"
+                                placeholder="Например, 630005, г. Новосибирск, ул. Некрасова, д. 48, тел/факс (383)-210-38-71, электронная почта studnso@mail.ru."
+                                name="legal_address"
+                                v-model:value="legal_address"
+                                :maxlength="200"
+                            />
+                            <div class="form__counter">
+                                {{ counterLegalAddress }} / 200
+                            </div>
+                        </div>
+                        <div class="form__field">
+                            <label for="rs-requisites"
+                                >Реквизиты регионального отделения (для
+                                справок)</label
+                            >
+                            <TextareaAbout
+                                :rows="2"
+                                maxlength="500"
+                                class="form__textarea"
+                                id="requisites"
+                                placeholder="Например, Расчетный счет 40703810695240700029 в филиале Сибирский ПАО Банк «ФК Открытие» г. Новосибирск, к/с 30101810250040000867, БИК 045004867, ИНН/КПП 5406970383/540601001, ОГРН 1115400003201."
+                                name="requisites"
+                                v-model:value="requisites"
+                            ></TextareaAbout>
+                            <div class="form__counter">
+                                {{ counterRequisites }} / 500
+                            </div>
+                        </div>
+
                         <div class="form__field">
                             <label for="hq-slogan">Девиз штаба</label>
                             <Input
@@ -401,6 +513,7 @@
                                 {{ counterSlogan }} / 100
                             </div>
                         </div>
+
                         <div class="form__field">
                             <label for="about-hq">О штабе</label>
                             <TextareaAbout
@@ -408,22 +521,141 @@
                                 maxlength="500"
                                 class="form__textarea"
                                 id="about-hq"
-                                placeholder="Расскажите о штабе"
+                                placeholder="Описание регионального штаба"
                                 name="about_hq"
                                 v-model:value="about"
                             ></TextareaAbout>
                             <div class="form__counter">
-                                {{ counterAbout }} / 500
+                                {{ counterAbout }} / 1000
                             </div>
                         </div>
-
                         <div class="form__field">
                             <label for="upload-logo">Добавьте логотип</label>
-                            <Avatar
-                                name="upload_logo"
-                                id="upload-logo"
-                                v-model:value="avatar"
-                            />
+                            <div class="user-metric__avatar-wrapper">
+                                <div class="user-metric__avatar">
+                                    <!-- Аватар пользователя  -->
+
+                                    <img
+                                        v-if="urlEmblem"
+                                        :src="urlEmblem"
+                                        alt="avatarka"
+                                    />
+                                    <img
+                                        v-else
+                                        id="profile-pic"
+                                        src="@app/assets/user-avatar.png"
+                                        alt="Аватарка(пусто)"
+                                    />
+                                </div>
+                                <!-- Иконки редактирования аватар -->
+                                <v-menu min-width="200px" rounded>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn
+                                            class="user-metric__avatar-add"
+                                            icon
+                                            v-bind="props"
+                                        >
+                                            <v-avatar size="large">
+                                                <v-icon
+                                                    icon="mdi-plus"
+                                                ></v-icon>
+                                            </v-avatar>
+                                        </v-btn>
+                                    </template>
+                                    <v-card>
+                                        <v-card-text>
+                                            <v-row justify="center">
+                                                <v-dialog
+                                                    v-model="dialog"
+                                                    width="1024"
+                                                >
+                                                    <template
+                                                        v-slot:activator="{
+                                                            props,
+                                                        }"
+                                                    >
+                                                        <v-btn
+                                                            rounded
+                                                            variant="text"
+                                                            v-bind="props"
+                                                        >
+                                                            Добавить логотип
+                                                        </v-btn>
+                                                    </template>
+                                                    <v-card
+                                                        class="uploadEmblem_wrap p-dropdown-items-wrapper"
+                                                    >
+                                                        <v-card-title>
+                                                            <span
+                                                                class="text-h5"
+                                                                >Загрузите ваше
+                                                                фото</span
+                                                            >
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-container>
+                                                                <v-row>
+                                                                    <v-file-input
+                                                                        @change="
+                                                                            selectFile
+                                                                        "
+                                                                        show-size
+                                                                        prepend-icon="mdi-camera"
+                                                                        counter
+                                                                    ></v-file-input>
+                                                                </v-row>
+                                                                <v-row>
+                                                                    <v-card
+                                                                        class="mt-5 mx-auto"
+                                                                    >
+                                                                        <img
+                                                                            class="uploadEmblem_img"
+                                                                            v-if="
+                                                                                urlEmblem
+                                                                            "
+                                                                            :src="
+                                                                                urlEmblem
+                                                                            "
+                                                                        />
+                                                                    </v-card>
+                                                                </v-row>
+                                                            </v-container>
+                                                        </v-card-text>
+                                                        <v-card-actions
+                                                            class="uploadBtn"
+                                                        >
+                                                            <v-btn
+                                                                color="blue-darken-1"
+                                                                variant="text"
+                                                                @click="
+                                                                    dialog = false;
+                                                                    urlEmblem =
+                                                                        null;
+                                                                "
+                                                            >
+                                                                Закрыть
+                                                            </v-btn>
+                                                            <v-btn
+                                                                :disabled="
+                                                                    !fileEmblem
+                                                                "
+                                                                color="blue-darken-1"
+                                                                variant="text"
+                                                                type="submit"
+                                                                @click="
+                                                                    uploadAvatar()
+                                                                "
+                                                            >
+                                                                Загрузить
+                                                            </v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-dialog>
+                                            </v-row>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-menu>
+                            </div>
                             <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
@@ -431,11 +663,127 @@
 
                         <div class="form__field">
                             <label for="upload-banner">Добавьте баннер</label>
-                            <bannerPhoto
-                                name="upload_banner"
-                                id="upload-banner"
-                                v-model:value="banner"
-                            />
+                            <div class="user-metric__top">
+                                <div class="user-metric__top-img-wrapper">
+                                    <!-- Заглушка Банер -->
+                                    <img
+                                        v-if="urlBanner"
+                                        :src="urlBanner"
+                                        alt="Баннер личной страницы"
+                                    />
+
+                                    <img
+                                        v-else
+                                        src="@/app/assets/user-banner.jpg"
+                                        alt="Баннер личной страницы(пусто)"
+                                    />
+                                </div>
+                                <v-menu min-width="200px" rounded>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn
+                                            class="user-metric__avatar-add"
+                                            icon
+                                            v-bind="props"
+                                        >
+                                            <v-avatar size="large">
+                                                <v-icon
+                                                    icon="mdi-plus"
+                                                ></v-icon>
+                                            </v-avatar>
+                                        </v-btn>
+                                    </template>
+                                    <v-card>
+                                        <v-card-text>
+                                            <v-row justify="center">
+                                                <v-dialog
+                                                    v-model="dialog"
+                                                    width="1024"
+                                                >
+                                                    <template
+                                                        v-slot:activator="{
+                                                            props,
+                                                        }"
+                                                    >
+                                                        <v-btn
+                                                            rounded
+                                                            variant="text"
+                                                            v-bind="props"
+                                                        >
+                                                            Добавить баннер
+                                                        </v-btn>
+                                                    </template>
+                                                    <v-card
+                                                        class="uploadEmblem_wrap p-dropdown-items-wrapper"
+                                                    >
+                                                        <v-card-title>
+                                                            <span
+                                                                class="text-h5"
+                                                                >Загрузите ваш
+                                                                баннер</span
+                                                            >
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-container>
+                                                                <v-row>
+                                                                    <v-file-input
+                                                                        @change="
+                                                                            selectBanner
+                                                                        "
+                                                                        show-size
+                                                                        prepend-icon="mdi-camera"
+                                                                        counter
+                                                                    ></v-file-input>
+                                                                </v-row>
+                                                                <v-row>
+                                                                    <v-card
+                                                                        class="mt-5 mx-auto"
+                                                                    >
+                                                                        <img
+                                                                            v-if="
+                                                                                urlBanner
+                                                                            "
+                                                                            :src="
+                                                                                urlBanner
+                                                                            "
+                                                                        />
+                                                                    </v-card>
+                                                                </v-row>
+                                                            </v-container>
+                                                        </v-card-text>
+                                                        <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn
+                                                                color="blue-darken-1"
+                                                                variant="text"
+                                                                @click="
+                                                                    dialog = false;
+                                                                    urlBanner =
+                                                                        null;
+                                                                "
+                                                            >
+                                                                Закрыть
+                                                            </v-btn>
+                                                            <v-btn
+                                                                :disabled="
+                                                                    !fileBanner
+                                                                "
+                                                                color="blue-darken-1"
+                                                                variant="text"
+                                                                type="submit"
+                                                                @click="
+                                                                    uploadBanner()
+                                                                "
+                                                            >
+                                                                Загрузить
+                                                            </v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-dialog>
+                                            </v-row>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-menu>
+                            </div>
                             <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
@@ -445,6 +793,7 @@
             </v-expansion-panel>
             <v-card-actions class="form__button-group">
                 <Button
+                    type="button"
                     v-show="showButtonPrev"
                     class="form-button form-button--prev"
                     variant="text"
@@ -453,7 +802,7 @@
                     @click="openPanelTwo"
                 ></Button>
                 <Button
-                    type="text"
+                    type="submit"
                     class="form-button"
                     variant="text"
                     label="Сохранить"
@@ -479,99 +828,139 @@ import { TextareaAbout } from '@shared/components/inputs';
 import { useVuelidate } from '@vuelidate/core';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
 
 const emit = defineEmits(['update:value']);
+const router = useRouter();
 
-const props = defineProps({
-    participants: {
-        type: Boolean,
-        default: false,
-    },
-    unit: {
-        type: Object,
-        default: () => ({}),
-    },
-});
+// const props = defineProps({
+//     participants: {
+//         type: Boolean,
+//         default: false,
+//     },
+//     unit: {
+//         type: Object,
+//         default: () => ({}),
+//     },
+// });
+
+const dialog = ref(false);
+const urlEmblem = ref(null);
+const urlBanner = ref(null);
 
 const submited = ref(false);
 
-const title = ref(props.unit.title);
-const date = ref(props.unit.date);
-const institution = ref(props.unit.institution);
-const city = ref(props.unit.city);
-const regional = ref(props.unit.regional);
-const beast = ref(props.unit.beast);
-const vk = ref(props.unit.vk);
-const te = ref(props.unit.te);
-const slogan = ref(props.unit.slogan);
-const about = ref(props.unit.about);
+const name = ref('');
+const district_headquarter = ref(null);
+const region = ref(null);
+const founding_date = ref('');
+const city = ref('');
+const commander = ref(null);
+const social_vk = ref('');
+const social_tg = ref('');
+const conference_date = ref('');
+const registry_number = ref('');
+const registry_date = ref('');
+const name_for_certificates = ref('');
+const case_name = ref('');
+const legal_address = ref('');
+const requisites = ref('');
+const slogan = ref('');
+const about = ref('');
+const fileEmblem = ref(null);
+const fileBanner = ref(null);
 
-const avatar = ref(props.unit.avatar);
-const banner = ref(props.unit.banner);
+const selectFile = (event) => {
+    fileEmblem.value = event.target.files[0];
+    urlEmblem.value = URL.createObjectURL(fileEmblem.value);
+};
 
-const rules = computed(() => ({
-    title: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    institution: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    regional: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-    beast: {
-        required: helpers.withMessage(`* обязательно для заполнения`, required),
-    },
-}));
+const selectBanner = (event) => {
+    fileBanner.value = event.target.files[0];
+    urlBanner.value = URL.createObjectURL(fileBanner.value);
+};
 
-const v = useVuelidate(rules, {
-    title,
-    institution,
-    regional,
-    beast,
-});
+const uploadAvatar = () => {
+    dialog.value = false;
+};
+
+const uploadBanner = () => {
+    dialog.value = false;
+};
 
 const swal = inject('$swal');
 
 const UploadData = async () => {
-    v.value.$touch();
-    if (v.value.$error) {
-        swal.fire({
-            icon: 'error',
-            title: 'Упсс...',
-            text: 'Что-то пошло не так!',
+    const formData = new FormData();
+    formData.append('name', name.value);
+    formData.append('district_headquarter', district_headquarter.value);
+    formData.append('region', region.value);
+    formData.append('founding_date', founding_date.value);
+    formData.append('city', city.value);
+    formData.append('commander', commander.value);
+    formData.append('social_vk', social_vk.value);
+    formData.append('social_tg', social_tg.value);
+    formData.append('conference_date', conference_date.value);
+    formData.append('registry_number', registry_number.value);
+    formData.append('registry_date', registry_date.value);
+    formData.append('name_for_certificates', name_for_certificates.value);
+    formData.append('case_name', case_name.value);
+    formData.append('legal_address', legal_address.value);
+    formData.append('requisites', requisites.value);
+    formData.append('slogan', slogan.value);
+    formData.append('about', about.value);
+    formData.append('emblem', fileEmblem.value);
+    formData.append('banner', fileBanner.value);
+    await axios
+        .post('api/v1/regionals/', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+        .then((response) => {
+            // formData = response.data;
+            console.log(response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            router.push('/RegionalHeadquarters');
+            // router.push({ name: 'user', params: { userId: '123' } })
+        })
+        .catch((error) => {
+            console.error('There was an error!', error);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
-    } else {
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'Данные успешно сохранены',
-            showConfirmButton: false,
-            timer: 1500,
-        });
-        // функция очистки полей формы после успешной отправки данных на сервер
-    }
 };
 
 //----------------------------------------------------------------------------------------------------------
-const counterTitle = computed(() => {
-    // console.log(title.value.length);
-    return title.value.length || 0;
+const counterName = computed(() => {
+    return name.value.length || 0;
 });
-
+const counterNameForCertificates = computed(() => {
+    return name_for_certificates.value.length || 0;
+});
+const counterCaseName = computed(() => {
+    return case_name.value.length || 0;
+});
+const counterLegalAddress = computed(() => {
+    return legal_address.value.length || 0;
+});
+const counterRequisites = computed(() => {
+    return requisites.value.length || 0;
+});
 const counterSlogan = computed(() => {
     return slogan.value.length || 0;
 });
-
 const counterAbout = computed(() => {
     return about.value.length || 0;
 });
@@ -594,208 +983,16 @@ const showButtonPrev = computed(() => {
     return panel.value === 'panelThree';
 });
 
-const institutions = ref([
-    { title: 'Алтайский государственный медицинский университет' },
-    { title: 'Амурская государственная медицинская академия' },
-    { title: 'Амурский государственный университет' },
-    { title: 'Владивостокский государственный медицинский университет' },
-    {
-        title: 'Владивостокский государственный университет экономики и сервиса',
-    },
-    { title: 'Дальневосточный государственный технический университет' },
-    { title: 'Дальневосточный федеральный университет' },
-]);
-
-const regionalOffices = ref([
-    { title: 'Карачаево-Черкесское региональное отделение' },
-    { title: 'Московское региональное отделение' },
-    { title: 'Амурское региональное отделение' },
-    { title: 'Дальневосточное региональное отделение' },
-    { title: 'Алтайское региональное отделение' },
-]);
-
-const leaders = ref([
-    {
-        id: 1,
-        img: true,
-        srcImg: 'foto-leader-squad-01.png',
-        logo: true,
-        iconStatus: 'icon-status-01.svg',
-        title: 'Васильев Андрей Владимирович',
-        date: '13.07.2000',
-    },
-    {
-        id: 2,
-        img: true,
-        srcImg: 'foto-leader-squad-02.png',
-        logo: true,
-        iconStatus: 'icon-status-02.svg',
-        title: 'Иванов Александр Петрович',
-        date: '13.07.2000',
-    },
-    {
-        id: 3,
-        img: true,
-        srcImg: 'foto-leader-squad-03.png',
-        logo: true,
-        iconStatus: 'icon-status-03.svg',
-        title: 'Сидоров Дмитрий Олегович',
-        date: '13.07.2000',
-    },
-    {
-        id: 4,
-        img: true,
-        srcImg: 'foto-leader-squad-04.png',
-        logo: true,
-        iconStatus: 'icon-status-04.svg',
-        title: 'Петрова Анастасия Владимировна',
-        date: '13.07.2000',
-    },
-    {
-        id: 5,
-        img: true,
-        srcImg: 'foto-leader-squad-05.png',
-        logo: false,
-        iconStatus: '',
-        title: 'Петров Петр Петрович',
-        date: '13.07.2000',
-    },
-    {
-        id: 6,
-        img: true,
-        srcImg: 'foto-leader-squad-06.png',
-        logo: false,
-        iconStatus: '',
-        title: 'Смирнова Елена Дмитриевна',
-        date: '13.07.2000',
-    },
-    {
-        id: 7,
-        img: false,
-        srcImg: '',
-        logo: false,
-        iconStatus: '',
-        title: 'Николаева Ольга Васильевна',
-        date: '13.07.2000',
-    },
-    {
-        id: 8,
-        img: true,
-        srcImg: 'foto-leader-squad-08.png',
-        logo: false,
-        iconStatus: '',
-        title: 'Васильев Михаил Владимирович',
-        date: '13.07.2000',
-    },
-    {
-        id: 9,
-        img: true,
-        srcImg: 'foto-leader-squad-09.png',
-        logo: false,
-        iconStatus: '',
-        title: 'Олегов Иван Иванович',
-        date: '13.07.2000',
-    },
-    {
-        id: 10,
-        img: true,
-        srcImg: 'foto-leader-squad-10.png',
-        logo: false,
-        iconStatus: '',
-        title: 'Певцов Дмитрий Владимирович',
-        date: '13.07.2000',
-    },
-]);
-
-const members = ref([
-    {
-        id: 1,
-        img: true,
-        srcImg: 'foto-leader-squad-01.png',
-        logo: true,
-        iconStatus: 'icon-status-01.svg',
-        title: 'Васильев Андрей Владимирович',
-        date: '13.07.2000',
-        position: null,
-        confidant: false,
-    },
-    {
-        id: 2,
-        img: true,
-        srcImg: 'foto-leader-squad-02.png',
-        logo: true,
-        iconStatus: 'icon-status-02.svg',
-        title: 'Иванов Александр Петрович',
-        date: '13.07.2000',
-        position: null,
-        confidant: true,
-    },
-    {
-        id: 3,
-        img: true,
-        srcImg: 'foto-leader-squad-03.png',
-        logo: true,
-        iconStatus: 'icon-status-03.svg',
-        title: 'Сидоров Дмитрий Олегович',
-        date: '13.07.2000',
-        position: null,
-        confidant: true,
-    },
-    {
-        id: 4,
-        img: true,
-        srcImg: 'foto-leader-squad-04.png',
-        logo: true,
-        iconStatus: 'icon-status-04.svg',
-        title: 'Петрова Анастасия Владимировна',
-        date: '13.07.2000',
-        position: null,
-        confidant: false,
-    },
-    {
-        id: 5,
-        img: true,
-        srcImg: 'foto-leader-squad-05.png',
-        logo: false,
-        iconStatus: '',
-        title: 'Петров Петр Петрович',
-        date: '13.07.2000',
-        position: null,
-        confidant: false,
-    },
-    {
-        id: 6,
-        img: true,
-        srcImg: 'foto-leader-squad-06.png',
-        logo: false,
-        iconStatus: '',
-        title: 'Смирнова Елена Дмитриевна',
-        date: '13.07.2000',
-        position: null,
-        confidant: false,
-    },
-    {
-        id: 7,
-        img: false,
-        srcImg: '',
-        logo: false,
-        iconStatus: '',
-        title: 'Николаева Ольга Васильевна',
-        date: '13.07.2000',
-        position: null,
-        confidant: false,
-    },
-]);
-
 const searchMembers = ref('');
 
-const sortedMembers = computed(() => {
-    return members.value.filter((item) => {
-        return item.title
-            .toUpperCase()
-            .includes(searchMembers.value.toUpperCase());
-    });
-});
+// ПОТОМ НАДО ВЕРНУТЬ!!!!!!!!!!!!!!!!!!!!!
+// const sortedMembers = computed(() => {
+//     return members.value.filter(item => {
+//         return item.title
+//             .toUpperCase()
+//             .includes(searchMembers.value.toUpperCase());
+//     });
+// });
 
 const onUpdateMember = (event, id) => {
     const targetMember = members.value.find((member) => member.id === id);
@@ -808,6 +1005,81 @@ const changeValue = (event) => {
     console.log(event);
     emit('update:value', event);
 };
+
+/* --------------------------------------------------------- Редактирование Штаба ------------------------------------------------------------ */
+
+/* Функция получения и вставки в инпут данных с сервера */
+
+// const districtid = route.params.id; /* Получим из URL параметра */
+// const editDistrict = route.params.editDistrict;
+// if (editDistrict) {
+//     editingProfileDistrict();
+// }
+// const editingProfileDistrict = () => {
+//     const getDataOfDistrict = async () => {
+//         await HTTP.get(`/regionals/${districtid}`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         })
+//             .then((response) => {
+//                 name = response.data.name;
+//                 // переменовать под себя
+//                 /* city = ref(props.unit.city);
+// regional = ref(props.unit.regional);
+// beast = ref(props.unit.beast);
+// vk = ref(props.unit.vk);
+// te = ref(props.unit.te);
+// slogan = ref(props.unit.slogan);
+// about = ref(props.unit.about);
+// avatar = ref(props.unit.avatar);
+// banner = ref(props.unit.banner);
+// regNameI = ref(props.unit.regNameI);
+// regNameP = ref(props.unit.regNameP);
+// address = ref(props.unit.address);
+// requisites = ref(props.unit.requisites);
+// ofYear = ref(props.unit.ofYear);
+// confDate = ref(props.unit.confDate);
+// regNumber = ref(props.unit.regNumber);
+// registryDate = ref(props.unit.registryDate); */
+//             }) /* Получаем данные с сервера и обновляем инпуты*/
+//             .catch(function (error) {
+//                 console.log('failed ' + error);
+//             });
+//     };
+// };
+
+// /* Ф-ия отправки изменных данных на сервер */
+
+// const sendEditingData = async () => {
+//     try {
+//         const formData = new FormData();
+//         formData.append('name', name.value);
+//         formData.append('founding_date', founding_date.value);
+//         formData.append('city', city.value);
+//         formData.append('commander', commander.value);
+//         formData.append('social_vk', social_vk.value);
+//         formData.append('social_tg', social_tg.value);
+//         formData.append('slogan', slogan.value);
+//         formData.append('about', about.value);
+//         formData.append('emblem', fileEmblem.value);
+//         formData.append('banner', fileBanner.value);
+
+//         await HTTP.patch(
+//             `/regionals/${districtid}`,
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             },
+//             formData,
+//         );
+//     } catch (err) {
+//         throw err;
+//     }
+// };
 </script>
 
 <style lang="scss" scoped>
@@ -830,5 +1102,52 @@ const changeValue = (event) => {
         border: 2px solid #35383f;
         background-color: #ffffff;
     }
+}
+
+.form_textarea {
+    border: 2px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 12px;
+    padding: 10px 16px 10px 16px;
+    margin-bottom: 20px;
+    width: 100%;
+    resize: none;
+}
+
+.p-dropdown-items-wrapper {
+    // min-height: 400px;
+
+    &::-webkit-scrollbar {
+        /*стили полосы прокрутки */
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        /*стили зоны отслеживания */
+        background: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #898989;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        /*стили бегунка */
+        width: 8px;
+        // height: 108px;
+        border-radius: 10px;
+        border: 1px solid #ffffff;
+        background-color: #35383f;
+    }
+}
+
+.test {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.form_width {
+    width: 46%;
 }
 </style>

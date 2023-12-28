@@ -79,7 +79,7 @@
                             id="select-district"
                             v-model="selectedSortDistrict"
                             class="filter-district"
-                            address="api/v1/districts/"
+                            address="/districts/"
                         ></Select>
                     </div>
                     <div class="sort-select">
