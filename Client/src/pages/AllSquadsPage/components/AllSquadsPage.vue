@@ -99,7 +99,7 @@
                     </div>
                     <div class="sort-select">
                         <sortByEducation
-                        variant="outlined"
+                            variant="outlined"
                             clearable
                             v-model="sortBy"
                             :options="sortOptionss"
@@ -171,7 +171,6 @@ const getCategories = async () => {
             console.log('an error occured ' + error);
         });
 };
-
 
 const getSquads = async () => {
     await HTTP.get('/detachments/', {
@@ -401,9 +400,9 @@ body {
 }
 
 .form__select {
-  margin-bottom: 0px;
-  margin-left: 8px;
-  border: 1px solid #35383F;
+    margin-bottom: 0px;
+    margin-left: 8px;
+    border: 1px solid #35383f;
 }
 
 @media (max-width: 575px) {

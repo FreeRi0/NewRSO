@@ -1,1 +1,1 @@
-export { default as activeApplications } from './components/ActiveApplicationsData.vue';
+export { default as ActiveApplicationsData} from './components/ActiveApplicationsData.vue';

@@ -121,7 +121,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- <router-link  :to="{ name: 'userpage', params: { id: user.id } }"></router-link> -->
+                <!-- <p>id: {{ user.id }}</p>
+                <router-link  :to="{ name: 'userpage', params: { id: user.id } }">Моя страница</router-link> -->
                 <div class="nav-user__menu user-menu" v-if="user">
                     <Dropdown
                         :items="userPages"
@@ -129,6 +130,8 @@
                         :url="user?.media?.photo"
                         desc="Фотография пользователя"
                     />
+
+
 
                     <!-- <img :src="user?.media?.photo" alt="userphoto"> -->
                     <!--
@@ -150,8 +153,8 @@ import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const router = useRouter();
 
-// const route = useRoute();
-// let id = route.params.id;
+const route = useRoute();
+let id = route.params.id;
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },

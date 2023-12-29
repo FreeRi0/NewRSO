@@ -407,7 +407,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/active',
                 name: 'active',
                 component: () =>
-                    import('@pages/ActiveApplicationsData'),
+                    import('@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'),
                     meta: {
                         requiresAuth: true
                     }
