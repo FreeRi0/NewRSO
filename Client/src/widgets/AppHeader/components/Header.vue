@@ -80,9 +80,10 @@
                                     .name
                             }}
                         </span>
+
                         <span v-else>Выберите региональное отделение</span>
                     </button>
-
+                    <p>{{  user?.user_region?.reg_region}}</p>
                     <div
                         class="header__overlay"
                         @click="show = !show"

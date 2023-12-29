@@ -231,7 +231,7 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/UserPage/components/UserPage.vue'),
                 meta: {
-                    label: 'Моя страница',
+                    label: 'Страница пользователя',
                 },
             },
 
