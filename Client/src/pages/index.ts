@@ -17,3 +17,5 @@ export * as PersonalData from './PersonalDataPage';
 export * as CreationOfHQ from './CreationOfHQ';
 
 export * as actionSquadsPage from './actionSquadsPade';
+
+export * as activeInventsPage from './ActiveInventsPage';

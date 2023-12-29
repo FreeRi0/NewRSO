@@ -204,6 +204,24 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/ContributionPage/components/ContributorPay.vue'),
             },
+            {
+                path: '/activeInvents/accountVerification',
+                name: 'accountVerification',
+                component: () =>
+                    import("@entities/Invents/components/AccountVerification.vue"),
+            },
+            {
+                path: '/activeInvents/inventActions',
+                name: 'inventActions',
+                component: () =>
+                    import("@entities/Invents/components/InventActions.vue"),
+            },
+            {
+                path: '/activeInvents/inventSquads',
+                name: 'inventSquads',
+                component: () =>
+                    import("@entities/Invents/components/InventSquads.vue"),
+            }
 
         ],
     },
