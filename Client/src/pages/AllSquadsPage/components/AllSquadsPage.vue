@@ -5,7 +5,7 @@
             <bannerCreate
                 desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
                 label="Создать отряд"
-                link="/CreateLSO"
+                name="CreateLSO"
             ></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
             <div class="squads-tabs">
@@ -130,7 +130,7 @@
                             name="select_education"
                             id="select-education"
                             v-model="selectedSort"
-                            address="api/v1/eduicational_institutions/"
+                            address="/eduicational_institutions/"
                         ></Select>
                     </div>
                     <div class='sort-select'>
@@ -244,9 +244,9 @@ onMounted(() => {
     getSquads();
     getCategories();
 });
-const squadsVisible = ref(12);
+const squadsVisible = ref(1);
 
-const step = ref(10);
+const step = ref(1);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -463,7 +463,8 @@ body {
 
 .form__select {
   margin-bottom: 0px;
-  margin-right: 8px;
+  margin-left: 8px;
+  border: 1px solid #35383F;
 }
 
 @media (max-width: 575px) {
@@ -481,3 +482,4 @@ body {
   }
 }
 </style>
+@shared/components/selects/inputs

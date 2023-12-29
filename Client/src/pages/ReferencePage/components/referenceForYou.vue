@@ -2,7 +2,7 @@
     <div class="container">
         <div class="references">
             <h2 class="references-title">
-              Справка о членстве в РСО (для внутреннего пользования)
+                Справка о членстве в РСО (для внутреннего пользования)
             </h2>
             <div class="references-search">
                 <input
@@ -384,14 +384,18 @@
                         <div class="sort-filters">
                             <div class="sort-select">
                                 <sortByEducation
+                                    variant="outlined"
+                                    clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
                                 ></sortByEducation>
                             </div>
 
                             <Button
+                                type="button"
+                                class="ascend"
+                                icon="switch"
                                 @click="ascending = !ascending"
-                                icon="icon"
                                 color="white"
                             ></Button>
                         </div>
@@ -399,7 +403,7 @@
                     <div class="references-wrapper">
                         <referencesList
                             @change="changePeoples"
-                            :participants="sortedParticipants"
+                            :participants="participants"
                         ></referencesList>
                     </div>
                     <Button
@@ -471,7 +475,6 @@
     </div>
 </template>
 <script setup>
-import participants from '@entities/Participants/participants';
 import { Button } from '@shared/components/buttons';
 import { RadioButton } from '@shared/components/buttons';
 import { Dropdown } from '@shared/components/dropdown';
@@ -482,10 +485,32 @@ import {
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed } from 'vue';
+import { ref, computed , onMounted} from 'vue';
 import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
+import { HTTP } from '@app/http';
 
+const participants = ref([])
 const participantsVisible = ref(12);
+
+const viewParticipants = async () => {
+    await HTTP.get('/rsousers/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            participants.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    viewParticipants();
+});
 
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
@@ -508,12 +533,12 @@ const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const select = () => {
+const select = (event) => {
     selectedPeoples.value = [];
 
-    if (!checkboxAll.value) {
-        for (item in participants) {
-            selectedPeoples.push(participants[item]);
+    if (event.target.checked) {
+        for (item in participants.value) {
+            selectedPeoples.value.push(participants.value[item]);
         }
     }
 };
@@ -557,25 +582,24 @@ const sortOptionss = ref([
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'birthdate', name: 'По дате вступления в РСО' },
-    { value: 'days', name: 'Популярности' },
+    { value: 'date_of_birth', name: 'По дате вступления в РСО' },
 ]);
 
 const sortedParticipants = computed(() => {
-    let tempParticipants = participants;
+    let tempParticipants = participants.value;
 
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
     tempParticipants = tempParticipants.filter((item) => {
-        return item.name
+        return item.first_name
             .toUpperCase()
             .includes(searchParticipants.value.toUpperCase());
     });
 
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa = a.first_name.toLowerCase(),
+                fb = b.first_name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -584,9 +608,9 @@ const sortedParticipants = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'birthdate') {
-            let fc = a.birthdate,
-                fn = b.birthdate;
+        } else if (sortBy.value == 'date_of_birth') {
+            let fc = a.date_of_birth,
+                fn = b.date_of_birth;
 
             if (fc < fn) {
                 return -1;
@@ -595,8 +619,6 @@ const sortedParticipants = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'days') {
-            return a.days - b.days;
         }
     });
 
@@ -644,11 +666,18 @@ const sortedParticipants = computed(() => {
     return tempParticipants;
 });
 </script>
-<style lang="scss">
+<style lang="scss" >
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.ascend {
+    margin-left: 5px;
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .references {
@@ -714,14 +743,17 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .references-sort__all {
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse;
-    padding: 11px 15px;
-    height: 46px;
+    padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
+    height: 48px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
 }
+
 .filter {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -735,6 +767,12 @@ input[type='number']::-webkit-outer-spin-button {
     margin-top: 60px;
     h3 {
         margin-bottom: 40px;
+    }
+}
+
+.sort {
+    &-filters {
+        align-items: flex-start;
     }
 }
 
@@ -774,3 +812,4 @@ input[type='number']::-webkit-outer-spin-button {
     display: none;
 }
 </style>
+@shared/components/selects/inputs

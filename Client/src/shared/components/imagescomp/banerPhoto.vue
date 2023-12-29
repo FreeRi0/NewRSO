@@ -4,19 +4,18 @@
             <!-- Заглушка Банер -->
 
             <img
-                :src="imgDataUrl.media.banner"
+                v-if="banner"
+                :src="banner"
                 alt="Баннер личной страницы"
-                v-if="imgDataUrl.media.banner"
-                v-show="true"
             />
 
             <img
+                v-else
                 src="@/app/assets/user-banner.jpg"
                 alt="Баннер личной страницы(пусто)"
-                v-else-if="!imgDataUrl.media.banner"
             />
         </div>
-        <v-menu min-width="200px" rounded v-if="!file">
+        <v-menu min-width="200px" rounded v-if="!props.banner">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -69,7 +68,7 @@
                                         Закрыть
                                     </v-btn>
                                     <v-btn
-                                        :disabled="!file"
+                                        :disabled="!media"
                                         color="blue-darken-1"
                                         variant="text"
                                         type="submit"
@@ -142,7 +141,7 @@
                                             Закрыть
                                         </v-btn>
                                         <v-btn
-                                            :disabled="!file"
+                                            :disabled="!media"
                                             color="blue-darken-1"
                                             variant="text"
                                             type="submit"
@@ -164,44 +163,51 @@
         </v-menu>
     </div>
 </template>
+
 <script setup>
 import { ref, onMounted } from 'vue';
-import myUpload from 'vue-image-crop-upload';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-const route = useRoute();
-const id = route.params.id;
+// const route = useRoute();
+// const id = route.params.id;
 const dialog = ref(false);
-const imgDataUrl = ref('');
+const imgDataUrl = ref(null);
 const preview = ref(null);
-const file = ref(null);
 
-const viewBanner = async () => {
-    await HTTP.get(`/rsousers/${id}/`, {
-        headers: {
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            imgDataUrl.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+const props = defineProps({
+    banner: String
+})
+// const file = ref(null);
+const media = ref({
+    banner: null,
+});
 
-viewBanner();
+// const viewBanner = async () => {
+//     await HTTP.get(`/rsousers/${id}/`, {
+//         headers: {
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             imgDataUrl.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+
+// viewBanner();
 
 const selectBanner = (event) => {
-    file.value = event.target.files[0];
-    preview.value = URL.createObjectURL(file.value);
+    media.value = event.target.files[0];
+    preview.value = URL.createObjectURL(media.value);
 };
 
-const uploadBanner= async () => {
+const uploadBanner = async () => {
     dialog.value = true;
     const formData = new FormData();
-    formData.append('banner', file.value);
+    formData.append('banner', media.value);
     await HTTP.post('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -210,7 +216,7 @@ const uploadBanner= async () => {
     })
         .then((response) => {
             dialog.value = false;
-            viewBanner();
+
             console.log(response, 'banner uploaded');
         })
         .catch(function (error) {
@@ -219,9 +225,8 @@ const uploadBanner= async () => {
 };
 
 const updateBanner = async () => {
-
     const fd = new FormData();
-    fd.append('banner', file.value);
+    fd.append('banner', media.value);
     dialog.value = true;
     await HTTP.put('/rsousers/me/media/', fd, {
         headers: {
@@ -231,21 +236,23 @@ const updateBanner = async () => {
     })
         .then((response) => {
             dialog.value = false;
-            viewBanner();
+
             console.log(response, 'banner updated');
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-}
+};
 
-const deleteBanner = async() => {
-    await HTTP.delete('/rsousers/me/media/', {
+const deleteBanner = async () => {
+    await HTTP.put('/rsousers/me/media/', media.value, {
         headers: {
+            'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
+
             console.log(response, 'deleted');
         })
         .catch(function (error) {
@@ -253,6 +260,7 @@ const deleteBanner = async() => {
         });
 };
 </script>
+
 <style lang="scss">
 .user-metric__top {
     display: grid;

@@ -6,7 +6,12 @@
             <span>{{ title }}</span>
 
             <div v-if="image" class="dropdown__box-image">
-                <img :src="url" :alt="desc" />
+                <img v-if="url" :src="url" :alt="desc" />
+                <img
+                    v-else
+                    src="@app/assets/user-avatar.png"
+                    alt="Фото бойца (заглушка)"
+                />
             </div>
 
             <transition name="fade" appear>
@@ -50,25 +55,60 @@
         <transition name="fade" appear>
             <ul class="dropdown__list" v-if="isOpen">
                 <li v-for="(item, i) in items" :key="i" class="dropdown__item">
-                    <a class="dropdown__link" :href="item.link">{{
-                        item.title
-                    }}</a>
+                    <a
+                        v-if="item.link"
+                        class="dropdown__link"
+                        :href="item.link"
+                        >{{ item.title }}</a
+                    >
+                    <button
+                        class="dropdown__button-item"
+                        v-if="item.button"
+                        @click="LogOut"
+                    >
+                        {{ item.title }}
+                    </button>
                 </li>
             </ul>
         </transition>
     </div>
 </template>
 
-<script>
-export default {
-    name: 'dropdown',
-    props: ['title', 'items', 'image', 'url', 'desc'],
-    data() {
-        return {
-            isOpen: false,
-        };
+<script setup>
+import { useRouter, useRoute } from 'vue-router';
+const router = useRouter();
+const props = defineProps({
+    title: {
+        type: String,
+        default: '',
     },
+    image: {
+        type: Boolean,
+        default: false,
+    },
+    url: {
+        type: String,
+        default: '',
+    },
+    desk: {
+        type: String,
+        default: '',
+    },
+    items: {
+        type: Array,
+        default: () => [],
+    },
+    isOpen: {
+        type: Boolean,
+        default: false,
+    },
+});
+
+const LogOut = () => {
+    localStorage.removeItem('Token');
+    router.push('/');
 };
+
 </script>
 
 <style lang="scss">
@@ -87,9 +127,20 @@ export default {
         left: 0;
     }
 
-    &__box-image img {
-        width: 100%;
-        height: auto;
+    &__box-image {
+        border-radius: 50%;
+        height: 56px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    &__button-item {
+        color: #ffffff;
+        padding: 11px 0;
     }
 }
 

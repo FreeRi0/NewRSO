@@ -15,7 +15,7 @@
                         class="LoginForm"
                         action="#"
                         method="post"
-                        @submit.prevent="submitForm"
+                        @submit.prevent="resetPasswordForm"
                     >
                         <p>
                             Пароль должен быть не короче 8 букв и цифр.
@@ -26,17 +26,19 @@
                             class="creaturePass__input"
                             placeholder="Новый пароль"
                             name="password"
-                            v-model:value="v.password.$model"
-                            :error="v.password.$errors"
+                            v-model:value="new_password"
                         ></PasswordInputVue>
                         <PasswordInputVue
                             class="creaturePass__input"
                             placeholder="Повторите новый пароль"
                             name="confirm"
-                            v-model:value="v.confirmPassword.$model"
-                            :error="v.confirmPassword.$errors"
+                            v-model:value="current_password"
                         ></PasswordInputVue>
-                        <Button label="Сохранить" color="primary"></Button>
+                        <Button
+                            label="Сохранить"
+                            color="primary"
+                            type="submit"
+                        ></Button>
                     </v-form>
                 </v-card>
             </div>
@@ -45,47 +47,110 @@
 </template>
 <script setup>
 import { ref, computed } from 'vue';
+import axios from 'axios';
+import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import { PasswordInputVue } from '@shared/components/inputs';
 import { helpers, minLength, required, sameAs } from '@vuelidate/validators';
 import { useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 
-const password = ref('');
-const confirmPassword = ref('');
+// const rules = computed(() => ({
+//     password: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//         minLength: helpers.withMessage(
+//             `Минимальная длина: 5 символов`,
+//             minLength(5),
+//         ),
+//     },
+//     confirmPassword: {
+//         required: helpers.withMessage(
+//             `Поле обязательно для заполнения`,
+//             required,
+//         ),
+//         sameAsPassword: helpers.withMessage(
+//             `Пароли не совпадают`,
+//             sameAs(password.value),
+//         ),
+//     },
+// }));
 
-const rules = computed(() => ({
-    password: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-        minLength: helpers.withMessage(
-            `Минимальная длина: 5 символов`,
-            minLength(5),
-        ),
-    },
-    confirmPassword: {
-        required: helpers.withMessage(
-            `Поле обязательно для заполнения`,
-            required,
-        ),
-        sameAsPassword: helpers.withMessage(
-            `Пароли не совпадают`,
-            sameAs(password.value),
-        ),
-    },
-}));
+// const v = useVuelidate(rules, {
+//     password,
+//     confirmPassword,
+// });
+//
+//
+//
+// const data = ref({
+//     new_password: '',
+//     current_password: '',
+// });
 
-const v = useVuelidate(rules, {
-    password,
-    confirmPassword,
+// const resetPasswordForm = () => {
+//     if (data.new_password === data.current_password) {
+//         HTTP.post('/users/set_password/', data.value)
+//             .then((response) => {
+//                 data.value = response.data;
+//                 localStorage.setItem('Token', response.data.auth_token);
+//             })
+//             .catch((error) => {
+//                 console.error(error);
+//             });
+//     } else {
+//         // Обработка случая, когда пароли не совпадают
+//     }
+// };
+const user = ref({});
+const new_password = ref('');
+const current_password = ref('');
+const token = localStorage.getItem('Token');
+
+const uid = user.value.id;
+
+const data = ref({
+    uid,
+    token,
+    new_password: new_password.value,
 });
 
-const submitForm = () => {
-    v.value.$touch();
-    if (v.value.$error) return;
-    alert('Form submitted');
+const getPrivate = async () => {
+    await HTTP.get('/rsousers/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+};
+
+getPrivate();
+
+const resetPasswordForm = async () => {
+    if (new_password.value !== current_password.value) {
+        console.error('Passwords do not match');
+        return;
+    }
+
+    try {
+        const response = await axios.post(
+            '/users/reset_password_confirm/',
+            data,
+        );
+        console.log(response.data);
+        localStorage.setItem('Token', response.data.auth_token);
+    } catch (error) {
+        console.error(error);
+    }
 };
 </script>
 <style lang="scss" scoped>
@@ -127,3 +192,4 @@ p {
     font-size: 40px;
 }
 </style>
+@shared/components/selects/inputs

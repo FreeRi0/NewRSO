@@ -5,6 +5,7 @@
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
+                name="createhq"
             ></bannerCreate>
             <h2 class="headquarters-title">Штабы СО ОО</h2>
             <div class="headquarters-search">
@@ -73,40 +74,36 @@
                     <div class="sort-select">
                         <Select
                             variant="outlined"
-                            clearable
                             name="select_district"
                             id="select-district"
                             v-model="selectedSortDistrict"
                             class="filter-district"
-                            address="api/v1/districts/"
+                            address="/districts/"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <Select
                             variant="outlined"
-                            clearable
                             name="select_region"
                             id="select-region"
                             v-model="selectedSortRegion"
                             class="filter-region"
-                            address="api/v1/regionals/"
+                            address="/regionals/"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <Select
                             variant="outlined"
-                            clearable
                             name="select_local"
                             id="select-local"
                             v-model="selectedSortLocal"
                             class="filter-local"
-                            address="api/v1/locals/"
+                            address="/locals/"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <sortByEducation
                             variant="outlined"
-                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
@@ -168,9 +165,9 @@ const pages = ref([
     { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
 ]);
 
-const headquartersVisible = ref(12);
+const headquartersVisible = ref(1);
 
-const step = ref(10);
+const step = ref(3);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -208,9 +205,9 @@ onMounted(() => {
 });
 
 const selectedSort = ref(0);
-const selectedSortLocal = ref(0);
-const selectedSortRegion = ref(0);
-const selectedSortDistrict = ref(0);
+const selectedSortLocal = ref(null);
+const selectedSortRegion = ref(null);
+const selectedSortDistrict = ref(null);
 
 const sortOptionss = ref([
     {
@@ -234,7 +231,6 @@ const sortedHeadquarters = computed(() => {
                 item.local_headquarter == selectedSortLocal.value)
         );
     });
-
     tempHeadquartes = tempHeadquartes.filter((item) => {
         return item.name
             .toUpperCase()
@@ -361,6 +357,7 @@ const sortedHeadquarters = computed(() => {
 .form__select {
     margin-bottom: 0px;
     margin-right: 8px;
+    border: 1px solid #35383f;
 }
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
@@ -384,11 +381,6 @@ const sortedHeadquarters = computed(() => {
     background-size: cover;
 }
 
-.ascend {
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
 .sort-filters {
     @media screen and (max-width: 768px) {
         margin-top: 40px;
@@ -426,3 +418,4 @@ const sortedHeadquarters = computed(() => {
     }
 }
 </style>
+@shared/components/selects/inputs

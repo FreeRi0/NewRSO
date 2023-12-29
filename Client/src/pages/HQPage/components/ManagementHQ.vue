@@ -1,58 +1,86 @@
 <template>
     <section class="headquarters-management">
         <h3>{{ head }}</h3>
-            <div class="headquarters-management__container">
-                <div class="manager-card" v-for="(manager, index) in managers" :class="{'align-left': index % 2 === 0, 'align-right': index % 2 !== 0}">
-                    <div class="manager-card__avatar">
-                        <img :src="'./assets/headquarters/'+manager.image" alt="avatar"/>
-                    </div>
-                    <div class="manager-card__box">
-                        <h5>{{ manager.name }}</h5>
-                        <p>{{ manager.status }}</p>
-                    </div>
+        <div class="headquarters-management__container">
+            <div
+                class="manager-card"
+                v-for="(manager, index) in member"
+                :class="{
+                    'align-left': index % 2 === 0,
+                    'align-right': index % 2 !== 0,
+                }"
+            >
+                <div class="manager-card__avatar">
+                    <img
+                        :src="manager.user.avatar.photo"
+                        alt="photo"
+                        v-if="manager.user.avatar"
+                    />
+                    <img
+                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                        alt="photo"
+                        v-else
+                    />
+                </div>
+                <div class="manager-card__box">
+                    <h5 id="name_length">
+                        {{ manager.user.username }}
+                    </h5>
+                    <p>{{ position.name }}</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 </template>
 
 <script setup>
-import {ref} from "vue"
+import { ref, onMounted } from 'vue';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+const route = useRoute();
+let id = route.params.id;
+
+const position = ref({});
+
 const props = defineProps({
-    head:{
-        default: 'Руководство штаба',
+    member: {
+        type: Array,
     },
-})
-const managers = ref([
-    {
-        name:"Александрова Вероника Александровна",
-        status:"Командир",
-        image:'manager.png',
+    position: {
+        type: Object,
     },
-    {
-        name:"Александров Александр Александрович",
-        status:"Комиссар",
-        image:'manager2.png',
+    head: {
+        type: String,
     },
-    {
-        name:"Александрова Катерина Александровна",
-        status:"Мастер-методист",
-        image:'manager3.png',
-    },
-    {
-        name:"Петрова Александра Александровна",
-        status:"Медик",
-        image:'manager4.png',
-    },
-    
-])
+});
+
+const aboutPosition = async () => {
+    await HTTP.get(`/positions/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            position.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+onMounted(() => {
+    aboutPosition();
+});
 </script>
+
 <style scoped lang="scss">
-section.headquarters-management{
+section.headquarters-management {
     margin-bottom: 60px;
 }
-    section.headquarters-management h3 {
-    color: #35383F;
-    font-family: "Akrobat";
+section.headquarters-management h3 {
+    color: #35383f;
+    font-family: 'Akrobat';
     font-size: 32px;
     font-style: normal;
     font-weight: 600;
@@ -60,7 +88,7 @@ section.headquarters-management{
 }
 
 .headquarters-management__container {
-    display:grid;
+    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
     margin-top: 40px;
@@ -68,7 +96,7 @@ section.headquarters-management{
 
 .manager-card {
     border-radius: 10px;
-    background: #FFF;
+    background: #fff;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.08);
     /*  */
     padding: 24px 20px;
@@ -83,6 +111,12 @@ section.headquarters-management{
     display: flex;
     justify-content: center;
 }
+.manager-card__avatar img {
+    margin-bottom: 32px;
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+}
 
 .manager-card__box {
     width: 240px;
@@ -93,9 +127,9 @@ section.headquarters-management{
 }
 
 .manager-card__box h5 {
-    color: #35383F;
+    color: #35383f;
     text-align: center;
-    font-family: "BertSans";
+    font-family: 'BertSans';
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -107,7 +141,7 @@ section.headquarters-management{
 .manager-card__box p {
     color: #676767;
     text-align: center;
-    font-family: "BertSans";
+    font-family: 'BertSans';
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -116,11 +150,11 @@ section.headquarters-management{
 
 // адаптив
 @media (max-width: 965px) {
-    .headquarters-management__container{
+    .headquarters-management__container {
         justify-items: center;
         column-gap: 40px;
     }
-    .manager-card.align-left{
+    .manager-card.align-left {
         margin-left: auto;
     }
     .manager-card.align-right {
@@ -128,8 +162,8 @@ section.headquarters-management{
     }
 }
 
-@media (max-width: 648px){
-    .manager-card.align-left{
+@media (max-width: 648px) {
+    .manager-card.align-left {
         margin-left: 0;
     }
     .manager-card.align-right {
@@ -137,28 +171,28 @@ section.headquarters-management{
     }
 }
 
-@media (max-width: 450px){
-    .headquarters-management__container{
+@media (max-width: 450px) {
+    .headquarters-management__container {
         grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
         column-gap: 16px;
         row-gap: 16px;
     }
-    .manager-card{
+    .manager-card {
         padding: 16px;
         width: 156px;
         height: 173px;
     }
-    .manager-card__box{
+    .manager-card__box {
         width: 127px;
     }
-    .manager-card__box h5{
+    .manager-card__box h5 {
         font-size: 12px;
         margin-bottom: 8px;
     }
-    .manager-card__box p{
+    .manager-card__box p {
         font-size: 12px;
     }
-    .manager-card__avatar img{
+    .manager-card__avatar img {
         width: 60px;
     }
 }

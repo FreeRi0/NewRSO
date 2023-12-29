@@ -1,7 +1,7 @@
 <template>
     <div class="squad-metric">
-        <squadBanner></squadBanner>
-        <squadAvatar></squadAvatar>
+        <squadBanner :banner="squad.banner"></squadBanner>
+        <squadAvatar :emblem="squad.emblem"></squadAvatar>
         <div class="squad-metric__bottom">
             <div class="squad-data__wrapper">
                 <div class="Squad-HQ__name">
@@ -13,7 +13,7 @@
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
                         <li class="Squad-HQ__university">
-                            <p>{{ educt.name }}</p>
+                            <p>{{ edict.name }}</p>
                         </li>
                         <li class="Squad-HQ__date">
                             <p>Дата создания ЛСО</p>
@@ -57,7 +57,12 @@
                             <!-- <p>{{ squad.members }}</p> -->
                         </div>
                     </div>
-                    <router-link to="/" class="user-data__link"
+                    <router-link
+                        :to="{
+                            name: 'EditLSO',
+                            params: { id: squad.id },
+                        }"
+                        class="user-data__link"
                         >Редактировать страницу</router-link
                     >
                 </div>
@@ -71,71 +76,27 @@ import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-const squad = ref({});
-const member = ref({});
-const educt = ref({});
 
-const route = useRoute();
-const id = route.params.id;
-const aboutSquad = async () => {
-    await HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squad.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const aboutMembers = async () => {
-    await HTTP.get(`/detachments/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            member.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-onMounted(() => {
-    aboutSquad();
-    aboutMembers();
-    aboutEduc();
+const props = defineProps({
+    banner: {
+        type: String,
+    },
+    emblem: {
+        type: String,
+    },
+    squad: {
+        type: Object,
+        required: true,
+    },
+    edict: {
+        type: Object,
+    },
+    member: {
+        type: Object,
+    },
 });
 </script>
 <style lang="scss" scoped>
-// .profile-settings-top {
-//     padding-top: 40px;
-//     margin-bottom: 40px;
-// }
-
 .squad-metric {
     display: grid;
     grid-template-columns: 30px 135px 135px 2fr 16px;

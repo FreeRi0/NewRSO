@@ -1,1 +1,1 @@
-export { default as 404Page } from './components/AboutSquad.vue';
+export { default as NotFoundPage } from './components/404Page.vue';

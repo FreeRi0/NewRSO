@@ -1,33 +1,33 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto></bannerPhoto>
-        <Avatar></Avatar>
-        <!-- <testUpload></testUpload> -->
+        <bannerPhoto :banner="user?.media?.banner"></bannerPhoto>
+        <Avatar :avatar="user?.media?.photo" :edited="false"></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
                 <div v-if="user" class="user-data__name">
-                    <h4>{{ user.first_name }}</h4>
-                    <h4>{{ user.last_name }}</h4>
-            <!-- <slot name="banner"></slot> -->
+                    <p>{{ user.first_name }}</p>
+                    <p>{{ user.last_name }}</p>
+                    <p>{{ user.patronymic_name }}</p>
+                    <!-- <slot name="banner"></slot> -->
                 </div>
-                <h4 v-if="user">{{ user.email }}</h4>
+                <!-- <h4 v-if="user">{{ user.email }}</h4> -->
                 <div></div>
 
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
                         <li v-if="education">
-                            <p>{{ education.study_faculty }}</p>
+                            <p>{{ user?.education?.study_faculty }}</p>
                         </li>
                         <li v-if="education">
-                            <p>{{ education.study_specialty }}</p>
+                            <p>{{ user?.education?.study_specialty }}</p>
                         </li>
                         <li v-if="education">
-                            <p>Курс{{ education.study_year }}</p>
+                            <p>Курс {{ user?.education?.study_year }}</p>
                         </li>
-                        <li v-if="region" class="user-data__regional-office">
-                            <p>{{ region.name }}</p>
+                        <li class="user-data__regional-office">
+                            <p>{{ user?.user_region?.reg_town}}</p>
                         </li>
                     </ul>
                 </div>
@@ -41,83 +41,34 @@ import { ref, onMounted } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { useRoute} from 'vue-router';
 
-let user = ref({});
-let education = ref(null);
-let region = ref(null);
-const route = useRoute();
-const id = route.params.id;
-const getUser = async () => {
-    await HTTP.get(`/users/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
-const getEducation = async () => {
-    await HTTP.get('/users/me/education', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            education.value = response.data;
-            console.log(education.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+const props = defineProps({
+    banner: {
+        type: String
+    },
+    avatar: {
+        type: String
+    },
+    edited: {
+        type: Boolean
+    },
 
-const getRegion = async () => {
-    await HTTP.get('/regions/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            region.value = response.data;
-            console.log(region.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-}
+    user: {
+        type: Object,
+    },
+    currentUser: {
+        type: Object,
+    },
+    education: {
+        type: Object,
+    },
+    user_region: {
+        type: Object,
+    }
+})
 
-onMounted(() => {
-    getUser();
-    getEducation();
-    getRegion();
-});
-
-// const getRegion = async (id) => {
-//     await HTTP
-//         .get('regions/{id}/', {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         })
-//         .then((response) => {
-//             region.value = response.data;
-//             console.log(region.value);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {
@@ -168,10 +119,11 @@ onMounted(() => {
 }
 
 .user-data__name {
+    display: flex;
     margin-bottom: 32px;
 }
 
-.user-data__name h4 {
+.user-data__name p {
     color: #35383f;
     /* Desktop/H-3 */
     font-family: 'Akrobat';
@@ -180,6 +132,7 @@ onMounted(() => {
     font-weight: 600;
     line-height: normal;
     color: #35383f;
+    margin-right: 8px;
 }
 
 .user-data__list-wrapper {
@@ -201,7 +154,7 @@ onMounted(() => {
 .user-data__list-wrapper li {
     border-right: 1px solid #35383f;
     height: 20px;
-    margin: auto 5px;
+    margin: auto 3px;
 }
 
 .user-data__list p,
