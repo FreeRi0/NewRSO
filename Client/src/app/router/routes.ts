@@ -371,6 +371,16 @@ const routes: RouteRecordRaw[] = [
                     }
 
             },
+            {
+                path: '/ActiveApplicationsData',
+                name: 'ActiveApplicationsData',
+                component: () =>
+                    import('@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'),
+                    meta: {
+                        requiresAuth: true
+                    }
+
+            },
         ],
     },
 ];

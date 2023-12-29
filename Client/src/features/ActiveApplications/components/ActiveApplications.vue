@@ -1,5 +1,22 @@
 <template>
-    <h1 class="act_title">Активные заявки</h1>
+    <div class="container">
+        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <h1 class="act_title">Активные заявки</h1>
+        <!--Табы-->
+        <div class="d-flex mt-9 mb-9">
+            <button
+                class="contributorBtn"
+                :class="{ active: picked === tab.name }"
+                v-for="tab in tabs"
+                :key="tab.id"
+                @click="picked = tab.name"
+                >{{ tab.name }}</button
+            >
+        </div>
+        <verification v-if="picked == 'Верификация аккаунтов'"></verification>
+        <application v-else-if="picked == 'Заявка на вступление в отряд'"></application>
+        <changePassword v-else-if="picked == 'Заявка на участие в мероприятии'"></changePassword>
+    </div>
     <div class="container_top">
         <div class="checkborder_top">
             <input type="checkbox" v-model="model" :value="value" />
@@ -30,12 +47,20 @@
     <div class="activeApp_button">
         <Button label="Показать ещё" color="primary"></Button>
     </div>
+    
 </template>
 <script setup>
+
+import { userData } from '@features/userData/components';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
+import { changePassword } from '@features/ChangePassword/components';
+import { privateProfile } from '@features/PrivateProfile/components';
+import { AccordionsPersonal } from '@features/PersonalAccordions/components';
 import participants from '@entities/user/index';
 import { sortByEducation } from '@shared/components/selects';
 import { computed, defineEmits, ref } from 'vue';
 import { Button } from '@shared/components/buttons';
+
 const props = defineProps({
     modelValue: { type: [Array, Boolean] },
     value: { type: [Boolean, Object] },
@@ -58,8 +83,50 @@ const educations = ref([
     { value: 'Только руководители', name: 'Только руководители' },
 ]);
 const selectedPhone = ref(0);
+const user = ref({});
+const education = ref({});
+
+const tabs = ref([
+    {
+        id: '1',
+        name: 'Верификация аккаунтов',
+    },
+    {
+        id: '2',
+        name: 'Заявка на вступление в отряд',
+    },
+    {
+        id: '3',
+        name: 'Заявка на участие в мероприятии',
+    },
+]);
+const pages = ref([
+    { pageTitle: 'Личный кабинет', href: '#' },
+    { pageTitle: 'Активные заявки', href: '#' },
+]);
 </script>
 <style lang="scss">
+
+.profile-title {
+    font-size: 40px;
+    margin-bottom: 40px;
+}
+
+.contributorBtn {
+    border-radius: 30px;
+    background-color: white;
+    color: #1c5c94;
+    border: 1px solid #1c5c94;
+    margin: 0px;
+    padding: 10px 24px;
+    margin: 7px;
+}
+
+.active {
+    background-color: #1c5c94;
+    color: white;
+}
+
 .checkbox_1 {
     display: flex;
     margin-bottom: 12px;
