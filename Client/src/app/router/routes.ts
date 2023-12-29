@@ -237,6 +237,24 @@ const routes: RouteRecordRaw[] = [
                 name: 'allsquads',
                 component: () =>
                     import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
+            },
+            {
+                path: '/actionSquads',
+                name: 'actionSquads',
+                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
+            },
+            {
+                path: "/createAction",
+                name: "createAction",
+                component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
+            },
+            {
+                path: '/EditLSO',
+                name: 'EditLSO',
+                component: () =>
+                    import(
+                        '@pages/EditingDetachment/components/EditingDetachment.vue'
+                    ),
                 meta: {
                     requiresAuth: true,
                     label: 'ЛСО',
