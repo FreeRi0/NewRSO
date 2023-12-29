@@ -33,47 +33,47 @@
                 <v-expansion-panels class='settings-header' variant="accordion">
                     <v-expansion-panel class='settings-body' title="Тип мероприятия">
                         <v-expansion-panel-text>
-                            <v-checkbox label="Онлайн" value="Онлайн"></v-checkbox>
-                            <v-checkbox label="Офлайн" value="Офлайн"></v-checkbox>
+                            <v-checkbox v-model='actionTypeSearch' label="Онлайн" value="Онлайн"></v-checkbox>
+                            <v-checkbox v-model='actionTypeSearch' label="Офлайн" value="Офлайн"></v-checkbox>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                     <v-expansion-panel class='settings-body' title="Статус мероприятия">
                         <v-expansion-panel-text>
                             <v-radio-group>
-                                <v-checkbox label="Незавершенные" value='Незавершенные'></v-checkbox>
-                                <v-checkbox label="Завершенные" value='Завершенные'></v-checkbox>
+                                <v-checkbox v-model='statusSearch' label="Незавершенные" value='Незавершенные'></v-checkbox>
+                                <v-checkbox v-model='statusSearch' label="Завершенные" value='Завершенные'></v-checkbox>
                             </v-radio-group>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                     <v-expansion-panel class='settings-body' title="Маштаб">
                         <v-expansion-panel-text>
                             <v-radio-group>
-                                <v-radio label="Все" value="Все"></v-radio>
-                                <v-radio label="Всероссийское" value="Всероссийское"></v-radio>
-                                <v-radio label="Окружное" value="Окружное"></v-radio>
-                                <v-radio label="Региональное" value="Региональное"></v-radio>
-                                <v-radio label="Городское" value="Городское"></v-radio>
-                                <v-radio label="Мероприятие ОО" value="Мероприятие ОО"></v-radio>
-                                <v-radio label="Отрядное" value="Отрядное"></v-radio>
+                                <v-radio v-model='rangeTypeSearch' label="Все" value="Все"></v-radio>
+                                <v-radio v-model='rangeTypeSearch' label="Всероссийское" value="Всероссийское"></v-radio>
+                                <v-radio v-model='rangeTypeSearch' label="Окружное" value="Окружное"></v-radio>
+                                <v-radio v-model='rangeTypeSearch' label="Региональное" value="Региональное"></v-radio>
+                                <v-radio v-model='rangeTypeSearch' label="Городское" value="Городское"></v-radio>
+                                <v-radio v-model='rangeTypeSearch' label="Мероприятие ОО" value="Мероприятие ОО"></v-radio>
+                                <v-radio v-model='rangeTypeSearch' label="Отрядное" value="Отрядное"></v-radio>
                             </v-radio-group>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                     <v-expansion-panel class='settings-body' title="Направление">
                         <v-expansion-panel-text>
-                            <v-radio-group>
-                                <v-radio label="Все" value="Все"></v-radio>
-                                <v-radio label="Добровольческое" value="Добровольческое"></v-radio>
-                                <v-radio label="Образовательное" value="Образовательное"></v-radio>
-                                <v-radio label="Патриотическое" value="Патриотическое"></v-radio>
-                                <v-radio label="Спортивное" value="Спортивное"></v-radio>
-                                <v-radio label="Творческое" value="Творческое"></v-radio>
+                            <v-radio-group v-model='roadSearch'>
+                                <v-radio v-model='roadSearch' label="Все" value="Все"></v-radio>
+                                <v-radio v-model='roadSearch' label="Добровольческое" value="Добровольческое"></v-radio>
+                                <v-radio v-model='roadSearch' label="Образовательное" value="Образовательное"></v-radio>
+                                <v-radio v-model='roadSearch' label="Патриотическое" value="Патриотическое"></v-radio>
+                                <v-radio v-model='roadSearch' label="Спортивное" value="Спортивное"></v-radio>
+                                <v-radio v-model='roadSearch' label="Творческое" value="Творческое"></v-radio>
                             </v-radio-group>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
                 <div class='settings-buttoms'>
-                    <Button class='settings-btminv' label='Свернуть все'>Сбросить</Button>
-                    <Button class='settings-btm' label='Свернуть все'>Сохранить</Button>
+                    <Button class='settings-btminv' label='Свернуть все' @click='ClearSearchForm' >Сбросить</Button>
+                    <Button class='settings-btm' label='Свернуть все' @click='SendSearchForm'>Сохранить</Button>
                 </div>
             </div>
             <div class='col' style='width: 100%'>
@@ -110,27 +110,15 @@
                             @click='ascending = !ascending'
                             color='white'
                         ></Button>
-                        <div class='sort-select'>
-                            <sortByEducation
-                                class='education'
-                            ></sortByEducation>
-                        </div>
-                        <div class='sort-select'>
-                            <sortByEducation
-                                class='education'
-                            ></sortByEducation>
-                        </div>
                     </div>
                 </div>
-                <div v-if='vertical' class='postcard-container'>
-                    <Actionitem></Actionitem>
-                    <Actionitem></Actionitem>
-                    <Actionitem></Actionitem>
-                </div>
-                <div v-if='!vertical' class='postcard-containerline'>
-                    <ActionitemVertical></ActionitemVertical>
-                    <ActionitemVertical></ActionitemVertical>
-                    <ActionitemVertical></ActionitemVertical>
+                <div class='postcard-container'>
+                    <div v-if='vertical' v-for='action in actions'>
+                        <Actionitem :action='action'></Actionitem>
+                    </div>
+                    <div v-if='!vertical' v-for='action in actions' class='postcard-containerline'>
+                        <ActionitemVertical :action='action'></ActionitemVertical>
+                    </div>
                 </div>
             </div>
         </div>
@@ -140,17 +128,37 @@
 <script setup>
 //Импорт файлов
 import * as HTTP from 'http';
+import Button from "primevue/button";
 import BannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
 import { ref } from 'vue';
+import actions from '@entities/Actions/actions';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 
 //Переменные компонента
-const actionSearch = ref('');
-
+const actionTypeSearch = ref('');
+const statusSearch = ref('');
+const rangeTypeSearch = ref('');
+const roadSearch = ref('');
 //Сортировка
 const vertical = ref(true);
 const ascending = ref(true);
+
+//Создание формы
+const actionFormSearch = {
+    actionType: actionTypeSearch.value,
+    status: statusSearch.value,
+    rangeType: rangeTypeSearch.value,
+    roads: roadSearch.value
+}
+//События нажатия
+function ClearSearchForm() {
+    console.log("Форма очищена")
+};
+function SendSearchForm() {
+    console.log(actionFormSearch);
+};
+//Изменение расположения блоков
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
@@ -167,9 +175,6 @@ const getActions = async () => {
 </script>
 
 <style lang='scss' scoped>
-    .v-label{
-      width: 100% !important;
-    }
     //Общий стиль компонента
     .action{
         &-container{
@@ -301,6 +306,7 @@ const getActions = async () => {
       }
       &-containerline{
         display: flex;
+        width: 100%;
         flex-direction: column;
       }
     }

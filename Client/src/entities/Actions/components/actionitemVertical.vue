@@ -2,20 +2,23 @@
     <div class='postcard'>
         <section class='postcard-counts'>
             <img src="@app/assets/actions/action_1.png" class='postcard-image' alt='Изображение'/>
-            <p class='postcard-title'>Спевка</p>
+            <p class='postcard-title'>{{action.name}}</p>
+            <p class='postcard-title'>{{action.description}}</p>
         </section>
         <section class='postcard-counts'>
-            <div class='postcard-date'>29 февраля 2023</div>
-            <div class='postcard-group'>20<img src="@app/assets/actions/Group_light.svg" alt=''/></div>
+            <div class='postcard-date'>{{action.date}}</div>
+            <div class='postcard-group'>{{action.groupReq}}<img src="@app/assets/actions/Group_light.svg" alt=''/></div>
         </section>
     </div>
 </template>
 
 <script setup>
-//Параметры модели
 const props = defineProps({
     action:{
-        id: 1,
+        id: {
+            type: String,
+            required: true
+        },
         name: {
             type: String,
             required: true
@@ -32,8 +35,12 @@ const props = defineProps({
             type: Number,
             required: true
         },
-        tags: {
-            type: String,
+        tag: {
+            type: Number,
+            required: true
+        },
+        range: {
+            type: Number,
             required: true
         }
     }
