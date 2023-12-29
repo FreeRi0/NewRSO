@@ -1,17 +1,33 @@
 <template>
     <ul class="breadcrumbs-container">
-        <li v-for="item in items" :key="item.pageTitle">
+        <!-- <li v-for="item in items" :key="item.pageTitle">
             <a :href="item.href">
                 {{ item.pageTitle }}
             </a>
+        </li> -->
+        <li v-for="route in routes" :key="route.path">
+            <router-link
+                :to="{ path: route.path }"
+                v-slot="{ navigate }"
+                @click="navigate"
+            >
+                {{ route.meta.label }}
+            </router-link>
         </li>
     </ul>
 </template>
 
 <script setup>
-const props = defineProps({
-    items: Array,
-});
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+// const props = defineProps({
+//     items: Array,
+// });
+
+const route = useRoute();
+const routes = route.matched;
+console.log(routes);
 </script>
 
 <style lang="scss" scoped>
@@ -36,6 +52,7 @@ const props = defineProps({
             content: '/';
             right: 0;
             width: 5px;
+            // color: red; //---------------------------------------------------------------
         }
 
         &:last-child::before {
@@ -46,6 +63,12 @@ const props = defineProps({
     a {
         padding: 10px 0;
         color: #35383f;
+        // background-color: grey;
+    }
+
+    //отключаем переход по ссылке "Структура" с адресом "/"
+    a[href='/'] {
+        pointer-events: none;
     }
 
     li:last-child a {

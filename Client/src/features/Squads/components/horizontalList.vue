@@ -1,12 +1,12 @@
 <template>
-    <div
-
-        v-for="squad in squads"
-        v-if="squads.length > 0"
-    >
-        <router-link  class="horizontal-item" :to="{name:'lso', params: {id: squad.id}}">
+    <div v-for="squad in squads" v-if="squads.length > 0">
+        <router-link
+            class="horizontal-item"
+            :to="{ name: 'lso', params: { id: squad.id } }"
+        >
             <div class="horizontal-img">
-                <img :src="squad.emblem" alt="logo" />
+                <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
+                <img src="@app/assets/user-avatar.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
                 <p class="squads-wrapper__item-category-full">

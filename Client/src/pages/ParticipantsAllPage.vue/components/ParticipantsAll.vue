@@ -4,14 +4,32 @@
             <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="participants-title">Участники ЛСО</h2>
             <div class="participants-tabs">
-                <v-btn
+                <!-- <v-btn
                     class="participants-tabs__item"
                     :class="{ active: checked === category }"
                     v-for="category in categories"
                     :key="category"
                     @click="checked = category"
                     >{{ category }}</v-btn
-                >
+                > -->
+
+                <!-- <div class="d-flex">
+                    <Button
+                        type="button"
+                        label="Уже в отряде"
+                        class="contributorBtn"
+                        :class="{ active: picked === is_trusted }"
+                        @click="picked = is_trusted"
+                    ></Button>
+
+                    <Button
+                        type="button"
+                        label="Ожидают одобрение"
+                        class="contributorBtn"
+                        :class="{ active: picked === !is_trusted }"
+                        @click="picked = !is_trusted"
+                    ></Button>
+                </div> -->
             </div>
             <div class="participants-search">
                 <input
@@ -133,6 +151,7 @@ import { useRoute } from 'vue-router';
 
 const participants = ref([]);
 const participantsVisible = ref(12);
+// const picked = ref(null);
 
 const step = ref(12);
 const position = ref({});
@@ -169,9 +188,6 @@ const pages = [
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-// const picked = ref('');
-
-// const categories = ref(['В отряде', 'Ожидают одобрения']);
 
 const vertical = ref(true);
 
@@ -229,7 +245,8 @@ const sortedParticipants = computed(() => {
         }
     });
 
-    // tempParticipants = tempParticipants.filter((item) => item.inSquad === picked.value);
+    // tempParticipants = tempParticipants.filter((item) => item.is_trusted === picked.value);
+    // tempParticipants = tempParticipants.sort((a, b) => a.is_trusted - b.is_trusted);
 
     if (!ascending.value) {
         tempParticipants.reverse();
@@ -308,11 +325,22 @@ const sortedParticipants = computed(() => {
         }
     }
 
+    .contributorBtn {
+        border-radius: 30px;
+        background-color: white;
+        color: #1c5c94;
+        border: 1px solid #1c5c94;
+        margin: 0px;
+        padding: 10px 24px;
+        margin: 7px;
+    }
+
     .active {
         background-color: #1c5c94;
         color: white;
         border: 1px solid #1c5c94;
     }
+
     .form__select {
         margin-bottom: 0px;
         margin-right: 8px;

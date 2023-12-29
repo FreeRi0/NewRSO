@@ -6,17 +6,16 @@
     >
         <div class="checked-item__wrapper">
             <div class="checked-img">
-                <img :src="'./assets/' + participant.image" alt="logo" />
+                <img :src="participant.media.photo" alt="logo" v-if="participants.media" />
                 <img
-                    v-if="participant.useIcon"
-                    class="checked-item__list-img-status"
-                    :src="'./assets/icon/' + participant.icon"
-                    alt="icon"
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+                    v-else
                 />
             </div>
             <div class="containerHorizontal">
                 <p class="checked-item__list-full">
-                    {{ participant.name }}
+                    {{ participant.first_name }}
                 </p>
                 <div class="checked-item__list-date">
                     <span
@@ -25,7 +24,7 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.birthdate }}</p>
+                    <p>{{ participant.date_of_birth }}</p>
                 </div>
             </div>
         </div>
@@ -58,6 +57,9 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    participant: {
+        type: Object,
+    }
 
 });
 const selectedPeoples = ref(props.participants);
@@ -65,7 +67,7 @@ const selectedPeoples = ref(props.participants);
  watch(selectedPeoples,
  (newChecked) =>{
     if(!newChecked) return;
-    emit('change', selectedPeoples)
+    emit('change', selectedPeoples.value)
     console.log(newChecked);
  })
 </script>
@@ -120,7 +122,7 @@ const selectedPeoples = ref(props.participants);
 .checked-item__list-date {
     width: 95px;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
+    grid-template-columns: auto 1fr 0fr;
 }
 
 .checked-item__list-img-status {
@@ -169,6 +171,7 @@ const selectedPeoples = ref(props.participants);
     border: 1px solid black;
     width: 168px;
     height: 48px;
+    padding: 12px 32px;
     span {
         font-size: 16px;
     }

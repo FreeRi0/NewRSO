@@ -2,93 +2,152 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--hq">Региональный штаб</h1>
-        <BannerComp class="mt-3">
-            <template #banner>
-                <div class="user-data__wrapper">
-                    <div class="Squad-HQ__name">
-                        <h4>{{ squadHQ.name }}</h4>
-                    </div>
-                    <div class="slogan">
-                        <p>{{ squadHQ.slogan }}</p>
-                        <p>{{ squadHQ.slogan2 }}</p>
-                    </div>
-                    <div class="user-data__list-wrapper">
-                        <ul class="Squad-HQ__list">
-                            <li class="Squad-HQ__date">
-                                <p>{{ squadHQ.date }}</p>
-                            </li>
-                            <li class="Squad-HQ__participants">
-                                <p>{{ squadHQ.participants }}</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="squad-data__contacts-wrapper">
-                        <div class="squad-data__contacts">
-                            <div class="squad-data__social-network">
-                                <div class="squad-data__link-vk">
-                                    <a href="https://vk.com" target="_blank">
-                                        <img
-                                            src="@/app/assets/icon/vk-blue.svg"
-                                        />
-                                    </a>
-                                </div>
-                                <div class="squad-data__link-telegram">
-                                    <a href="https://t.me" target="_blank">
-                                        <img
-                                            src="@/app/assets/icon/telegram-blue.svg"
-                                            alt=""
-                                        />
-                                    </a>
-                                </div>
-                                <div class="squad-data__link-share-link">
-                                    <a href="#" target="_blank">
-                                        <img
-                                            src="@/app/assets/icon/to-share-link.svg"
-                                            alt=""
-                                        />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <router-link to="/" class="user-data__link"
-                            >Редактировать штаб</router-link
-                        >
-                    </div>
-                </div>
-            </template>
-        </BannerComp>
-        <AboutHQ
-            head="Описание  регионального штаба"
-            description="Режим работы: пн-пт с 9:00 до 17:30. 
-        Наши контакты: +7 (863) 285-35-04 sto@mail.ru 
-        г. Казань, ул. Красных Зорь, 64"
-        ></AboutHQ>
-        <ManagementHQ head="Руководство регионального штаба"></ManagementHQ>
+        <BannerHQ
+            v-if="showHQ"
+            :headquarter="headquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showDistrictHQ"
+            :districtHeadquarter="districtHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showLocalHQ"
+            :localHeadquarter="localHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showRegionalHQ"
+            :regionalHeadquarter="regionalHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else
+            :centralHeadquarter="centralHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <section class="about-hq">
+            <h3>Описание регионального штаба</h3>
+            <p v-if="showHQ">
+                {{ localHeadquarter.about }}
+            </p>
+            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
+            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
+            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
+            <p v-else>{{ centralHeadquarter.about }}</p>
+        </section>
+        <ManagementHQ
+            :member="member"
+            head="Руководство регионального штаба"
+        ></ManagementHQ>
         <HQandSquad></HQandSquad>
     </div>
 </template>
 
 <script setup>
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { BannerComp } from '@features/baner/components';
-import AboutHQ from '../HQPage/components/AboutHQ.vue';
+import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
-import HQandSquad from './components/HQandSquad.vue';
-import { ref } from 'vue';
+import HQandSquad from '../RegionalHQPage/components/HQandSquad.vue';
+import { ref, onMounted, watch } from 'vue';
+import { HTTP } from '@app/http';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+
+// banner condition
+const showRegionalHQ = ref(true);
+const showDistrictHQ = ref(false);
+const showLocalHQ = ref(false);
+const showHQ = ref(false);
+
+const regionalHeadquarter = ref({});
+const member = ref([]);
+const educt = ref({});
+const route = useRoute();
+let id = route.params.id;
+
+const aboutRegionalHQ = async () => {
+    await HTTP.get(`/regionals/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regionalHeadquarter.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const aboutEduc = async () => {
+    await HTTP.get(`/eduicational_institutions/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            educt.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const aboutMembers = async () => {
+    await HTTP.get(`/regionals/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            member.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) {
+        aboutRegionalHQ();
+        aboutMembers();
+        aboutEduc();
+    }
+});
+watch(
+    () => route.params.id,
+
+    (newId, oldId) => {
+        id = newId;
+        aboutRegionalHQ();
+        aboutMembers();
+        aboutEduc();
+    },
+);
+
+onMounted(() => {
+    aboutRegionalHQ();
+    aboutMembers();
+    aboutEduc();
+});
 
 const pages = [
     { pageTitle: 'Структура', href: '#' },
     { pageTitle: 'Региональные штабы', href: '#' },
-    { pageTitle: ' Татарстанский региональный штаб', href: '#' },
+    { pageTitle: `${regionalHeadquarter.name}`, href: '#' },
 ];
-
-const squadHQ = ref({
-    name: 'Татарстанский региональный штаб',
-    slogan: 'Через тернии к звездам!',
-    slogan2: '100 лет на благо страны!',
-    date: '12.10.2005 — дата учредительной конференции РШ',
-    participants: '2000 участников',
-});
 </script>
 <style scoped lang="scss">
 .title {
@@ -166,6 +225,12 @@ const squadHQ = ref({
     gap: 12px;
     justify-content: space-between;
     margin: 16px 16px 0px 0px;
+}
+
+.about-hq {
+    font-size: 27px;
+    font-family: 'Akrobat';
+    margin-bottom: 60px;
 }
 
 @media (max-width: 1110px) {

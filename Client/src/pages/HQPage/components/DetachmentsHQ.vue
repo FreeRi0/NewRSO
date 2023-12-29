@@ -1,52 +1,95 @@
 <template>
     <section class="headquarters-detachments">
         <h3>Отряды штаба</h3>
-            <div class="headquarters-detachments__container">
-                <div class="squad-card" v-for="detachment in detachments.slice(0,6)">
-                    <div class="squad-card__ava">
-                        <img :src="'./assets/headquarters/'+detachment.image" alt="ava"/>
-                    </div>
-                    <h5>{{ detachment.name }}</h5>
+        <div class="headquarters-detachments__container">
+            <div class="squad-card" v-for="detachment in area">
+                <div class="squad-card__ava">
+                    <img
+                        :src="detachment.avatar.photo"
+                        alt="photo"
+                        v-if="detachment.avatar"
+                    />
+                    <img
+                        src="@app/assets/headquarters/squad-ava.png"
+                        alt="photo"
+                        v-else
+                    />
                 </div>
+                <a href="/AllSquads"
+                    ><h5>{{ area.name }}</h5></a
+                >
             </div>
-        </section>
+        </div>
+    </section>
 </template>
 
 <script setup>
-import {ref} from "vue"
-const detachments = ref([
-    {
-        name:"Сервисные",
-        image:'squad-ava.png',
+import { ref, onMounted } from 'vue';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+const route = useRoute();
+let id = route.params.id;
+
+const area = ref({});
+
+const props = defineProps({
+    area: {
+        type: Array,
     },
-    {
-        name:"Проводников",
-        image:'squad-ava2.png',
-    },
-    {
-        name:"Медицинские",
-        image:'squad-ava3.png',
-    },
-    {
-        name:"Сельскохозяйственные",
-        image:'squad-ava4.png',
-    },
-    {
-        name:"Строительные",
-        image:'squad-ava5.png',
-    },
-    {
-        name:"Педагогические",
-        image:'squad-ava6.png',
-    },
-])
+});
+
+const aboutArea = async () => {
+    await HTTP.get(`/areas/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            area.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+onMounted(() => {
+    aboutArea();
+});
+
+// const detachments = ref([
+//     {
+//         name: 'Сервисные',
+//         image: 'squad-ava.png',
+//     },
+//     {
+//         name: 'Проводников',
+//         image: 'squad-ava2.png',
+//     },
+//     {
+//         name: 'Медицинские',
+//         image: 'squad-ava3.png',
+//     },
+//     {
+//         name: 'Сельскохозяйственные',
+//         image: 'squad-ava5.png',
+//     },
+//     {
+//         name: 'Строительные',
+//         image: 'squad-ava4.png',
+//     },
+//     {
+//         name: 'Педагогические',
+//         image: 'squad-ava6.png',
+//     },
+// ]);
 </script>
 
 <style scoped lang="scss">
-    section.headquarters-detachments h3 {
-    color: #35383F;
+section.headquarters-detachments h3 {
+    color: #35383f;
     /* Desktop/H-3 */
-    font-family: "Akrobat";
+    font-family: 'Akrobat';
     font-size: 32px;
     font-style: normal;
     font-weight: 600;
@@ -82,9 +125,9 @@ const detachments = ref([
 }
 
 .squad-card h5 {
-    color: #35383F;
+    color: #35383f;
     text-align: center;
-    font-family: "BertSans";
+    font-family: 'BertSans';
     font-size: 20px;
     font-style: normal;
     font-weight: 600;

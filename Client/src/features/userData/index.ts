@@ -1,0 +1,1 @@
+export { default as userData } from './components/userData.vue';

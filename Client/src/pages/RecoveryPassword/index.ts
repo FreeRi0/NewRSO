@@ -1,1 +1,1 @@
-export { default as Registration } from './components/RecoveryPassword.vue';
+export { default as RecoveryPassword } from './components/RecoveryPasswordPage.vue';

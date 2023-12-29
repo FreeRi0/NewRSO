@@ -34,7 +34,7 @@
                 <div ref="navMenu" class="header__nav-container no-visible">
                     <div class="header__overlay" @click="removeClass()"></div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item">
+                        <li class="header__nav-item" v-if="user">
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
@@ -43,7 +43,7 @@
                             <a class="header__nav-link" href="/actionSquads">Мероприятия</a>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="#"
+                            <a class="header__nav-link" href="/FAQ"
                                 >Полезная информация</a
                             >
                         </li>
@@ -65,10 +65,22 @@
                     <div class="nav-user__quantity"></div>
                 </div>
 
-                <div class="nav-user__location">
+                <div class="nav-user__location" v-if="user">
                     <button class="nav-user__button" @click="show = !show">
                         <!--прописать в span кнопки логику изменения ее названия-->
-                        <span>Карачаево-Черкесское региональное отделение</span>
+
+                        <!-- <span
+                            >{{ user?.user_region?.reg_town }} региональное
+                            отделение</span
+                        > -->
+
+                        <span v-if="user?.user_region?.reg_region"
+                            >{{
+                                regionals[user?.user_region?.reg_region - 1]
+                                    .name
+                            }}
+                        </span>
+                        <span v-else>Выберите региональное отделение</span>
                     </button>
 
                     <div
@@ -86,41 +98,40 @@
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <Input
-                            class="nav-user__input"
-                            placeholder="Выберите свой регион"
-                            name="your-region"
-                            id="your-region"
-                            type="text"
-                        />
+                        <Select
+                            variant="outlined"
+                            clearable
+                            name="select_education"
+                            id="select-education"
+                            placeholder="Ваш регион"
+                            v-model="user.region"
+                            address="regions/"
+                        ></Select>
 
                         <div>
                             <Button
-                                class="nav-user__button-agree"
+                                type="submit"
+                                class="nav-user__button-agree mt-2 mx-auto"
                                 label="Да, все верно"
                                 color="primary"
                                 size="large"
-                                @click="show = !show"
+                                @click="updateRegion"
                             ></Button>
-                            <Button
-                                class="nav-user__button-change"
-                                label="Выбрать другой"
-                                size="large"
-                            ></Button
-                            ><!--если переход на другую страницу, то переделать на ссылку-->
                         </div>
                     </div>
                 </div>
-
-                <div class="nav-user__menu user-menu">
+                <!-- <router-link  :to="{ name: 'userpage', params: { id: user.id } }"></router-link> -->
+                <div class="nav-user__menu user-menu" v-if="user">
                     <Dropdown
                         :items="userPages"
                         :image="true"
-                        url="/assets/avatar-user.svg"
+                        :url="user?.media?.photo"
                         desc="Фотография пользователя"
                     />
-                    <!-- <Button v-if="user" @click="LogOut" label="Выйти"></Button>
-                    <p v-else>Not auth</p> -->
+
+                    <!-- <img :src="user?.media?.photo" alt="userphoto"> -->
+                    <!--
+                    <Button v-if="user" @click="LogOut" label="Выйти"></Button> -->
                 </div>
             </nav>
         </header>
@@ -130,53 +141,62 @@
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
-import { Input } from '@shared/components/inputs';
+// import { Input } from '@shared/components/inputs';
+import { Select } from '@shared/components/selects';
 import { HTTP } from '@app/http';
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const router = useRouter();
+
+// const route = useRoute();
+// let id = route.params.id;
+
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
     { title: 'Штабы СО ОО', link: '/AllHeadquarters' },
     { title: 'Местные штабы', link: '/LocalHeadquarters' },
     { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
     { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '#' },
+    { title: 'Центральный штаб', link: '/CentralHQ' },
 ]);
 
 const userPages = ref([
-    { title: 'Моя страница', link: '/UserPage' },
-    { title: 'Мой отряд', link: '#' },
+    { title: 'Моя страница', link: `/UserPage/` },
+    { title: 'Мой отряд', link: '/allSquads' },
     { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
     { title: 'Местный штаб', link: '/LocalHeadquarters' },
     { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
     { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
-    { title: 'Активные заявки', link: '#' },
+    { title: 'Центральный штаб', link: '/CentralHQ' },
+    { title: 'Активные заявки', link: '/active' },
     { title: 'Поиск участников', link: '#' },
-    { title: 'Членский взнос', link: '#' },
-    { title: 'Оформление справок', link: '#' },
-    { title: 'Настройки профиля', link: '#' },
-    { title: 'Выйти из ЛК', link: '#' },
+    { title: 'Членский взнос', link: '/contributorPay' },
+    { title: 'Оформление справок', link: '/references' },
+    { title: 'Настройки профиля', link: '/PersonalData' },
+    { title: 'Выйти из ЛК', button: true },
 ]);
 
-const show = ref(false);
+let show = ref(false);
 
 const isOpen = ref(false);
-const user = ref(null);
+const user = ref({
+    region: null,
+});
+
+const navMenu = ref(null);
 
 const removeClass = () => {
     const menu = navMenu.value;
     menu.classList.toggle('no-visible');
 };
 
-const LogOut = () => {
-    localStorage.removeItem('Token');
-    router.push('/');
-};
+const regions = ref({});
+
+const regionals = ref([]);
 
 const getUser = async () => {
-    await HTTP.get('/users/me/', {
+    await HTTP.get('/rsousers/me/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -191,9 +211,75 @@ const getUser = async () => {
         });
 };
 
+const updateRegion = async () => {
+    await HTTP.patch('/rsousers/me/region/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            show = !show;
+            console.log(user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const getRegions = async () => {
+    await HTTP.get(`/regions/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regions.value = response.data;
+            console.log(regions.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const getRegionals = async () => {
+    await HTTP.get(`/regionals/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regionals.value = response.data;
+            console.log(regionals.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         getUser();
+//     }
+// });
+
+// watch(
+//     () => router.params.id,
+
+//     (newId, oldId) => {
+//         id = newId;
+//         getUser();
+//     },
+// );
+
 onMounted(() => {
-    getUser()
-})
+    getUser();
+    getRegions();
+    getRegionals();
+});
 </script>
 
 <style lang="scss">
@@ -206,6 +292,7 @@ onMounted(() => {
     padding: 15px 0;
     color: #35383f;
     position: relative;
+    // border-bottom: 1px solid red; //-------------------------------------
 
     &__overlay {
         position: fixed;
@@ -361,11 +448,12 @@ onMounted(() => {
         top: 100%;
         display: grid;
         row-gap: 8px;
-        padding: 8px 28px;
+        padding: 28px 28px;
         max-height: 820px; //---------------
+        width: 328px;
         overflow-y: auto;
-        border-radius: 0 0 10px 10px;
-        background-color: #ffffff;
+        border-radius: 10px;
+        background-color: #1f7cc0;
         z-index: 2;
 
         @media (max-width: 1024px) {
@@ -385,7 +473,7 @@ onMounted(() => {
             bottom: 0;
             right: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.2);
 
             @media (max-width: 1024px) {
                 background-color: rgba(255, 255, 255, 0.2);
@@ -399,8 +487,14 @@ onMounted(() => {
 
     &__link {
         display: block;
-        padding: 16px 0;
+        padding: 11px 0;
         width: max-content;
+    }
+}
+
+.nav-menu-item {
+    .dropdown__link {
+        color: #ffffff;
     }
 }
 
@@ -409,6 +503,14 @@ onMounted(() => {
         &__box-image {
             margin-right: 12px;
             width: 56px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
             @media (max-width: 1024px) {
                 margin-right: 0;

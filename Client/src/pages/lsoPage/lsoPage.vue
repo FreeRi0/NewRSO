@@ -5,20 +5,20 @@
         <!-- <BannerComp class="user-metric mt-3">
 
         </BannerComp> -->
-        <BannerSquad></BannerSquad>
+        <BannerSquad :squad="squad" :edict="educt" :member="member"></BannerSquad>
         <section class="about-squad">
             <h3>Об отряде</h3>
             <p>
                 {{ squad.about }}
             </p>
+            <!-- <p>222{{ squad }}</p> -->
         </section>
         <v-row class="mt-8">
             <v-col v-for="n in 4" :key="n" class="d-flex">
-                <squadPhotos></squadPhotos>
+                <squadPhotos :squad-photos="squad.photo1"></squadPhotos>
             </v-col>
         </v-row>
-        <SquadParticipants></SquadParticipants>
-
+        <SquadParticipants :squad="squad" :member="member"></SquadParticipants>
     </div>
 </template>
 <script setup>
@@ -26,15 +26,16 @@ import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerSquad } from '@features/baner/components';
 import { squadPhotos } from '@shared/components/imagescomp';
 import SquadParticipants from './components/SquadParticipants.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 const squad = ref({});
-const member = ref({});
+const member = ref([]);
 const educt = ref({});
 const route = useRoute();
-const id = route.params.id;
+let id = route.params.id;
+
 
 const aboutSquad = async () => {
     await HTTP.get(`/detachments/${id}/`, {
@@ -83,6 +84,26 @@ const aboutMembers = async () => {
             console.log('an error occured ' + error);
         });
 };
+
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) {
+        aboutSquad();
+        aboutMembers();
+        aboutEduc();
+    }
+});
+
+watch(
+    () => route.params.id,
+
+    (newId, oldId) => {
+        id = newId
+        aboutSquad();
+        aboutMembers();
+        aboutEduc();
+    },
+);
+
 onMounted(() => {
     aboutSquad();
     aboutMembers();

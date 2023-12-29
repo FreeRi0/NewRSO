@@ -1,0 +1,1 @@
+export { default as EditingOfCentral } from './components/EditingOfCentral.vue';

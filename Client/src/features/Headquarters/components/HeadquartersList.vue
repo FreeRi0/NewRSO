@@ -1,19 +1,20 @@
 <template>
-    <div
-        class="headquarters-wrapper__item"
-        v-for="headquarter in headquarters"
-        v-if="headquarters.length > 0"
-    >
-        <div class="round-img">
-            <img :src="headquarter.emblem" alt="logo" />
-        </div>
-        <div class="container-headquarters">
-            <p class="headquarters-wrapper__item-title">
-                {{ headquarter.name }}
-            </p>
-        </div>
+    <div v-for="headquarter in headquarters" v-if="headquarters.length > 0">
+        <router-link
+            class="headquarters-wrapper__item"
+            :to="{ name: 'HQ', params: { id: headquarter.id } }"
+        >
+            <div class="round-img">
+                <img :src="headquarter.emblem" alt="logo" v-if="headquarter.emblem" />
+                <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
+            </div>
+            <div class="container-headquarters">
+                <p class="headquarters-wrapper__item-title">
+                    {{ headquarter.name }}
+                </p>
+            </div>
+        </router-link>
     </div>
-
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>

@@ -4,25 +4,25 @@
         v-for="squad in squads"
         v-if="squads.length > 0"
     >
-      <router-link  :to="{name:'lso', params: {id: squad.id}}">
-        <div class="round-img">
-            <img :src="squad.emblem" alt="logo" />
-        </div>
-        <div class="container-squad">
-            <!-- <p class="squads-wrapper__item-category">
+        <router-link :to="{ name: 'lso', params: { id: squad.id } }">
+            <div class="round-img">
+                <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
+                <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
+            </div>
+            <div class="container-squad">
+                <!-- <p class="squads-wrapper__item-category">
                 {{ squad.desc }}
             </p> -->
-            <p class="squads-wrapper__item-title normal-title">
-                {{ squad.name }}
-            </p>
-        </div>
-      </router-link>
-
+                <p class="squads-wrapper__item-title normal-title">
+                    {{ squad.name }}
+                </p>
+            </div>
+        </router-link>
     </div>
     <h2 v-else>Отряд не найден...</h2>
 </template>
 <script setup>
-import {ref} from 'vue';
+import { ref } from 'vue';
 const props = defineProps({
     squads: {
         type: Array,
@@ -67,5 +67,4 @@ const props = defineProps({
         color: #1e1e1e;
     }
 }
-
 </style>

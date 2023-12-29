@@ -1,8 +1,8 @@
 <template>
   <div class="AuthWrapper">
-  <v-container>
+  <div class="container">
     <RegistrationForm></RegistrationForm>
-  </v-container>
+  </div>
   </div>
 </template>
 <script setup>

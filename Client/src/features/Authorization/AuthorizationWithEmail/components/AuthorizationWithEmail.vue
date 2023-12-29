@@ -1,7 +1,7 @@
 <template>
-    <div class="d-flex justify-end">
-        <v-card class="px-14 py-15" max-width="586">
-            <v-card-title class="text-h4 text-center"
+    <div class="d-flex justify-end align-self-center">
+        <v-card class="" height="535px">
+            <v-card-title class="text-center"
                 >Вход в личный кабинет</v-card-title
             >
 
@@ -10,21 +10,31 @@
                     >У вас еще нет аккаунта?
                     <router-link to="/Register">Зарегистрироваться</router-link>
                 </v-card-text>
+
                 <Input
-                    placeholder="Имя"
-                    name="name"
+                    placeholder="Логин"
+                    name="login"
                     v-model:value="data.username"
                     class="username-input"
                 />
 
-                <p v-if="isError">{{ isError }}</p>
-                <PasswordInputVue
+                <p class="error" v-if="isError.username">{{ isError.username }}</p>
+                <!-- <p v-if="isError">{{ isError.username }}</p> -->
+                <Input
+                    type="password"
                     placeholder="Пароль"
                     name="password"
                     v-model:value="data.password"
-                ></PasswordInputVue>
+                >
+                </Input>
 
-                <p v-if="isError">{{ isError }}</p>
+                <p class="error" v-if="isError.password">{{ isError.password }}</p>
+
+                <!-- <p v-if="isError">{{ isError.non_field_errors }}</p> -->
+                <p class="error" v-if="isError.non_field_errors">
+                    {{ isError.non_field_errors }}
+                </p>
+
                 <Button
                     class="login_btn"
                     type="submit"
@@ -36,7 +46,9 @@
 
                 <v-card-text class="text-center"
                     >Забыли пароль?
-                    <router-link to="/">Восстановить</router-link></v-card-text
+                    <router-link to="/RecoveryPass"
+                        >Восстановить</router-link
+                    ></v-card-text
                 >
             </v-form>
         </v-card>
@@ -44,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, PasswordInputVue } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
@@ -55,16 +67,34 @@ const data = ref({
     username: '',
     password: '',
 });
-const isError = ref(null);
+
+// const user = ref({});
+const isError = ref('');
 const isLoading = ref(false);
 const swal = inject('$swal');
 const router = useRouter();
 const LoginUser = async () => {
     isLoading.value = true;
-    HTTP.post('/token/login/', data.value)
+    await HTTP.post('/token/login/', data.value)
         .then((response) => {
             data.value = response.data;
             localStorage.setItem('Token', response.data.auth_token);
+            HTTP.get(`/rsousers/me/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            })
+                .then((response) => {
+                    console.log(response);
+                    router.push({
+                        name: 'userpage',
+                        params: { id: response.data.id },
+                    });
+                })
+                .catch(function (error) {
+                    console.log('an error occured ' + error);
+                });
             console.log(response.data);
             isLoading.value = false;
             swal.fire({
@@ -74,7 +104,8 @@ const LoginUser = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            router.push('/UserPage');
+
+            // router.push({ name: 'userpage', params: {id: response.data.id}});
         })
 
         .catch(({ response }) => {
@@ -99,11 +130,32 @@ const LoginUser = async () => {
 
 .v-card-title {
     padding: 0rem 1rem;
-    padding-top: 2rem;
+    font-size: 40px;
+    font-weight: 600;
+    font-family: Akrobat;
+    padding-top: 0rem;
 }
-
 .v-card-text {
     padding: 0;
-    padding-bottom: 2rem;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 10px;
+    text-align: center;
+}
+
+.v-card {
+    padding: 105px 98px;
+}
+
+a {
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 18px;
 }
 </style>
