@@ -18,5 +18,4 @@ export * as CreationOfHQ from './CreationOfHQ';
 
 export * as actionSquadsPage from './actionSquadsPade';
 
-export * as CreationOfRS from './CreationOfRS';
-
+export * as activeInventsPage from './ActiveInventsPage';
