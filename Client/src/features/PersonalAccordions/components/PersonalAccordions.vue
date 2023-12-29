@@ -16,7 +16,7 @@
     <form
         class="accordion-form"
         enctype="multipart/form-data"
-        @submit.prevent="addData"
+        @submit.prevent="updateData"
     >
         <p class="accordion-title">
             Для вступления в РСО внесите ниже персональные данные
@@ -176,7 +176,6 @@
                                     :value="sex.name"
                                     :label="sex.id"
                                     :id="sex.id"
-                                    :checked="user.gender"
                                     name="sex"
                                     v-model:checkedValue="user.gender"
                                 />
@@ -317,7 +316,6 @@
                                             :value="passP.name"
                                             :label="passP.name"
                                             :id="passP.id"
-                                            :checked="passP.checked"
                                             name="passParent"
                                             v-model:checkedValue="
                                                 selectedPassParent
@@ -553,7 +551,7 @@
                     Имя пользователя обязательное поле
                 </p>
                 <p class="error" v-if="isError.first_name">
-                     Фамилия пользователя
+                    Фамилия пользователя
                 </p>
             </v-expansion-panel>
 
@@ -1000,7 +998,11 @@
                                     v-model="documents.mil_reg_doc_type"
                                     :names="militaryDocs"
                                 ></Select>
+                                <p class="error" v-if="isError.mil_reg_doc_type">
+                    {{ '' + isError.mil_reg_doc_type }}
+                </p>
                             </div>
+
                             <div class="form-field">
                                 <label for="military-id"
                                     >Серия и номер документов воинского
@@ -1018,6 +1020,7 @@
                                     "
                                 />
                             </div>
+
                         </div>
                         <div
                             id="no-passport"
@@ -1216,14 +1219,22 @@
                                     >*</span
                                 ></label
                             >
-                            <Input
+                            <!-- <Input
                                 name="study_institution"
                                 type="text"
                                 id="education-org"
                                 class="input-full"
                                 placeholder="Введите название образовательной организации"
                                 v-model:value="education.study_institution"
-                            />
+                            /> -->
+                            <Select
+                                variant="outlined"
+                                clearable
+                                class="input-full"
+                                v-model="education.study_institution"
+                                address="/eduicational_institutions/"
+                            >
+                            </Select>
                         </div>
                         <div class="form-field">
                             <label for="facultet">Факультет</label>
@@ -2581,15 +2592,14 @@
                 class="form__button-group d-flex justify-space-between"
             >
                 <Button
-                    class="mr-3"
                     type="submit"
                     label="Отправить данные на верификацию"
                 ></Button>
-                <Button
+                <!-- <Button
                     @click="updateData"
                     type="button"
                     label="Обновить данные"
-                ></Button>
+                ></Button> -->
             </v-card-actions>
         </v-expansion-panels>
     </form>
@@ -2694,7 +2704,7 @@ const user = ref({
 });
 
 const education = ref({
-    study_institution: '',
+    study_institution: null,
     study_faculty: '',
     study_year: '',
     study_specialty: '',
@@ -2938,117 +2948,117 @@ const downloadAll = async () => {
         });
 };
 
-const addData = async () => {
-    let fd = new FormData();
-    fd.append('statement', statement.value);
-    fd.append('consent_personal_data', consent_personal_data.value);
-    fd.append(
-        'consent_personal_data_representative',
-        consent_personal_data_representative.value,
-    );
-    fd.append('passport', passportUpload.value);
-    fd.append('passport_representative', passport_representative.value);
-    fd.append('snils_file', snils_file.value);
-    fd.append('inn_file', inn_file.value);
-    fd.append('employment_document', military_document.value);
-    fd.append('international_passport', international_passport.value);
-    const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
-    const axiosrequest2 = HTTP.post('/rsousers/me/region/', regionData.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
-    const axiosrequest3 = HTTP.post(
-        '/rsousers/me/documents/',
-        documents.value,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
-    );
-    const axiosrequest4 = HTTP.post(
-        '/rsousers/me/education/',
-        education.value,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
-    );
+// const addData = async () => {
+//     let fd = new FormData();
+//     fd.append('statement', statement.value);
+//     fd.append('consent_personal_data', consent_personal_data.value);
+//     fd.append(
+//         'consent_personal_data_representative',
+//         consent_personal_data_representative.value,
+//     );
+//     fd.append('passport', passportUpload.value);
+//     fd.append('passport_representative', passport_representative.value);
+//     fd.append('snils_file', snils_file.value);
+//     fd.append('inn_file', inn_file.value);
+//     fd.append('employment_document', military_document.value);
+//     fd.append('international_passport', international_passport.value);
+//     const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     });
+//     const axiosrequest2 = HTTP.post('/rsousers/me/region/', regionData.value, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     });
+//     const axiosrequest3 = HTTP.post(
+//         '/rsousers/me/documents/',
+//         documents.value,
+//         {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         },
+//     );
+//     const axiosrequest4 = HTTP.post(
+//         '/rsousers/me/education/',
+//         education.value,
+//         {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         },
+//     );
 
-    const axiosrequest5 = HTTP.post('/rsousers/me/statement/', fd, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
+//     const axiosrequest5 = HTTP.post('/rsousers/me/statement/', fd, {
+//         headers: {
+//             'Content-Type': 'multipart/form-data',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     });
 
-    await axios
-        .all([
-            axiosrequest1,
-            axiosrequest2,
-            axiosrequest3,
-            axiosrequest4,
-            axiosrequest5,
-        ])
-        .then(
-            axios.spread(function (res1, res2, res3, res4) {
-                user.value = res1.data;
-                regionData.value = res2.data;
-                documents.value = res3.data;
-                education.value = res4.data;
-                console.log(res1.data);
-                console.log(res2.data);
-                console.log(res3.data);
-                console.log(res4.data);
+//     await axios
+//         .all([
+//             axiosrequest1,
+//             axiosrequest2,
+//             axiosrequest3,
+//             axiosrequest4,
+//             axiosrequest5,
+//         ])
+//         .then(
+//             axios.spread(function (res1, res2, res3, res4) {
+//                 user.value = res1.data;
+//                 regionData.value = res2.data;
+//                 documents.value = res3.data;
+//                 education.value = res4.data;
+//                 console.log(res1.data);
+//                 console.log(res2.data);
+//                 console.log(res3.data);
+//                 console.log(res4.data);
 
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            }),
-        )
-        // .catch((error) => {
-        //     console.error('There was an error!', error);
-        //     swal.fire({
-        //         position: 'top-center',
-        //         icon: 'error',
-        //         title: 'ошибка',
-        //         showConfirmButton: false,
-        //         timer: 1500,
-        //     });
-        // });
-        .catch(({ response }) => {
-            isError.value = response.data;
-            // isError2.value = response.data;
-            // isError3.value = response.data;
-            // isError4.value = response.data;
-            console.error('There was an error!', response.data);
-            // console.error('There was an error!', response.data);
-            // console.error('There was an error!', response.data);
-            // console.error('There was an error!', response.data);
+//                 swal.fire({
+//                     position: 'top-center',
+//                     icon: 'success',
+//                     title: 'успешно',
+//                     showConfirmButton: false,
+//                     timer: 1500,
+//                 });
+//             }),
+//         )
+//         // .catch((error) => {
+//         //     console.error('There was an error!', error);
+//         //     swal.fire({
+//         //         position: 'top-center',
+//         //         icon: 'error',
+//         //         title: 'ошибка',
+//         //         showConfirmButton: false,
+//         //         timer: 1500,
+//         //     });
+//         // });
+//         .catch(({ response }) => {
+//             isError.value = response.data;
+//             // isError2.value = response.data;
+//             // isError3.value = response.data;
+//             // isError4.value = response.data;
+//             console.error('There was an error!', response.data);
+//             // console.error('There was an error!', response.data);
+//             // console.error('There was an error!', response.data);
+//             // console.error('There was an error!', response.data);
 
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
-};
+//             swal.fire({
+//                 position: 'top-center',
+//                 icon: 'error',
+//                 title: 'ошибка',
+//                 showConfirmButton: false,
+//                 timer: 1500,
+//             });
+//         });
+// };
 
 const updateData = async () => {
     let fd = new FormData();
@@ -3147,8 +3157,8 @@ const answers = ref([
 ]);
 
 const gender = ref([
-    { name: 'male', value: 'gender', id: 'Мужской' },
-    { name: 'female', value: 'gender', id: 'Женский' },
+    { name: 'male', value: 'gender', id: 'Мужской',  },
+    { name: 'female', value: 'gender', id: 'Женский',  },
 ]);
 
 const passportParent = ref([

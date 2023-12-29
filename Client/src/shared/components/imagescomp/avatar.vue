@@ -13,82 +13,77 @@
         </div>
 
             <!-- Иконка добавления аватара -->
-            <v-menu min-width="200px" rounded v-if="!props.avatar">
-                <template v-slot:activator="{ props }">
-                    <v-btn class="user-metric__avatar-add" icon v-bind="props">
-                        <v-avatar size="large">
-                            <v-icon icon="mdi-plus"></v-icon>
-                        </v-avatar>
-                    </v-btn>
-                </template>
-                <v-card>
-                    <v-card-text>
-                        <v-row justify="center">
-                            <v-dialog v-model="dialog" width="1024">
-                                <template v-slot:activator="{ props }">
-                                    <v-btn
-                                        rounded
-                                        variant="text"
-                                        v-bind="props"
+            <v-menu min-width="200px" rounded v-if="!props.avatar" >
+            <template v-slot:activator="{ props }">
+                <v-btn class="user-metric__avatar-add" icon v-bind="props">
+                    <v-avatar size="large">
+                        <v-icon icon="mdi-plus"></v-icon>
+                    </v-avatar>
+                </v-btn>
+            </template>
+            <v-card>
+                <v-card-text>
+                    <v-row justify="center">
+                        <v-dialog v-model="dialog" width="1024">
+                            <template v-slot:activator="{ props }">
+                                <v-btn rounded variant="text" v-bind="props">
+                                    Загрузить аватар
+                                </v-btn>
+                            </template>
+                            <v-card>
+                                <v-card-title>
+                                    <span class="text-h5"
+                                        >Загрузите ваше фото</span
                                     >
-                                        Добавить аватар
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-container>
+                                        <v-row>
+                                            <v-file-input
+                                                @change="selectFile"
+                                                show-size
+                                                prepend-icon="mdi-camera"
+                                                counter
+                                            ></v-file-input>
+                                        </v-row>
+                                        <v-row>
+                                            <v-card class="mt-5 mx-auto">
+                                                <img
+                                                    v-if="preview"
+                                                    :src="preview"
+                                                />
+                                            </v-card>
+                                        </v-row>
+                                    </v-container>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        color="blue-darken-1"
+                                        variant="text"
+                                        @click="dialog = false"
+                                    >
+                                        Закрыть
                                     </v-btn>
-                                </template>
-                                <v-card>
-                                    <v-card-title>
-                                        <span class="text-h5"
-                                            >Загрузите ваше фото</span
-                                        >
-                                    </v-card-title>
-                                    <v-card-text>
-                                        <v-container>
-                                            <v-row>
-                                                <v-file-input
-                                                    @change="selectFile"
-                                                    show-size
-                                                    prepend-icon="mdi-camera"
-                                                    counter
-                                                ></v-file-input>
-                                            </v-row>
-                                            <v-row>
-                                                <v-card class="mt-5 mx-auto">
-                                                    <img
-                                                        v-if="preview"
-                                                        :src="preview"
-                                                    />
-                                                </v-card>
-                                            </v-row>
-                                        </v-container>
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn
-                                            color="blue-darken-1"
-                                            variant="text"
-                                            @click="dialog = false"
-                                        >
-                                            Закрыть
-                                        </v-btn>
-                                        <v-btn
-                                            :disabled="!media"
-                                            color="blue-darken-1"
-                                            variant="text"
-                                            type="submit"
-                                            @click="uploadAvatar()"
-                                        >
-                                            Загрузить
-                                        </v-btn>
+                                    <v-btn
+                                        :disabled="!media"
+                                        color="blue-darken-1"
+                                        variant="text"
+                                        type="submit"
+                                        @click="uploadAvatar()"
+                                    >
+                                        Загрузить
+                                    </v-btn>
 
-                                    </v-card-actions>
-                                    <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
-                                </v-card>
-                            </v-dialog>
-                        </v-row>
-                    </v-card-text>
-                </v-card>
-            </v-menu>
-
-            <v-menu min-width="200px" rounded v-else>
+                                </v-card-actions>
+                                <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
+                            </v-card>
+                        </v-dialog>
+                    </v-row>
+                </v-card-text>
+            </v-card>
+        </v-menu>
+      <v-menu min-width="200px" rounded v-else>
                 <template v-slot:activator="{ props }">
                     <v-btn class="user-metric__avatar-add" icon v-bind="props">
                         <v-avatar size="large">
@@ -174,6 +169,8 @@
                     </v-card-text>
                 </v-card>
             </v-menu>
+
+
     </div>
 </template>
 <script setup>
@@ -203,7 +200,7 @@ const uploadAvatar = async () => {
     dialog.value = true;
     const formData = new FormData();
     formData.append('photo', media.value);
-    await HTTP.post('/rsousers/me/media/', formData, {
+    await HTTP.patch('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),

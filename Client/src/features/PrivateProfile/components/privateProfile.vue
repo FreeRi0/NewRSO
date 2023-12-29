@@ -143,7 +143,7 @@ onMounted(() => {
 
 
 const ChangePrivate = async () => {
-    await HTTP.post('/rsousers/me/privacy/', privateData.value, {
+    await HTTP.put('/rsousers/me/privacy/', privateData.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

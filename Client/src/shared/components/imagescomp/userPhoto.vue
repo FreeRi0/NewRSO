@@ -206,7 +206,7 @@ const uploadPhoto = async () => {
     dialog.value = true;
     const formData = new FormData();
     formData.append('photo1', userPhotos.value);
-    await HTTP.post('/rsousers/me/media/', formData, {
+    await HTTP.patch('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),

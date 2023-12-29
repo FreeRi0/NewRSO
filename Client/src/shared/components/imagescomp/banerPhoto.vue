@@ -15,7 +15,7 @@
                 alt="Баннер личной страницы(пусто)"
             />
         </div>
-        <v-menu min-width="200px" rounded v-if="!props.banner">
+        <v-menu min-width="200px" rounded v-if="!props.banner" >
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -29,7 +29,7 @@
                         <v-dialog v-model="dialog" width="1024">
                             <template v-slot:activator="{ props }">
                                 <v-btn rounded variant="text" v-bind="props">
-                                    Добавить баннер
+                                    Изменить баннер
                                 </v-btn>
                             </template>
                             <v-card>
@@ -197,7 +197,7 @@ const uploadBanner = async () => {
     dialog.value = true;
     const formData = new FormData();
     formData.append('banner', media.value);
-    await HTTP.post('/rsousers/me/media/', formData, {
+    await HTTP.patch('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -229,10 +229,10 @@ const uploadBanner = async () => {
 };
 
 const updateBanner = async () => {
-    const fd = new FormData();
-    fd.append('banner', media.value);
     dialog.value = true;
-    await HTTP.put('/rsousers/me/media/', fd, {
+    const formData = new FormData();
+    formData.append('banner', media.value);
+    await HTTP.put('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -248,7 +248,7 @@ const updateBanner = async () => {
             });
             dialog.value = false;
 
-            console.log(response, 'banner updated');
+            console.log(response, 'banner uploaded');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -262,7 +262,6 @@ const updateBanner = async () => {
             });
         });
 };
-
 const deleteBanner = async () => {
     await HTTP.put('/rsousers/me/media/', media.value, {
         headers: {

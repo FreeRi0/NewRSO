@@ -195,6 +195,9 @@ const routes: RouteRecordRaw[] = [
                 name: 'CentralHQ',
                 component: () =>
                     import('@pages/CentralHQPage/CentralHQPage.vue'),
+                    meta: {
+                        label: 'Центральный штаб',
+                    },
             },
             {
                 path: '/RegionalHQ/:id',
@@ -218,9 +221,9 @@ const routes: RouteRecordRaw[] = [
                 name: 'userpaage',
                 component: () =>
                     import('@pages/UserPage/components/UserPage.vue'),
-                meta: {
-                    requiresAuth: true,
-                },
+                    meta: {
+                        label: 'Моя страница',
+                    },
             },
             {
                 path: '/UserPage/:id',
@@ -228,7 +231,7 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/UserPage/components/UserPage.vue'),
                 meta: {
-                    requiresAuth: true,
+                    label: 'Моя страница',
                 },
             },
 
@@ -262,7 +265,7 @@ const routes: RouteRecordRaw[] = [
                         '@pages/AllHeadquartersPage/components/LocalHeadquartersPage.vue'
                     ),
                 meta: {
-                    requiresAuth: true,
+                    label: 'Местные штабы',
                 },
             },
             {
@@ -273,7 +276,7 @@ const routes: RouteRecordRaw[] = [
                         '@pages/AllHeadquartersPage/components/RegionalHeadquarters.vue'
                     ),
                 meta: {
-                    requiresAuth: true,
+                    label: 'Региональные штабы',
                 },
             },
             {
@@ -284,7 +287,7 @@ const routes: RouteRecordRaw[] = [
                         '@pages/AllHeadquartersPage/components/DistrictsHeadquartersPage.vue'
                     ),
                 meta: {
-                    requiresAuth: true,
+                    label: 'Окружные штабы ',
                 },
             },
             {
@@ -305,21 +308,21 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/PersonalDataPage/components/PersonalData.vue'
                     ),
-                meta: {
-                    requiresAuth: true,
-                },
+                    meta: {
+                        label: 'Персональные данные',
+                    },
             },
-            {
-                path: '/PersonalData/:id',
-                name: 'PersonalData',
-                component: () =>
-                    import(
-                        '@pages/PersonalDataPage/components/PersonalData.vue'
-                    ),
-                meta: {
-                    requiresAuth: true,
-                },
-            },
+            // {
+            //     path: '/PersonalData/:id',
+            //     name: 'PersonalData',
+            //     component: () =>
+            //         import(
+            //             '@pages/PersonalDataPage/components/PersonalData.vue'
+            //         ),
+            //     meta: {
+            //         requiresAuth: true,
+            //     },
+            // },
 
             {
                 path: '/reference',
@@ -358,6 +361,9 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/ContributionPage/components/ContributorPay.vue'
                     ),
+                    meta: {
+                        label: 'Членский взнос',
+                    },
             },
             {
                 path: '/CreationOfRS',
