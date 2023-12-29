@@ -103,6 +103,9 @@
                                 v-model:value="user.last_name"
                             />
                         </div>
+                        <p class="error" v-if="isError.last_name">
+                            {{ isError.last_name }}
+                        </p>
                         <div class="form-field">
                             <label for="surname-lat">Фамилия(Латиницей) </label>
                             <Input
@@ -125,6 +128,9 @@
                                 v-model:value="user.first_name"
                             />
                         </div>
+                        <p class="error" v-if="isError.first_name">
+                            {{ isError.first_name }}
+                        </p>
                         <div class="form-field">
                             <label for="name-lat">Имя(Латиницей)</label>
                             <Input
@@ -154,7 +160,7 @@
                                 clearable
                                 placeholder="patronomyc"
                                 name="patronomyc-lat"
-                                v-model:value="patronymic_lat"
+                                v-model:value="user.patronymic_lat"
                             />
                         </div>
                         <div class="checkbox-wrapper">
@@ -170,7 +176,7 @@
                                     :value="sex.name"
                                     :label="sex.id"
                                     :id="sex.id"
-                                    :checked="sex.name"
+                                    :checked="user.gender"
                                     name="sex"
                                     v-model:checkedValue="user.gender"
                                 />
@@ -540,6 +546,15 @@
                         </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
+                <p class="error" v-if="isError.gender">
+                    Гендер пользователя обязательное поле
+                </p>
+                <p class="error" v-if="isError.first_name">
+                    Имя пользователя обязательное поле
+                </p>
+                <p class="error" v-if="isError.first_name">
+                     Фамилия пользователя
+                </p>
             </v-expansion-panel>
 
             <v-expansion-panel value="panelTwo">
@@ -628,8 +643,8 @@
                             <Select
                                 variant="outlined"
                                 clearable
-                                v-model="regionData.reg_region"
-                                placeholder="Например, Карачаево-Черкесское региональное отделение"
+                                v-model="user.region"
+                                placeholder="Например, Карачаево-Черкесск"
                                 address="/regions/"
                             ></Select>
                         </div>
@@ -714,10 +729,10 @@
                                 :key="addr.id"
                             >
                                 <RadioButton
-                                    :value="addr.name"
+                                    :value="addr.value"
                                     :label="addr.id"
                                     :id="addr.id"
-                                    :checked="addr.name"
+                                    :checked="addr.checked"
                                     name="address"
                                     v-model:checkedValue="
                                         regionData.reg_fact_same_address
@@ -725,11 +740,11 @@
                                 />
                             </div>
                         </div>
-
+                        <!-- <p>value: {{ regionData.reg_fact_same_address}}</p> -->
                         <div
                             class="addr-fact__wrapper"
                             id="addr-fact"
-                            v-if="regionData.reg_fact_same_address == 'Нет'"
+                            v-if="!regionData.reg_fact_same_address"
                         >
                             <p class="accordion-block-title small">
                                 Адрес фактического проживания
@@ -768,6 +783,7 @@
                             </div>
                         </div>
                     </div>
+
                     <v-card-actions class="nav-btn__wrapper">
                         <button
                             type="button"
@@ -790,6 +806,10 @@
                         </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
+                <p class="error" v-if="isError.detail">
+                    <!-- {{ isError.detail }} -->Данные региона пользователя уже
+                    существуют
+                </p>
             </v-expansion-panel>
 
             <v-expansion-panel value="panelThree">
@@ -1099,6 +1119,7 @@
                             </div>
                         </div>
                     </div>
+
                     <v-card-actions class="nav-btn__wrapper">
                         <button
                             type="button"
@@ -1121,6 +1142,9 @@
                         </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
+                <p class="error" v-if="isError.detail">
+                    Данные документов пользователя уже существуют
+                </p>
             </v-expansion-panel>
             <v-expansion-panel value="panelFour">
                 <v-expansion-panel-title>
@@ -1260,6 +1284,9 @@
                         </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
+                <p class="error" v-if="isError.detail">
+                    Образовательные данные пользователя уже существуют
+                </p>
             </v-expansion-panel>
             <v-expansion-panel
                 value="panelFive"
@@ -2550,8 +2577,11 @@
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-card-actions class="form__button-group d-flex justify-space-between">
+            <v-card-actions
+                class="form__button-group d-flex justify-space-between"
+            >
                 <Button
+                    class="mr-3"
                     type="submit"
                     label="Отправить данные на верификацию"
                 ></Button>
@@ -2586,7 +2616,10 @@ import axios from 'axios';
 
 const router = useRouter();
 const panel = ref();
-
+const isError = ref([]);
+// const isError2 = ref([]);
+// const isError3 = ref([]);
+// const isError4 = ref([]);
 const openPanelOne = () => {
     panel.value = 'panelOne';
 };
@@ -2611,7 +2644,6 @@ const regionData = ref({
     reg_town: '',
     reg_house: '',
     reg_fact_same_address: null,
-    reg_region: null,
     fact_region: null,
     fact_town: '',
     fact_house: '',
@@ -2649,6 +2681,7 @@ const user = ref({
     first_name: '',
     last_name: '',
     patronymic_name: '',
+    region: null,
     date_of_birth: '',
     last_name_lat: '',
     first_name_lat: '',
@@ -2892,8 +2925,6 @@ const downloadAll = async () => {
         responseType: 'blob',
     })
         .then((response) => {
-
-
             const url = new Blob([response.data], { type: 'application/zip' });
             const link = document.createElement('a');
             link.href = url;
@@ -2989,8 +3020,26 @@ const addData = async () => {
                 });
             }),
         )
-        .catch((error) => {
-            console.error('There was an error!', error);
+        // .catch((error) => {
+        //     console.error('There was an error!', error);
+        //     swal.fire({
+        //         position: 'top-center',
+        //         icon: 'error',
+        //         title: 'ошибка',
+        //         showConfirmButton: false,
+        //         timer: 1500,
+        //     });
+        // });
+        .catch(({ response }) => {
+            isError.value = response.data;
+            // isError2.value = response.data;
+            // isError3.value = response.data;
+            // isError4.value = response.data;
+            console.error('There was an error!', response.data);
+            // console.error('There was an error!', response.data);
+            // console.error('There was an error!', response.data);
+            // console.error('There was an error!', response.data);
+
             swal.fire({
                 position: 'top-center',
                 icon: 'error',
@@ -3078,8 +3127,10 @@ const updateData = async () => {
                 });
             }),
         )
-        .catch((error) => {
-            console.error('There was an error!', error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+
             swal.fire({
                 position: 'top-center',
                 icon: 'error',
@@ -3096,8 +3147,8 @@ const answers = ref([
 ]);
 
 const gender = ref([
-    { name: 'male', value: 'male', id: 'Мужской' },
-    { name: 'female', value: 'female', id: 'Женский' },
+    { name: 'male', value: 'gender', id: 'Мужской' },
+    { name: 'female', value: 'gender', id: 'Женский' },
 ]);
 
 const passportParent = ref([
@@ -3120,9 +3171,9 @@ const militaryDocs = ref([
     { value: 'Военный билтет', name: 'Военный билет' },
 ]);
 
-const address = reactive([
-    { name: true, value: 'reg_fact_same_address', id: 'Да' },
-    { name: false, value: 'reg_fact_same_address', id: 'Нет' },
+const address = ref([
+    { name: 'да', value: true, id: 'Да' },
+    { name: 'нет', value: false, id: 'Нет' },
 ]);
 
 const passport = reactive([
@@ -3172,6 +3223,15 @@ const selectedPass = ref('Да');
         font-weight: 600;
         font-family: 'Bert-Sans', sans-serif;
     }
+}
+
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 10px;
+    text-align: center;
 }
 
 .data-form {

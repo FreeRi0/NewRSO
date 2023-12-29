@@ -76,7 +76,9 @@
                                     >
                                         Загрузить
                                     </v-btn>
+
                                 </v-card-actions>
+                                <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
                             </v-card>
                         </v-dialog>
                     </v-row>
@@ -150,6 +152,7 @@
                                             Загрузить
                                         </v-btn>
                                     </v-card-actions>
+                                    <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
                                 </v-card>
                             </v-dialog>
                         </v-row>
@@ -165,7 +168,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 // const route = useRoute();
@@ -173,6 +176,8 @@ import { useRoute } from 'vue-router';
 const dialog = ref(false);
 const imgDataUrl = ref(null);
 const preview = ref(null);
+const isError = ref([]);
+const swal = inject('$swal');
 
 const props = defineProps({
     banner: String
@@ -182,22 +187,6 @@ const media = ref({
     banner: null,
 });
 
-// const viewBanner = async () => {
-//     await HTTP.get(`/rsousers/${id}/`, {
-//         headers: {
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             imgDataUrl.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// viewBanner();
 
 const selectBanner = (event) => {
     media.value = event.target.files[0];
@@ -215,12 +204,27 @@ const uploadBanner = async () => {
         },
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             dialog.value = false;
 
             console.log(response, 'banner uploaded');
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 
@@ -235,12 +239,27 @@ const updateBanner = async () => {
         },
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             dialog.value = false;
 
             console.log(response, 'banner updated');
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 
@@ -252,11 +271,25 @@ const deleteBanner = async () => {
         },
     })
         .then((response) => {
-
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             console.log(response, 'deleted');
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 </script>

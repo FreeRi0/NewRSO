@@ -80,6 +80,7 @@
                                             Загрузить
                                         </v-btn>
                                     </v-card-actions>
+                                    <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
                                 </v-card>
                             </v-dialog>
                         </v-row>
@@ -155,6 +156,7 @@
                                                 Загрузить
                                             </v-btn>
                                         </v-card-actions>
+                                        <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
                                     </v-card>
                                 </v-dialog>
                             </v-row>
@@ -174,12 +176,14 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
 
 const dialog = ref(false);
 const preview = ref(null);
 const showPhoto = ref(false);
+const isError = ref([]);
+const swal = inject('$swal');
 
 const props = defineProps({
     photos: Array,
@@ -209,11 +213,26 @@ const uploadPhoto = async () => {
         },
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             dialog.value = false;
             console.log(response, 'photo uploaded');
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 const updatePhoto = async () => {
@@ -227,11 +246,26 @@ const updatePhoto = async () => {
         },
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             dialog.value = false;
             console.log(response, 'updated');
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 
@@ -243,10 +277,25 @@ const deletePhoto = async () => {
         },
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             console.log(response, 'deleted');
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 </script>

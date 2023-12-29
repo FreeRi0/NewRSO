@@ -78,7 +78,9 @@
                                         >
                                             Загрузить
                                         </v-btn>
+
                                     </v-card-actions>
+                                    <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
                                 </v-card>
                             </v-dialog>
                         </v-row>
@@ -155,6 +157,7 @@
                                                 Загрузить
                                             </v-btn>
                                         </v-card-actions>
+                                        <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
                                     </v-card>
                                 </v-dialog>
                             </v-row>
@@ -174,7 +177,7 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 const props = defineProps({
@@ -188,6 +191,8 @@ const media = ref({
 const route = useRoute();
 const dialog = ref(false);
 const preview = ref(null);
+const isError = ref([]);
+const swal = inject('$swal');
 
 const selectFile = (event) => {
     media.value = event.target.files[0];
@@ -205,12 +210,27 @@ const uploadAvatar = async () => {
         },
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             dialog.value = false;
 
             console.log(response, 'avatar uploaded');
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 const updateAvatar = async () => {
@@ -224,12 +244,27 @@ const updateAvatar = async () => {
         },
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             dialog.value = false;
 
             console.log(response, 'updated');
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 
@@ -241,10 +276,25 @@ const deleteAvatar = async () => {
         },
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             console.log(response, 'deleted');
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 </script>

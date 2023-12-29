@@ -8,6 +8,9 @@
                 placeholder="Напиши что нибудь"
                 v-model:value="user.bio"
             ></TextArea>
+            <p class="error" v-if="isError.last_name">{{ 'Фамилия пользователя, ' +  isError.last_name }}</p>
+            <p class="error" v-if="isError.first_name">{{'Имя пользователя, ' + isError.first_name }}</p>
+            <p class="error" v-if="isError.gender">{{'Гендер, ' + isError.gender }}</p>
             <Button
                 :loaded="isLoading"
                 :disabled="isLoading"
@@ -34,9 +37,6 @@ import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { ref, onMounted, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
 
-// const data = ref({
-//     bio: '',
-// });
 const user = ref({
     bio: ''
 });
