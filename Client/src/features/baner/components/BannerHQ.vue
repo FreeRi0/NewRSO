@@ -87,28 +87,29 @@
                     <p>{{ localHeadquarter.slogan }}</p>
                 </div>
                 <div class="hq__list-wrapper">
-                    <ul class="Squad-HQ__list">
-                        <li class="Squad-HQ__university">
-                            <p>{{ edict.name }}</p>
-                        </li>
+                    <ul class="Squad-HQ__list-Local">
                         <li class="Squad-HQ__date">
-                            <p>Дата создания штаба</p>
-                            <img
-                                src="@/app/assets/icon/calendar.svg"
-                                alt="calendar"
-                            />
-                            <time datetime="2022-09-10">{{
-                                localHeadquarter.founding_date
-                            }}</time>
+                            <time datetime="2022-09-10"
+                                >{{ localHeadquarter.founding_date }} — дата
+                                проведения первого Общего собрания МШ</time
+                            >
+                        </li>
+                        <li class="hq-data__participant-counter">
+                            <span>{{ member.length }} участников</span>
+                        </li>
+                        <li class="hq-data__participant-counter-">
+                            <span
+                                >{{
+                                    localHeadquarter.participants_count
+                                }}
+                                дейстующих членов</span
+                            >
                         </li>
                     </ul>
                 </div>
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
-                        <div class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
-                        </div>
-                        <div class="hq-data__social-network">
+                        <div class="hq-data__social-network-Reg">
                             <div class="hq-data__link-vk">
                                 <a href="https://vk.com" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
@@ -156,28 +157,29 @@
                     <p>{{ districtHeadquarter.slogan }}</p>
                 </div>
                 <div class="hq__list-wrapper">
-                    <ul class="Squad-HQ__list">
-                        <li class="Squad-HQ__university">
-                            <p>{{ edict.name }}</p>
-                        </li>
+                    <ul class="Squad-HQ__list-Reg">
                         <li class="Squad-HQ__date">
-                            <p>Дата создания штаба</p>
-                            <img
-                                src="@/app/assets/icon/calendar.svg"
-                                alt="calendar"
-                            />
-                            <time datetime="2022-09-10">{{
-                                districtHeadquarter.founding_date
-                            }}</time>
+                            <time datetime="2022-09-10"
+                                >{{ districtHeadquarter.founding_date }} — дата
+                                начала функционирования ОШ</time
+                            >
+                        </li>
+                        <li class="hq-data__participant-counter">
+                            <span>{{ member.length }} участников</span>
+                        </li>
+                        <li class="hq-data__participant-counter-">
+                            <span
+                                >{{
+                                    districtHeadquarter.participants_count
+                                }}
+                                дейстующих членов</span
+                            >
                         </li>
                     </ul>
                 </div>
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
-                        <div class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
-                        </div>
-                        <div class="hq-data__social-network">
+                        <div class="hq-data__social-network-Reg">
                             <div class="hq-data__link-vk">
                                 <a href="https://vk.com" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
@@ -225,28 +227,29 @@
                     <p>{{ regionalHeadquarter.slogan }}</p>
                 </div>
                 <div class="hq__list-wrapper">
-                    <ul class="Squad-HQ__list">
-                        <li class="Squad-HQ__university">
-                            <p>{{ edict.name }}</p>
-                        </li>
+                    <ul class="Squad-HQ__list-Reg">
                         <li class="Squad-HQ__date">
-                            <p>Дата создания штаба</p>
-                            <img
-                                src="@/app/assets/icon/calendar.svg"
-                                alt="calendar"
-                            />
-                            <time datetime="2022-09-10">{{
-                                regionalHeadquarter.founding_date
-                            }}</time>
+                            <time datetime="2022-09-10"
+                                >{{ regionalHeadquarter.conference_date }} —
+                                дата учредительной конференции РШ</time
+                            >
+                        </li>
+                        <li class="hq-data__participant-counter">
+                            <span>{{ member.length }} участников</span>
+                        </li>
+                        <li class="hq-data__participant-counter-">
+                            <span
+                                >{{
+                                    regionalHeadquarter.participants_count
+                                }}
+                                дейстующих членов</span
+                            >
                         </li>
                     </ul>
                 </div>
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
-                        <div class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
-                        </div>
-                        <div class="hq-data__social-network">
+                        <div class="hq-data__social-network-Reg">
                             <div class="hq-data__link-vk">
                                 <a href="https://vk.com" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
@@ -295,17 +298,18 @@
                 <div class="slogan">
                     <p>{{ centralHeadquarter.slogan }}</p>
                 </div>
+                <div class="working_slogan">
+                    <p>
+                        {{ centralHeadquarter.working_years }}лет на благо
+                        страны!
+                    </p>
+                </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list">
-                        <li class="Squad-HQ__university">
+                        <!-- <li class="Squad-HQ__university">
                             <p>{{ edict.name }}</p>
-                        </li>
+                        </li> -->
                         <li class="Squad-HQ__date">
-                            <p>Дата создания штаба</p>
-                            <img
-                                src="@/app/assets/icon/calendar.svg"
-                                alt="calendar"
-                            />
                             <time datetime="2022-09-10">{{
                                 centralHeadquarter.founding_date
                             }}</time>
@@ -503,7 +507,8 @@ const props = defineProps({
     font-weight: 600;
     line-height: normal;
 }
-.slogan {
+.slogan,
+.working_slogan {
     margin-top: 20px;
     margin-bottom: 9.5px;
 }
@@ -512,10 +517,35 @@ const props = defineProps({
     display: grid;
     grid-template-columns: 380px 300px;
 }
+.Squad-HQ__list-Reg {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 410px 120px 180px;
+}
+.Squad-HQ__list-Local {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 480px 120px 180px;
+}
+
 .Squad-HQ__list li {
     border-right: none;
     height: 20px;
     margin: 0;
+}
+.Squad-HQ__list-Reg li {
+    border-right: none;
+    height: 20px;
+    margin: 0;
+    border-right: 1px solid #35383f;
+    margin-right: 8px;
+}
+.Squad-HQ__list-Local li {
+    border-right: none;
+    height: 20px;
+    margin: 0;
+    border-right: 1px solid #35383f;
+    margin-right: 8px;
 }
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
@@ -556,5 +586,11 @@ const props = defineProps({
     display: flex;
     justify-content: space-between;
     margin: 12px 0px;
+}
+.hq-data__social-network-Reg {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0px;
+    column-gap: 12px;
 }
 </style>
