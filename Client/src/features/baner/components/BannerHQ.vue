@@ -62,12 +62,12 @@
                         >Редактировать штаб</router-link
                     > -->
                     <router-link
-                    class="hq-data__link"
+                        class="hq-data__link"
                         :to="{
                             name: 'EditHQ',
                             params: { id: headquarter.id },
                         }"
-                        >Редактировать страницу</router-link
+                        >Редактировать штаб</router-link
                     >
 
                     <!-- class="hq-data__link" -->
@@ -134,12 +134,12 @@
                         </div>
                     </div>
                     <router-link
-                    class="hq-data__link"
+                        class="hq-data__link"
                         :to="{
                             name: 'FormLocal',
                             params: { id: localHeadquarter.id },
                         }"
-                        >Редактировать страницу</router-link
+                        >Редактировать штаб</router-link
                     >
                 </div>
             </div>
@@ -204,12 +204,12 @@
                         </div>
                     </div>
                     <router-link
-                    class="hq-data__link"
+                        class="hq-data__link"
                         :to="{
                             name: 'FormDH',
                             params: { id: districtHeadquarter.id },
                         }"
-                        >Редактировать страницу</router-link
+                        >Редактировать штаб</router-link
                     >
                 </div>
             </div>
@@ -274,14 +274,12 @@
                         </div>
                     </div>
                     <router-link
-
-                    class="hq-data__link"
+                        class="hq-data__link"
                         :to="{
                             name: 'EditingOfRS',
                             params: { id: regionalHeadquarter.id },
                         }"
-                        >Редактировать страницу</router-link
-
+                        >Редактировать штаб</router-link
                     >
                 </div>
             </div>
@@ -346,11 +344,11 @@
                         </div>
                     </div>
                     <router-link
-                    class="hq-data__link"
+                        class="hq-data__link"
                         :to="{
                             name: 'FormCentral',
                         }"
-                        >Редактировать страницу</router-link
+                        >Редактировать штаб</router-link
                     >
                 </div>
             </div>
