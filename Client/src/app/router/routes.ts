@@ -126,7 +126,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Штаб СО',
                         },
                         name: 'HQ',
                         component: () => import('@pages/HQPage/HQPage.vue'),
@@ -134,7 +134,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Штаб СО',
                         },
 
                         children: [
@@ -153,21 +153,26 @@ const routes: RouteRecordRaw[] = [
                                 path: 'EditingOfLocal',
                                 name: 'FormLocal',
                                 component: () =>
-                                    import('@pages/EditingOfLocal/components/EditingOfLocal.vue'),
+                                    import(
+                                        '@pages/EditingOfLocal/components/EditingOfLocal.vue'
+                                    ),
                             },
                             {
                                 path: 'EditingOfDH',
                                 name: 'FormDH',
                                 component: () =>
-                                    import('@pages/EditingOfDH/components/EditingOfDH.vue'),
+                                    import(
+                                        '@pages/EditingOfDH/components/EditingOfDH.vue'
+                                    ),
                             },
                             {
                                 path: 'EditingOfRS',
                                 name: 'EditingOfRS',
                                 component: () =>
-                                    import('@pages/EditingOfRS/components/EditingOfRS.vue'),
+                                    import(
+                                        '@pages/EditingOfRS/components/EditingOfRS.vue'
+                                    ),
                             },
-
                         ],
                     },
                     {
@@ -195,9 +200,9 @@ const routes: RouteRecordRaw[] = [
                 name: 'CentralHQ',
                 component: () =>
                     import('@pages/CentralHQPage/CentralHQPage.vue'),
-                    meta: {
-                        label: 'Центральный штаб',
-                    },
+                meta: {
+                    label: 'Центральный штаб',
+                },
             },
             {
                 path: '/RegionalHQ/:id',
@@ -221,9 +226,9 @@ const routes: RouteRecordRaw[] = [
                 name: 'userpaage',
                 component: () =>
                     import('@pages/UserPage/components/UserPage.vue'),
-                    meta: {
-                        label: 'Моя страница',
-                    },
+                meta: {
+                    label: 'Моя страница',
+                },
             },
             {
                 path: '/UserPage/:id',
@@ -308,9 +313,9 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/PersonalDataPage/components/PersonalData.vue'
                     ),
-                    meta: {
-                        label: 'Персональные данные',
-                    },
+                meta: {
+                    label: 'Персональные данные',
+                },
             },
             // {
             //     path: '/PersonalData/:id',
@@ -361,9 +366,9 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/ContributionPage/components/ContributorPay.vue'
                     ),
-                    meta: {
-                        label: 'Членский взнос',
-                    },
+                meta: {
+                    label: 'Членский взнос',
+                },
             },
             {
                 path: '/CreationOfRS',
@@ -379,10 +384,10 @@ const routes: RouteRecordRaw[] = [
                 path: 'EditingOfCentral',
                 name: 'FormCentral',
                 component: () =>
-                    import('@pages/EditingOfCentral/components/EditingOfCentral.vue'),
-
+                    import(
+                        '@pages/EditingOfCentral/components/EditingOfCentral.vue'
+                    ),
             },
-
 
             {
                 path: '/FAQ',
@@ -396,21 +401,22 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/Event',
                 name: 'event',
-                component: () =>
-                    import('@pages/Event/components/Event.vue'),
-                    meta: {
-                        requiresAuth: true
-                    }
+                component: () => import('@pages/Event/components/Event.vue'),
+                meta: {
+                    requiresAuth: true,
+                },
             },
 
             {
                 path: '/active',
                 name: 'active',
                 component: () =>
-                    import('@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'),
-                    meta: {
-                        requiresAuth: true
-                    }
+                    import(
+                        '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'
+                    ),
+                meta: {
+                    requiresAuth: true,
+                },
             },
         ],
     },

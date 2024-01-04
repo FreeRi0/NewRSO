@@ -29,13 +29,12 @@
         <BannerHQ
             v-else
             :centralHeadquarter="centralHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <section class="about-hq">
             <h3>Описание центрального штаба</h3>
             <p v-if="showHQ">
-                {{ localHeadquarter.about }}
+                {{ headquarter.about }}
             </p>
             <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
             <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
@@ -54,8 +53,9 @@ import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import HQandSquad from '../RegionalHQPage/components/HQandSquad.vue';
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 // banner condition
 const showRegionalHQ = ref(false);
@@ -63,41 +63,44 @@ const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showHQ = ref(false);
 
+const centralHeadquarters = ref({});
 const centralHeadquarter = ref({});
 const member = ref([]);
-const educt = ref({});
+const commander = ref({});
+const route = useRoute();
+let id = route.params.id;
+// let id = 1;
 
-const aboutCentralHQ = async () => {
-    await HTTP.get(`/centrals/${id}/`, {
+const aboutCentralHQs = async () => {
+    await HTTP.get(`/centrals/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            centralHeadquarter.value = response.data;
+            centralHeadquarters.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
 };
-
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const aboutCentralHQ = async () => {
+//     await HTTP.get(`/centrals/${id}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             centralHeadquarter.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
 const aboutMembers = async () => {
     await HTTP.get(`/centrals/${id}/members/`, {
@@ -115,13 +118,35 @@ const aboutMembers = async () => {
         });
 };
 
-aboutCentralHQ();
-aboutMembers();
-aboutEduc();
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         // aboutCentralHQs();
+//         aboutCentralHQ();
+//         aboutMembers();
+//         aboutEduc();
+//     }
+// });
+// watch(
+//     () => route.params.id,
+
+//     (newId, oldId) => {
+//         id = newId;
+//         // aboutCentralHQs();
+//         aboutCentralHQ();
+//         aboutMembers();
+//         aboutEduc();
+//     },
+// );
+
+onMounted(() => {
+    aboutCentralHQs();
+    // aboutCentralHQ();
+    aboutMembers();
+});
 
 const pages = [
     { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Центральный штаб', href: '/CentralHQ' },
+    { pageTitle: 'Центральный штаб', href: '#' },
 ];
 </script>
 <style lang="scss" scoped>
