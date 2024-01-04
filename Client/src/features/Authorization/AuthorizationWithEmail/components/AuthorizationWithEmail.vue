@@ -2,7 +2,7 @@
     <div class="d-flex justify-end align-self-center">
         <v-card class="" height="535px">
             <v-card-title class="text-center"
-                >Вход в лк</v-card-title
+                >Вход в личный кабинет пользователя</v-card-title
             >
 
             <v-form action="#" method="post" @submit.prevent="LoginUser">
