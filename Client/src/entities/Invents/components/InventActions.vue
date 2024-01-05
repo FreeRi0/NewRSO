@@ -4,14 +4,18 @@
         <div class='title'>Активные заявки</div>
         <div class='menu'>
             <router-link to='/activeInvents/accountVerification'><segment class='menu-block'>Верификация аккаунтов</segment></router-link>
-            <router-link to='/activeInvents/inventActions'><segment class='menu-block'>Заявка на вступление в отряд</segment></router-link>
-            <router-link to='/activeInvents/inventSquads'><segment class='menu-block'>Заявка на участие в мероприятии</segment></router-link>
+            <router-link to='/activeInvents/inventSquads'><segment class='menu-block'>Заявка на вступление в отряд</segment></router-link>
+            <router-link to='/activeInvents/inventActions'><segment class='menu-block menu-block-active'>Заявка на участие в мероприятии</segment></router-link>
         </div>
         <router-view></router-view>
+        <div class='invents-header'>
+
+        </div>
     </div>
 </template>
 
 <script setup>
+
 import Breadcrumbs from '@shared/components/breadcrumbs/Breadcrumbs.vue';
 </script>
 

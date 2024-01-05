@@ -169,7 +169,7 @@ const userPages = ref([
     { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
     { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
     { title: 'Центральный штаб', link: '/CentralHQ' },
-    { title: 'Активные заявки', link: '/active' },
+    { title: 'Активные заявки', link: '/activeInvents/accountVerification' },
     { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', link: '/contributorPay' },
     { title: 'Оформление справок', link: '/references' },

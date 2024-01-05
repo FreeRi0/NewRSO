@@ -403,7 +403,7 @@ const routes: RouteRecordRaw[] = [
                 name: 'inventSquads',
                 component: () =>
                     import("@entities/Invents/components/InventSquads.vue"),
-            }
+            },
 
             {
                 path: 'EditingOfCentral',

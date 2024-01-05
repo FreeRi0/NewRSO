@@ -8,7 +8,7 @@
             <div class='postcard-group'>{{action.groupReq}}<img src="@app/assets/actions/Group_light.svg" alt=''/></div>
         </section>
         <section class='postcard-counts'>
-            <div class='postcard-tag'>{{action.range}}</div>
+            <div class='postcard-tag'>{{action.direction}}</div>
             <div class='postcard-tag'>{{action.tag}}</div>
         </section>
     </div>
@@ -18,34 +18,20 @@
 //Параметры модели
 const props = defineProps({
     action:{
-        id: {
-            type: String,
-            required: true
-        },
-        name: {
-            type: String,
-            required: true
-        },
-        description: {
-            type: String,
-            required: true
-        },
-        date: {
-            type: String,
-            required: true
-        },
-        groupReq: {
-            type: Number,
-            required: true
-        },
-        tag: {
-            type: Number,
-            required: true
-        },
-        range: {
-            type: Number,
-            required: true
-        }
+        id: Number,
+        author: String,
+        format: String,
+        direction: String,
+        status: String,
+        scale: String,
+        created_at: String,
+        name: String,
+        banner: String,
+        conference_link: String,
+        address: String,
+        description: String,
+        application_type: String,
+        available_structural_units: String
     }
 })
 </script>
