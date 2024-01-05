@@ -104,13 +104,13 @@ const isSave = ref(true);
 const educations = ref([
     {
         value: 'all',
-        name: 'all',
+        name: 'Все',
     },
     {
-        value: 'detachment_members',
-        name: 'detachment_members',
+        value: 'Члены отряда',
+        name: 'Члены отряда',
     },
-    { value: 'management_members', name: 'management_members' },
+    { value: 'Руководство', name: 'Руководство' },
 ]);
 
 const privateData = ref({

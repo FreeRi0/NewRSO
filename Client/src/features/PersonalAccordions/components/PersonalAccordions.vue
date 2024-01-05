@@ -998,9 +998,12 @@
                                     v-model="documents.mil_reg_doc_type"
                                     :names="militaryDocs"
                                 ></Select>
-                                <p class="error" v-if="isError.mil_reg_doc_type">
-                    {{ '' + isError.mil_reg_doc_type }}
-                </p>
+                                <p
+                                    class="error"
+                                    v-if="isError.mil_reg_doc_type"
+                                >
+                                    {{ '' + isError.mil_reg_doc_type }}
+                                </p>
                             </div>
 
                             <div class="form-field">
@@ -1020,7 +1023,6 @@
                                     "
                                 />
                             </div>
-
                         </div>
                         <div
                             id="no-passport"
@@ -1036,7 +1038,7 @@
                                     type="text"
                                     class="input-full"
                                     placeholder="документ"
-                                    v-model:value="foreign.name"
+                                    v-model:value="foreignDoc.name"
                                 />
                             </div>
 
@@ -1050,7 +1052,7 @@
                                     type="date"
                                     name="pass-date"
                                     class="input-small"
-                                    v-model:value="foreign.foreign_pass_date"
+                                    v-model:value="foreignDoc.foreign_pass_date"
                                 />
                             </div>
 
@@ -1063,7 +1065,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="__ ___ ____"
-                                    v-model:value="foreign.foreign_pass_num"
+                                    v-model:value="foreignDoc.foreign_pass_num"
                                 />
                             </div>
                             <div class="form-field one">
@@ -1077,7 +1079,7 @@
                                     id="org-id"
                                     class="input-full"
                                     placeholder="оуфмс по моковской обл"
-                                    v-model:value="foreign.foreign_pass_whom"
+                                    v-model:value="foreignDoc.foreign_pass_whom"
                                 />
                             </div>
                             <div class="form-field">
@@ -1091,7 +1093,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="foreign.work_book_num"
+                                    v-model:value="foreignDoc.work_book_num"
                                 />
                             </div>
                             <div class="form-field">
@@ -1103,7 +1105,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="foreign.inn"
+                                    v-model:value="foreignDoc.inn"
                                 />
                             </div>
                             <div class="form-field">
@@ -1117,7 +1119,7 @@
                                     maska="AA ##########"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
-                                    v-model:value="foreign.snils"
+                                    v-model:value="foreignDoc.snils"
                                 />
                             </div>
                         </div>
@@ -2611,6 +2613,8 @@ import { Input } from '@shared/components/inputs';
 // import { vMaska } from 'maska';
 import { useVuelidate } from '@vuelidate/core';
 import { useRouter } from 'vue-router';
+import { useAppStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
 import { Select } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import {
@@ -2625,6 +2629,9 @@ import { HTTP } from '@app/http';
 import axios from 'axios';
 
 const router = useRouter();
+// const appStore = useAppStore();
+// appStore.getUser();
+// const { user } = storeToRefs(appStore);
 const panel = ref();
 const isError = ref([]);
 // const isError2 = ref([]);
@@ -2659,7 +2666,7 @@ const regionData = ref({
     fact_house: '',
 });
 
-const foreign = ref({
+const foreignDoc = ref({
     name: '',
     foreign_pass_num: '',
     foreign_pass_whom: '',
@@ -2797,6 +2804,22 @@ const getUser = async () => {
         });
 };
 
+const getParent = async () => {
+    await HTTP.get('/rsousers/me/parent/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            parentData.value = response.data;
+            console.log(parentData.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
 const getEducation = async () => {
     await HTTP.get('/rsousers/me/education/', {
         headers: {
@@ -2821,7 +2844,23 @@ const getDocuments = async () => {
     })
         .then((response) => {
             documents.value = response.data;
-            console.log(user.value);
+            console.log(documents.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const getForeignDoc = async () => {
+    await HTTP.get('/rsousers/me/foreign_documents/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            foreignDoc.value = response.data;
+            console.log(foreignDoc.value);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -2845,8 +2884,10 @@ const getUserRegions = async () => {
 };
 
 getUser();
+getParent();
 getEducation();
 getDocuments();
+getForeignDoc();
 getUserRegions();
 
 const downloadBlankPersonal = async () => {
@@ -2948,118 +2989,6 @@ const downloadAll = async () => {
         });
 };
 
-// const addData = async () => {
-//     let fd = new FormData();
-//     fd.append('statement', statement.value);
-//     fd.append('consent_personal_data', consent_personal_data.value);
-//     fd.append(
-//         'consent_personal_data_representative',
-//         consent_personal_data_representative.value,
-//     );
-//     fd.append('passport', passportUpload.value);
-//     fd.append('passport_representative', passport_representative.value);
-//     fd.append('snils_file', snils_file.value);
-//     fd.append('inn_file', inn_file.value);
-//     fd.append('employment_document', military_document.value);
-//     fd.append('international_passport', international_passport.value);
-//     const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     });
-//     const axiosrequest2 = HTTP.post('/rsousers/me/region/', regionData.value, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     });
-//     const axiosrequest3 = HTTP.post(
-//         '/rsousers/me/documents/',
-//         documents.value,
-//         {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         },
-//     );
-//     const axiosrequest4 = HTTP.post(
-//         '/rsousers/me/education/',
-//         education.value,
-//         {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         },
-//     );
-
-//     const axiosrequest5 = HTTP.post('/rsousers/me/statement/', fd, {
-//         headers: {
-//             'Content-Type': 'multipart/form-data',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     });
-
-//     await axios
-//         .all([
-//             axiosrequest1,
-//             axiosrequest2,
-//             axiosrequest3,
-//             axiosrequest4,
-//             axiosrequest5,
-//         ])
-//         .then(
-//             axios.spread(function (res1, res2, res3, res4) {
-//                 user.value = res1.data;
-//                 regionData.value = res2.data;
-//                 documents.value = res3.data;
-//                 education.value = res4.data;
-//                 console.log(res1.data);
-//                 console.log(res2.data);
-//                 console.log(res3.data);
-//                 console.log(res4.data);
-
-//                 swal.fire({
-//                     position: 'top-center',
-//                     icon: 'success',
-//                     title: 'успешно',
-//                     showConfirmButton: false,
-//                     timer: 1500,
-//                 });
-//             }),
-//         )
-//         // .catch((error) => {
-//         //     console.error('There was an error!', error);
-//         //     swal.fire({
-//         //         position: 'top-center',
-//         //         icon: 'error',
-//         //         title: 'ошибка',
-//         //         showConfirmButton: false,
-//         //         timer: 1500,
-//         //     });
-//         // });
-//         .catch(({ response }) => {
-//             isError.value = response.data;
-//             // isError2.value = response.data;
-//             // isError3.value = response.data;
-//             // isError4.value = response.data;
-//             console.error('There was an error!', response.data);
-//             // console.error('There was an error!', response.data);
-//             // console.error('There was an error!', response.data);
-//             // console.error('There was an error!', response.data);
-
-//             swal.fire({
-//                 position: 'top-center',
-//                 icon: 'error',
-//                 title: 'ошибка',
-//                 showConfirmButton: false,
-//                 timer: 1500,
-//             });
-//         });
-// };
-
 const updateData = async () => {
     let fd = new FormData();
     fd.append('statement', statement.value);
@@ -3116,18 +3045,37 @@ const updateData = async () => {
         },
     });
 
+    const axiosrequest6 = HTTP.patch(
+        '/rsousers/me/foreign_documents/',
+        foreignDoc.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    );
+
     await axios
-        .all([axiosrequest1, axiosrequest2, axiosrequest3, axiosrequest4])
+        .all([
+            axiosrequest1,
+            axiosrequest2,
+            axiosrequest3,
+            axiosrequest4,
+            axiosrequest6,
+        ])
         .then(
-            axios.spread(function (res1, res2, res3, res4) {
+            axios.spread(function (res1, res2, res3, res4, res6) {
                 user.value = res1.data;
                 regionData.value = res2.data;
                 documents.value = res3.data;
                 education.value = res4.data;
+                foreignDoc.value = res6.data;
                 console.log(res1.data);
                 console.log(res2.data);
                 console.log(res3.data);
                 console.log(res4.data);
+                console.log(res6.data);
                 swal.fire({
                     position: 'top-center',
                     icon: 'success',
@@ -3149,6 +3097,37 @@ const updateData = async () => {
                 timer: 1500,
             });
         });
+
+    if (user.value.is_adult == true) {
+        await HTTP.patch('/rsousers/me/parent/', parentData.value, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+            .then((response) => {
+                console.log(response.data);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            })
+
+            .catch(({ response }) => {
+                isError.value = response.data;
+                console.error('There was an error!', response.data);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'error',
+                    title: 'ошибка',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            });
+    }
 };
 
 const answers = ref([
@@ -3157,8 +3136,8 @@ const answers = ref([
 ]);
 
 const gender = ref([
-    { name: 'male', value: 'gender', id: 'Мужской',  },
-    { name: 'female', value: 'gender', id: 'Женский',  },
+    { name: 'male', value: 'gender', id: 'Мужской' },
+    { name: 'female', value: 'gender', id: 'Женский' },
 ]);
 
 const passportParent = ref([
@@ -3167,10 +3146,10 @@ const passportParent = ref([
 ]);
 const parents = ref([
     {
-        value: 'Отец',
-        name: 'Отец',
+        value: 'father',
+        name: 'father',
     },
-    { value: 'Мать', name: 'Мать' },
+    { value: 'mother', name: 'mother' },
 ]);
 
 const militaryDocs = ref([

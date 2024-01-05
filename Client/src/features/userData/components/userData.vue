@@ -1,9 +1,9 @@
 <template>
     <div class="MyPage">
-        <form action="#" method="post" @submit.prevent="AddAbout">
+        <form action="#" class="userBio" method="post" @submit.prevent="AddAbout">
             <p>Кратко о себе</p>
             <TextArea
-                class="mt-2"
+                class="mt-4"
                 name="about"
                 placeholder="Напиши что нибудь"
                 v-model:value="user.bio"
@@ -17,6 +17,15 @@
                 type="submit"
                 label="сохранить"
             ></Button>
+            <div class="d-flex">
+                <!-- <Button
+                type="button"
+                @click="removeBio()"
+                label="Очистить"
+            ></Button> -->
+
+            </div>
+
         </form>
 
         <v-row class="mt-8">
@@ -38,8 +47,9 @@ import { ref, onMounted, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
 
 const user = ref({
-    bio: ''
+    bio: '',
 });
+const del = ref('');
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
@@ -96,6 +106,39 @@ const AddAbout = async () => {
         });
 };
 
+// const removeBio = async () => {
+//     await HTTP.patch(`/rsousers/me/`, user.value , {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             isLoading.value = false;
+//             swal.fire({
+//                 position: 'top-center',
+//                 icon: 'success',
+//                 title: 'успешно',
+//                 showConfirmButton: false,
+//                 timer: 1500,
+//             });
+//             user.value = response.data;
+//             console.log(response.data);
+//         })
+//         .catch(({ response }) => {
+//             isError.value = response.data;
+//             console.error('There was an error!', response.data);
+//             isLoading.value = false;
+//             swal.fire({
+//                 position: 'top-center',
+//                 icon: 'error',
+//                 title: 'ошибка',
+//                 showConfirmButton: false,
+//                 timer: 1500,
+//             });
+//         });
+// }
+
 // onBeforeRouteUpdate(async (to, from) => {
 //     if (to.params.id !== from.params.id) {
 //         getUser();
@@ -121,5 +164,9 @@ onMounted(() => {
     border-radius: 10px;
     padding: 40px;
     margin-bottom: 80px;
+}
+
+.userBio {
+    max-width: 900px;
 }
 </style>

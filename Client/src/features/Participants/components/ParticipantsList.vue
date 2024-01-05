@@ -1,5 +1,5 @@
 <template>
-    <div
+    <!-- <div
         class="participants-wrapper__item"
         v-for="participant in participants"
         v-if="participants.length > 0"
@@ -26,11 +26,20 @@
                 </p>
             </div>
         </router-link>
-    </div>
+    </div> -->
+
+    <participantItem
+        v-for="participant in participants"
+        :participant="participant"
+        :position="position"
+        :key="participant.id"
+        v-if="participants.length > 0"
+    />
 
     <h2 v-else>Участники не найдены...</h2>
 </template>
 <script setup>
+import { participantItem } from '@entities/Participants';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { HTTP } from '@app/http';
@@ -54,9 +63,9 @@ const aboutPosition = async () => {
         });
 };
 
-onMounted(() =>{
+onMounted(() => {
     aboutPosition();
-})
+});
 
 const props = defineProps({
     participants: {
