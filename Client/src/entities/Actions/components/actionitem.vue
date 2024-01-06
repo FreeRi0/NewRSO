@@ -1,15 +1,15 @@
 <template lang>
     <div class='postcard'>
-        <img src="@app/assets/actions/action_1.png" class='postcard-image' alt='Изображение'/>
+        <img src="{{action.banner}}" class='postcard-image' alt='Изображение'/>
         <p class='postcard-title'>{{action.name}}</p>
         <p class='postcard-title'>{{action.description}}</p>
         <section class='postcard-counts'>
-            <div class='postcard-date'>{{action.date}}</div>
-            <div class='postcard-group'>{{action.groupReq}}<img src="@app/assets/actions/Group_light.svg" alt=''/></div>
+            <div class='postcard-date'>{{action.time_data.start_date + " - " + action.time_data.start_time}}</div>
+            <div class='postcard-group'>{{action.participants_number}}<img src="@app/assets/actions/Group_light.svg" alt=''/></div>
         </section>
         <section class='postcard-counts'>
             <div class='postcard-tag'>{{action.direction}}</div>
-            <div class='postcard-tag'>{{action.tag}}</div>
+            <div class='postcard-tag'>{{action.format}}</div>
         </section>
     </div>
 </template>
@@ -31,7 +31,12 @@ const props = defineProps({
         address: String,
         description: String,
         application_type: String,
-        available_structural_units: String
+        available_structural_units: String,
+        participants_number: String,
+        time_data: {
+            start_date: String,
+            start_time: String
+        }
     }
 })
 </script>
@@ -51,7 +56,7 @@ const props = defineProps({
     border-radius: 5px;
   }
   &-title{
-    height: 52px;
+
   }
   &-counts{
     display: flex;

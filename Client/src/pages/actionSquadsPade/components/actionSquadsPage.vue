@@ -137,17 +137,19 @@ import actions from '@entities/Actions/actions';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { getListActions } from '@services/ActionService';
+
+let actionsList = ref([]);
+
 getListActions()
     .then((responce)=>{
-        actionsList = responce.data;
-        console.log("Список мероприятий:", actionsList);
-    })
+    actionsList.value = responce.data;
+    console.log("Список мероприятий:", actionsList.value);
+})
     .catch((e) =>{
 
     })
 
 //Переменные компонента
-let actionsList = []
 const actionTypeSearch = ref('');
 const statusSearch = ref('');
 const rangeTypeSearch = ref('');
