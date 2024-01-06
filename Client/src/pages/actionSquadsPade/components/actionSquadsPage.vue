@@ -30,7 +30,7 @@
         </div>
         <div class='row-cols-2 action-slides'>
             <div class='col settings-container'>
-                <v-form>
+                <form method='post'>
                     <v-expansion-panels class='settings-header' variant="accordion">
                         <v-expansion-panel class='settings-body' title="Тип мероприятия">
                             <v-expansion-panel-text>
@@ -76,7 +76,7 @@
                         <Button class='settings-btminv' type='button' @click='ClearSearchForm' >Сбросить</Button>
                         <Button class='settings-btm' type='button' @click='SendSearchForm'>Сохранить</Button>
                     </div>
-                </v-form>
+                </form>
             </div>
             <div class='col' style='width: 100%'>
                 <div class='sort-container'>
@@ -132,11 +132,11 @@
 import * as HTTP from 'http';
 import Button from "primevue/button";
 import BannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
-import { onBeforeMount, ref } from 'vue';
+import { ref } from 'vue';
 import actions from '@entities/Actions/actions';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
-import { getListActions } from '@services/ActionService';;
+import { getListActions } from '@services/ActionService';
 getListActions()
     .then((responce)=>{
         actionsList = responce.data;

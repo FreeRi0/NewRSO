@@ -454,12 +454,55 @@ img {
   background-color: #e2eff7;
 }
 
+.invents {
+  display: flex;
+  flex-direction: column;
+}
+.invents-main {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
 .invents-header {
   display: flex;
   justify-content: space-between;
   height: 48px;
   margin-top: 40px;
   margin-bottom: 40px;
+}
+.invents-block {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 12px 12px 12px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.invents-checkbox {
+  width: 24px;
+  height: 24px;
+}
+.invents-select {
+  width: 224px;
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.invents-action {
+  width: 100%;
+  margin-left: 12px;
+}
+.invents-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+.invents-panel:hover {
+  background-color: #e9ecef;
 }
 
 /*# sourceMappingURL=app.css.map */

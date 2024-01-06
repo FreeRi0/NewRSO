@@ -8,12 +8,72 @@
             <router-link to='/activeInvents/inventActions'><segment class='menu-block'>Заявка на участие в мероприятии</segment></router-link>
         </div>
         <router-view></router-view>
-
+        <div class='invents-header'>
+            <div class='invents-block'>
+                <input type='checkbox' class='invents-checkbox'>
+            </div>
+            <Dropdown v-model='SelectedFunction'
+                      :options='SelectModes'
+                      optionlabel='title'
+                      placeholder='Выберете действие'
+                      class='invents-block invents-select'>
+            </Dropdown>
+        </div>
+        <div v-for='invent in inventList' class='invents-main'>
+            <InventForm :action='invent'></InventForm>
+        </div>
     </div>
 </template>
 
 <script setup>
 import Breadcrumbs from '@shared/components/breadcrumbs/Breadcrumbs.vue';
+import Dropdown from 'primevue/dropdown';
+import { ref } from 'vue';
+import InventForm from '@entities/Invents/components/InventForm.vue';
+
+const SelectedFunction = ref({});
+
+const inventList = [{
+    id: 1,
+    title: 2
+},
+    {
+        id: 1,
+        title: 2
+    },
+    {
+        id: 1,
+        title: 2
+    },
+    {
+        id: 1,
+        title: 2
+    },
+    {
+        id: 1,
+        title: 2
+    },
+    {
+        id: 1,
+        title: 2
+    }];
+
+const SelectModes = [
+    {
+        title: "Удалить",
+        action: DeleteAction
+    },
+    {
+        title: "Изменить",
+        action: UpdateAction
+    }];
+
+function DeleteAction(){
+
+}
+function UpdateAction(){
+
+}
 </script>
 
 <style lang='scss' scoped>
