@@ -488,7 +488,6 @@ import { Dropdown } from '@shared/components/dropdown';
 import { Input } from '@shared/components/inputs';
 import {
     referencesList,
-    filters,
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';

@@ -103,8 +103,8 @@ import { useRoute } from 'vue-router';
 // const members = ref([]);
 // const squad = ref({});
 const position = ref({});
-// const route = useRoute();
-// const id = route.params.id;
+const route = useRoute();
+const id = route.params.id;
 
 const props = defineProps({
     // name: {

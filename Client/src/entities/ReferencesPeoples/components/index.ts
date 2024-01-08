@@ -1,4 +1,5 @@
 import referenceItem from './referenceItem.vue';
-import contributorsItem from './contrbutorItem.vue';
+import contributorItem from './contributorItem.vue';
+import checkedContributorsItem from './checkedContributorsItem.vue';
 
-export default {referenceItem, contributorsItem}
+export {referenceItem, contributorItem, checkedContributorsItem}

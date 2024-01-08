@@ -1,16 +1,29 @@
 <template>
     <div class="MyPage">
-        <form action="#" class="userBio" method="post" @submit.prevent="AddAbout">
+        <form
+            action="#"
+            class="userBio"
+            method="post"
+            @submit.prevent="AddAbout"
+        >
             <p>Кратко о себе</p>
             <TextArea
                 class="mt-4"
                 name="about"
                 placeholder="Напиши что нибудь"
                 v-model:value="user.bio"
+                :max-length="400"
             ></TextArea>
-            <p class="error" v-if="isError.last_name">{{ 'Фамилия пользователя, ' +  isError.last_name }}</p>
-            <p class="error" v-if="isError.first_name">{{'Имя пользователя, ' + isError.first_name }}</p>
-            <p class="error" v-if="isError.gender">{{'Гендер, ' + isError.gender }}</p>
+            <div class="form__counter">{{ counterSquad }} / 400</div>
+            <p class="error" v-if="isError.last_name">
+                {{ 'Фамилия пользователя, ' + isError.last_name }}
+            </p>
+            <p class="error" v-if="isError.first_name">
+                {{ 'Имя пользователя, ' + isError.first_name }}
+            </p>
+            <p class="error" v-if="isError.gender">
+                {{ 'Гендер, ' + isError.gender }}
+            </p>
             <Button
                 :loaded="isLoading"
                 :disabled="isLoading"
@@ -23,19 +36,31 @@
                 @click="removeBio()"
                 label="Очистить"
             ></Button> -->
-
             </div>
-
         </form>
 
-        <v-row class="mt-8">
-            <v-col v-for="n in 4" :key="n" class="d-flex">
-                <userPhoto
-                    :photos="user?.media?.photo1"
-                    :add="true"
-                ></userPhoto>
-            </v-col>
-        </v-row>
+        <div class="mt-8 d-flex">
+            <userPhoto
+                class="photo-item"
+                :photo="media.photo1"
+                :add="true"
+            ></userPhoto>
+            <userPhoto
+                class="photo-item"
+                :photo="media.photo2"
+                :add="true"
+            ></userPhoto>
+            <userPhoto
+                class="photo-item"
+                :photo="media.photo3"
+                :add="true"
+            ></userPhoto>
+            <userPhoto
+                class="photo-item"
+                :photo="media.photo4"
+                :add="true"
+            ></userPhoto>
+        </div>
     </div>
 </template>
 <script setup>
@@ -43,17 +68,28 @@ import { Button } from '@shared/components/buttons';
 import { TextArea } from '@shared/components/inputs';
 import { userPhoto } from '@shared/components/imagescomp';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { ref, onMounted, watch, inject } from 'vue';
+import { ref, onMounted, watch, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
 
 const user = ref({
     bio: '',
+});
+
+const media = ref({
+    photo1: null,
+    photo2: null,
+    photo3: null,
+    photo4: null,
 });
 const del = ref('');
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 const route = useRoute();
+
+const counterSquad = computed(() => {
+    return user.value.bio.length || 0;
+});
 let id = route.params.id;
 
 const getUser = async () => {
@@ -65,6 +101,22 @@ const getUser = async () => {
     })
         .then((response) => {
             user.value = response.data;
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+};
+
+const getMedia = async () => {
+    await HTTP.get(`/rsousers/me/media/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            media.value = response.data;
             console.log(response.data);
         })
         .catch(function (error) {
@@ -139,23 +191,9 @@ const AddAbout = async () => {
 //         });
 // }
 
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         getUser();
-//     }
-// });
-
-// watch(
-//     () => route.params.id,
-
-//     (newId, oldId) => {
-//         id = newId;
-//         getUser();
-//     },
-// );
-
 onMounted(() => {
     getUser();
+    getMedia();
 });
 </script>
 <style lang="scss">
@@ -168,5 +206,10 @@ onMounted(() => {
 
 .userBio {
     max-width: 900px;
+}
+
+.photo-item {
+    width: 260px;
+    margin-right: 20px;
 }
 </style>

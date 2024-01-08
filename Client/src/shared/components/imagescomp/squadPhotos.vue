@@ -21,7 +21,7 @@ import { ref, computed } from 'vue';
 import { HTTP } from '@app/http';
 
 const props = defineProps({
- squadPhotos: Array
+ squadPhotos: String
 })
 
 </script>

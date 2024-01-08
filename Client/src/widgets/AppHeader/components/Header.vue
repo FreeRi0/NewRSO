@@ -152,9 +152,11 @@ import { ref, onMounted, watch } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const router = useRouter();
-
+const user = ref({
+    region: null,
+});
 const route = useRoute();
-let id = route.params.id;
+let id = route.params.id
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
@@ -166,7 +168,7 @@ const pages = ref([
 ]);
 
 const userPages = ref([
-    { title: 'Моя страница', link: `/UserPage/` },
+    { title: 'Моя страница', link: `/UserPage/${id}/` },
     { title: 'Мой отряд', link: '/allSquads' },
     { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
     { title: 'Местный штаб', link: '/LocalHeadquarters' },
@@ -184,9 +186,7 @@ const userPages = ref([
 let show = ref(false);
 
 const isOpen = ref(false);
-const user = ref({
-    region: null,
-});
+
 
 const navMenu = ref(null);
 

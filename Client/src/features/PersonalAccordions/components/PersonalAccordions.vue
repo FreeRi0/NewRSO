@@ -232,6 +232,8 @@
                                     ></Select>
                                 </div>
 
+                                <!-- <p>{{ user.is_adult }}</p> -->
+
                                 <div class="form-field">
                                     <label for="patronomyc-parent"
                                         >Отчество</label
@@ -886,19 +888,19 @@
                                 :key="pas.id"
                             >
                                 <RadioButton
-                                    :value="pas.name"
-                                    :label="pas.name"
+                                :value="pas.value"
+                                    :label="pas.id"
                                     :id="pas.id"
                                     :checked="pas.checked"
                                     name="passport"
-                                    v-model:checkedValue="selectedPass"
+                                    v-model:checkedValue="documents.russian_passport"
                                 />
                             </div>
                         </div>
                         <div
                             id="yes-passport"
                             class="form-data izm"
-                            v-if="selectedPass === 'Да'"
+                            v-if="documents.russian_passport"
                         >
                             <div class="form-field">
                                 <label for="pass-num"
@@ -1027,7 +1029,7 @@
                         <div
                             id="no-passport"
                             class="form-data izm"
-                            v-else="selectedPass === 'Нет'"
+                            v-else="!documents.russian_passport"
                         >
                             <div class="form-field one">
                                 <label for="pass-num"
@@ -2728,8 +2730,9 @@ const documents = ref({
     pass_address: '',
     work_book_num: '',
     international_pass: '',
-    mil_reg_doc_type: '',
+    mil_reg_doc_type: null,
     mil_reg_doc_ser_num: '',
+    russian_passport: null,
 });
 
 const statement = ref(null);
@@ -3016,7 +3019,7 @@ const updateData = async () => {
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
-    const axiosrequest3 = HTTP.patch(
+    const axiosrequest3 = HTTP.put(
         '/rsousers/me/documents/',
         documents.value,
         {
@@ -3044,38 +3047,24 @@ const updateData = async () => {
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
-
-    const axiosrequest6 = HTTP.patch(
-        '/rsousers/me/foreign_documents/',
-        foreignDoc.value,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
-    );
-
     await axios
         .all([
             axiosrequest1,
             axiosrequest2,
             axiosrequest3,
             axiosrequest4,
-            axiosrequest6,
+
         ])
         .then(
-            axios.spread(function (res1, res2, res3, res4, res6) {
+            axios.spread(function (res1, res2, res3, res4) {
                 user.value = res1.data;
                 regionData.value = res2.data;
                 documents.value = res3.data;
                 education.value = res4.data;
-                foreignDoc.value = res6.data;
                 console.log(res1.data);
                 console.log(res2.data);
                 console.log(res3.data);
                 console.log(res4.data);
-                console.log(res6.data);
                 swal.fire({
                     position: 'top-center',
                     icon: 'success',
@@ -3098,8 +3087,39 @@ const updateData = async () => {
             });
         });
 
-    if (user.value.is_adult == true) {
+    if (user.value.is_adult == false) {
         await HTTP.patch('/rsousers/me/parent/', parentData.value, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+            .then((response) => {
+                console.log(response.data);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            })
+
+            .catch(({ response }) => {
+                isError.value = response.data;
+                console.error('There was an error!', response.data);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'error',
+                    title: 'ошибка',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            });
+    }
+
+    if (documents.value.russian_passport == false) {
+        await HTTP.patch('/rsousers/me/foreign_documents/', foreignDoc.value, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -3154,10 +3174,10 @@ const parents = ref([
 
 const militaryDocs = ref([
     {
-        value: 'Удостоверение гражданина,подлежащего призыву на военную службу',
-        name: 'Удостоверение гражданина, подлежащего призыву на военную службу',
+        value: 'military_ticket',
+        name: 'Удостоверение гражданина подлежащего вызову на срочную военную службу',
     },
-    { value: 'Военный билтет', name: 'Военный билет' },
+    { value: 'military_certificate', name: 'Военный билет' },
 ]);
 
 const address = ref([
@@ -3166,8 +3186,8 @@ const address = ref([
 ]);
 
 const passport = reactive([
-    { name: 'Да', id: 'pass1', checked: true },
-    { name: 'Нет', id: 'pass2' },
+    { name: 'Да',  value: true, id: 'Да'},
+    { name: 'Нет', value: false,  id: 'Нет' },
 ]);
 
 // const selectedSex = ref(user.gender);
@@ -3322,7 +3342,7 @@ const selectedPass = ref('Да');
 }
 
 .select-small {
-    border: 2px solid #a3a3a3;
+    border: 1px solid #939393;
     border-radius: 10px;
     width: 248px;
     min-height: 40px;
@@ -3331,12 +3351,12 @@ const selectedPass = ref('Да');
     font-family: 'BertSans';
     font-weight: 500;
     font-size: 16px;
-    color: #898989;
+    color: #35383f;
     margin-bottom: 20px;
 }
 
 .select-big {
-    border: 2px solid #a3a3a3;
+    border: 1px solid #939393;
     border-radius: 10px;
     width: 465px;
     min-height: 40px;
@@ -3345,8 +3365,14 @@ const selectedPass = ref('Да');
     font-family: 'BertSans';
     font-weight: 500;
     font-size: 16px;
-    color: #898989;
+    color: #35383f;
     margin-bottom: 20px;
+}
+
+.v-select__selection span {
+    font-size: 16px;
+    color: #35383F;
+    font-weight: 400;
 }
 
 .how {

@@ -488,9 +488,8 @@
                         </div>
                         <div class="contributor-wrapper">
                             <contributorsList
-                                @change="changePeoples"
                                 :participants="sortedParticipants"
-                                :selectedParticipants="selectedPeoples"
+                                @change="changePeoples"
                             ></contributorsList>
                         </div>
                         <Button
@@ -611,7 +610,9 @@ const select = (event) => {
     }
 };
 const searchParticipants = ref('');
+
 const changePeoples = (selectedHumans) => {
+    console.log('fff', selectedHumans)
     selectedPeoples.value = selectedHumans;
 };
 
