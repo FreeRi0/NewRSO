@@ -1,5 +1,5 @@
-<template lang>
-    <div class='postcard'>
+<template>
+    <div class='postcard' @click='RouteToAction'>
         <img src="{{action.banner}}" class='postcard-image' alt='Изображение'/>
         <p class='postcard-title'>{{action.name}}</p>
         <p class='postcard-title'>{{action.description}}</p>
@@ -15,6 +15,10 @@
 </template>
 
 <script setup>
+
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 //Параметры модели
 const props = defineProps({
     action:{
@@ -39,12 +43,18 @@ const props = defineProps({
         }
     }
 })
+
+//Функция обработки перехода
+function RouteToAction(){
+    router.push("/");
+}
 </script>
 
 <style lang='scss' scoped>
 .postcard{
   width: 280px;
   margin: 5px 5px 5px 5px;
+  border-radius: 5px;
   &-container{
     display: flex;
     flex-direction: row;
@@ -86,5 +96,10 @@ const props = defineProps({
     border-radius: 20px;
     text-align: center;
   }
+}
+
+.postcard:hover{
+  cursor: pointer;
+  border: 1px solid black;
 }
 </style>

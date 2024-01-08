@@ -1,7 +1,7 @@
-<template lang>
+<template>
     <div class='postcard'>
         <section class='postcard-counts'>
-            <img src="@app/assets/actions/action_1.png" class='postcard-image' alt='Изображение'/>
+            <img src="{{action.banner}}" class='postcard-image' alt='Изображение'/>
             <p class='postcard-title'>{{action.name}}</p>
             <p class='postcard-title'>{{action.description}}</p>
         </section>
@@ -15,33 +15,24 @@
 <script setup>
 const props = defineProps({
     action:{
-        id: {
-            type: String,
-            required: true
-        },
-        name: {
-            type: String,
-            required: true
-        },
-        description: {
-            type: String,
-            required: true
-        },
-        date: {
-            type: String,
-            required: true
-        },
-        groupReq: {
-            type: Number,
-            required: true
-        },
-        tag: {
-            type: Number,
-            required: true
-        },
-        range: {
-            type: Number,
-            required: true
+        id: Number,
+        author: String,
+        format: String,
+        direction: String,
+        status: String,
+        scale: String,
+        created_at: String,
+        name: String,
+        banner: String,
+        conference_link: String,
+        address: String,
+        description: String,
+        application_type: String,
+        available_structural_units: String,
+        participants_number: String,
+        time_data: {
+            start_date: String,
+            start_time: String
         }
     }
 })
@@ -80,6 +71,7 @@ const props = defineProps({
   &-counts{
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
   &-date, &-group{
     display: flex;
@@ -107,5 +99,10 @@ const props = defineProps({
     border-radius: 20px;
     text-align: center;
   }
+}
+
+.postcard:hover{
+  cursor: pointer;
+  border: 1px solid black;
 }
 </style>

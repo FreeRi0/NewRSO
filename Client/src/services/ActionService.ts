@@ -8,3 +8,12 @@ export function getListActions(){
        }
    });
 }
+
+export function getActionsBySearch({ data }: { data: any }){
+    return HTTP.post("/events/", data, {
+        headers:{
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        }
+    })
+}

@@ -10,6 +10,7 @@
                     id='search'
                     class='squads-search__input'
                     placeholder='Найти мероприятие'
+                    v-model='nameSearch'
                 />
                 <svg
                     width='28'
@@ -33,14 +34,14 @@
                 <form method='post'>
                     <v-expansion-panels class='settings-header' variant="accordion">
                         <v-expansion-panel class='settings-body' title="Тип мероприятия">
-                            <v-expansion-panel-text>
+                            <v-expansion-panel-text v-model='actionTypeSearch'>
                                 <v-checkbox v-model='actionTypeSearch' label="Онлайн" value="Онлайн"></v-checkbox>
                                 <v-checkbox v-model='actionTypeSearch' label="Офлайн" value="Офлайн"></v-checkbox>
                             </v-expansion-panel-text>
                         </v-expansion-panel>
                         <v-expansion-panel class='settings-body' title="Статус мероприятия">
                             <v-expansion-panel-text>
-                                <v-radio-group>
+                                <v-radio-group v-model='statusSearch'>
                                     <v-checkbox v-model='statusSearch' label="Незавершенные" value='Незавершенные'></v-checkbox>
                                     <v-checkbox v-model='statusSearch' label="Завершенные" value='Завершенные'></v-checkbox>
                                 </v-radio-group>
@@ -48,7 +49,7 @@
                         </v-expansion-panel>
                         <v-expansion-panel class='settings-body' title="Маштаб">
                             <v-expansion-panel-text>
-                                <v-radio-group>
+                                <v-radio-group v-model='rangeTypeSearch'>
                                     <v-radio v-model='rangeTypeSearch' label="Все" value="Все"></v-radio>
                                     <v-radio v-model='rangeTypeSearch' label="Всероссийское" value="Всероссийское"></v-radio>
                                     <v-radio v-model='rangeTypeSearch' label="Окружное" value="Окружное"></v-radio>
@@ -78,6 +79,9 @@
                     </div>
                 </form>
             </div>
+            <!--Привет) Страницы мероприятий писал и подключал Modestra -->
+            <!--Я в поисках работы, если вам требуется Frontend разработчик, пишите сюда -->
+            <!--https://t.me/Modestra -->
             <div class='col' style='width: 100%'>
                 <div class='sort-container'>
                     <div class='sort-layout sort-types'>
@@ -136,7 +140,7 @@ import { ref } from 'vue';
 import actions from '@entities/Actions/actions';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
-import { getListActions } from '@services/ActionService';
+import { getActionsBySearch, getListActions } from '@services/ActionService';
 
 let actionsList = ref([]);
 
@@ -154,6 +158,7 @@ const actionTypeSearch = ref('');
 const statusSearch = ref('');
 const rangeTypeSearch = ref('');
 const roadSearch = ref('');
+const nameSearch = ref('')
 
 //Сортировка
 const vertical = ref(true);
@@ -168,7 +173,8 @@ function SendSearchForm() {
         format: actionTypeSearch.value,
         direction: statusSearch.value,
         status: rangeTypeSearch.value,
-        roads: roadSearch.value
+        roads: roadSearch.value,
+        search: nameSearch.value
     }
     console.log(actionFormSearch);
 };

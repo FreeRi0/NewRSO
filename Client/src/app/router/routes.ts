@@ -244,6 +244,11 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
             },
             {
+                path: '/actionSquads/:id',
+                name: 'Action',
+                component: () => import('@pages/ActionPage/components/ActionPage.vue'),
+            },
+            {
                 path: "/createAction",
                 name: "createAction",
                 component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
