@@ -46,7 +46,7 @@ const props = defineProps({
 
 //Функция обработки перехода
 function RouteToAction(){
-    router.push("/");
+    router.push(`/actionSquads/` + props.action.id);
 }
 </script>
 

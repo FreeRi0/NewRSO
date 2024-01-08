@@ -133,14 +133,12 @@
 
 <script setup>
 //Импорт файлов
-import * as HTTP from 'http';
 import Button from "primevue/button";
 import BannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
 import { ref } from 'vue';
-import actions from '@entities/Actions/actions';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
-import { getActionsBySearch, getListActions } from '@services/ActionService';
+import { getListActions } from '@services/ActionService';
 
 let actionsList = ref([]);
 

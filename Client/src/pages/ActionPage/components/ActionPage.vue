@@ -1,12 +1,14 @@
 <template>
-
+  <div class="container">
+      Здесь находится форма мероприятия
+  </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-console.log(router);
+
 </script>
 
 <style scoped>
