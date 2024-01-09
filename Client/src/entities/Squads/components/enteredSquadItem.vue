@@ -1,20 +1,48 @@
 <template>
-    <div class="horizontallso">
+<div class="horizontallso">
         <div class="horizontallso__confidant mr-3">
             <input
                 type="checkbox"
-                v-model="selectedPeoples"
-                :value="participant"
-                @change="updateCheck"
+                v-model=" selectedSquads"
+                :value="detachment"
+                @change="updateCheckSquad"
             />
         </div>
 
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img
+                <!-- <img
                     :src="participant.media.photo"
                     alt="logo"
                     v-if="participant.media"
+                />
+                <img
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+
+                /> -->
+            </div>
+            <div class="containerHorizontal">
+                <p class="horizontallso-item__list-full">
+                    {{ detachment.users_for_verification }}
+                </p>
+                <!-- <div class="horizontallso-item__list-date">
+                    <span
+                        style="
+                            border-left: 2px solid #b6b6b6;
+                            padding-right: 8px;
+                        "
+                    ></span>
+                    <p>{{ participant.date_of_birth }}</p>
+                </div> -->
+            </div>
+        </div>
+        <div class="horizontallso-item__wrapper">
+            <div class="horizontallso-img">
+                <img
+                    :src="detachment.emblem"
+                    alt="logo"
+                    v-if="detachment.emblem"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -24,17 +52,8 @@
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ participant.first_name }}
+                    {{ detachment.name }}
                 </p>
-                <div class="horizontallso-item__list-date">
-                    <span
-                        style="
-                            border-left: 2px solid #b6b6b6;
-                            padding-right: 8px;
-                        "
-                    ></span>
-                    <p>{{ participant.date_of_birth }}</p>
-                </div>
             </div>
         </div>
     </div>
@@ -42,32 +61,33 @@
 <script setup>
 import { ref, watch } from 'vue';
 
-import { HTTP } from '@app/http';
-
 const emit = defineEmits(['change']);
 
-const updateCheck = (e) => {
-    console.log('dddddd');
-    emit('change', selectedPeoples.value);
+const updateCheckSquad = (e) => {
+    console.log('ddddddSquad');
+    emit('change', selectedDetch.value);
 };
+
 const props = defineProps({
-    participant: {
-        type: Object,
-        require: true,
+    detachment: {
+      type: Object,
+        required: true,
     },
-    selectedParticipants: {
+    selectedSquads: {
         type: Array,
         default: () => [],
     },
 });
 
-const selectedPeoples = ref(props.selectedParticipants);
+
+
+const selectedDetch = ref(props.selectedSquads);
 
 watch(
-    () => props.selectedParticipants,
+    () => props.selectedSquads,
     (newChecked) => {
         if (!newChecked) return;
-        selectedPeoples.value = newChecked;
+        selectedDetch.value = newChecked;
     },
 );
 </script>

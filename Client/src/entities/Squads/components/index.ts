@@ -1,3 +1,4 @@
 import squadItem from './squadItem.vue';
+import enteredSquad from './enteredSquadItem.vue';
 
-export default {squadItem};
+export {squadItem, enteredSquad};

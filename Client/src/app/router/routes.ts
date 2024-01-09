@@ -414,9 +414,9 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'
                     ),
-                meta: {
-                    requiresAuth: true,
-                },
+                    meta: {
+                        label: 'Активные заявки',
+                    },
             },
         ],
     },

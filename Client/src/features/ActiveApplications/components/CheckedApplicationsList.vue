@@ -1,29 +1,26 @@
 <template>
-    <contributorItem
+    <checkedReferencesItem
         v-for="participant in participants"
+        @change="changeSelected"
         :participant="participant"
-        @change="changePeoples"
-        :selectedParticipants="selectedPeoples"
-        :isMembership="false"
+        :participants="selectedPeoples"
         :key="participant.id"
     />
 </template>
-
 <script setup>
 import { ref, watch } from 'vue';
-import { contributorItem } from '@entities/ReferencesPeoples';
+import { checkedReferencesItem } from '@entities/ReferencesPeoples';
+
 const emit = defineEmits(['change']);
+const changeSelected = (changePeoples) => {
+    emit('change', changePeoples);
+};
+
 const props = defineProps({
     participants: {
         type: Array,
         required: true,
     },
 });
-
-const changePeoples = (selectedHumans) => {
-    emit('change', selectedHumans)
-};
-
-
-
 </script>
+<style lang="scss"></style>
