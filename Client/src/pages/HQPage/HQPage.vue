@@ -1,19 +1,48 @@
 <template>
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--hq">Штаб</h1>
+        <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
         <BannerHQ
+            v-if="showHQ"
             :headquarter="headquarter"
             :edict="educt"
             :member="member"
         ></BannerHQ>
+        <BannerHQ
+            v-else-if="showDistrictHQ"
+            :districtHeadquarter="districtHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showLocalHQ"
+            :localHeadquarter="localHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showRegionalHQ"
+            :regionalHeadquarter="regionalHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else
+            :centralHeadquarter="centralHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
         <section class="about-hq">
-            <h3>Об отряде</h3>
-            <p>
+            <h3>Описание штаба</h3>
+            <p v-if="showHQ">
                 {{ headquarter.about }}
             </p>
+            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
+            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
+            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
+            <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
-        <ManagementHQ></ManagementHQ>
+        <ManagementHQ :member="member" head="Руководство штаба"></ManagementHQ>
         <DetachmentsHQ></DetachmentsHQ>
     </div>
 </template>
@@ -26,6 +55,12 @@ import DetachmentsHQ from './components/DetachmentsHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+
+// banner condition
+const showHQ = ref(true);
+const showDistrictHQ = ref(false);
+const showLocalHQ = ref(false);
+const showRegionalHQ = ref(false);
 
 const headquarter = ref({});
 const member = ref([]);
@@ -41,7 +76,7 @@ const aboutHQ = async () => {
         },
     })
         .then((response) => {
-            squad.value = response.data;
+            headquarter.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
@@ -189,6 +224,12 @@ const pages = [
     display: flex;
     justify-content: space-between;
     margin: 16px 16px 0px 0px;
+}
+
+.about-hq {
+    font-size: 27px;
+    font-family: 'Akrobat';
+    margin-bottom: 60px;
 }
 
 @media (max-width: 1110px) {

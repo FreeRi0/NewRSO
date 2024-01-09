@@ -1,7 +1,12 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto :banner="user?.media?.banner"></bannerPhoto>
-        <Avatar :avatar="user?.media?.photo" :edited="false"></Avatar>
+        <bannerPhoto :banner="user?.media?.banner" v-if="user"></bannerPhoto>
+        <!-- <bannerPhoto
+            :banner="currentUser?.media?.banner"
+            v-else
+        ></bannerPhoto> -->
+        <Avatar :avatar="user?.media?.photo" v-if="user"></Avatar>
+        <!-- <Avatar :avatar="currentUser?.media?.photo" v-else></Avatar> -->
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
@@ -11,26 +16,47 @@
                     <p>{{ user.patronymic_name }}</p>
                     <!-- <slot name="banner"></slot> -->
                 </div>
+           
                 <!-- <h4 v-if="user">{{ user.email }}</h4> -->
                 <div></div>
 
-                <div class="user-data__list-wrapper">
+                <div class="user-data__list-wrapper" v-if="user">
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
                         <li v-if="education">
                             <p>{{ user?.education?.study_faculty }}</p>
                         </li>
+
                         <li v-if="education">
                             <p>{{ user?.education?.study_specialty }}</p>
                         </li>
+
                         <li v-if="education">
                             <p>Курс {{ user?.education?.study_year }}</p>
                         </li>
+
                         <li class="user-data__regional-office">
-                            <p>{{ user?.user_region?.reg_town}}</p>
+                            <p>{{ user?.user_region?.reg_town }}</p>
                         </li>
                     </ul>
                 </div>
+                <!-- <div class="user-data__list-wrapper" v-if="currentUser">
+                    <ul class="user-data__list">
+                        <li class="user-data__title"><p>Кандидат</p></li>
+                        <li v-if="education">
+                            <p>{{ currentUser?.education?.study_faculty }}</p>
+                        </li>
+                        <li v-if="education">
+                            <p>{{ currentUser?.education?.study_specialty }}</p>
+                        </li>
+                        <li v-if="education">
+                            <p>Курс{{ currentUser?.education?.study_year }}</p>
+                        </li>
+                        <li class="user-data__regional-office">
+                            <p>{{ currentUser?.user_region?.reg_town }}</p>
+                        </li>
+                    </ul>
+                </div> -->
                 <!-- Контакты пользователя  -->
             </div>
         </div>
@@ -41,18 +67,17 @@ import { ref, onMounted } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
-import { useRoute} from 'vue-router';
-
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
     banner: {
-        type: String
+        type: String,
     },
     avatar: {
-        type: String
+        type: String,
     },
     edited: {
-        type: Boolean
+        type: Boolean,
     },
 
     user: {
@@ -66,9 +91,8 @@ const props = defineProps({
     },
     user_region: {
         type: Object,
-    }
-})
-
+    },
+});
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {

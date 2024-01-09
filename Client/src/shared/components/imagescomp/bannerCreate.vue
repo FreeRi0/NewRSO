@@ -3,7 +3,7 @@
         <div class="squads-banner__text">
            {{ desc}}
         </div>
-        <router-link :to="{name: name}"><p class="create">{{ label }}</p></router-link>
+        <router-link :to="{name: name}"><p v-if="button" class="create">{{ label }}</p></router-link>
     </div>
 </template>
 <script setup>
@@ -22,6 +22,10 @@ const props = defineProps({
     desc: {
         type: String,
         default: 'lorem ipsum s',
+    },
+    button: {
+        type: Boolean,
+        default: true
     }
 });
 

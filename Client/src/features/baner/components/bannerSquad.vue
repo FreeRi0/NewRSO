@@ -60,7 +60,7 @@
                     <router-link
                         :to="{
                             name: 'EditLSO',
-                            params: { id: squad.id, name: squad.name },
+                            params: { id: squad.id },
                         }"
                         class="user-data__link"
                         >Редактировать страницу</router-link
@@ -76,7 +76,6 @@ import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-
 
 const props = defineProps({
     banner: {
@@ -94,16 +93,10 @@ const props = defineProps({
     },
     member: {
         type: Object,
-
-    }
-
-})
-
-
+    },
+});
 </script>
 <style lang="scss" scoped>
-
-
 .squad-metric {
     display: grid;
     grid-template-columns: 30px 135px 135px 2fr 16px;

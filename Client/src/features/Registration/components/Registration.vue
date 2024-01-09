@@ -10,7 +10,7 @@
                     id="select-region"
                     placeholder="Москва"
                     v-model="form.region"
-                    address="api/v1/regions/"
+                    address="/regions/"
                 ></Select>
                 <Input
                     placeholder="Фамилия"

@@ -10,7 +10,7 @@
                 <img
                     :src="participant.media.photo"
                     alt="logo"
-                    v-if="participants.media"
+                    v-if="participant.media"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -52,11 +52,12 @@
         <Button class="save" type="submit" label="Сохранить"></Button>
         <!-- <Button @click="DeleteStatus()" label="Удалить"></Button> -->
     </form>
+    <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, watch } from 'vue';
+import { ref, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
@@ -64,6 +65,8 @@ const emit = defineEmits(['change']);
 
 const route = useRoute();
 const id = route.params.id;
+const swal = inject('$swal');
+const isError = ref([]);
 
 const participant = ref({
     membership_fee: null,
@@ -72,9 +75,9 @@ const participant = ref({
 const filteredPayed = ref([
     {
         value: 'membership_fee',
-        name: true,
+        name: 'Оплачен',
     },
-    { value: 'membership_fee', name: false },
+    { value: 'membership_fee', name: 'Неоплачен' },
 ]);
 
 const updateMembership = (participant, event) => {
@@ -87,6 +90,7 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+
 });
 const selectedPeoples = ref(props.participants);
 
@@ -104,31 +108,30 @@ const ChangeStatus = async (id) => {
         },
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
            participant.value = response.data;
             console.log(response.data);
         })
 
-        .catch((error) => {
-            console.error('There was an error!', error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 
-// const DeleteStatus = async (id) => {
-//     HTTP.delete(`rsousers/${id}/membership_fee_status/`, usersData.value,  {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             usersData.value = response.data;
-//             console.log(response.data);
-//         })
-
-//         .catch((error) => {
-//             console.error('There was an error!', error);
-//         });
-// }
 </script>
 <style lang="scss" scoped>
 .checked {
@@ -178,6 +181,14 @@ const ChangeStatus = async (id) => {
     margin-left: 10px;
 }
 
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 10px;
+    text-align: center;
+}
 .checked-item__list-date {
     width: 95px;
     display: grid;

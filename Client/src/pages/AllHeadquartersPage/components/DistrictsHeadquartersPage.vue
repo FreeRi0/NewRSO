@@ -4,7 +4,7 @@
             <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
-                label="Создать штаб"
+                :button="false"
             ></bannerCreate>
             <h2 class="headquarters-title">Окружные штабы</h2>
             <div class="headquarters-sort">
@@ -45,20 +45,19 @@
                     ></Button>
                 </div>
 
-                <div class="sort-filters">
-                </div>
+                <div class="sort-filters"></div>
             </div>
 
             <div class="headquarters-wrapper" v-show="vertical">
-                <HeadquartersList
-                    :headquarters="districtHeadquarters"
-                ></HeadquartersList>
+                <DistrictHQList
+                    :districtHeadquarters="districtHeadquarters"
+                ></DistrictHQList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalHeadquarters
-                    :headquarters="districtHeadquarters"
-                ></horizontalHeadquarters>
+                <HorizontalDistrictHQs
+                    :districtHeadquarters="districtHeadquarters"
+                ></HorizontalDistrictHQs>
             </div>
         </div>
     </div>
@@ -68,8 +67,8 @@ import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import {
-    HeadquartersList,
-    horizontalHeadquarters,
+    DistrictHQList,
+    HorizontalDistrictHQs,
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
@@ -81,11 +80,10 @@ const districtHeadquarters = ref([]);
 
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Окружные штабы', href: '/AllHeadquarters' },
+    { pageTitle: 'Окружные штабы', href: '/DistrictHeadquarters' },
 ]);
 
 const vertical = ref(true);
-
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -110,7 +108,6 @@ const getDistrictHeadquarters = async () => {
 onMounted(() => {
     getDistrictHeadquarters();
 });
-
 </script>
 <style lang="scss">
 .headquarters {
@@ -197,7 +194,7 @@ onMounted(() => {
 .form__select {
     margin-bottom: 0px;
     margin-right: 8px;
-    border: 1px solid #35383F;
+    border: 1px solid #35383f;
 }
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');

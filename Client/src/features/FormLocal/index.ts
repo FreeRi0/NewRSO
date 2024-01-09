@@ -1,0 +1,1 @@
+export { default as FormLocal } from './components/FormLocal.vue';

@@ -1,17 +1,16 @@
 <template>
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
-
         <h1 class="title title--lso">Создание регионального штаба</h1>
-
-        <FormHQ :unit="unit"></FormHQ>
+        <FormRS></FormRS>
+        <!-- <FormRS :participants="true" :unit="unit"></FormRS> -->
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { FormHQ } from '@features/FormHQ';
+import { FormRS } from '@features/FormRS';
 
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
@@ -19,20 +18,21 @@ const pages = ref([
     { pageTitle: 'Создание регионального штаба', href: '#' },
 ]);
 
-const unit = ref({
-    title: '',
-    institution: null,
-    date: '',
-    regional: null,
-    city: '',
-    beast: '',
-    vk: '',
-    te: '',
-    slogan: '',
-    about: '',
-    avatar: '',
-    banner: '',
-});
+// const unit = ref({
+//     title: '',
+//     regional: null,
+//     city: '',
+//     beast: '',
+//     vk: '',
+//     te: '',
+//     slogan: '',
+//     about: '',
+//     avatar: '',
+//     banner: '',
+//     regNameI: '',
+//     regNameP: '',
+//     address: '',
+//     requisites: '',
+//     ofDate: '',
+// });
 </script>
-
-<style lang="scss"></style>

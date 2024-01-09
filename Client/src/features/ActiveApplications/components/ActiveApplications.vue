@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <div class="checkbox_1" v-for="participant in participants">
+    <!-- <div class="checkbox_1" v-for="participant in participants">
         <div class="checkborder">
             <input type="checkbox" v-model="model" :value="value" />
         </div>
@@ -43,20 +43,14 @@
             <div class="checkbox_date">{{ participant.birthdate }}</div>
         </div>
         <span>{{ label }}</span>
-    </div>
+    </div> -->
     <div class="activeApp_button">
         <Button label="Показать ещё" color="primary"></Button>
     </div>
     
 </template>
 <script setup>
-
-import { userData } from '@features/userData/components';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { changePassword } from '@features/ChangePassword/components';
-import { privateProfile } from '@features/PrivateProfile/components';
-import { AccordionsPersonal } from '@features/PersonalAccordions/components';
-import participants from '@entities/user/index';
+// import participants from '@entities/user/index';
 import { sortByEducation } from '@shared/components/selects';
 import { computed, defineEmits, ref } from 'vue';
 import { Button } from '@shared/components/buttons';
@@ -75,6 +69,8 @@ const model = computed({
         emit('update:modelValue', value);
     },
 });
+
+const participants = ref([]);
 const educations = ref([
     {
         value: 'Мой отряд',

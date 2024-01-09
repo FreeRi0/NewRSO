@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Редактирование ЛСО</h1>
 

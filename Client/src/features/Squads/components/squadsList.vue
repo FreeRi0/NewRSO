@@ -4,11 +4,10 @@
         v-for="squad in squads"
         v-if="squads.length > 0"
     >
-        <router-link
-            :to="{ name: 'lso', params: { id: squad.id, name: squad.name } }"
-        >
+        <router-link :to="{ name: 'lso', params: { id: squad.id } }">
             <div class="round-img">
-                <img :src="squad.emblem" alt="logo" />
+                <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
+                <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
             </div>
             <div class="container-squad">
                 <!-- <p class="squads-wrapper__item-category">

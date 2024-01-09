@@ -2,26 +2,23 @@
     <section class="headquarters-detachments">
         <h3>Отряды штаба</h3>
         <div class="headquarters-detachments__container">
-            <div
-                class="squad-card"
-                v-for="detachment in squad.slice(0, 6)"
-                v-if="member.length > 0"
-            >
-                <div class="squad-card__ava" v-if="squad.is_trusted == true">
+            <div class="squad-card" v-for="detachment in area">
+                <div class="squad-card__ava">
                     <img
-                        :src="squad.avatar.photo"
-                        alt="ava"
-                        v-if="squad.avatar"
+                        :src="detachment.avatar.photo"
+                        alt="photo"
+                        v-if="detachment.avatar"
                     />
                     <img
-                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                        src="@app/assets/headquarters/squad-ava.png"
                         alt="photo"
                         v-else
                     />
                 </div>
-                <h5 id="name_length">{{ squad.name }}</h5>
+                <a href="/AllSquads"
+                    ><h5>{{ area.name }}</h5></a
+                >
             </div>
-            <h2 v-else>Отряды не найдены...</h2>
         </div>
     </section>
 </template>
@@ -30,13 +27,36 @@
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
+const route = useRoute();
+let id = route.params.id;
+
+const area = ref({});
 
 const props = defineProps({
-    squad: {
-        type: Object,
-        required: true,
+    area: {
+        type: Array,
     },
 });
+
+const aboutArea = async () => {
+    await HTTP.get(`/areas/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            area.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+onMounted(() => {
+    aboutArea();
+});
+
 // const detachments = ref([
 //     {
 //         name: 'Сервисные',
@@ -52,35 +72,17 @@ const props = defineProps({
 //     },
 //     {
 //         name: 'Сельскохозяйственные',
-//         image: 'squad-ava4.png',
+//         image: 'squad-ava5.png',
 //     },
 //     {
 //         name: 'Строительные',
-//         image: 'squad-ava5.png',
+//         image: 'squad-ava4.png',
 //     },
 //     {
 //         name: 'Педагогические',
 //         image: 'squad-ava6.png',
 //     },
 // ]);
-const aboutSquad = async () => {
-    await HTTP.get(`/detachments/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squad.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-onMounted(() => {
-    aboutSquad();
-});
 </script>
 
 <style scoped lang="scss">

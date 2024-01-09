@@ -403,7 +403,7 @@
                     <div class="references-wrapper">
                         <referencesList
                             @change="changePeoples"
-                            :participants="participants"
+                            :participants="sortedParticipants"
                         ></referencesList>
                     </div>
                     <Button

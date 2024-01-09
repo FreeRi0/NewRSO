@@ -4,7 +4,7 @@
             <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
-                label="Создать штаб"
+                :button="false"
             ></bannerCreate>
             <h2 class="headquarters-title">Местные штабы</h2>
             <div class="headquarters-search">
@@ -78,7 +78,7 @@
                             id="select-district"
                             v-model="selectedSortDistrict"
                             class="filter-district"
-                            address="api/v1/districts/"
+                            address="/districts/"
                             placeholder="Окружные штабы"
                         ></Select>
                     </div>
@@ -90,13 +90,12 @@
                             id="select-region"
                             v-model="selectedSortRegion"
                             class="filter-region"
-                            address="api/v1/regionals/"
+                            address="/regionals/"
                         ></Select>
                     </div>
                     <div class="sort-select">
-
                         <sortByEducation
-                        variant="outlined"
+                            variant="outlined"
                             clearable
                             v-model="sortBy"
                             :options="sortOptionss"
@@ -115,15 +114,15 @@
             </div>
 
             <div class="headquarters-wrapper" v-show="vertical">
-                <HeadquartersList
-                    :headquarters="sortedHeadquarters"
-                ></HeadquartersList>
+                <LocalHQList
+                    :localHeadquarters="sortedHeadquarters"
+                ></LocalHQList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalHeadquarters
-                    :headquarters="sortedHeadquarters"
-                ></horizontalHeadquarters>
+                <HorizontalLocalHQs
+                    :localHeadquarters="sortedHeadquarters"
+                ></HorizontalLocalHQs>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -143,8 +142,8 @@ import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import {
-    HeadquartersList,
-    horizontalHeadquarters,
+    LocalHQList,
+    HorizontalLocalHQs,
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
@@ -348,7 +347,7 @@ const sortedHeadquarters = computed(() => {
 .form__select {
     margin-bottom: 0px;
     margin-right: 8px;
-    border: 1px solid #35383F;
+    border: 1px solid #35383f;
 }
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
