@@ -367,7 +367,7 @@
                     </v-expansion-panels>
 
                     <p>
-                        Найдено пользователей: {{ sortedParticipants.length }}
+                        Найдено пользователей: {{ sortedParticipantsRef.length }}
                     </p>
                 </div>
                 <!-- <filters></filters> -->
@@ -403,7 +403,7 @@
                     <div class="references-wrapper">
                         <referencesList
                             @change="changePeoples"
-                            :participants="participants"
+                            :participants="sortedParticipantsRef"
                             :selectedParticipants="selectedPeoples"
                         ></referencesList>
                     </div>
@@ -621,7 +621,7 @@ const sortOptionss = ref([
     { value: 'date_of_birth', name: 'По дате вступления в РСО' },
 ]);
 
-const sortedParticipants = computed(() => {
+const sortedParticipantsRef = computed(() => {
     let tempParticipants = participants.value;
 
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);

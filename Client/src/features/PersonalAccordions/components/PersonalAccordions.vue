@@ -16,7 +16,7 @@
     <form
         class="accordion-form"
         enctype="multipart/form-data"
-        @submit.prevent="addData"
+        @submit.prevent="updateData"
     >
         <p class="accordion-title">
             Для вступления в РСО внесите ниже персональные данные
@@ -103,6 +103,9 @@
                                 v-model:value="user.last_name"
                             />
                         </div>
+                        <p class="error" v-if="isError.last_name">
+                            {{ isError.last_name }}
+                        </p>
                         <div class="form-field">
                             <label for="surname-lat">Фамилия(Латиницей) </label>
                             <Input
@@ -125,6 +128,9 @@
                                 v-model:value="user.first_name"
                             />
                         </div>
+                        <p class="error" v-if="isError.first_name">
+                            {{ isError.first_name }}
+                        </p>
                         <div class="form-field">
                             <label for="name-lat">Имя(Латиницей)</label>
                             <Input
@@ -154,7 +160,7 @@
                                 clearable
                                 placeholder="patronomyc"
                                 name="patronomyc-lat"
-                                v-model:value="patronymic_lat"
+                                v-model:value="user.patronymic_lat"
                             />
                         </div>
                         <div class="checkbox-wrapper">
@@ -170,7 +176,6 @@
                                     :value="sex.name"
                                     :label="sex.id"
                                     :id="sex.id"
-                                    :checked="sex.name"
                                     name="sex"
                                     v-model:checkedValue="user.gender"
                                 />
@@ -311,7 +316,6 @@
                                             :value="passP.name"
                                             :label="passP.name"
                                             :id="passP.id"
-                                            :checked="passP.checked"
                                             name="passParent"
                                             v-model:checkedValue="
                                                 selectedPassParent
@@ -540,6 +544,15 @@
                         </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
+                <p class="error" v-if="isError.gender">
+                    Гендер пользователя обязательное поле
+                </p>
+                <p class="error" v-if="isError.first_name">
+                    Имя пользователя обязательное поле
+                </p>
+                <p class="error" v-if="isError.first_name">
+                    Фамилия пользователя
+                </p>
             </v-expansion-panel>
 
             <v-expansion-panel value="panelTwo">
@@ -628,8 +641,8 @@
                             <Select
                                 variant="outlined"
                                 clearable
-                                v-model="regionData.reg_region"
-                                placeholder="Например, Карачаево-Черкесское региональное отделение"
+                                v-model="user.region"
+                                placeholder="Например, Карачаево-Черкесск"
                                 address="/regions/"
                             ></Select>
                         </div>
@@ -714,10 +727,10 @@
                                 :key="addr.id"
                             >
                                 <RadioButton
-                                    :value="addr.name"
+                                    :value="addr.value"
                                     :label="addr.id"
                                     :id="addr.id"
-                                    :checked="addr.name"
+                                    :checked="addr.checked"
                                     name="address"
                                     v-model:checkedValue="
                                         regionData.reg_fact_same_address
@@ -725,11 +738,11 @@
                                 />
                             </div>
                         </div>
-
+                        <!-- <p>value: {{ regionData.reg_fact_same_address}}</p> -->
                         <div
                             class="addr-fact__wrapper"
                             id="addr-fact"
-                            v-if="regionData.reg_fact_same_address == 'Нет'"
+                            v-if="!regionData.reg_fact_same_address"
                         >
                             <p class="accordion-block-title small">
                                 Адрес фактического проживания
@@ -768,6 +781,7 @@
                             </div>
                         </div>
                     </div>
+
                     <v-card-actions class="nav-btn__wrapper">
                         <button
                             type="button"
@@ -790,6 +804,10 @@
                         </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
+                <p class="error" v-if="isError.detail">
+                    <!-- {{ isError.detail }} -->Данные региона пользователя уже
+                    существуют
+                </p>
             </v-expansion-panel>
 
             <v-expansion-panel value="panelThree">
@@ -980,7 +998,11 @@
                                     v-model="documents.mil_reg_doc_type"
                                     :names="militaryDocs"
                                 ></Select>
+                                <p class="error" v-if="isError.mil_reg_doc_type">
+                    {{ '' + isError.mil_reg_doc_type }}
+                </p>
                             </div>
+
                             <div class="form-field">
                                 <label for="military-id"
                                     >Серия и номер документов воинского
@@ -998,6 +1020,7 @@
                                     "
                                 />
                             </div>
+
                         </div>
                         <div
                             id="no-passport"
@@ -1099,6 +1122,7 @@
                             </div>
                         </div>
                     </div>
+
                     <v-card-actions class="nav-btn__wrapper">
                         <button
                             type="button"
@@ -1121,6 +1145,9 @@
                         </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
+                <p class="error" v-if="isError.detail">
+                    Данные документов пользователя уже существуют
+                </p>
             </v-expansion-panel>
             <v-expansion-panel value="panelFour">
                 <v-expansion-panel-title>
@@ -1192,14 +1219,22 @@
                                     >*</span
                                 ></label
                             >
-                            <Input
+                            <!-- <Input
                                 name="study_institution"
                                 type="text"
                                 id="education-org"
                                 class="input-full"
                                 placeholder="Введите название образовательной организации"
                                 v-model:value="education.study_institution"
-                            />
+                            /> -->
+                            <Select
+                                variant="outlined"
+                                clearable
+                                class="input-full"
+                                v-model="education.study_institution"
+                                address="/eduicational_institutions/"
+                            >
+                            </Select>
                         </div>
                         <div class="form-field">
                             <label for="facultet">Факультет</label>
@@ -1260,6 +1295,9 @@
                         </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
+                <p class="error" v-if="isError.detail">
+                    Образовательные данные пользователя уже существуют
+                </p>
             </v-expansion-panel>
             <v-expansion-panel
                 value="panelFive"
@@ -2550,16 +2588,18 @@
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-card-actions class="form__button-group d-flex justify-space-between">
+            <v-card-actions
+                class="form__button-group d-flex justify-space-between"
+            >
                 <Button
                     type="submit"
                     label="Отправить данные на верификацию"
                 ></Button>
-                <Button
+                <!-- <Button
                     @click="updateData"
                     type="button"
                     label="Обновить данные"
-                ></Button>
+                ></Button> -->
             </v-card-actions>
         </v-expansion-panels>
     </form>
@@ -2586,7 +2626,10 @@ import axios from 'axios';
 
 const router = useRouter();
 const panel = ref();
-
+const isError = ref([]);
+// const isError2 = ref([]);
+// const isError3 = ref([]);
+// const isError4 = ref([]);
 const openPanelOne = () => {
     panel.value = 'panelOne';
 };
@@ -2611,7 +2654,6 @@ const regionData = ref({
     reg_town: '',
     reg_house: '',
     reg_fact_same_address: null,
-    reg_region: null,
     fact_region: null,
     fact_town: '',
     fact_house: '',
@@ -2649,6 +2691,7 @@ const user = ref({
     first_name: '',
     last_name: '',
     patronymic_name: '',
+    region: null,
     date_of_birth: '',
     last_name_lat: '',
     first_name_lat: '',
@@ -2661,7 +2704,7 @@ const user = ref({
 });
 
 const education = ref({
-    study_institution: '',
+    study_institution: null,
     study_faculty: '',
     study_year: '',
     study_specialty: '',
@@ -2892,8 +2935,6 @@ const downloadAll = async () => {
         responseType: 'blob',
     })
         .then((response) => {
-
-
             const url = new Blob([response.data], { type: 'application/zip' });
             const link = document.createElement('a');
             link.href = url;
@@ -2907,99 +2948,117 @@ const downloadAll = async () => {
         });
 };
 
-const addData = async () => {
-    let fd = new FormData();
-    fd.append('statement', statement.value);
-    fd.append('consent_personal_data', consent_personal_data.value);
-    fd.append(
-        'consent_personal_data_representative',
-        consent_personal_data_representative.value,
-    );
-    fd.append('passport', passportUpload.value);
-    fd.append('passport_representative', passport_representative.value);
-    fd.append('snils_file', snils_file.value);
-    fd.append('inn_file', inn_file.value);
-    fd.append('employment_document', military_document.value);
-    fd.append('international_passport', international_passport.value);
-    const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
-    const axiosrequest2 = HTTP.post('/rsousers/me/region/', regionData.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
-    const axiosrequest3 = HTTP.post(
-        '/rsousers/me/documents/',
-        documents.value,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
-    );
-    const axiosrequest4 = HTTP.post(
-        '/rsousers/me/education/',
-        education.value,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
-    );
+// const addData = async () => {
+//     let fd = new FormData();
+//     fd.append('statement', statement.value);
+//     fd.append('consent_personal_data', consent_personal_data.value);
+//     fd.append(
+//         'consent_personal_data_representative',
+//         consent_personal_data_representative.value,
+//     );
+//     fd.append('passport', passportUpload.value);
+//     fd.append('passport_representative', passport_representative.value);
+//     fd.append('snils_file', snils_file.value);
+//     fd.append('inn_file', inn_file.value);
+//     fd.append('employment_document', military_document.value);
+//     fd.append('international_passport', international_passport.value);
+//     const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     });
+//     const axiosrequest2 = HTTP.post('/rsousers/me/region/', regionData.value, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     });
+//     const axiosrequest3 = HTTP.post(
+//         '/rsousers/me/documents/',
+//         documents.value,
+//         {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         },
+//     );
+//     const axiosrequest4 = HTTP.post(
+//         '/rsousers/me/education/',
+//         education.value,
+//         {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         },
+//     );
 
-    const axiosrequest5 = HTTP.post('/rsousers/me/statement/', fd, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
+//     const axiosrequest5 = HTTP.post('/rsousers/me/statement/', fd, {
+//         headers: {
+//             'Content-Type': 'multipart/form-data',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     });
 
-    await axios
-        .all([
-            axiosrequest1,
-            axiosrequest2,
-            axiosrequest3,
-            axiosrequest4,
-            axiosrequest5,
-        ])
-        .then(
-            axios.spread(function (res1, res2, res3, res4) {
-                user.value = res1.data;
-                regionData.value = res2.data;
-                documents.value = res3.data;
-                education.value = res4.data;
-                console.log(res1.data);
-                console.log(res2.data);
-                console.log(res3.data);
-                console.log(res4.data);
+//     await axios
+//         .all([
+//             axiosrequest1,
+//             axiosrequest2,
+//             axiosrequest3,
+//             axiosrequest4,
+//             axiosrequest5,
+//         ])
+//         .then(
+//             axios.spread(function (res1, res2, res3, res4) {
+//                 user.value = res1.data;
+//                 regionData.value = res2.data;
+//                 documents.value = res3.data;
+//                 education.value = res4.data;
+//                 console.log(res1.data);
+//                 console.log(res2.data);
+//                 console.log(res3.data);
+//                 console.log(res4.data);
 
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            }),
-        )
-        .catch((error) => {
-            console.error('There was an error!', error);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
-};
+//                 swal.fire({
+//                     position: 'top-center',
+//                     icon: 'success',
+//                     title: 'успешно',
+//                     showConfirmButton: false,
+//                     timer: 1500,
+//                 });
+//             }),
+//         )
+//         // .catch((error) => {
+//         //     console.error('There was an error!', error);
+//         //     swal.fire({
+//         //         position: 'top-center',
+//         //         icon: 'error',
+//         //         title: 'ошибка',
+//         //         showConfirmButton: false,
+//         //         timer: 1500,
+//         //     });
+//         // });
+//         .catch(({ response }) => {
+//             isError.value = response.data;
+//             // isError2.value = response.data;
+//             // isError3.value = response.data;
+//             // isError4.value = response.data;
+//             console.error('There was an error!', response.data);
+//             // console.error('There was an error!', response.data);
+//             // console.error('There was an error!', response.data);
+//             // console.error('There was an error!', response.data);
+
+//             swal.fire({
+//                 position: 'top-center',
+//                 icon: 'error',
+//                 title: 'ошибка',
+//                 showConfirmButton: false,
+//                 timer: 1500,
+//             });
+//         });
+// };
 
 const updateData = async () => {
     let fd = new FormData();
@@ -3078,8 +3137,10 @@ const updateData = async () => {
                 });
             }),
         )
-        .catch((error) => {
-            console.error('There was an error!', error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+
             swal.fire({
                 position: 'top-center',
                 icon: 'error',
@@ -3096,8 +3157,8 @@ const answers = ref([
 ]);
 
 const gender = ref([
-    { name: 'male', value: 'male', id: 'Мужской' },
-    { name: 'female', value: 'female', id: 'Женский' },
+    { name: 'male', value: 'gender', id: 'Мужской',  },
+    { name: 'female', value: 'gender', id: 'Женский',  },
 ]);
 
 const passportParent = ref([
@@ -3120,9 +3181,9 @@ const militaryDocs = ref([
     { value: 'Военный билтет', name: 'Военный билет' },
 ]);
 
-const address = reactive([
-    { name: true, value: 'reg_fact_same_address', id: 'Да' },
-    { name: false, value: 'reg_fact_same_address', id: 'Нет' },
+const address = ref([
+    { name: 'да', value: true, id: 'Да' },
+    { name: 'нет', value: false, id: 'Нет' },
 ]);
 
 const passport = reactive([
@@ -3172,6 +3233,15 @@ const selectedPass = ref('Да');
         font-weight: 600;
         font-family: 'Bert-Sans', sans-serif;
     }
+}
+
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 10px;
+    text-align: center;
 }
 
 .data-form {

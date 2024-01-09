@@ -26,10 +26,6 @@ let id = route.params.id;
 
 const HQandSquads = ref([
     {
-        name: 'Местные штабы',
-        link: '/LocalHeadquarters',
-    },
-    {
         name: 'Окружные штабы',
         link: '/DistrictHeadquarters',
     },
@@ -37,6 +33,11 @@ const HQandSquads = ref([
         name: 'Региональные штабы',
         link: '/RegionalHeadquarters',
     },
+    {
+        name: 'Местные штабы',
+        link: '/LocalHeadquarters',
+    },
+
     {
         name: 'Штабы СО ОО',
         link: '/AllHeadquarters',

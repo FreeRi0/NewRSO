@@ -135,7 +135,7 @@
                     </div>
                     <div class='sort-select'>
                         <sortByEducation
-                        variant="outlined"
+                            variant="outlined"
                             clearable
                             v-model="sortBy"
                             :options="sortOptionss"
@@ -201,22 +201,6 @@ const getCategories = async () => {
     })
         .then((response) => {
             categories.value = response.data;
-            console.log(response);
-        })
-        .catch(function(error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getEducations = async () => {
-    await HTTP.get('/eduicational_institutions/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token')
-        }
-    })
-        .then((response) => {
-            educations.value = response.data;
             console.log(response);
         })
         .catch(function(error) {
@@ -462,9 +446,9 @@ body {
 }
 
 .form__select {
-  margin-bottom: 0px;
-  margin-left: 8px;
-  border: 1px solid #35383F;
+    margin-bottom: 0px;
+    margin-left: 8px;
+    border: 1px solid #35383f;
 }
 
 @media (max-width: 575px) {
