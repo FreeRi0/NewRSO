@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Редактирование штаба СО ОО</h1>
 
@@ -24,13 +24,6 @@ import { FormHQ } from '@features/FormHQ';
 import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-
-const pages = ref([
-    { pageTitle: 'Структура' },
-    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
-    { pageTitle: 'Штаб КГПИ', href: '#' },
-    { pageTitle: 'Редактирование штаба СО ОО', href: '#' },
-]);
 
 const route = useRoute();
 let id = route.params.id;

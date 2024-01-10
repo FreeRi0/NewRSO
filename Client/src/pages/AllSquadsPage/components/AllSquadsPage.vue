@@ -13,16 +13,16 @@
                     class="squads-tabs__item"
                     :class="{ active: picked === '' }"
                     @click="picked = ''"
-                    >Все</v-btn
-                >
+                    >Все
+                </v-btn>
                 <v-btn
                     class="squads-tabs__item"
                     :class="{ active: picked === area.id }"
                     v-for="area in categories"
                     :key="area"
                     @click="picked = area.id"
-                    >{{ area.name }}</v-btn
-                >
+                    >{{ area.name }}
+                </v-btn>
             </div>
             <div class="squads-search">
                 <input
@@ -296,11 +296,13 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .menuuA {
     background-image: url('@app/assets/icon/MenuA.svg');
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .menuu {
     background-image: url('@app/assets/icon/Menu.svg');
     background-repeat: no-repeat;
@@ -315,12 +317,14 @@ body {
 
 .squads {
     padding: 40px 0px 60px 0px;
+
     &-title {
         font-size: 52px;
         @media screen and (max-width: 575px) {
             font-size: 32px;
         }
     }
+
     &-wrapper {
         padding: 60px 0px;
         display: grid;
@@ -333,16 +337,19 @@ body {
             grid-template-columns: 1fr 1fr;
         }
     }
+
     &-sort {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
     }
+
     &-tabs {
         margin-top: 20px;
         margin-bottom: 40px;
         display: flex;
         flex-wrap: wrap;
+
         &__item {
             padding: 6px 24px;
             border: 1px solid black;
@@ -376,14 +383,17 @@ body {
     color: white;
     border: 1px solid #1c5c94;
 }
+
 .squads-search {
     position: relative;
     box-sizing: border-box;
+
     svg {
         position: absolute;
         top: 10px;
         left: 16px;
     }
+
     &__input {
         width: 100%;
         padding: 13px 0px 10px 60px;
