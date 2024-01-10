@@ -120,13 +120,13 @@ const routes: RouteRecordRaw[] = [
                 path: '/AllHeadquarters',
                 meta: {
                     requiresAuth: true,
-                    label: 'Штабы',
+                    label: 'Штабы СО ОО',
                 },
                 children: [
                     {
                         path: ':id',
                         meta: {
-                            label: 'Штаб СО',
+                            label: 'title',
                         },
                         name: 'HQ',
                         component: () => import('@pages/HQPage/HQPage.vue'),
@@ -134,7 +134,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'Штаб СО',
+                            label: 'title',
                         },
 
                         children: [
@@ -149,6 +149,8 @@ const routes: RouteRecordRaw[] = [
                                     label: 'Редактирование',
                                 },
                             },
+
+                            //в данной структуре только штабы СО ОО, редактирование 3-х штабов, которые ниже нужно перенести в другую структуру
                             {
                                 path: 'EditingOfLocal',
                                 name: 'FormLocal',
@@ -173,6 +175,7 @@ const routes: RouteRecordRaw[] = [
                                         '@pages/EditingOfRS/components/EditingOfRS.vue'
                                     ),
                             },
+                            //-----------------------------------------------------------------------------------------------------------------
                         ],
                     },
                     {
@@ -249,12 +252,18 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/actionSquads',
                 name: 'actionSquads',
-                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
+                component: () =>
+                    import(
+                        '@pages/actionSquadsPade/components/actionSquadsPage.vue'
+                    ),
             },
             {
-                path: "/createAction",
-                name: "createAction",
-                component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
+                path: '/createAction',
+                name: 'createAction',
+                component: () =>
+                    import(
+                        '@pages/CreationActionsPage/components/CreationActionsPage.vue'
+                    ),
             },
             {
                 path: '/EditLSO',
@@ -277,7 +286,7 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
-                    label: 'Штабы',
+                    label: 'Штабы СО ОО',
                 },
             },
             {

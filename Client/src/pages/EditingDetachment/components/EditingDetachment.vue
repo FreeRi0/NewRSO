@@ -33,13 +33,6 @@ import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
-const pages = ref([
-    { pageTitle: 'Структура' },
-    { pageTitle: 'ЛСО', href: '/AllSquads' },
-    { pageTitle: 'ССО «Инвар»', href: '#' },
-    { pageTitle: 'Редактирование', href: '#' },
-]);
-
 const route = useRoute();
 console.log(route);
 let id = route.params.id;
