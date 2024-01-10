@@ -30,9 +30,54 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    image: {
+    type: string
+    },
     position: {
         type: Object,
     },
 });
 </script>
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.round-img {
+    img {
+        width: 120px;
+        height: 120px;
+        display: block;
+        margin: 0px auto;
+        border-radius: 100%;
+        @media screen and (max-width: 575px) {
+            width: 60px;
+            height: 60px;
+        }
+    }
+}
+
+.participants-wrapper__item {
+    margin: 0px auto;
+    width: 170px;
+    @media screen and (max-width: 575px) {
+        width: 104px;
+    }
+    &-name {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        text-align: center;
+        font-size: 28px;
+        font-family: 'Akrobat';
+        color: #1e1e1e;
+        @media screen and (max-width: 575px) {
+            font-size: 18px;
+        }
+    }
+    &-position {
+        text-align: center;
+        font-size: 16px;
+        font-family: 'Akrobat';
+        color: #676767;
+        @media screen and (max-width: 575px) {
+            font-size: 12px;
+        }
+    }
+}
+</style>

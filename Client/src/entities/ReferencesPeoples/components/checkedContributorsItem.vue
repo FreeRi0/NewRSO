@@ -56,6 +56,7 @@ import { Button } from '@shared/components/buttons';
 import { Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { ref, watch, inject } from 'vue';
+import { HTTP } from '@app/http';
 const emit = defineEmits(['change']);
 
 const updateMembership = (participant, event) => {
@@ -74,8 +75,8 @@ const props = defineProps({
     },
 });
 
-const route = useRoute();
-const id = route.params.id;
+// const route = useRoute();
+// const id = route.params.id;
 
 const swal = inject('$swal');
 const selectedPeoples = ref(props.participants);

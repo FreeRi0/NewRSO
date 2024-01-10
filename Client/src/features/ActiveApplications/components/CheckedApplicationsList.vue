@@ -21,6 +21,19 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    selectedParticipants: {
+        type: Array,
+        default: () => []
+    },
+});
+
+const selectedPeoples = ref(props.participants);
+
+
+watch(selectedPeoples, (newChecked) => {
+    if (!newChecked) return;
+    emit('change', selectedPeoples.value);
+    console.log(newChecked);
 });
 </script>
 <style lang="scss"></style>

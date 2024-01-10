@@ -4,7 +4,6 @@
         :participant="participant"
         @change="changePeoples"
         :selectedParticipants="selectedPeoples"
-        :isMembership="false"
         :key="participant.id"
     />
 </template>
@@ -15,11 +14,17 @@ import { computed, ref } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { referenceItem } from '@entities/ReferencesPeoples/components';
 
+
+
 const emit = defineEmits(['change']);
 const props = defineProps({
     participants: {
         type: Array,
         required: true,
+    },
+    selectedParticipants: {
+        type: Array,
+        default: () => []
     },
 });
 

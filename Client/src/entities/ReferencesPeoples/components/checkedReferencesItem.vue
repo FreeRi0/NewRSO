@@ -31,7 +31,7 @@
         <div class="sort-select ml-3">
             <Select
                 variant="outlined"
-                v-model="participant.membership_fee"
+                v-model="participantItem.is_verified"
                 :names="filteredPayed"
             ></Select>
         </div>
@@ -69,20 +69,15 @@ const props = defineProps({
         type: Object,
         require: true,
     },
-   participants: {
-        type: Array,
-        require: true,
-    },
+
 });
 
-const route = useRoute();
-const id = route.params.id;
 
 const swal = inject('$swal');
-const selectedPeoples = ref(props.participants);
+
 
 const participantItem = ref({
-    membership_fee: null,
+    is_verified: null,
 });
 
 
@@ -94,15 +89,10 @@ const filteredPayed = ref([
     { value: 'is_verified', name: 'Неодобрен' },
 ]);
 
-watch(selectedPeoples, (newChecked) => {
-    if (!newChecked) return;
-    emit('change', selectedPeoples.value);
-    console.log(newChecked);
-});
 
 const ChangeStatus = async () => {
     let { id, ...rest } = props.participant;
-    HTTP.post(`rsousers/${id}/verify/`, rest, {
+    HTTP.post(`rsousers/${id}/verify/`, participantItem.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

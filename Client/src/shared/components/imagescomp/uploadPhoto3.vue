@@ -1,5 +1,5 @@
 <template>
-    <div class="avatar-edit my_photo__add" >
+    <div class="avatar-edit my_photo__add">
         <v-menu min-width="200px" rounded v-if="!props.photo">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__baner-add" icon v-bind="props">
@@ -175,23 +175,19 @@ const isError = ref([]);
 const swal = inject('$swal');
 
 const userPhotos = ref({
-    photo1: null,
+    photo3: null,
 });
 
 
 const selectFile = (event) => {
-    userPhotos.value.photo1 = event.target.files[0];
-    preview.value = URL.createObjectURL(userPhotos.value.photo1);
-    // userPhotos.value.photo2 = event.target.files[0];
-    // preview.value = URL.createObjectURL(userPhotos.value.photo2);
-    // userPhotos.value.photo3 = event.target.files[0];
-    // preview.value = URL.createObjectURL(userPhotos.value.photo3);
+    userPhotos.value.photo3 = event.target.files[0];
+    preview.value = URL.createObjectURL(userPhotos.value.photo3);
 };
 
 const uploadPhoto = async () => {
     dialog.value = true;
     const formData = new FormData();
-    formData.append('photo1', userPhotos.value.photo1);
+    formData.append('photo3', userPhotos.value.photo3);
 
     await HTTP.patch('/rsousers/me/media/', formData, {
         headers: {
@@ -224,7 +220,7 @@ const uploadPhoto = async () => {
 };
 const updatePhoto = async () => {
     let fd = new FormData();
-    fd.append('photo1', userPhotos.value.photo1);
+    fd.append('photo3', userPhotos.value.photo3);
     dialog.value = true;
     await HTTP.put('/rsousers/me/media/', fd, {
         headers: {
@@ -286,40 +282,4 @@ const deletePhoto = async () => {
         });
 };
 </script>
-<style lang="scss">
-.my_photo__edit {
-    display: grid;
-    grid-template-columns: 1fr 68px;
-    grid-template-rows: 1fr 68px;
-    border-radius: 10px;
-}
-.avatar-preview,
-.my_photo__plug {
-    display: grid;
-    grid-column-start: 1;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 3;
-    border-radius: 10px;
-}
 
-.my_photo__add,
-.avatar-edit {
-    display: grid;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    justify-content: center;
-    align-content: center;
-    z-index: 9;
-}
-
-.avatar-preview img,
-.my_photo__plug img {
-    width: 100%;
-    height: 371px;
-    object-fit: cover;
-    border-radius: 10px;
-}
-</style>

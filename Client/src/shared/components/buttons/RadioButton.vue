@@ -32,7 +32,7 @@ const props = defineProps({
         default: '',
     },
     checked: {
-        type: Boolean,
+        type: String,
         default: false,
     },
     disabled: {

@@ -173,9 +173,10 @@
                                 :key="sex.id"
                             >
                                 <RadioButton
-                                    :value="sex.name"
-                                    :label="sex.id"
+                                    :value="sex.value"
+                                    :label="sex.name"
                                     :id="sex.id"
+                                    :checked="user.gender"
                                     name="sex"
                                     v-model:checkedValue="user.gender"
                                 />
@@ -3156,8 +3157,8 @@ const answers = ref([
 ]);
 
 const gender = ref([
-    { name: 'male', value: 'gender', id: 'Мужской' },
-    { name: 'female', value: 'gender', id: 'Женский' },
+    { name: 'Мужской', value: 'male', id: 'm1' },
+    { name: 'Женский', value: 'female', id: 'f1' },
 ]);
 
 const passportParent = ref([

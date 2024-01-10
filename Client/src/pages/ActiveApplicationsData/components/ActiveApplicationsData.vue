@@ -92,7 +92,7 @@ let tempParticipants = participants.value;
 tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
 const viewParticipants = async () => {
-    await HTTP.get('/rsousers/', {
+    await HTTP.get('/detachments/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -138,9 +138,6 @@ const changeSelected = (changePeoples) => {
     selectedPeoples.value = changePeoples;
 };
 
-// const changeDetachments = (selectedHumans) => {
-//     selecte
-// }
 
 const select = (event) => {
     selectedPeoples.value = [];

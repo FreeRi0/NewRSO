@@ -31,11 +31,6 @@
                 label="сохранить"
             ></Button>
             <div class="d-flex">
-                <!-- <Button
-                type="button"
-                @click="removeBio()"
-                label="Очистить"
-            ></Button> -->
             </div>
         </form>
 
@@ -45,28 +40,28 @@
                 :photo="media.photo1"
                 :add="true"
             ></userPhoto>
-            <userPhoto
+            <userPhoto2
                 class="photo-item"
                 :photo="media.photo2"
                 :add="true"
-            ></userPhoto>
-            <userPhoto
+            ></userPhoto2>
+            <userPhoto3
                 class="photo-item"
                 :photo="media.photo3"
                 :add="true"
-            ></userPhoto>
-            <userPhoto
+            ></userPhoto3>
+            <userPhoto4
                 class="photo-item"
                 :photo="media.photo4"
                 :add="true"
-            ></userPhoto>
+            ></userPhoto4>
         </div>
     </div>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { TextArea } from '@shared/components/inputs';
-import { userPhoto } from '@shared/components/imagescomp';
+import { userPhoto, userPhoto2, userPhoto3, userPhoto4 } from '@shared/components/imagescomp';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { ref, onMounted, watch, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
@@ -158,38 +153,6 @@ const AddAbout = async () => {
         });
 };
 
-// const removeBio = async () => {
-//     await HTTP.patch(`/rsousers/me/`, user.value , {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             isLoading.value = false;
-//             swal.fire({
-//                 position: 'top-center',
-//                 icon: 'success',
-//                 title: 'успешно',
-//                 showConfirmButton: false,
-//                 timer: 1500,
-//             });
-//             user.value = response.data;
-//             console.log(response.data);
-//         })
-//         .catch(({ response }) => {
-//             isError.value = response.data;
-//             console.error('There was an error!', response.data);
-//             isLoading.value = false;
-//             swal.fire({
-//                 position: 'top-center',
-//                 icon: 'error',
-//                 title: 'ошибка',
-//                 showConfirmButton: false,
-//                 timer: 1500,
-//             });
-//         });
-// }
 
 onMounted(() => {
     getUser();

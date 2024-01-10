@@ -99,9 +99,7 @@
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-
-// const members = ref([]);
-// const squad = ref({});
+;
 const position = ref({});
 const route = useRoute();
 const id = route.params.id;

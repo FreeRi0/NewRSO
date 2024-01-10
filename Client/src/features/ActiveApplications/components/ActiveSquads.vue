@@ -3,7 +3,7 @@
         v-for="detachment in detachments"
         :detachment="detachment"
         @change="changePeoples"
-        :selectedSquads="selectedDeth"
+        :selectedSquads="selectedDetch"
         :key="detachment.id"
     />
 </template>

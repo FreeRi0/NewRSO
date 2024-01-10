@@ -12,21 +12,18 @@
             />
         </div>
         <!-- Добавить фото -->
-        <uploadPhoto :add="true" :photo="photo"></uploadPhoto>
+        <uploadPhoto v-if="add" :photo="photo"></uploadPhoto>
     </div>
 </template>
 <script setup>
 import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
-import { uploadPhoto } from '.';
-
-
+import { uploadPhoto} from '.';
 
 const props = defineProps({
     photo: String,
     add: Boolean
 });
-
 
 </script>
 <style lang="scss">

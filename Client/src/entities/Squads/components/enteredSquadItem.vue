@@ -24,7 +24,7 @@
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ detachment.users_for_verification }}
+                    {{ detachment.applications }}
                 </p>
                 <!-- <div class="horizontallso-item__list-date">
                     <span
@@ -71,7 +71,6 @@ const updateCheckSquad = (e) => {
 const props = defineProps({
     detachment: {
       type: Object,
-        required: true,
     },
     selectedSquads: {
         type: Array,

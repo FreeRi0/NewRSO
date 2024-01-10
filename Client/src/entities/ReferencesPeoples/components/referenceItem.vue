@@ -24,7 +24,7 @@
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ participant.first_name }}
+                    {{ participant.users_for_verification.name }}
                 </p>
                 <div class="horizontallso-item__list-date">
                     <span
@@ -33,7 +33,7 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.date_of_birth }}</p>
+                    <!-- <p>{{ participant.users_for_verification }}</p> -->
                 </div>
             </div>
         </div>
