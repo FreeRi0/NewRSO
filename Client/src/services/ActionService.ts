@@ -1,5 +1,6 @@
 import { HTTP } from '@app/http';
 
+//Получить данные по всем мероприятиям
 export function getListActions(){
    return HTTP.get("/events/", {
        headers:{
@@ -8,8 +9,8 @@ export function getListActions(){
        }
    });
 }
-
-export function getActionsBySearch({ data }: { data: any }){
+//Отправка формы мероприятия
+export function createAction({ data }: { data: any }){
     return HTTP.post("/events/", data, {
         headers:{
             'Content-Type': 'application/json',

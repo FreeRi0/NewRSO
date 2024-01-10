@@ -1,7 +1,7 @@
 <template>
     <div class='container action'>
         <div class='action-title'>Создание мероприятия</div>
-        <form method='post' enctype='multipart/form-data'>
+        <form method='post' enctype='multipart/form-data' @submit.prevent='SubmitEvent'>
         <div class='col-auto form-container'>
             <v-expansion-panels variant='accordion'>
                 <v-expansion-panel>
@@ -69,69 +69,145 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
                         <div class='form-container'>
-                            <div class='form-col'>
+                            <div class='form-col-100'>
+                                <label class='form-label'>Выберете формат мероприятия</label>
+                                <label class='flex align-items-center' style='display: flex'>
+                                    <div class="flex align-items-center">
+                                        <input type='radio' class='form-radio'/>
+                                        <label for="hours1" class="ml-2 form-label">Оффлайн</label>
+                                    </div>
+                                    <div class="flex align-items-center">
+                                        <input type='radio' class='form-radio'/>
+                                        <label for="hours2" class="ml-2 form-label">Онлайн</label>
+                                    </div>
+                                </label>
+                            <div class='form-col-100'>
                                 <div class="form__field">
-                                    <label for="name-hq">ФИО организатора<sup class="valid-red">*</sup></label>
+                                    <label class='form-label' for="name-hq">Название мероприятия<sup class="valid-red">*</sup></label>
                                     <Input
                                         id="name-hq"
                                         class="form__input form-input-container"
-                                        placeholder="Фамилия Имя Отчество"
+                                        placeholder="Название мероприятия"
+                                        name="name_hq"
+                                        :maxlength="100"
+                                    />
+                                    <div class="form__counter"></div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class='form-container'>
+                            <div class='form-col'>
+                                <div class="form__field">
+                                    <label class='form-label' for="name-hq">Название мероприятия<sup class="valid-red">*</sup></label>
+                                    <Input
+                                        id="name-hq"
+                                        class="form__input form-input-container"
+                                        placeholder="Название мероприятия"
                                         name="name_hq"
                                         :maxlength="100"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="telegram-owner-hq">Telegram организатора</label>
+                                    <label for="telegram-owner-hq">Ссылка на конференцию</label>
                                     <Input
                                         id="telegram-owner-hq"
                                         class="form__input form-input-container"
-                                        placeholder="@modestra"
+                                        placeholder="https://discord.gg/s44UfkVJ"
                                         name="telegram-owner-hq"
                                         :maxlength="100"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="telegram-squad-hq">Telegram отряда</label>
-                                    <Input
-                                        id="telegram-squad-hq"
-                                        class="form__input form-input-container"
-                                        placeholder="@Invar"
-                                        name="telegram-squad-hq"
-                                        :maxlength="100"
-                                    />
-                                    <div class="form__counter"></div>
+                                    <label>Добавить баннер</label>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @uploader="selectParentPersonal"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="email-hq">Email организатора<sup class="valid-red">*</sup></label>
+                                    <label for="email-hq">Адрес проведения (Оффлайн)<sup class="valid-red">*</sup></label>
                                     <Input
                                         id="email-hq"
                                         class="form__input form-input-container"
-                                        placeholder="email@gmail.com"
+                                        placeholder="Например, Москва, Гагарина 40"
                                         name="email_hq"
                                         :maxlength="100"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="organization-hq">Организация</label>
+                                    <label for="organization-hq">Количество участников</label>
                                     <Input
                                         id="organization-hq"
                                         class="form__input form-input-container"
-                                        placeholder="Например КузГТУ"
+                                        placeholder="Например, 100"
                                         name="organization-hq"
                                         :maxlength="100"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
-                                <div class="form__field"></div>
+                                <div class="form__field">
+                                    <label>О мероприятии</label>
+                                    <v-textarea label="Label" variant="outlined"></v-textarea>
+                                </div>
                             </div>
                         </div>
                         <div class='form-container'>
-                            <div class='form-border'></div>
+                            <div class='form-col-100'>
+                                <div class="form__field">
+                                    <label for="name-hq">Добавьте направление<sup class="valid-red">*</sup></label>
+                                    <Input
+                                        id="name-hq"
+                                        class="form__input form-input-container"
+                                        placeholder="Название мероприятия"
+                                        name="name_hq"
+                                        :maxlength="100"
+                                    />
+                                    <div class="form__counter"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-container'>
+                            <div class='form-col'>
+                                <label>Выберите вид принимаемых к подаче заявок на мероприятие</label>
+                                <label class='flex align-items-center' style='display: flex'>
+                                    <div class="flex align-items-center">
+                                        <input type='radio' class='form-radio'/>
+                                        <label for="hours1" class="ml-2">Персональная</label>
+                                    </div>
+                                    <div class="flex align-items-center">
+                                        <input type='radio' class='form-radio'/>
+                                        <label for="hours2" class="ml-2">Групповая</label>
+                                    </div>
+                                    <div class="flex align-items-center">
+                                        <input type='radio' class='form-radio'/>
+                                        <label for="hours2" class="ml-2">Многоэтапная</label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class='form-col'>
+                                <Dropdown
+                                          optionlabel='title'
+                                          placeholder='Выберете действие'
+                                          class='invents-block invents-select'>
+                                </Dropdown>
+                            </div>
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -263,15 +339,15 @@
                                 <div class="form__field">
                                     <label class='flex align-items-center' style='display: flex'>
                                         <div class="flex align-items-center">
-                                            <RadioButton v-model="datahour" inputId="hours1" name="hours" :value="1" />
+                                            <input type='radio' class='form-radio'/>
                                             <label for="hours1" class="ml-2">За час</label>
                                         </div>
                                         <div class="flex align-items-center">
-                                            <RadioButton v-model="datahour" inputId="hours2" name="hours" :value="2" />
+                                            <input type='radio' class='form-radio'/>
                                             <label for="hours2" class="ml-2">За 2 часа</label>
                                         </div>
                                         <div class="flex align-items-center">
-                                            <RadioButton v-model="datahour" inputId="hours3" name="hours" :value="3" />
+                                            <input type='radio' class='form-radio'/>
                                             <label for="hours3" class="ml-2">За 3 часа</label>
                                         </div>
                                     </label>
@@ -386,7 +462,21 @@
                                 </v-container>
                                 Добавьте документы:
                                 <div class='form-col'>
-                                <input type='file' accept='application/pdf'/>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @uploader="selectParentPersonal"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                                 <div class='form-col-100'>
                                     Расскажите, с какими документами необходимо просто ознакомиться, а какие скачать и заполнить
@@ -525,7 +615,7 @@
                                 <div class="form__field"></div>
                             </div>
                         </div>
-                        <div class='form-label'>+ Добавить организатора</div>
+                        <div class='form-add'>+ Добавить организатора</div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
@@ -603,7 +693,7 @@
                                         name="name_hq"
                                         :maxlength="100"
                                     />
-                                    <div class='form-label'>+ Добавить вопрос</div>
+                                    <div class='form-add' @click='AddQuestion'>+ Добавить вопрос</div>
                                 </div>
                             </div>
                         </div>
@@ -612,7 +702,7 @@
             </v-expansion-panels>
         </div>
             <div class='form-col-100'>
-                <Button label='Сохранить'></Button>
+                <Button type='submit' label='Сохранить'></Button>
             </div>
         </form>
     </div>
@@ -621,16 +711,55 @@
 <script setup>
 import RadioButton from 'primevue/radiobutton';
 import { Button } from '@shared/components/buttons';
-import actions from "@entities/Actions/actions";
 import { ref } from 'vue';
+import { createAction } from '@services/ActionService';
+import { useRoute } from 'vue-router';
+import Dropdown from 'primevue/dropdown';
+const router = useRoute();
 const datahour = ref("");
 const documents = ref([]);
 
+
+//Переменные для формы
+
+
+
+//Формы самой страницы
+
+const actionForm = {
+    format: String,
+    direction: String,
+    status: String,
+    name: String,
+    scale: String,
+    participants_number: Number,
+    description: String,
+    application_type: String,
+}
+//Документы пользователя
+const user_documents = {
+    document: String,
+
+}
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
     { pageTitle: 'Штабы СО ОО', href: '#' },
     { pageTitle: 'Создание штаба СО ОО', href: '#' },
 ]);
+
+function SubmitEvent(){
+    createAction(actionForm)
+        .then(() =>{
+
+    })
+        .catch((e) =>{
+
+        })
+}
+
+function AddQuestion(){
+
+}
 
 </script>
 
@@ -669,9 +798,6 @@ const pages = ref([
     margin-bottom: 20px;
     margin-top: 20px;
   }
-  .v-label{
-    margin-top: 0;
-  }
   &-col{
     width:50%;
     padding-left: 15px;
@@ -680,6 +806,9 @@ const pages = ref([
   &-input{
     width: 100%;
     height: 40px;
+  }
+  &-radio{
+    margin-left: 10px;
   }
   &-input-container{
     border: 1px solid black;
@@ -705,26 +834,23 @@ const pages = ref([
   }
   &-col-100{
     width: 100%;
-    font-family: Bert Sans;
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
     line-height: 34px;
     margin-top: 3px;
-    margin-buttom: 3px;
-
-    &-label{
-      font-family: Bert Sans;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 600;
-      line-height: 24px; /* 171.429% */
-      text-decoration-line: underline;
-      margin-top: 5px;
-    }
-    &-add-block:hover{
-      cursor: pointer;
-    }
+    margin-bottom: 3px;
+  }
+  &-label{
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    margin-top: 5px;
+  }
+  &-add-block:hover{
+    cursor: pointer;
   }
   &-btm{
     width: 114px;
@@ -741,6 +867,13 @@ const pages = ref([
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  &-add{
+    margin-top: 10px;
+    text-decoration: underline;
+  }
+  &-add:hover{
+    cursor: pointer;
   }
 }
 </style>

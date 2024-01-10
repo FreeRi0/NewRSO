@@ -486,7 +486,7 @@ img {
   height: 24px;
 }
 .invents-select {
-  width: 224px;
+  width: 100%;
   cursor: pointer;
   border: 1px solid black;
   border-radius: 10px;

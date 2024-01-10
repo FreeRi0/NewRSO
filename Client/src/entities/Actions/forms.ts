@@ -25,3 +25,15 @@ export const actionForm = {
 export const time_data = {
 
 }
+
+export const createForm = {
+    format: String,
+    direction: String,
+    status: String,
+    name: String,
+    scale: String,
+    participants_number: Number,
+    description: String,
+    application_type: String,
+
+}
