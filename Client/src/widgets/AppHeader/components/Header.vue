@@ -77,12 +77,13 @@
                         <span v-if="user?.user_region?.reg_region"
                             >{{
                                 regionals[user?.user_region?.reg_region - 1]
-                                    .name
+                                    ?.name
                             }}
                         </span>
+
                         <span v-else>Выберите региональное отделение</span>
                     </button>
-
+                    <!-- <p>{{  user?.user_region?.reg_region}}</p> -->
                     <div
                         class="header__overlay"
                         @click="show = !show"
@@ -120,7 +121,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- <router-link  :to="{ name: 'userpage', params: { id: user.id } }"></router-link> -->
+               <!-- <p>id: {{ user.id }}</p> -->
+                <!-- <router-link  :to="{ name: 'userpage', params: { id: user.id } }">Моя страница</router-link> -->
                 <div class="nav-user__menu user-menu" v-if="user">
                     <Dropdown
                         :items="userPages"
@@ -128,10 +130,6 @@
                         :url="user?.media?.photo"
                         desc="Фотография пользователя"
                     />
-
-                    <!-- <img :src="user?.media?.photo" alt="userphoto"> -->
-                    <!--
-                    <Button v-if="user" @click="LogOut" label="Выйти"></Button> -->
                 </div>
             </nav>
         </header>
@@ -148,9 +146,10 @@ import { ref, onMounted, watch } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const router = useRouter();
-
+const user = ref({});
 // const route = useRoute();
-// let id = route.params.id;
+// let id = route.params.id
+let { id, ...rest } = user;
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
@@ -161,8 +160,10 @@ const pages = ref([
     { title: 'Центральный штаб', link: '/CentralHQ' },
 ]);
 
+
 const userPages = ref([
-    { title: 'Моя страница', link: `/UserPage/` },
+
+    { title: 'Моя страница', link: `/UserPage/${id}/` },
     { title: 'Мой отряд', link: '/allSquads' },
     { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
     { title: 'Местный штаб', link: '/LocalHeadquarters' },
@@ -180,9 +181,7 @@ const userPages = ref([
 let show = ref(false);
 
 const isOpen = ref(false);
-const user = ref({
-    region: null,
-});
+
 
 const navMenu = ref(null);
 
@@ -210,6 +209,8 @@ const getUser = async () => {
             console.log('an error occured ' + error);
         });
 };
+
+console.log('dddddd', id)
 
 const updateRegion = async () => {
     await HTTP.patch('/rsousers/me/region/', {
