@@ -73,37 +73,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Что такое РСО?"
-                                    ></v-list-item>
-                                    <!-- <v-icon>
-                                                                   
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="32"
-                                            height="32"
-                                            viewBox="0 0 32 32"
-                                            fill="none"
-                                        >
-                                                                           
-                                            <circle
-                                                cx="16"
-                                                cy="16"
-                                                r="15.5"
-                                                fill="#1F7CC0"
-                                                stroke="#1F7CC0"
-                                            />
-                                                                           
-                                            <path
-                                                d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                stroke="white"
-                                                stroke-width="1.5"
-                                                stroke-miterlimit="10"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            />
-                                                                       
-                                        </svg>
-                                                               
-                                    </v-icon> -->
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -125,12 +147,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -142,7 +158,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Где я могу узнать, действует ли движение РСО в моем регионе и какие существуют направления работы?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -152,18 +220,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -175,7 +231,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Могу ли я вступить в РСО, если мне нет 18 лет?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -185,18 +293,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -208,7 +304,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Хочу узнать подробнее о структуре организации, правах, обязанностях членов РСО"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -217,18 +365,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -241,7 +377,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Для чего нужен членский взнос?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -251,18 +439,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -275,7 +451,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как просмотреть информацию об оплате членского взноса?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -286,18 +514,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -310,7 +526,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Что означают аббревиатуры ЛСО, Штаб СО ОО?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -320,18 +588,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -344,7 +600,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Что такое линейный студенческий отряд?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -362,18 +670,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -453,7 +749,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как зарегистрироваться в РСО?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -466,18 +814,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -490,7 +826,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как изменить пароль?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -502,18 +890,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -526,7 +902,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как изменить логин?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -539,18 +967,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -563,7 +979,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как восстановить пароль?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -577,18 +1045,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -601,7 +1057,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как изменить персональные данные?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -613,18 +1121,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -637,7 +1133,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как настроить приватность данных?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -649,18 +1197,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -673,7 +1209,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Для чего нужна верификация данных?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -686,18 +1274,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -710,7 +1286,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как пройти верификацию данных?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -729,18 +1357,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -820,7 +1436,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как создать отряд?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -832,18 +1500,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -856,7 +1512,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как редактировать данные об отряде?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -868,18 +1576,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -892,7 +1588,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как создать штаб?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -905,18 +1653,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -929,7 +1665,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как редактировать данные о штабе?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -941,18 +1729,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -965,7 +1741,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как вступить в отряд?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -980,18 +1808,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -1071,7 +1887,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как создать мероприятие?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -1083,18 +1951,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -1107,7 +1963,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как редактировать данные о мероприятии?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -1120,18 +2028,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -1144,7 +2040,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как зарегистрироваться на участие в мероприятии?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -1178,18 +2126,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -1202,7 +2138,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как отказаться от участия в мероприятии?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -1214,18 +2202,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -1305,7 +2281,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как одобрить/отклонить заявку на участие в мероприятии?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -1319,18 +2347,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -1343,7 +2359,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как одобрить/отклонить заявку на вступление в отряд?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -1357,18 +2425,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -1381,7 +2437,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как одобрить/отклонить заявку на верификацию аккаунта?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -1396,18 +2504,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -1487,7 +2583,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как пользоваться реестром участников?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -1501,18 +2649,6 @@
                                     </template>
                                 </v-list-group>
                                 <v-card-actions class="form__button-group">
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Назад"
-                                        size="large"
-                                    ></Button>
-                                    <Button
-                                        class="form__button form__button--prev"
-                                        variant="text"
-                                        label="Далее"
-                                        size="large"
-                                    ></Button>
                                 </v-card-actions>
                             </v-list-group>
                         </v-list>
@@ -1525,7 +2661,59 @@
                                     <v-list-item
                                         v-bind="props"
                                         title="Как сформировать справку о членстве в РСО?"
-                                    ></v-list-item>
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
@@ -1560,15 +2748,16 @@
 </template>
 
 <script setup>
-import { Button } from '@shared/components/buttons';
 </script>
 
 <style lang="scss">
-
 .v-card {
-    width: 1140px;
     margin-top: 10px;
     border-bottom: 1px solid #d9d9d9;
+    box-shadow: none;
+}
+
+.v-card.v-theme--light.v-card--density-default.v-card--variant-elevated.mx-auto {
     box-shadow: none;
 }
 
