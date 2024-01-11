@@ -1,26 +1,14 @@
 <template>
-    <div
+    <districtItem
         v-for="districtHeadquarter in districtHeadquarters"
+        :district-headquarter="districtHeadquarter"
+        :key="districtHeadquarter.id"
         v-if="districtHeadquarters.length > 0"
-    >
-        <router-link
-            class="headquarters-wrapper__item"
-            :to="{ name: 'DistrictHQ', params: { id: districtHeadquarter.id } }"
-        >
-            <div class="round-img">
-                <img :src="districtHeadquarter.emblem" alt="logo" v-if="districtHeadquarter.emblem" />
-                <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
-            </div>
-            <div class="container-headquarters">
-                <p class="headquarters-wrapper__item-title">
-                    {{ districtHeadquarter.name }}
-                </p>
-            </div>
-        </router-link>
-    </div>
+    ></districtItem>
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
+import { districtItem } from '@entities/HeadquartersData/components';
 const props = defineProps({
     districtHeadquarters: {
         type: Array,

@@ -221,15 +221,15 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
-            {
-                path: '/UserPage',
-                name: 'userpaage',
-                component: () =>
-                    import('@pages/UserPage/components/UserPage.vue'),
-                meta: {
-                    label: 'Моя страница',
-                },
-            },
+            // {
+            //     path: '/UserPage',
+            //     name: 'userpaage',
+            //     component: () =>
+            //         import('@pages/UserPage/components/UserPage.vue'),
+            //     meta: {
+            //         label: 'Моя страница',
+            //     },
+            // },
             {
                 path: '/UserPage/:id',
                 name: 'userpage',
@@ -304,6 +304,19 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
+                    label: 'Участнки отряда'
+                },
+            },
+            {
+                path: '/AllParticipants/:id',
+                name: 'allEventMembers',
+                component: () =>
+                    import(
+                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                    ),
+                meta: {
+                    requiresAuth: true,
+                    label: 'Участнки мероприятия'
                 },
             },
             {
@@ -414,9 +427,9 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'
                     ),
-                meta: {
-                    requiresAuth: true,
-                },
+                    meta: {
+                        label: 'Активные заявки',
+                    },
             },
             {
                 path: '/ActiveApplicationsData',

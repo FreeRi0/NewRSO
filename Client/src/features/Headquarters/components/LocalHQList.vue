@@ -1,26 +1,14 @@
 <template>
-    <div
+    <localItem
         v-for="localHeadquarter in localHeadquarters"
+        :local-headquarter="localHeadquarter"
+        :key="localHeadquarter.id"
         v-if="localHeadquarters.length > 0"
-    >
-        <router-link
-            class="headquarters-wrapper__item"
-            :to="{ name: 'LocalHQ', params: { id: localHeadquarter.id } }"
-        >
-            <div class="round-img">
-                <img :src="localHeadquarter.emblem" alt="logo" v-if="localHeadquarter.emblem" />
-                <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
-            </div>
-            <div class="container-headquarters">
-                <p class="headquarters-wrapper__item-title">
-                    {{ localHeadquarter.name }}
-                </p>
-            </div>
-        </router-link>
-    </div>
+    />
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
+import { localItem } from '@entities/HeadquartersData/components';
 const props = defineProps({
     localHeadquarters: {
         type: Array,

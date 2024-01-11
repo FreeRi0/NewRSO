@@ -104,14 +104,31 @@ const isSave = ref(true);
 const educations = ref([
     {
         value: 'all',
-        name: 'all',
+        name: 'Все',
     },
     {
         value: 'detachment_members',
-        name: 'detachment_members',
+        name: 'Члены отряда',
     },
-    { value: 'management_members', name: 'management_members' },
+    { value: 'management_members', name: 'Руководство' },
 ]);
+
+// const educations = ref([
+//     {
+//         value: 'all',
+//         name: 'all',
+//         name: 'Все',
+//     },
+//     {
+//         value: 'detachment_members',
+//         name: 'detachment_members',
+//         value: 'Члены отряда',
+//         name: 'Члены отряда',
+//     },
+//     { value: 'management_members', name: 'management_members' },
+//     { value: 'Руководство', name: 'Руководство' },
+// ]);
+
 
 const privateData = ref({
     privacy_photo: null,
@@ -143,7 +160,7 @@ onMounted(() => {
 
 
 const ChangePrivate = async () => {
-    await HTTP.put('/rsousers/me/privacy/', privateData.value, {
+    await HTTP.patch('/rsousers/me/privacy/', privateData.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -151,7 +168,6 @@ const ChangePrivate = async () => {
     })
         .then((response) => {
             console.log(response.data);
-            isSave.value = false;
             swal.fire({
                 position: 'top-center',
                 icon: 'success',

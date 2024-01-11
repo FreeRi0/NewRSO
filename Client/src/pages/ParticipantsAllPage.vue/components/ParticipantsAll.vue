@@ -3,6 +3,7 @@
         <div class="participants">
             <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="participants-title">Участники ЛСО</h2>
+            <h2 class="participants-title" v-if="event">Участники Мероприятия</h2>
             <div class="participants-tabs">
                 <!-- <v-btn
                     class="participants-tabs__item"
@@ -148,7 +149,11 @@ import { HTTP } from '@app/http';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { useRoute } from 'vue-router';
 // import participants from '@entities/Participants/participants';
-
+const props = defineProps({
+    event: {
+        type: Boolean,
+    },
+});
 const participants = ref([]);
 const participantsVisible = ref(12);
 // const picked = ref(null);
@@ -158,25 +163,47 @@ const position = ref({});
 const route = useRoute();
 const id = route.params.id;
 
-const aboutMembers = async () => {
-    await HTTP.get(`/detachments/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            participants.value = response.data;
-            console.log(response);
+if (props.event) {
+    const eventMembers = async () => {
+        await HTTP.get(`/events/${id}/participants/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-onMounted(() => {
+            .then((response) => {
+                participants.value = response.data;
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    };
+    onMounted(() => {
+    eventMembers();
+});
+} else {
+    const aboutMembers = async () => {
+        await HTTP.get(`/detachments/${id}/members/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+            .then((response) => {
+                participants.value = response.data;
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    };
+    onMounted(() => {
     aboutMembers();
 });
+
+}
+
 
 const pages = [
     { pageTitle: 'Структура', href: '/UserPage' },
@@ -187,7 +214,6 @@ const pages = [
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
-
 
 const vertical = ref(true);
 
