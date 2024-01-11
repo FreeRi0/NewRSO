@@ -1,0 +1,1 @@
+import {default as EditActionPage} from "./components/EditActionPage.vue";
