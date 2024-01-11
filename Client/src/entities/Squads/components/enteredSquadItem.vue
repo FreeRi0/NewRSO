@@ -1,5 +1,7 @@
 <template>
+
 <div class="horizontallso">
+
         <div class="horizontallso__confidant mr-3">
             <input
                 type="checkbox"
@@ -9,7 +11,8 @@
             />
         </div>
 
-        <div class="horizontallso-item__wrapper">
+        <div class="horizontallso-item__wrapper mr-3">
+
             <div class="horizontallso-img">
                 <!-- <img
                     :src="participant.media.photo"
@@ -37,7 +40,7 @@
                 </div> -->
             </div>
         </div>
-        <div class="horizontallso-item__wrapper">
+        <div class="horizontallso-item__wrapper ">
             <div class="horizontallso-img">
                 <img
                     :src="detachment.emblem"

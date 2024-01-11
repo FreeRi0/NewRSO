@@ -147,9 +147,9 @@ import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const router = useRouter();
 const user = ref({});
-// const route = useRoute();
-// let id = route.params.id
-let { id, ...rest } = user;
+const route = useRoute();
+let id = route.params.id
+// let { id, ...rest } = user;
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
@@ -163,18 +163,18 @@ const pages = ref([
 
 const userPages = ref([
 
-    { title: 'Моя страница', link: `/UserPage/${id}/` },
-    { title: 'Мой отряд', link: '/allSquads' },
-    { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
-    { title: 'Местный штаб', link: '/LocalHeadquarters' },
-    { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
-    { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '/CentralHQ' },
-    { title: 'Активные заявки', link: '/active' },
-    { title: 'Поиск участников', link: '#' },
-    { title: 'Членский взнос', link: '/contributorPay' },
-    { title: 'Оформление справок', link: '/references' },
-    { title: 'Настройки профиля', link: '/PersonalData' },
+    // { title: 'Моя страница', name: 'userpage', params: id },
+    // { title: 'Мой отряд', link: '/allSquads' },
+    // { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
+    // { title: 'Местный штаб', link: '/LocalHeadquarters' },
+    // { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
+    // { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
+    // { title: 'Центральный штаб', link: '/CentralHQ' },
+    { title: 'Активные заявки', name: 'active' },
+    // { title: 'Поиск участников', link: '#' },
+    { title: 'Членский взнос', name: 'contributorPay' },
+    { title: 'Оформление справок', name: 'references' },
+    { title: 'Настройки профиля', name: 'personaldata' },
     { title: 'Выйти из ЛК', button: true },
 ]);
 

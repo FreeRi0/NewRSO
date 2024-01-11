@@ -31,7 +31,7 @@
         <div class="sort-select ml-3">
             <Select
                 variant="outlined"
-                v-model="participant.membership_fee"
+                v-model="participantItem.membership_fee"
                 :names="filteredPayed"
             ></Select>
         </div>
@@ -50,6 +50,7 @@
             @click="ChangeStatus(participant.id)"
         ></Button>
     </div>
+    <p v-if="isError" class="error">{{ isError.detail }}</p>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
@@ -74,6 +75,8 @@ const props = defineProps({
         require: true,
     },
 });
+
+const isError = ref([]);
 
 // const route = useRoute();
 // const id = route.params.id;
@@ -102,7 +105,7 @@ watch(selectedPeoples, (newChecked) => {
 
 const ChangeStatus = async () => {
     let { id, ...rest } = props.participant;
-    HTTP.post(`rsousers/${id}/membership_fee_status/`, rest, {
+    HTTP.post(`rsousers/${id}/membership_fee_status/`, participantItem.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

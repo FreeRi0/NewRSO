@@ -42,10 +42,30 @@
             </div>
         </div>
         <div v-else-if="picked == 'Заявка на вступление в отряд'">
-            <div class="contributor-sort__all mb-8"></div>
-            <ActiveSquads
-                :detachments="detachments"
-            />
+            <div class="contributor-sort__all mb-8">
+                <input
+                    type="checkbox"
+                    @click="selectSquads"
+                    v-model="checkboxAllSquads"
+                />
+            </div>
+            <div class="classes">
+                <div>Боец</div>
+                <div>Отряд</div>
+            </div>
+            <ActiveSquads @change="changeSquads" :detachments="detachments" />
+            <div class="selectedItems" v-if="selectedDetch.length > 0">
+                <h3>Итого: {{ selectedDetch.length }}</h3>
+
+                <CheckedSquadsList
+                    @change="changeSelectedSquads"
+                    :detachments="selectedDetch"
+                ></CheckedSquadsList>
+            </div>
+        </div>
+
+        <div v-else-if="picked == 'Заявка на участие в мероприятии'">
+            <p class="text-h3">Блок в разработке.....</p>
         </div>
     </div>
 </template>
@@ -57,6 +77,7 @@ import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { Button } from '@shared/components/buttons';
 import { activeApplications } from '@features/ActiveApplications/components';
 import { checkedAppList } from '@features/ActiveApplications/components';
+import { CheckedSquadsList } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
 
 const picked = ref('');
@@ -83,8 +104,10 @@ const pages = ref([
 const participants = ref([]);
 const detachments = ref([]);
 const checkboxAll = ref(false);
+const checkboxAllSquads = ref(false);
 const participantsVisible = ref(12);
 const selectedPeoples = ref([]);
+const selectedDetch = ref([]);
 const step = ref(12);
 
 let tempParticipants = participants.value;
@@ -92,7 +115,7 @@ let tempParticipants = participants.value;
 tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
 const viewParticipants = async () => {
-    await HTTP.get('/detachments/', {
+    await HTTP.get('/detachments/1/verifications/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -138,6 +161,10 @@ const changeSelected = (changePeoples) => {
     selectedPeoples.value = changePeoples;
 };
 
+const changeSquads = (selectedSquads) => {
+    console.log('fff', selectedSquads);
+    selectedDetch.value = selectedSquads;
+};
 
 const select = (event) => {
     selectedPeoples.value = [];
@@ -182,6 +209,17 @@ const select = (event) => {
     input {
         width: 24px;
         height: 24px;
+    }
+}
+
+.classes {
+    margin-left: 68px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    p{
+        font-size: 16px;
+        color: #35383F;
     }
 }
 </style>
