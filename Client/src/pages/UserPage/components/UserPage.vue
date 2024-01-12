@@ -8,7 +8,6 @@
             </h2>
             <BannerComp
                 :user="user"
-
                 :education="education"
                 :user_region="region"
                 :edited="false"

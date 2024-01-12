@@ -2,7 +2,7 @@
     <div v-for="headquarter in headquarters" v-if="headquarters.length > 0">
         <router-link
             class="headquarters-wrapper__item"
-            :to="{ name: 'HQ', params: { id: headquarter.id } }"
+            :to="{ name: 'HQ', params: { id: headquarter.id, label: `${headquarter.name}` } }"
         >
             <div class="round-img">
                 <img :src="headquarter.emblem" alt="logo" v-if="headquarter.emblem" />

@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <!-- ЗДЕСЬ ПОМЕНЯЛА -->
+        <Breadcrumbs></Breadcrumbs>
         <h1 class="title title--hq">Местный штаб</h1>
         <BannerHQ
             v-if="showHQ"
@@ -58,7 +59,6 @@ import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
-// banner condition
 const showLocalHQ = ref(true);
 const showHQ = ref(false);
 const showDistrictHQ = ref(false);
@@ -86,21 +86,21 @@ const aboutlocalHQ = async () => {
         });
 };
 
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const aboutEduc = async () => {
+//     await HTTP.get(`/eduicational_institutions/${id}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             educt.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
 const aboutMembers = async () => {
     await HTTP.get(`/locals/${id}/members/`, {
@@ -122,7 +122,7 @@ onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutlocalHQ();
         aboutMembers();
-        aboutEduc();
+        // aboutEduc();
     }
 });
 watch(
@@ -132,21 +132,21 @@ watch(
         id = newId;
         aboutlocalHQ();
         aboutMembers();
-        aboutEduc();
+        // aboutEduc();
     },
 );
 
 onMounted(() => {
     aboutlocalHQ();
     aboutMembers();
-    aboutEduc();
+    // aboutEduc();
 });
 
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Местные штабы', href: '/LocalHeadquarters' },
-    { pageTitle: `${localHeadquarter.name}`, href: '#' },
-];
+// const pages = [
+//     { pageTitle: 'Структура', href: '#' },
+//     { pageTitle: 'Местные штабы', href: '/LocalHeadquarters' },
+//     { pageTitle: `${localHeadquarter.name}`, href: '#' },
+// ];
 </script>
 <style scoped lang="scss">
 .title {

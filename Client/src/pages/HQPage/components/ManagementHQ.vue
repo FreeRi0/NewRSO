@@ -69,6 +69,7 @@ const aboutPosition = async () => {
             console.log('an error occured ' + error);
         });
 };
+
 onMounted(() => {
     aboutPosition();
 });

@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <Breadcrumbs></Breadcrumbs>
         <h1 class="title title--hq">Центральный штаб</h1>
         <BannerHQ
             v-if="showHQ"
@@ -57,29 +57,26 @@ import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
-// banner condition
 const showRegionalHQ = ref(false);
 const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showHQ = ref(false);
 
-const centralHeadquarters = ref({});
 const centralHeadquarter = ref({});
 const member = ref([]);
 const commander = ref({});
 const route = useRoute();
 let id = route.params.id;
-// let id = 1;
 
 const aboutCentralHQs = async () => {
-    await HTTP.get(`/centrals/`, {
+    await HTTP.get(`/centrals/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            centralHeadquarters.value = response.data;
+            centralHeadquarter.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
@@ -103,7 +100,7 @@ const aboutCentralHQs = async () => {
 // };
 
 const aboutMembers = async () => {
-    await HTTP.get(`/centrals/${id}/members/`, {
+    await HTTP.get('/centrals/1/members/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -144,10 +141,10 @@ onMounted(() => {
     aboutMembers();
 });
 
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Центральный штаб', href: '#' },
-];
+// const pages = [
+//     { pageTitle: 'Структура', href: '#' },
+//     { pageTitle: 'Центральный штаб', href: '#' },
+// ];
 </script>
 <style lang="scss" scoped>
 .title {

@@ -86,21 +86,21 @@ const aboutDistrictHQ = async () => {
         });
 };
 
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const aboutEduc = async () => {
+//     await HTTP.get(`/eduicational_institutions/${id}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             educt.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
 const aboutMembers = async () => {
     await HTTP.get(`/districts/${id}/members/`, {
@@ -122,7 +122,7 @@ onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutDistrictHQ();
         aboutMembers();
-        aboutEduc();
+        // aboutEduc();
     }
 });
 watch(
@@ -132,21 +132,15 @@ watch(
         id = newId;
         aboutDistrictHQ();
         aboutMembers();
-        aboutEduc();
+        // aboutEduc();
     },
 );
 
 onMounted(() => {
     aboutDistrictHQ();
     aboutMembers();
-    aboutEduc();
+    // aboutEduc();
 });
-
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Окружные штабы', href: '#' },
-    { pageTitle: `${districtHeadquarter.name}`, href: '#' },
-];
 </script>
 <style lang="scss" scoped>
 .title {

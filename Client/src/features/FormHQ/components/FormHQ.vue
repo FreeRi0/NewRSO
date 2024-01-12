@@ -7,14 +7,12 @@
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
-                    <template v-slot="{ expanded }">
                         <v-row no-gutters>
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
                             </v-col>
                             <!-- <div v-if="">обязательно для заполнения</div> -->
                         </v-row>
-                    </template>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
                             <svg
@@ -938,6 +936,7 @@ const resetEmblem = () => {
 
     emit('resetEmblem', fileEmblem.value);
 };
+
 //--Добавление баннера-----------------------------------------------------------------------------
 const fileBanner = ref(props.fileBanner);
 const urlBanner = ref(null);

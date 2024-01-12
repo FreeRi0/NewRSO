@@ -14,6 +14,7 @@
                 {{ route.meta.label }}
             </router-link>
         </li>
+        {{label}}
     </ul>
 </template>
 
@@ -25,9 +26,16 @@ import { useRoute } from 'vue-router';
 //     items: Array,
 // });
 
+const props = defineProps({
+    label: {
+        type: String
+    },
+});
+
 const route = useRoute();
 const routes = route.matched;
 console.log(routes);
+
 </script>
 
 <style lang="scss" scoped>

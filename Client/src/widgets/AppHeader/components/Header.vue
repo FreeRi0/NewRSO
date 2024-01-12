@@ -162,7 +162,7 @@ const pages = ref([
     { title: 'Местные штабы', link: '/LocalHeadquarters' },
     { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
     { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '/CentralHQ' },
+    { title: 'Центральный штаб', link: '/CentralHQ/1' },
 ]);
 
 const userPages = ref([
@@ -172,7 +172,7 @@ const userPages = ref([
     { title: 'Местный штаб', link: '/LocalHeadquarters' },
     { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
     { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '/CentralHQ' },
+    { title: 'Центральный штаб', link: '/CentralHQ/1' },
     { title: 'Активные заявки', link: '/active' },
     { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', link: '/contributorPay' },
