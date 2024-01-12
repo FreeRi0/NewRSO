@@ -1,7 +1,7 @@
 <template>
     <div class='postcard' @click="RouteToAction">
         <section class='postcard-counts'>
-            <img src="{{action.banner}}" class='postcard-image' alt='Изображение'/>
+            <img :src="action.banner" class='postcard-image' alt='Изображение'/>
             <p class='postcard-title'>{{action.name}}</p>
             <p class='postcard-title'>{{action.description}}</p>
         </section>
