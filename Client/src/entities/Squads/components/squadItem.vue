@@ -1,24 +1,25 @@
 <template lang>
     <div class="squads-wrapper__item">
-        <div class="round-img">
-            <img :src="'./assets/logo/' + squad.image" alt="logo" />
-        </div>
-        <div class="container-squad">
-            <p class="squads-wrapper__item-category">
-                {{ squad.desc }}
-            </p>
-            <p class="squads-wrapper__item-title">{{ squad.title }}</p>
-        </div>
+        <router-link :to="{ name: 'lso', params: { id: squad.id } }">
+            <div class="round-img">
+                <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
+                <img src="@app/assets/user-avatar.png" alt="logo" v-else />
+            </div>
+            <div class="container-squad">
+                <p class="squads-wrapper__item-title normal-title">
+                    {{ squad.name }}
+                </p>
+            </div>
+        </router-link>
     </div>
 </template>
 <script setup>
-
 const props = defineProps({
-  squad: {
-   type: Object,
-   required: true
-  }
-})
+    squad: {
+        type: Object,
+        required: true,
+    },
+});
 </script>
 <style lang="scss">
 .round-img {

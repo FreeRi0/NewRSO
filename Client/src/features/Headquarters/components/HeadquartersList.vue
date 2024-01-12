@@ -1,23 +1,14 @@
 <template>
-    <div v-for="headquarter in headquarters" v-if="headquarters.length > 0">
-        <router-link
-            class="headquarters-wrapper__item"
-            :to="{ name: 'HQ', params: { id: headquarter.id } }"
-        >
-            <div class="round-img">
-                <img :src="headquarter.emblem" alt="logo" v-if="headquarter.emblem" />
-                <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
-            </div>
-            <div class="container-headquarters">
-                <p class="headquarters-wrapper__item-title">
-                    {{ headquarter.name }}
-                </p>
-            </div>
-        </router-link>
-    </div>
+    <educationItem
+        v-for="headquarter in headquarters"
+        :headquarter="headquarter"
+        :key="headquarter.id"
+        v-if="headquarters.length > 0"
+    />
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
+import { educationItem } from '@entities/HeadquartersData';
 const props = defineProps({
     headquarters: {
         type: Array,

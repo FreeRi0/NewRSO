@@ -17,9 +17,10 @@
             <div class="horizontallso-img">
                 <img :src="participant.media.photo" alt="logo" v-if="participant.media" />
                 <img
+                v-else
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
                     alt="photo"
-                    v-else
+
                 />
             </div>
             <div class="containerHorizontal">
@@ -38,11 +39,10 @@
             </div>
         </div>
     </div>
-    <!-- <pre>{{  }}</pre> -->
 </template>
 
 <script setup>
-// import referenceItem from '@entities/ReferencesPeoples/components';
+
 
 import { ref, watch } from 'vue';
 
@@ -65,12 +65,6 @@ const props = defineProps({
 
 const selectedPeoples = ref(props.selectedParticipants);
 
-// watch(selectedPeoples,
-//  (newChecked) =>{
-//     if(!newChecked) return;
-//     emit('change', selectedPeoples)
-//     console.log(newChecked);
-//  });
 
 watch(
     () => props.selectedParticipants,
@@ -80,17 +74,6 @@ watch(
     },
 );
 
-// const checkboxAll = ref(false);
-
-// const select = () => {
-//     selectedPeoples.value = [];
-
-//     if (checkboxAll.value) {
-//         for (participant in participants) {
-//             selectedPeoples.value.push(participants[participant].id.toString());
-//         }
-//     }
-// };
 </script>
 
 <style lang="scss" scoped>

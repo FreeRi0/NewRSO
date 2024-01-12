@@ -17,11 +17,17 @@
                     name="surname"
                     v-model:value.trim="form.last_name"
                 />
+                <p class="error" v-if="isError.last_name">
+                    {{ isError.last_name }}
+                </p>
                 <Input
                     placeholder="Имя"
                     name="name"
                     v-model:value.trim="form.first_name"
                 />
+                <p class="error" v-if="isError.first_name">
+                    {{ isError.first_name }}
+                </p>
                 <Input
                     placeholder="Отчество(При наличии)"
                     name="patronomyc"
@@ -39,28 +45,46 @@
                     type="email"
                     v-model:value.trim="form.email"
                 />
+                <p class="error" v-if="isError.email">
+                    {{ isError.email }}
+                </p>
                 <Input
                     name="date"
                     type="date"
                     v-model:value="form.date_of_birth"
                 />
+                <p class="error" v-if="isError.date_of_birth">
+                    {{ isError.date_of_birth }}
+                </p>
                 <Input
                     placeholder="Придумайте логин"
                     name="login"
                     v-model:value.trim="form.username"
                 />
+                <p class="error" v-if="isError.username">
+                    {{ isError.username }}
+                </p>
                 <Input
                     type="password"
                     placeholder="Придумайте пароль"
                     name="password"
                     v-model:value.trim="form.password"
                 ></Input>
+                <p class="error" v-if="isError.password">
+                    {{ isError.password }}
+                </p>
                 <Input
                     type="password"
                     placeholder="Повторите пароль"
                     name="confirm"
                     v-model:value.trim="form.re_password"
                 ></Input>
+                <p class="error" v-if="isError.re_password">
+                    {{ isError.re_password }}
+                </p>
+                <p class="error" v-else-if="isError.non_field_errors">
+                    Пароли не совпадают
+                </p>
                 <v-checkbox
                     v-model="form.personal_data_agreement"
                     label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных."
@@ -90,23 +114,31 @@
     margin: 60px auto;
     margin-bottom: 15px;
 }
-
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+}
 .v-card {
-   padding-left: 100px;
-   padding-right: 100px;
- }
- .v-card-title {
-   padding: 0rem 1rem;
-   font-size: 40px;
-   font-weight: 600;
-   font-family: Akrobat;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+.v-card-title {
+    padding: 0rem 1rem;
+    font-size: 40px;
+    font-weight: 600;
+    font-family: Akrobat;
 }
 
 a {
-   text-decoration: underline;
-   font-weight: bold;
-   font-size: 18px;
- }
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 18px;
+}
 </style>
 
 <script setup>
@@ -144,82 +176,7 @@ const form = ref({
 
 const isLoading = ref(false);
 
-// const rules = computed(() => ({
-//     surnameUser: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         minLength: helpers.withMessage(
-//             `Минимальная длина: 2 символа`,
-//             minLength(2),
-//         ),
-//     },
-//     nameUser: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         minLength: helpers.withMessage(
-//             `Минимальная длина: 2 символа`,
-//             minLength(2),
-//         ),
-//     },
-//     emailField: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         email: helpers.withMessage('Вы ввели неверный email', email),
-//     },
-//     loginField: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         minLength: helpers.withMessage(
-//             `Минимальная длина: 5 символа`,
-//             minLength(5),
-//         ),
-//     },
-//     phoneField: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//     },
-//     password: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         minLength: helpers.withMessage(
-//             `Минимальная длина: 5 символов`,
-//             minLength(5),
-//         ),
-//     },
-//     confirmPassword: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         sameAsPassword: helpers.withMessage(
-//             `Пароли не совпадают`,
-//             sameAs(password.value),
-//         ),
-//     },
-// }));
-
-// const v = useVuelidate(rules, {
-//     surnameUser,
-//     nameUser,
-//     password,
-//     confirmPassword,
-//     phoneField,
-//     loginField,
-//     emailField,
-// });
-
+const isError = ref([]);
 const router = useRouter();
 const swal = inject('$swal');
 
@@ -244,8 +201,9 @@ const RegisterUser = async () => {
             router.push('/');
         })
 
-        .catch((error) => {
-            console.error('There was an error!', error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
             isLoading.value = false;
             swal.fire({
                 position: 'top-center',
@@ -257,4 +215,3 @@ const RegisterUser = async () => {
         });
 };
 </script>
-

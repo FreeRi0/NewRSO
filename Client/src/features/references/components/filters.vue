@@ -143,7 +143,6 @@
     </div>
 </template>
 <script setup>
-import participants from '@entities/Participants/participants';
 import { ref, computed } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { RadioButton } from '@shared/components/buttons';

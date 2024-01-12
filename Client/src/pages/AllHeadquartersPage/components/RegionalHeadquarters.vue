@@ -147,9 +147,9 @@ const pages = ref([
     { pageTitle: 'Региональные штабы', href: '/RegionalHeadquarters' },
 ]);
 
-const headquartersVisible = ref(12);
+const headquartersVisible = ref(20);
 
-const step = ref(10);
+const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');

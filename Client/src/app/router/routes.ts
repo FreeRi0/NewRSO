@@ -224,15 +224,15 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
-            {
-                path: '/UserPage',
-                name: 'userpaage',
-                component: () =>
-                    import('@pages/UserPage/components/UserPage.vue'),
-                meta: {
-                    label: 'Моя страница',
-                },
-            },
+            // {
+            //     path: '/UserPage',
+            //     name: 'userpaage',
+            //     component: () =>
+            //         import('@pages/UserPage/components/UserPage.vue'),
+            //     meta: {
+            //         label: 'Моя страница',
+            //     },
+            // },
             {
                 path: '/UserPage/:id',
                 name: 'userpage',
@@ -252,18 +252,26 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/actionSquads',
                 name: 'actionSquads',
-                component: () =>
-                    import(
-                        '@pages/actionSquadsPade/components/actionSquadsPage.vue'
-                    ),
+
+                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
             },
             {
-                path: '/createAction',
-                name: 'createAction',
-                component: () =>
-                    import(
-                        '@pages/CreationActionsPage/components/CreationActionsPage.vue'
-                    ),
+                path: '/actionSquads/:id',
+                name: 'Action',
+                component: () => import('@pages/ActionPage/components/ActionPage.vue'),
+            },
+            {
+                path: "/createAction",
+                name: "createAction",
+                component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
+            },
+            {
+                path: "/EditAction",
+                name: "editAction",
+                component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
+            },
+            
+
             },
             {
                 path: '/AllHeadquarters',
@@ -319,6 +327,19 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
+                    label: 'Участнки отряда'
+                },
+            },
+            {
+                path: '/AllParticipants/:id',
+                name: 'allEventMembers',
+                component: () =>
+                    import(
+                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                    ),
+                meta: {
+                    requiresAuth: true,
+                    label: 'Участнки мероприятия'
                 },
             },
             {
@@ -394,6 +415,24 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
+            {
+                path: '/activeInvents/accountVerification',
+                name: 'accountVerification',
+                component: () =>
+                    import("@entities/Invents/components/AccountVerification.vue"),
+            },
+            {
+                path: '/activeInvents/inventActions',
+                name: 'inventActions',
+                component: () =>
+                    import("@entities/Invents/components/InventActions.vue"),
+            },
+            {
+                path: '/activeInvents/inventSquads',
+                name: 'inventSquads',
+                component: () =>
+                    import("@entities/Invents/components/InventSquads.vue"),
+            },
 
             {
                 path: 'EditingOfCentral',
@@ -429,9 +468,9 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'
                     ),
-                meta: {
-                    requiresAuth: true,
-                },
+                    meta: {
+                        label: 'Активные заявки',
+                    },
             },
         ],
     },

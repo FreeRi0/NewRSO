@@ -5,19 +5,37 @@
         <!-- <BannerComp class="user-metric mt-3">
 
         </BannerComp> -->
-        <BannerSquad :squad="squad" :edict="educt" :member="member"></BannerSquad>
+        <BannerSquad
+            :squad="squad"
+            :edict="educt"
+            :member="member"
+        ></BannerSquad>
         <section class="about-squad">
             <h3>Об отряде</h3>
             <p>
                 {{ squad.about }}
             </p>
-            <!-- <p>222{{ squad }}</p> -->
         </section>
-        <v-row class="mt-8">
-            <v-col v-for="n in 4" :key="n" class="d-flex">
-                <squadPhotos :squad-photos="squad.photo1"></squadPhotos>
-            </v-col>
-        </v-row>
+        <div class="mt-8 d-flex">
+            <squadPhotos
+                class="photo-item"
+                :squad-photos="squad.photo1"
+            ></squadPhotos>
+            <squadPhotos
+                class="photo-item"
+                :squad-photos="squad.photo2"
+            ></squadPhotos>
+            <squadPhotos
+                class="photo-item"
+                :squad-photos="squad.photo3"
+            ></squadPhotos>
+            <squadPhotos
+                class="photo-item"
+                :squad-photos="squad.photo4"
+            ></squadPhotos>
+        </div>
+
+
         <SquadParticipants :squad="squad" :member="member"></SquadParticipants>
     </div>
 </template>
@@ -35,7 +53,6 @@ const member = ref([]);
 const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
-
 
 const aboutSquad = async () => {
     await HTTP.get(`/detachments/${id}/`, {
@@ -97,7 +114,7 @@ watch(
     () => route.params.id,
 
     (newId, oldId) => {
-        id = newId
+        id = newId;
         aboutSquad();
         aboutMembers();
         aboutEduc();
@@ -217,6 +234,10 @@ section.about-squad {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+.photo-item {
+    width: 260px;
+    margin-right: 20px;
 }
 
 @media (max-width: 1110px) {
