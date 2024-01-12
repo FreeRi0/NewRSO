@@ -35,6 +35,7 @@ export default defineConfig({
             getAliasObject('@features', './src/features'),
             getAliasObject('@entities', './src/entities'),
             getAliasObject('@shared', './src/shared'),
+            getAliasObject('@services', './src/services'),
         ],
     },
     css: {

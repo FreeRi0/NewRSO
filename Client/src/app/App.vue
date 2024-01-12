@@ -12,5 +12,4 @@
 import { Header } from '@widgets/AppHeader';
 import { Footer } from '@widgets/AppFooter';
 
-
 </script>
