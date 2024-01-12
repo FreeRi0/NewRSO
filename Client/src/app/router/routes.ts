@@ -266,18 +266,6 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
-                path: '/EditLSO',
-                name: 'EditLSO',
-                component: () =>
-                    import(
-                        '@pages/EditingDetachment/components/EditingDetachment.vue'
-                    ),
-                meta: {
-                    requiresAuth: true,
-                    label: 'ЛСО',
-                },
-            },
-            {
                 path: '/AllHeadquarters',
                 name: 'allheadquarters',
                 component: () =>

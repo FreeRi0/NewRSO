@@ -17,12 +17,16 @@
         border: 1px solid #b6b6b6;
         border-radius: 10px;
         background-color: #ffffff;
+
+        @media (max-width: 768px) {
+            padding: 16px;
+        }
     }
 
     &__field {
         display: flex;
         flex-direction: column;
-        margin-bottom: 24px;
+        margin-bottom: 32px;
 
         &:last-child {
             margin-bottom: 0;
@@ -85,6 +89,12 @@
         border: 1px solid #b6b6b6;
         border-radius: 10px;
         overflow-y: auto;
+
+        &--mobile {
+            @media (max-width: 360px) {
+                min-height: 67px;
+            }
+        }
     }
 
     &__select {
@@ -107,6 +117,23 @@
             font-weight: 400;
         }
     }
+
+    .v-field__field {
+        font-weight: 400;
+        letter-spacing: normal;
+
+        input {
+            @media (max-width: 360px) {
+                padding-right: 15px;
+            }
+        }
+    }
+
+    .v-text-field input.v-field__input {
+        padding: 11px 44px 11px 10px;
+        min-height: 0;
+    }
+
     // .v-select .dropdown-toggle { //не работает
     //     // .v-menu__content {
     //     border: 1px solid #b6b6b6;
@@ -119,9 +146,9 @@
     }
 
     &__select-item:not(:last-child) {
-        //не отрабатывает
+        //не отрабатывает :last-child
         border-bottom: 1px solid #b6b6b6;
-        margin-bottom: 10px;
+        // margin-bottom: 10px;
     }
 
     &__counter {
@@ -140,13 +167,10 @@
         .v-field__field input {
             padding: 8px 20px 8px 10px;
         }
-        // input {
-        //     padding: 8px 20px 8px 10px;
-        // }
     }
 
     &__footnote {
-        margin: 16px 0 8px;
+        margin: 16px 0 0;
         font-size: 14px;
         line-height: 18.5px;
         color: #939393;
@@ -225,8 +249,6 @@
                 display: none;
             }
         }
-
-        
 
         // .v-expansion-panel--active
         //     > .v-expansion-panel-title--active.button-height {
