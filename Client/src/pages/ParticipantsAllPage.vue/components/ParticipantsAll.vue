@@ -14,23 +14,23 @@
                     >{{ category }}</v-btn
                 > -->
 
-                <!-- <div class="d-flex">
+                <div class="d-flex">
                     <Button
                         type="button"
                         label="Уже в отряде"
                         class="contributorBtn"
-                        :class="{ active: picked === is_trusted }"
-                        @click="picked = is_trusted"
+                        :class="{ active: picked === true }"
+                    @click="picked = true"
                     ></Button>
 
                     <Button
                         type="button"
                         label="Ожидают одобрение"
                         class="contributorBtn"
-                        :class="{ active: picked === !is_trusted }"
-                        @click="picked = !is_trusted"
+                        :class="{ active: picked === false }"
+                    @click="picked = false"
                     ></Button>
-                </div> -->
+                </div>
             </div>
             <div class="participants-search">
                 <input
@@ -115,12 +115,15 @@
 
             <div class="participants-wrapper" v-show="vertical">
                 <ParticipantsList
+                v-if="picked === true"
                     :participants="sortedParticipants"
                 ></ParticipantsList>
+                <VerifiedList  v-else="picked === false" :verified="verified"></VerifiedList>
             </div>
 
             <div class="horizontallso" v-show="!vertical">
                 <horizontalParticipantsList
+
                     :participants="sortedParticipants"
                 ></horizontalParticipantsList>
             </div>
@@ -142,6 +145,7 @@ import { Button } from '@shared/components/buttons';
 import {
     ParticipantsList,
     horizontalParticipantsList,
+    VerifiedList
 } from '@features/Participants/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
@@ -159,8 +163,10 @@ const participantsVisible = ref(12);
 // const picked = ref(null);
 
 const step = ref(12);
+const picked = ref(true);
 const position = ref({});
 const route = useRoute();
+const verified = ref([]);
 const id = route.params.id;
 
 if (props.event) {
@@ -198,12 +204,27 @@ if (props.event) {
                 console.log('an error occured ' + error);
             });
     };
+    const aboutVerified = async () => {
+        await HTTP.get(`/detachments/${id}/applications/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+            .then((response) => {
+                verified.value = response.data;
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    };
     onMounted(() => {
     aboutMembers();
+    aboutVerified();
 });
 
 }
-
 
 const pages = [
     { pageTitle: 'Структура', href: '/UserPage' },

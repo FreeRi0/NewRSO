@@ -131,7 +131,7 @@ const viewParticipants = async () => {
 };
 
 const viewDetachments = async () => {
-    await HTTP.get('/detachments/', {
+    await HTTP.get('/detachments/1/applications/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -151,9 +151,17 @@ onMounted(() => {
     viewDetachments();
 });
 
-const changePeoples = (selectedHumans) => {
-    console.log('fff', selectedHumans);
-    selectedPeoples.value = selectedHumans;
+const changePeoples = (CheckedUser, UserId) => {
+    let participant = {};
+    console.log('fff', CheckedUser, UserId);
+    if (CheckedUser) {
+        participant = participants.value.find((item) => item.id == UserId);
+        selectedPeoples.value.push(participant);
+    } else {
+        selectedPeoples.value = selectedPeoples.value.filter(
+            (item) => item.id !== UserId,
+        );
+    }
 };
 
 const changeSelected = (changePeoples) => {
@@ -161,9 +169,17 @@ const changeSelected = (changePeoples) => {
     selectedPeoples.value = changePeoples;
 };
 
-const changeSquads = (selectedSquads) => {
-    console.log('fff', selectedSquads);
-    selectedDetch.value = selectedSquads;
+const changeSquads = (CheckedSquad, SquadId) => {
+    let detachment = {};
+    console.log('fff', CheckedSquad, SquadId);
+    if (CheckedSquad) {
+        detachment = detachments.value.find((item) => item.id == SquadId);
+        selectedDetch.value.push(detachment);
+    } else {
+        selectedDetch.value = selectedDetch.value.filter(
+            (item) => item.id !== SquadId,
+        );
+    }
 };
 
 const select = (event) => {
@@ -217,9 +233,9 @@ const select = (event) => {
     margin-bottom: 12px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    p{
+    p {
         font-size: 16px;
-        color: #35383F;
+        color: #35383f;
     }
 }
 </style>

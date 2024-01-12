@@ -30,9 +30,6 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    image: {
-    type: string
-    },
     position: {
         type: Object,
     },

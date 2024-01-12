@@ -104,8 +104,8 @@ const props = defineProps({
         default: false,
     },
     params: {
-      type: Object,
-      default: () => ({}),
+      type: String,
+    //   default: () => ({}),
     },
     name: {
         type: String,

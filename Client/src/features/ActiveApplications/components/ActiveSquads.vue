@@ -19,8 +19,8 @@ const props = defineProps({
     },
 });
 
-const changeSquads = (selectedSquads) => {
-    emit('change', selectedSquads);
+const changeSquads = (CheckedSquad, SquadId) => {
+    emit('change', CheckedSquad, SquadId);
 };
 </script>
-<style lang="scss"></style>
+

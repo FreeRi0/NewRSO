@@ -26,7 +26,6 @@
                             >
                                 <div
                                     class="squad-participant_box"
-                                    v-if="participant.is_trusted == true"
                                 >
                                     <img
                                         :src="participant.user.avatar.photo"
@@ -63,12 +62,11 @@
                         <ul class="wait_squad">
                             <li
                                 class="squad-participant"
-                                v-for="participant in member.slice(0, 6)"
+                                v-for="participant in isVerified.slice(0, 6)"
                                 v-if="member.length > 0"
                             >
                                 <div
                                     class="squad-participant_box"
-                                    v-if="participant.is_trusted == false"
                                 >
                                     <img
                                         :src="participant.user.avatar.photo"
@@ -88,6 +86,16 @@
                             </li>
                             <h2 v-else>Участников не найдено...</h2>
                         </ul>
+                        <router-link
+                            :to="{
+                                name: 'allparticipants',
+                                params: { id: squad.id },
+                            }"
+                        >
+                            <div class="squad-participants__link">
+                                Показать всех
+                            </div></router-link
+                        >
                     </section>
                 </div>
             </nav>
@@ -101,15 +109,16 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 ;
 const position = ref({});
+const isVerified = ref([]);
 const route = useRoute();
 const id = route.params.id;
 
 const props = defineProps({
-    // name: {
-    //     type: String
-    // },
 
     member: {
+        type: Array,
+    },
+    isVerified: {
         type: Array,
     },
     squad: {
@@ -120,37 +129,21 @@ const props = defineProps({
         type: Object,
     },
 });
-
-// const aboutMembers = async () => {
-//     await HTTP.get(`/detachments/${id}/members/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             member.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-// const aboutSquad = async () => {
-//     await HTTP.get(`/detachments/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             squad.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
+const getVerified = async () => {
+    await HTTP.get(`/detachments/${id}/applications/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            isVerified.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
 const aboutPosition = async () => {
     await HTTP.get(`/positions/${id}/`, {
@@ -168,17 +161,11 @@ const aboutPosition = async () => {
         });
 };
 onMounted(() => {
-    // aboutMembers();
-    // aboutSquad();
     aboutPosition();
+    getVerified();
 });
 
-// member.value = member.value.sort((a, b) => a.is_trusted - b.is_trusted);
-// const lastCategoryIndex = member.value.findIndex(
-//     (item) => item.is_trusted === false,
-// );
 
-// member.value = member.value.filter((item) => item.is_trusted === false)
 </script>
 
 <style scoped lang="scss">

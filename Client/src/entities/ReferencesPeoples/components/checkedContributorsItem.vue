@@ -38,7 +38,7 @@
         <div class="checked__confidant ml-3">
             <input
                 type="checkbox"
-                v-model="selectedPeoples"
+                v-model="checked"
                 :value="participant"
                 @change="(event) => updateMembership(participant, event)"
             />
@@ -58,12 +58,6 @@ import { Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { ref, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
-const emit = defineEmits(['change']);
-
-const updateMembership = (participant, event) => {
-    console.log('dddddddft', participant, event);
-    emit('change', participant, event);
-};
 
 const props = defineProps({
     participant: {
@@ -76,6 +70,13 @@ const props = defineProps({
     },
 });
 
+const emit = defineEmits(['change']);
+const updateMembership = (participant, event) => {
+    console.log('dddddddft', participant, event);
+    emit('change', participant, event);
+};
+
+const checked = ref(true)
 const isError = ref([]);
 
 // const route = useRoute();

@@ -3,7 +3,7 @@
         <div class="horizontallso__confidant mr-3">
             <input
                 type="checkbox"
-                v-model="selectedPeoples"
+                v-model="checked"
                 :value="participant"
                 @change="updateCheck"
             />
@@ -44,13 +44,6 @@
 import { ref, watch } from 'vue';
 
 import { HTTP } from '@app/http';
-
-const emit = defineEmits(['change']);
-
-const updateCheck = (e) => {
-    console.log('dddddd');
-    emit('change', selectedPeoples.value);
-};
 const props = defineProps({
     participant: {
         type: Object,
@@ -61,6 +54,13 @@ const props = defineProps({
         default: () => [],
     },
 });
+
+const emit = defineEmits(['change']);
+const checked = ref(false)
+const updateCheck = (e) => {
+    console.log('dddddd', checked.value);
+    emit('change', checked.value, props.participant.id);
+};
 
 const selectedPeoples = ref(props.selectedParticipants);
 

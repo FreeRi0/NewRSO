@@ -40,7 +40,9 @@
                             </div>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="/actionSquads">Мероприятия</a>
+                            <a class="header__nav-link" href="/actionSquads"
+                                >Мероприятия</a
+                            >
                         </li>
                         <li class="header__nav-item">
                             <a class="header__nav-link" href="/FAQ"
@@ -121,7 +123,7 @@
                         </div>
                     </div>
                 </div>
-               <!-- <p>id: {{ user.id }}</p> -->
+                <!-- <p>id: {{ user.id }}</p> -->
                 <!-- <router-link  :to="{ name: 'userpage', params: { id: user.id } }">Моя страница</router-link> -->
                 <div class="nav-user__menu user-menu" v-if="user">
                     <Dropdown
@@ -142,13 +144,13 @@ import { Button } from '@shared/components/buttons';
 // import { Input } from '@shared/components/inputs';
 import { Select } from '@shared/components/selects';
 import { HTTP } from '@app/http';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const router = useRouter();
 const user = ref({});
 const route = useRoute();
-let id = route.params.id
+let id = route.params.id;
 // let { id, ...rest } = user;
 
 const pages = ref([
@@ -160,16 +162,53 @@ const pages = ref([
     { title: 'Центральный штаб', link: '/CentralHQ' },
 ]);
 
-
-const userPages = ref([
-
-    // { title: 'Моя страница', name: 'userpage', params: id },
-    // { title: 'Мой отряд', link: '/allSquads' },
-    // { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
-    // { title: 'Местный штаб', link: '/LocalHeadquarters' },
-    // { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
-    // { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
-    // { title: 'Центральный штаб', link: '/CentralHQ' },
+const userPages = computed(() => [
+    {
+        title: 'Моя страница',
+        name: 'userpage',
+        params: {
+            id: user.value.id,
+        },
+    },
+    {
+        title: 'Мой отряд',
+        name: 'lso',
+        params: {
+            id: user.value.detachment_id,
+        },
+    },
+    {
+        title: 'Штаб СО ОО',
+        name: 'HQ',
+        params: {
+            id: user.value.educational_headquarter_id,
+        },
+    },
+    {
+        title: 'Местный штаб',
+        name: 'LocalHQ',
+        params: {
+            id: user.value.local_headquarter_id,
+        },
+    },
+    {
+        title: 'Региональный штаб',
+        name: 'RegionalHQ',
+        params: {
+            id: user.value.regional_headquarter_id,
+        },
+    },
+    {
+        title: 'Окружной штаб',
+        name: 'DistrictHQ',
+        params: {
+            id: user.value.district_headquarter_id,
+        },
+    },
+    // { title: 'Центральный штаб',  name: 'CentralHQ',
+    //     params: {
+    //         id: user.value.central_headquarter_id,
+    //     }, },
     { title: 'Активные заявки', name: 'active' },
     // { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', name: 'contributorPay' },
@@ -181,7 +220,6 @@ const userPages = ref([
 let show = ref(false);
 
 const isOpen = ref(false);
-
 
 const navMenu = ref(null);
 
@@ -209,8 +247,7 @@ const getUser = async () => {
             console.log('an error occured ' + error);
         });
 };
-
-console.log('dddddd', id)
+console.log('dddddd', id);
 
 const updateRegion = async () => {
     await HTTP.patch('/rsousers/me/region/', {

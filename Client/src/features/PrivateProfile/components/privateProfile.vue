@@ -15,7 +15,7 @@
                         clearable
                         class="changePrivate"
                         v-model="privateData.privacy_telephone"
-                        :names="educations"
+                        :names="privacies"
                     ></Select>
                     <p class="error" v-if="isError.privacy_telephone">{{ 'Настройка ' +  isError.privacy_telephone }}</p>
                 </div>
@@ -30,7 +30,7 @@
                         clearable
                         class="changePrivate"
                         v-model="privateData.privacy_email"
-                        :names="educations"
+                        :names="privacies"
                     ></Select>
                     <p class="error" v-if="isError.privacy_email">{{ '' +  isError.privacy_email }}</p>
                 </div>
@@ -44,7 +44,7 @@
                         clearable
                         class="changePrivate"
                         v-model="privateData.privacy_social"
-                        :names="educations"
+                        :names="privacies"
                     ></Select>
                     <p class="error" v-if="isError.privacy_social">{{ '' +  isError.privacy_social }}</p>
                 </div>
@@ -57,7 +57,7 @@
                         clearable
                         class="changePrivate"
                         v-model="privateData.privacy_about"
-                        :names="educations"
+                        :names="privacies"
                     ></Select>
                     <p class="error" v-if="isError.privacy_about">{{ '' +  isError.privacy_about }}</p>
                 </div>
@@ -70,7 +70,7 @@
                         clearable
                         class="changePrivate"
                         v-model="privateData.privacy_photo"
-                        :names="educations"
+                        :names="privacies"
                     ></Select>
                     <p class="error" v-if="isError.privacy_photo">{{ '' +  isError.privacy_photo }}</p>
                 </div>
@@ -81,13 +81,6 @@
                     label="Сохранить"
                     color="primary"
                 ></Button>
-                <!-- <Button
-                    v-else
-                    type="button"
-                    @click="updateChangePrivate"
-                    label="Обновить"
-                    color="primary"
-                ></Button> -->
             </form>
         </div>
     </div>
@@ -101,33 +94,17 @@ import { HTTP } from '@app/http';
 const swal = inject('$swal');
 const isError = ref([]);
 const isSave = ref(true);
-const educations = ref([
+const privacies = ref([
     {
         value: 'all',
-        name: 'Все',
+        name: 'all',
     },
     {
         value: 'detachment_members',
-        name: 'Члены отряда',
+        name: 'detachment_members',
     },
-    { value: 'management_members', name: 'Руководство' },
+    { value: 'management_members', name: 'management_members' },
 ]);
-
-// const educations = ref([
-//     {
-//         value: 'all',
-//         name: 'all',
-//         name: 'Все',
-//     },
-//     {
-//         value: 'detachment_members',
-//         name: 'detachment_members',
-//         value: 'Члены отряда',
-//         name: 'Члены отряда',
-//     },
-//     { value: 'management_members', name: 'management_members' },
-//     { value: 'Руководство', name: 'Руководство' },
-// ]);
 
 
 const privateData = ref({
