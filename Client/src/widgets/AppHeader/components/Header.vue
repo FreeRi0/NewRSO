@@ -41,7 +41,7 @@
                         </li>
                         <li class="header__nav-item">
                             <a class="header__nav-link" href="/actionSquads"
-                                >Мероприятия</a
+                                >Мероприятияяя</a
                             >
                         </li>
                         <li class="header__nav-item">
