@@ -1,6 +1,6 @@
-import { patch } from 'node_modules/axios/index.d.cts';
+// import { patch } from 'node_modules/axios/index.d.cts';
 import { type RouteRecordRaw } from 'vue-router';
-import { id } from 'vuetify/locale';
+// import { id } from 'vuetify/locale';
 
 const routes: RouteRecordRaw[] = [
     {
@@ -348,7 +348,7 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
 
-            //----------------------Конец----------------Штабы/Создание/Редактирование---------------------------------------------------------
+            //----------------------Конец----------------Штабы/Создание/Редактирование---------------------------------------------------------96cb9a («.»)
             // {
             //     path: '/UserPage',
             //     name: 'userpaage',
@@ -407,7 +407,7 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
-                    label: 'Участнки отряда',
+                    label: 'Участники отряда',
                 },
             },
             {

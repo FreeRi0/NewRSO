@@ -135,7 +135,6 @@
                                 >Командир штаба:
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                             <Dropdown
                              open-on-clear
                                 id="beast"
@@ -227,7 +226,6 @@
                             <label for="social-media-vk" class="form__label"
                                 >Группа штаба ВКонтакте
                             </label>
-                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                             <TextareaAbout
                                 maxlength="50"
                                 class="form__textarea form__textarea--mobile"
@@ -241,7 +239,6 @@
                             <label for="social-media-te" class="form__label"
                                 >Группа штаба в Телеграм
                             </label>
-                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                            <TextareaAbout
                                 maxlength="50"
                                 class="form__textarea form__textarea--mobile"
@@ -251,7 +248,6 @@
                                 v-model:value="headquarter.social_tg"
                             ></TextareaAbout>
                         </div>
-                        <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                         <div class="form__field" v-if="participants">
                             <p class="form__label">
                                 Назначить на должность
@@ -279,7 +275,7 @@
                                 :submited="submited"
                                 @update-member="onUpdateMember"
                             ></MembersList>
-                        </div>
+                        </div> -->
                     </div>
 
                     <v-card-actions class="form__button-group">
@@ -368,7 +364,6 @@
                     <div class="form__field-group">
                         <div class="form__field">
                             <label for="hq-slogan" class="form__label">Девиз штаба</label>
-                          <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                            <TextareaAbout
                                 maxlength="100"
                                 class="form__textarea form__textarea--mobile"
@@ -518,7 +513,6 @@
                                     />
                                 </div>
                             </div>
-                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                             <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
@@ -647,7 +641,6 @@
                                     />
                                 </div>
                             </div>
-                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                             <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
@@ -687,7 +680,6 @@ import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 
 import { useVuelidate } from '@vuelidate/core';
-// УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
 import { HTTP } from '@app/http';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -703,7 +695,6 @@ import {
 
 const emit = defineEmits([
     'update:value',
-    // УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
     'updateMember',
     'changeHeadquarter',
     'selectFile',
@@ -770,7 +761,6 @@ const showButtonPrev = computed(() => {
 //-----------------------------------------------------------------------
 const members = ref([]);
 
-// УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
 const route = useRoute();
 let id = route.params.id;
 

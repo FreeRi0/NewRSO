@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <Breadcrumbs :label="headquarter.name"></Breadcrumbs>
+        <!-- <Breadcrumbs :items="pages"></Breadcrumbs> -->
         <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
         <BannerHQ
             v-if="showHQ"

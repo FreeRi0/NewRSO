@@ -73,6 +73,7 @@
                                 >Наименование штаба
                                 <sup class="valid-red">*</sup>
                             </label>
+                            <!-- в v-model добавила headquarter -->
                             <Input
                                 id="name-hq"
                                 class="form__input"
@@ -508,11 +509,10 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form__footnote"
+                            <span class="form-field__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
-
                         <div class="form__field photo-add">
                             <p class="form__label">Добавьте баннер</p>
                             <div class="photo-add__box photo-add__box--banner">
@@ -636,7 +636,7 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form__footnote"
+                            <span class="form-field__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
@@ -676,7 +676,7 @@ import { Icon } from '@iconify/vue';
 
 import { useVuelidate } from '@vuelidate/core';
 import { HTTP } from '@app/http';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 import {
     helpers,
