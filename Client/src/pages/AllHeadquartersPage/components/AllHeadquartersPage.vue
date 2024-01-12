@@ -165,9 +165,9 @@ const pages = ref([
     { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
 ]);
 
-const headquartersVisible = ref(1);
+const headquartersVisible = ref(20);
 
-const step = ref(3);
+const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
