@@ -87,51 +87,7 @@
                 </div>
 
                 <div class="sort-filters">
-                    <div class="sort-select">
-                        <sortByEducation
-                            class="education"
-                            v-model="selectedSort"
-                            :options="educations"
-                        ></sortByEducation>
-                    </div>
                     <div class="squads-sort">
-                        <div class="sort-layout">
-                            <Button
-                                v-if="vertical"
-                                type="button"
-                                class="dashboard"
-                                icon="icon"
-                                color="white"
-                                @click="showVertical"
-                            >
-                            </Button>
-                            <Button
-                                v-else="!vertical"
-                                type="button"
-                                class="dashboardD"
-                                icon="icon"
-                                color="white"
-                                @click="showVertical"
-                            >
-                            </Button>
-                            <Button
-                                v-if="!vertical"
-                                type="button"
-                                class="menuuA"
-                                icon="icon"
-                                color="white"
-                                @click="showVertical"
-                            ></Button>
-                            <Button
-                                v-else="vertical"
-                                type="button"
-                                class="menuu"
-                                icon="icon"
-                                color="white"
-                                @click="showVertical"
-                            ></Button>
-                        </div>
-
                         <div class="sort-filters">
                             <div class="sort-select">
                                 <Select
@@ -161,26 +117,25 @@
                             ></Button>
                         </div>
                     </div>
-
-                    <div class="squads-wrapper" v-show="vertical">
-                        <squadsList :squads="sortedSquads"></squadsList>
-                    </div>
-
-                    <div class="horizontal" v-show="!vertical">
-                        <horizontalList :squads="sortedSquads"></horizontalList>
-                    </div>
-                    <Button
-                        @click="squadsVisible += step"
-                        v-if="squadsVisible < squads.length"
-                        label="Показать еще"
-                    ></Button>
-                    <Button
-                        @click="squadsVisible -= step"
-                        v-else
-                        label="Свернуть все"
-                    ></Button>
                 </div>
             </div>
+            <div class="squads-wrapper" v-show="vertical">
+                <squadsList :squads="sortedSquads"></squadsList>
+            </div>
+
+            <div class="horizontal" v-show="!vertical">
+                <horizontalList :squads="sortedSquads"></horizontalList>
+            </div>
+            <Button
+                @click="squadsVisible += step"
+                v-if="squadsVisible < squads.length"
+                label="Показать еще"
+            ></Button>
+            <Button
+                @click="squadsVisible -= step"
+                v-else
+                label="Свернуть все"
+            ></Button>
         </div>
     </div>
 </template>
