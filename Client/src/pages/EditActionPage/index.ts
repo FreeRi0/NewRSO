@@ -1,1 +1,1 @@
-import {default as EditActionPage} from "./components/EditActionPage.vue";
+export {default as EditActionPage} from "./components/EditActionPage.vue";
