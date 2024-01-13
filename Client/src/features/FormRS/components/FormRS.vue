@@ -86,7 +86,7 @@
                                 {{ counterName }} / 100
                             </div>
                         </div>
-                        <div class="form__field">
+                        <dwiv class="form__field">
                             <label for="district_headquarter"
                                 >Выберите окружной штаб
                                 <sup class="valid-red">*</sup>
@@ -99,7 +99,7 @@
                                 v-model="headquarter.district_headquarter"
                                 address="districts/"
                             ></Select>
-                        </div>
+                        </dwiv>
                         <div class="form__field">
                             <label for="region"
                                 >Выберите регион
@@ -373,7 +373,7 @@
                                 />
                             </div>
 
-                            <div class="form__field form_width">
+                            <di v class="form__field form_width">
                                 <label for="conference_date"
                                     >Дата учредительной конференции
                                     регионального штаба
@@ -386,7 +386,7 @@
                                     name="conference_date"
                                     v-model:value="headquarter.conference_date"
                                 />
-                            </div>
+                            </di>
                             <div class="form__field form_width">
                                 <label for="registry_number"
                                     >Регистрационный номер в реестре молодежных
@@ -493,13 +493,13 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="hq-slogan">Девиз штаба</label>
+                            <label for="slogan">Девиз штаба</label>
                             <Input
                                 class="form__input"
                                 type="text"
-                                id="hq-slogan"
+                                id="slogan"
                                 placeholder="Например, через тернии к звездам"
-                                name="hq_slogan"
+                                name="slogan"
                                 v-model:value="headquarter.slogan"
                                 :maxlength="100"
                             />
@@ -800,7 +800,7 @@
 </template>
 
 <script setup>
-import { ref, computed, inject } from 'vue';
+import { ref, computed, inject, onMounted } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Avatar } from '@shared/components/imagescomp';
@@ -858,6 +858,7 @@ const props = defineProps({
         type: String,
         default: null,
     },
+
 });
 
 const headquarter = ref(props.headquarter);
@@ -879,10 +880,10 @@ const counterRequisites = computed(() => {
     return headquarter.value.requisites.length || 0;
 });
 const counterSlogan = computed(() => {
-    return headquarter.value.slogan.length || 0;
+    return headquarter.value?.slogan?.length || 0;
 });
 const counterAbout = computed(() => {
-    return headquarter.value.about.length || 0;
+    return headquarter.value?.about?.length || 0;
 });
 //----------------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -987,6 +988,10 @@ const resetBanner = () => {
 </script>
 
 <style lang="scss" scoped>
+.form__field {
+    margin-bottom: 0;
+}
+
 .form-button {
     width: 132px;
     min-height: 52px;
@@ -1052,5 +1057,6 @@ const resetBanner = () => {
 
 .form_width {
     width: 46%;
+    margin-top: auto;
 }
 </style>

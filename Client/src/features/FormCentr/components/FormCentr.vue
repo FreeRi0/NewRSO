@@ -934,5 +934,14 @@ const resetBanner = () => {
 .date_central_wrap {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.form_width .form-input {
+    margin-top: auto;
+}
+
+.form__field.form_width {
+    margin-bottom: 0;
 }
 </style>

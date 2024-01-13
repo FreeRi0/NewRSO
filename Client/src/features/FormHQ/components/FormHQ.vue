@@ -981,4 +981,3 @@ const resetBanner = () => {
     }
 }
 </style>
-@shared/components/selects/inputs@shared/components/selects/inputs

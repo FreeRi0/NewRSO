@@ -105,7 +105,7 @@ const changeHeadquarter = async () => {
     formData.append('emblem', fileEmblem.value);
     formData.append('banner', fileBanner.value);
 
-    HTTP.put(`/regionals/${id}/`, formData, {
+    HTTP.patch(`/regionals/${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
