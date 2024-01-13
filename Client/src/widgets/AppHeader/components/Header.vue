@@ -49,6 +49,9 @@
                                 >Полезная информация</a
                             >
                         </li>
+                        <li class="header__nav-item">
+                            <a class="header__nav-link" href="#">КОНКУРС!</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -69,12 +72,13 @@
 
                 <div class="nav-user__location" v-if="user">
                     <button class="nav-user__button" @click="show = !show">
-                        <!--прописать в span кнопки логику изменения ее названия-->
-
-                        <!-- <span
-                            >{{ user?.user_region?.reg_town }} региональное
-                            отделение</span
-                        > -->
+                        <!-- <img
+                            class="nav-user__button-mobile"
+                            src="@app/assets/icon/icon-location.svg"
+                            width="36"
+                            height="36"
+                            alt="Иконка геолокации"
+                        /> -->
 
                         <span v-if="user?.user_region?.reg_region"
                             >{{
@@ -85,7 +89,9 @@
 
                         <span v-else>Выберите региональное отделение</span>
                     </button>
+
                     <!-- <p>{{  user?.user_region?.reg_region}}</p> -->
+
                     <div
                         class="header__overlay"
                         @click="show = !show"
@@ -132,6 +138,8 @@
                         :url="user?.media?.photo"
                         desc="Фотография пользователя"
                     />
+
+
                 </div>
             </nav>
         </header>
@@ -327,10 +335,20 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 0;
+    padding: 13px 0;
     color: #35383f;
     position: relative;
-    // border-bottom: 1px solid red; //-------------------------------------
+    border-bottom: 1px solid #d9d9d9;
+
+    @media (max-width: 1024px) {
+        padding: 0;
+        min-height: 88px;
+    }
+
+    @media (max-width: 768px) {
+        padding: 0;
+        min-height: 60px;
+    }
 
     &__overlay {
         position: fixed;
@@ -350,6 +368,17 @@ onMounted(() => {
         grid-template-columns: 1fr 1fr;
         column-gap: 30px;
         max-width: 146px;
+        margin-right: 25px;
+
+        @media (max-width: 1024px) {
+            column-gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            width: 88px;
+            column-gap: 12px;
+            margin-right: 36px;
+        }
     }
 
     &__nav--order {
@@ -375,19 +404,25 @@ onMounted(() => {
     }
 
     &__nav-list {
-        display: grid;
-        grid-template-columns: auto auto auto;
-        column-gap: 32px;
+        // display: grid;
+        // grid-template-columns: auto auto auto;
+        column-gap: 12px;
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+        flex-wrap: wrap;
         align-items: center;
-        min-width: 328px;
+        // min-width: 415px;
         max-width: 445px;
 
         @media (max-width: 1024px) {
             position: absolute;
             right: 0;
             top: calc(100%);
+            min-width: 415px;
             padding: 28px;
             border-radius: 10px;
+            display: grid;
             grid-template-columns: 1fr;
             row-gap: 8px;
             background-color: #1f7cc0;
@@ -396,6 +431,12 @@ onMounted(() => {
             a {
                 color: #ffffff;
             }
+        }
+
+        @media (max-width: 768px) {
+            min-width: 0;
+            max-width: 415px;
+            width: 100%;
         }
     }
 
@@ -424,6 +465,10 @@ onMounted(() => {
                     0 20px 0 0#35383f;
             }
         }
+
+        @media (max-width: 768px) {
+            margin-left: 20px;
+        }
     }
 
     &__nav-item {
@@ -436,7 +481,11 @@ onMounted(() => {
 
     &__nav-link {
         display: block;
-        padding: 16px 0;
+        padding: 5px 0;
+
+        @media (max-width: 1024px) {
+            padding: 16px 0;
+        }
     }
 }
 
@@ -465,7 +514,17 @@ onMounted(() => {
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        padding: 16px 0;
+        padding: 5px 0;
+
+        @media (max-width: 1024px) {
+            color: #ffffff;
+            padding: 16px 0;
+        }
+
+        @media (max-width: 768px) {
+            color: #ffffff;
+            padding: 10px 0;
+        }
 
         svg {
             display: none;
@@ -474,10 +533,6 @@ onMounted(() => {
                 display: block;
                 stroke: #ffffff;
             }
-        }
-
-        @media (max-width: 1024px) {
-            color: #ffffff;
         }
     }
 
@@ -496,6 +551,7 @@ onMounted(() => {
 
         @media (max-width: 1024px) {
             position: relative;
+            width: 100%;
             padding: 0;
             background-color: #1f7cc0;
         }
@@ -554,8 +610,9 @@ onMounted(() => {
                 margin-right: 0;
             }
 
-            @media (max-width: 360px) {
+            @media (max-width: 768px) {
                 width: 36px;
+                height: 36px;
             }
         }
 
@@ -572,7 +629,8 @@ onMounted(() => {
 
         &__list {
             right: 0;
-            min-width: 328px;
+            // min-width: 328px;
+            width: 328px;
             padding: 28px;
             border-radius: 10px;
             background-color: #1f7cc0;
@@ -584,11 +642,7 @@ onMounted(() => {
             }
 
             @media (max-width: 768px) {
-                right: 84px;
-            }
-
-            @media (max-width: 360px) {
-                right: 56px;
+                right: 0;
             }
         }
 
@@ -606,13 +660,32 @@ onMounted(() => {
 //------------------------------------------------------------------------------------
 
 .nav-user {
-    display: grid;
-    grid-template-columns: min-content 1fr min-content;
-    column-gap: 48px;
+    // display: grid;
+    // grid-template-columns: min-content 1fr min-content;
+    column-gap: 18px;
     // column-gap: 20px;
+
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    min-width: 242px;
     max-width: 383px;
     flex-grow: 1;
+    margin-left: 25px;
+
+    @media (max-width: 1024px) {
+        margin-left: auto;
+        column-gap: 60px;
+    }
+
+    @media (max-width: 768px) {
+        column-gap: 20px;
+
+        min-width: 148px;
+        max-width: 204px;
+        flex-grow: 1;
+        // margin-left: 54px;
+    }
 
     &__application-count a {
         display: block;
@@ -624,18 +697,19 @@ onMounted(() => {
     &__location {
         max-width: 169px;
 
-        @media (max-width: 360px) {
+        @media (max-width: 768px) {
             display: flex;
-            min-width: auto;
+            // min-width: auto;
         }
     }
 
     &__button {
         font-size: 14px;
 
-        @media (max-width: 360px) {
-            width: 20px;
+        @media (max-width: 768px) {
+            width: 36px;
             height: 36px;
+            // margin-top: 5px;
             background-image: url('../../../app/assets/icon/location-mark.svg');
             background-position: center;
             // order: 1;
@@ -682,11 +756,6 @@ onMounted(() => {
         margin-left: auto;
         margin-right: -40px;
         margin-top: -24px;
-    }
-
-    @media (max-width: 1024px) {
-        margin-left: auto;
-        column-gap: 60px;
     }
 }
 

@@ -6,6 +6,7 @@ export const actionFormSearch = [{
     roads: String
 }]
 //Модель компонента
+
 export const actionForm = {
     id: Number,
     author: String,
@@ -37,3 +38,4 @@ export const createForm = {
     application_type: String,
 
 }
+

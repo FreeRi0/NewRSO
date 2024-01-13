@@ -188,6 +188,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
+                                open-on-clear
                                 id="beast"
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
@@ -280,14 +281,14 @@
                                 >Группа отряда ВКонтакте
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
-                                class="form__input"
+                            <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-vk"
-                                :maxlength="50"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
                                 v-model:value="detachment.social_vk"
-                            />
+                            ></TextareaAbout>
                         </div>
 
                         <div class="form__field">
@@ -295,14 +296,14 @@
                                 >Группа отряда в Телеграмме
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
-                                class="form__input"
+                            <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-te"
-                                :maxlength="50"
                                 placeholder="Например, https://t.me/cco_monolit"
                                 name="social_media_te"
                                 v-model:value="detachment.social_tg"
-                            />
+                            ></TextareaAbout>
                         </div>
 
                         <div class="form__field" v-if="participants">
@@ -424,15 +425,14 @@
                                 >Девиз отряда
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
-                                class="form__input"
-                                type="text"
+                            <TextareaAbout
+                                maxlength="100"
+                                class="form__textarea form__textarea--mobile"
                                 id="squad-slogan"
                                 placeholder="Например, через тернии к звездам"
                                 name="squad_slogan"
-                                :maxlength="100"
                                 v-model:value="detachment.slogan"
-                            />
+                            ></TextareaAbout>
                             <div class="form__counter">
                                 {{ counterSlogan }} / 100
                             </div>
@@ -578,7 +578,7 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
@@ -706,7 +706,7 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
@@ -1290,8 +1290,8 @@ import { TextareaAbout } from '@shared/components/inputs';
 // import { UnitImage } from "@shared/components/imagescomp";
 
 import { useVuelidate } from '@vuelidate/core';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
 import {
     helpers,
     minLength,
@@ -1304,6 +1304,7 @@ import {
 
 const emit = defineEmits([
     'update:value',
+    'updateMember',
     'changeDetachment',
     'selectFile',
     'resetEmblem',
@@ -1496,14 +1497,16 @@ const showButtonPrev = computed(() => {
 
 const members = ref([]);
 
+const route = useRoute();
+let id = route.params.id;
+
 const getMembers = async () => {
-    await axios
-        .get('api/v1/detachments/1/members/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+    await HTTP.get(`detachments/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
         .then((response) => {
             members.value = response.data;
             console.log(response);

@@ -1,7 +1,9 @@
 <template>
     <div class='container action'>
         <div class='action-title'>Создание мероприятия</div>
+
         <form method='post' enctype='multipart/form-data' @submit.prevent='SubmitEvent'>
+
         <div class='col-auto form-container'>
             <v-expansion-panels variant='accordion'>
                 <v-expansion-panel>
@@ -69,6 +71,7 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
                         <div class='form-container'>
+
                             <div class='form-col-100'>
                                 <label class='form-label'>Выберете формат мероприятия</label>
                                 <div class='flex align-items-center' style='display: flex'>
@@ -104,24 +107,28 @@
                                         v-model='name'
                                         class="form__input form-input-container"
                                         placeholder="Название мероприятия"
+
                                         name="name_hq"
                                         :maxlength="100"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
+
                                     <label for="telegram-owner-hq">Ссылка на конференцию</label>
                                     <Input
                                         id="telegram-owner-hq"
                                         v-model='link'
                                         class="form__input form-input-container"
                                         placeholder="https://discord.gg/s44UfkVJ"
+
                                         name="telegram-owner-hq"
                                         :maxlength="100"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
+
                                     <label>Добавить баннер</label>
                                     <div class="statement-item">
                                         <img
@@ -149,10 +156,12 @@
                                         class="form__input form-input-container"
                                         placeholder="Например, Москва, Гагарина 40"
                                         name="address_hq"
+
                                         :maxlength="100"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
+
                                 <div class="form__field">
                                     <label for="group-hq">Количество участников</label>
                                     <Input
@@ -181,10 +190,12 @@
                                         class="form__input form-input-container"
                                         placeholder="Например, ССО"
                                         name="road_hq"
+
                                         :maxlength="100"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
+
                             </div>
                         </div>
                         <div class='form-container'>
@@ -215,6 +226,7 @@
                                           class='invents-block invents-select'>
                                 </Dropdown>
                             </div>
+
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -285,6 +297,7 @@
                         <div class='form-container'>
                             <div class='form-col'>
                                 <div class="form__field">
+
                                     <label for="action-start-hq">Начало мероприятия<sup class="valid-red">*</sup></label>
                                     <Input
                                         id="action-start-hq"
@@ -305,20 +318,24 @@
                                         name="action-end-hq"
                                         type='date'
                                     />
+
                                 </div>
                                 <div class="form__field">
                                     <label for="telegram-squad-hq">Telegram отряда</label>
                                     <Input
                                         id="telegram-squad-hq"
                                         class="form__input form-input-container"
+
                                         v-model='telegramSquad'
                                         placeholder="@Invar"
                                         name="telegram-squad-hq"
                                     />
+
                                 </div>
                             </div>
                             <div class='form-col'>
                                 <div class="form__field">
+
                                     <label for="action-hours-start-hq">Время в часах</label>
                                     <Input
                                         id="action-hours-start-hq"
@@ -326,10 +343,12 @@
                                         v-model="timehourStart"
                                         placeholder="Например 7:30"
                                         name="action-hours-start-hq"
+
                                     />
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
+
                                     <label for="action-hours-end-hq">Время в часах</label>
                                     <Input
                                         id="action-hours-end-hq"
@@ -337,12 +356,14 @@
                                         v-model="timehourEnd"
                                         placeholder="Например 18:30"
                                         name="action-hours-end-hq"
+
                                     />
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
                                     <label class='flex align-items-center' style='display: flex'>
                                         <div class="flex align-items-center">
+
                                             <input v-model='hour' value="1" name='houre1' type='radio' class='form-radio'/>
                                             <label for="hours1" class="ml-2">За час</label>
                                         </div>
@@ -358,6 +379,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
@@ -430,6 +452,7 @@
                                 Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.
                                 <v-container fluid>
                                     <v-checkbox
+
                                         v-model="passport"
                                         label="Паспорт"
                                     ></v-checkbox>
@@ -452,10 +475,12 @@
                                     <v-checkbox
                                         v-model="consent_personal_data"
                                         label="Согласие на обработку персональных данных"
+
                                     ></v-checkbox>
                                 </v-container>
                                 Добавьте документы:
                                 <div class='form-col'>
+
                                     <div class="statement-item">
                                         <img
                                             src="@app/assets/icon/addFile.svg"
@@ -475,6 +500,7 @@
                                 <div class='form-col-100'>
                                     Расскажите, с какими документами необходимо просто ознакомиться, а какие скачать и заполнить
                                     <v-textarea></v-textarea>
+
                                 </div>
                             </div>
                         </div>
@@ -553,7 +579,9 @@
                                     <label for="name-hq">ФИО организатора<sup class="valid-red">*</sup></label>
                                     <Input
                                         id="name-hq"
+
                                         v-model="organizer"
+
                                         class="form__input form-input-container"
                                         placeholder="Фамилия Имя Отчество"
                                         name="name_hq"
@@ -565,7 +593,9 @@
                                     <label for="telegram-owner-hq">Telegram организатора</label>
                                     <Input
                                         id="telegram-owner-hq"
+
                                         v-model="telegram"
+
                                         class="form__input form-input-container"
                                         placeholder="@modestra"
                                         name="telegram-owner-hq"
@@ -577,7 +607,9 @@
                                     <label for="telegram-squad-hq">Telegram отряда</label>
                                     <Input
                                         id="telegram-squad-hq"
+
                                         v-model="telegramSquad"
+
                                         class="form__input form-input-container"
                                         placeholder="@Invar"
                                         name="telegram-squad-hq"
@@ -591,7 +623,9 @@
                                     <label for="email-hq">Email организатора<sup class="valid-red">*</sup></label>
                                     <Input
                                         id="email-hq"
+
                                         v-model="organizer_email"
+
                                         class="form__input form-input-container"
                                         placeholder="email@gmail.com"
                                         name="email_hq"
@@ -603,7 +637,9 @@
                                     <label for="organization-hq">Организация</label>
                                     <Input
                                         id="organization-hq"
+
                                         v-model="organization"
+
                                         class="form__input form-input-container"
                                         placeholder="Например КузГТУ"
                                         name="organization-hq"
@@ -614,7 +650,9 @@
                                 <div class="form__field"></div>
                             </div>
                         </div>
+
                         <div class='form-add'>+ Добавить организатора</div>
+
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
@@ -692,7 +730,9 @@
                                         name="name_hq"
                                         :maxlength="100"
                                     />
+
                                     <div class='form-add' @click='AddQuestion'>+ Добавить вопрос</div>
+
                                 </div>
                             </div>
                         </div>
@@ -701,13 +741,16 @@
             </v-expansion-panels>
         </div>
             <div class='form-col-100'>
+
                 <Button type='submit' label='Сохранить'></Button>
+
             </div>
         </form>
     </div>
 </template>
 
 <script setup>
+
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
 import { createAction } from '@services/ActionService';
@@ -788,11 +831,13 @@ const actionForm = ref([{
     description: String,
     application_type: String,
 }]);
+
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
     { pageTitle: 'Штабы СО ОО', href: '#' },
     { pageTitle: 'Создание штаба СО ОО', href: '#' },
 ]);
+
 function SubmitEvent(){
     console.log(documents.value, "Документы");
     console.log(organizator.value, "Организаторы");
@@ -801,6 +846,7 @@ function SubmitEvent(){
 function AddQuestion(){
 
 }
+
 
 </script>
 
@@ -839,6 +885,7 @@ function AddQuestion(){
     margin-bottom: 20px;
     margin-top: 20px;
   }
+
   &-col{
     width:50%;
     padding-left: 15px;
@@ -848,9 +895,11 @@ function AddQuestion(){
     width: 100%;
     height: 40px;
   }
+
   &-radio{
     margin-left: 10px;
   }
+
   &-input-container{
     border: 1px solid black;
     border-radius: 15px;
@@ -875,11 +924,13 @@ function AddQuestion(){
   }
   &-col-100{
     width: 100%;
+
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
     line-height: 34px;
     margin-top: 3px;
+
     margin-bottom: 3px;
   }
   &-label{
@@ -892,6 +943,7 @@ function AddQuestion(){
   }
   &-add-block:hover{
     cursor: pointer;
+
   }
   &-btm{
     width: 114px;
@@ -909,6 +961,7 @@ function AddQuestion(){
     justify-content: center;
     align-items: center;
   }
+
   &-add{
     margin-top: 10px;
     text-decoration: underline;
@@ -916,5 +969,6 @@ function AddQuestion(){
   &-add:hover{
     cursor: pointer;
   }
+
 }
 </style>

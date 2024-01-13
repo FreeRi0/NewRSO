@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
+    <div class="container container--top">
+        <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Редактирование штаба СО ОО</h1>
 
@@ -21,20 +21,11 @@
 import { ref, onMounted, inject, watch } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormHQ } from '@features/FormHQ';
-import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
-const pages = ref([
-    { pageTitle: 'Структура' },
-    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
-    { pageTitle: 'Штаб КГПИ', href: '#' },
-    { pageTitle: 'Редактирование штаба СО ОО', href: '#' },
-]);
-
 const route = useRoute();
 let id = route.params.id;
-// let id = 4;
 
 const submited = ref(false);
 
