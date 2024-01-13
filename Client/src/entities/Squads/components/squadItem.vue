@@ -27,6 +27,7 @@ const props = defineProps({
     height: 128px;
     display: block;
     margin: 0px auto;
+    border-radius: 100%;
 }
 .squads-wrapper__item {
     margin: 0px auto;
