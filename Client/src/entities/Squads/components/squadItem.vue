@@ -23,11 +23,13 @@ const props = defineProps({
 </script>
 <style lang="scss">
 .round-img {
-    width: 128px;
-    height: 128px;
-    display: block;
-    margin: 0px auto;
-    border-radius: 100%;
+    img {
+        width: 128px;
+        height: 128px;
+        display: block;
+        margin: 0px auto;
+        border-radius: 100%;
+    }
 }
 .squads-wrapper__item {
     margin: 0px auto;
