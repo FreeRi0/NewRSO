@@ -822,9 +822,6 @@ function AddQuestion(){
 <style lang='scss' scoped>
 .action{
     margin-top: 60px;
-    &-container{
-
-    }
     &-title{
       height: 116px;
       font-size: 52px;
