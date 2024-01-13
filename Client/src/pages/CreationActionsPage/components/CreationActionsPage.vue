@@ -1,7 +1,6 @@
 <template>
     <div class='container action'>
         <div class='action-title'>Создание мероприятия</div>
-        <form method='post' enctype='multipart/form-data' @submit.prevent='SubmitEvent'>
         <div class='col-auto form-container'>
             <v-expansion-panels variant='accordion'>
                 <v-expansion-panel>
@@ -73,22 +72,22 @@
                                 <label class='form-label'>Выберете формат мероприятия</label>
                                 <div class='flex align-items-center' style='display: flex'>
                                     <div class="flex align-items-center">
-                                        <input v-model='format' type='radio' value='offline' class='form-radio'/>
+                                        <input v-model='maininfo.format' type='radio' value='Оффлайн' class='form-radio'/>
                                         <label class="ml-2 form-label">Оффлайн</label>
                                     </div>
                                     <div class="flex align-items-center">
-                                        <input v-model='format' type='radio' value='online' class='form-radio'/>
+                                        <input v-model='maininfo.format' type='radio' value='Онлайн' class='form-radio'/>
                                         <label class="ml-2 form-label">Онлайн</label>
                                     </div>
                                 </div>
                             <div class='form-col-100'>
                                 <div class="form__field">
-                                    <label class='form-label'>Выберите формат мероприятия<sup class="valid-red">*</sup></label>
+                                    <label class='form-label'>Выберите маштаб мероприятия<sup class="valid-red">*</sup></label>
                                     <Dropdown
-                                        :options='massive'
-                                        optionlabel='name'
+                                        :options='scale_massive'
+                                        optionLabel='name'
                                         placeholder='Например, ЛСО'
-                                        v-model:value='selectedMassive'
+                                        v-model='maininfo.scale'
                                         class='invents-block invents-select'>
                                     </Dropdown>
                                 </div>
@@ -99,9 +98,9 @@
                             <div class='form-col'>
                                 <div class="form__field">
                                     <label class='form-label' for="name-hq">Название мероприятия<sup class="valid-red">*</sup></label>
-                                    <input
+                                    <InputText
                                         id="name-hq"
-                                        v-model='name'
+                                        v-model='maininfo.name'
                                         class="form__input form-input-container"
                                         placeholder="Название мероприятия"
                                         name="name_hq"
@@ -111,13 +110,12 @@
                                 </div>
                                 <div class="form__field">
                                     <label for="telegram-owner-hq">Ссылка на конференцию</label>
-                                    <Input
+                                    <InputText
                                         id="telegram-owner-hq"
-                                        v-model='link'
+                                        v-model='maininfo.conference_link'
                                         class="form__input form-input-container"
                                         placeholder="https://discord.gg/s44UfkVJ"
                                         name="telegram-owner-hq"
-                                        :maxlength="100"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
@@ -134,7 +132,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="banner"
+                                            @uploader="maininfo.banner"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -143,9 +141,9 @@
                             <div class='form-col'>
                                 <div class="form__field">
                                     <label for="address-hq">Адрес проведения (Оффлайн)<sup class="valid-red">*</sup></label>
-                                    <Input
+                                    <InputText
                                         id="address-hq"
-                                        v-model='address'
+                                        v-model='maininfo.address'
                                         class="form__input form-input-container"
                                         placeholder="Например, Москва, Гагарина 40"
                                         name="address_hq"
@@ -155,8 +153,8 @@
                                 </div>
                                 <div class="form__field">
                                     <label for="group-hq">Количество участников</label>
-                                    <Input
-                                        v-model='groupReq'
+                                    <InputText
+                                        v-model='maininfo.participants_number'
                                         id="group-hq"
                                         type='number'
                                         class="form__input form-input-container"
@@ -167,7 +165,7 @@
                                 </div>
                                 <div class="form__field">
                                     <label>О мероприятии</label>
-                                    <v-textarea v-model='description' label="Мероприятие"></v-textarea>
+                                    <Textarea class="form__textarea" />
                                 </div>
                             </div>
                         </div>
@@ -175,13 +173,12 @@
                             <div class='form-col-100'>
                                 <div class="form__field">
                                     <label for="road-hq">Добавьте направление<sup class="valid-red">*</sup></label>
-                                    <Input
-                                        id="road-hq"
-                                        v-model='road'
-                                        class="form__input form-input-container"
-                                        placeholder="Например, ССО"
-                                        name="road_hq"
-                                        :maxlength="100"
+                                    <Dropdown
+                                        :options='scale_massive'
+                                        optionLabel='name'
+                                        placeholder='Например, ЛСО'
+                                        v-model='maininfo.scale'
+                                        class='invents-block invents-select'
                                     />
                                     <div class="form__counter"></div>
                                 </div>
@@ -192,15 +189,15 @@
                                 <label>Выберите вид принимаемых к подаче заявок на мероприятие</label>
                                 <label class='flex align-items-center' style='display: flex'>
                                     <div class="flex align-items-center">
-                                        <input v-model='type' value='personal' type='radio' class='form-radio'/>
+                                        <input v-model='maininfo.application_type' value='Персональная' type='radio' class='form-radio'/>
                                         <label class="ml-2">Персональная</label>
                                     </div>
                                     <div class="flex align-items-center">
-                                        <input v-model='type'  value='group' type='radio' class='form-radio'/>
+                                        <input v-model='maininfo.application_type' value='Групповая' type='radio' class='form-radio'/>
                                         <label class="ml-2">Групповая</label>
                                     </div>
                                     <div class="flex align-items-center">
-                                        <input v-model='type' value='manygroup' type='radio' class='form-radio'/>
+                                        <input v-model='maininfo.application_type' value='Многоэтапная' type='radio' class='form-radio'/>
                                         <label class="ml-2">Многоэтапная</label>
                                     </div>
                                 </label>
@@ -208,13 +205,13 @@
                             <div class='form-col'>
                                 <label>На какую область расчитано мероприятие</label>
                                 <Dropdown
-                                          optionlabel='name'
-                                          placeholder='Например, ЛСО'
-                                          :options='area'
-                                          v-model='selectedArea'
-                                          class='invents-block invents-select'>
-                                </Dropdown>
-                            </div>
+                                    v-model='maininfo.direction'
+                                    :options='direction_massive'
+                                    optionLabel='name'
+                                    placeholder='Например, ЛСО'
+                                    class='invents-block invents-select'
+                                />
+                            </div> 
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -286,7 +283,7 @@
                             <div class='form-col'>
                                 <div class="form__field">
                                     <label for="action-start-hq">Начало мероприятия<sup class="valid-red">*</sup></label>
-                                    <Input
+                                    <InputText
                                         id="action-start-hq"
                                         v-model='timeStart'
                                         class="form__input form-input-container"
@@ -297,7 +294,7 @@
                                 </div>
                                 <div class="form__field">
                                     <label for="action-end-hq">Окончание мероприятия</label>
-                                    <Input
+                                    <InputText
                                         id="action-end-hq"
                                         v-model='timeEnd'
                                         class="form__input form-input-container"
@@ -308,7 +305,7 @@
                                 </div>
                                 <div class="form__field">
                                     <label for="telegram-squad-hq">Telegram отряда</label>
-                                    <Input
+                                    <InputText
                                         id="telegram-squad-hq"
                                         class="form__input form-input-container"
                                         v-model='telegramSquad'
@@ -320,7 +317,7 @@
                             <div class='form-col'>
                                 <div class="form__field">
                                     <label for="action-hours-start-hq">Время в часах</label>
-                                    <Input
+                                    <InputText
                                         id="action-hours-start-hq"
                                         class="form__input form-input-container"
                                         v-model="timehourStart"
@@ -331,7 +328,7 @@
                                 </div>
                                 <div class="form__field">
                                     <label for="action-hours-end-hq">Время в часах</label>
-                                    <Input
+                                    <InputText
                                         id="action-hours-end-hq"
                                         class="form__input form-input-container"
                                         v-model="timehourEnd"
@@ -551,7 +548,7 @@
                             <div class='form-col'>
                                 <div class="form__field">
                                     <label for="name-hq">ФИО организатора<sup class="valid-red">*</sup></label>
-                                    <Input
+                                    <InputText
                                         id="name-hq"
                                         v-model="organizer"
                                         class="form__input form-input-container"
@@ -563,7 +560,7 @@
                                 </div>
                                 <div class="form__field">
                                     <label for="telegram-owner-hq">Telegram организатора</label>
-                                    <Input
+                                    <InputText
                                         id="telegram-owner-hq"
                                         v-model="telegram"
                                         class="form__input form-input-container"
@@ -575,7 +572,7 @@
                                 </div>
                                 <div class="form__field">
                                     <label for="telegram-squad-hq">Telegram отряда</label>
-                                    <Input
+                                    <InputText
                                         id="telegram-squad-hq"
                                         v-model="telegramSquad"
                                         class="form__input form-input-container"
@@ -589,7 +586,7 @@
                             <div class='form-col'>
                                 <div class="form__field">
                                     <label for="email-hq">Email организатора<sup class="valid-red">*</sup></label>
-                                    <Input
+                                    <InputText
                                         id="email-hq"
                                         v-model="organizer_email"
                                         class="form__input form-input-container"
@@ -601,7 +598,7 @@
                                 </div>
                                 <div class="form__field">
                                     <label for="organization-hq">Организация</label>
-                                    <Input
+                                    <InputText
                                         id="organization-hq"
                                         v-model="organization"
                                         class="form__input form-input-container"
@@ -685,7 +682,7 @@
                             <div class='form-col'>
                                 <div class="form__field">
                                     <label for="sub-questions-hq">Задайте интересующие вопросы участникам мероприятия</label>
-                                    <Input
+                                    <InputText
                                         id="sub-questions-hq"
                                         class="form__input form-input-container"
                                         placeholder="Например: Какой у вас размер футболки"
@@ -700,10 +697,9 @@
                 </v-expansion-panel>
             </v-expansion-panels>
         </div>
-            <div class='form-col-100'>
-                <Button type='submit' label='Сохранить'></Button>
-            </div>
-        </form>
+        <div class='form-col-100'>
+            <Button @click="SubmitEvent" label='Сохранить'></Button>
+        </div>
     </div>
 </template>
 
@@ -712,22 +708,54 @@ import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
 import { createAction } from '@services/ActionService';
 import { useRoute } from 'vue-router';
+import FileUpload from 'primevue/fileupload';
 import Dropdown from 'primevue/dropdown';
+import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
 const router = useRoute();
 const datahour = ref("");
 
 //Переменные для формы
 
-const format = ref('')
-const name = ref('')
-const link = ref('')
-const banner = ref('')
-const address = ref('')
-const road = ref('')
-const type = ref('')
-const massive = ref([
-    {name: "Строительное", value: "build"},
-    {name: "Проводники", value: "train"}
+const scale_massive = ref([
+    {name: "Отрядное"},
+    {name: "Образовательное"},
+    {name: "Городское"},
+    {name: "Региональное"},
+    {name: "Окружное"},
+    {name: "Городское"}
+])
+
+const direction_massive = ref([
+    {name: "Добровольческое"},
+    {name: "Образовательное"},
+    {name: "Патриотическое"},
+    {name: "Региональное"},
+    {name: "Окружное"},
+    {name: "Всероссийское"}
+])
+
+const maininfo = ref({
+    format: '',
+    direction: '',
+    name: '',
+    scale: '',
+    direction: '',
+    banner: '',
+    conference_link: '',
+    address: '',
+    participants_number: Number,
+    application_type: '',
+    available_structural_units: ''
+})
+
+const available_structural_units = ref([
+    {name: "Отряды"},
+    {name: "Образовательные Отряды"},
+    {name: "Местные штабы"},
+    {name: "Региональные штабы"},
+    {name: "Окружные штабы"},
+    {name: "Центральные штабы"},
 ])
 const selectedMassive = ref('')
 const area = ref([
@@ -737,14 +765,13 @@ const area = ref([
 ])
 const selectedArea = ref('');
 const groupReq = ref(Number);
-const description = ref('');
 const timeStart = ref('');
 const timehourStart = ref('');
 const timeEnd = ref('');
 const timehourEnd = ref('')
 const hour = ref('')
 
-const organizer = ref('');
+const organizer = ref("");
 const organizer_phone_number = ref('');
 const organizer_email = ref('');
 const organization = ref('');
@@ -777,25 +804,13 @@ const documents = ref({
     additional_info: additional_info.value
 })
 //Формы самой страницы
-
-const actionForm = ref([{
-    format: String,
-    direction: String,
-    status: String,
-    name: String,
-    scale: String,
-    participants_number: Number,
-    description: String,
-    application_type: String,
-}]);
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
     { pageTitle: 'Штабы СО ОО', href: '#' },
     { pageTitle: 'Создание штаба СО ОО', href: '#' },
 ]);
 function SubmitEvent(){
-    console.log(documents.value, "Документы");
-    console.log(organizator.value, "Организаторы");
+    console.log("Основаная информация", maininfo.value)
 }
 
 function AddQuestion(){
@@ -878,7 +893,6 @@ function AddQuestion(){
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 34px;
     margin-top: 3px;
     margin-bottom: 3px;
   }
