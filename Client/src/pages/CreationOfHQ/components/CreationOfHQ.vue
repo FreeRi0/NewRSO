@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container container--top">
         <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Создание штаба СО ОО</h1>
@@ -19,14 +19,7 @@
 import { ref, inject } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormHQ } from '@features/FormHQ';
-import axios from 'axios';
 import { HTTP } from '@app/http';
-
-const pages = ref([
-    { pageTitle: 'Структура' },
-    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
-    { pageTitle: 'Создание штаба СО ОО', href: '#' },
-]);
 
 const headquarter = ref({
     name: '',

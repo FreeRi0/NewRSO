@@ -111,9 +111,21 @@ export default {};
 
     &__top-container {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 88px;
+        // grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 80px 182px 134px 200px;
+        column-gap: 32px;
         margin-bottom: 40px;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__logo-wrapper {
+        @media (max-width: 768px) {
+            margin: 0 auto 32px;
+            width: fit-content;
+        }
     }
 
     a {
@@ -125,17 +137,50 @@ export default {};
     }
 
     &__social-list {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 12px;
+
+        @media (max-width: 768px) {
+            column-gap: 24px;
+        }
     }
 
     &__social-item {
-        margin-right: 12px;
+        width: fit-content;
+
+        @media (max-width: 768px) {
+            img {
+                width: 32px;
+                height: 32px;
+            }
+        }
+    }
+
+    &__contacts {
+        @media (max-width: 768px) {
+            display: grid;
+            grid-template-columns: 1fr;
+            row-gap: 8px;
+        }
+    }
+
+    &__privacy-policy-list {
+        @media (max-width: 768px) {
+            margin-top: 24px;
+        }
     }
 
     &__bottom-container {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 55% 45%;
         align-items: center;
+
+        @media (max-width: 768px) {
+            align-items: flex-start;
+            grid-template-columns: 1fr;
+            row-gap: 32px;
+        }
     }
 
     &__contacts-email a {
@@ -144,10 +189,36 @@ export default {};
 
     &__developed {
         display: flex;
+        align-items: center;
+        line-height: 19px;
+        font-weight: 500;
+
+        @media (max-width: 768px) {
+            grid-row: 1 / 2;
+            font-size: 14px;
+        }
 
         p {
             margin-right: 16px;
+            margin-left: auto;
             color: #90959d;
+
+            @media (max-width: 768px) {
+                margin-left: 0;
+            }
+        }
+    }
+
+    &__all-rights-reserved {
+        line-height: 20px;
+        font-weight: 400;
+
+        @media (max-width: 768px) {
+            font-size: 14px;
+        }
+
+        @media (max-width: 360px) {
+            font-size: 12px;
         }
     }
 

@@ -158,9 +158,9 @@ const pages = ref([
     { pageTitle: 'Местные штабы', href: '/AllHeadquarters' },
 ]);
 
-const headquartersVisible = ref(12);
+const headquartersVisible = ref(20);
 
-const step = ref(10);
+const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');

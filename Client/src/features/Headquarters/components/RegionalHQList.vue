@@ -1,26 +1,14 @@
 <template>
-    <div
+    <regionalItem
         v-for="regionalHeadquarter in regionalHeadquarters"
+        :regional-headquarter="regionalHeadquarter"
+        :key="regionalHeadquarter.id"
         v-if="regionalHeadquarters.length > 0"
-    >
-        <router-link
-            class="headquarters-wrapper__item"
-            :to="{ name: 'RegionalHQ', params: { id: regionalHeadquarter.id } }"
-        >
-            <div class="round-img">
-                <img :src="regionalHeadquarter.emblem" alt="logo" v-if="regionalHeadquarter.emblem" />
-                <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
-            </div>
-            <div class="container-headquarters">
-                <p class="headquarters-wrapper__item-title">
-                    {{ regionalHeadquarter.name }}
-                </p>
-            </div>
-        </router-link>
-    </div>
+    />
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
+import { regionalItem } from '@entities/HeadquartersData/components';
 const props = defineProps({
     regionalHeadquarters: {
         type: Array,

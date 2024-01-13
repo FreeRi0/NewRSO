@@ -34,7 +34,7 @@
                     />
                     <img
                         v-else
-                        :src="'./assets/foto-leader-squad/foto-leader-squad-stub.png'"
+                        :src="'/assets/foto-leader-squad/foto-leader-squad-stub.png'"
                         alt="'Фото бойца (заглушка)'"
                     />
                 </div>
@@ -58,7 +58,7 @@
 
         <template v-slot:item="{ props, item }">
             <v-container v-bind="props">
-                <div class="option__content">
+                <div class="option__content option__content--option">
                     <div class="option__image">
                         <img
                             v-if="item?.raw?.media"
@@ -67,7 +67,7 @@
                         />
                         <img
                             v-else
-                            :src="'./assets/foto-leader-squad/foto-leader-squad-stub.png'"
+                            :src="'/assets/foto-leader-squad/foto-leader-squad-stub.png'"
                             alt="'Фото бойца (заглушка)'"
                         />
                     </div>
@@ -199,6 +199,18 @@ onMounted(() => {
         display: flex;
         align-items: center;
         position: relative;
+
+        &--option {
+            width: calc(100% - 10px);
+            // margin-left: -20px;
+            // margin-right: -20px;
+            // margin-left: 5px;
+            // margin-right: 5px;
+            margin-bottom: -20px;
+            padding: 5px 20px;
+            border: 1px solid #b6b6b6;
+            border-radius: 10px;
+        }
     }
 
     &__image {
@@ -210,6 +222,12 @@ onMounted(() => {
         align-items: center;
         border-radius: 50%;
         overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
         @media (max-width: 768px) {
             margin-right: 13px;
@@ -256,6 +274,7 @@ onMounted(() => {
     &__date {
         position: relative;
         color: #1c5c94;
+        min-width: 82px;
 
         &::before {
             position: absolute;

@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container container--top">
         <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Создание ЛСО</h1>
@@ -27,17 +27,10 @@
 import { ref, inject } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormUnit } from '@features/FormUnit';
-import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 const router = useRoute();
-
-const pages = ref([
-    { pageTitle: 'Структура' },
-    { pageTitle: 'ЛСО', href: '/AllSquads' },
-    { pageTitle: 'Создание ЛСО', href: '#' },
-]);
 
 const detachment = ref({
     name: '',

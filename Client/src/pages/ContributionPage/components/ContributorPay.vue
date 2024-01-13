@@ -488,9 +488,8 @@
                         </div>
                         <div class="contributor-wrapper">
                             <contributorsList
-                                @change="changePeoples"
                                 :participants="sortedParticipants"
-                                :selectedParticipants="selectedPeoples"
+                                @change="changePeoples"
                             ></contributorsList>
                         </div>
                         <Button
@@ -601,23 +600,32 @@ onMounted(() => {
 
 const select = (event) => {
     selectedPeoples.value = [];
-    console.log('fffss',checkboxAll.value, event)
+    console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
-        console.log('fffss',checkboxAll.value, event)
+        console.log('fffss', checkboxAll.value, event);
         for (let index in participants.value) {
-            console.log('arr', selectedPeoples.value)
+            console.log('arr', selectedPeoples.value);
             selectedPeoples.value.push(participants.value[index]);
         }
     }
 };
 const searchParticipants = ref('');
-const changePeoples = (selectedHumans) => {
-    selectedPeoples.value = selectedHumans;
+
+const changePeoples = (CheckedUser, UserId) => {
+    let participant = {};
+    console.log('fff', CheckedUser, UserId);
+    if (CheckedUser) {
+        participant = participants.value.find((item) => item.id == UserId);
+        selectedPeoples.value.push(participant);
+    } else {
+        selectedPeoples.value = selectedPeoples.value.filter((item) => item.id !== UserId);
+
+    }
 };
 
-const changeSelected = (changePeoples) => {
-    console.log('fff', changePeoples)
-    selectedPeoples.value = changePeoples;
+const changeSelected = (changeUser) => {
+    console.log('fff', changeUser);
+    selectedPeoples.value = changeUser;
 };
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);

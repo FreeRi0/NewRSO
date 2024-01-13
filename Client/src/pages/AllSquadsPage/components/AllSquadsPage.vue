@@ -87,32 +87,36 @@
                 </div>
 
                 <div class="sort-filters">
-                    <div class="sort-select">
-                        <Select
-                            variant="outlined"
-                            clearable
-                            name="select_education"
-                            id="select-education"
-                            v-model="selectedSort"
-                            address="/eduicational_institutions/"
-                        ></Select>
-                    </div>
-                    <div class="sort-select">
-                        <sortByEducation
-                            variant="outlined"
-                            clearable
-                            v-model="sortBy"
-                            :options="sortOptionss"
-                        ></sortByEducation>
-                    </div>
+                    <div class="squads-sort">
+                        <div class="sort-filters">
+                            <div class="sort-select">
+                                <Select
+                                    variant="outlined"
+                                    clearable
+                                    name="select_education"
+                                    id="select-education"
+                                    v-model="selectedSort"
+                                    address="/eduicational_institutions/"
+                                ></Select>
+                            </div>
+                            <div class="sort-select">
+                                <sortByEducation
+                                    variant="outlined"
+                                    clearable
+                                    v-model="sortBy"
+                                    :options="sortOptionss"
+                                ></sortByEducation>
+                            </div>
 
-                    <Button
-                        type="button"
-                        class="ascend"
-                        icon="switch"
-                        @click="ascending = !ascending"
-                        color="white"
-                    ></Button>
+                            <Button
+                                type="button"
+                                class="ascend"
+                                icon="switch"
+                                @click="ascending = !ascending"
+                                color="white"
+                            ></Button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -172,6 +176,22 @@ const getCategories = async () => {
         });
 };
 
+const getEducations = async () => {
+    await HTTP.get('/eduicational_institutions/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            educations.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
 const getSquads = async () => {
     await HTTP.get('/detachments/', {
         headers: {
@@ -192,9 +212,9 @@ onMounted(() => {
     getSquads();
     getCategories();
 });
-const squadsVisible = ref(1);
+const squadsVisible = ref(20);
 
-const step = ref(1);
+const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');

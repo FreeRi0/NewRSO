@@ -1,16 +1,13 @@
 <template>
-    <v-textarea
-        clearable
+    <textarea
+        class="textareaUser"
         :name="name"
         :id="name"
         :value="value"
         :maxlength="maxLength"
         :placeholder="placeholder"
-        counter
         @input="updateValue"
-
-        variant="outlined"
-    ></v-textarea>
+    ></textarea>
 </template>
 <script setup>
 import { ref } from 'vue';
@@ -37,5 +34,13 @@ const updateValue = (e) => {
     emit('update:value', e.target.value);
 };
 </script>
-<style lang="scss"></style>
-// :model-value="value"
+<style lang="scss">
+.textareaUser {
+    margin-top: 12px;
+    padding: 16px 60px 16px 16px;
+    border-radius: 10px;
+    width: 820px;
+    height: 116px;
+    border: 1px solid #0000001A;
+}
+</style>

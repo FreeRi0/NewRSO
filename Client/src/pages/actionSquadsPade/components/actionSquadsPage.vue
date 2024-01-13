@@ -1,7 +1,9 @@
 <template>
     <div class='container'>
         <bannerCreate desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
-                      label="Создать мероприятие" link="createAction"></bannerCreate>
+
+                      label="Создать мероприятие" name='createAction'></bannerCreate>
+
         <h2 class='action-title'>Мероприятия</h2>
         <div class='searcher'>
             <div class='squads-search'>
@@ -10,6 +12,9 @@
                     id='search'
                     class='squads-search__input'
                     placeholder='Найти мероприятие'
+
+                    v-model='nameSearch'
+
                 />
                 <svg
                     width='28'
@@ -30,52 +35,59 @@
         </div>
         <div class='row-cols-2 action-slides'>
             <div class='col settings-container'>
-                <v-expansion-panels class='settings-header' variant="accordion">
-                    <v-expansion-panel class='settings-body' title="Тип мероприятия">
-                        <v-expansion-panel-text>
-                            <v-checkbox v-model='actionTypeSearch' label="Онлайн" value="Онлайн"></v-checkbox>
-                            <v-checkbox v-model='actionTypeSearch' label="Офлайн" value="Офлайн"></v-checkbox>
-                        </v-expansion-panel-text>
-                    </v-expansion-panel>
-                    <v-expansion-panel class='settings-body' title="Статус мероприятия">
-                        <v-expansion-panel-text>
-                            <v-radio-group>
-                                <v-checkbox v-model='statusSearch' label="Незавершенные" value='Незавершенные'></v-checkbox>
-                                <v-checkbox v-model='statusSearch' label="Завершенные" value='Завершенные'></v-checkbox>
-                            </v-radio-group>
-                        </v-expansion-panel-text>
-                    </v-expansion-panel>
-                    <v-expansion-panel class='settings-body' title="Маштаб">
-                        <v-expansion-panel-text>
-                            <v-radio-group>
-                                <v-radio v-model='rangeTypeSearch' label="Все" value="Все"></v-radio>
-                                <v-radio v-model='rangeTypeSearch' label="Всероссийское" value="Всероссийское"></v-radio>
-                                <v-radio v-model='rangeTypeSearch' label="Окружное" value="Окружное"></v-radio>
-                                <v-radio v-model='rangeTypeSearch' label="Региональное" value="Региональное"></v-radio>
-                                <v-radio v-model='rangeTypeSearch' label="Городское" value="Городское"></v-radio>
-                                <v-radio v-model='rangeTypeSearch' label="Мероприятие ОО" value="Мероприятие ОО"></v-radio>
-                                <v-radio v-model='rangeTypeSearch' label="Отрядное" value="Отрядное"></v-radio>
-                            </v-radio-group>
-                        </v-expansion-panel-text>
-                    </v-expansion-panel>
-                    <v-expansion-panel class='settings-body' title="Направление">
-                        <v-expansion-panel-text>
-                            <v-radio-group v-model='roadSearch'>
-                                <v-radio v-model='roadSearch' label="Все" value="Все"></v-radio>
-                                <v-radio v-model='roadSearch' label="Добровольческое" value="Добровольческое"></v-radio>
-                                <v-radio v-model='roadSearch' label="Образовательное" value="Образовательное"></v-radio>
-                                <v-radio v-model='roadSearch' label="Патриотическое" value="Патриотическое"></v-radio>
-                                <v-radio v-model='roadSearch' label="Спортивное" value="Спортивное"></v-radio>
-                                <v-radio v-model='roadSearch' label="Творческое" value="Творческое"></v-radio>
-                            </v-radio-group>
-                        </v-expansion-panel-text>
-                    </v-expansion-panel>
-                </v-expansion-panels>
-                <div class='settings-buttoms'>
-                    <Button class='settings-btminv' label='Свернуть все' @click='ClearSearchForm' >Сбросить</Button>
-                    <Button class='settings-btm' label='Свернуть все' @click='SendSearchForm'>Сохранить</Button>
-                </div>
+
+                <form method='post'>
+                    <v-expansion-panels class='settings-header' variant="accordion">
+                        <v-expansion-panel class='settings-body' title="Тип мероприятия">
+                            <v-expansion-panel-text v-model='actionTypeSearch'>
+                                <v-checkbox v-model='actionTypeSearch' label="Онлайн" value="Онлайн"></v-checkbox>
+                                <v-checkbox v-model='actionTypeSearch' label="Офлайн" value="Офлайн"></v-checkbox>
+                            </v-expansion-panel-text>
+                        </v-expansion-panel>
+                        <v-expansion-panel class='settings-body' title="Статус мероприятия">
+                            <v-expansion-panel-text>
+                                <v-radio-group v-model='statusSearch'>
+                                    <v-checkbox v-model='statusSearch' label="Незавершенные" value='Незавершенные'></v-checkbox>
+                                    <v-checkbox v-model='statusSearch' label="Завершенные" value='Завершенные'></v-checkbox>
+                                </v-radio-group>
+                            </v-expansion-panel-text>
+                        </v-expansion-panel>
+                        <v-expansion-panel class='settings-body' title="Маштаб">
+                            <v-expansion-panel-text>
+                                <v-radio-group v-model='rangeTypeSearch'>
+                                    <v-radio v-model='rangeTypeSearch' label="Все" value="Все"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Всероссийское" value="Всероссийское"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Окружное" value="Окружное"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Региональное" value="Региональное"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Городское" value="Городское"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Мероприятие ОО" value="Мероприятие ОО"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Отрядное" value="Отрядное"></v-radio>
+                                </v-radio-group>
+                            </v-expansion-panel-text>
+                        </v-expansion-panel>
+                        <v-expansion-panel class='settings-body' title="Направление">
+                            <v-expansion-panel-text>
+                                <v-radio-group v-model='roadSearch'>
+                                    <v-radio v-model='roadSearch' label="Все" value="Все"></v-radio>
+                                    <v-radio v-model='roadSearch' label="Добровольческое" value="Добровольческое"></v-radio>
+                                    <v-radio v-model='roadSearch' label="Образовательное" value="Образовательное"></v-radio>
+                                    <v-radio v-model='roadSearch' label="Патриотическое" value="Патриотическое"></v-radio>
+                                    <v-radio v-model='roadSearch' label="Спортивное" value="Спортивное"></v-radio>
+                                    <v-radio v-model='roadSearch' label="Творческое" value="Творческое"></v-radio>
+                                </v-radio-group>
+                            </v-expansion-panel-text>
+                        </v-expansion-panel>
+                    </v-expansion-panels>
+                    <div class='settings-buttoms'>
+                        <Button class='settings-btminv' type='button' @click='ClearSearchForm' >Сбросить</Button>
+                        <Button class='settings-btm' type='button' @click='SendSearchForm'>Сохранить</Button>
+                    </div>
+                </form>
             </div>
+            <!--Привет) Страницы мероприятий писал и подключал Modestra -->
+            <!--Я в поисках работы, если вам требуется Frontend разработчик, пишите сюда -->
+            <!--https://t.me/Modestra -->
+
             <div class='col' style='width: 100%'>
                 <div class='sort-container'>
                     <div class='sort-layout sort-types'>
@@ -113,10 +125,12 @@
                     </div>
                 </div>
                 <div class='postcard-container'>
-                    <div v-if='vertical' v-for='action in actions'>
+
+                    <div v-if='vertical' v-for='action in actionsList'>
                         <Actionitem :action='action'></Actionitem>
                     </div>
-                    <div v-if='!vertical' v-for='action in actions' class='postcard-containerline'>
+                    <div v-if='!vertical' v-for='action in actionsList' class='postcard-containerline'>
+
                         <ActionitemVertical :action='action'></ActionitemVertical>
                     </div>
                 </div>
@@ -127,35 +141,54 @@
 
 <script setup>
 //Импорт файлов
-import * as HTTP from 'http';
+
 import Button from "primevue/button";
 import BannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
 import { ref } from 'vue';
-import actions from '@entities/Actions/actions';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
+import { getListActions } from '@services/ActionService';
+
+let actionsList = ref([]);
+
+getListActions()
+    .then((responce)=>{
+    actionsList.value = responce.data;
+    console.log("Список мероприятий:", actionsList.value);
+})
+    .catch((e) =>{
+
+    })
+
 
 //Переменные компонента
 const actionTypeSearch = ref('');
 const statusSearch = ref('');
 const rangeTypeSearch = ref('');
 const roadSearch = ref('');
+
+const nameSearch = ref('')
+
+
 //Сортировка
 const vertical = ref(true);
 const ascending = ref(true);
 
-//Создание формы
-const actionFormSearch = {
-    actionType: actionTypeSearch.value,
-    status: statusSearch.value,
-    rangeType: rangeTypeSearch.value,
-    roads: roadSearch.value
-}
+
 //События нажатия
 function ClearSearchForm() {
     console.log("Форма очищена")
 };
 function SendSearchForm() {
+
+    const actionFormSearch = {
+        format: actionTypeSearch.value,
+        direction: statusSearch.value,
+        status: rangeTypeSearch.value,
+        roads: roadSearch.value,
+        search: nameSearch.value
+    }
+
     console.log(actionFormSearch);
 };
 //Изменение расположения блоков
@@ -164,14 +197,7 @@ const showVertical = () => {
 };
 
 //Получить полный список мероприятий
-const getActions = async () => {
-    await HTTP.get('', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token')
-        }
-    });
-};
+
 </script>
 
 <style lang='scss' scoped>
