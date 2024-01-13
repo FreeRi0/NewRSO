@@ -270,9 +270,9 @@ const routes: RouteRecordRaw[] = [
                 name: "editAction",
                 component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
             },
-            
 
-            },
+
+
             {
                 path: '/AllHeadquarters',
                 name: 'allheadquarters',
@@ -473,7 +473,7 @@ const routes: RouteRecordRaw[] = [
                     },
             },
         ],
-    },
-];
+    }
+]
 
 export default routes;
