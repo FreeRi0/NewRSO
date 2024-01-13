@@ -18,17 +18,32 @@
                     class="username-input"
                 />
 
-                <p class="error" v-if="isError.username">{{ isError.username }}</p>
+                <p class="error" v-if="isError.username">
+                    {{ isError.username }}
+                </p>
                 <!-- <p v-if="isError">{{ isError.username }}</p> -->
                 <Input
-                    type="password"
+                    :type="show === true ? 'text' : 'password'"
                     placeholder="Пароль"
                     name="password"
                     v-model:value="data.password"
                 >
                 </Input>
 
-                <p class="error" v-if="isError.password">{{ isError.password }}</p>
+                <i
+                    class="fa-regular fa-eye show-icon_log"
+                    v-if="show"
+                    @click="show = !show"
+                ></i>
+                <i
+                    class="fas fa-eye-slash hide-icon_log"
+                    v-else
+                    @click="show = !show"
+                ></i>
+
+                <p class="error" v-if="isError.password">
+                    {{ isError.password }}
+                </p>
 
                 <!-- <p v-if="isError">{{ isError.non_field_errors }}</p> -->
                 <p class="error" v-if="isError.non_field_errors">
@@ -67,6 +82,7 @@ const data = ref({
     username: '',
     password: '',
 });
+const show = ref(false);
 
 // const user = ref({});
 const isError = ref('');

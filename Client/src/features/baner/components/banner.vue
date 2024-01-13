@@ -1,22 +1,16 @@
 <template>
     <div class="user-metric">
         <bannerPhoto :banner="user?.media?.banner" v-if="user"></bannerPhoto>
-        <!-- <bannerPhoto
-            :banner="currentUser?.media?.banner"
-            v-else
-        ></bannerPhoto> -->
         <Avatar :avatar="user?.media?.photo" v-if="user"></Avatar>
-        <!-- <Avatar :avatar="currentUser?.media?.photo" v-else></Avatar> -->
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
                 <div v-if="user" class="user-data__name">
-                    <p>{{ user.first_name }}</p>
                     <p>{{ user.last_name }}</p>
+                    <p>{{ user.first_name }}</p>
                     <p>{{ user.patronymic_name }}</p>
-                    <!-- <slot name="banner"></slot> -->
                 </div>
-           
+
                 <!-- <h4 v-if="user">{{ user.email }}</h4> -->
                 <div></div>
 

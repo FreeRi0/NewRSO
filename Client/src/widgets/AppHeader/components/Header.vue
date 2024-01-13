@@ -199,13 +199,13 @@ const userPages = computed(() => [
             id: user.value.local_headquarter_id,
         },
     },
-    {
-        title: 'Региональный штаб',
-        name: 'RegionalHQ',
-        params: {
-            id: user.value.regional_headquarter_id,
-        },
-    },
+    // {
+    //     title: 'Региональный штаб',
+    //     name: 'RegionalHQ',
+    //     params: {
+    //         id: user.value.regional_headquarter_id,
+    //     },
+    // },
     {
         title: 'Окружной штаб',
         name: 'DistrictHQ',

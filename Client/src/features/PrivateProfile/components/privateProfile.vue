@@ -97,13 +97,13 @@ const isSave = ref(true);
 const privacies = ref([
     {
         value: 'all',
-        name: 'all',
+        name: 'Все',
     },
     {
         value: 'detachment_members',
-        name: 'detachment_members',
+        name: 'Члены отряда',
     },
-    { value: 'management_members', name: 'management_members' },
+    { value: 'management_members', name: 'Руководство' },
 ]);
 
 
