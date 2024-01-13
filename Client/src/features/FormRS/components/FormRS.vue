@@ -510,7 +510,7 @@
                                 class="form__textarea form__textarea--mobile"
                                 id="hq-slogan"
                                 placeholder="Например, через тернии к звездам"
-                                name="hq_slogan"
+                                name="slogan"
                                 v-model:value="headquarter.slogan"
                             ></TextareaAbout>
                             <div class="form__counter">
@@ -861,6 +861,7 @@ const props = defineProps({
         type: String,
         default: null,
     },
+
 });
 
 const headquarter = ref(props.headquarter);
@@ -992,6 +993,10 @@ const resetBanner = () => {
 </script>
 
 <style lang="scss" scoped>
+.form__field {
+    margin-bottom: 0;
+}
+
 .form-button {
     width: 132px;
     min-height: 52px;
