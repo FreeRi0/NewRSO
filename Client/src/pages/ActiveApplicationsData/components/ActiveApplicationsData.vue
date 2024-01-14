@@ -1,12 +1,273 @@
 <template>
-    <div>
-        <div class="container">
-            <activeApplications></activeApplications>
+    <div class="container">
+        <div class="active-app">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
+            <h2 class="profile-title">Активные заявки</h2>
+
+            <div class="d-flex mt-9 mb-9">
+                <button
+                    class="contributorBtn"
+                    :class="{ active: picked === tab.name }"
+                    v-for="tab in tabs"
+                    :key="tab.id"
+                    @click="picked = tab.name"
+                >
+                    {{ tab.name }}
+                </button>
+            </div>
+            <div v-if="picked == 'Верификация аккаунтов' || picked == ''">
+                <div class="contributor-sort__all mb-8">
+                    <input
+                        type="checkbox"
+                        @click="select"
+                        v-model="checkboxAll"
+                    />
+                </div>
+                <activeApplications
+                    :participants="participants"
+                    @change="changePeoples"
+                />
+                <Button
+                    @click="participantsVisible += step"
+                    v-if="participantsVisible < participants.length"
+                    label="Показать еще"
+                ></Button>
+                <Button
+                    @click="participantsVisible -= step"
+                    v-else
+                    label="Свернуть все"
+                ></Button>
+                <div class="selectedItems" v-if="selectedPeoples.length > 0">
+                    <h3>Итого: {{ selectedPeoples.length }}</h3>
+
+                    <checkedAppList
+                        @change="changeSelected"
+                        :participants="selectedPeoples"
+                    ></checkedAppList>
+                </div>
+            </div>
+            <div v-else-if="picked == 'Заявка на вступление в отряд'">
+                <div class="contributor-sort__all mb-8">
+                    <input
+                        type="checkbox"
+                        @click="selectSquads"
+                        v-model="checkboxAllSquads"
+                    />
+                </div>
+                <div class="classes">
+                    <div>Боец</div>
+                    <div>Отряд</div>
+                </div>
+                <ActiveSquads
+                    @change="changeSquads"
+                    :detachments="detachments"
+                />
+                <div class="selectedItems" v-if="selectedDetch.length > 0">
+                    <h3>Итого: {{ selectedDetch.length }}</h3>
+
+                    <CheckedSquadsList
+                        @change="changeSelectedSquads"
+                        :detachments="selectedDetch"
+                    ></CheckedSquadsList>
+                </div>
+            </div>
+
+            <div v-else-if="picked == 'Заявка на участие в мероприятии'">
+                <p class="text-h3">Блок в разработке.....</p>
+            </div>
         </div>
     </div>
 </template>
-<script setup lang="ts">
+<script setup>
+import { ref, onMounted, watch } from 'vue';
+import { HTTP } from '@app/http';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { Button } from '@shared/components/buttons';
 import { activeApplications } from '@features/ActiveApplications/components';
+import { checkedAppList } from '@features/ActiveApplications/components';
+import { CheckedSquadsList } from '@features/ActiveApplications/components';
+import { ActiveSquads } from '@features/ActiveApplications/components';
+
+const picked = ref('');
+const tabs = ref([
+    {
+        id: '1',
+        name: 'Верификация аккаунтов',
+    },
+    {
+        id: '2',
+        name: 'Заявка на вступление в отряд',
+    },
+    {
+        id: '3',
+        name: 'Заявка на участие в мероприятии',
+    },
+]);
+
+const pages = ref([
+    { pageTitle: 'Личный кабинет', href: '#' },
+    { pageTitle: 'Активные заявки', href: '#' },
+]);
+
+const participants = ref([]);
+const detachments = ref([]);
+const squad = ref({});
+const checkboxAll = ref(false);
+const checkboxAllSquads = ref(false);
+const participantsVisible = ref(12);
+const selectedPeoples = ref([]);
+const selectedDetch = ref([]);
+const step = ref(12);
+
+// const getUser = async () => {
+//     await HTTP.get(`/rsousers/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             user.value = response.data;
+//             console.log(response.data);
+//         })
+//         .catch(function (error) {
+//             console.log('failed ' + error);
+//         });
+// };
+
+let tempParticipants = participants.value;
+
+tempParticipants = tempParticipants.slice(0, participantsVisible.value);
+
+const viewParticipants = async () => {
+    let { id, ...rest } = squad.value;
+    await HTTP.get(`/detachments/1/verifications/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            participants.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const viewDetachments = async () => {
+    await HTTP.get(`/detachments/${id}/applications/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            detachments.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    getSquad();
+    viewParticipants();
+    viewDetachments();
+});
+
+const changePeoples = (CheckedUser, UserId) => {
+    let participant = {};
+    console.log('fff', CheckedUser, UserId);
+    if (CheckedUser) {
+        participant = participants.value.find((item) => item.id == UserId);
+        selectedPeoples.value.push(participant);
+    } else {
+        selectedPeoples.value = selectedPeoples.value.filter(
+            (item) => item.id !== UserId,
+        );
+    }
+};
+
+const changeSelected = (changePeoples) => {
+    console.log('fff', changePeoples);
+    selectedPeoples.value = changePeoples;
+};
+
+const changeSquads = (CheckedSquad, SquadId) => {
+    let detachment = {};
+    console.log('fff', CheckedSquad, SquadId);
+    if (CheckedSquad) {
+        detachment = detachments.value.find((item) => item.id == SquadId);
+        selectedDetch.value.push(detachment);
+    } else {
+        selectedDetch.value = selectedDetch.value.filter(
+            (item) => item.id !== SquadId,
+        );
+    }
+};
+
+const select = (event) => {
+    selectedPeoples.value = [];
+    console.log('fffss', checkboxAll.value, event);
+    if (event.target.checked) {
+        console.log('fffss', checkboxAll.value, event);
+        for (let index in participants.value) {
+            console.log('arr', selectedPeoples.value);
+            selectedPeoples.value.push(participants.value[index]);
+        }
+    }
+};
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.profile-title {
+    font-size: 40px;
+    margin-bottom: 40px;
+}
+
+.contributorBtn {
+    border-radius: 30px;
+    background-color: white;
+    color: #1c5c94;
+    border: 1px solid #1c5c94;
+    margin: 0px;
+    padding: 10px 24px;
+    margin: 7px;
+}
+
+.active-app {
+    padding-top: 40px;
+}
+
+.active {
+    background-color: #1c5c94;
+    color: white;
+}
+
+.contributor-sort__all {
+    padding: 11px 12px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    height: 48px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.classes {
+    margin-left: 68px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    p {
+        font-size: 16px;
+        color: #35383f;
+    }
+}
+</style>

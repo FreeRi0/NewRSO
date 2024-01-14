@@ -1,24 +1,46 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--lso">ЛСО</h1>
-        <!-- <BannerComp class="user-metric mt-3">
+        <div class="squad-page">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
+            <h1 class="title title--lso">ЛСО</h1>
+            <!-- <BannerComp class="user-metric mt-3">
 
         </BannerComp> -->
-        <BannerSquad :squad="squad" :edict="educt" :member="member"></BannerSquad>
-        <section class="about-squad">
-            <h3>Об отряде</h3>
-            <p>
-                {{ squad.about }}
-            </p>
-            <!-- <p>222{{ squad }}</p> -->
-        </section>
-        <v-row class="mt-8">
-            <v-col v-for="n in 4" :key="n" class="d-flex">
-                <squadPhotos :squad-photos="squad.photo1"></squadPhotos>
-            </v-col>
-        </v-row>
-        <SquadParticipants :squad="squad" :member="member"></SquadParticipants>
+            <BannerSquad
+                :squad="squad"
+                :edict="educt"
+                :member="member"
+            ></BannerSquad>
+            <section class="about-squad">
+                <h3>Об отряде</h3>
+                <p>
+                    {{ squad.about }}
+                </p>
+            </section>
+            <div class="mt-8 d-flex">
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo1"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo2"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo3"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo4"
+                ></squadPhotos>
+            </div>
+
+            <SquadParticipants
+                :squad="squad"
+                :member="member"
+            ></SquadParticipants>
+        </div>
     </div>
 </template>
 <script setup>
@@ -35,7 +57,6 @@ const member = ref([]);
 const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
-
 
 const aboutSquad = async () => {
     await HTTP.get(`/detachments/${id}/`, {
@@ -97,7 +118,7 @@ watch(
     () => route.params.id,
 
     (newId, oldId) => {
-        id = newId
+        id = newId;
         aboutSquad();
         aboutMembers();
         aboutEduc();
@@ -116,6 +137,10 @@ const pages = [
 ];
 </script>
 <style scoped lang="scss">
+
+.squad-page {
+   padding-top: 40px;
+}
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;
@@ -217,6 +242,10 @@ section.about-squad {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+.photo-item {
+    width: 260px;
+    margin-right: 20px;
 }
 
 @media (max-width: 1110px) {

@@ -1,28 +1,39 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h2 class="profile-title">Настройки профиля</h2>
-        <BannerComp
-            :user="user"
-            :education="education"
-            class="mt-3"
-            :edited="true"
-        ></BannerComp>
-        <!--Табы-->
-        <div class="d-flex mt-9 mb-9">
-            <button
-                class="contributorBtn"
-                :class="{ active: picked === tab.name }"
-                v-for="tab in tabs"
-                :key="tab.id"
-                @click="picked = tab.name"
-                >{{ tab.name }}</button
-            >
+        <div class="mt-14">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
+            <h2 class="profile-title">Настройки профиля</h2>
+            <BannerComp
+                :user="user"
+                :education="education"
+                class="mt-3"
+                :edited="true"
+            ></BannerComp>
+            <!--Табы-->
+            <div class="d-flex mt-9 mb-9">
+                <button
+                    class="contributorBtn"
+                    :class="{ active: picked === tab.name }"
+                    v-for="tab in tabs"
+                    :key="tab.id"
+                    @click="picked = tab.name"
+                >
+                    {{ tab.name }}
+                </button>
+            </div>
+            <AccordionsPersonal
+                v-if="picked == 'Персональные данные'"
+            ></AccordionsPersonal>
+            <userData
+                v-else-if="picked == 'Моя страница' || picked == ''"
+            ></userData>
+            <privateProfile
+                v-else-if="picked == 'Настройки приватности'"
+            ></privateProfile>
+            <changePassword
+                v-else-if="picked == 'Логин и пароль'"
+            ></changePassword>
         </div>
-        <AccordionsPersonal v-if="picked == 'Персональные данные'"></AccordionsPersonal>
-        <userData v-else-if="picked == 'Моя страница' || picked == ''"></userData>
-        <privateProfile v-else-if="picked == 'Настройки приватности'"></privateProfile>
-        <changePassword v-else-if="picked == 'Логин и пароль'"></changePassword>
     </div>
 </template>
 <script setup>

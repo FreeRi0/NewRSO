@@ -91,6 +91,7 @@
                             v-model="selectedSortRegion"
                             class="filter-region"
                             address="/regionals/"
+                            placeholder="Региональные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
@@ -156,9 +157,9 @@ const pages = ref([
     { pageTitle: 'Местные штабы', href: '/AllHeadquarters' },
 ]);
 
-const headquartersVisible = ref(12);
+const headquartersVisible = ref(20);
 
-const step = ref(10);
+const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -368,6 +369,15 @@ const sortedHeadquarters = computed(() => {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
 
 // .v-label {
 //     margin-top: 20px;

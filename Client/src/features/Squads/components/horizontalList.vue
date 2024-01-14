@@ -36,8 +36,11 @@ const props = defineProps({
         padding: 4px 20px;
     }
     &-img {
-        width: 40px;
-        height: 40px;
+        img {
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+        }
     }
 }
 

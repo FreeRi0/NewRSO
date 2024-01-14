@@ -1,50 +1,58 @@
 <template>
     <div class="container">
-        <Breadcrumbs :label="headquarter.name"></Breadcrumbs>
-        <!-- <Breadcrumbs :items="pages"></Breadcrumbs> -->
-        <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
-        <BannerHQ
-            v-if="showHQ"
-            :headquarter="headquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showDistrictHQ"
-            :districtHeadquarter="districtHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showLocalHQ"
-            :localHeadquarter="localHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showRegionalHQ"
-            :regionalHeadquarter="regionalHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else
-            :centralHeadquarter="centralHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <section class="about-hq">
-            <h3>Описание штаба</h3>
-            <p v-if="showHQ">
-                {{ headquarter.about }}
-            </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
-        </section>
-        <ManagementHQ :member="member" head="Руководство штаба"></ManagementHQ>
-        <DetachmentsHQ></DetachmentsHQ>
+        <div class="hq-page">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
+            <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
+            <BannerHQ
+                v-if="showHQ"
+                :headquarter="headquarter"
+                :edict="educt"
+                :member="member"
+            ></BannerHQ>
+            <BannerHQ
+                v-else-if="showDistrictHQ"
+                :districtHeadquarter="districtHeadquarter"
+                :edict="educt"
+                :member="member"
+            ></BannerHQ>
+            <BannerHQ
+                v-else-if="showLocalHQ"
+                :localHeadquarter="localHeadquarter"
+                :edict="educt"
+                :member="member"
+            ></BannerHQ>
+            <BannerHQ
+                v-else-if="showRegionalHQ"
+                :regionalHeadquarter="regionalHeadquarter"
+                :edict="educt"
+                :member="member"
+            ></BannerHQ>
+            <BannerHQ
+                v-else
+                :centralHeadquarter="centralHeadquarter"
+                :edict="educt"
+                :member="member"
+            ></BannerHQ>
+            <section class="about-hq">
+                <h3>Описание штаба</h3>
+                <p v-if="showHQ">
+                    {{ headquarter.about }}
+                </p>
+                <p v-else-if="showDistrictHQ">
+                    {{ districtHeadquarter.about }}
+                </p>
+                <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
+                <p v-else-if="showRegionalHQ">
+                    {{ regionalHeadquarter.about }}
+                </p>
+                <p v-else>{{ centralHeadquarter.about }}</p>
+            </section>
+            <ManagementHQ
+                :member="member"
+                head="Руководство штаба"
+            ></ManagementHQ>
+            <DetachmentsHQ></DetachmentsHQ>
+        </div>
     </div>
 </template>
 
@@ -161,6 +169,10 @@ const pages = [
     &--hq {
         margin-bottom: 50px;
     }
+}
+
+.hq-page {
+    padding-top: 40px;
 }
 .user-data__wrapper {
     margin: 20px 0 12px 298px;

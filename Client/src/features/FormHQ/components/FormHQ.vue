@@ -92,7 +92,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
-                                class="form__select--select"
+                                class="form__select form__select--select"
                                 variant="outlined"
                                 clearable
                                 name="select_institution"
@@ -134,7 +134,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
-                                class="form__select--select"
+                                class="form__select form__select--select"
                                 variant="outlined"
                                 clearable
                                 name="select_regional-office"
@@ -162,6 +162,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
+                                open-on-clear
                                 id="beast"
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
@@ -252,26 +253,28 @@
                             <label class="form__label" for="social-media-vk"
                                 >Группа штаба ВКонтакте
                             </label>
-                            <Input
-                                class="form__input"
+                            <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-vk"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
                                 v-model:value="headquarter.social_vk"
-                            />
+                            ></TextareaAbout>
                         </div>
 
                         <div class="form__field">
                             <label class="form__label" for="social-media-te"
                                 >Группа штаба в Телеграмме
                             </label>
-                            <Input
-                                class="form__input"
+                            <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-te"
                                 placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                 name="social_media_te"
                                 v-model:value="headquarter.social_tg"
-                            />
+                            ></TextareaAbout>
                         </div>
 
                         <div class="form__field" v-if="participants">
@@ -392,7 +395,7 @@
                             <label class="form__label" for="hq-slogan"
                                 >Девиз штаба</label
                             >
-                            <Input
+                            <!-- <Input
                                 class="form__input"
                                 type="text"
                                 id="hq-slogan"
@@ -400,7 +403,15 @@
                                 name="hq_slogan"
                                 v-model:value="headquarter.slogan"
                                 :maxlength="100"
-                            />
+                            /> -->
+                            <TextareaAbout
+                                maxlength="100"
+                                class="form__textarea form__textarea--mobile"
+                                id="hq-slogan"
+                                placeholder="Например, через тернии к звездам"
+                                name="hq_slogan"
+                                v-model:value="headquarter.slogan"
+                            ></TextareaAbout>
                             <div class="form__counter">
                                 {{ counterSlogan }} / 100
                             </div>
@@ -543,7 +554,7 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
@@ -671,7 +682,7 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
@@ -724,8 +735,8 @@ import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
 
 import { useVuelidate } from '@vuelidate/core';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
 import {
     helpers,
     minLength,
@@ -738,6 +749,7 @@ import {
 
 const emit = defineEmits([
     'update:value',
+    'updateMember',
     'changeHeadquarter',
     'selectFile',
     'resetEmblem',
@@ -864,14 +876,16 @@ const showButtonPrev = computed(() => {
 //-----------------------------------------------------------------------
 const members = ref([]);
 
+const route = useRoute();
+let id = route.params.id;
+
 const getMembers = async () => {
-    await axios
-        .get('api/v1/educationals/1/members/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+    await HTTP.get(`educationals/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
         .then((response) => {
             members.value = response.data;
             console.log(response);
@@ -879,6 +893,7 @@ const getMembers = async () => {
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
+    // console.log(id);
 };
 
 onMounted(() => {
@@ -898,7 +913,6 @@ const sortedMembers = computed(() => {
 
 const onUpdateMember = (event, id) => {
     const targetMember = members.value.find((member) => member.id === id);
-
     const firstkey = Object.keys(event)[0];
     targetMember[firstkey] = event[firstkey];
 };

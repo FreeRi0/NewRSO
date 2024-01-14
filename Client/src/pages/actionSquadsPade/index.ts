@@ -1,0 +1,1 @@
+export { default as actionSquadsPage } from './components/actionSquadsPage.vue';
