@@ -28,7 +28,7 @@
                         v-if="picked === true"
                         :participants="member"
                     />
-                    <VerifiedList :verified="isVerified"></VerifiedList>
+                    <VerifiedList  v-else="picked === false" :verified="isVerified"></VerifiedList>
                 </div>
                 <div>
                     <router-link

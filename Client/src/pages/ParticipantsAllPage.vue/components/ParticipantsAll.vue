@@ -429,6 +429,14 @@ const sortedVerified = computed(() => {
         border: 1px solid #1c5c94;
     }
 
+    .v-select__selection {
+        span {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+
     .form__select {
         margin-bottom: 0px;
         margin-right: 8px;
