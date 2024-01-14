@@ -139,25 +139,24 @@ const step = ref(12);
 let tempParticipants = participants.value;
 
 tempParticipants = tempParticipants.slice(0, participantsVisible.value);
-const getSquad = async () => {
-    await HTTP.get(`/detachments/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squad.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const getSquad = async () => {
+//     await HTTP.get(`/detachments/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             squad.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
 const viewParticipants = async () => {
-    let id = squad.value.id;
-    await HTTP.get(`/detachments/${id}/verifications/`, {
+    await HTTP.get(`/detachments/4/verifications/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -189,7 +188,6 @@ const viewDetachments = async () => {
 };
 
 onMounted(() => {
-    getSquad();
     viewParticipants();
     viewDetachments();
 });

@@ -116,6 +116,10 @@ const props = defineProps({
     }
 }
 
+.squad-data__participant-counter {
+
+}
+
 .ps__title {
     margin: 40px 0;
 }
