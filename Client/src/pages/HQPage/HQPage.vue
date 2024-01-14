@@ -1,58 +1,53 @@
 <template>
     <div class="container">
-        <div class="hq-page">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
-            <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
-            <BannerHQ
-                v-if="showHQ"
-                :headquarter="headquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showDistrictHQ"
-                :districtHeadquarter="districtHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showLocalHQ"
-                :localHeadquarter="localHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showRegionalHQ"
-                :regionalHeadquarter="regionalHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else
-                :centralHeadquarter="centralHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <section class="about-hq">
-                <h3>Описание штаба</h3>
-                <p v-if="showHQ">
-                    {{ headquarter.about }}
-                </p>
-                <p v-else-if="showDistrictHQ">
-                    {{ districtHeadquarter.about }}
-                </p>
-                <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-                <p v-else-if="showRegionalHQ">
-                    {{ regionalHeadquarter.about }}
-                </p>
-                <p v-else>{{ centralHeadquarter.about }}</p>
-            </section>
-            <ManagementHQ
-                :member="member"
-                head="Руководство штаба"
-            ></ManagementHQ>
-            <DetachmentsHQ></DetachmentsHQ>
-        </div>
+        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
+        <BannerHQ
+            v-if="showHQ"
+            :headquarter="headquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showDistrictHQ"
+            :districtHeadquarter="districtHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showLocalHQ"
+            :localHeadquarter="localHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showRegionalHQ"
+            :regionalHeadquarter="regionalHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else
+            :centralHeadquarter="centralHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <section class="about-hq">
+            <h3>Описание штаба</h3>
+            <p v-if="showHQ">
+                {{ headquarter.about }}
+            </p>
+            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
+            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
+            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
+            <p v-else>{{ centralHeadquarter.about }}</p>
+        </section>
+        <ManagementHQ
+            :member="member"
+            head="Руководство штаба"
+            :position="position"
+        ></ManagementHQ>
+        <DetachmentsHQ></DetachmentsHQ>
     </div>
 </template>
 
@@ -72,10 +67,12 @@ const showLocalHQ = ref(false);
 const showRegionalHQ = ref(false);
 
 const headquarter = ref({});
+const position = ref({});
 const member = ref([]);
 const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
+// hhhh
 
 const aboutHQ = async () => {
     await HTTP.get(`/educationals/${id}/`, {
@@ -125,6 +122,36 @@ const aboutMembers = async () => {
         });
 };
 
+// let allMembers;
+
+// const aboutMembers = async () => {
+//     try {
+//         const response = await HTTP.get(`/educationals/${id}/members/`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+
+//         member.value = response.data;
+//         console.log(response);
+//         allMembers = response.data;
+
+//         const filteredMembers = allMembers.filter(
+//             (sort) =>
+//                 sort.position === 'Командир' ||
+//                 sort.position === 'Комиссар' ||
+//                 sort.position === 'Мастер (методист)',
+//         );
+
+//         member.value = filteredMembers;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
+
+aboutMembers();
+
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutHQ();
@@ -153,7 +180,7 @@ onMounted(() => {
 const pages = [
     { pageTitle: 'Структура', href: '#' },
     { pageTitle: 'Штабы', href: '/AllHeadquarters' },
-    { pageTitle: `${headquarter.name}`, href: '#' },
+    { pageTitle: headquarter.name, href: '#' },
 ];
 </script>
 <style scoped lang="scss">

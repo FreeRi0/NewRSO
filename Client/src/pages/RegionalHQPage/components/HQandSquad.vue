@@ -37,7 +37,6 @@ const HQandSquads = ref([
         name: 'Местные штабы',
         link: '/LocalHeadquarters',
     },
-
     {
         name: 'Штабы СО ОО',
         link: '/AllHeadquarters',
