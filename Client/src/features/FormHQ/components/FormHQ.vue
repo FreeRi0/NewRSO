@@ -12,7 +12,18 @@
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
                             </v-col>
-                            <!-- <div v-if="">обязательно для заполнения</div> -->
+                            <p
+                                class="form__error form__error--title"
+                                v-if="
+                                    isError.name ||
+                                    isError.educational_institution ||
+                                    isError.founding_date ||
+                                    isError.regional_headquarter ||
+                                    isError.commander
+                                "
+                            >
+                                Заполните обязательные поля!
+                            </p>
                         </v-row>
                     </template>
                     <template v-slot:actions="{ expanded }">
@@ -84,6 +95,13 @@
                                 v-model:value="headquarter.name"
                                 :maxlength="100"
                             />
+                            <p
+                                class="form__error form__error--name"
+                                v-if="isError.name"
+                            >
+                                <!-- * обязательно для заполнения -->
+                                * {{ isError.name[0] }}
+                            </p>
                             <div class="form__counter">
                                 {{ counterTitle }} / 100
                             </div>
@@ -103,6 +121,13 @@
                                 v-model="headquarter.educational_institution"
                                 address="eduicational_institutions/"
                             ></Select>
+                            <p
+                                class="form__error"
+                                v-if="isError.educational_institution"
+                            >
+                                * Это поле не может быть пустым.
+                                <!-- {{ isError.educational_institution[0] }} -->
+                            </p>
                         </div>
 
                         <div class="form__field">
@@ -126,6 +151,10 @@
                                 type="date"
                                 v-model:value="headquarter.founding_date"
                             />
+                            <p class="form__error" v-if="isError.founding_date">
+                                * Это поле не может быть пустым.
+                                <!-- {{ isError.founding_date[0] }} -->
+                            </p>
                         </div>
 
                         <div class="form__field">
@@ -145,6 +174,13 @@
                                 v-model="headquarter.regional_headquarter"
                                 address="regionals/"
                             ></Select>
+                            <p
+                                class="form__error"
+                                v-if="isError.regional_headquarter"
+                            >
+                                * Это поле не может быть пустым.
+                                <!-- {{ isError.regional_headquarter[0] }} -->
+                            </p>
                         </div>
 
                         <div class="form__field">
@@ -172,6 +208,28 @@
                                 @update:value="changeValue"
                                 address="rsousers/"
                             ></Dropdown>
+                            <p
+                                class="form__error form__error--commander"
+                                v-if="isError.commander"
+                            >
+                                * Это поле не может быть пустым.
+                                <!-- {{ isError.commander[0] }} -->
+                            </p>
+                            <!-- <p
+                                class="form__error form__error--commander"
+                                v-if="
+                                    isError.commander ||
+                                    isError.non_field_errors
+                                "
+                            >
+                                <span v-if="isError.commander"
+                                    >* обязательно для заполнения</span
+                                >
+                                <span v-if="isError.non_field_errors"
+                                    >Пользователь уже является командиром
+                                    другого штаба</span
+                                >
+                            </p> -->
                         </div>
                     </div>
 
@@ -779,6 +837,10 @@ const props = defineProps({
     fileBanner: {
         type: String,
         default: null,
+    },
+    isError: {
+        type: Object,
+        default: () => ({}),
     },
 });
 

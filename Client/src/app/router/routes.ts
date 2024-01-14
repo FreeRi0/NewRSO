@@ -68,7 +68,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Отряд',
                         },
                         name: 'lso',
                         component: () => import('@pages/lsoPage/lsoPage.vue'),
@@ -76,7 +76,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Отряд',
                         },
 
                         children: [
@@ -126,7 +126,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Штаб',
                         },
                         name: 'HQ',
                         component: () => import('@pages/HQPage/HQPage.vue'),
@@ -134,7 +134,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Штаб',
                         },
 
                         children: [

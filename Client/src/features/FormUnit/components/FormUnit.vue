@@ -12,7 +12,19 @@
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
                             </v-col>
-                            <!-- <div v-if="">обязательно для заполнения</div> -->
+                            <p
+                                class="form__error form__error--title"
+                                v-if="
+                                    isError.name ||
+                                    isError.area ||
+                                    isError.founding_date ||
+                                    isError.region ||
+                                    isError.educational_institution ||
+                                    isError.commander
+                                "
+                            >
+                                Заполните обязательные поля!
+                            </p>
                         </v-row>
                     </template>
                     <template v-slot:actions="{ expanded }">
@@ -84,6 +96,13 @@
                                 name="name_squad"
                                 v-model:value="detachment.name"
                             />
+                            <p
+                                class="form__error form__error--name"
+                                v-if="isError.name"
+                            >
+                                <!-- * обязательно для заполнения -->
+                                * {{ isError.name[0] }}
+                            </p>
                             <div class="form__counter">
                                 {{ counterSquad }} / 30
                             </div>
@@ -103,6 +122,9 @@
                                 v-model="detachment.area"
                                 address="areas/"
                             ></Select>
+                            <p class="form__error" v-if="isError.area">
+                                * Это поле не может быть пустым.
+                            </p>
                             <!-- <p>{{ detachment.area }}</p> -->
                         </div>
 
@@ -127,6 +149,9 @@
                                 type="date"
                                 v-model:value="detachment.founding_date"
                             />
+                            <p class="form__error" v-if="isError.founding_date">
+                                * Это поле не может быть пустым.
+                            </p>
                             <!-- <Input
                                 class="form__input"
                                 id="create-date"
@@ -153,6 +178,9 @@
                                 v-model="detachment.region"
                                 address="regions/"
                             ></Select>
+                            <p class="form__error" v-if="isError.region">
+                                * Это поле не может быть пустым.
+                            </p>
                         </div>
 
                         <div class="form__field">
@@ -180,6 +208,12 @@
                                 v-model="detachment.educational_institution"
                                 address="eduicational_institutions/"
                             ></Select>
+                            <p
+                                class="form__error"
+                                v-if="isError.educational_institution"
+                            >
+                                * Это поле не может быть пустым.
+                            </p>
                         </div>
 
                         <div class="form__field form__field--commander">
@@ -196,6 +230,12 @@
                                 @update:value="changeValue"
                                 address="rsousers/"
                             ></Dropdown>
+                            <p
+                                class="form__error form__error--commander"
+                                v-if="isError.commander"
+                            >
+                                * Это поле не может быть пустым.
+                            </p>
                             <!-- <p>{{ detachment.commander }}</p> -->
                         </div>
                     </div>
@@ -219,6 +259,12 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Контакты
                         </v-col>
+                        <!-- <p
+                            class="form__error form__error--title"
+                            v-if="isError.social_vk || isError.social_tg"
+                        >
+                            Заполните обязательные поля!
+                        </p> -->
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -279,7 +325,7 @@
                         <div class="form__field">
                             <label class="form__label" for="social-media-vk"
                                 >Группа отряда ВКонтакте
-                                <sup class="valid-red">*</sup>
+                                <!-- <sup class="valid-red">*</sup> -->
                             </label>
                             <TextareaAbout
                                 maxlength="50"
@@ -289,12 +335,18 @@
                                 name="social_media_vk"
                                 v-model:value="detachment.social_vk"
                             ></TextareaAbout>
+                            <!-- <p
+                                class="form__error"
+                                v-if="isError.social_vk"
+                            >
+                                * обязательно для заполнения
+                            </p> -->
                         </div>
 
                         <div class="form__field">
                             <label class="form__label" for="social-media-te"
                                 >Группа отряда в Телеграмме
-                                <sup class="valid-red">*</sup>
+                                <!-- <sup class="valid-red">*</sup> -->
                             </label>
                             <TextareaAbout
                                 maxlength="50"
@@ -304,6 +356,12 @@
                                 name="social_media_te"
                                 v-model:value="detachment.social_tg"
                             ></TextareaAbout>
+                            <!-- <p
+                                class="form__error"
+                                v-if="isError.social_tg"
+                            >
+                                * обязательно для заполнения
+                            </p> -->
                         </div>
 
                         <div class="form__field" v-if="participants">
@@ -331,6 +389,7 @@
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                :unit="'отряд'"
                                 @update-member="onUpdateMember"
                             ></MembersList>
                         </div>
@@ -363,6 +422,12 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Оформление
                         </v-col>
+                        <!-- <p
+                            class="form__error form__error--title"
+                            v-if="isError.slogan || isError.about"
+                        >
+                            Заполните обязательные поля!
+                        </p> -->
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -423,7 +488,7 @@
                         <div class="form__field">
                             <label class="form__label" for="squad-slogan"
                                 >Девиз отряда
-                                <sup class="valid-red">*</sup>
+                                <!-- <sup class="valid-red">*</sup> -->
                             </label>
                             <TextareaAbout
                                 maxlength="100"
@@ -433,6 +498,12 @@
                                 name="squad_slogan"
                                 v-model:value="detachment.slogan"
                             ></TextareaAbout>
+                            <!-- <p
+                                class="form__error form__error--name"
+                                v-if="isError.slogan"
+                            >
+                                * обязательно для заполнения
+                            </p> -->
                             <div class="form__counter">
                                 {{ counterSlogan }} / 100
                             </div>
@@ -441,7 +512,7 @@
                         <div class="form__field">
                             <label class="form__label" for="about-squad"
                                 >Об отряде
-                                <sup class="valid-red">*</sup>
+                                <!-- <sup class="valid-red">*</sup> -->
                             </label>
                             <TextareaAbout
                                 :rows="6"
@@ -452,6 +523,12 @@
                                 name="about_squad"
                                 v-model:value="detachment.about"
                             ></TextareaAbout>
+                            <!-- <p
+                                class="form__error form__error--name"
+                                v-if="isError.about"
+                            >
+                                * обязательно для заполнения
+                            </p> -->
                             <div class="form__counter">
                                 {{ counterAbout }} / 500
                             </div>
@@ -1356,6 +1433,10 @@ const props = defineProps({
     filePhotoFour: {
         type: String,
         default: null,
+    },
+    isError: {
+        type: Object,
+        default: () => ({}),
     },
 });
 
