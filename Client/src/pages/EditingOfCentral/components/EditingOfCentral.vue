@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
+    <div class="container container--top">
+        <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Редактирование центрального штаба</h1>
 

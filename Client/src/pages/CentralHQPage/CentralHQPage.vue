@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <Breadcrumbs></Breadcrumbs>
+<div class="central-page">
+            <Breadcrumbs></Breadcrumbs>
         <h1 class="title title--hq">Центральный штаб</h1>
         <BannerHQ
             v-if="showHQ"
@@ -46,6 +47,7 @@
             head="Руководство центрального штаба"
         ></ManagementHQ>
         <HQandSquad></HQandSquad>
+</div>
     </div>
 </template>
 <script setup>
@@ -147,6 +149,9 @@ onMounted(() => {
 // ];
 </script>
 <style lang="scss" scoped>
+.central-page {
+        padding-top: 40px;
+}
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;

@@ -69,7 +69,7 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="name-hq"
+                            <label for="name-hq" class="form__label"
                                 >Наименование штаба
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -89,7 +89,7 @@
 
                         <div class="date_central_wrap">
                             <div class="form__field form_width">
-                                <label for="date_students"
+                                <label for="date_students" class="form__label"
                                     >Дата появления студенческих отрядов в
                                     России (год)
                                     <sup class="valid-red">*</sup>
@@ -106,7 +106,7 @@
                                 />
                             </div>
                             <div class="form__field form_width">
-                                <label for="date_first"
+                                <label for="date_first" class="form__label"
                                     >Дата первого учредительного съезда РСО
                                     <sup class="valid-red">*</sup>
                                 </label>
@@ -121,7 +121,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="city">Город</label>
+                            <label for="city" class="form__label">Город</label>
                             <Input
                                 class="form__input"
                                 id="city"
@@ -135,7 +135,9 @@
                                 >Командир штаба:
                                 <sup class="valid-red">*</sup>
                             </label>
+                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                             <Dropdown
+                             open-on-clear
                                 id="beast"
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
@@ -222,33 +224,36 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="social-media-vk"
+                            <label for="social-media-vk" class="form__label"
                                 >Группа штаба ВКонтакте
                             </label>
-                            <Input
-                                class="form__input"
+                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
+                            <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-vk"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
                                 v-model:value="headquarter.social_vk"
-                            />
+                            ></TextareaAbout>
                         </div>
-
                         <div class="form__field">
-                            <label for="social-media-te"
-                                >Группа штаба в Телеграмме
+                            <label for="social-media-te" class="form__label"
+                                >Группа штаба в Телеграм
                             </label>
-                            <Input
-                                class="form__input"
+                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
+                           <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-te"
                                 placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                 name="social_media_te"
                                 v-model:value="headquarter.social_tg"
-                            />
+                            ></TextareaAbout>
                         </div>
-                        <!-- <div class="form__field" v-if="participants">
-                            <p>
-                                Участники отряда
+                        <div class="form__field" v-if="participants">
+                            <p class="form__label">
+                                Назначить на должность
                                 <sup class="valid-red">*</sup>
                             </p>
                             <v-text-field
@@ -270,11 +275,10 @@
                             </v-text-field>
                             <MembersList
                                 :items="sortedMembers"
-                                :validate="v"
                                 :submited="submited"
-                                @updateMember="onUpdateMember"
+                                @update-member="onUpdateMember"
                             ></MembersList>
-                        </div> -->
+                        </div>
                     </div>
 
                     <v-card-actions class="form__button-group">
@@ -362,23 +366,23 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="hq-slogan">Девиз штаба</label>
-                            <Input
-                                class="form__input"
-                                type="text"
+                            <label for="hq-slogan" class="form__label">Девиз штаба</label>
+                          <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
+                           <TextareaAbout
+                                maxlength="100"
+                                class="form__textarea form__textarea--mobile"
                                 id="hq-slogan"
                                 placeholder="Например, через тернии к звездам"
                                 name="hq_slogan"
                                 v-model:value="headquarter.slogan"
-                                :maxlength="100"
-                            />
+                            ></TextareaAbout>
                             <div class="form__counter">
                                 {{ counterSlogan }} / 100
                             </div>
                         </div>
 
                         <div class="form__field">
-                            <label for="about-hq">О штабе</label>
+                            <label for="about-hq" class="form__label">О штабе</label>
                             <TextareaAbout
                                 :rows="6"
                                 maxlength="500"
@@ -513,7 +517,8 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
@@ -641,7 +646,8 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
@@ -683,6 +689,10 @@ import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
 
 import { useVuelidate } from '@vuelidate/core';
+// УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import {
@@ -697,6 +707,9 @@ import {
 
 const emit = defineEmits([
     'update:value',
+    // УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
+    'updateMember',
+
     'changeHeadquarter',
     'selectFile',
     'resetEmblem',
@@ -762,14 +775,17 @@ const showButtonPrev = computed(() => {
 //-----------------------------------------------------------------------
 const members = ref([]);
 
+// УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
+const route = useRoute();
+let id = route.params.id;
+
 const getMembers = async () => {
-    await axios
-        .get('api/v1/centrals/1/members/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+    await HTTP.get(`centrals/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
         .then((response) => {
             members.value = response.data;
             console.log(response);
@@ -795,7 +811,6 @@ const sortedMembers = computed(() => {
 
 const onUpdateMember = (event, id) => {
     const targetMember = members.value.find((member) => member.id === id);
-
     const firstkey = Object.keys(event)[0];
     targetMember[firstkey] = event[firstkey];
 };
@@ -808,29 +823,19 @@ const changeValue = (event) => {
 //--Добавление логотипа-----------------------------------------------------------------------------
 
 const fileEmblem = ref(props.fileEmblem);
-// console.log(fileEmblem);
-
 const urlEmblem = ref(null);
-// console.log("значение emblem до изм - ", urlEmblem);
 
 const selectFile = (event) => {
     fileEmblem.value = event.target.files[0];
-    // console.log("значение fileEmblem после изм - ", fileEmblem.value);
-
     headquarter.value.emblem = null;
     urlEmblem.value = URL.createObjectURL(fileEmblem.value);
-    //   console.log("значение emblem после изм - ", detachment.value.emblem);
     emit('selectFile', fileEmblem.value);
 };
 
 const resetEmblem = () => {
-    // console.log(fileEmblem.value);
     headquarter.value.emblem = null;
     urlEmblem.value = null;
-
     fileEmblem.value = null;
-    // console.log(fileEmblem.value);
-
     emit('resetEmblem', fileEmblem.value);
 };
 
@@ -854,7 +859,6 @@ const resetBanner = () => {
 </script>
 
 <style lang="scss" scoped>
-// $expansion-panel-active-title-min-height 64px
 .form-button {
     width: 132px;
     min-height: 52px;
@@ -907,7 +911,6 @@ const resetBanner = () => {
 }
 
 .p-dropdown-items-wrapper {
-    // min-height: 400px;
 
     &::-webkit-scrollbar {
         /*стили полосы прокрутки */

@@ -339,6 +339,7 @@ onMounted(() => {
     color: #35383f;
     position: relative;
     border-bottom: 1px solid #d9d9d9;
+    // margin-bottom: 60px;
 
     @media (max-width: 1024px) {
         padding: 0;

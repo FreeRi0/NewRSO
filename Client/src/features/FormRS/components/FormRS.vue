@@ -69,7 +69,7 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="name-hq"
+                            <label for="name-hq" class="form__label"
                                 >Наименование штаба
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <dwiv class="form__field">
-                            <label for="district_headquarter"
+                            <label for="district_headquarter" class="form__label"
                                 >Выберите окружной штаб
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -101,7 +101,7 @@
                             ></Select>
                         </dwiv>
                         <div class="form__field">
-                            <label for="region"
+                            <label for="region" class="form__label"
                                 >Выберите регион
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -116,7 +116,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="city">Город</label>
+                            <label for="city" class="form__label">Город</label>
                             <Input
                                 class="form__input"
                                 id="city"
@@ -217,7 +217,7 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="social-media-vk"
+                            <label for="social-media-vk" class="form__label"
                                 >Группа штаба ВКонтакте
                             </label>
                             <Input
@@ -230,7 +230,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="social-media-te"
+                            <label for="social-media-te" class="form__label"
                                 >Группа штаба в Телеграмме
                             </label>
                             <Input
@@ -241,34 +241,6 @@
                                 v-model:value="headquarter.social_tg"
                             />
                         </div>
-                        <!-- <div class="form__field" v-if="editDistrict">
-                            <p>
-                                Участники отряда
-                                <sup class="valid-red">*</sup>
-                            </p>
-                            <v-text-field
-                                class="form__field-search"
-                                variant="outlined"
-                                type="text"
-                                placeholder="Поиск по ФИО"
-                                v-model="searchMembers"
-                            >
-                                <template #prepend-inner>
-                                    <Icon
-                                        icon="clarity-search-line"
-                                        color="#222222"
-                                        width="24"
-                                        height="24"
-                                    >
-                                    </Icon>
-                                </template>
-                            </v-text-field>
-                            <MembersList
-                                :items="sortedMembers"
-                                :submited="submited"
-                                @updateMember="onUpdateMember"
-                            ></MembersList>
-                        </div> -->
                     </div>
                     <v-card-actions class="form__button-group">
                         <Button
