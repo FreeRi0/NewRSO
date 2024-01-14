@@ -3,7 +3,7 @@
         <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Редактирование регионального штаба</h1>
-
+        
         <FormRS
             :participants="true"
             :headquarter="headquarter"
@@ -118,23 +118,71 @@ const changeHeadquarter = async () => {
     formData.append('emblem', fileEmblem.value);
     formData.append('banner', fileBanner.value);
 
-    HTTP.patch(`/regionals/${id}/`, formData, {
+    if ((fileEmblem, fileBanner)) {
+        HTTP.patch(`/regionals/${id}/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+    } else {
+        const axiosrequest2 = HTTP.patch(
+            `/regionals/${id}/`,
+            fileEmblem.value,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        const axiosrequest3 = HTTP.patch(
+            `/regionals/${id}/`,
+            fileBanner.value,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+    }
+
+    const axiosrequest1 = HTTP.patch(`/regionals/${id}/`, headquarter.value, {
         headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
-    })
-        .then((response) => {
-            submited.value = true;
-            console.log(response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        })
+    });
+
+    // const axiosrequest3 = HTTP.patch(`/regionals/${id}/`, fileBanner.value, {
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Token ' + localStorage.getItem('Token'),
+    //     },
+    // });
+
+    await axios
+        .all([axiosrequest1, axiosrequest2, axiosrequest3])
+        .then(
+            axios.spread(function (res1, res2, res3) {
+                headquarter.value = res1.data;
+                fileEmblem.value = res2.data;
+                fileBanner.value = res3.data;
+                // formData = res2.data;
+                // media.value = res2.data;
+                console.log(res1.data);
+                console.log(res2.data);
+                console.log(res3.data);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }),
+        )
         .catch((error) => {
             console.error('There was an error!', error);
             swal.fire({
@@ -145,6 +193,34 @@ const changeHeadquarter = async () => {
                 timer: 1500,
             });
         });
+
+    // HTTP.patch(`/regionals/${id}/`, formData, {
+    //     headers: {
+    //         'Content-Type': 'multipart/form-data',
+    //         Authorization: 'Token ' + localStorage.getItem('Token'),
+    //     },
+    // })
+    //     .then((response) => {
+    //         submited.value = true;
+    //         console.log(response.data);
+    //         swal.fire({
+    //             position: 'top-center',
+    //             icon: 'success',
+    //             title: 'успешно',
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //         });
+    //     })
+    //     .catch((error) => {
+    //         console.error('There was an error!', error);
+    //         swal.fire({
+    //             position: 'top-center',
+    //             icon: 'error',
+    //             title: 'ошибка',
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //         });
+    //     });
 };
 
 // const changeHeadquarter = async () => {
