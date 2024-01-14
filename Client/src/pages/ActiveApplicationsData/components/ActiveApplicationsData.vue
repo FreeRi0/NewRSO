@@ -1,71 +1,80 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h2 class="profile-title">Активные заявки</h2>
+        <div class="active-app">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
+            <h2 class="profile-title">Активные заявки</h2>
 
-        <div class="d-flex mt-9 mb-9">
-            <button
-                class="contributorBtn"
-                :class="{ active: picked === tab.name }"
-                v-for="tab in tabs"
-                :key="tab.id"
-                @click="picked = tab.name"
-            >
-                {{ tab.name }}
-            </button>
-        </div>
-        <div v-if="picked == 'Верификация аккаунтов' || picked == ''">
-            <div class="contributor-sort__all mb-8">
-                <input type="checkbox" @click="select" v-model="checkboxAll" />
+            <div class="d-flex mt-9 mb-9">
+                <button
+                    class="contributorBtn"
+                    :class="{ active: picked === tab.name }"
+                    v-for="tab in tabs"
+                    :key="tab.id"
+                    @click="picked = tab.name"
+                >
+                    {{ tab.name }}
+                </button>
             </div>
-            <activeApplications
-                :participants="participants"
-                @change="changePeoples"
-            />
-            <Button
-                @click="participantsVisible += step"
-                v-if="participantsVisible < participants.length"
-                label="Показать еще"
-            ></Button>
-            <Button
-                @click="participantsVisible -= step"
-                v-else
-                label="Свернуть все"
-            ></Button>
-            <div class="selectedItems" v-if="selectedPeoples.length > 0">
-                <h3>Итого: {{ selectedPeoples.length }}</h3>
-
-                <checkedAppList
-                    @change="changeSelected"
-                    :participants="selectedPeoples"
-                ></checkedAppList>
-            </div>
-        </div>
-        <div v-else-if="picked == 'Заявка на вступление в отряд'">
-            <div class="contributor-sort__all mb-8">
-                <input
-                    type="checkbox"
-                    @click="selectSquads"
-                    v-model="checkboxAllSquads"
+            <div v-if="picked == 'Верификация аккаунтов' || picked == ''">
+                <div class="contributor-sort__all mb-8">
+                    <input
+                        type="checkbox"
+                        @click="select"
+                        v-model="checkboxAll"
+                    />
+                </div>
+                <activeApplications
+                    :participants="participants"
+                    @change="changePeoples"
                 />
-            </div>
-            <div class="classes">
-                <div>Боец</div>
-                <div>Отряд</div>
-            </div>
-            <ActiveSquads @change="changeSquads" :detachments="detachments" />
-            <div class="selectedItems" v-if="selectedDetch.length > 0">
-                <h3>Итого: {{ selectedDetch.length }}</h3>
+                <Button
+                    @click="participantsVisible += step"
+                    v-if="participantsVisible < participants.length"
+                    label="Показать еще"
+                ></Button>
+                <Button
+                    @click="participantsVisible -= step"
+                    v-else
+                    label="Свернуть все"
+                ></Button>
+                <div class="selectedItems" v-if="selectedPeoples.length > 0">
+                    <h3>Итого: {{ selectedPeoples.length }}</h3>
 
-                <CheckedSquadsList
-                    @change="changeSelectedSquads"
-                    :detachments="selectedDetch"
-                ></CheckedSquadsList>
+                    <checkedAppList
+                        @change="changeSelected"
+                        :participants="selectedPeoples"
+                    ></checkedAppList>
+                </div>
             </div>
-        </div>
+            <div v-else-if="picked == 'Заявка на вступление в отряд'">
+                <div class="contributor-sort__all mb-8">
+                    <input
+                        type="checkbox"
+                        @click="selectSquads"
+                        v-model="checkboxAllSquads"
+                    />
+                </div>
+                <div class="classes">
+                    <div>Боец</div>
+                    <div>Отряд</div>
+                </div>
+                <ActiveSquads
+                    @change="changeSquads"
+                    :detachments="detachments"
+                />
+                <div class="selectedItems" v-if="selectedDetch.length > 0">
+                    <h3>Итого: {{ selectedDetch.length }}</h3>
 
-        <div v-else-if="picked == 'Заявка на участие в мероприятии'">
-            <p class="text-h3">Блок в разработке.....</p>
+                    <CheckedSquadsList
+                        @change="changeSelectedSquads"
+                        :detachments="selectedDetch"
+                    ></CheckedSquadsList>
+                </div>
+            </div>
+
+            <div v-else-if="picked == 'Заявка на участие в мероприятии'">
+                <p class="text-h3">Блок в разработке.....</p>
+            </div>
         </div>
     </div>
 </template>
@@ -103,6 +112,7 @@ const pages = ref([
 
 const participants = ref([]);
 const detachments = ref([]);
+const squad = ref({});
 const checkboxAll = ref(false);
 const checkboxAllSquads = ref(false);
 const participantsVisible = ref(12);
@@ -110,12 +120,43 @@ const selectedPeoples = ref([]);
 const selectedDetch = ref([]);
 const step = ref(12);
 
+// const getUser = async () => {
+//     await HTTP.get(`/rsousers/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             user.value = response.data;
+//             console.log(response.data);
+//         })
+//         .catch(function (error) {
+//             console.log('failed ' + error);
+//         });
+// };
+
 let tempParticipants = participants.value;
 
 tempParticipants = tempParticipants.slice(0, participantsVisible.value);
+// const getSquad = async () => {
+//     await HTTP.get(`/detachments/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             squad.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
 const viewParticipants = async () => {
-    await HTTP.get('/detachments/1/verifications/', {
+    await HTTP.get(`/detachments/4/verifications/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -131,7 +172,7 @@ const viewParticipants = async () => {
 };
 
 const viewDetachments = async () => {
-    await HTTP.get('/detachments/1/applications/', {
+    await HTTP.get(`/detachments/1/applications/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -209,6 +250,10 @@ const select = (event) => {
     margin: 0px;
     padding: 10px 24px;
     margin: 7px;
+}
+
+.active-app {
+    padding-top: 40px;
 }
 
 .active {

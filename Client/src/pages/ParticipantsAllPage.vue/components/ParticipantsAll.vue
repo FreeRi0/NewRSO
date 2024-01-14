@@ -3,24 +3,17 @@
         <div class="participants">
             <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="participants-title">Участники ЛСО</h2>
-            <h2 class="participants-title" v-if="event">Участники Мероприятия</h2>
+            <h2 class="participants-title" v-if="event">
+                Участники Мероприятия
+            </h2>
             <div class="participants-tabs">
-                <!-- <v-btn
-                    class="participants-tabs__item"
-                    :class="{ active: checked === category }"
-                    v-for="category in categories"
-                    :key="category"
-                    @click="checked = category"
-                    >{{ category }}</v-btn
-                > -->
-
                 <div class="d-flex">
                     <Button
                         type="button"
                         label="Уже в отряде"
                         class="contributorBtn"
                         :class="{ active: picked === true }"
-                    @click="picked = true"
+                        @click="picked = true"
                     ></Button>
 
                     <Button
@@ -28,7 +21,7 @@
                         label="Ожидают одобрение"
                         class="contributorBtn"
                         :class="{ active: picked === false }"
-                    @click="picked = false"
+                        @click="picked = false"
                     ></Button>
                 </div>
             </div>
@@ -115,17 +108,24 @@
 
             <div class="participants-wrapper" v-show="vertical">
                 <ParticipantsList
-                v-if="picked === true"
+                    v-if="picked === true"
                     :participants="sortedParticipants"
                 ></ParticipantsList>
-                <VerifiedList  v-else="picked === false" :verified="verified"></VerifiedList>
+                <VerifiedList
+                    v-else="picked === false"
+                    :verified="sortedVerified"
+                ></VerifiedList>
             </div>
 
             <div class="horizontallso" v-show="!vertical">
                 <horizontalParticipantsList
-
+                    v-if="picked === true"
                     :participants="sortedParticipants"
                 ></horizontalParticipantsList>
+                <VerifiedHorizontal
+                    v-else="picked === false"
+                    :verified="sortedVerified"
+                ></VerifiedHorizontal>
             </div>
             <Button
                 @click="participantsVisible += step"
@@ -145,7 +145,8 @@ import { Button } from '@shared/components/buttons';
 import {
     ParticipantsList,
     horizontalParticipantsList,
-    VerifiedList
+    VerifiedList,
+    VerifiedHorizontal,
 } from '@features/Participants/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
@@ -186,8 +187,8 @@ if (props.event) {
             });
     };
     onMounted(() => {
-    eventMembers();
-});
+        eventMembers();
+    });
 } else {
     const aboutMembers = async () => {
         await HTTP.get(`/detachments/${id}/members/`, {
@@ -220,10 +221,9 @@ if (props.event) {
             });
     };
     onMounted(() => {
-    aboutMembers();
-    aboutVerified();
-});
-
+        aboutMembers();
+        aboutVerified();
+    });
 }
 
 const pages = [
@@ -292,14 +292,55 @@ const sortedParticipants = computed(() => {
         }
     });
 
-    // tempParticipants = tempParticipants.filter((item) => item.is_trusted === picked.value);
-    // tempParticipants = tempParticipants.sort((a, b) => a.is_trusted - b.is_trusted);
+    return tempParticipants;
+});
+
+const sortedVerified = computed(() => {
+    let tempVerified = verified.value;
+    tempVerified = tempVerified.slice(0, participantsVisible.value);
+
+    tempVerified = tempVerified.filter((item) => {
+        return item.user.last_name
+            .toUpperCase()
+            .includes(searchParticipants.value.toUpperCase());
+    });
+
+    tempVerified = tempVerified.sort((a, b) => {
+        if (sortBy.value == 'alphabetically') {
+            let fa = a.user.last_name.toLowerCase(),
+                fb = b.user.last_name.toLowerCase();
+
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        } else if (sortBy.value == 'date_of_birth') {
+            let fc = a.user.date_of_birth,
+                fn = b.user.date_of_birth;
+
+            if (fc < fn) {
+                return -1;
+            }
+            if (fc > fn) {
+                return 1;
+            }
+            return 0;
+        } else if (sortBy.value == 'days') {
+            return a.days - b.days;
+        }
+    });
 
     if (!ascending.value) {
         tempParticipants.reverse();
     }
+    if (!ascending.value) {
+        tempVerified.reverse();
+    }
 
-    return tempParticipants;
+    return tempVerified;
 });
 </script>
 <style lang="scss">
@@ -386,6 +427,14 @@ const sortedParticipants = computed(() => {
         background-color: #1c5c94;
         color: white;
         border: 1px solid #1c5c94;
+    }
+
+    .v-select__selection {
+        span {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     }
 
     .form__select {

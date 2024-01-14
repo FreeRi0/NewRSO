@@ -91,6 +91,7 @@
                             v-model="selectedSortRegion"
                             class="filter-region"
                             address="/regionals/"
+                            placeholder="Региональные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
@@ -370,6 +371,15 @@ const sortedHeadquarters = computed(() => {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
 
 // .v-label {
 //     margin-top: 20px;
