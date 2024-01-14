@@ -135,6 +135,7 @@
                                 >Командир штаба:
                                 <sup class="valid-red">*</sup>
                             </label>
+                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                             <Dropdown
                              open-on-clear
                                 id="beast"
@@ -275,7 +276,7 @@
                                 :submited="submited"
                                 @update-member="onUpdateMember"
                             ></MembersList>
-                        </div> -->
+                        </div>
                     </div>
 
                     <v-card-actions class="form__button-group">
