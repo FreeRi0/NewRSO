@@ -3,8 +3,17 @@
         <div class="user-wrapper">
             <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="page-title" v-if="currentUser">Моя страница</h2>
-            <h2 class="page-title" v-else>Пользователь: {{ user.first_name }}</h2>
-            <BannerComp :user="user"  :education="education" :user_region="region" :edited="false" class="mt-3"></BannerComp>
+            <h2 class="page-title" v-else>
+                Пользователь: {{ user.first_name }}
+            </h2>
+            <BannerComp
+                :user="user"
+
+                :education="education"
+                :user_region="region"
+                :edited="false"
+                class="mt-3"
+            ></BannerComp>
             <div class="user-verify" v-if="!user.is_verified">
                 <p class="user-verify__title">Верификация данных</p>
                 <div class="user-verify__desc">
@@ -13,24 +22,39 @@
                     верификацию. Верификация — это документальное подтверждение
                     ваших личных данных. Она займет всего несколько минут.
                 </div>
-                <router-link to='/PersonalData'>
-                <Button
-                class="user-verify__btn"
-                    name="verify-btn"
-                    label="Пройти верификацию"
-                    color="primary"
-                ></Button
-            ></router-link>
+                <router-link to="/PersonalData">
+                    <Button
+                        class="user-verify__btn"
+                        name="verify-btn"
+                        label="Пройти верификацию"
+                        color="primary"
+                    ></Button
+                ></router-link>
             </div>
 
-
-
             <div class="mt-14" v-if="user.is_verified">{{ user.bio }}</div>
-            <v-row class="mt-8">
-                <v-col v-for="photo in 4" :key="n" class="d-flex" v-if="user.is_verified">
-                  <userPhoto :photos="user?.media?.photo1" :add="false"></userPhoto>
-                </v-col>
-            </v-row>
+            <div class="mt-8 d-flex">
+            <userPhoto
+                class="photo-item"
+                :photo="user?.media?.photo1"
+                :add="false"
+            ></userPhoto>
+            <userPhoto2
+                class="photo-item"
+                :photo="user?.media?.photo2"
+                :add="false"
+            ></userPhoto2>
+            <userPhoto3
+                class="photo-item"
+                :photo="user?.media?.photo3"
+                :add="false"
+            ></userPhoto3>
+            <userPhoto4
+                class="photo-item"
+                :photo="user?.media?.photo4"
+                :add="false"
+            ></userPhoto4>
+        </div>
         </div>
     </div>
 </template>
@@ -38,9 +62,7 @@
 import { Button } from '@shared/components/buttons';
 import { BannerComp } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
-import {
-    userPhoto,
-} from '@shared/components/imagescomp';
+import { userPhoto, userPhoto2, userPhoto3, userPhoto4 } from '@shared/components/imagescomp';
 
 import { ref, computed, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
@@ -51,14 +73,19 @@ const pages = ref([
     { pageTitle: 'Моя страница', href: '#' },
 ]);
 
-const user = ref({})
-const currentUser = ref(null)
-const education = ref({})
-const region = ref({})
+const user = ref({});
+const currentUser = ref({});
+const education = ref({});
+const region = ref({});
 const route = useRoute();
 let id = route.params.id;
 
-const getUser = async() => {
+const props = defineProps({
+    currentUsser: Boolean,
+});
+
+
+const getUser = async () => {
     await HTTP.get(`/rsousers/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -72,8 +99,25 @@ const getUser = async() => {
         .catch(function (error) {
             console.log('failed ' + error);
         });
-}
-const getCurrentUser = async() => {
+};
+
+const getMedia = async () => {
+    await HTTP.get(`/rsousers/me/media/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            media.value = response.data;
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+};
+
+const getCurrentUser = async () => {
     await HTTP.get('/rsousers/me/', {
         headers: {
             'Content-Type': 'application/json',
@@ -87,11 +131,11 @@ const getCurrentUser = async() => {
         .catch(function (error) {
             console.log('failed ' + error);
         });
-}
+};
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
-        getUser()
+        getUser();
     }
 });
 
@@ -99,15 +143,18 @@ watch(
     () => route.params.id,
 
     (newId, oldId) => {
-        id = newId
-        getUser()
+        id = newId;
+        getUser();
     },
 );
 
 onMounted(() => {
-    getUser()
-    getCurrentUser()
-})
+
+        getCurrentUser();
+
+        getUser();
+
+});
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
@@ -127,6 +174,12 @@ onMounted(() => {
         width: 835px;
         margin-bottom: 40px;
     }
+}
+
+
+.photo-item {
+    width: 260px;
+    margin-right: 20px;
 }
 .btn {
     margin: 0px;

@@ -1,3 +1,4 @@
 import activeApplications from './ActiveApplications.vue';
-
-export { activeApplications };
+import checkedAppList from './CheckedApplicationsList.vue';
+import ActiveSquads from './ActiveSquads.vue';
+export { activeApplications, checkedAppList, ActiveSquads };

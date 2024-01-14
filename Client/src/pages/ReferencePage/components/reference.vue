@@ -367,7 +367,8 @@
                     </v-expansion-panels>
 
                     <p>
-                        Найдено пользователей: {{ sortedParticipants.length }}
+                        Найдено пользователей:
+                        {{ sortedParticipantsRef.length }}
                     </p>
                 </div>
                 <!-- <filters></filters> -->
@@ -403,7 +404,7 @@
                     <div class="references-wrapper">
                         <referencesList
                             @change="changePeoples"
-                            :participants="participants"
+                            :participants="sortedParticipantsRef"
                             :selectedParticipants="selectedPeoples"
                         ></referencesList>
                     </div>
@@ -421,10 +422,7 @@
             </div>
 
             <div class="references-form" v-if="selectedPeoples.length > 0">
-                <form
-                    action="#"
-                    @submit.prevent="SendReference()"
-                >
+                <form action="#" @submit.prevent="SendReference()">
                     <div class="data-form refer">
                         <div class="form-field">
                             <label for="education-org"
@@ -488,7 +486,6 @@ import { Dropdown } from '@shared/components/dropdown';
 import { Input } from '@shared/components/inputs';
 import {
     referencesList,
-    filters,
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
@@ -502,13 +499,32 @@ const participants = ref([]);
 // const participant = ref({});
 
 const selectedPeoples = ref([]);
+console.log('dssdddd', selectedPeoples);
 
+// const ids = ref(selectedPeoples);
+// const arr = selectedPeoples.value.reduce(({ id }) => {}, []);
+
+// let arr = selectedPeoples.value.map((item) => item.id)
+
+const arr = computed(() => {
+    let tempPeoples = selectedPeoples.value;
+    tempPeoples = tempPeoples.map((item) => item.id);
+    return tempPeoples;
+});
+
+console.log('idssSss', arr);
+
+// console.log(getArr(selectedPeoples))
+// let { id, ...rest } = selectedPeoples;
+// console.log('id', id)
 const refData = ref({
     cert_start_date: '',
     cert_end_date: '',
-    ids: Array,
+    ids: arr,
     recipient: '',
 });
+
+console.log('data', refData.value.ids);
 
 const viewParticipants = async () => {
     await HTTP.get('/rsousers/', {
@@ -536,9 +552,17 @@ const SendReference = async () => {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
+        responseType: 'blob',
     })
         .then((response) => {
-            refData.value = response.data
+            refData.value = response.data;
+            const url = new Blob([response.data], { type: 'application/zip' });
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'external.zip');
+            document.body.appendChild(link);
+            link.click();
+            console.log(response, 'success');
             console.log(response);
         })
         .catch(function (error) {
@@ -621,7 +645,7 @@ const sortOptionss = ref([
     { value: 'date_of_birth', name: 'По дате вступления в РСО' },
 ]);
 
-const sortedParticipants = computed(() => {
+const sortedParticipantsRef = computed(() => {
     let tempParticipants = participants.value;
 
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);

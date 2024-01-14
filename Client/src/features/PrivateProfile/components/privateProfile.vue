@@ -17,11 +17,14 @@
                         v-model="privateData.privacy_telephone"
                         :names="educations"
                     ></Select>
+                    <p class="error" v-if="isError.privacy_telephone">{{ 'Настройка ' +  isError.privacy_telephone }}</p>
                 </div>
                 <div class="privateProfile-select">
+
                     <div class="privateProfile-text">
                         Кто видит мою электронную почту
                     </div>
+
                     <Select
                         variant="outlined"
                         clearable
@@ -29,7 +32,9 @@
                         v-model="privateData.privacy_email"
                         :names="educations"
                     ></Select>
+                    <p class="error" v-if="isError.privacy_email">{{ '' +  isError.privacy_email }}</p>
                 </div>
+
                 <div class="privateProfile-select">
                     <div class="privateProfile-text">
                         Кто видит мои ссылки на соцсети
@@ -41,6 +46,7 @@
                         v-model="privateData.privacy_social"
                         :names="educations"
                     ></Select>
+                    <p class="error" v-if="isError.privacy_social">{{ '' +  isError.privacy_social }}</p>
                 </div>
                 <div class="privateProfile-select">
                     <div class="privateProfile-text">
@@ -53,6 +59,7 @@
                         v-model="privateData.privacy_about"
                         :names="educations"
                     ></Select>
+                    <p class="error" v-if="isError.privacy_about">{{ '' +  isError.privacy_about }}</p>
                 </div>
                 <div class="privateProfile-select">
                     <div class="privateProfile-text">
@@ -65,7 +72,10 @@
                         v-model="privateData.privacy_photo"
                         :names="educations"
                     ></Select>
+                    <p class="error" v-if="isError.privacy_photo">{{ '' +  isError.privacy_photo }}</p>
                 </div>
+
+                <p class="error" v-if="isError.detail">{{ '' +  isError.detail }}</p>
                 <Button
                     type="submit"
                     label="Сохранить"
@@ -85,21 +95,40 @@
 <script setup>
 import { Select } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, inject } from 'vue';
 import { HTTP } from '@app/http';
 
+const swal = inject('$swal');
+const isError = ref([]);
 const isSave = ref(true);
 const educations = ref([
     {
         value: 'all',
-        name: 'all',
+        name: 'Все',
     },
     {
         value: 'detachment_members',
-        name: 'detachment_members',
+        name: 'Члены отряда',
     },
-    { value: 'management_members', name: 'management_members' },
+    { value: 'management_members', name: 'Руководство' },
 ]);
+
+// const educations = ref([
+//     {
+//         value: 'all',
+//         name: 'all',
+//         name: 'Все',
+//     },
+//     {
+//         value: 'detachment_members',
+//         name: 'detachment_members',
+//         value: 'Члены отряда',
+//         name: 'Члены отряда',
+//     },
+//     { value: 'management_members', name: 'management_members' },
+//     { value: 'Руководство', name: 'Руководство' },
+// ]);
+
 
 const privateData = ref({
     privacy_photo: null,
@@ -131,7 +160,7 @@ onMounted(() => {
 
 
 const ChangePrivate = async () => {
-    await HTTP.post('/rsousers/me/privacy/', privateData.value, {
+    await HTTP.patch('/rsousers/me/privacy/', privateData.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -139,7 +168,6 @@ const ChangePrivate = async () => {
     })
         .then((response) => {
             console.log(response.data);
-            isSave.value = false;
             swal.fire({
                 position: 'top-center',
                 icon: 'success',
@@ -149,8 +177,9 @@ const ChangePrivate = async () => {
             });
         })
 
-        .catch(({ error }) => {
-            console.log('There was an error!', error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
             swal.fire({
                 position: 'top-center',
                 icon: 'error',
@@ -161,7 +190,6 @@ const ChangePrivate = async () => {
         });
 };
 
-// const updateChangePrivate = async () => {};
 </script>
 <style lang="scss">
 .privateProfile-select {
