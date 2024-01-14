@@ -188,9 +188,6 @@ const showVertical = () => {
 <style lang='scss' scoped>
     //Общий стиль компонента
     .action{
-        &-container{
-
-        }
         &-title{
           height: 116px;
           font-size: 52px;
@@ -210,12 +207,6 @@ const showVertical = () => {
           width: 320px;
           margin-right: 16px;
           margin-bottom: 20px;
-        }
-        &-header{
-
-        }
-        &-body{
-
         }
         &-text{
           align-items: baseline;
