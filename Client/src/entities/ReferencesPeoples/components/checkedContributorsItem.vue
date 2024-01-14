@@ -106,7 +106,7 @@ watch(selectedPeoples, (newChecked) => {
 
 const ChangeStatus = async () => {
     let { id, ...rest } = props.participant;
-    HTTP.post(`rsousers/${id}/membership_fee_status/`, participantItem.value, {
+    await HTTP.post(`rsousers/${id}/membership_fee_status/`, participantItem.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

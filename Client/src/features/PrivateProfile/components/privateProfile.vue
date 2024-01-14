@@ -10,72 +10,87 @@
                     <div class="privateProfile-text">
                         Кто видит мой номер телефона
                     </div>
-                    <Select
+                    <sortByEducation
+                       placeholder="Все"
                         variant="outlined"
                         clearable
-                        class="changePrivate"
                         v-model="privateData.privacy_telephone"
-                        :names="privacies"
-                    ></Select>
-                    <p class="error" v-if="isError.privacy_telephone">{{ 'Настройка ' +  isError.privacy_telephone }}</p>
+                        :options="privacies"
+                    ></sortByEducation>
+
+                    <p class="error" v-if="isError.privacy_telephone">
+                        {{ 'Настройка ' + isError.privacy_telephone }}
+                    </p>
                 </div>
                 <div class="privateProfile-select">
-
                     <div class="privateProfile-text">
                         Кто видит мою электронную почту
                     </div>
 
-                    <Select
+                    <sortByEducation
+                       placeholder="Все"
                         variant="outlined"
                         clearable
-                        class="changePrivate"
                         v-model="privateData.privacy_email"
-                        :names="privacies"
-                    ></Select>
-                    <p class="error" v-if="isError.privacy_email">{{ '' +  isError.privacy_email }}</p>
+                        :options="privacies"
+                    ></sortByEducation>
+                    <p class="error" v-if="isError.privacy_email">
+                        {{ '' + isError.privacy_email }}
+                    </p>
                 </div>
 
                 <div class="privateProfile-select">
                     <div class="privateProfile-text">
                         Кто видит мои ссылки на соцсети
                     </div>
-                    <Select
+                    <sortByEducation
+                       placeholder="Все"
                         variant="outlined"
                         clearable
-                        class="changePrivate"
                         v-model="privateData.privacy_social"
-                        :names="privacies"
-                    ></Select>
-                    <p class="error" v-if="isError.privacy_social">{{ '' +  isError.privacy_social }}</p>
+                        :options="privacies"
+                    ></sortByEducation>
+
+                    <p class="error" v-if="isError.privacy_social">
+                        {{ '' + isError.privacy_social }}
+                    </p>
                 </div>
                 <div class="privateProfile-select">
                     <div class="privateProfile-text">
                         Кто видит информацию обо мне
                     </div>
-                    <Select
+                    <sortByEducation
+                       placeholder="Все"
                         variant="outlined"
                         clearable
-                        class="changePrivate"
                         v-model="privateData.privacy_about"
-                        :names="privacies"
-                    ></Select>
-                    <p class="error" v-if="isError.privacy_about">{{ '' +  isError.privacy_about }}</p>
+                        :options="privacies"
+                    ></sortByEducation>
+
+                    <p class="error" v-if="isError.privacy_about">
+                        {{ '' + isError.privacy_about }}
+                    </p>
                 </div>
                 <div class="privateProfile-select">
                     <div class="privateProfile-text">
                         Кто видит мои фотографии
                     </div>
-                    <Select
+                    <sortByEducation
+                       placeholder="Все"
                         variant="outlined"
                         clearable
-                        class="changePrivate"
                         v-model="privateData.privacy_photo"
-                        :names="privacies"
-                    ></Select>
-                    <p class="error" v-if="isError.privacy_photo">{{ '' +  isError.privacy_photo }}</p>
+                        :options="privacies"
+                    ></sortByEducation>
+         
+                    <p class="error" v-if="isError.privacy_photo">
+                        {{ '' + isError.privacy_photo }}
+                    </p>
                 </div>
 
-                <p class="error" v-if="isError.detail">{{ '' +  isError.detail }}</p>
+                <p class="error" v-if="isError.detail">
+                    {{ '' + isError.detail }}
+                </p>
                 <Button
                     type="submit"
                     label="Сохранить"
@@ -86,7 +101,7 @@
     </div>
 </template>
 <script setup>
-import { Select } from '@shared/components/selects';
+import { Select, sortByEducation } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { ref, computed, onMounted, inject } from 'vue';
 import { HTTP } from '@app/http';
@@ -105,7 +120,6 @@ const privacies = ref([
     },
     { value: 'management_members', name: 'Руководство' },
 ]);
-
 
 const privateData = ref({
     privacy_photo: null,
@@ -132,9 +146,8 @@ const getPrivate = async () => {
 };
 
 onMounted(() => {
-    getPrivate()
-})
-
+    getPrivate();
+});
 
 const ChangePrivate = async () => {
     await HTTP.patch('/rsousers/me/privacy/', privateData.value, {
@@ -166,7 +179,6 @@ const ChangePrivate = async () => {
             });
         });
 };
-
 </script>
 <style lang="scss">
 .privateProfile-select {

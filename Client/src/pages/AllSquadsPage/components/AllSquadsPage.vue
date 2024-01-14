@@ -97,6 +97,7 @@
                                     id="select-education"
                                     v-model="selectedSort"
                                     address="/eduicational_institutions/"
+                                    placeholder="Образовательная организация"
                                 ></Select>
                             </div>
                             <div class="sort-select">
@@ -298,7 +299,7 @@ const sortedSquads = computed(() => {
     return tempSquads;
 });
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
 body {
     border: 1px solid red;
 }
@@ -331,6 +332,13 @@ body {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
     background-position: center;
+}
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 .squads {

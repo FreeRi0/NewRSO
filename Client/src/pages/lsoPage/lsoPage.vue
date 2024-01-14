@@ -1,42 +1,46 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--lso">ЛСО</h1>
-        <!-- <BannerComp class="user-metric mt-3">
+        <div class="squad-page">
+            <Breadcrumbs :items="pages"></Breadcrumbs>
+            <h1 class="title title--lso">ЛСО</h1>
+            <!-- <BannerComp class="user-metric mt-3">
 
         </BannerComp> -->
-        <BannerSquad
-            :squad="squad"
-            :edict="educt"
-            :member="member"
-        ></BannerSquad>
-        <section class="about-squad">
-            <h3>Об отряде</h3>
-            <p>
-                {{ squad.about }}
-            </p>
-        </section>
-        <div class="mt-8 d-flex">
-            <squadPhotos
-                class="photo-item"
-                :squad-photos="squad.photo1"
-            ></squadPhotos>
-            <squadPhotos
-                class="photo-item"
-                :squad-photos="squad.photo2"
-            ></squadPhotos>
-            <squadPhotos
-                class="photo-item"
-                :squad-photos="squad.photo3"
-            ></squadPhotos>
-            <squadPhotos
-                class="photo-item"
-                :squad-photos="squad.photo4"
-            ></squadPhotos>
+            <BannerSquad
+                :squad="squad"
+                :edict="educt"
+                :member="member"
+            ></BannerSquad>
+            <section class="about-squad">
+                <h3>Об отряде</h3>
+                <p>
+                    {{ squad.about }}
+                </p>
+            </section>
+            <div class="mt-8 d-flex">
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo1"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo2"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo3"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo4"
+                ></squadPhotos>
+            </div>
+
+            <SquadParticipants
+                :squad="squad"
+                :member="member"
+            ></SquadParticipants>
         </div>
-
-
-        <SquadParticipants :squad="squad" :member="member"></SquadParticipants>
     </div>
 </template>
 <script setup>
@@ -133,6 +137,10 @@ const pages = [
 ];
 </script>
 <style scoped lang="scss">
+
+.squad-page {
+   padding-top: 40px;
+}
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;
