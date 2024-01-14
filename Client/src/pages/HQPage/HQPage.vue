@@ -72,6 +72,7 @@ const member = ref([]);
 const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
+// hhhh
 
 const aboutHQ = async () => {
     await HTTP.get(`/educationals/${id}/`, {
