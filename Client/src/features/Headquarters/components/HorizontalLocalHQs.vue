@@ -5,8 +5,12 @@
         v-if="localHeadquarters.length > 0"
     >
         <div class="horizontal-img">
-            <img :src="localHeadquarter.emblem" alt="logo" v-if="localHeadquarter.emblem" />
-            <img src="@app/assets/user-avatar.png" alt="logo" v-else/>
+            <img
+                :src="localHeadquarter.emblem"
+                alt="logo"
+                v-if="localHeadquarter.emblem"
+            />
+            <img src="@app/assets/user-avatar.png" alt="logo" v-else />
         </div>
         <div class="containerHorizontal">
             <p class="headquarters-wrapper__item-category-full">
@@ -35,8 +39,11 @@ const props = defineProps({
         padding: 4px 20px;
     }
     &-img {
-        width: 40px;
-        height: 40px;
+        img {
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+        }
     }
 }
 

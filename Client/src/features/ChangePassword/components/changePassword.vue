@@ -14,6 +14,7 @@
         <p class="error" v-if="isError.last_name">{{ 'Фамилия пользователя, ' +  isError.last_name }}</p>
             <p class="error" v-if="isError.first_name">{{'Имя пользователя, ' + isError.first_name }}</p>
             <p class="error" v-if="isError.gender">{{'Гендер, ' + isError.gender }}</p>
+            <p class="error" v-if="isError.username">{{'' + isError.username }}</p>
         <Button @click="updateUsername" v-show="visible" class="save" label="Сохранить" color="primary"></Button>
     </div>
     <div class="change_Password">

@@ -73,32 +73,38 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <Select
+                            clearable
                             variant="outlined"
                             name="select_district"
                             id="select-district"
                             v-model="selectedSortDistrict"
                             class="filter-district"
                             address="/districts/"
+                            placeholder="Окружные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <Select
+                            clearable
                             variant="outlined"
                             name="select_region"
                             id="select-region"
                             v-model="selectedSortRegion"
                             class="filter-region"
                             address="/regionals/"
+                            placeholder="Региональные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <Select
+                            clearable
                             variant="outlined"
                             name="select_local"
                             id="select-local"
                             v-model="selectedSortLocal"
                             class="filter-local"
                             address="/locals/"
+                            placeholder="Местные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
@@ -165,9 +171,9 @@ const pages = ref([
     { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
 ]);
 
-const headquartersVisible = ref(1);
+const headquartersVisible = ref(20);
 
-const step = ref(3);
+const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -345,6 +351,14 @@ const sortedHeadquarters = computed(() => {
         font-size: 20px;
         font-family: 'Akrobat';
         color: #1e1e1e;
+    }
+}
+
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }
 

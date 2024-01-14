@@ -45,12 +45,14 @@ body div[id=app] {
   width: 212px;
 }
 
+
 .ascend {
   border: 1px solid #35383F !important;
   background-image: url("@app/assets/icon/switch.svg");
   background-repeat: no-repeat;
   background-position: center;
 }
+
 
 ul {
   list-style: none;
@@ -111,8 +113,10 @@ img {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center bottom;
+
   padding-top: 60px;
   padding-bottom: 60px;
+
 }
 
 .v-card--variant-elevated {
@@ -175,6 +179,15 @@ img {
 .form__field:last-child {
   margin-bottom: 0;
 }
+
+.form__field label {
+  width: fit-content;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #35383f;
+}
+
 .form__field .form-input input.form__input {
   padding: 8px 44px 8px 20px;
   font-size: 16px;
@@ -185,6 +198,7 @@ img {
 .form__field .form-input input[type=date] {
   padding: 8px 20px;
 }
+
 .form__label {
   width: fit-content;
   margin-bottom: 8px;
@@ -195,6 +209,7 @@ img {
 .form__field--commander .v-field__field {
   margin-left: 10px;
 }
+
 .form__input {
   min-height: 40px;
 }
@@ -216,11 +231,13 @@ img {
   border: 1px solid #b6b6b6;
   border-radius: 10px;
 }
+
 .form__select--select {
   margin-right: 0;
   border: 1px solid #b6b6b6;
   margin-bottom: 8px;
 }
+
 .form__select .v-field__input {
   min-height: 40px;
   padding: 8px 20px;
@@ -228,6 +245,7 @@ img {
   line-height: 21px;
   font-weight: 400;
 }
+
 .form__select-item {
   width: calc(100% - 40px);
   margin: 0 auto;
@@ -236,6 +254,7 @@ img {
   border-bottom: 1px solid #b6b6b6;
   margin-bottom: 10px;
 }
+
 .form__counter {
   font-size: 14px;
   line-height: 18.5px;
@@ -262,6 +281,17 @@ img {
   margin: 40px 0 60px;
   padding: 0;
 }
+
+.form__photo-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  column-gap: 20px;
+  height: 347px;
+}
+.form .avatar-preview.my_photo__plug img {
+  height: 347px;
+}
+
 .form .valid-red {
   color: #db0000;
 }
@@ -304,9 +334,11 @@ img {
 .form .v-expansion-panel .v-expansion-panel-text__wrapper {
   padding: 0;
 }
+
 .form .v-autocomplete__selection {
   width: 100%;
 }
+
 
 .title {
   font-family: "Akrobat";
@@ -325,6 +357,7 @@ img {
     font-weight: 600;
   }
 }
+
 
 .photo-add__container {
   display: grid;

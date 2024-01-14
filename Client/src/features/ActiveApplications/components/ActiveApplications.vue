@@ -8,28 +8,17 @@
     />
 </template>
 <script setup>
-// import participants from '@entities/user/index';
-import { sortByEducation } from '@shared/components/selects';
 import { computed, ref } from 'vue';
-import { Button } from '@shared/components/buttons';
 import { referenceItem } from '@entities/ReferencesPeoples/components';
-
-
-
 const emit = defineEmits(['change']);
 const props = defineProps({
     participants: {
         type: Array,
         required: true,
     },
-    selectedParticipants: {
-        type: Array,
-        default: () => []
-    },
 });
 
-const changePeoples = (selectedHumans) => {
-    emit('change', selectedHumans);
+const changePeoples = (CheckedUser, UserId) => {
+    emit('change', CheckedUser, UserId);
 };
 </script>
-<style lang="scss"></style>

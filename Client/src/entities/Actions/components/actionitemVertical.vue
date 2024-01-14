@@ -1,7 +1,9 @@
+
 <template>
     <div class='postcard' @click="RouteToAction">
         <section class='postcard-counts'>
-            <img src="{{action.banner}}" class='postcard-image' alt='Изображение'/>
+            <img :src="action.banner" class='postcard-image' alt='Изображение'/>
+
             <p class='postcard-title'>{{action.name}}</p>
             <p class='postcard-title'>{{action.description}}</p>
         </section>
@@ -13,6 +15,7 @@
 </template>
 
 <script setup>
+
 
 import { useRouter } from 'vue-router';
 
@@ -45,6 +48,7 @@ const props = defineProps({
 function RouteToAction(){
     router.push(`/actionSquads/` + props.action.id);
 }
+
 </script>
 
 <style lang='scss' scoped>
@@ -80,7 +84,9 @@ function RouteToAction(){
   &-counts{
     display: flex;
     justify-content: space-between;
+
     align-items: center;
+
   }
   &-date, &-group{
     display: flex;
@@ -110,8 +116,10 @@ function RouteToAction(){
   }
 }
 
+
 .postcard:hover{
   cursor: pointer;
   border: 1px solid black;
 }
+
 </style>

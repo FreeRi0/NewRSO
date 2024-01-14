@@ -1,1 +1,1 @@
-import {default as ActionPage} from "./components/ActionPage.vue";
+export {default as ActionPage} from "./components/ActionPage.vue";
