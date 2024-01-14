@@ -6,6 +6,8 @@ export * as termsPage from './terms_of_use';
 
 export * as UserPage from './UserPage';
 
+export * as CreationActionsPage from './CreationActionsPage';
+
 export * as CreationOfDetachment from './CreationOfDetachment';
 
 export * as EditingDetachment from './EditingDetachment';
@@ -14,4 +16,8 @@ export * as PersonalData from './PersonalDataPage';
 
 export * as CreationOfHQ from './CreationOfHQ';
 
-export * as CreationOfRS from './CreationOfRS';
+export * as actionSquadsPage from './actionSquadsPade';
+
+
+export * as activeInventsPage from './ActiveInventsPage';
+

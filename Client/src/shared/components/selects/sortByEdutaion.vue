@@ -19,6 +19,7 @@
         :model-value="modelValue"
         @update:model-value="changeOption"
         :items="options"
+        :placeholder="placeholder"
         item-title="name"
         item-value="value"
     >
@@ -41,6 +42,10 @@ const props = defineProps({
         default: () => [],
     },
     selected: {
+        type: String,
+        default: '',
+    },
+    placeholder: {
         type: String,
         default: '',
     },

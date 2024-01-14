@@ -3,7 +3,7 @@
         <div class="horizontallso__confidant mr-3">
             <input
                 type="checkbox"
-                v-model="selectedPeoples"
+                v-model="checked"
                 :value="participant"
                 @change="updateMembership"
             />
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="horizontallso-info mx-3" v-if="!isMembership" >
+        <div class="horizontallso-info mx-3">
             <p v-if="participant.membership_fee">Оплачен</p>
             <p v-else>Не оплачен</p>
         </div>
@@ -45,18 +45,8 @@
 </template>
 <script setup>
 import { ref, watch } from 'vue';
-import { Button } from '@shared/components/buttons';
-import { sortByEducation, Select } from '@shared/components/selects';
-import { HTTP } from '@app/http';
 
 // const selectedPeoples = ref([]);
-
-const emit = defineEmits(['change']);
-
-const updateMembership = (e) => {
-    console.log('dddddd', selectedPeoples.value);
-    emit('change', selectedPeoples.value);
-};
 const props = defineProps({
     participant: {
         type: Object,
@@ -66,13 +56,17 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    isMembership: {
-        type: Boolean,
-    },
 });
 
-const selectedPeoples = ref(props.selectedParticipants);
+const emit = defineEmits(['change']);
+const checked = ref(false);
 
+const updateMembership = (e) => {
+    console.log('dddddd', checked.value);
+    emit('change', checked.value, props.participant.id);
+};
+
+const selectedPeoples = ref(props.selectedParticipants);
 
 watch(
     () => props.selectedParticipants,

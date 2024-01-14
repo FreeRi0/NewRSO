@@ -1,11 +1,12 @@
 <template>
-    <div class="container">
+    <div class="container container--top">
         <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Создание ЛСО</h1>
 
         <FormUnit
             :detachment="detachment"
+            :is-error="isError"
             @submit.prevent="changeDetachment"
             @select-file="onSelectFile"
             @reset-file="onResetFile"
@@ -27,17 +28,10 @@
 import { ref, inject } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormUnit } from '@features/FormUnit';
-import axios from 'axios';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 
-const router = useRoute();
-
-const pages = ref([
-    { pageTitle: 'Структура' },
-    { pageTitle: 'ЛСО', href: '/AllSquads' },
-    { pageTitle: 'Создание ЛСО', href: '#' },
-]);
+const router = useRouter();
 
 const detachment = ref({
     name: '',
@@ -105,6 +99,7 @@ const onResetPhotoFour = (file) => {
     filePhotoFour.value = file;
 };
 
+const isError = ref({});
 const swal = inject('$swal');
 
 const changeDetachment = async () => {
@@ -146,17 +141,23 @@ const changeDetachment = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            // router.push("/AllSquads");
-            // router.push({ name: 'user', params: { userId: '123' } })
+            router.push({
+                name: 'lso',
+                params: { id: response.data.id },
+            });
         })
-        .catch((error) => {
-            console.error('There was an error!', error);
+        // .catch((error) => {
+        //     console.error('There was an error!', error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            console.log('Ошибки отправки формы', isError.value);
             swal.fire({
                 position: 'top-center',
                 icon: 'error',
-                title: 'ошибка',
+                title: `ошибка- ${isError.value.non_field_errors}`,
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 2500,
             });
         });
 };

@@ -73,13 +73,14 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <Select
+                        clearable
                             variant="outlined"
-                            clearable
                             name="select_district"
                             id="select-district"
                             v-model="selectedSortDistrict"
                             class="filter-district"
                             address="/districts/"
+                            placeholder="Окружной штаб"
                         ></Select>
                     </div>
                     <div class="sort-select">
@@ -147,9 +148,9 @@ const pages = ref([
     { pageTitle: 'Региональные штабы', href: '/RegionalHeadquarters' },
 ]);
 
-const headquartersVisible = ref(12);
+const headquartersVisible = ref(20);
 
-const step = ref(10);
+const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -347,6 +348,14 @@ const sortedHeadquarters = computed(() => {
     background-repeat: no-repeat;
     background-size: cover;
 }
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
 .menuuA {
     background-image: url('@app/assets/icon/MenuA.svg');
     background-repeat: no-repeat;

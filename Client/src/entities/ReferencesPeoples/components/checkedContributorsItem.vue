@@ -31,14 +31,14 @@
         <div class="sort-select ml-3">
             <Select
                 variant="outlined"
-                v-model="participant.membership_fee"
+                v-model="participantItem.membership_fee"
                 :names="filteredPayed"
             ></Select>
         </div>
         <div class="checked__confidant ml-3">
             <input
                 type="checkbox"
-                v-model="selectedPeoples"
+                v-model="checked"
                 :value="participant"
                 @change="(event) => updateMembership(participant, event)"
             />
@@ -50,6 +50,7 @@
             @click="ChangeStatus(participant.id)"
         ></Button>
     </div>
+    <p v-if="isError" class="error">{{ isError.detail }}</p>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
@@ -57,12 +58,6 @@ import { Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { ref, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
-const emit = defineEmits(['change']);
-
-const updateMembership = (participant, event) => {
-    console.log('dddddddft', participant, event);
-    emit('change', participant, event);
-};
 
 const props = defineProps({
     participant: {
@@ -74,6 +69,15 @@ const props = defineProps({
         require: true,
     },
 });
+
+const emit = defineEmits(['change']);
+const updateMembership = (participant, event) => {
+    console.log('dddddddft', participant, event);
+    emit('change', participant, event);
+};
+
+const checked = ref(true)
+const isError = ref([]);
 
 // const route = useRoute();
 // const id = route.params.id;
@@ -102,7 +106,7 @@ watch(selectedPeoples, (newChecked) => {
 
 const ChangeStatus = async () => {
     let { id, ...rest } = props.participant;
-    HTTP.post(`rsousers/${id}/membership_fee_status/`, rest, {
+    await HTTP.post(`rsousers/${id}/membership_fee_status/`, participantItem.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

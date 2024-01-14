@@ -1,30 +1,30 @@
 <template>
-<div class="horizontallso">
+    <div class="horizontallso">
         <div class="horizontallso__confidant mr-3">
             <input
                 type="checkbox"
-                v-model=" selectedSquads"
+                v-model="checked"
                 :value="detachment"
                 @change="updateCheckSquad"
             />
         </div>
 
-        <div class="horizontallso-item__wrapper">
+        <div class="horizontallso-item__wrapper mr-3">
             <div class="horizontallso-img">
-                <!-- <img
-                    :src="participant.media.photo"
+                <img
+                    :src="detachment?.user?.media?.photo"
                     alt="logo"
-                    v-if="participant.media"
+                    v-if="detachment?.user?.media?.photo"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
                     alt="photo"
 
-                /> -->
+                />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ detachment.applications }}
+                    {{detachment.user.first_name }}
                 </p>
                 <!-- <div class="horizontallso-item__list-date">
                     <span
@@ -60,17 +60,9 @@
 </template>
 <script setup>
 import { ref, watch } from 'vue';
-
-const emit = defineEmits(['change']);
-
-const updateCheckSquad = (e) => {
-    console.log('ddddddSquad');
-    emit('change', selectedDetch.value);
-};
-
 const props = defineProps({
     detachment: {
-      type: Object,
+        type: Object,
     },
     selectedSquads: {
         type: Array,
@@ -78,7 +70,12 @@ const props = defineProps({
     },
 });
 
-
+const emit = defineEmits(['change']);
+const checked = ref(false);
+const updateCheckSquad = (e) => {
+    console.log('ddddddSquad', checked.value);
+    emit('change', checked.value, props.detachment.id);
+};
 
 const selectedDetch = ref(props.selectedSquads);
 

@@ -68,7 +68,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Отряд',
                         },
                         name: 'lso',
                         component: () => import('@pages/lsoPage/lsoPage.vue'),
@@ -76,7 +76,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Отряд',
                         },
 
                         children: [
@@ -120,13 +120,13 @@ const routes: RouteRecordRaw[] = [
                 path: '/AllHeadquarters',
                 meta: {
                     requiresAuth: true,
-                    label: 'Штабы',
+                    label: 'Штабы СО ОО',
                 },
                 children: [
                     {
                         path: ':id',
                         meta: {
-                            label: 'Штаб СО',
+                            label: 'Штаб',
                         },
                         name: 'HQ',
                         component: () => import('@pages/HQPage/HQPage.vue'),
@@ -134,7 +134,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'Штаб СО',
+                            label: 'Штаб',
                         },
 
                         children: [
@@ -149,6 +149,8 @@ const routes: RouteRecordRaw[] = [
                                     label: 'Редактирование',
                                 },
                             },
+
+                            //в данной структуре только штабы СО ОО, редактирование 3-х штабов, которые ниже нужно перенести в другую структуру
                             {
                                 path: 'EditingOfLocal',
                                 name: 'FormLocal',
@@ -173,6 +175,7 @@ const routes: RouteRecordRaw[] = [
                                         '@pages/EditingOfRS/components/EditingOfRS.vue'
                                     ),
                             },
+                            //-----------------------------------------------------------------------------------------------------------------
                         ],
                     },
                     {
@@ -245,11 +248,39 @@ const routes: RouteRecordRaw[] = [
                 name: 'allsquads',
                 component: () =>
                     import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
-                meta: {
-                    requiresAuth: true,
-                    label: 'ЛСО',
-                },
             },
+            {
+                path: '/actionSquads',
+                name: 'actionSquads',
+
+                component: () =>
+                    import(
+                        '@pages/actionSquadsPade/components/actionSquadsPage.vue'
+                    ),
+            },
+            {
+                path: '/actionSquads/:id',
+                name: 'Action',
+                component: () =>
+                    import('@pages/ActionPage/components/ActionPage.vue'),
+            },
+            {
+                path: '/createAction',
+                name: 'createAction',
+                component: () =>
+                    import(
+                        '@pages/CreationActionsPage/components/CreationActionsPage.vue'
+                    ),
+            },
+            {
+                path: '/EditAction',
+                name: 'editAction',
+                component: () =>
+                    import(
+                        '@pages/EditActionPage/components/EditActionPage.vue'
+                    ),
+            },
+
             {
                 path: '/AllHeadquarters',
                 name: 'allheadquarters',
@@ -259,7 +290,7 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
-                    label: 'Штабы',
+                    label: 'Штабы СО ОО',
                 },
             },
             {
@@ -304,7 +335,7 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
-                    label: 'Участнки отряда'
+                    label: 'Участнки отряда',
                 },
             },
             {
@@ -316,7 +347,7 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
-                    label: 'Участнки мероприятия'
+                    label: 'Участнки мероприятия',
                 },
             },
             {
@@ -392,6 +423,26 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
+            {
+                path: '/activeInvents/accountVerification',
+                name: 'accountVerification',
+                component: () =>
+                    import(
+                        '@entities/Invents/components/AccountVerification.vue'
+                    ),
+            },
+            {
+                path: '/activeInvents/inventActions',
+                name: 'inventActions',
+                component: () =>
+                    import('@entities/Invents/components/InventActions.vue'),
+            },
+            {
+                path: '/activeInvents/inventSquads',
+                name: 'inventSquads',
+                component: () =>
+                    import('@entities/Invents/components/InventSquads.vue'),
+            },
 
             {
                 path: 'EditingOfCentral',
@@ -427,9 +478,9 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'
                     ),
-                    meta: {
-                        label: 'Активные заявки',
-                    },
+                meta: {
+                    label: 'Активные заявки',
+                },
             },
             {
                 path: '/ActiveApplicationsData',

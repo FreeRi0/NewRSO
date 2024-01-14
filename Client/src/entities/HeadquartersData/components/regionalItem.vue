@@ -26,4 +26,14 @@ const props = defineProps({
     },
 });
 </script>
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.round-img {
+    img {
+        width: 128px;
+        height: 128px;
+        display: block;
+        margin: 0px auto;
+        border-radius: 100%;
+    }
+}
+</style>

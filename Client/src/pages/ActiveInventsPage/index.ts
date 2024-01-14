@@ -1,0 +1,1 @@
+export { default as ActiveInventsPage } from "@pages/ActiveInventsPage/components/ActiveInventsPage.vue";

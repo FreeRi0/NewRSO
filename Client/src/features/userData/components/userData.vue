@@ -83,7 +83,7 @@ const swal = inject('$swal');
 const route = useRoute();
 
 const counterSquad = computed(() => {
-    return user.value.bio.length || 0;
+    return user.value?.bio?.length || 0;
 });
 let id = route.params.id;
 

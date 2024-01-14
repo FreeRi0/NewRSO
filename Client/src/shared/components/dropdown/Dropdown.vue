@@ -61,6 +61,7 @@
                         :href="item.link"
                         >{{ item.title }}</a
                     >
+                     <router-link  v-if="item.name"  class="dropdown__link" :to="{ name: item.name, params: item.params }">{{ item.title }}</router-link>
                     <button
                         class="dropdown__button-item"
                         v-if="item.button"
@@ -102,7 +103,22 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    params: {
+      type: String,
+    //   default: () => ({}),
+    },
+    name: {
+        type: String,
+        default: '',
+    },
+    link: {
+        type: String,
+        default: '',
+    }
 });
+
+const route = useRoute();
+let id = route.params.id
 
 const LogOut = () => {
     localStorage.removeItem('Token');
