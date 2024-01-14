@@ -120,6 +120,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="squads-wrapper" v-show="vertical">
                 <squadsList :squads="sortedSquads"></squadsList>
             </div>
@@ -191,6 +192,7 @@ const getEducations = async () => {
             console.log('an error occured ' + error);
         });
 };
+
 const getSquads = async () => {
     await HTTP.get('/detachments/', {
         headers: {

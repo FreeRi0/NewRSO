@@ -9,10 +9,6 @@
                     "
                     alt="Фото бойца"
                 />
-                <!-- <img
-                    :src="'./assets/foto-leader-squad/foto-leader-squad-stub.png'"
-                    alt="Фото бойца (заглушка)"
-                /> -->
             </div>
             <div class="member__container">
                 <p class="member__title">

@@ -68,7 +68,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Отряд',
                         },
                         name: 'lso',
                         component: () => import('@pages/lsoPage/lsoPage.vue'),
@@ -76,7 +76,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Отряд',
                         },
 
                         children: [
@@ -126,7 +126,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Штаб',
                         },
                         name: 'HQ',
                         component: () => import('@pages/HQPage/HQPage.vue'),
@@ -134,7 +134,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Штаб',
                         },
 
                         children: [
@@ -253,25 +253,33 @@ const routes: RouteRecordRaw[] = [
                 path: '/actionSquads',
                 name: 'actionSquads',
 
-                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
+                component: () =>
+                    import(
+                        '@pages/actionSquadsPade/components/actionSquadsPage.vue'
+                    ),
             },
             {
                 path: '/actionSquads/:id',
                 name: 'Action',
-                component: () => import('@pages/ActionPage/components/ActionPage.vue'),
+                component: () =>
+                    import('@pages/ActionPage/components/ActionPage.vue'),
             },
             {
-                path: "/createAction",
-                name: "createAction",
-                component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
+                path: '/createAction',
+                name: 'createAction',
+                component: () =>
+                    import(
+                        '@pages/CreationActionsPage/components/CreationActionsPage.vue'
+                    ),
             },
             {
-                path: "/EditAction",
-                name: "editAction",
-                component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
+                path: '/EditAction',
+                name: 'editAction',
+                component: () =>
+                    import(
+                        '@pages/EditActionPage/components/EditActionPage.vue'
+                    ),
             },
-
-
 
             {
                 path: '/AllHeadquarters',
@@ -327,7 +335,7 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
-                    label: 'Участнки отряда'
+                    label: 'Участнки отряда',
                 },
             },
             {
@@ -339,7 +347,7 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
-                    label: 'Участнки мероприятия'
+                    label: 'Участнки мероприятия',
                 },
             },
             {
@@ -419,19 +427,21 @@ const routes: RouteRecordRaw[] = [
                 path: '/activeInvents/accountVerification',
                 name: 'accountVerification',
                 component: () =>
-                    import("@entities/Invents/components/AccountVerification.vue"),
+                    import(
+                        '@entities/Invents/components/AccountVerification.vue'
+                    ),
             },
             {
                 path: '/activeInvents/inventActions',
                 name: 'inventActions',
                 component: () =>
-                    import("@entities/Invents/components/InventActions.vue"),
+                    import('@entities/Invents/components/InventActions.vue'),
             },
             {
                 path: '/activeInvents/inventSquads',
                 name: 'inventSquads',
                 component: () =>
-                    import("@entities/Invents/components/InventSquads.vue"),
+                    import('@entities/Invents/components/InventSquads.vue'),
             },
 
             {
@@ -468,12 +478,12 @@ const routes: RouteRecordRaw[] = [
                     import(
                         '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'
                     ),
-                    meta: {
-                        label: 'Активные заявки',
-                    },
+                meta: {
+                    label: 'Активные заявки',
+                },
             },
         ],
-    }
-]
+    },
+];
 
 export default routes;
