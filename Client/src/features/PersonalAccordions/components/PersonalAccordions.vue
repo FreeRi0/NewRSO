@@ -28,13 +28,11 @@
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
-                    <template v-slot="{ expanded }">
                         <v-row no-gutters>
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
                             </v-col>
                         </v-row>
-                    </template>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
                             <svg
