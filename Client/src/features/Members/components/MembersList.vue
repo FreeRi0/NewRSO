@@ -11,7 +11,7 @@
                 ></ItemMember>
             </template>
 
-            <p v-else>Участники не найдены...</p>
+            <p v-else>В {{ unit }} еще никто не вступил...</p>
         </ul>
     </div>
 </template>
@@ -29,6 +29,10 @@ const props = defineProps({
     submited: {
         type: Boolean,
         default: false,
+    },
+    unit: {
+        type: String,
+        default: 'штаб',
     },
 });
 

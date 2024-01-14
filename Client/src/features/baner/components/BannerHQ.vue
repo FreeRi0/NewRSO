@@ -436,7 +436,7 @@ const props = defineProps({
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    margin: 32px 0 32px 300px;
+    margin: 32px 0 16px 300px;
 }
 
 .hq-data__name {
@@ -562,6 +562,7 @@ const props = defineProps({
     align-self: end;
     text-align: center;
     font-family: 'BertSans';
+    letter-spacing: 1.2px;
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
@@ -583,12 +584,12 @@ const props = defineProps({
 .hq-data__social-network {
     display: flex;
     justify-content: space-between;
-    margin: 12px 0px;
+    margin: 12px 0 0;
 }
 .hq-data__social-network-Reg {
     display: flex;
     justify-content: space-between;
-    margin: 12px 0px;
+    margin: 12px 0 0;
     column-gap: 12px;
 }
 </style>

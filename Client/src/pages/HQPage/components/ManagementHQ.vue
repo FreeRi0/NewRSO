@@ -12,19 +12,17 @@
             >
                 <div class="manager-card__avatar">
                     <img
-                        :src="manager.user.avatar.photo"
-                        alt="photo"
-                        v-if="manager.user.avatar"
-                    />
-                    <img
-                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                        alt="photo"
-                        v-else
+                        :src="
+                            manager.user?.avatar?.photo ??
+                            '/assets/foto-leader-squad/foto-leader-squad-01.png'
+                        "
+                        alt="фото"
                     />
                 </div>
                 <div class="manager-card__box">
                     <h5 id="name_length">
-                        {{ manager.user.username }}
+                        {{ manager.user.first_name }}
+                        {{ manager.user.last_name }}
                     </h5>
                     <p>{{ position.name }}</p>
                 </div>
@@ -41,7 +39,6 @@ const route = useRoute();
 let id = route.params.id;
 
 const position = ref({});
-
 const props = defineProps({
     member: {
         type: Array,
@@ -55,6 +52,7 @@ const props = defineProps({
 });
 
 const aboutPosition = async () => {
+    let { id, ...rest } = props.member;
     await HTTP.get(`/positions/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -69,6 +67,7 @@ const aboutPosition = async () => {
             console.log('an error occured ' + error);
         });
 };
+
 onMounted(() => {
     aboutPosition();
 });

@@ -6,6 +6,7 @@
 
         <FormHQ
             :headquarter="headquarter"
+            :is-error="isError"
             @submit.prevent="changeHeadquarter"
             @select-file="onSelectFile"
             @reset-file="onResetFile"
@@ -20,6 +21,9 @@ import { ref, inject } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormHQ } from '@features/FormHQ';
 import { HTTP } from '@app/http';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const headquarter = ref({
     name: '',
@@ -54,6 +58,7 @@ const onResetBanner = (file) => {
     fileBanner.value = file;
 };
 
+const isError = ref({});
 const swal = inject('$swal');
 
 const changeHeadquarter = async () => {
@@ -94,16 +99,23 @@ const changeHeadquarter = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            //   router.push("/AllHeadquarters");
+            router.push({
+                name: 'HQ',
+                params: { id: response.data.id },
+            });
         })
-        .catch((error) => {
-            console.error('There was an error!', error);
+        // .catch((error) => {
+        //     console.error('There was an error!', error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            console.log('Ошибки отправки формы', isError.value);
             swal.fire({
                 position: 'top-center',
                 icon: 'error',
-                title: 'ошибка',
+                title: `ошибка- ${isError.value.non_field_errors}`,
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 2500,
             });
         });
 };

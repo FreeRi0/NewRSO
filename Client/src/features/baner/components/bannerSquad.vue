@@ -116,6 +116,10 @@ const props = defineProps({
     }
 }
 
+.squad-data__participant-counter {
+margin-top: 20px;
+}
+
 .ps__title {
     margin: 40px 0;
 }
@@ -222,6 +226,7 @@ const props = defineProps({
     border-right: 1px solid #35383f;
     margin-right: 8px;
     padding-right: 8px;
+    display: inline-block;
 }
 .Squad-HQ__date {
     display: flex;

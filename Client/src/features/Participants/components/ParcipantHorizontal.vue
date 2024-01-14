@@ -1,5 +1,5 @@
 <template>
-    <div v-for="participant in participants">
+    <div v-for="participant in participants" v-if="participants.length > 0">
         <router-link
             class="horizontallso-item__wrapper"
             :to="{ name: 'userpage', params: { id: participant.id } }"
@@ -32,6 +32,7 @@
             </div>
         </router-link>
     </div>
+    <h2 v-else>Участники не найдены...</h2>
 </template>
 <script setup>
 const props = defineProps({
