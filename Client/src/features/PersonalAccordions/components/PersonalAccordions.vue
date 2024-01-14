@@ -996,13 +996,21 @@
                             </div>
                             <div class="form-field">
                                 <label for="">Документ воинского учета</label>
-                                <Select
+                                <!-- <Select
                                     variant="outlined"
                                     clearable
                                     class="select-big"
                                     v-model="documents.mil_reg_doc_type"
                                     :names="militaryDocs"
-                                ></Select>
+                                ></Select> -->
+                                <sortByEducation
+                                    placeholder="Выберите документ"
+                                    clearable
+                                    variant="outlined"
+                                    v-model="documents.mil_reg_doc_type"
+                                    :options="militaryDocs"
+                                    class="select-big"
+                                ></sortByEducation>
                                 <p
                                     class="error"
                                     v-if="isError.mil_reg_doc_type"
@@ -1226,17 +1234,10 @@
                                     >*</span
                                 ></label
                             >
-                            <!-- <Input
-                                name="study_institution"
-                                type="text"
-                                id="education-org"
-                                class="input-full"
-                                placeholder="Введите название образовательной организации"
-                                v-model:value="education.study_institution"
-                            /> -->
                             <Select
                                 variant="outlined"
                                 clearable
+                                placeholder="Выберете образовательную организацию"
                                 class="input-full"
                                 v-model="education.study_institution"
                                 address="/eduicational_institutions/"
@@ -2617,7 +2618,7 @@ import { useVuelidate } from '@vuelidate/core';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
-import { Select } from '@shared/components/selects';
+import { Select, sortByEducation } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import {
     helpers,
@@ -3048,8 +3049,6 @@ const updateData = async () => {
         .all([axiosrequest1, axiosrequest2, axiosrequest3, axiosrequest4])
         .then(
             axios.spread(function (res1, res2, res3, res4) {
-
-
                 user.value = res1.data;
                 regionData.value = res2.data;
                 documents.value = res3.data;
@@ -3240,6 +3239,13 @@ const selectedPass = ref('Да');
     font-family: 'Acrobat';
     margin-top: 10px;
     text-align: center;
+}
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 .data-form {

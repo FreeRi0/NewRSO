@@ -4,117 +4,65 @@
             <!--  Контейнер c вкладками   -->
             <nav class="squad__navigation">
                 <h3 class="squad-participants__title">Участники</h3>
-                <input
-                    checked
-                    id="tab-btn-1"
-                    name="tab-btn"
-                    type="radio"
-                    value=""
-                />
-                <label class="tab-position" for="tab-btn-1">Уже в отряде</label>
-                <input id="tab-btn-2" name="tab-btn" type="radio" value="" />
-                <label class="position-tab" for="tab-btn-2"
-                    >Ожидают одобрения</label
-                >
-                <div class="tab-content" id="content-1">
-                    <section class="squad-participants__list">
-                        <ul class="already_in_squad">
-                            <li
-                                class="squad-participant"
-                                v-for="participant in member.slice(0, 6)"
-                                v-if="member.length > 0"
-                            >
-                                <div
-                                    class="squad-participant_box"
-                                >
-                                    <img
-                                        :src="participant.user.avatar.photo"
-                                        alt="photo"
-                                        v-if="participant.user.avatar"
-                                    />
-                                    <img
-                                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                                        alt="photo"
-                                        v-else
-                                    />
-                                    <h5 id="name_length">
-                                        {{ participant.user.username }}
-                                    </h5>
-                                    <p>{{ position.name }}</p>
-                                </div>
-                            </li>
-                            <h2 v-else>Участников не найдено...</h2>
-                        </ul>
-                        <router-link
-                            :to="{
-                                name: 'allparticipants',
-                                params: { id: squad.id },
-                            }"
-                        >
-                            <div class="squad-participants__link">
-                                Показать всех
-                            </div></router-link
-                        >
-                    </section>
-                </div>
-                <div class="tab-content" id="content-2">
-                    <section class="squad-participants__list">
-                        <ul class="wait_squad">
-                            <li
-                                class="squad-participant"
-                                v-for="participant in isVerified.slice(0, 6)"
-                                v-if="member.length > 0"
-                            >
-                                <div
-                                    class="squad-participant_box"
-                                >
-                                    <img
-                                        :src="participant.user.avatar.photo"
-                                        alt="photo"
-                                        v-if="participant.user.avatar"
-                                    />
-                                    <img
-                                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                                        alt="photo"
-                                        v-else
-                                    />
-                                    <h5 id="name_length">
-                                        {{ participant.user.last_name }}
-                                    </h5>
-                                    <p>{{ position.name }}</p>
-                                </div>
-                            </li>
-                            <h2 v-else>Участников не найдено...</h2>
-                        </ul>
-                        <router-link
-                            :to="{
-                                name: 'allparticipants',
-                                params: { id: squad.id },
-                            }"
-                        >
-                            <div class="squad-participants__link">
-                                Показать всех
-                            </div></router-link
-                        >
-                    </section>
+                <div class="d-flex">
+                    <Button
+                        type="button"
+                        label="Уже в отряде"
+                        class="memberBtn mr-2"
+                        :class="{ active: picked === true }"
+                        @click="picked = true"
+                    ></Button>
+
+                    <Button
+                        type="button"
+                        label="Ожидают одобрение"
+                        class="memberBtn"
+                        :class="{ active: picked === false }"
+                        @click="picked = false"
+                    ></Button>
                 </div>
             </nav>
+            <div class="squad__wrapper">
+                <div class="squad__wrapper-container">
+                    <ParticipantsList
+                        v-if="picked === true"
+                        :participants="member"
+                    />
+                    <VerifiedList :verified="isVerified"></VerifiedList>
+                </div>
+                <div>
+                    <router-link
+                        :to="{
+                            name: 'allparticipants',
+                            params: { id: squad.id },
+                        }"
+                    >
+                        <div class="squad__wrapper-route">
+                            Показать всех
+                        </div></router-link
+                    >
+                </div>
+            </div>
         </section>
     </section>
 </template>
 
 <script setup>
+import { Button } from '@shared/components/buttons';
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-;
-const position = ref({});
+import {
+    ParticipantsList,
+    VerifiedList,
+} from '@features/Participants/components';
+
 const isVerified = ref([]);
 const route = useRoute();
+const picked = ref(false);
 const id = route.params.id;
 
 const props = defineProps({
-
     member: {
         type: Array,
     },
@@ -124,9 +72,6 @@ const props = defineProps({
     squad: {
         type: Object,
         required: true,
-    },
-    position: {
-        type: Object,
     },
 });
 const getVerified = async () => {
@@ -146,6 +91,7 @@ const getVerified = async () => {
 };
 
 const aboutPosition = async () => {
+    let { id, ...rest } = props.member;
     await HTTP.get(`/positions/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -164,22 +110,47 @@ onMounted(() => {
     aboutPosition();
     getVerified();
 });
-
-
 </script>
 
 <style scoped lang="scss">
 /* Табы */
-section.squad-tabs {
-    margin-bottom: 40px;
-}
+
 .squad__navigation {
+    display: flex;
+    justify-content: space-between;
     margin-top: 60px;
 }
-section.squad-tabs .container {
-    display: flex;
-    flex-direction: column;
+
+.squad__wrapper {
+    padding: 34px 46px 24px 46px;
+
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.05);
+    margin-bottom: 80px;
+    &-route {
+        margin-top: 40px;
+        text-align: center;
+        color: #5E5C5C;
+        text-decoration: underline;
+    }
+
+    &-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-row-gap: 40px;
+        @media screen and (max-width: 1024px) {
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 768px) {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 575px) {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
 }
+
 .squad-participants__list {
     border-radius: 10px;
     box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.05);
@@ -194,69 +165,24 @@ section.squad-tabs .container {
     margin-bottom: 40px;
 }
 
-.squad__navigation ul {
-    list-style: none;
-    justify-items: center;
+.memberBtn {
+    border-radius: 30px;
+    background-color: white;
+    color: #1c5c94;
+    border: 1px solid #1c5c94;
+    margin: 0px;
+    padding: 7px 12px;
+    margin: 7px;
+    height: 38px;
 }
 
-.squad__navigation a {
-    display: block;
-    text-decoration: none;
-    text-align: center;
-    font-family: 'BertSans';
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 100%;
+.active {
+    background-color: #1c5c94;
+    color: white;
+    border: 1px solid #1c5c94;
 }
 
 /* ****************************************************************************************** */
-.squad__navigation > input[type='radio'] {
-    display: none;
-}
-
-#tab-btn-1:checked ~ #content-1,
-#tab-btn-2:checked ~ #content-2 {
-    display: block;
-}
-
-.tab-content {
-    display: none;
-    width: 100%;
-    margin-top: 40px;
-}
-
-.squad__navigation > label {
-    /*  */
-    font-size: 20px;
-    font-weight: 500;
-    font-family: 'BertSans';
-    color: #1f7cc0;
-    text-decoration: none;
-    line-height: 100%;
-    /*  */
-    padding: 6px 24px;
-    cursor: pointer;
-    transition:
-        color 0.15s ease-in-out,
-        background-color 0.15s ease-in-out,
-        border-color 0.15s ease-in-out;
-    border: 2px solid #1f7cc0;
-    border-radius: 30px;
-}
-
-.squad__navigation > input[type='radio']:checked + label {
-    cursor: default;
-    color: #fff;
-    background-color: #1c5c94;
-    /*  */
-    border-radius: 30px;
-    border: 2px solid #1c5c94;
-}
-
-nav {
-    position: relative;
-}
 
 .tab-position {
     position: absolute;
@@ -278,23 +204,6 @@ nav {
 .squad-participants__list {
     margin-bottom: 40px;
 }
-
-.already_in_squad,
-.wait_squad {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(183.2px, 1fr));
-    margin-bottom: 40px;
-    padding: 24px;
-    height: 252px;
-    overflow: hidden;
-}
-
-.squad-participants__list .container {
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.05);
-}
-
 .squad-participant_box {
     align-items: center;
     display: flex;

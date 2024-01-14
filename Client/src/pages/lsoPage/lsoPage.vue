@@ -53,7 +53,7 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 const squad = ref({});
-const member = ref([]);
+const member = ref({});
 const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
