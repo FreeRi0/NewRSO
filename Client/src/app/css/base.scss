@@ -21,7 +21,7 @@ body {
     margin: 0;
 }
 
-body div[id='app'] {
+body div[id="app"] {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -50,7 +50,7 @@ body div[id='app'] {
 
 .ascend {
     border: 1px solid #35383f !important;
-    background-image: url('@app/assets/icon/switch.svg');
+    background-image: url("@app/assets/icon/switch.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -75,6 +75,9 @@ img {
 .page-title {
     font-size: 52px;
     font-weight: 700;
+    @media screen and (max-width: 575px) {
+        font-size: 32px;
+    }
 }
 
 .container {

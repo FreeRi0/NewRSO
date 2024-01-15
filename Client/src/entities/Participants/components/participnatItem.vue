@@ -41,7 +41,8 @@ const position = ref({});
 
 
 const aboutPosition = async () => {
-    let {id, ...rest} = props.participant;
+    let id = props.participant.position;
+
     await HTTP.get(`/positions/${id}/`, {
         headers: {
             'Content-Type': 'application/json',

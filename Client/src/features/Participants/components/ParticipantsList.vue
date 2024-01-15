@@ -11,7 +11,6 @@
 </template>
 <script setup>
 import { participantItem } from '@entities/Participants';
-import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     participants: {

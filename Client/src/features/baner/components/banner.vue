@@ -4,19 +4,25 @@
         <Avatar :avatar="user?.media?.photo" v-if="user"></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
-            <div class="user-data__wrapper">
+            <div class="user-data__wrapper" v-if="user">
                 <div v-if="user" class="user-data__name">
                     <p>{{ user.last_name }}</p>
                     <p>{{ user.first_name }}</p>
                     <p>{{ user.patronymic_name }}</p>
                 </div>
 
-                <!-- <h4 v-if="user">{{ user.email }}</h4> -->
-                <div></div>
-
-                <div class="user-data__list-wrapper" v-if="user">
+                <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
+                        <li class="user-data__regional-office">
+                            <p>{{ user?.user_region?.reg_town }}</p>
+                            <!-- <span v-if="user?.user_region?.reg_region"
+                                >{{
+                                    regionals[user?.user_region?.reg_region - 1]
+                                        ?.name
+                                }}
+                            </span> -->
+                        </li>
                         <li v-if="education">
                             <p>{{ user?.education?.study_faculty }}</p>
                         </li>
@@ -28,30 +34,12 @@
                         <li v-if="education">
                             <p>Курс {{ user?.education?.study_year }}</p>
                         </li>
-
-                        <li class="user-data__regional-office">
-                            <p>{{ user?.user_region?.reg_town }}</p>
-                        </li>
                     </ul>
                 </div>
-                <!-- <div class="user-data__list-wrapper" v-if="currentUser">
-                    <ul class="user-data__list">
-                        <li class="user-data__title"><p>Кандидат</p></li>
-                        <li v-if="education">
-                            <p>{{ currentUser?.education?.study_faculty }}</p>
-                        </li>
-                        <li v-if="education">
-                            <p>{{ currentUser?.education?.study_specialty }}</p>
-                        </li>
-                        <li v-if="education">
-                            <p>Курс{{ currentUser?.education?.study_year }}</p>
-                        </li>
-                        <li class="user-data__regional-office">
-                            <p>{{ currentUser?.user_region?.reg_town }}</p>
-                        </li>
-                    </ul>
-                </div> -->
-                <!-- Контакты пользователя  -->
+                <div class="user-data__contact">
+                    <p>{{ user.phone_number }}</p>
+                    <p class="ml-5">{{ user.email }}</p>
+                </div>
             </div>
         </div>
     </div>
@@ -73,7 +61,6 @@ const props = defineProps({
     edited: {
         type: Boolean,
     },
-
     user: {
         type: Object,
     },
@@ -87,6 +74,26 @@ const props = defineProps({
         type: Object,
     },
 });
+
+const user_region = ref({});
+const regionals = ref([]);
+
+
+const getRegionals = async () => {
+    await HTTP.get(`/regionals/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regionals.value = response.data;
+            console.log(regionals.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {
@@ -111,21 +118,29 @@ const props = defineProps({
     margin: 40px 0;
 }
 
-.ps__title h2 {
-    /* Desktop/H-1 */
-    font-family: 'Akrobat';
-    font-size: 52px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    color: #35383f;
-}
+// .ps__title h2 {
+//     /* Desktop/H-1 */
+//     font-family: 'Akrobat';
+//     font-size: 52px;
+//     font-style: normal;
+//     font-weight: 700;
+//     line-height: normal;
+//     color: #35383f;
+
+// }
 
 .user-metric__bottom {
     grid-column-start: 1;
     grid-column-end: 5;
     grid-row-start: 3;
     grid-row-end: 5;
+    padding: 36px 38px 32px 300px;
+    @media screen and (max-width: 768px) {
+        padding: 116px 90px 36px 60px;
+    }
+    @media screen and (max-width: 575px) {
+        padding: 116px 14px 32px 14px;
+    }
 }
 
 /* Данные пользователя */
@@ -133,12 +148,30 @@ const props = defineProps({
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    margin: 32px 0 32px 300px;
 }
 
 .user-data__name {
     display: flex;
     margin-bottom: 32px;
+    @media screen and (max-width: 768px) {
+        margin-bottom: 20px;
+    }
+    @media screen and (max-width: 575px) {
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.user-data__contact {
+    display: flex;
+    p {
+        color: #35383f;
+    }
+    @media screen and (max-width: 575px) {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 .user-data__name p {
@@ -159,6 +192,9 @@ const props = defineProps({
     align-items: center;
     max-width: 700px;
     margin-bottom: 32px;
+    @media screen and (max-width: 768px) {
+        margin-bottom: 20px;
+    }
 }
 
 .user-data__list-wrapper ul {
@@ -167,12 +203,19 @@ const props = defineProps({
     align-items: center;
     justify-content: flex-start;
     list-style: none;
+    @media screen and (max-width: 575px) {
+        justify-content: center;
+    }
 }
 
 .user-data__list-wrapper li {
     border-right: 1px solid #35383f;
     height: 20px;
     margin: auto 3px;
+}
+
+.user-data__list-wrapper li:last-child {
+    border-right: none;
 }
 
 .user-data__list p,

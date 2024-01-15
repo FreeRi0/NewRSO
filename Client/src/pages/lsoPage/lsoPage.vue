@@ -1,15 +1,12 @@
 <template>
     <div class="container">
         <div class="squad-page">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
+            <Breadcrumbs></Breadcrumbs>
             <h1 class="title title--lso">ЛСО</h1>
-            <!-- <BannerComp class="user-metric mt-3">
-
-        </BannerComp> -->
             <BannerSquad
                 :squad="squad"
-                :edict="educt"
                 :member="member"
+                :edict="edict"
             ></BannerSquad>
             <section class="about-squad">
                 <h3>Об отряде</h3>
@@ -54,7 +51,7 @@ import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 const squad = ref({});
 const member = ref({});
-const educt = ref({});
+const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 
@@ -74,21 +71,6 @@ const aboutSquad = async () => {
         });
 };
 
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
 const aboutMembers = async () => {
     await HTTP.get(`/detachments/${id}/members/`, {
@@ -106,11 +88,12 @@ const aboutMembers = async () => {
         });
 };
 
+
+
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutSquad();
         aboutMembers();
-        aboutEduc();
     }
 });
 
@@ -121,20 +104,15 @@ watch(
         id = newId;
         aboutSquad();
         aboutMembers();
-        aboutEduc();
+
     },
 );
 
 onMounted(() => {
     aboutSquad();
     aboutMembers();
-    aboutEduc();
 });
 
-const pages = [
-    { pageTitle: 'Личный кабинет', href: '/UserPage' },
-    { pageTitle: `${squad.name}`, href: '#' },
-];
 </script>
 <style scoped lang="scss">
 

@@ -90,24 +90,7 @@ const getVerified = async () => {
         });
 };
 
-const aboutPosition = async () => {
-    let { id, ...rest } = props.member;
-    await HTTP.get(`/positions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            position.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 onMounted(() => {
-    aboutPosition();
     getVerified();
 });
 </script>
