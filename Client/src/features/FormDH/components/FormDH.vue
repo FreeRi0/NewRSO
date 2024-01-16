@@ -494,10 +494,11 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
+
                         <div class="form__field photo-add">
                             <p class="form__label">Добавьте баннер</p>
                             <div class="photo-add__box photo-add__box--banner">
@@ -621,11 +622,10 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
-
                     </div>
                 </v-expansion-panel-text>
             </v-expansion-panel>

@@ -249,6 +249,7 @@
                                 v-model:value="headquarter.social_tg"
                             ></TextareaAbout>
                         </div>
+                        <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                         <div class="form__field" v-if="participants">
                             <p class="form__label">
                                 Назначить на должность

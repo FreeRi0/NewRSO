@@ -510,7 +510,7 @@
                                 class="form__textarea form__textarea--mobile"
                                 id="hq-slogan"
                                 placeholder="Например, через тернии к звездам"
-                                name="slogan"
+                                name="hq_slogan"
                                 v-model:value="headquarter.slogan"
                             ></TextareaAbout>
                             <div class="form__counter">
@@ -653,10 +653,11 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
+
                         <div class="form__field photo-add">
                             <p class="form__label">Добавьте баннер</p>
                             <div class="photo-add__box photo-add__box--banner">
@@ -780,7 +781,7 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
@@ -861,7 +862,6 @@ const props = defineProps({
         type: String,
         default: null,
     },
-
 });
 
 const headquarter = ref(props.headquarter);
@@ -993,9 +993,6 @@ const resetBanner = () => {
 </script>
 
 <style lang="scss" scoped>
-.form__field {
-    margin-bottom: 0;
-}
 
 .form-button {
     width: 132px;

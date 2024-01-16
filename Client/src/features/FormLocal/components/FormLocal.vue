@@ -73,7 +73,6 @@
                                 >Наименование штаба
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- в v-model добавила headquarter -->
                             <Input
                                 id="name-hq"
                                 class="form__input"
@@ -509,7 +508,7 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
@@ -636,7 +635,7 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
