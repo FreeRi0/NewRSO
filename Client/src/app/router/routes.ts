@@ -1,6 +1,6 @@
-import { patch } from 'node_modules/axios/index.d.cts';
+
 import { type RouteRecordRaw } from 'vue-router';
-import { id } from 'vuetify/locale';
+
 
 const routes: RouteRecordRaw[] = [
     {
