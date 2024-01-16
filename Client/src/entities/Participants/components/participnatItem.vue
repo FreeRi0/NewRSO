@@ -1,5 +1,5 @@
 <template>
-    <div class="participants-wrapper__item">
+    <div class="participants-wrapper__item list">
         <router-link :to="{ name: 'userpage', params: { id: participant.id } }">
             <div class="round-img">
                 <img
@@ -38,7 +38,6 @@ const props = defineProps({
 });
 
 const position = ref({});
-
 
 const aboutPosition = async () => {
     let id = props.participant.position;
@@ -102,6 +101,15 @@ onMounted(() => {
         @media screen and (max-width: 575px) {
             font-size: 12px;
         }
+    }
+}
+
+.list {
+    @media screen and (max-width: 768px) {
+        width: 160px;
+    }
+    @media screen and (max-width: 575px) {
+        width: 100px;
     }
 }
 </style>

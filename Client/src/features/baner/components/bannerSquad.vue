@@ -3,7 +3,7 @@
         <squadBanner :banner="squad.banner"></squadBanner>
         <squadAvatar :emblem="squad.emblem"></squadAvatar>
         <div class="squad-metric__bottom">
-            <div class="squad-data__wrapper">
+            <div class="squad-data__wrapper" v-if="squad">
                 <div class="Squad-HQ__name">
                     <h4>{{ squad.name }}</h4>
                 </div>
@@ -13,8 +13,8 @@
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
                         <li class="Squad-HQ__university">
-                        <p>Коми государственный педагогический институт</p>
-                            <!-- <p>{{ edict.name }}</p> -->
+                            <!-- <p >Коми государственный педагогический институт</p> -->
+                            <p>{{ edict.name }}</p>
                             <!-- <p>{{ squad.educational_institution }}</p> -->
                         </li>
                         <li class="Squad-HQ__date">
@@ -68,6 +68,7 @@
                     >
                 </div>
             </div>
+            <div v-else>Загрузка....</div>
         </div>
     </div>
 </template>
@@ -96,9 +97,11 @@ const props = defineProps({
     },
 });
 
+
 const edict = ref({});
 const aboutEduc = async () => {
     let id = props.squad.educational_institution;
+    console.log('squad', props.squad)
     console.log('id', id);
     await HTTP.get(`/eduicational_institutions/${id}/`, {
         headers: {
@@ -149,8 +152,6 @@ onMounted(() => {
 // .squad-data__participant-counter {
 //     margin-top: 20px;
 // }
-
-
 
 /* Данные пользователя */
 .squad-data__wrapper {
@@ -240,12 +241,21 @@ onMounted(() => {
     border-right: none;
     height: 20px;
     margin: 0;
+    @media screen and (max-width: 1024px) {
+        height: auto;
+    }
 }
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
     margin-right: 8px;
     padding-right: 8px;
     display: inline-block;
+    @media screen and (max-width: 1024px) {
+        border-right: none;
+        margin-bottom: 10px;
+        margin-right: 0;
+        padding-right: 0;
+    }
 }
 .Squad-HQ__date {
     display: flex;
@@ -269,17 +279,21 @@ onMounted(() => {
 .squad-data__contacts-wrapper {
     display: flex;
     justify-content: space-between;
+    @media screen and (max-width: 768px) {
+        flex-wrap: wrap;
+    }
 }
-.squad-data__contacts {
-    display: grid;
-}
+
 .squad-data__contacts {
     display: flex;
     flex-direction: column;
+    @media screen and (max-width: 768px) {
+        margin-bottom: 20px;
+    }
 }
 .squad-data__social-network {
     display: flex;
     justify-content: space-between;
-    margin: 16px 16px 0px 0px;
+    margin-top: 17px;
 }
 </style>

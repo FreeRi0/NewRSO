@@ -37,8 +37,42 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
-                    <p>{{ user.phone_number }}</p>
-                    <p class="ml-5">{{ user.email }}</p>
+                    <div class="user-data__social-network">
+                        <div class="user-data__link-vk mr-2">
+                            <a :href="user.social_vk" target="_blank">
+                                <img src="@/app/assets/icon/vk-blue.svg" />
+                            </a>
+                        </div>
+                        <div class="user-data__link-telegram mr-2">
+                            <a :href="user.social_tg">
+                                <img
+                                    src="@/app/assets/icon/telegram-blue.svg"
+                                    alt=""
+                                />
+                            </a>
+                        </div>
+                        <div class="user-data__link-share-link">
+                            <a href="#" target="_blank">
+                                <img
+                                    src="@/app/assets/icon/to-share-link.svg"
+                                    alt=""
+                                />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="user-data__contact-contact">
+                        <div class="user-data__contact-contact_item">
+                            <img
+                                src="@/app/assets/icon/phone.svg"
+                                alt="phone"
+                            />
+                            <p class="ml-2">{{ user.phone_number }}</p>
+                        </div>
+                        <div class="user-data__contact-contact_item mail">
+                            <img src="@/app/assets/icon/mail.svg" alt="mail" />
+                            <p class="ml-2">{{ user.email }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,7 +112,6 @@ const props = defineProps({
 const user_region = ref({});
 const regionals = ref([]);
 
-
 const getRegionals = async () => {
     await HTTP.get(`/regionals/`, {
         headers: {
@@ -114,21 +147,6 @@ const getRegionals = async () => {
     background: rgba(244, 244, 244, 0);
 }
 
-.ps__title {
-    margin: 40px 0;
-}
-
-// .ps__title h2 {
-//     /* Desktop/H-1 */
-//     font-family: 'Akrobat';
-//     font-size: 52px;
-//     font-style: normal;
-//     font-weight: 700;
-//     line-height: normal;
-//     color: #35383f;
-
-// }
-
 .user-metric__bottom {
     grid-column-start: 1;
     grid-column-end: 5;
@@ -162,14 +180,45 @@ const getRegionals = async () => {
         justify-content: center;
     }
 }
+.user-data__social-network {
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+    @media screen and (max-width: 768px) {
+        margin-top: 16px;
+        margin-right: 0;
+    }
+    @media screen and (max-width: 575px) {
+        margin-top: 16px;
+        margin-right: 0;
+    }
+}
 
 .user-data__contact {
     display: flex;
     p {
         color: #35383f;
     }
+    &-contact {
+        display: flex;
+        @media screen and (max-width: 575px) {
+            flex-direction: column;
+            align-items: center;
+        }
+        &_item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            @media screen and (max-width: 575px) {
+                margin-right: 0;
+            }
+        }
+    }
+    @media screen and (max-width: 768px) {
+        flex-direction: column-reverse;
+    }
     @media screen and (max-width: 575px) {
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: center;
     }
 }
