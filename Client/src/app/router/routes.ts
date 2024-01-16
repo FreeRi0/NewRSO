@@ -79,7 +79,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Отряд',
                         },
                         name: 'lso',
                         component: () => import('@pages/lsoPage/lsoPage.vue'),
@@ -87,7 +87,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            label: 'title',
+                            label: 'Отряд',
                         },
                         children: [
                             {
@@ -126,12 +126,68 @@ const routes: RouteRecordRaw[] = [
                 },
                 children: [
                     {
+<<<<<<< HEAD
                         path: '',
                         name: 'allheadquarters',
                         component: () =>
                             import(
                                 '@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'
                             ),
+=======
+                        path: ':id',
+                        meta: {
+                            label: 'Штаб',
+                        },
+                        name: 'HQ',
+                        component: () => import('@pages/HQPage/HQPage.vue'),
+                    },
+                    {
+                        path: ':id',
+                        meta: {
+                            label: 'Штаб',
+                        },
+
+                        children: [
+                            {
+                                path: 'EditHQ',
+                                name: 'EditHQ',
+                                component: () =>
+                                    import(
+                                        '@pages/EditingHQ/components/EditingHQ.vue'
+                                    ),
+                                meta: {
+                                    label: 'Редактирование',
+                                },
+                            },
+
+                            //в данной структуре только штабы СО ОО, редактирование 3-х штабов, которые ниже нужно перенести в другую структуру
+                            {
+                                path: 'EditingOfLocal',
+                                name: 'FormLocal',
+                                component: () =>
+                                    import(
+                                        '@pages/EditingOfLocal/components/EditingOfLocal.vue'
+                                    ),
+                            },
+                            {
+                                path: 'EditingOfDH',
+                                name: 'FormDH',
+                                component: () =>
+                                    import(
+                                        '@pages/EditingOfDH/components/EditingOfDH.vue'
+                                    ),
+                            },
+                            {
+                                path: 'EditingOfRS',
+                                name: 'EditingOfRS',
+                                component: () =>
+                                    import(
+                                        '@pages/EditingOfRS/components/EditingOfRS.vue'
+                                    ),
+                            },
+                            //-----------------------------------------------------------------------------------------------------------------
+                        ],
+>>>>>>> 1df48253a9a26dfbffa2b1ef36b70d2c72200b59
                     },
                     {
                         path: '/createhq',
@@ -371,23 +427,82 @@ const routes: RouteRecordRaw[] = [
                 path: '/actionSquads',
                 name: 'actionSquads',
 
-                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
+                component: () =>
+                    import(
+                        '@pages/actionSquadsPade/components/actionSquadsPage.vue'
+                    ),
             },
             {
                 path: '/actionSquads/:id',
                 name: 'Action',
-                component: () => import('@pages/ActionPage/components/ActionPage.vue'),
+                component: () =>
+                    import('@pages/ActionPage/components/ActionPage.vue'),
             },
             {
-                path: "/createAction",
-                name: "createAction",
-                component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
+                path: '/createAction',
+                name: 'createAction',
+                component: () =>
+                    import(
+                        '@pages/CreationActionsPage/components/CreationActionsPage.vue'
+                    ),
             },
             {
-                path: "/EditAction",
-                name: "editAction",
-                component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
+                path: '/EditAction',
+                name: 'editAction',
+                component: () =>
+                    import(
+                        '@pages/EditActionPage/components/EditActionPage.vue'
+                    ),
             },
+<<<<<<< HEAD
+=======
+
+            {
+                path: '/AllHeadquarters',
+                name: 'allheadquarters',
+                component: () =>
+                    import(
+                        '@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'
+                    ),
+                meta: {
+                    requiresAuth: true,
+                    label: 'Штабы СО ОО',
+                },
+            },
+            {
+                path: '/LocalHeadquarters',
+                name: 'localHeadquarters',
+                component: () =>
+                    import(
+                        '@pages/AllHeadquartersPage/components/LocalHeadquartersPage.vue'
+                    ),
+                meta: {
+                    label: 'Местные штабы',
+                },
+            },
+            {
+                path: '/RegionalHeadquarters',
+                name: 'regionalHeadquarters',
+                component: () =>
+                    import(
+                        '@pages/AllHeadquartersPage/components/RegionalHeadquarters.vue'
+                    ),
+                meta: {
+                    label: 'Региональные штабы',
+                },
+            },
+            {
+                path: '/DistrictHeadquarters',
+                name: 'districtHeadquarters',
+                component: () =>
+                    import(
+                        '@pages/AllHeadquartersPage/components/DistrictsHeadquartersPage.vue'
+                    ),
+                meta: {
+                    label: 'Окружные штабы ',
+                },
+            },
+>>>>>>> 1df48253a9a26dfbffa2b1ef36b70d2c72200b59
             {
                 path: '/AllParticipants/:id',
                 name: 'allparticipants',
@@ -397,8 +512,12 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
+<<<<<<< HEAD
                     label: 'Участники отряда',
                     label: 'Участнки отряда'
+=======
+                    label: 'Участнки отряда',
+>>>>>>> 1df48253a9a26dfbffa2b1ef36b70d2c72200b59
                 },
             },
             {
@@ -410,7 +529,11 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
+<<<<<<< HEAD
                     label: 'Участники мероприятия',
+=======
+                    label: 'Участнки мероприятия',
+>>>>>>> 1df48253a9a26dfbffa2b1ef36b70d2c72200b59
                 },
             },
             {
@@ -481,19 +604,21 @@ const routes: RouteRecordRaw[] = [
                 path: '/activeInvents/accountVerification',
                 name: 'accountVerification',
                 component: () =>
-                    import("@entities/Invents/components/AccountVerification.vue"),
+                    import(
+                        '@entities/Invents/components/AccountVerification.vue'
+                    ),
             },
             {
                 path: '/activeInvents/inventActions',
                 name: 'inventActions',
                 component: () =>
-                    import("@entities/Invents/components/InventActions.vue"),
+                    import('@entities/Invents/components/InventActions.vue'),
             },
             {
                 path: '/activeInvents/inventSquads',
                 name: 'inventSquads',
                 component: () =>
-                    import("@entities/Invents/components/InventSquads.vue"),
+                    import('@entities/Invents/components/InventSquads.vue'),
             },
             {
                 path: '/FAQ',
@@ -525,7 +650,7 @@ const routes: RouteRecordRaw[] = [
                 },
             },
         ],
-    }
-]
+    },
+];
 
 export default routes;

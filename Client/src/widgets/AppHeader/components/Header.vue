@@ -49,9 +49,9 @@
                                 >Полезная информация</a
                             >
                         </li>
-                        <li class="header__nav-item">
+                        <!-- <li class="header__nav-item">
                             <a class="header__nav-link" href="#">КОНКУРС!</a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </nav>
@@ -138,8 +138,6 @@
                         :url="user?.media?.photo"
                         desc="Фотография пользователя"
                     />
-
-
                 </div>
             </nav>
         </header>
@@ -415,6 +413,8 @@ onMounted(() => {
         align-items: center;
         // min-width: 415px;
         max-width: 445px;
+
+        min-width: 411px; // для отображения без ссылки КОНКУРС
 
         @media (max-width: 1024px) {
             position: absolute;
