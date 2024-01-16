@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-<<<<<<< HEAD
         <div class="district-page">
             <Breadcrumbs></Breadcrumbs>
             <h1 class="title title--hq">Окружной штаб</h1>
@@ -54,71 +53,6 @@
             ></ManagementHQ>
             <HQandSquad></HQandSquad>
         </div>
-=======
-        <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--hq">Окружной штаб</h1>
-        <BannerHQ
-            v-if="showHQ"
-            :headquarter="headquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showDistrictHQ"
-            :districtHeadquarter="districtHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showLocalHQ"
-            :localHeadquarter="localHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showRegionalHQ"
-            :regionalHeadquarter="regionalHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else
-            :centralHeadquarter="centralHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <section class="about-hq">
-            <h3>Описание окружного штаба</h3>
-            <p v-if="showHQ">
-                {{ localHeadquarter.about }}
-            </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
-        </section>
-        <ManagementHQ
-            :member="member"
-            head="Руководство окружного штаба"
-        ></ManagementHQ>
-        <section class="headquarters_squads">
-            <h3>Штабы и отряды окружного штаба</h3>
-            <div class="headquarters_squads__container">
-                <div
-                    class="card"
-                    v-for="(HQandSquad, index) in HQandSquads"
-                    :class="{
-                        'align-left': index % 2 === 0,
-                        'align-right': index % 2 !== 0,
-                    }"
-                >
-                    <a v-bind:href="HQandSquad.link"
-                        ><p>{{ HQandSquad.name }}</p></a
-                    >
-                </div>
-            </div>
-        </section>
->>>>>>> 1df48253a9a26dfbffa2b1ef36b70d2c72200b59
     </div>
 </template>
 <script setup>

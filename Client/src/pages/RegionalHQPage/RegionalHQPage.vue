@@ -138,31 +138,6 @@ onMounted(() => {
     aboutRegionalHQ();
     aboutMembers();
 });
-<<<<<<< HEAD
-=======
-
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Региональные штабы', href: '#' },
-    { pageTitle: `${regionalHeadquarter.name}`, href: '#' },
-];
-
-//блок отряды и штабы регионального штаба
-const HQandSquads = ref([
-    {
-        name: 'Местные штабы',
-        link: '/LocalHeadquarters',
-    },
-    {
-        name: 'Штабы СО ОО',
-        link: '/AllHeadquarters',
-    },
-    {
-        name: 'ЛСО',
-        link: '/AllSquads',
-    },
-]);
->>>>>>> 1df48253a9a26dfbffa2b1ef36b70d2c72200b59
 </script>
 <style scoped lang="scss">
 .title {
