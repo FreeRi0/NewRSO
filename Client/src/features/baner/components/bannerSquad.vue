@@ -3,7 +3,7 @@
         <squadBanner :banner="squad.banner"></squadBanner>
         <squadAvatar :emblem="squad.emblem"></squadAvatar>
         <div class="squad-metric__bottom">
-            <div class="squad-data__wrapper" v-if="squad">
+            <div class="squad-data__wrapper">
                 <div class="Squad-HQ__name">
                     <h4>{{ squad.name }}</h4>
                 </div>
@@ -68,12 +68,12 @@
                     >
                 </div>
             </div>
-            <div v-else>Загрузка....</div>
+            <!-- <div v-else>Загрузка....</div> -->
         </div>
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
@@ -97,11 +97,18 @@ const props = defineProps({
     },
 });
 
-
 const edict = ref({});
+
+// const isEmpty = computed(() => {
+//     for (let i in props.squad) {
+//        console.log("Объект пуст")
+//     }
+//     console.log("Объект есть")
+// });
+
 const aboutEduc = async () => {
     let id = props.squad.educational_institution;
-    console.log('squad', props.squad)
+    console.log('squad', props.squad);
     console.log('id', id);
     await HTTP.get(`/eduicational_institutions/${id}/`, {
         headers: {
@@ -121,6 +128,17 @@ const aboutEduc = async () => {
 onMounted(() => {
     aboutEduc();
 });
+
+watch(
+    () => props.squad,
+
+    (newSquad, oldSquad) => {
+        if (Object.keys(props.squad).length === 0) {
+            return;
+        }
+        aboutEduc();
+    },
+);
 </script>
 <style lang="scss" scoped>
 .squad-metric {

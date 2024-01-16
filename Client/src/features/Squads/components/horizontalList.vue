@@ -34,6 +34,7 @@ const props = defineProps({
         display: flex;
         align-items: center;
         padding: 4px 20px;
+        margin-bottom: 12px;
     }
     &-img {
         img {
@@ -73,6 +74,7 @@ const props = defineProps({
         font-size: 20px;
         font-family: 'Akrobat';
         color: #1e1e1e;
+        margin-left: 10px;
         @media screen and (max-width: 575px) {
             font-size: 15px;
         }

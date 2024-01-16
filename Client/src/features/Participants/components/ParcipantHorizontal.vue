@@ -1,37 +1,49 @@
 <template>
-    <div v-for="participant in participants" v-if="participants.length > 0">
-        <router-link
-            class="horizontallso-item__wrapper"
-            :to="{ name: 'userpage', params: { id: participant.id } }"
-        >
-            <div class="horizontallso-img">
-                <img
-                    :src="participant.user.avatar.photo"
-                    alt="photo"
-                    v-if="participant.user.avatar"
-                />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                    v-else
-                />
-            </div>
-            <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full">
-                    {{ participant.user.last_name }}
-                </p>
-                <div class="horizontallso-item__list-date">
-                    <span
-                        style="
-                            border-left: 2px solid #b6b6b6;
-                            padding-right: 8px;
-                        "
-                    ></span>
-                    <p>{{ participant.user.date_of_birth }}</p>
+    <div v-if="participants.length > 0">
+        <div v-for="participant in participants">
+            <router-link
+                class="horizontallso-item__wrapper"
+                :to="{ name: 'userpage', params: { id: participant.id } }"
+            >
+                <div class="horizontallso-img">
+                    <img
+                        :src="participant.user.avatar.photo"
+                        alt="photo"
+                        v-if="participant.user.avatar"
+                    />
+                    <img
+                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                        alt="photo"
+                        v-else
+                    />
                 </div>
-            </div>
-        </router-link>
+                <div class="containerHorizontal">
+                    <div class="d-flex">
+                        <p class="horizontallso-item__list-full">
+                            {{ participant.user.last_name }}
+                        </p>
+                        <p class="horizontallso-item__list-full">
+                            {{ participant.user.first_name }}
+                        </p>
+                        <p class="horizontallso-item__list-full">
+                            {{ participant.user.patronymic_name }}
+                        </p>
+                    </div>
+
+                    <div class="horizontallso-item__list-date">
+                        <span
+                            style="
+                                border-left: 2px solid #b6b6b6;
+                                padding-right: 8px;
+                            "
+                        ></span>
+                        <p>{{ participant.user.date_of_birth }}</p>
+                    </div>
+                </div>
+            </router-link>
+        </div>
     </div>
+
     <h2 v-else>Участники не найдены...</h2>
 </template>
 <script setup>
@@ -81,13 +93,12 @@ const props = defineProps({
 }
 
 .horizontallso-item p {
-    margin-left: 10px;
+    margin-left: 7px;
 }
 
 .horizontallso-item__list-date {
-    width: 95px;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
+    grid-template-columns: auto 1fr 0fr;
 }
 
 .horizontallso-img img {
@@ -113,7 +124,7 @@ const props = defineProps({
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
     font-weight: 400;
-    margin-left: 10px;
+    margin-left: 7px;
 }
 
 .horizontallso-item__list-date p {
