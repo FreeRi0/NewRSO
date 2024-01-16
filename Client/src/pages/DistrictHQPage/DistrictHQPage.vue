@@ -126,34 +126,6 @@ onMounted(() => {
     aboutDistrictHQ();
     aboutMembers();
 });
-<<<<<<< HEAD
-=======
-
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Окружные штабы', href: '#' },
-    { pageTitle: `${districtHeadquarter.name}`, href: '#' },
-];
-
-const HQandSquads = ref([
-    {
-        name: 'Региональные штабы',
-        link: '/RegionalHeadquarters',
-    },
-    {
-        name: 'Местные штабы',
-        link: '/LocalHeadquarters',
-    },
-    {
-        name: 'Штабы СО ОО',
-        link: '/AllHeadquarters',
-    },
-    {
-        name: 'ЛСО',
-        link: '/AllSquads',
-    },
-]);
->>>>>>> 1df48253a9a26dfbffa2b1ef36b70d2c72200b59
 </script>
 <style lang="scss" scoped>
 .district-page {
