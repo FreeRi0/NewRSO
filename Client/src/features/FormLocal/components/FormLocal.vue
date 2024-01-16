@@ -665,15 +665,13 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Avatar, bannerPhoto } from '@shared/components/imagescomp';
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 
-import { useVuelidate } from '@vuelidate/core';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
