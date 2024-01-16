@@ -251,6 +251,7 @@
                                 v-model:value="headquarter.social_tg"
                             ></TextareaAbout>
                         </div>
+                        <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                         <div class="form__field" v-if="participants">
                             <p class="form__label">
                                 Назначить на должность
@@ -678,23 +679,18 @@
 
 <script setup>
 import { ref, computed, inject, onMounted } from 'vue';
-import { Input } from '@shared/components/inputs';
+import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Avatar } from '@shared/components/imagescomp';
-import { bannerPhoto } from '@shared/components/imagescomp';
-import { Select } from '@shared/components/selects';
-import { Dropdown } from '@shared/components/selects';
+import { Avatar, bannerPhoto } from '@shared/components/imagescomp';
+import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-import { TextareaAbout } from '@shared/components/inputs';
 
 import { useVuelidate } from '@vuelidate/core';
 // УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
-import axios from 'axios';
-import { useRouter } from 'vue-router';
 import {
     helpers,
     minLength,
@@ -709,7 +705,6 @@ const emit = defineEmits([
     'update:value',
     // УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
     'updateMember',
-
     'changeHeadquarter',
     'selectFile',
     'resetEmblem',
@@ -879,6 +874,10 @@ const resetBanner = () => {
         color: #35383f;
         border: 2px solid #35383f;
         background-color: #ffffff;
+    }
+    
+    &--prev {
+        margin-right: 20px;
     }
 }
 

@@ -69,7 +69,7 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="name-hq"
+                            <label for="name-hq" class="form__label"
                                 >Наименование штаба
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <div class="form__field">
-                            <label for="founding_date"
+                            <label for="founding_date" class="form__label"
                                 >Дата начала функционирования ОШ
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -101,7 +101,7 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="city">Город</label>
+                            <label for="city" class="form__label">Город</label>
                             <Input
                                 class="form__input"
                                 id="city"
@@ -111,12 +111,13 @@
                             />
                         </div>
 
-               <div class="form__field form__field--commander">
+                        <div class="form__field form__field--commander">
                             <label class="form__label" for="beast"
-                                >Командир штаба СО ОО:
+                                >Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
+                             open-on-clear
                                 id="beast"
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
@@ -203,33 +204,35 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="social-media-vk"
+                            <label for="social-media-vk" class="form__label"
                                 >Группа штаба ВКонтакте
                             </label>
-                            <Input
-                                class="form__input"
+                            <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-vk"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
                                 v-model:value="headquarter.social_vk"
-                            />
+                            ></TextareaAbout>
                         </div>
 
                         <div class="form__field">
-                            <label for="social-media-te"
-                                >Группа штаба в Телеграмме
+                            <label for="social-media-te" class="form__label"
+                                >Группа штаба в Телеграм
                             </label>
-                            <Input
-                                class="form__input"
+                            <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-te"
                                 placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                 name="social_media_te"
                                 v-model:value="headquarter.social_tg"
-                            />
+                            ></TextareaAbout>
                         </div>
                         <div class="form__field" v-if="participants">
-                            <p>
-                                Участники отряда
+                            <p class="form__label">
+                                Назначить на должность
                                 <sup class="valid-red">*</sup>
                             </p>
                             <v-text-field
@@ -251,9 +254,8 @@
                             </v-text-field>
                             <MembersList
                                 :items="sortedMembers"
-                                :validate="v"
                                 :submited="submited"
-                                @updateMember="onUpdateMember"
+                                @update-member="onUpdateMember"
                             ></MembersList>
                         </div>
                     </div>
@@ -343,23 +345,22 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="hq-slogan">Девиз штаба</label>
-                            <Input
-                                class="form__input"
-                                type="text"
+                            <label for="hq-slogan" class="form__label">Девиз штаба</label>
+                            <TextareaAbout
+                                maxlength="100"
+                                class="form__textarea form__textarea--mobile"
                                 id="hq-slogan"
                                 placeholder="Например, через тернии к звездам"
                                 name="hq_slogan"
                                 v-model:value="headquarter.slogan"
-                                :maxlength="100"
-                            />
+                            ></TextareaAbout>
                             <div class="form__counter">
                                 {{ counterSlogan }} / 100
                             </div>
                         </div>
 
                         <div class="form__field">
-                            <label for="about-hq">О штабе</label>
+                            <label for="about-hq" class="form__label">О штабе</label>
                             <TextareaAbout
                                 :rows="6"
                                 maxlength="500"
@@ -373,7 +374,7 @@
                                 {{ counterAbout }} / 1000
                             </div>
                         </div>
-                            <div class="form__field photo-add">
+                        <div class="form__field photo-add">
                             <p class="form__label">Добавьте логотип</p>
                             <div class="photo-add__box photo-add__box--logo">
                                 <div
@@ -493,10 +494,11 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
+
                         <div class="form__field photo-add">
                             <p class="form__label">Добавьте баннер</p>
                             <div class="photo-add__box photo-add__box--banner">
@@ -620,11 +622,10 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
-
                     </div>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -652,19 +653,16 @@
 
 <script setup>
 import { ref, computed, inject, onMounted } from 'vue';
-import { Input } from '@shared/components/inputs';
+import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Avatar } from '@shared/components/imagescomp';
-import { bannerPhoto } from '@shared/components/imagescomp';
-import { Select } from '@shared/components/selects';
-import { Dropdown } from '@shared/components/selects';
+import { Avatar, bannerPhoto } from '@shared/components/imagescomp';
+import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-import { TextareaAbout } from '@shared/components/inputs';
 
 import { useVuelidate } from '@vuelidate/core';
-import axios from 'axios';
-import { useRouter, useRoute } from 'vue-router';
+import { HTTP } from '@app/http';
+import { useRoute, useRouter } from 'vue-router';
 
 import {
     helpers,
@@ -678,15 +676,13 @@ import {
 
 const emit = defineEmits([
     'update:value',
+    'updateMember',
     'changeHeadquarter',
     'selectFile',
     'resetEmblem',
     'selectBanner',
     'resetBanner',
 ]);
-
-const route = useRoute();
-const id = route.params.id;
 
 const props = defineProps({
     participants: {
@@ -747,14 +743,16 @@ const showButtonPrev = computed(() => {
 //-----------------------------------------------------------------------
 const members = ref([]);
 
+const route = useRoute();
+let id = route.params.id;
+
 const getMembers = async () => {
-    await axios
-        .get(`api/v1/districts/${id}/members/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+    await HTTP.get(`districts/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
         .then((response) => {
             members.value = response.data;
             console.log(response);
@@ -849,6 +847,10 @@ const resetBanner = () => {
         border: 2px solid #35383f;
         background-color: #ffffff;
     }
+    
+    &--prev {
+        margin-right: 20px;
+    }
 }
 
 .form_textarea {
@@ -876,7 +878,6 @@ const resetBanner = () => {
 }
 
 .p-dropdown-items-wrapper {
-
     &::-webkit-scrollbar {
         /*стили полосы прокрутки */
         width: 8px;

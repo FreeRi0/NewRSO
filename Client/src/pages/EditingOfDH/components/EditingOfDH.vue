@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container container--top">
         <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Редактирование окружного штаба</h1>

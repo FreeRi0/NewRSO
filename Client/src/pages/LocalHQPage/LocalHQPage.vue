@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <!-- ЗДЕСЬ ПОМЕНЯЛА -->
-        <Breadcrumbs></Breadcrumbs>
+<div class="local-page">
+            <Breadcrumbs></Breadcrumbs>
         <h1 class="title title--hq">Местный штаб</h1>
         <BannerHQ
             v-if="showHQ"
@@ -48,6 +48,7 @@
             head="Руководство местного штаба"
         ></ManagementHQ>
         <HQandSquad></HQandSquad>
+</div>
     </div>
 </template>
 <script setup>
@@ -86,22 +87,6 @@ const aboutlocalHQ = async () => {
         });
 };
 
-// const aboutEduc = async () => {
-//     await HTTP.get(`/eduicational_institutions/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             educt.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
 const aboutMembers = async () => {
     await HTTP.get(`/locals/${id}/members/`, {
         headers: {
@@ -122,7 +107,6 @@ onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutlocalHQ();
         aboutMembers();
-        // aboutEduc();
     }
 });
 watch(
@@ -132,23 +116,19 @@ watch(
         id = newId;
         aboutlocalHQ();
         aboutMembers();
-        // aboutEduc();
     },
 );
 
 onMounted(() => {
     aboutlocalHQ();
     aboutMembers();
-    // aboutEduc();
 });
-
-// const pages = [
-//     { pageTitle: 'Структура', href: '#' },
-//     { pageTitle: 'Местные штабы', href: '/LocalHeadquarters' },
-//     { pageTitle: `${localHeadquarter.name}`, href: '#' },
-// ];
 </script>
 <style scoped lang="scss">
+.local-page {
+    padding-top: 40px;
+}
+
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;

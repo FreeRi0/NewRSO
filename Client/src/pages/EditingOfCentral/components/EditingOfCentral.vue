@@ -15,9 +15,6 @@
             @reset-banner="onResetBanner"
         >
         </FormCentr>
-
-        <!-- <FormCentr :participants="true"></FormCentr> -->
-        <!-- <FormCentr :participants="true" :unit="unit"></FormCentr> -->
     </div>
 </template>
 
@@ -28,12 +25,6 @@ import { FormCentr } from '@features/FormCentr';
 import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-
-// const pages = ref([
-//     { pageTitle: 'Структура', href: '#' },
-//     { pageTitle: 'Центральный штаб', href: '#' },
-//     { pageTitle: 'Редактирование', href: '#' },
-// ]);
 
 const route = useRoute();
 let id = route.params.id;

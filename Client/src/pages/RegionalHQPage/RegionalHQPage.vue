@@ -86,22 +86,6 @@ const aboutRegionalHQ = async () => {
         });
 };
 
-// const aboutEduc = async () => {
-//     await HTTP.get(`/regionals/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             educt.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
 const aboutMembers = async () => {
     await HTTP.get(`/regionals/${id}/members/`, {
         headers: {
@@ -122,7 +106,6 @@ onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutRegionalHQ();
         aboutMembers();
-        // aboutEduc();
     }
 });
 watch(
@@ -132,14 +115,12 @@ watch(
         id = newId;
         aboutRegionalHQ();
         aboutMembers();
-        // aboutEduc();
     },
 );
 
 onMounted(() => {
     aboutRegionalHQ();
     aboutMembers();
-    // aboutEduc();
 });
 </script>
 <style scoped lang="scss">
