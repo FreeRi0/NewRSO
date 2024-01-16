@@ -1,12 +1,12 @@
 <template>
     <div class="d-flex justify-end align-self-center">
-        <v-card class="" height="535px">
+        <v-card>
             <v-card-title class="text-center"
                 >Вход в личный кабинет</v-card-title
             >
 
             <v-form action="#" method="post" @submit.prevent="LoginUser">
-                <v-card-text class="text-center"
+                <v-card-text class="text-center goReg"
                     >У вас еще нет аккаунта?
                     <router-link to="/Register">Зарегистрироваться</router-link>
                 </v-card-text>
@@ -150,11 +150,20 @@ const LoginUser = async () => {
     font-weight: 600;
     font-family: Akrobat;
     padding-top: 0rem;
+    @media screen and (max-width: 575px) {
+        font-size: 28px;
+    }
 }
 .v-card-text {
     padding: 0;
-    margin-bottom: 20px;
     font-size: 18px;
+    @media screen and (max-width: 575px) {
+        font-size: 16px;
+    }
+}
+
+.goReg {
+    margin-bottom: 20px;
 }
 .error {
     color: #db0000;
@@ -167,6 +176,12 @@ const LoginUser = async () => {
 
 .v-card {
     padding: 105px 98px;
+    @media screen and (max-width: 768px) {
+        padding: 60px 98px;
+    }
+    @media screen and (max-width: 575px) {
+        padding: 60px 16px;
+    }
 }
 
 a {
