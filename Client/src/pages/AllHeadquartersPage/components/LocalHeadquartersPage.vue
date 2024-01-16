@@ -113,13 +113,11 @@
                     ></Button>
                 </div>
             </div>
-
             <div class="headquarters-wrapper" v-show="vertical">
                 <LocalHQList
                     :localHeadquarters="sortedHeadquarters"
                 ></LocalHQList>
             </div>
-
             <div class="horizontal" v-show="!vertical">
                 <HorizontalLocalHQs
                     :localHeadquarters="sortedHeadquarters"
@@ -426,4 +424,3 @@ const sortedHeadquarters = computed(() => {
     }
 }
 </style>
-@shared/components/selects/inputs

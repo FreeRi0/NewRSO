@@ -182,6 +182,7 @@ const pages = [
     { pageTitle: 'Штабы', href: '/AllHeadquarters' },
     { pageTitle: headquarter.name, href: '#' },
 ];
+
 </script>
 <style scoped lang="scss">
 .title {

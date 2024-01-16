@@ -165,7 +165,7 @@ const pages = ref([
     { title: 'Местные штабы', link: '/LocalHeadquarters' },
     { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
     { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '/CentralHQ' },
+    { title: 'Центральный штаб', link: '/CentralHQ/1' },
 ]);
 
 const userPages = computed(() => [
@@ -337,6 +337,7 @@ onMounted(() => {
     color: #35383f;
     position: relative;
     border-bottom: 1px solid #d9d9d9;
+    // margin-bottom: 60px;
 
     @media (max-width: 1024px) {
         padding: 0;
