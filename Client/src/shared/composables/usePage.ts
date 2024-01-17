@@ -1,9 +1,24 @@
-import { onActivated, onMounted, watch } from 'vue';
+import type { RouteLocationNormalizedLoaded } from 'vue-router';
+
+import { onActivated, onMounted } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 import { usePageStore } from '..';
 
 interface Params {
-    targetObjects: object[];
+    targetObjects: Record<string, unknown>[];
     notUsedHooks?: boolean;
+}
+
+function getCountIsObjectLabels(route: RouteLocationNormalizedLoaded) {
+    let counter = 0;
+
+    if (route.meta.isObject) counter++;
+
+    counter += route.matched.reduce((count, matchedRoute) => {
+        return matchedRoute.meta.isObject ? ++count : count;
+    }, 0);
+
+    return counter;
 }
 
 export default function usePage(
@@ -12,9 +27,8 @@ export default function usePage(
     const { targetObjects, notUsedHooks } = params;
 
     const pageStore = usePageStore();
-    pageStore.clearTargetObjects();
 
-    const replaceTargetObjects = (targetObjects: object[]) => {
+    const replaceTargetObjects = (targetObjects: Record<string, unknown>[]) => {
         pageStore.replaceTargetObjects(targetObjects);
     };
 
@@ -23,19 +37,9 @@ export default function usePage(
         pageStore.replaceTargetObjects(targetObjects);
     }
 
-    function addNewTargetObject(targetObject: object) {
-        console.log('add', targetObject, targetObjects);
-        pageStore.addNewTagetObject(targetObject);
+    function addTargetObject(targetObject: Record<string, unknown>) {
+        pageStore.addTargetObject(targetObject);
     }
-
-    watch(
-        targetObjects,
-        (newTargetObjects) => {
-            if (!newTargetObjects?.length) return;
-            pageStore.replaceTargetObjects(newTargetObjects);
-        },
-        { deep: true },
-    );
 
     if (!notUsedHooks) {
         onMounted(() => {
@@ -47,8 +51,17 @@ export default function usePage(
         });
     }
 
+    onBeforeRouteLeave((to, from) => {
+        const devideCount =
+            getCountIsObjectLabels(to) - getCountIsObjectLabels(from);
+
+        if (devideCount >= 0) return true;
+
+        pageStore.removeLastObjects(devideCount * -1);
+    });
+
     return {
-        addNewTargetObject,
+        addTargetObject,
         replaceTargetObjects,
     };
 }

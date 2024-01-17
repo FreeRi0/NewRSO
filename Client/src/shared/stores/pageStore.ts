@@ -1,34 +1,31 @@
 import { defineStore } from 'pinia';
-import { reactive, ref, watch } from 'vue';
-import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router';
+import { reactive, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
 export const usePageStore = defineStore('page', () => {
     const route = useRoute();
 
     const currentPage = ref<RouteLocationNormalizedLoaded>(route);
-    const targetObjects = reactive<object[]>([]);
+    const targetObjects = reactive<Record<string, unknown>[]>([]);
 
-    watch(route, (newRoute) => {
-        currentPage.value = newRoute;
-    });
-
-    function replaceTargetObjects(objs: object[]) {
-        targetObjects.splice(0, targetObjects.length, ...objs);
-    }
-
-    function addNewTagetObject(targetObject: object) {
+    function addTargetObject(targetObject: Record<string, unknown>) {
         targetObjects.push(targetObject);
     }
 
-    function clearTargetObjects() {
-        targetObjects.splice(0, targetObjects.length);
+    function replaceTargetObjects(objs: Record<string, unknown>[]) {
+        targetObjects.splice(0, targetObjects.length, ...objs);
+    }
+
+    function removeLastObjects(count: number) {
+        targetObjects.splice(targetObjects.length - count - 1, count);
     }
 
     return {
         currentPage,
         targetObjects,
-        addNewTagetObject,
+        addTargetObject,
         replaceTargetObjects,
-        clearTargetObjects,
+        removeLastObjects,
     };
 });
