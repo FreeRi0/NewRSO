@@ -96,13 +96,13 @@ const changeHeadquarter = async () => {
     formData.append('commander', headquarter.value.commander);
     formData.append('social_vk', headquarter.value.social_vk);
     formData.append('social_tg', headquarter.value.social_tg);
-
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
-    formData.append('emblem', fileEmblem.value);
-    formData.append('banner', fileBanner.value);
 
-    HTTP.put('/centrals/1/', formData, {
+    if (fileEmblem.value) formData.append('emblem', fileEmblem.value);
+    if (fileBanner.value) formData.append('banner', fileBanner.value);
+
+    HTTP.patch('/centrals/1/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
