@@ -1,6 +1,4 @@
-// import { patch } from 'node_modules/axios/index.d.cts';
 import { type RouteRecordRaw } from 'vue-router';
-// import { id } from 'vuetify/locale';
 
 const routes: RouteRecordRaw[] = [
     {
@@ -9,6 +7,7 @@ const routes: RouteRecordRaw[] = [
             import('@layouts/MainLayout/components/MainLayout.vue'),
         meta: {
             label: 'Структура',
+            namedRoute: 'Login',
         },
         children: [
             {
@@ -59,37 +58,46 @@ const routes: RouteRecordRaw[] = [
             },
             //----------------------Начало----------------Штабы/Создание/Редактирование---------------------------------------------------------
             // Штабы ЛСО
+            // {
+            //     path: '/AllSquads',
+            //     name: 'allsquads',
+            //     component: () =>
+            //         import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
+            //     meta: {
+            //         requiresAuth: true,
+            //         label: 'ЛСО',
+            //     },
+            // },
             {
                 path: '/AllSquads',
-                name: 'allsquads',
-                component: () =>
-                    import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
                 meta: {
                     requiresAuth: true,
-                    label: 'ЛСО',
-                },
-            },
-            {
-                path: '/AllSquads',
-                meta: {
-                    requiresAuth: true,
+                    namedRoute: 'allsquads',
                     label: 'ЛСО',
                 },
                 children: [
                     {
-                        path: ':id',
-                        meta: {
-                            label: 'Отряд',
-                        },
-                        name: 'lso',
-                        component: () => import('@pages/lsoPage/lsoPage.vue'),
+                        path: '',
+                        name: 'allsquads',
+                        component: () =>
+                            import(
+                                '@pages/AllSquadsPage/components/AllSquadsPage.vue'
+                            ),
                     },
                     {
                         path: ':id',
                         meta: {
-                            label: 'Отряд',
+                            label: 'squad.name',
+                            namedRoute: 'lso',
+                            isObject: true,
                         },
                         children: [
+                            {
+                                path: '',
+                                name: 'lso',
+                                component: () =>
+                                    import('@pages/lsoPage/lsoPage.vue'),
+                            },
                             {
                                 path: 'EditLSO',
                                 name: 'EditLSO',
@@ -103,6 +111,22 @@ const routes: RouteRecordRaw[] = [
                             },
                         ],
                     },
+                    // {
+                    //     path: ':id',
+                    //     children: [
+                    //         {
+                    //             path: 'EditLSO',
+                    //             name: 'EditLSO',
+                    //             component: () =>
+                    //                 import(
+                    //                     '@pages/EditingDetachment/components/EditingDetachment.vue'
+                    //                 ),
+                    //             meta: {
+                    //                 label: 'Редактирование',
+                    //             },
+                    //         },
+                    //     ],
+                    // },
                     {
                         path: '/CreateLSO',
                         name: 'CreateLSO',
@@ -202,7 +226,9 @@ const routes: RouteRecordRaw[] = [
                                 path: '',
                                 name: 'LocalHQ',
                                 component: () =>
-                                    import('@pages/LocalHQPage/LocalHQPage.vue'),
+                                    import(
+                                        '@pages/LocalHQPage/LocalHQPage.vue'
+                                    ),
                             },
                             {
                                 path: 'EditingOfLocal',
@@ -259,7 +285,9 @@ const routes: RouteRecordRaw[] = [
                                 path: '',
                                 name: 'RegionalHQ',
                                 component: () =>
-                                    import('@pages/RegionalHQPage/RegionalHQPage.vue'),
+                                    import(
+                                        '@pages/RegionalHQPage/RegionalHQPage.vue'
+                                    ),
                             },
                             {
                                 path: 'EditingOfRS',
@@ -304,7 +332,9 @@ const routes: RouteRecordRaw[] = [
                                 path: '',
                                 name: 'DistrictHQ',
                                 component: () =>
-                                    import('@pages/DistrictHQPage/DistrictHQPage.vue'),
+                                    import(
+                                        '@pages/DistrictHQPage/DistrictHQPage.vue'
+                                    ),
                             },
                             {
                                 path: 'EditingOfDH',
