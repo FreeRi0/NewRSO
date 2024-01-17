@@ -1,7 +1,7 @@
 import { type RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
-// сменить структуру под каждые нужные нам компоненты - закинуть lable и namedRoute в штабы, в мероприятия и остальное соответствующе.
+    // сменить структуру под каждые нужные нам компоненты - закинуть lable и namedRoute в штабы, в мероприятия и остальное соответствующе.
     {
         path: '/',
         component: () =>
@@ -60,6 +60,16 @@ const routes: RouteRecordRaw[] = [
             },
             //----------------------Начало----------------Штабы/Создание/Редактирование---------------------------------------------------------
             // Штабы ЛСО
+            // {
+            //     path: '/AllSquads',
+            //     name: 'allsquads',
+            //     component: () =>
+            //         import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
+            //     meta: {
+            //         requiresAuth: true,
+            //         label: 'ЛСО',
+            //     },
+            // },
             {
                 path: '/AllSquads',
                 meta: {
@@ -116,6 +126,34 @@ const routes: RouteRecordRaw[] = [
                                 },
                             },
                         ],
+                    },
+                    // {
+                    //     path: ':id',
+                    //     children: [
+                    //         {
+                    //             path: 'EditLSO',
+                    //             name: 'EditLSO',
+                    //             component: () =>
+                    //                 import(
+                    //                     '@pages/EditingDetachment/components/EditingDetachment.vue'
+                    //                 ),
+                    //             meta: {
+                    //                 label: 'Редактирование',
+                    //             },
+                    //         },
+                    //     ],
+                    // },
+                    {
+                        path: '/CreateLSO',
+                        name: 'CreateLSO',
+                        component: () =>
+                            import(
+                                '@pages/CreationOfDetachment/components/CreationOfDetachment.vue'
+                            ),
+                        meta: {
+                            requiresAuth: true,
+                            label: 'Создание ЛСО',
+                        },
                     },
                 ],
             },

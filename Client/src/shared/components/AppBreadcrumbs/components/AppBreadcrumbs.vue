@@ -22,13 +22,13 @@ const { breadcrumbs } = useBreadcrumbsStore();
     flex-wrap: wrap;
     align-items: center;
     margin-bottom: 40px;
-    font-family: "Akrobat";
+    font-family: 'Akrobat';
     font-size: 14px;
     line-height: 17px;
     font-weight: 600;
     color: #35383f;
     padding-top: 60px;
-    
+
     @media (max-width: 360px) {
         margin-bottom: 20px;
     }

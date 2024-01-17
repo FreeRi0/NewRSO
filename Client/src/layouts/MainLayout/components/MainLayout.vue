@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-breadcrumbs/>
+        <app-breadcrumbs />
 
         <router-view v-slot="{ Component }">
             <keep-alive>
@@ -27,8 +27,4 @@ roleStore.getRoles();
 // userStore.getUser();
 // const user = storeToRefs(userStore);
 // console.log('lalala', user.user.value);
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 </script>
