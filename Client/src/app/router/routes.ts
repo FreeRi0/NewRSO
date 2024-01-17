@@ -254,7 +254,7 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/actionSquads/:id',
                 name: 'Action',
-                component: () => import('@pages/ActionPage/components/ActionPage.vue'),
+                component: () => import('@pages/Event/components/Event.vue'),
             },
             {
                 path: "/createAction",
@@ -262,7 +262,7 @@ const routes: RouteRecordRaw[] = [
                 component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
             },
             {
-                path: "/EditAction",
+                path: "/actionSquads/:id/EditAction",
                 name: "editAction",
                 component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
             },

@@ -82,14 +82,12 @@
                                 </div>
                             <div class='form-col-100'>
                                 <div class="form__field">
-                                    <label class='form-label'>Выберите маштаб мероприятия<sup class="valid-red">*</sup></label>
-                                    <Dropdown
+                                    <label class='form-label'>Выберите маcштаб мероприятия<sup class="valid-red">*</sup></label>
+                                    <sortByEducation
                                         :options='scale_massive'
-                                        optionLabel='name'
                                         placeholder='Например, ЛСО'
-                                        v-model='maininfo.scale'
-                                        class='invents-block invents-select'>
-                                    </Dropdown>
+                                        v-model='maininfo.scale'>
+                                    </sortByEducation>
                                 </div>
                             </div>
                             </div>
@@ -106,10 +104,10 @@
                                         name="name_hq"
                                         :maxlength="100"
                                     />
-                                    <div class="form__counter"></div>
+                                    <div class="form__counter">{{ maininfo.name.length }}/100</div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="telegram-owner-hq">Ссылка на конференцию</label>
+                                    <label class="form-label" for="telegram-owner-hq">Ссылка на конференцию</label>
                                     <InputText
                                         id="telegram-owner-hq"
                                         v-model='maininfo.conference_link'
@@ -120,27 +118,33 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label>Добавить баннер</label>
-                                    <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @uploader="maininfo.banner"
-                                            chooseLabel="Выбрать файл"
-                                        />
-                                    </div>
+                                    <label class="form-label">Добавить баннер</label>
+                                    <FileUpload 
+                                        name="demo[]" 
+                                        accept=".pdf, .jpeg, .png" 
+                                        :maxFileSize="7000000"
+                                        v-model="maininfo.banner"
+                                    >
+                                        <template #header="{ chooseCallback }">
+                                            <button @click="chooseCallback()" class="upload">
+                                                <div class="upload-load">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="32"
+                                                        height="32"
+                                                        viewBox="0 0 32 32"
+                                                        fill="none"
+                                                    ></svg>
+                                                </div>
+                                            </button>
+                                            <div class="form__counter">Рекомендуемый размер файла 1024х768</div>
+                                        </template>
+                                    </FileUpload>
                                 </div>
                             </div>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="address-hq">Адрес проведения (Оффлайн)<sup class="valid-red">*</sup></label>
+                                    <label class="form-label" for="address-hq">Адрес проведения (Оффлайн)<sup class="valid-red">*</sup></label>
                                     <InputText
                                         id="address-hq"
                                         v-model='maininfo.address'
@@ -149,10 +153,10 @@
                                         name="address_hq"
                                         :maxlength="100"
                                     />
-                                    <div class="form__counter"></div>
+                                    <div class="form__counter">{{ maininfo.address.length }}/100</div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="group-hq">Количество участников</label>
+                                    <label class="form-label" for="group-hq">Количество участников</label>
                                     <InputText
                                         v-model='maininfo.participants_number'
                                         id="group-hq"
@@ -160,57 +164,53 @@
                                         class="form__input form-input-container"
                                         placeholder="Например, 100"
                                         name="group-hq"
-                                        :maxlength="100"
                                     />
                                 </div>
                                 <div class="form__field">
-                                    <label>О мероприятии</label>
-                                    <Textarea class="form__textarea" />
+                                    <label class="form-label">О мероприятии</label>
+                                    <textarea class="form__textarea" v-model="maininfo.description" />
                                 </div>
                             </div>
                         </div>
                         <div class='form-container'>
                             <div class='form-col-100'>
                                 <div class="form__field">
-                                    <label for="road-hq">Добавьте направление<sup class="valid-red">*</sup></label>
-                                    <Dropdown
+                                    <label class="form-label" for="road-hq">Добавьте направление<sup class="valid-red">*</sup></label>
+                                    <sortByEducation
+                                        id="road-hq"
                                         :options='direction_massive'
                                         optionLabel='name'
                                         placeholder='Например, ЛСО'
                                         v-model='maininfo.direction'
-                                        class='invents-block invents-select'
-                                    />
-                                    <div class="form__counter"></div>
+                                    ></sortByEducation>
                                 </div>
                             </div>
                         </div>
                         <div class='form-container'>
                             <div class='form-col'>
-                                <label>Выберите вид принимаемых к подаче заявок на мероприятие</label>
+                                <label class="form-label">Выберите вид принимаемых к подаче на мероприятие заявок</label>
                                 <label class='flex align-items-center' style='display: flex'>
                                     <div class="flex align-items-center">
                                         <input v-model='maininfo.application_type' value='Персональная' type='radio' class='form-radio'/>
-                                        <label class="ml-2">Персональная</label>
+                                        <label class="ml-2 form-label">Персональная</label>
                                     </div>
                                     <div class="flex align-items-center">
                                         <input v-model='maininfo.application_type' value='Групповая' type='radio' class='form-radio'/>
-                                        <label class="ml-2">Групповая</label>
+                                        <label class="ml-2 form-label">Групповая</label>
                                     </div>
                                     <div class="flex align-items-center">
                                         <input v-model='maininfo.application_type' value='Многоэтапная' type='radio' class='form-radio'/>
-                                        <label class="ml-2">Многоэтапная</label>
+                                        <label class="ml-2 form-label">Многоэтапная</label>
                                     </div>
                                 </label>
                             </div>
                             <div class='form-col'>
-                                <label>На какую область расчитано мероприятие</label>
-                                <Dropdown
-                                    v-model='maininfo.direction'
-                                    :options='direction_massive'
-                                    optionLabel='name'
+                                <label class="form-label">Какие объекты могут формировать групповые заявки</label>
+                                <sortByEducation
+                                    v-model='area'
+                                    :options='area_massive'
                                     placeholder='Например, ЛСО'
-                                    class='invents-block invents-select'
-                                />
+                                ></sortByEducation>
                             </div> 
                         </div>
                     </v-expansion-panel-text>
@@ -282,7 +282,7 @@
                         <div class='form-container'>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="action-start-hq">Начало мероприятия<sup class="valid-red">*</sup></label>
+                                    <label class="form-label" for="action-start-hq">Начало мероприятия<sup class="valid-red">*</sup></label>
                                     <InputText
                                         id="action-start-hq"
                                         v-model='timeData.timeStart'
@@ -293,7 +293,7 @@
                                     />
                                 </div>
                                 <div class="form__field">
-                                    <label for="action-end-hq">Окончание мероприятия</label>
+                                    <label class="form-label" for="action-end-hq">Окончание мероприятия</label>
                                     <InputText
                                         id="action-end-hq"
                                         v-model='timeData.timeEnd'
@@ -304,7 +304,7 @@
                                     />
                                 </div>
                                 <div class="form__field">
-                                    <label for="end-registration-hq">Окончение регистрации</label>
+                                    <label class="form-label" for="end-registration-hq">Окончение регистрации</label>
                                     <InputText
                                         id="end-registration-hq"
                                         class="form__input form-input-container"
@@ -317,7 +317,7 @@
                             </div>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="action-hours-start-hq">Время в часах</label>
+                                    <label class="form-label" for="action-hours-start-hq">Время в часах</label>
                                     <InputText
                                         id="action-hours-start-hq"
                                         class="form__input form-input-container"
@@ -329,7 +329,7 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="action-hours-end-hq">Время в часах</label>
+                                    <label class="form-label" for="action-hours-end-hq">Время в часах</label>
                                     <InputText
                                         id="action-hours-end-hq"
                                         class="form__input form-input-container"
@@ -426,8 +426,8 @@
                     <v-expansion-panel-text>
                         <div class='form-container'>
                             <div class='form-col-100'>
-                                Какие личные данные участников вам нужны?
-                                Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.
+                                <label class="form-label">Какие личные данные участников вам нужны?
+                                Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.</label>
                                 <v-container fluid>
                                     <v-checkbox
                                         v-model="documents.passport"
@@ -474,12 +474,12 @@
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             chooseLabel="Выбрать файл"
-                                        />
+                                        ></FileUpload>
                                     </div>
                                 </div>
                                 <div class='form-col-100'>
-                                    Расскажите, с какими документами необходимо просто ознакомиться, а какие скачать и заполнить
-                                    <Textarea class="form__textarea" />
+                                    <label class="form-label">Расскажите, с какими документами необходимо просто ознакомиться, а какие скачать и заполнить</label>
+                                    <textarea class="form__textarea" />
                                 </div>
                             </div>
                         </div>
@@ -552,10 +552,10 @@
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
-                        <div class='form-container'>
+                        <div v-for="organizator in organizators" class='form-container'>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="name-hq">ФИО организатора<sup class="valid-red">*</sup></label>
+                                    <label class="form-label" for="name-hq">ФИО организатора<sup class="valid-red">*</sup></label>
                                     <InputText
                                         id="name-hq"
                                         v-model="organizator.organizer"
@@ -567,7 +567,7 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="telegram-owner-hq">Telegram организатора</label>
+                                    <label class="form-label" for="telegram-owner-hq">Telegram организатора</label>
                                     <InputText
                                         id="telegram-owner-hq"
                                         v-model="organizator.telegram"
@@ -579,7 +579,7 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="telegram-squad-hq">Telegram отряда</label>
+                                    <label class="form-label" for="telegram-squad-hq">Telegram отряда</label>
                                     <InputText
                                         id="telegram-squad-hq"
                                         v-model="organizator.telegramSquad"
@@ -593,7 +593,7 @@
                             </div>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="email-hq">Email организатора<sup class="valid-red">*</sup></label>
+                                    <label class="form-label" for="email-hq">Email организатора<sup class="valid-red">*</sup></label>
                                     <InputText
                                         id="email-hq"
                                         v-model="organizator.organizer_email"
@@ -605,7 +605,7 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="organization-hq">Организация</label>
+                                    <label class="form-label" for="organization-hq">Организация</label>
                                     <InputText
                                         id="organization-hq"
                                         v-model="organizator.organization"
@@ -616,7 +616,6 @@
                                     />
                                     <div class="form__counter"></div>
                                 </div>
-                                <div class="form__field"></div>
                             </div>
                         </div>
                         <div class='form-add' @click="AddOrganizator">+ Добавить организатора</div>
@@ -686,22 +685,22 @@
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
-                        <div class='form-container'>
+                        <div v-for="answer in answers" class='form-container'>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="sub-questions-hq">Задайте интересующие вопросы участникам мероприятия</label>
+                                    <label class="form-label" for="sub-questions-hq">Задайте интересующие вопросы участникам мероприятия</label>
                                     <InputText
                                         id="sub-questions-hq"
-                                        v-model="answers.question"
+                                        v-model="answer.question"
                                         class="form__input form-input-container"
                                         placeholder="Например: Какой у вас размер футболки"
                                         name="name_hq"
                                         :maxlength="100"
                                     />
-                                    <div class='form-add' @click='AddQuestion'>+ Добавить вопрос</div>
                                 </div>
                             </div>
                         </div>
+                        <div class='form-add' @click='AddQuestion'>+ Добавить вопрос</div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -715,43 +714,43 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
-import { createAction } from '@services/ActionService';
+import { createAction, createOrganizator } from '@services/ActionService';
+import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
+import { uploadPhoto } from '@shared/components/imagescomp';
 import FileUpload from 'primevue/fileupload';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
-import Textarea from 'primevue/textarea';
+import textarea from '@shared/components/inputs/textarea.vue'
 const router = useRoute();
 
 //Переменные для основной формы
 
 const scale_massive = ref([
     {name: "Отрядное"},
-    {name: "Образовательное"},
-    {name: "Городское"},
-    {name: "Региональное"},
-    {name: "Окружное"},
-    {name: "Городское"}
-])
+    {name:"Образовательное"},
+    {name:"Городское"},
+    {name:"Региональное"},
+    {name:"Окружное"},
+    {name:"Городское"}])
 
 const direction_massive = ref([
-    {name: "Добровольческое"},
-    {name: "Образовательное"},
-    {name: "Патриотическое"},
-    {name: "Региональное"},
-    {name: "Окружное"},
-    {name: "Всероссийское"}
-])
+    {name:"Добровольческое"},
+    {name:"Образовательное"},
+    {name:"Патриотическое"},
+    {name:"Региональное"},
+    {name:"Окружное"},
+    {name:"Всероссийское"}])
 
 const maininfo = ref({
     format: '',
     direction: '',
     name: '',
     scale: '',
-    direction: '',
-    banner: '',
+    banner: 'http://example.com',
     conference_link: '',
     address: '',
+    description: '',
     participants_number: Number,
     application_type: '',
     available_structural_units: ''
@@ -765,10 +764,11 @@ const available_structural_units = ref([
     {name: "Окружные штабы"},
     {name: "Центральные штабы"},
 ])
-const area = ref([
-    {name: "ЛСО", value: "LSO"},
-    {name: "Региональный штаб", value: "regional"},
-    {name: "Окружной штаб", value: "area"}
+const area = ref('')
+const area_massive = ref([
+    {name: "ЛСО"},
+    {name: "Региональный штаб"},
+    {name: "Окружной штаб"}
 ])
 
 //Переменные даты 
@@ -784,7 +784,7 @@ const timeData = ref({
 
 //Переменные организаторов
 
-const organizator = ref([{
+const organizators = ref([{
     organizer: '',
     organizer_phone_number: '',
     organizer_email: '',
@@ -819,7 +819,14 @@ const pages = ref([
 ]);
 
 function AddOrganizator(){
-    return this.organizator.push();
+    organizators.value.push({
+        organizer: '',
+        organizer_phone_number: '',
+        organizer_email: '',
+        organization: '',
+        telegram: '',
+        is_contact_person: false
+    });
 }
 function SubmitEvent(){
     console.log("Основная информация", maininfo.value)
@@ -827,10 +834,28 @@ function SubmitEvent(){
     console.log("Организаторы", organizator.value)
     console.log("Документы", documents.value)
     console.log("Ответы на вопросы", answers.value)
+
+    createAction(maininfo.value)
+    .then((resp)=>{
+        console.log("Форма передалась успешно", resp.value)
+        createOrganizator(resp.value.id)
+        .then((resp)=>{
+            console.log("Форма организаторов передалась успешно", resp.value)
+        })
+        .catch((e)=>{
+            console.log(e)
+        })
+    })
+    .catch((e)=>{
+        console.log(e)
+    })
 }
 
 function AddQuestion(){
-    
+    answers.value.push({
+        question: '',
+        answer: ''
+    });
 }
 
 </script>
@@ -911,11 +936,12 @@ function AddQuestion(){
   }
   &-label{
     font-family: Bert Sans;
-    font-size: 16px;
+    font-size: 1.2vw;
     font-style: normal;
     font-weight: 600;
     line-height: 24px;
     margin-top: 5px;
+    margin-bottom: 2px;
   }
   &-add-block:hover{
     cursor: pointer;
@@ -944,4 +970,20 @@ function AddQuestion(){
     cursor: pointer;
   }
 }
+.upload{
+    width: 100%;
+    height: 162px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 16px;
+
+    &-load{
+        width: 64px;
+        height: 64px;
+        background-color: #5153b9;
+        border-radius: 50%;
+    }
+  }
 </style>

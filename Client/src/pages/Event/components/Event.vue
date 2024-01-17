@@ -4,7 +4,6 @@
         <h1 class="title title--lso">
             Всероссийский конкурс фотографий среди студенческих отрядов
         </h1>
-        <!-- Баннер -->
         <div class="banner_wrap">
             <div>
                 <img
@@ -19,6 +18,7 @@
                     label="Редактировать заявку"
                     variant="text"
                     size="large"
+                    @click="EditAction"
                 ></Button>
                 <Button
                     type="button"
@@ -36,7 +36,6 @@
                 ></Button>
             </div>
         </div>
-        <!-- О мероприятии -->
         <h2 class="title title--subtitle">О мероприятии</h2>
         <div class="event_type_wrap">
             <span
@@ -288,7 +287,16 @@
 import { ref } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { Button } from '@shared/components/buttons';
+import { useRoute, useRouter } from 'vue-router';
+import { onMounted } from 'vue';
 
+const route = useRoute();
+const router = useRouter();
+
+function EditAction(){
+    console.log("Test")
+    router.push({ name: 'editAction', params: { id: route.params.id } });
+}
 const pages = ref([
     { pageTitle: 'Мероприятия', href: '#' },
     {
