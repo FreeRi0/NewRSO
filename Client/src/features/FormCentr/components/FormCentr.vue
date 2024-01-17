@@ -227,7 +227,6 @@
                             <label for="social-media-vk" class="form__label"
                                 >Группа штаба ВКонтакте
                             </label>
-                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                             <TextareaAbout
                                 maxlength="50"
                                 class="form__textarea form__textarea--mobile"
@@ -241,7 +240,6 @@
                             <label for="social-media-te" class="form__label"
                                 >Группа штаба в Телеграм
                             </label>
-                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                            <TextareaAbout
                                 maxlength="50"
                                 class="form__textarea form__textarea--mobile"
@@ -368,7 +366,6 @@
                     <div class="form__field-group">
                         <div class="form__field">
                             <label for="hq-slogan" class="form__label">Девиз штаба</label>
-                          <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                            <TextareaAbout
                                 maxlength="100"
                                 class="form__textarea form__textarea--mobile"
@@ -518,7 +515,6 @@
                                     />
                                 </div>
                             </div>
-                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                             <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
@@ -647,7 +643,6 @@
                                     />
                                 </div>
                             </div>
-                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                             <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
@@ -678,18 +673,15 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Avatar, bannerPhoto } from '@shared/components/imagescomp';
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 
-import { useVuelidate } from '@vuelidate/core';
-// УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
 import { HTTP } from '@app/http';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 import {
     helpers,
@@ -703,7 +695,6 @@ import {
 
 const emit = defineEmits([
     'update:value',
-    // УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
     'updateMember',
     'changeHeadquarter',
     'selectFile',
@@ -770,7 +761,6 @@ const showButtonPrev = computed(() => {
 //-----------------------------------------------------------------------
 const members = ref([]);
 
-// УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА
 const route = useRoute();
 let id = route.params.id;
 

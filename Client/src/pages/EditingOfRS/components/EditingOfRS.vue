@@ -3,7 +3,7 @@
         <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Редактирование регионального штаба</h1>
-
+        
         <FormRS
             :participants="true"
             :headquarter="headquarter"

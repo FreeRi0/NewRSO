@@ -1,10 +1,11 @@
 <template>
-    <educationItem
-        v-for="headquarter in headquarters"
-        :headquarter="headquarter"
-        :key="headquarter.id"
-        v-if="headquarters.length > 0"
-    />
+    <div v-if="headquarters.length > 0">
+        <educationItem
+            v-for="headquarter in headquarters"
+            :headquarter="headquarter"
+            :key="headquarter.id"
+        />
+    </div>
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
