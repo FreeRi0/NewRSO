@@ -121,7 +121,7 @@
                 </div>
             </div>
 
-            <div class="squads-wrapper" v-show="vertical">
+            <div v-show="vertical">
                 <squadsList :squads="sortedSquads"></squadsList>
             </div>
 

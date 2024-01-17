@@ -642,7 +642,7 @@
                             <Select
                                 variant="outlined"
                                 clearable
-                                v-model="user.region"
+                                v-model="regionData.reg_region_id"
                                 placeholder="Например, Карачаево-Черкесск"
                                 address="/regions/"
                             ></Select>
@@ -2660,6 +2660,7 @@ const openPanelFive = () => {
 };
 
 const regionData = ref({
+    reg_region_id: null,
     reg_town: '',
     reg_house: '',
     reg_fact_same_address: null,
@@ -2700,7 +2701,6 @@ const user = ref({
     first_name: '',
     last_name: '',
     patronymic_name: '',
-    region: null,
     date_of_birth: '',
     last_name_lat: '',
     first_name_lat: '',
@@ -3064,10 +3064,10 @@ const updateData = async () => {
                     showConfirmButton: false,
                     timer: 1000,
                 });
-                router.push({
-                    name: 'userpage',
-                    params: { id: user.value?.id },
-                });
+                // router.push({
+                //     name: 'userpage',
+                //     params: { id: user.value?.id },
+                // });
             }),
         )
         .catch(({ response }) => {
