@@ -59,6 +59,7 @@
                         </div>
                     </div>
                     <router-link
+                    v-if="roles.roles.detachment_commander"
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -66,6 +67,8 @@
                         class="user-data__link"
                         >Редактировать страницу</router-link
                     >
+                    <div v-else>Вступить в отряд</div>
+
                 </div>
             </div>
             <!-- <div v-else>Загрузка....</div> -->
@@ -77,6 +80,12 @@ import { ref, onMounted, watch } from 'vue';
 import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+const roleStore = useRoleStore();
+roleStore.getRoles();
+
+const roles = storeToRefs(roleStore);
 
 const props = defineProps({
     banner: {

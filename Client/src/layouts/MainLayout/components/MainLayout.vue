@@ -8,4 +8,10 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRoleStore } from '@layouts/store/role';
+const roleStore = useRoleStore();
+roleStore.getRoles();
+
+//запрос на коммандира
+</script>

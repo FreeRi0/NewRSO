@@ -113,7 +113,7 @@
                     ></Button>
                 </div>
             </div>
-            <div class="headquarters-wrapper" v-show="vertical">
+            <div v-show="vertical">
                 <LocalHQList
                     :localHeadquarters="sortedHeadquarters"
                 ></LocalHQList>
