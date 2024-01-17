@@ -1,7 +1,5 @@
 <template>
     <div class="container container--top">
-        <Breadcrumbs></Breadcrumbs>
-
         <h1 class="title title--lso">Редактирование ЛСО</h1>
 
         <FormUnit
@@ -28,10 +26,10 @@
 
 <script setup>
 import { ref, onMounted, inject, watch } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormUnit } from '@features/FormUnit';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
+import { usePage } from '@shared';
 
 const router = useRouter();
 const route = useRoute();
@@ -39,6 +37,8 @@ console.log(route);
 let id = route.params.id;
 
 const detachment = ref(null);
+
+const { replaceTargetObjects } = usePage();
 
 const getDetachment = async () => {
     console.log('id отряда для редактирования - ', id);
@@ -50,6 +50,7 @@ const getDetachment = async () => {
     })
         .then((response) => {
             detachment.value = response.data;
+            replaceTargetObjects([detachment.value]);
             console.log(response);
         })
         .catch(function (error) {

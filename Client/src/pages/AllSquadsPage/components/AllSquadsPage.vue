@@ -143,13 +143,15 @@
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
+// import { usePage } from '@shared';
+
+// usePage();
 // import squads from '@entities/Squads/squads';
 
 const squads = ref([]);
@@ -301,7 +303,7 @@ const sortedSquads = computed(() => {
     return tempSquads;
 });
 </script>
-<style lang="scss" >
+<style lang="scss">
 body {
     border: 1px solid red;
 }
