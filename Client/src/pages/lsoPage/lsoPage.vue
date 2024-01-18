@@ -48,9 +48,11 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { usePage } from '@shared';
 
+//передаём эту переменную в replaceTargetObjects
 const squad = ref({});
 const member = ref({});
 const edict = ref({});
+
 const route = useRoute();
 let id = route.params.id;
 

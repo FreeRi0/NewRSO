@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="district-page">
-            <Breadcrumbs></Breadcrumbs>
             <h1 class="title title--hq">Окружной штаб</h1>
             <BannerHQ
                 v-if="showHQ"
@@ -56,12 +55,12 @@
     </div>
 </template>
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
 const showDistrictHQ = ref(true);
 const showLocalHQ = ref(false);
@@ -74,6 +73,8 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const aboutDistrictHQ = async () => {
     await HTTP.get(`/districts/${id}/`, {
         headers: {
@@ -83,7 +84,8 @@ const aboutDistrictHQ = async () => {
     })
         .then((response) => {
             districtHeadquarter.value = response.data;
-            console.log(response);
+            replaceTargetObjects([districtHeadquarter.value]);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -99,7 +101,7 @@ const aboutMembers = async () => {
     })
         .then((response) => {
             member.value = response.data;
-            console.log(response);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);

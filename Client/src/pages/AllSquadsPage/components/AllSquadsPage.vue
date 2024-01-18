@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="squads">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
                 label="Создать отряд"
@@ -50,40 +49,44 @@
             </div>
             <div class="squads-sort">
                 <div class="sort-layout">
-                    <Button
-                        v-if="vertical"
-                        type="button"
-                        class="dashboard"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    >
-                    </Button>
-                    <Button
-                        v-else="!vertical"
-                        type="button"
-                        class="dashboardD"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    >
-                    </Button>
-                    <Button
-                        v-if="!vertical"
-                        type="button"
-                        class="menuuA"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    ></Button>
-                    <Button
-                        v-else="vertical"
-                        type="button"
-                        class="menuu"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    ></Button>
+                    <div>
+                        <Button
+                            v-if="vertical"
+                            type="button"
+                            class="dashboard"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        >
+                        </Button>
+                        <Button
+                            v-else
+                            type="button"
+                            class="dashboardD"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        >
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
+                            v-if="!vertical"
+                            type="button"
+                            class="menuuA"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        ></Button>
+                        <Button
+                            v-else
+                            type="button"
+                            class="menuu"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        ></Button>
+                    </div>
                 </div>
 
                 <div class="sort-filters">
@@ -146,7 +149,7 @@ import { bannerCreate } from '@shared/components/imagescomp';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
+// import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 // import { usePage } from '@shared';
@@ -157,11 +160,6 @@ import { HTTP } from '@app/http';
 const squads = ref([]);
 const categories = ref([]);
 const educations = ref([]);
-
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Отряды', href: '/AllSquads' },
-]);
 
 const getCategories = async () => {
     await HTTP.get('/areas/', {

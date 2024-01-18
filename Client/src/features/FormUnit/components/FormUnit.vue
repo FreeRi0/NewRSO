@@ -641,7 +641,7 @@
                                         <button
                                             class="photo-add__button-clear"
                                             type="button"
-                                            @click="resetEmblem"
+                                            @click="deleteEmblem"
                                         >
                                             Удалить фото
                                         </button>
@@ -651,7 +651,7 @@
                                         id="upload-logo"
                                         name="squad-logo"
                                         hidden
-                                        @change="selectFile"
+                                        @change="selectEmblem"
                                     />
                                 </div>
                             </div>
@@ -769,7 +769,7 @@
                                         <button
                                             class="photo-add__button-clear"
                                             type="reset"
-                                            @click="resetBanner"
+                                            @click="deleteBanner"
                                         >
                                             Удалить фото
                                         </button>
@@ -1383,10 +1383,10 @@ const emit = defineEmits([
     'update:value',
     'updateMember',
     'changeDetachment',
-    'selectFile',
-    'resetEmblem',
+    'selectEmblem',
+    'deleteEmblem',
     'selectBanner',
-    'resetBanner',
+    'deleteBanner',
     'selectPhotoOne',
     'resetPhotoOne',
     'selectPhotoTwo',
@@ -1631,17 +1631,17 @@ const fileEmblem = ref(props.fileEmblem);
 const urlEmblem = ref(null);
 // console.log("значение emblem до изм - ", urlEmblem);
 
-const selectFile = (event) => {
+const selectEmblem = (event) => {
     fileEmblem.value = event.target.files[0];
     // console.log("значение fileEmblem после изм - ", fileEmblem.value);
 
     detachment.value.emblem = null;
     urlEmblem.value = URL.createObjectURL(fileEmblem.value);
     //   console.log("значение emblem после изм - ", detachment.value.emblem);
-    emit('selectFile', fileEmblem.value);
+    emit('selectEmblem', fileEmblem.value);
 };
 
-const resetEmblem = () => {
+const deleteEmblem = () => {
     // console.log(fileEmblem.value);
     detachment.value.emblem = null;
     urlEmblem.value = null;
@@ -1649,7 +1649,7 @@ const resetEmblem = () => {
     fileEmblem.value = null;
     // console.log(fileEmblem.value);
 
-    emit('resetEmblem', fileEmblem.value);
+    emit('deleteEmblem', fileEmblem.value);
 };
 //--Добавление баннера-----------------------------------------------------------------------------
 const fileBanner = ref(props.fileBanner);
@@ -1662,11 +1662,11 @@ const selectBanner = (event) => {
     emit('selectBanner', fileBanner.value);
 };
 
-const resetBanner = () => {
+const deleteBanner = () => {
     detachment.value.banner = null;
     urlBanner.value = null;
     fileBanner.value = null;
-    emit('resetBanner', fileBanner.value);
+    emit('deleteBanner', fileBanner.value);
 };
 //--Добавление фото-----------------------------------------------------------------------------
 const filePhotoOne = ref(props.filePhotoOne);

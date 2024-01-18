@@ -135,9 +135,8 @@
                                 >Командир штаба:
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                             <Dropdown
-                             open-on-clear
+                                open-on-clear
                                 id="beast"
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
@@ -240,7 +239,7 @@
                             <label for="social-media-te" class="form__label"
                                 >Группа штаба в Телеграм
                             </label>
-                           <TextareaAbout
+                            <TextareaAbout
                                 maxlength="50"
                                 class="form__textarea form__textarea--mobile"
                                 id="social-media-te"
@@ -249,7 +248,6 @@
                                 v-model:value="headquarter.social_tg"
                             ></TextareaAbout>
                         </div>
-                        <!-- УЧАСТНИКИ ЗДЕСЬ ДОБАВИЛА -->
                         <div class="form__field" v-if="participants">
                             <p class="form__label">
                                 Назначить на должность
@@ -365,8 +363,10 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="hq-slogan" class="form__label">Девиз штаба</label>
-                           <TextareaAbout
+                            <label for="hq-slogan" class="form__label"
+                                >Девиз штаба</label
+                            >
+                            <TextareaAbout
                                 maxlength="100"
                                 class="form__textarea form__textarea--mobile"
                                 id="hq-slogan"
@@ -380,7 +380,9 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="about-hq" class="form__label">О штабе</label>
+                            <label for="about-hq" class="form__label"
+                                >О штабе</label
+                            >
                             <TextareaAbout
                                 :rows="6"
                                 maxlength="500"
@@ -501,7 +503,7 @@
                                         <button
                                             class="photo-add__button-clear"
                                             type="button"
-                                            @click="resetEmblem"
+                                            @click="deleteEmblem"
                                         >
                                             Удалить фото
                                         </button>
@@ -511,7 +513,7 @@
                                         id="upload-logo"
                                         name="squad-logo"
                                         hidden
-                                        @change="selectFile"
+                                        @change="selectEmblem"
                                     />
                                 </div>
                             </div>
@@ -628,8 +630,8 @@
                                         </label>
                                         <button
                                             class="photo-add__button-clear"
-                                            type="reset"
-                                            @click="resetBanner"
+                                            type="delete"
+                                            @click="deleteBanner"
                                         >
                                             Удалить фото
                                         </button>
@@ -697,10 +699,10 @@ const emit = defineEmits([
     'update:value',
     'updateMember',
     'changeHeadquarter',
-    'selectFile',
-    'resetEmblem',
+    'selectEmblem',
+    'deleteEmblem',
     'selectBanner',
-    'resetBanner',
+    'deleteBanner',
 ]);
 
 const props = defineProps({
@@ -765,7 +767,7 @@ const route = useRoute();
 let id = route.params.id;
 
 const getMembers = async () => {
-    await HTTP.get(`centrals/${id}/members/`, {
+    HTTP.get('centrals/1/members/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -810,18 +812,18 @@ const changeValue = (event) => {
 const fileEmblem = ref(props.fileEmblem);
 const urlEmblem = ref(null);
 
-const selectFile = (event) => {
+const selectEmblem = (event) => {
     fileEmblem.value = event.target.files[0];
     headquarter.value.emblem = null;
     urlEmblem.value = URL.createObjectURL(fileEmblem.value);
-    emit('selectFile', fileEmblem.value);
+    emit('selectEmblem', fileEmblem.value);
 };
 
-const resetEmblem = () => {
+const deleteEmblem = () => {
     headquarter.value.emblem = null;
     urlEmblem.value = null;
     fileEmblem.value = null;
-    emit('resetEmblem', fileEmblem.value);
+    emit('deleteEmblem', fileEmblem.value);
 };
 
 //--Добавление баннера-----------------------------------------------------------------------------
@@ -835,11 +837,11 @@ const selectBanner = (event) => {
     emit('selectBanner', fileBanner.value);
 };
 
-const resetBanner = () => {
+const deleteBanner = () => {
     headquarter.value.banner = null;
     urlBanner.value = null;
     fileBanner.value = null;
-    emit('resetBanner', fileBanner.value);
+    emit('deleteBanner', fileBanner.value);
 };
 </script>
 
@@ -865,7 +867,7 @@ const resetBanner = () => {
         border: 2px solid #35383f;
         background-color: #ffffff;
     }
-    
+
     &--prev {
         margin-right: 20px;
     }
@@ -900,7 +902,6 @@ const resetBanner = () => {
 }
 
 .p-dropdown-items-wrapper {
-
     &::-webkit-scrollbar {
         /*стили полосы прокрутки */
         width: 8px;

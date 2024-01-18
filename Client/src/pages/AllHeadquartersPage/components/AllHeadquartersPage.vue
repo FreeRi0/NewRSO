@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="headquarters">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
@@ -34,7 +33,8 @@
             </div>
             <div class="headquarters-sort">
                 <div class="sort-layout">
-                    <Button
+                    <div>
+                        <Button
                         v-if="vertical"
                         type="button"
                         class="dashboard"
@@ -44,7 +44,7 @@
                     >
                     </Button>
                     <Button
-                        v-else="!vertical"
+                        v-else
                         type="button"
                         class="dashboardD"
                         icon="icon"
@@ -52,6 +52,7 @@
                         @click="showVertical"
                     >
                     </Button>
+                    </div>
                     <Button
                         v-if="!vertical"
                         type="button"
@@ -61,7 +62,7 @@
                         @click="showVertical"
                     ></Button>
                     <Button
-                        v-else="vertical"
+                        v-else
                         type="button"
                         class="menuu"
                         icon="icon"
@@ -160,16 +161,10 @@ import {
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 // import headquarters from '@entities/HeadquartersData/headquarters';
 
 const headquarters = ref([]);
-
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
-]);
 
 const headquartersVisible = ref(20);
 

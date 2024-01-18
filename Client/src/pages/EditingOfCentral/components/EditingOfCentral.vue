@@ -1,18 +1,15 @@
 <template>
     <div class="container container--top">
-        <Breadcrumbs></Breadcrumbs>
-
         <h1 class="title title--lso">Редактирование центрального штаба</h1>
-
         <FormCentr
             :participants="true"
             :headquarter="headquarter"
             v-if="headquarter"
             @submit.prevent="changeHeadquarter"
-            @select-file="onSelectFile"
-            @reset-file="onResetFile"
+            @select-emblem="onSelectEmblem"
             @select-banner="onSelectBanner"
-            @reset-banner="onResetBanner"
+            @delete-emblem="onDeleteEmblem"
+            @delete-banner="onDeleteBanner"
         >
         </FormCentr>
     </div>
@@ -20,11 +17,10 @@
 
 <script setup>
 import { ref, onMounted, inject, watch } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormCentr } from '@features/FormCentr';
-import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
 const route = useRoute();
 let id = route.params.id;
@@ -32,6 +28,8 @@ let id = route.params.id;
 const submited = ref(false);
 
 const headquarter = ref(null);
+
+const { replaceTargetObjects } = usePage();
 
 const getHeadquarter = async () => {
     await HTTP.get(`centrals/1/`, {
@@ -42,7 +40,8 @@ const getHeadquarter = async () => {
     })
         .then((response) => {
             headquarter.value = response.data;
-            console.log(response);
+            replaceTargetObjects([headquarter.value]);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -68,19 +67,28 @@ onMounted(() => {
     getHeadquarter();
 });
 
+/**
+ * переменные на удаление фото из БД
+ */
+const isEmblemChange = ref(false);
+const isBannerChange = ref(false);
+
 const fileEmblem = ref(null);
 const fileBanner = ref(null);
 
-const onSelectFile = (file) => {
-    fileEmblem.value = file;
-};
-const onResetFile = (file) => {
+const onSelectEmblem = (file) => {
     fileEmblem.value = file;
 };
 const onSelectBanner = (file) => {
     fileBanner.value = file;
 };
-const onResetBanner = (file) => {
+
+const onDeleteEmblem = (file) => {
+    isEmblemChange.value = true;
+    fileEmblem.value = file;
+};
+const onDeleteBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 
@@ -88,6 +96,7 @@ const swal = inject('$swal');
 
 const changeHeadquarter = async () => {
     const formData = new FormData();
+
     formData.append('name', headquarter.value.name);
     formData.append('date_students', headquarter.value.date_students);
     formData.append('founding_date', headquarter.value.founding_date);
@@ -102,6 +111,77 @@ const changeHeadquarter = async () => {
     if (fileEmblem.value) formData.append('emblem', fileEmblem.value);
     if (fileBanner.value) formData.append('banner', fileBanner.value);
 
+    /**
+     * можно написать в этом же if, через или, но нужно указать что именно мы принимает null
+     * переписать запрос в корректный вид, чтобы не было задвоения
+     */
+    // Условия удалени фото из БД
+    if (isEmblemChange.value && !fileEmblem.value) {
+        HTTP.patch(
+            '/centrals/1/',
+            { emblem: fileEmblem.value },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        )
+            .then((response) => {
+                submited.value = true;
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            })
+            .catch((error) => {
+                console.error('There was an error!', error);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'error',
+                    title: 'ошибка',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            });
+    }
+
+    if (isBannerChange.value && !fileBanner.value) {
+        HTTP.patch(
+            '/centrals/1/',
+            { banner: fileBanner.value },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        )
+            .then((response) => {
+                submited.value = true;
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            })
+            .catch((error) => {
+                console.error('There was an error!', error);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'error',
+                    title: 'ошибка',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            });
+    }
+
     HTTP.patch('/centrals/1/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -110,7 +190,6 @@ const changeHeadquarter = async () => {
     })
         .then((response) => {
             submited.value = true;
-            console.log(response.data);
             swal.fire({
                 position: 'top-center',
                 icon: 'success',
