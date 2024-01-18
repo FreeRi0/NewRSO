@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="headquarters">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 :button="false"
@@ -33,7 +32,8 @@
             </div>
             <div class="headquarters-sort">
                 <div class="sort-layout">
-                    <Button
+                <div>
+                        <Button
                         v-if="vertical"
                         type="button"
                         class="dashboard"
@@ -43,7 +43,7 @@
                     >
                     </Button>
                     <Button
-                        v-else="!vertical"
+                        v-else
                         type="button"
                         class="dashboardD"
                         icon="icon"
@@ -51,7 +51,9 @@
                         @click="showVertical"
                     >
                     </Button>
-                    <Button
+                </div>
+                    <div>
+                        <Button
                         v-if="!vertical"
                         type="button"
                         class="menuuA"
@@ -60,13 +62,14 @@
                         @click="showVertical"
                     ></Button>
                     <Button
-                        v-else="vertical"
+                        v-else
                         type="button"
                         class="menuu"
                         icon="icon"
                         color="white"
                         @click="showVertical"
                     ></Button>
+                    </div>
                 </div>
 
                 <div class="sort-filters">
@@ -151,11 +154,6 @@ import { HTTP } from '@app/http';
 // import headquarters from '@entities/HeadquartersData/headquarters';
 
 const localHeadquarters = ref([]);
-
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Местные штабы', href: '/AllHeadquarters' },
-]);
 
 const headquartersVisible = ref(20);
 
@@ -263,7 +261,7 @@ const sortedHeadquarters = computed(() => {
 </script>
 <style lang="scss">
 .headquarters {
-    padding: 40px 0px 60px 0px;
+    padding-bottom: 60px;
     &-title {
         margin-bottom: 40px;
         font-size: 52px;

@@ -1,9 +1,6 @@
 <template>
-    <div class="container container--top">
-        <Breadcrumbs></Breadcrumbs>
-
+    <div class="container">
         <h1 class="title title--lso">Создание регионального штаба</h1>
-
         <FormRS
             :headquarter="headquarter"
             @submit.prevent="changeHeadquarter"
@@ -17,7 +14,6 @@
 
 <script setup>
 import { ref, inject } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormRS } from '@features/FormRS';
 import { HTTP } from '@app/http';
 // import { districtItem } from '@entities/HeadquartersData/components/index';

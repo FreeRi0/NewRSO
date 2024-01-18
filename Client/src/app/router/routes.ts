@@ -1,14 +1,15 @@
-// import { patch } from 'node_modules/axios/index.d.cts';
 import { type RouteRecordRaw } from 'vue-router';
-// import { id } from 'vuetify/locale';
 
 const routes: RouteRecordRaw[] = [
+// сменить структуру под каждые нужные нам компоненты - закинуть lable и namedRoute в штабы, в мероприятия и остальное соответствующе.
     {
         path: '/',
         component: () =>
             import('@layouts/MainLayout/components/MainLayout.vue'),
         meta: {
+            //
             label: 'Структура',
+            namedRoute: 'Login',
         },
         children: [
             {
@@ -61,35 +62,48 @@ const routes: RouteRecordRaw[] = [
             // Штабы ЛСО
             {
                 path: '/AllSquads',
-                name: 'allsquads',
-                component: () =>
-                    import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
                 meta: {
                     requiresAuth: true,
-                    label: 'ЛСО',
-                },
-            },
-            {
-                path: '/AllSquads',
-                meta: {
-                    requiresAuth: true,
+                    namedRoute: 'allsquads',
                     label: 'ЛСО',
                 },
                 children: [
                     {
-                        path: ':id',
-                        meta: {
-                            label: 'Отряд',
-                        },
-                        name: 'lso',
-                        component: () => import('@pages/lsoPage/lsoPage.vue'),
+                        path: '',
+                        name: 'allsquads',
+                        component: () =>
+                            import(
+                                '@pages/AllSquadsPage/components/AllSquadsPage.vue'
+                            ),
                     },
+
+                    {
+                        path: '/CreateLSO',
+                        name: 'CreateLSO',
+                        component: () =>
+                            import(
+                                '@pages/CreationOfDetachment/components/CreationOfDetachment.vue'
+                            ),
+                        meta: {
+                            requiresAuth: true,
+                            label: 'Создание ЛСО',
+                        },
+                    },
+
                     {
                         path: ':id',
                         meta: {
-                            label: 'Отряд',
+                            label: 'squad.name',
+                            namedRoute: 'lso',
+                            isObject: true,
                         },
                         children: [
+                            {
+                                path: '',
+                                name: 'lso',
+                                component: () =>
+                                    import('@pages/lsoPage/lsoPage.vue'),
+                            },
                             {
                                 path: 'EditLSO',
                                 name: 'EditLSO',
@@ -103,18 +117,6 @@ const routes: RouteRecordRaw[] = [
                             },
                         ],
                     },
-                    {
-                        path: '/CreateLSO',
-                        name: 'CreateLSO',
-                        component: () =>
-                            import(
-                                '@pages/CreationOfDetachment/components/CreationOfDetachment.vue'
-                            ),
-                        meta: {
-                            requiresAuth: true,
-                            label: 'Создание ЛСО',
-                        },
-                    },
                 ],
             },
             // Штабы СО ОО
@@ -122,12 +124,13 @@ const routes: RouteRecordRaw[] = [
                 path: '/AllHeadquarters',
                 meta: {
                     requiresAuth: true,
+                    namedRoute: 'AllHeadquarters',
                     label: 'Штабы СО ОО',
                 },
                 children: [
                     {
                         path: '',
-                        name: 'allheadquarters',
+                        name: 'AllHeadquarters',
                         component: () =>
                             import(
                                 '@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'
@@ -148,9 +151,9 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            // здесь нужна будет передача через объект
-                            label: '{Name}',
-                            // namedRoute: 'HQ',
+                            label: 'headquarter.name',
+                            namedRoute: 'HQ',
+                            isObject: true,
                         },
                         children: [
                             {
@@ -179,12 +182,13 @@ const routes: RouteRecordRaw[] = [
                 path: '/LocalHeadquarters',
                 meta: {
                     requiresAuth: true,
+                    namedRoute: 'LocalHeadquarters',
                     label: 'Местные штабы',
                 },
                 children: [
                     {
                         path: '',
-                        name: 'localHeadquarters',
+                        name: 'LocalHeadquarters',
                         component: () =>
                             import(
                                 '@pages/AllHeadquartersPage/components/LocalHeadquartersPage.vue'
@@ -193,16 +197,18 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            // здесь нужна будет передача через объект
-                            label: '{Name}',
-                            // namedRoute: 'HQ',
+                            label: 'localHeadquarter.name',
+                            namedRoute: 'LocalHQ',
+                            isObject: true,
                         },
                         children: [
                             {
                                 path: '',
                                 name: 'LocalHQ',
                                 component: () =>
-                                    import('@pages/LocalHQPage/LocalHQPage.vue'),
+                                    import(
+                                        '@pages/LocalHQPage/LocalHQPage.vue'
+                                    ),
                             },
                             {
                                 path: 'EditingOfLocal',
@@ -224,6 +230,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/RegionalHeadquarters',
                 meta: {
                     requiresAuth: true,
+                    namedRoute: 'regionalHeadquarters',
                     label: 'Региональные штабы',
                 },
                 children: [
@@ -250,16 +257,18 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: ':id',
                         meta: {
-                            // здесь нужна будет передача через объект
-                            label: '{Name}',
-                            // namedRoute: 'HQ',
+                            label: 'regionalHeadquarter.name',
+                            namedRoute: 'RegionalHQ',
+                            isObject: true,
                         },
                         children: [
                             {
                                 path: '',
                                 name: 'RegionalHQ',
                                 component: () =>
-                                    import('@pages/RegionalHQPage/RegionalHQPage.vue'),
+                                    import(
+                                        '@pages/RegionalHQPage/RegionalHQPage.vue'
+                                    ),
                             },
                             {
                                 path: 'EditingOfRS',
@@ -281,6 +290,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/DistrictHeadquarters',
                 meta: {
                     requiresAuth: true,
+                    namedRoute: 'districtHeadquarters',
                     label: 'Окружные штабы',
                 },
                 children: [
@@ -292,19 +302,22 @@ const routes: RouteRecordRaw[] = [
                                 '@pages/AllHeadquartersPage/components/DistrictsHeadquartersPage.vue'
                             ),
                     },
+
                     {
                         path: ':id',
                         meta: {
-                            // здесь нужна будет передача через объект
-                            label: '{Name}',
-                            // namedRoute: 'HQ',
+                            label: 'districtHeadquarter.name',
+                            namedRoute: 'DistrictHQ',
+                            isObject: true,
                         },
                         children: [
                             {
                                 path: '',
                                 name: 'DistrictHQ',
                                 component: () =>
-                                    import('@pages/DistrictHQPage/DistrictHQPage.vue'),
+                                    import(
+                                        '@pages/DistrictHQPage/DistrictHQPage.vue'
+                                    ),
                             },
                             {
                                 path: 'EditingOfDH',
@@ -325,7 +338,9 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/CentralHQ/:id',
                 meta: {
-                    label: 'Центральный штаб',
+                    label: 'centralHeadquarter.name',
+                    namedRoute: 'CentralHQ',
+                    isObject: true,
                 },
                 children: [
                     {
@@ -349,7 +364,7 @@ const routes: RouteRecordRaw[] = [
             },
 
             //----------------------Конец----------------Штабы/Создание/Редактирование---------------------------------------------------------96cb9a («.»)
-            
+
             // {
             //     path: '/UserPage',
             //     name: 'userpaage',
@@ -516,7 +531,7 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
-            // ИНДИВИДУАЛЬНОЕ МЕРОПРИЯТИЕ
+            // Индивидуальное мероприятие
             {
                 path: '/Event',
                 name: 'event',

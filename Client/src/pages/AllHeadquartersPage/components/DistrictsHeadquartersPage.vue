@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="headquarters">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 :button="false"
@@ -9,40 +8,44 @@
             <h2 class="headquarters-title">Окружные штабы</h2>
             <div class="headquarters-sort">
                 <div class="sort-layout">
-                    <Button
-                        v-if="vertical"
-                        type="button"
-                        class="dashboard"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    >
-                    </Button>
-                    <Button
-                        v-else="!vertical"
-                        type="button"
-                        class="dashboardD"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    >
-                    </Button>
-                    <Button
-                        v-if="!vertical"
-                        type="button"
-                        class="menuuA"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    ></Button>
-                    <Button
-                        v-else="vertical"
-                        type="button"
-                        class="menuu"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    ></Button>
+                    <div>
+                        <Button
+                            v-if="vertical"
+                            type="button"
+                            class="dashboard"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        >
+                        </Button>
+                        <Button
+                            v-else
+                            type="button"
+                            class="dashboardD"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        >
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
+                            v-if="!vertical"
+                            type="button"
+                            class="menuuA"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        ></Button>
+                        <Button
+                            v-else
+                            type="button"
+                            class="menuu"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        ></Button>
+                    </div>
                 </div>
 
                 <div class="sort-filters"></div>
@@ -64,7 +67,6 @@
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import {
     DistrictHQList,
@@ -72,16 +74,10 @@ import {
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 // import headquarters from '@entities/HeadquartersData/headquarters';
 
 const districtHeadquarters = ref([]);
-
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Окружные штабы', href: '/DistrictHeadquarters' },
-]);
 
 const vertical = ref(true);
 
@@ -111,7 +107,7 @@ onMounted(() => {
 </script>
 <style lang="scss">
 .headquarters {
-    padding: 40px 0px 60px 0px;
+    padding-bottom: 60px;
     &-title {
         margin-bottom: 40px;
         font-size: 52px;
