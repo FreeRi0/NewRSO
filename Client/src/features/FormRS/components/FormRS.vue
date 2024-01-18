@@ -365,7 +365,7 @@
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
-                        <div class="test">
+                        <div class="number_wrap">
                             <div class="form__field form_width">
                                 <label for="founding_date" class="form__label"
                                     >Официальная дата (год) появления
@@ -1054,16 +1054,23 @@ const deleteBanner = () => {
     }
 }
 
-.test {
+.number_wrap {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
+
+    @media (max-width: 1070px) {
+        flex-direction: column;
+    }
 }
 
 .form_width {
     width: 46%;
-    // margin-top: auto;
+
+    @media (max-width: 1070px) {
+        width: 100%;
+    }
 }
 
 .form_width .form-input {
