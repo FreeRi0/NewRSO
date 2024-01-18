@@ -1,27 +1,16 @@
 <template>
-    <div
-        class="horizontal-item"
-        v-for="localHeadquarter in localHeadquarters"
-        v-if="localHeadquarters.length > 0"
-    >
-        <div class="horizontal-img">
-            <img
-                :src="localHeadquarter.emblem"
-                alt="logo"
-                v-if="localHeadquarter.emblem"
-            />
-            <img src="@app/assets/user-avatar.png" alt="logo" v-else />
-        </div>
-        <div class="containerHorizontal">
-            <p class="headquarters-wrapper__item-category-full">
-                {{ localHeadquarter.name }}
-            </p>
-        </div>
+    <div v-if="localHeadquarters.length > 0">
+        <localItemHorizontal
+            v-for="localHeadquarter in localHeadquarters"
+            :local-headquarter="localHeadquarter"
+            :key="localHeadquarter.id"
+        ></localItemHorizontal>
     </div>
 
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
+import { localItemHorizontal } from '@entities/HeadquartersData';
 const props = defineProps({
     localHeadquarters: {
         type: Array,

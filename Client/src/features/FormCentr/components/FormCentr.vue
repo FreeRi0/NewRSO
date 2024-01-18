@@ -239,7 +239,8 @@
                             <label for="social-media-te" class="form__label"
                                 >Группа штаба в Телеграм
                             </label>
-                            <TextareaAbout
+                           <TextareaAbout
+
                                 maxlength="50"
                                 class="form__textarea form__textarea--mobile"
                                 id="social-media-te"
@@ -378,7 +379,6 @@
                                 {{ counterSlogan }} / 100
                             </div>
                         </div>
-
                         <div class="form__field">
                             <label for="about-hq" class="form__label"
                                 >О штабе</label
