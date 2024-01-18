@@ -3,23 +3,41 @@
         <div class="horizontalSquad-item__wrapper mr-3">
             <div class="horizontalSquad-img">
                 <img
+                    :src="detachment?.user?.media?.photo"
+                    alt="logo"
+                    v-if="detachment?.user?.media?.photo"
+                />
+                <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
                     alt="photo"
                 />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full">
-                    {{ detachment.applications }}
-                </p>
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{ detachment.user.last_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ detachment.user.first_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ detachment.user.patronymic_name }}
+                    </p>
+                </div>
+                <div class="horizontallso-item__list-date">
+                    <span
+                        style="
+                            border-left: 2px solid #b6b6b6;
+                            padding-right: 8px;
+                        "
+                    ></span>
+                    <p>{{ detachment.user.date_of_birth }}</p>
+                </div>
             </div>
         </div>
         <div class="horizontalSquad-item__wrapper">
             <div class="horizontallso-img">
-                <img
-                    :src="detachment.emblem"
-                    alt="logo"
-                    v-if="detachment.emblem"
-                />
+                <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
                     alt="photo"
@@ -28,18 +46,19 @@
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ detachment.name }}
+                    {{ squad.name }}
                 </p>
             </div>
-
         </div>
         <div class="d-flex">
             <div class="sort-select mr-3">
-                <Select
+                <sortByEducation
+                    placeholder="Выберете действие"
                     variant="outlined"
-                    v-model="squadItem.is_verified"
-                    :names="filteredPayed"
-                ></Select>
+                    clearable
+                    v-model="user.applications"
+                    :options="filteredPayed"
+                ></sortByEducation>
             </div>
 
             <div class="horizontalSquad__confidant mr-3">
@@ -50,23 +69,27 @@
                     @change="updateSquads"
                 />
             </div>
-        </div>
-
-            <!-- <Button
+            <Button
                 class="save"
                 type="button"
                 label="Сохранить"
                 @click="ChangeStatus(detachment.id)"
-            ></Button> -->
-
+            ></Button>
+        </div>
     </div>
+    <p v-if="isError" class="error">{{ isError.detail }}</p>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { Select } from '@shared/components/selects';
-import { useRoute } from 'vue-router';
-import { ref, watch, inject } from 'vue';
+import { sortByEducation } from '@shared/components/selects';
+import { ref, onMounted, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+
+const roleStore = useRoleStore();
+roleStore.getRoles();
+const roles = storeToRefs(roleStore);
 
 const updateSquads = (detachment, event) => {
     console.log('dddddddft', detachment, event);
@@ -78,24 +101,96 @@ const props = defineProps({
         type: Object,
         require: true,
     },
+    squad: {
+        type: Object,
+    },
 });
 
-const squadItem = ref({
+const squad = ref({});
+const isError = ref([]);
+
+const swal = inject('$swal');
+
+const viewSquad = async () => {
+    let id = roles?.roles?.value?.detachment_commander;
+    console.log('roles', roles.roles.value);
+    console.log('id', id);
+    await HTTP.get(`/detachments/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            squad.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+onMounted(() => {
+    viewSquad();
+});
+
+console.log('squad', props.squad);
+const user = ref({
     applications: null,
 });
 
 const filteredPayed = ref([
     {
-        value: 'applications',
+        value: 'Одобрить',
         name: 'Одобрить',
     },
-    { value: 'applications', name: 'Отклонить' },
+    { value: 'Отклонить', name: 'Отклонить' },
 ]);
+
+const ChangeStatus = async () => {
+    let id = squad.value.id;
+    console.log('squad', id);
+    let application_pk = props.detachment.id;
+    console.log('application', application_pk);
+    HTTP.post(
+        `/detachments/${id}/applications/${application_pk}/accept/`,
+        user.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    )
+        .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            // participant.value = response.data; //emit
+            console.log(response.data);
+        })
+
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+};
 </script>
 <style lang="scss" scoped>
 .horizontalSquad {
     display: grid;
-    grid-template-columns: 1fr 0.4fr;
+    grid-template-columns: 0.525fr 0.35fr;
+    grid-column-gap: 12px;
     // flex-wrap: wrap;
     // align-items: flex-start;
     &-img {

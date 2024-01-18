@@ -1,11 +1,15 @@
 <template>
-    <enteredSquad
-        v-for="detachment in detachments"
-        :detachment="detachment"
-        @change="changeSquads"
-        :selectedSquads="selectedDetch"
-        :key="detachment.id"
-    />
+    <div v-if="detachments.length > 0">
+        <enteredSquad
+            v-for="detachment in detachments"
+            :detachment="detachment"
+            :squad="squad"
+            @change="changeSquads"
+            :selectedSquads="selectedDetch"
+            :key="detachment.id"
+        />
+    </div>
+    <h2 v-else>Заявок нет...</h2>
 </template>
 <script setup>
 import { ref } from 'vue';
@@ -23,4 +27,3 @@ const changeSquads = (CheckedSquad, SquadId) => {
     emit('change', CheckedSquad, SquadId);
 };
 </script>
-

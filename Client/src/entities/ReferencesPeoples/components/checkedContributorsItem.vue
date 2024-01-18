@@ -14,9 +14,17 @@
                 />
             </div>
             <div class="containerHorizontal">
-                <p class="checked-item__list-full">
-                    {{ participant.first_name }}
-                </p>
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.last_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.first_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.patronymic_name }}
+                    </p>
+                </div>
                 <div class="checked-item__list-date">
                     <span
                         style="
@@ -29,11 +37,12 @@
             </div>
         </div>
         <div class="sort-select ml-3">
-            <Select
+            <sortByEducation
+                placeholder="Выберете действие"
                 variant="outlined"
                 v-model="participantItem.membership_fee"
-                :names="filteredPayed"
-            ></Select>
+                :options="filteredPayed"
+            ></sortByEducation>
         </div>
         <div class="checked__confidant ml-3">
             <input
@@ -54,7 +63,7 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { Select } from '@shared/components/selects';
+import { Select, sortByEducation } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { ref, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
@@ -64,7 +73,7 @@ const props = defineProps({
         type: Object,
         require: true,
     },
-   participants: {
+    participants: {
         type: Array,
         require: true,
     },
@@ -76,7 +85,7 @@ const updateMembership = (participant, event) => {
     emit('change', participant, event);
 };
 
-const checked = ref(true)
+const checked = ref(true);
 const isError = ref([]);
 
 // const route = useRoute();
@@ -89,13 +98,12 @@ const participantItem = ref({
     membership_fee: null,
 });
 
-
 const filteredPayed = ref([
     {
-        value: 'membership_fee',
+        value: 'Оплачен',
         name: 'Оплачен',
     },
-    { value: 'membership_fee', name: 'Неоплачен' },
+    { value: 'Неоплачен', name: 'Неоплачен' },
 ]);
 
 watch(selectedPeoples, (newChecked) => {
@@ -106,12 +114,16 @@ watch(selectedPeoples, (newChecked) => {
 
 const ChangeStatus = async () => {
     let { id, ...rest } = props.participant;
-    await HTTP.post(`rsousers/${id}/membership_fee_status/`, participantItem.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+    await HTTP.post(
+        `rsousers/${id}/membership_fee_status/`,
+        participantItem.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         },
-    })
+    )
         .then((response) => {
             swal.fire({
                 position: 'top-center',

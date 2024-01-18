@@ -1,4 +1,4 @@
-<template >
+<template>
     <div class="checked">
         <div class="checked-item__wrapper">
             <div class="checked-img">
@@ -29,11 +29,13 @@
             </div>
         </div>
         <div class="sort-select ml-3">
-            <Select
+            <sortByEducation
+                placeholder="Выберете действие"
                 variant="outlined"
+                clearable
                 v-model="user.is_verified"
-                :names="filteredPayed"
-            ></Select>
+                :options="filteredPayed"
+            ></sortByEducation>
         </div>
         <div class="checked__confidant ml-3">
             <input
@@ -49,14 +51,12 @@
             label="Сохранить"
             @click="ChangeStatus(participant.id)"
         ></Button>
-
     </div>
     <p v-if="isError" class="error">{{ isError.detail }}</p>
-
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { Select } from '@shared/components/selects';
+import {  sortByEducation } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { ref, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
@@ -72,13 +72,11 @@ const props = defineProps({
         type: Object,
         require: true,
     },
-
 });
 
 const isError = ref([]);
 
 const swal = inject('$swal');
-
 
 const user = ref({
     is_verified: null,
@@ -86,12 +84,11 @@ const user = ref({
 
 const filteredPayed = ref([
     {
-        value: 'is_verified',
+        value: 'Одобрен',
         name: 'Одобрен',
     },
-    { value: 'is_verified', name: 'Неодобрен' },
+    { value: 'Неодобрен', name: 'Неодобрен' },
 ]);
-
 
 const ChangeStatus = async () => {
     let { id, ...rest } = props.participant.user;

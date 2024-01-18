@@ -13,9 +13,7 @@
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
                         <li class="Squad-HQ__university">
-                            <!-- <p >Коми государственный педагогический институт</p> -->
                             <p>{{ edict.name }}</p>
-                            <!-- <p>{{ squad.educational_institution }}</p> -->
                         </li>
                         <li class="Squad-HQ__date">
                             <p>Дата создания ЛСО</p>
@@ -59,7 +57,7 @@
                         </div>
                     </div>
                     <router-link
-                    v-if="roles.roles.detachment_commander"
+                        v-if="comId == squad.commander"
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -67,11 +65,9 @@
                         class="user-data__link"
                         >Редактировать страницу</router-link
                     >
-                    <div v-else>Вступить в отряд</div>
-
+                    <div class="user-data__link" v-else>Подать заявку</div>
                 </div>
             </div>
-            <!-- <div v-else>Загрузка....</div> -->
         </div>
     </div>
 </template>
@@ -86,7 +82,8 @@ const roleStore = useRoleStore();
 roleStore.getRoles();
 
 const roles = storeToRefs(roleStore);
-
+let comId = roles.roles.value.detachment_commander;
+console.log('comId', comId);
 const props = defineProps({
     banner: {
         type: String,
@@ -107,14 +104,6 @@ const props = defineProps({
 });
 
 const edict = ref({});
-
-// const isEmpty = computed(() => {
-//     for (let i in props.squad) {
-//        console.log("Объект пуст")
-//     }
-//     console.log("Объект есть")
-// });
-
 const aboutEduc = async () => {
     let id = props.squad.educational_institution;
     console.log('squad', props.squad);
@@ -175,10 +164,6 @@ watch(
         }
     }
 }
-
-// .squad-data__participant-counter {
-//     margin-top: 20px;
-// }
 
 /* Данные пользователя */
 .squad-data__wrapper {

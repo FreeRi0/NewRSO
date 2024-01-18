@@ -4,7 +4,7 @@
         <Avatar :avatar="user?.media?.photo" v-if="user"></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
-            <div class="user-data__wrapper" v-if="user">
+            <div class="user-data__wrapper">
                 <div v-if="user" class="user-data__name">
                     <p>{{ user.last_name }}</p>
                     <p>{{ user.first_name }}</p>
@@ -14,6 +14,12 @@
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
+                        <li class="user-data__title" v-if="detachment.name">
+                            <p> ССО "{{ detachment.name }}"</p>
+                        </li>
+                        <li class="user-data__title" v-if="educationalHeadquarter.name">
+                            <p>Штаб {{ educationalHeadquarter.name  }}</p>
+                        </li>
                         <li class="user-data__regional-office">
                             <p v-if="user?.user_region?.reg_region">
                                 {{
@@ -22,15 +28,15 @@
                                 }}
                             </p>
                         </li>
-                        <li v-if="education">
+                        <li v-if="user?.education?.study_faculty">
                             <p>{{ user?.education?.study_faculty }}</p>
                         </li>
 
-                        <li v-if="education">
+                        <li v-if="user?.education?.study_specialty">
                             <p>{{ user?.education?.study_specialty }}</p>
                         </li>
 
-                        <li v-if="education">
+                        <li v-if="user?.education?.study_year">
                             <p>Курс {{ user?.education?.study_year }}</p>
                         </li>
                     </ul>
@@ -78,7 +84,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
@@ -106,6 +112,8 @@ const props = defineProps({
 });
 
 const regionals = ref([]);
+const detachment = ref({});
+const educationalHeadquarter = ref({});
 
 const getRegionals = async () => {
     await HTTP.get(`/regionals/`, {
@@ -123,9 +131,57 @@ const getRegionals = async () => {
         });
 };
 
+const getDetachment = async () => {
+    let id = props.user.detachment_id;
+    await HTTP.get(`/detachments/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            detachment.value = response.data;
+            console.log(regionals.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+const getEducationalHeadquarter = async () => {
+    let id = props.user.educational_headquarter_id;
+    await HTTP.get(`/educationals/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            educationalHeadquarter.value = response.data;
+            console.log(regionals.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
 onMounted(() => {
     getRegionals();
+    getDetachment();
+    getEducationalHeadquarter();
 });
+
+watch(
+    () => props.user,
+
+    (newUser, oldUser) => {
+        if (Object.keys(props.user).length === 0) {
+            return;
+        }
+        getDetachment();
+        getEducationalHeadquarter();
+    },
+);
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {

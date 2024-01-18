@@ -618,8 +618,9 @@ const changePeoples = (CheckedUser, UserId) => {
         participant = participants.value.find((item) => item.id == UserId);
         selectedPeoples.value.push(participant);
     } else {
-        selectedPeoples.value = selectedPeoples.value.filter((item) => item.id !== UserId);
-
+        selectedPeoples.value = selectedPeoples.value.filter(
+            (item) => item.id !== UserId,
+        );
     }
 };
 
@@ -750,7 +751,7 @@ const sortedParticipants = computed(() => {
     return tempParticipants;
 });
 </script>
-<style lang="scss">
+<style lang="scss" >
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -835,12 +836,18 @@ p {
     margin-bottom: 8px;
 }
 
-.form__select {
-    border: 1px solid #35383f;
-}
+
 
 .input-big {
     width: 465px;
+}
+
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 .ascend {

@@ -3043,6 +3043,7 @@ const updateData = async () => {
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
+
     await axios
         .all([axiosrequest1, axiosrequest2, axiosrequest3, axiosrequest4])
         .then(
