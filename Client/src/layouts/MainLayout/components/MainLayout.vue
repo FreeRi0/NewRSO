@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-breadcrumbs v-if="user.user"/>
+        <app-breadcrumbs/>
 
         <router-view v-slot="{ Component }">
             <keep-alive>
@@ -13,15 +13,13 @@
 <script setup>
 import { AppBreadcrumbs } from '@shared';
 
-/**
- * 
- */
-import { useAppStore } from '@features/store/index';
-import { storeToRefs } from 'pinia';
+// запрос по хб
+// import { useAppStore } from '@features/store/index';
+// import { storeToRefs } from 'pinia';
 
-const userStore = useAppStore();
-userStore.getUser();
-const user = storeToRefs(userStore);
-console.log('lalala', user.user.value);
+// const userStore = useAppStore();
+// userStore.getUser();
+// const user = storeToRefs(userStore);
+// console.log('lalala', user.user.value);
 
 </script>

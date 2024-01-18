@@ -886,6 +886,11 @@ const deleteBanner = () => {
 
 .form_width {
     width: 46%;
+
+@media (max-width: 768px) {
+        width: 100%;
+    }
+
 }
 
 .uploadEmblem_wrap {
@@ -928,10 +933,19 @@ const deleteBanner = () => {
     display: flex;
     justify-content: space-between;
     margin-bottom: 24px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        margin-bottom: 0;
+    }
 }
 
 .form_width .form-input {
     margin-top: auto;
+
+    @media (max-width: 768px) {
+        margin-bottom: 32px;
+    }
 }
 
 .form__field.form_width {
