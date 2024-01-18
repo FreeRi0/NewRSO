@@ -1,4 +1,4 @@
-<template lang>
+<template>
     <div class="squads-wrapper__item">
         <router-link :to="{ name: 'lso', params: { id: squad.id } }">
             <div class="round-img">

@@ -127,7 +127,7 @@
                 </div>
             </div>
 
-            <div class="headquarters-wrapper" v-show="vertical">
+            <div  v-show="vertical">
                 <HeadquartersList
                     :headquarters="sortedHeadquarters"
                 ></HeadquartersList>

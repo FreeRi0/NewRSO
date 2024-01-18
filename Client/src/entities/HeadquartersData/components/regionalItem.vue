@@ -1,22 +1,23 @@
 <template>
-    <router-link
-        class="headquarters-wrapper__item"
-        :to="{ name: 'RegionalHQ', params: { id: regionalHeadquarter.id } }"
-    >
-        <div class="round-img">
-            <img
-                :src="regionalHeadquarter.emblem"
-                alt="logo"
-                v-if="regionalHeadquarter.emblem"
-            />
-            <img src="@app/assets/user-avatar.png" alt="logo" v-else />
-        </div>
-        <div class="container-headquarters">
-            <p class="headquarters-wrapper__item-title">
-                {{ regionalHeadquarter.name }}
-            </p>
-        </div>
-    </router-link>
+    <div class="headquarters-wrapper__item">
+        <router-link
+            :to="{ name: 'RegionalHQ', params: { id: regionalHeadquarter.id } }"
+        >
+            <div class="round-img">
+                <img
+                    :src="regionalHeadquarter.emblem"
+                    alt="logo"
+                    v-if="regionalHeadquarter.emblem"
+                />
+                <img src="@app/assets/user-avatar.png" alt="logo" v-else />
+            </div>
+            <div class="container-headquarters">
+                <p class="headquarters-wrapper__item-title">
+                    {{ regionalHeadquarter.name }}
+                </p>
+            </div>
+        </router-link>
+    </div>
 </template>
 <script setup>
 const props = defineProps({

@@ -15,13 +15,12 @@
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
                         <li class="user-data__regional-office">
-                            <p>{{ user?.user_region?.reg_town }}</p>
-                            <!-- <span v-if="user?.user_region?.reg_region"
-                                >{{
+                            <p v-if="user?.user_region?.reg_region">
+                                {{
                                     regionals[user?.user_region?.reg_region - 1]
                                         ?.name
                                 }}
-                            </span> -->
+                            </p>
                         </li>
                         <li v-if="education">
                             <p>{{ user?.education?.study_faculty }}</p>
@@ -104,12 +103,8 @@ const props = defineProps({
     education: {
         type: Object,
     },
-    user_region: {
-        type: Object,
-    },
 });
 
-const user_region = ref({});
 const regionals = ref([]);
 
 const getRegionals = async () => {
@@ -127,6 +122,10 @@ const getRegionals = async () => {
             console.log('an error occured ' + error);
         });
 };
+
+onMounted(() => {
+    getRegionals();
+});
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {

@@ -13,15 +13,18 @@
 <script setup>
 import { AppBreadcrumbs } from '@shared';
 
-/**
- * 
- */
-import { useAppStore } from '@features/store/index';
-import { storeToRefs } from 'pinia';
+import { useRoleStore } from '@layouts/store/role';
+const roleStore = useRoleStore();
+roleStore.getRoles();
 
-const userStore = useAppStore();
-userStore.getUser();
-const user = storeToRefs(userStore);
-console.log('lalala', user.user.value);
+//запрос на коммандира
 
+// запрос по хб
+// import { useAppStore } from '@features/store/index';
+// import { storeToRefs } from 'pinia';
+
+// const userStore = useAppStore();
+// userStore.getUser();
+// const user = storeToRefs(userStore);
+// console.log('lalala', user.user.value);
 </script>
