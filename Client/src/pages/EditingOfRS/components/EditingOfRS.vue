@@ -1,5 +1,5 @@
 <template>
-    <div class="container container--top">
+    <div class="container">
         <h1 class="title title--lso">Редактирование регионального штаба</h1>
         <FormRS
             :participants="true"

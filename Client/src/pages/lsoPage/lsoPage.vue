@@ -1,6 +1,7 @@
 <template>
     <div class="container">
         <div class="squad-page">
+            <Breadcrumbs></Breadcrumbs>
             <h1 class="title title--lso">ЛСО</h1>
             <BannerSquad
                 :squad="squad"
@@ -13,7 +14,7 @@
                     {{ squad.about }}
                 </p>
             </section>
-            <div class="mt-8 photoWrapper">
+            <div class="mt-8 d-flex">
                 <squadPhotos
                     class="photo-item"
                     :squad-photos="squad.photo1"
@@ -40,23 +41,19 @@
     </div>
 </template>
 <script setup>
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerSquad } from '@features/baner/components';
 import { squadPhotos } from '@shared/components/imagescomp';
 import SquadParticipants from './components/SquadParticipants.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage } from '@shared';
 
-//передаём эту переменную в replaceTargetObjects
 const squad = ref({});
 const member = ref({});
 const edict = ref({});
-
 const route = useRoute();
 let id = route.params.id;
-
-const { replaceTargetObjects } = usePage();
 
 const aboutSquad = async () => {
     await HTTP.get(`/detachments/${id}/`, {
@@ -67,13 +64,13 @@ const aboutSquad = async () => {
     })
         .then((response) => {
             squad.value = response.data;
-            replaceTargetObjects([squad.value]);
             console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
 };
+
 
 const aboutMembers = async () => {
     await HTTP.get(`/detachments/${id}/members/`, {
@@ -91,6 +88,8 @@ const aboutMembers = async () => {
         });
 };
 
+
+
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutSquad();
@@ -105,6 +104,7 @@ watch(
         id = newId;
         aboutSquad();
         aboutMembers();
+
     },
 );
 
@@ -112,10 +112,12 @@ onMounted(() => {
     aboutSquad();
     aboutMembers();
 });
+
 </script>
 <style scoped lang="scss">
+
 .squad-page {
-    padding-top: 40px;
+   padding-top: 40px;
 }
 .title {
     //-----------------------------------общий класс для всех заголовков h1
@@ -139,14 +141,6 @@ onMounted(() => {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-}
-
-.photoWrapper {
-    display: flex;
-    @media screen and (max-width: 768px) {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
 }
 .slogan {
     margin-top: 20px;
@@ -201,18 +195,6 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     margin: 16px 16px 0px 0px;
-}
-
-.photo-item {
-    width: 260px;
-    margin-right: 20px;
-    @media screen and (max-width: 768px) {
-        margin-bottom: 16px;
-    }
-    @media screen and (max-width: 575px) {
-        width: 156px;
-        margin-right: 16px;
-    }
 }
 
 section.about-squad {

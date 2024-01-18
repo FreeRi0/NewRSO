@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <h1 class="title title--hq" v-if="showHQ">Штаб СО ОО</h1>
+        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
         <BannerHQ
             v-if="showHQ"
             :headquarter="headquarter"
@@ -51,28 +52,27 @@
 </template>
 
 <script setup>
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from './components/ManagementHQ.vue';
 import DetachmentsHQ from './components/DetachmentsHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage } from '@shared';
 
+// banner condition
 const showHQ = ref(true);
 const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showRegionalHQ = ref(false);
-// передали
+
 const headquarter = ref({});
 const position = ref({});
 const member = ref([]);
 const educt = ref({});
-
 const route = useRoute();
 let id = route.params.id;
-
-const { replaceTargetObjects } = usePage();
+// hhhh
 
 const aboutHQ = async () => {
     await HTTP.get(`/educationals/${id}/`, {
@@ -83,8 +83,7 @@ const aboutHQ = async () => {
     })
         .then((response) => {
             headquarter.value = response.data;
-            replaceTargetObjects([headquarter.value]);
-            // console.log(response);
+            console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -183,7 +182,6 @@ const pages = [
     { pageTitle: 'Штабы', href: '/AllHeadquarters' },
     { pageTitle: headquarter.name, href: '#' },
 ];
-
 </script>
 <style scoped lang="scss">
 .title {

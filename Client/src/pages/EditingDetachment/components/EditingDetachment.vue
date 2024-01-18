@@ -1,16 +1,19 @@
 <template>
     <div class="container container--top">
+        <Breadcrumbs></Breadcrumbs>
+
         <h1 class="title title--lso">Редактирование ЛСО</h1>
 
         <FormUnit
             :participants="true"
             :detachment="detachment"
-            v-if="detachment"
+            :is-error="isError"
+            v-if="detachment && isError"
             @submit.prevent="changeDetachment"
-            @select-emblem="onSelectEmblem"
+            @select-file="onSelectFile"
+            @reset-file="onResetFile"
             @select-banner="onSelectBanner"
-            @delete-emblem="onDeleteEmblem"
-            @delete-banner="onDeleteBanner"
+            @reset-banner="onResetBanner"
             @select-photo-one="onSelectPhotoOne"
             @reset-phot-one="onResetPhotoOne"
             @select-photo-two="onSelectPhotoTwo"
@@ -25,26 +28,21 @@
 
 <script setup>
 import { ref, onMounted, inject, watch } from 'vue';
+import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormUnit } from '@features/FormUnit';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage } from '@shared';
-// import { useRouter } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 
-// const router = useRouter();
+const router = useRouter();
 const route = useRoute();
-// console.log(route);
+console.log(route);
 let id = route.params.id;
 
-//передаём эту переменную в replaceTargetObjects
 const detachment = ref(null);
-
-const { replaceTargetObjects } = usePage();
 
 const getDetachment = async () => {
     console.log('id отряда для редактирования - ', id);
-    // await HTTP.get(`/detachments/${id}/`, {
-    HTTP.get(`/detachments/${id}/`, {
+    await HTTP.get(`/detachments/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -52,7 +50,6 @@ const getDetachment = async () => {
     })
         .then((response) => {
             detachment.value = response.data;
-            replaceTargetObjects([detachment.value]);
             console.log(response);
         })
         .catch(function (error) {
@@ -89,21 +86,16 @@ const filePhotoFour = ref(null);
 
 const swal = inject('$swal');
 
-const isEmblemChange = ref(false);
-const isBannerChange = ref(false);
-
-const onSelectEmblem = (file) => {
+const onSelectFile = (file) => {
+    fileEmblem.value = file;
+};
+const onResetFile = (file) => {
     fileEmblem.value = file;
 };
 const onSelectBanner = (file) => {
     fileBanner.value = file;
 };
-const onDeleteEmblem = (file) => {
-    isEmblemChange.value = true;
-    fileEmblem.value = file;
-};
-const onDeleteBanner = (file) => {
-    isBannerChange.value = true;
+const onResetBanner = (file) => {
     fileBanner.value = file;
 };
 const onSelectPhotoOne = (file) => {
@@ -134,6 +126,35 @@ const onResetPhotoFour = (file) => {
 const isError = ref({});
 
 const changeDetachment = async () => {
+    // HTTP.put(`detachments/${id}/`, detachment.value, {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: "Token " + localStorage.getItem("Token"),
+    //   },
+    // })
+    //   .then((response) => {
+    //     submited.value = true;
+    //     detachment.value = response.data;
+    //     console.log(response.data);
+    //     swal.fire({
+    //       position: "top-center",
+    //       icon: "success",
+    //       title: "успешно",
+    //       showConfirmButton: false,
+    //       timer: 1500,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.error("There was an error!", error);
+    //     swal.fire({
+    //       position: "top-center",
+    //       icon: "error",
+    //       title: "ошибка",
+    //       showConfirmButton: false,
+    //       timer: 1500,
+    //     });
+    //   });
+
     const formData = new FormData();
     formData.append('name', detachment.value.name);
     formData.append('area', detachment.value.area);
@@ -157,81 +178,14 @@ const changeDetachment = async () => {
     //   filePhotoThree.value,
     //   filePhotoFour.value
     // );
+    formData.append('emblem', fileEmblem.value);
+    formData.append('banner', fileBanner.value);
     formData.append('photo1', filePhotoOne.value);
     formData.append('photo2', filePhotoTwo.value);
     formData.append('photo3', filePhotoThree.value);
     formData.append('photo4', filePhotoFour.value);
 
-    if (fileEmblem.value) formData.append('emblem', fileEmblem.value);
-    if (fileBanner.value) formData.append('banner', fileBanner.value);
-
-    if (isEmblemChange.value && !fileEmblem.value) {
-        HTTP.patch(
-            `/detachments/${id}/`,
-            { emblem: fileEmblem.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        )
-            .then((response) => {
-                submited.value = true;
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-            .catch((error) => {
-                console.error('There was an error!', error);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    }
-
-    if (isBannerChange.value && !fileBanner.value) {
-        HTTP.patch(
-            `/detachments/${id}/`,
-            { banner: fileBanner.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        )
-            .then((response) => {
-                submited.value = true;
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-            .catch((error) => {
-                console.error('There was an error!', error);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    }
-
-    HTTP.patch(`/detachments/${id}/`, formData, {
+    HTTP.put(`/detachments/${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -240,7 +194,7 @@ const changeDetachment = async () => {
         .then((response) => {
             submited.value = true;
             // formData = response.data;
-            // console.log(response.data);
+            console.log(response.data);
             swal.fire({
                 position: 'top-center',
                 icon: 'success',
@@ -248,22 +202,21 @@ const changeDetachment = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            // router.push({
-            //     name: 'lso',
-            //     params: { id: detachment.value.id },
-            // });
+            router.push({
+                name: 'lso',
+                params: { id: detachment.value.id },
+            });
         })
         // .catch((error) => {
         //     console.error('There was an error!', error);
         .catch(({ response }) => {
-            // isError.value = response.data;
+            isError.value = response.data;
             console.error('There was an error!', response.data);
-            // console.log('Ошибки отправки формы', isError.value);
+            console.log('Ошибки отправки формы', isError.value);
             swal.fire({
                 position: 'top-center',
                 icon: 'error',
-                title: 'ошибка',
-                // title: `ошибка - ${isError.value.non_field_errors}`,
+                title: `ошибка - ${isError.value.non_field_errors}`,
                 showConfirmButton: false,
                 timer: 1500,
             });

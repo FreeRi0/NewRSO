@@ -1,5 +1,5 @@
 <template>
-    <ul class="breadcrumb__list">
+    <ul class="breadcrumb__list container">
         <app-breadcrumb
             v-for="(breadcrumb, index) in breadcrumbs"
             :key="breadcrumb.path"
@@ -18,7 +18,19 @@ const { breadcrumbs } = useBreadcrumbsStore();
 
 <style scoped lang="scss">
 .breadcrumb__list {
-    list-style-type: none;
-    display: inline-block;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 40px;
+    font-family: "Akrobat";
+    font-size: 14px;
+    line-height: 17px;
+    font-weight: 600;
+    color: #35383f;
+    padding-top: 60px;
+    
+    @media (max-width: 360px) {
+        margin-bottom: 20px;
+    }
 }
 </style>

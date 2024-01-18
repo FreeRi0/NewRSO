@@ -107,7 +107,7 @@ onMounted(() => {
 </script>
 <style lang="scss">
 .headquarters {
-    padding: 40px 0px 60px 0px;
+    padding-bottom: 60px;
     &-title {
         margin-bottom: 40px;
         font-size: 52px;

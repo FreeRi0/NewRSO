@@ -29,15 +29,13 @@ const classes = computed(() => ({
 </script>
 
 <style scoped lang="scss">
-.breadcrumb {
-    display: inline-block;
-}
 
 .breadcrumb__separator {
-    margin-left: 4px;
-    margin-right: 4px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
+
 .breadcrumb.active {
-    color: blue;
+    color: #1c5c94;
 }
 </style>

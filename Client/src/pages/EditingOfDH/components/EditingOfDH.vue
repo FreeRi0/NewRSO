@@ -1,5 +1,5 @@
 <template>
-    <div class="container container--top">
+    <div class="container">
         <h1 class="title title--lso">Редактирование окружного штаба</h1>
         <FormDH :participants="true"
             :headquarter="headquarter"

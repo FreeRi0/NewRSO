@@ -1,11 +1,13 @@
 import { type RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
+// сменить структуру под каждые нужные нам компоненты - закинуть lable и namedRoute в штабы, в мероприятия и остальное соответствующе.
     {
         path: '/',
         component: () =>
             import('@layouts/MainLayout/components/MainLayout.vue'),
         meta: {
+            //
             label: 'Структура',
             namedRoute: 'Login',
         },

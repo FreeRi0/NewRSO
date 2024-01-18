@@ -7,6 +7,7 @@
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
+                    <template v-slot="{ expanded }">
                         <v-row no-gutters>
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
@@ -24,6 +25,7 @@
                                 Заполните обязательные поля!
                             </p>
                         </v-row>
+                    </template>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
                             <svg
@@ -598,7 +600,7 @@
                                         <button
                                             class="photo-add__button-clear"
                                             type="button"
-                                            @click="deleteEmblem"
+                                            @click="resetEmblem"
                                         >
                                             Удалить фото
                                         </button>
@@ -608,7 +610,7 @@
                                         id="upload-logo"
                                         name="squad-logo"
                                         hidden
-                                        @change="selectEmblem"
+                                        @change="selectFile"
                                     />
                                 </div>
                             </div>
@@ -726,7 +728,7 @@
                                         <button
                                             class="photo-add__button-clear"
                                             type="reset"
-                                            @click="deleteBanner"
+                                            @click="resetBanner"
                                         >
                                             Удалить фото
                                         </button>
@@ -781,16 +783,20 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { Input, TextareaAbout } from '@shared/components/inputs';
+import { ref, computed, inject, onMounted } from 'vue';
+import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Select, Dropdown } from '@shared/components/selects';
+import { Avatar } from '@shared/components/imagescomp';
+import { bannerPhoto } from '@shared/components/imagescomp';
+import { Select } from '@shared/components/selects';
+import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
+import { TextareaAbout } from '@shared/components/inputs';
 
+import { useVuelidate } from '@vuelidate/core';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-
 import {
     helpers,
     minLength,
@@ -805,10 +811,10 @@ const emit = defineEmits([
     'update:value',
     'updateMember',
     'changeHeadquarter',
-    'selectEmblem',
-    'deleteEmblem',
+    'selectFile',
+    'resetEmblem',
     'selectBanner',
-    'deleteBanner',
+    'resetBanner',
 ]);
 
 const props = defineProps({
@@ -988,17 +994,17 @@ const fileEmblem = ref(props.fileEmblem);
 const urlEmblem = ref(null);
 // console.log("значение emblem до изм - ", urlEmblem);
 
-const selectEmblem = (event) => {
+const selectFile = (event) => {
     fileEmblem.value = event.target.files[0];
     // console.log("значение fileEmblem после изм - ", fileEmblem.value);
 
     headquarter.value.emblem = null;
     urlEmblem.value = URL.createObjectURL(fileEmblem.value);
     //   console.log("значение emblem после изм - ", detachment.value.emblem);
-    emit('selectEmblem', fileEmblem.value);
+    emit('selectFile', fileEmblem.value);
 };
 
-const deleteEmblem = () => {
+const resetEmblem = () => {
     // console.log(fileEmblem.value);
     headquarter.value.emblem = null;
     urlEmblem.value = null;
@@ -1006,9 +1012,8 @@ const deleteEmblem = () => {
     fileEmblem.value = null;
     // console.log(fileEmblem.value);
 
-    emit('deleteEmblem', fileEmblem.value);
+    emit('resetEmblem', fileEmblem.value);
 };
-
 //--Добавление баннера-----------------------------------------------------------------------------
 const fileBanner = ref(props.fileBanner);
 const urlBanner = ref(null);
@@ -1020,11 +1025,11 @@ const selectBanner = (event) => {
     emit('selectBanner', fileBanner.value);
 };
 
-const deleteBanner = () => {
+const resetBanner = () => {
     headquarter.value.banner = null;
     urlBanner.value = null;
     fileBanner.value = null;
-    emit('deleteBanner', fileBanner.value);
+    emit('resetBanner', fileBanner.value);
 };
 </script>
 
@@ -1053,3 +1058,4 @@ const deleteBanner = () => {
     }
 }
 </style>
+@shared/components/selects/inputs@shared/components/selects/inputs

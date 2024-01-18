@@ -130,9 +130,6 @@ onMounted(() => {
 });
 </script>
 <style scoped lang="scss">
-.local-page {
-    padding-top: 40px;
-}
 
 .title {
     //-----------------------------------общий класс для всех заголовков h1
