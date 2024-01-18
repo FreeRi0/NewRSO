@@ -88,6 +88,13 @@ import { activeApplications } from '@features/ActiveApplications/components';
 import { checkedAppList } from '@features/ActiveApplications/components';
 import { CheckedSquadsList } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+
+const roleStore = useRoleStore();
+roleStore.getRoles();
+
+const roles = storeToRefs(roleStore);
 
 const picked = ref('');
 const tabs = ref([
@@ -112,7 +119,6 @@ const pages = ref([
 
 const participants = ref([]);
 const detachments = ref([]);
-const squad = ref({});
 const checkboxAll = ref(false);
 const checkboxAllSquads = ref(false);
 const participantsVisible = ref(12);
@@ -120,43 +126,13 @@ const selectedPeoples = ref([]);
 const selectedDetch = ref([]);
 const step = ref(12);
 
-// const getUser = async () => {
-//     await HTTP.get(`/rsousers/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             user.value = response.data;
-//             console.log(response.data);
-//         })
-//         .catch(function (error) {
-//             console.log('failed ' + error);
-//         });
-// };
-
 let tempParticipants = participants.value;
 
 tempParticipants = tempParticipants.slice(0, participantsVisible.value);
-const getSquad = async () => {
-    await HTTP.get(`/detachments/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squad.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
 const viewParticipants = async () => {
-    let id = squad.value.id;
+    let id = roles?.roles?.value?.detachment_commander;
+    console.log('roles', roles.roles.value);
     console.log('id', id);
     await HTTP.get(`/detachments/${id}/verifications/`, {
         headers: {
@@ -174,7 +150,10 @@ const viewParticipants = async () => {
 };
 
 const viewDetachments = async () => {
-    await HTTP.get(`/detachments/1/applications/`, {
+    let id = roles?.roles?.value?.detachment_commander;
+    console.log('roles', roles.roles.value);
+    console.log('id', id);
+    await HTTP.get(`/detachments/${id}/applications/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -192,8 +171,19 @@ const viewDetachments = async () => {
 onMounted(() => {
     viewParticipants();
     viewDetachments();
-    getSquad();
 });
+
+watch(
+    () => roles.roles.value,
+
+    (newRole, oldRole) => {
+        if (Object.keys(roles.roles.value).length === 0) {
+            return;
+        }
+        viewParticipants();
+        viewDetachments();
+    },
+);
 
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};

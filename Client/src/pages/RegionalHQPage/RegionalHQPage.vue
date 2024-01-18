@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-        <Breadcrumbs></Breadcrumbs>
         <h1 class="title title--hq">Региональный штаб</h1>
         <BannerHQ
             v-if="showHQ"
@@ -68,12 +67,12 @@
 </template>
 
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
 const showRegionalHQ = ref(true);
 const showDistrictHQ = ref(false);
@@ -86,6 +85,8 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const aboutRegionalHQ = async () => {
     await HTTP.get(`/regionals/${id}/`, {
         headers: {
@@ -95,6 +96,7 @@ const aboutRegionalHQ = async () => {
     })
         .then((response) => {
             regionalHeadquarter.value = response.data;
+            replaceTargetObjects([regionalHeadquarter.value]);
             console.log(response);
         })
         .catch(function (error) {

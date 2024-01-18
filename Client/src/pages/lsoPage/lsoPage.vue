@@ -13,7 +13,7 @@
                     {{ squad.about }}
                 </p>
             </section>
-            <div class="mt-8 photoWrapper">
+            <div class="mt-8 d-flex">
                 <squadPhotos
                     class="photo-item"
                     :squad-photos="squad.photo1"
@@ -73,6 +73,7 @@ const aboutSquad = async () => {
         });
 };
 
+
 const aboutMembers = async () => {
     await HTTP.get(`/detachments/${id}/members/`, {
         headers: {
@@ -89,6 +90,8 @@ const aboutMembers = async () => {
         });
 };
 
+
+
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutSquad();
@@ -103,6 +106,7 @@ watch(
         id = newId;
         aboutSquad();
         aboutMembers();
+
     },
 );
 
@@ -110,10 +114,12 @@ onMounted(() => {
     aboutSquad();
     aboutMembers();
 });
+
 </script>
 <style scoped lang="scss">
+
 .squad-page {
-    padding-top: 40px;
+   padding-top: 40px;
 }
 .title {
     //-----------------------------------общий класс для всех заголовков h1
@@ -137,14 +143,6 @@ onMounted(() => {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-}
-
-.photoWrapper {
-    display: flex;
-    @media screen and (max-width: 768px) {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
 }
 .slogan {
     margin-top: 20px;
@@ -199,18 +197,6 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     margin: 16px 16px 0px 0px;
-}
-
-.photo-item {
-    width: 260px;
-    margin-right: 20px;
-    @media screen and (max-width: 768px) {
-        margin-bottom: 16px;
-    }
-    @media screen and (max-width: 575px) {
-        width: 156px;
-        margin-right: 16px;
-    }
 }
 
 section.about-squad {

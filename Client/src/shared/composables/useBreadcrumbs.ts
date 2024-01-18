@@ -1,3 +1,4 @@
+
 import { reactive } from 'vue';
 import {
     RouteLocationNormalizedLoaded,
@@ -21,7 +22,7 @@ interface Params {
     targetObjects?: object[];
 }
 
-function bypassObject(stringProperties: string, obj: object | null) {
+
     if (!obj) return '';
 
     const arrayProperties = stringProperties.split('.');
@@ -70,7 +71,7 @@ function getElementParams(element: RouteLocationMatched, params: RouteParams) {
 
     if (!keys?.length) return undefined;
 
-    return keys.reduce((acc, key) => {
+
         acc[key] = params[key];
 
         return acc;
@@ -88,18 +89,6 @@ export default function useBreadcrumbs(params: Params = {}) {
     const objectsForLabels = params.targetObjects ?? [];
     const matchedRoutes = route.matched;
 
-    const pushBreadcrumb = (
-        element: RouteLocationMatched,
-        label: string | string[],
-    ) => {
-        breadcrumbs.push({
-            path: element.path,
-            name: element.name || (element.meta.namedRoute as RouteRecordName),
-            params: getElementParams(element, route.params),
-            query: route.query,
-            label,
-        });
-    };
 
     matchedRoutes.forEach((el) => {
         const metaLabel = el.meta.label as string | null;
@@ -114,31 +103,17 @@ export default function useBreadcrumbs(params: Params = {}) {
             isParamLabel || isQueryLabel ? metaLabel.slice(1) : metaLabel;
 
         if (isParamLabel) {
-            pushBreadcrumb(el, route.params[finalMetaLabel]);
+
         } else if (isQueryLabel) {
             const properties = finalMetaLabel.split('.');
             const curr = route.query[properties[0]];
 
-            pushBreadcrumb(
-                el,
-                getObjectBreadcrumb(
-                    properties.slice(1).join('.'),
-                    JSON.parse(curr?.toString() ?? ''),
-                ) as string,
-            );
+
         } else if (isObjectLabel) {
             const properties = finalMetaLabel.split('.');
             const curr = objectsForLabels.shift();
 
-            pushBreadcrumb(
-                el,
-                getObjectBreadcrumb(
-                    properties.slice(1).join('.'),
-                    curr,
-                ) as string,
-            );
-        } else {
-            pushBreadcrumb(el, finalMetaLabel);
+
         }
     });
 

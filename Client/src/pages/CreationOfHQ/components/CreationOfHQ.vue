@@ -1,6 +1,5 @@
 <template>
     <div class="container container--top">
-        <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Создание штаба СО ОО</h1>
 
@@ -18,7 +17,6 @@
 
 <script setup>
 import { ref, inject } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormHQ } from '@features/FormHQ';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';

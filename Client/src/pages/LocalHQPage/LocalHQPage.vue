@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="local-page">
-            <Breadcrumbs></Breadcrumbs>
             <h1 class="title title--hq">Местный штаб</h1>
             <BannerHQ
                 v-if="showHQ"
@@ -56,12 +55,12 @@
     </div>
 </template>
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
 const showLocalHQ = ref(true);
 const showHQ = ref(false);
@@ -74,6 +73,8 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const aboutlocalHQ = async () => {
     await HTTP.get(`/locals/${id}/`, {
         headers: {
@@ -83,6 +84,7 @@ const aboutlocalHQ = async () => {
     })
         .then((response) => {
             localHeadquarter.value = response.data;
+            replaceTargetObjects([localHeadquarter.value]);
             console.log(response);
         })
         .catch(function (error) {
@@ -128,9 +130,6 @@ onMounted(() => {
 });
 </script>
 <style scoped lang="scss">
-.local-page {
-    padding-top: 40px;
-}
 
 .title {
     //-----------------------------------общий класс для всех заголовков h1

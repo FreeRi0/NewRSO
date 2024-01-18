@@ -494,7 +494,7 @@
                                         <button
                                             class="photo-add__button-clear"
                                             type="button"
-                                            @click="resetEmblem"
+                                            @click="deleteEmblem"
                                         >
                                             Удалить фото
                                         </button>
@@ -504,7 +504,7 @@
                                         id="upload-logo"
                                         name="squad-logo"
                                         hidden
-                                        @change="selectFile"
+                                        @change="selectEmblem"
                                     />
                                 </div>
                             </div>
@@ -512,7 +512,6 @@
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
-
                         <div class="form__field photo-add">
                             <p class="form__label">Добавьте баннер</p>
                             <div class="photo-add__box photo-add__box--banner">
@@ -622,7 +621,7 @@
                                         <button
                                             class="photo-add__button-clear"
                                             type="reset"
-                                            @click="resetBanner"
+                                            @click="deleteBanner"
                                         >
                                             Удалить фото
                                         </button>
@@ -666,17 +665,15 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Avatar, bannerPhoto } from '@shared/components/imagescomp';
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 
-import { useVuelidate } from '@vuelidate/core';
 import { HTTP } from '@app/http';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 import {
     helpers,
@@ -692,10 +689,10 @@ const emit = defineEmits([
     'update:value',
     'updateMember',
     'changeHeadquarter',
-    'selectFile',
-    'resetEmblem',
+    'selectEmblem',
+    'deleteEmblem',
     'selectBanner',
-    'resetBanner',
+    'deleteBanner',
 ]);
 
 const props = defineProps({
@@ -807,18 +804,18 @@ const changeValue = (event) => {
 const fileEmblem = ref(props.fileEmblem);
 const urlEmblem = ref(null);
 
-const selectFile = (event) => {
+const selectEmblem = (event) => {
     fileEmblem.value = event.target.files[0];
     headquarter.value.emblem = null;
     urlEmblem.value = URL.createObjectURL(fileEmblem.value);
-    emit('selectFile', fileEmblem.value);
+    emit('selectEmblem', fileEmblem.value);
 };
 
-const resetEmblem = () => {
+const deleteEmblem = () => {
     headquarter.value.emblem = null;
     urlEmblem.value = null;
     fileEmblem.value = null;
-    emit('resetEmblem', fileEmblem.value);
+    emit('deleteEmblem', fileEmblem.value);
 };
 
 //--Добавление баннера-----------------------------------------------------------------------------
@@ -832,11 +829,11 @@ const selectBanner = (event) => {
     emit('selectBanner', fileBanner.value);
 };
 
-const resetBanner = () => {
+const deleteBanner = () => {
     headquarter.value.banner = null;
     urlBanner.value = null;
     fileBanner.value = null;
-    emit('resetBanner', fileBanner.value);
+    emit('deleteBanner', fileBanner.value);
 };
 </script>
 

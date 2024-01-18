@@ -7,6 +7,7 @@
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
+                    <template v-slot="{ expanded }">
                         <v-row no-gutters>
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
@@ -24,6 +25,7 @@
                                 Заполните обязательные поля!
                             </p>
                         </v-row>
+                    </template>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
                             <svg
@@ -781,20 +783,16 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted } from 'vue';
-import { Input } from '@shared/components/inputs';
+import { ref, computed, onMounted } from 'vue';
+import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Avatar } from '@shared/components/imagescomp';
-import { bannerPhoto } from '@shared/components/imagescomp';
-import { Select } from '@shared/components/selects';
-import { Dropdown } from '@shared/components/selects';
+import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-import { TextareaAbout } from '@shared/components/inputs';
 
-import { useVuelidate } from '@vuelidate/core';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
+
 import {
     helpers,
     minLength,
@@ -1012,7 +1010,6 @@ const resetEmblem = () => {
 
     emit('resetEmblem', fileEmblem.value);
 };
-
 //--Добавление баннера-----------------------------------------------------------------------------
 const fileBanner = ref(props.fileBanner);
 const urlBanner = ref(null);
@@ -1057,3 +1054,4 @@ const resetBanner = () => {
     }
 }
 </style>
+@shared/components/selects/inputs@shared/components/selects/inputs

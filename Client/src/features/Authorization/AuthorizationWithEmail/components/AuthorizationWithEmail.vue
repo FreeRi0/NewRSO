@@ -22,24 +22,23 @@
                     {{ isError.username }}
                 </p>
                 <!-- <p v-if="isError">{{ isError.username }}</p> -->
+                <!-- <v-text-field
+                    class="password-input"
+                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                    :type="visible ? 'text' : 'password'"
+                    density="compact"
+                    placeholder="Пароль"
+                    variant="outlined"
+                    @click:append-inner="visible = !visible"
+                ></v-text-field> -->
+
                 <Input
-                    :type="show === true ? 'text' : 'password'"
+                    type="password"
                     placeholder="Пароль"
                     name="password"
                     v-model:value="data.password"
-                >
-                </Input>
-
-                <i
-                    class="fa-regular fa-eye show-icon_log"
-                    v-if="show"
-                    @click="show = !show"
-                ></i>
-                <i
-                    class="fas fa-eye-slash hide-icon_log"
-                    v-else
-                    @click="show = !show"
-                ></i>
+                    class="username-password"
+                />
 
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
@@ -82,7 +81,7 @@ const data = ref({
     username: '',
     password: '',
 });
-const show = ref(false);
+const visible = ref(false);
 
 // const user = ref({});
 const isError = ref('');
@@ -173,6 +172,22 @@ const LoginUser = async () => {
     margin-top: 10px;
     text-align: center;
 }
+
+// .password-input {
+//     border: 1px solid #a3a3a3;
+//     border-radius: 10px;
+//     font-size: 16px;
+//     color: #35383F;
+//     font-weight: normal;
+//     font-family: 'Bert-Sans';
+// }
+
+// .password-input::placeholder {
+//     color: #898989;
+//     font-size: 16px;
+//     font-weight: 500;
+//     font-family: 'Bert-Sans';
+// }
 
 .v-card {
     padding: 105px 98px;

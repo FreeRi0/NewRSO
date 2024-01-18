@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-breadcrumbs />
+
 
         <router-view v-slot="{ Component }">
             <keep-alive>
@@ -11,5 +11,5 @@
 </template>
 
 <script setup>
-import { AppBreadcrumbs } from '@shared';
+
 </script>

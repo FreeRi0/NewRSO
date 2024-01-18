@@ -294,6 +294,7 @@ const deleteAvatar = async () => {
             });
         });
 };
+
 </script>
 
 <style lang="scss">
