@@ -35,43 +35,45 @@
         </div>
         <div class='row-cols-2 action-slides'>
             <div class='col settings-container'>
+
+                <form method='post'>
                     <v-expansion-panels class='settings-header' variant="accordion">
                         <v-expansion-panel class='settings-body' title="Тип мероприятия">
-                            <v-expansion-panel-text v-model='actionFormSearch.format'>
-                                <v-checkbox v-model='actionFormSearch.format' label="Онлайн" value="Онлайн"></v-checkbox>
-                                <v-checkbox v-model='actionFormSearch.format' label="Офлайн" value="Офлайн"></v-checkbox>
+                            <v-expansion-panel-text v-model='actionTypeSearch'>
+                                <v-checkbox v-model='actionTypeSearch' label="Онлайн" value="Онлайн"></v-checkbox>
+                                <v-checkbox v-model='actionTypeSearch' label="Офлайн" value="Офлайн"></v-checkbox>
                             </v-expansion-panel-text>
                         </v-expansion-panel>
                         <v-expansion-panel class='settings-body' title="Статус мероприятия">
                             <v-expansion-panel-text>
-                                <v-radio-group v-model='actionFormSearch.status'>
-                                    <v-checkbox v-model='actionFormSearch.status' label="Незавершенные" value='Незавершенные'></v-checkbox>
-                                    <v-checkbox v-model='actionFormSearch.status' label="Завершенные" value='Завершенные'></v-checkbox>
+                                <v-radio-group v-model='statusSearch'>
+                                    <v-checkbox v-model='statusSearch' label="Незавершенные" value='Незавершенные'></v-checkbox>
+                                    <v-checkbox v-model='statusSearch' label="Завершенные" value='Завершенные'></v-checkbox>
                                 </v-radio-group>
                             </v-expansion-panel-text>
                         </v-expansion-panel>
                         <v-expansion-panel class='settings-body' title="Маштаб">
                             <v-expansion-panel-text>
-                                <v-radio-group v-model='actionFormSearch.roads'>
-                                    <v-radio v-model='actionFormSearch.roads' label="Все" value="Все"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Всероссийское" value="Всероссийское"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Окружное" value="Окружное"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Региональное" value="Региональное"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Городское" value="Городское"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Мероприятие ОО" value="Мероприятие ОО"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Отрядное" value="Отрядное"></v-radio>
+                                <v-radio-group v-model='rangeTypeSearch'>
+                                    <v-radio v-model='rangeTypeSearch' label="Все" value="Все"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Всероссийское" value="Всероссийское"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Окружное" value="Окружное"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Региональное" value="Региональное"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Городское" value="Городское"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Мероприятие ОО" value="Мероприятие ОО"></v-radio>
+                                    <v-radio v-model='rangeTypeSearch' label="Отрядное" value="Отрядное"></v-radio>
                                 </v-radio-group>
                             </v-expansion-panel-text>
                         </v-expansion-panel>
                         <v-expansion-panel class='settings-body' title="Направление">
                             <v-expansion-panel-text>
-                                <v-radio-group v-model='actionFormSearch.direction'>
-                                    <v-radio v-model='actionFormSearch.direction' label="Все" value="Все"></v-radio>
-                                    <v-radio v-model='actionFormSearch.direction' label="Добровольческое" value="Добровольческое"></v-radio>
-                                    <v-radio v-model='actionFormSearch.direction' label="Образовательное" value="Образовательное"></v-radio>
-                                    <v-radio v-model='actionFormSearch.direction' label="Патриотическое" value="Патриотическое"></v-radio>
-                                    <v-radio v-model='actionFormSearch.direction' label="Спортивное" value="Спортивное"></v-radio>
-                                    <v-radio v-model='actionFormSearch.direction' label="Творческое" value="Творческое"></v-radio>
+                                <v-radio-group v-model='roadSearch'>
+                                    <v-radio v-model='roadSearch' label="Все" value="Все"></v-radio>
+                                    <v-radio v-model='roadSearch' label="Добровольческое" value="Добровольческое"></v-radio>
+                                    <v-radio v-model='roadSearch' label="Образовательное" value="Образовательное"></v-radio>
+                                    <v-radio v-model='roadSearch' label="Патриотическое" value="Патриотическое"></v-radio>
+                                    <v-radio v-model='roadSearch' label="Спортивное" value="Спортивное"></v-radio>
+                                    <v-radio v-model='roadSearch' label="Творческое" value="Творческое"></v-radio>
                                 </v-radio-group>
                             </v-expansion-panel-text>
                         </v-expansion-panel>
@@ -79,7 +81,8 @@
                     <div class='settings-buttoms'>
                         <Button class='settings-btminv' type='button' @click='ClearSearchForm' >Сбросить</Button>
                         <Button class='settings-btm' type='button' @click='SendSearchForm'>Сохранить</Button>
-                  </div>
+                    </div>
+                </form>
             </div>
             <!--Привет) Страницы мероприятий писал и подключал Modestra -->
             <!--Я в поисках работы, если вам требуется Frontend разработчик, пишите сюда -->
@@ -112,12 +115,6 @@
                         ></Button>
                     </div>
                     <div class='sort-alphabet'>
-                        <sortByEducation
-                              variant="outlined"
-                              v-model="sortBy"
-                              :options="sortOptionss"
-                              class="sort-select"
-                          ></sortByEducation>
                         <Button
                             type='button'
                             class='ascend sort-button'
@@ -150,9 +147,7 @@ import BannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
 import { ref } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
-import { sortByEducation, Select } from '@shared/components/selects';
 import { getListActions } from '@services/ActionService';
-import { computed } from "vue";
 
 let actionsList = ref([]);
 
@@ -167,11 +162,12 @@ getListActions()
 
 
 //Переменные компонента
-const nameSearch = ref('');
+const actionTypeSearch = ref('');
+const statusSearch = ref('');
+const rangeTypeSearch = ref('');
+const roadSearch = ref('');
 
-const actionNewList = computed(() => {
-  
-})
+const nameSearch = ref('')
 
 
 //Сортировка
@@ -183,32 +179,22 @@ const ascending = ref(true);
 function ClearSearchForm() {
     console.log("Форма очищена")
 };
-
-const actionFormSearch = {
-        format: '',
-        direction: '',
-        status: '',
-        roads: '',
-        search: ''
-    }
 function SendSearchForm() {
+
+    const actionFormSearch = {
+        format: actionTypeSearch.value,
+        direction: statusSearch.value,
+        status: rangeTypeSearch.value,
+        roads: roadSearch.value,
+        search: nameSearch.value
+    }
+
     console.log(actionFormSearch);
 };
 //Изменение расположения блоков
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
-
-const sortBy = ref('alphabetically');
-
-const sortOptionss = ref([
-    {
-        value: 'alphabetically',
-        name: 'Алфавиту от А - Я',
-    },
-    { value: 'founding_date', name: 'Дате создания штаба' },
-    { value: 'members_count', name: 'Количеству участников' },
-]);
 
 //Получить полный список мероприятий
 
@@ -217,6 +203,9 @@ const sortOptionss = ref([
 <style lang='scss' scoped>
     //Общий стиль компонента
     .action{
+        &-container{
+
+        }
         &-title{
           height: 116px;
           font-size: 52px;
@@ -237,6 +226,12 @@ const sortOptionss = ref([
           margin-right: 16px;
           margin-bottom: 20px;
         }
+        &-header{
+
+        }
+        &-body{
+
+        }
         &-text{
           align-items: baseline;
         }
@@ -246,9 +241,6 @@ const sortOptionss = ref([
         height: 40px;
         display:flex;
         justify-content: space-around;
-      }
-      &-select{
-        padding-right: 5px;
       }
       &-btm{
         width: 114px;
@@ -275,9 +267,6 @@ const sortOptionss = ref([
         display: flex;
         justify-content: space-between;
       }
-      &-select{
-        margin-right: 8px;
-      }
       &-types{
         height: 50px;
       }
@@ -289,7 +278,7 @@ const sortOptionss = ref([
         height: 25px;
       }
       &-alphabet {
-        width: 275px;
+        width: 100%;
         display: flex;
         justify-content: flex-end;
       }

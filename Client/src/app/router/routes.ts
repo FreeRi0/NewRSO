@@ -386,42 +386,45 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/actionSquads',
                 name: 'actionSquads',
-                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
-            },
-            {
-                path: '/actionSquads/:id',
-                name: 'Action',
-                component: () => import('@pages/Event/components/Event.vue'),
-            },
-            {
-                path: "/createAction",
-                name: "createAction",
-                component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
-            },
-            {
-                path: "/actionSquads/:id/EditAction",
-                name: "editAction",
-                component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
-            },
-            {
-                path: '/EditLSO',
-                name: 'EditLSO',
-                component: () =>
-                    import(
-                        '@pages/EditingDetachment/components/EditingDetachment.vue'
-                    ),
-                meta: {
-                    requiresAuth: true,
-                    label: 'ЛСО',
-                },
-            },
-            {
-                path: '/AllHeadquarters',
-                name: 'allheadquarters',
+
                 component: () =>
                     import(
                         '@pages/actionSquadsPade/components/actionSquadsPage.vue'
                     ),
+            },
+            {
+                path: '/actionSquads/:id',
+                name: 'Action',
+                component: () =>
+                    import('@pages/ActionPage/components/ActionPage.vue'),
+            },
+            {
+                path: '/createAction',
+                name: 'createAction',
+                component: () =>
+                    import(
+                        '@pages/CreationActionsPage/components/CreationActionsPage.vue'
+                    ),
+            },
+            {
+                path: '/EditAction',
+                name: 'editAction',
+                component: () =>
+                    import(
+                        '@pages/EditActionPage/components/EditActionPage.vue'
+                    ),
+            },
+            {
+                path: '/AllParticipants/:id',
+                name: 'allparticipants',
+                component: () =>
+                    import(
+                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                    ),
+                meta: {
+                    requiresAuth: true,
+                    label: 'Участники отряда',
+                },
             },
             {
                 path: '/AllParticipants/:id',
