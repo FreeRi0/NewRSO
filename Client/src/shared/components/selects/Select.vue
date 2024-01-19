@@ -8,6 +8,7 @@
         v-bind="$attrs"
         item-title="name"
         item-value="id"
+        :item-raw-name="item.raw.name"
     >
         <template #selection="{ item }">
             <span>{{ item.raw.name }}</span>
@@ -32,6 +33,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { HTTP } from '@app/http';
+import { onBeforeRouteUpdate } from 'vue-router';
 
 defineOptions({
     inheritAttrs: false,
@@ -63,6 +65,10 @@ const props = defineProps({
         default: '',
     },
     address: {
+        type: String,
+        default: '',
+    },
+    itemRawName: {
         type: String,
         default: '',
     },

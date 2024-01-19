@@ -73,7 +73,7 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <Select
-                        clearable
+                            clearable
                             variant="outlined"
                             name="select_district"
                             id="select-district"
@@ -249,6 +249,8 @@ const sortedHeadquarters = computed(() => {
 
     return tempHeadquartes;
 });
+///////////////////////////////////////////////////////
+// localStorage.getItem('sortHQ');
 </script>
 <style lang="scss">
 .headquarters {

@@ -51,6 +51,7 @@
             <h3>Штабы и отряды регионального штаба</h3>
             <div class="headquarters_squads__container">
                 <div
+                    :key="index"
                     class="card"
                     v-for="(HQandSquad, index) in HQandSquads"
                     :class="{
@@ -58,7 +59,9 @@
                         'align-right': index % 2 !== 0,
                     }"
                 >
-                    <a v-bind:href="HQandSquad.link"
+                    <a
+                        v-bind:href="HQandSquad.link"
+                        @click="saveSortHQ(regionalHeadquarter.name)"
                         ><p>{{ HQandSquad.name }}</p></a
                     >
                 </div>
@@ -180,6 +183,13 @@ const HQandSquads = ref([
         link: '/AllSquads',
     },
 ]);
+
+function saveSortHQ(value) {
+    localStorage.setItem('sortHQ', value);
+}
+
+// let sortHQ = localStorage.getItem('sortHQ');
+// console.log(sortHQ);
 </script>
 <style scoped lang="scss">
 .title {
