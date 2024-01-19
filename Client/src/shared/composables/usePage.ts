@@ -1,6 +1,6 @@
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
-import { onActivated, onMounted } from 'vue';
+import { onActivated, onMounted, ref } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useBreadcrumbsStore, usePageStore } from '..';
 import { storeToRefs } from 'pinia';
@@ -32,20 +32,36 @@ export default function usePage(
 ) {
     const { targetObjects, notUsedHooks, isHidden } = params;
 
+    const cache = ref<Record<string, Record<string, unknown>[]>>({});
+
     /* STORES */
     const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
     const { excludeRoutes } = storeToRefs(useBreadcrumbsStore());
     const pageStore = usePageStore();
     /* STORES */
 
+    if (targetObjects?.length) {
+        cache.value[pageStore.currentPage.name as string] = targetObjects;
+    }
+
     /* METHODS */
     const replaceTargetObjects = (targetObjects: Record<string, unknown>[]) => {
         pageStore.replaceTargetObjects(targetObjects);
+        cache.value[pageStore.currentPage.name as string] = targetObjects;
     };
 
     function handleReplace() {
-        if (!targetObjects.length) return;
-        pageStore.replaceTargetObjects(targetObjects);
+        if (
+            !targetObjects.length &&
+            !cache.value[pageStore.currentPage.name as string]?.length
+        )
+            return;
+
+        pageStore.replaceTargetObjects(
+            targetObjects.length
+                ? targetObjects
+                : cache.value[pageStore.currentPage.name as string],
+        );
     }
 
     function addTargetObject(targetObject: Record<string, unknown>) {
