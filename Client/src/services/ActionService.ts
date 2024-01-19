@@ -18,6 +18,14 @@ export function createAction(data: object){
         }
     })
 }
+export function getAction(id: number){
+    return HTTP.get(`/events/${id}`, {
+        headers:{
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        }
+    })
+}
 //Отправка и изменение запросов
 export function createQuestion(id: number, data: object){
     return HTTP.post(`/events/${id}/answers`, data, {

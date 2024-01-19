@@ -2,7 +2,7 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--lso">
-            Всероссийский конкурс фотографий среди студенческих отрядов
+            {{ event.name }}
         </h1>
         <div class="banner_wrap">
             <div>
@@ -50,11 +50,7 @@
             студенческих отрядов!
         </p>
         <p class="text event_type_wrap">
-            Добро пожаловать на захватывающее мероприятие «В объективе РСО»! Это
-            уникальный фотографический квест, специально созданный для членов
-            Региональной Студенческой Организации (РСО), с целью познакомить
-            участников с искусством фотографии и развить их креативные навыки
-            через объектив фотоаппаратов.
+            {{ event.description }}
         </p>
         <!-- Доработать grid, при уменьшении список не сдвигается, если много текста, то не переносится на новую строчку -->
         <v-list class="item_wrap">
@@ -75,13 +71,12 @@
         <h2 class="title title--subtitle">Организаторы</h2>
 
         <div class="card_wrap">
-            <v-card v-for="card in cards" :key="card" class="event_card_wrap">
-                <v-img width="120" :src="card.avatar"></v-img>
+            <v-card v-for="organizator in organizators" :key="card" class="event_card_wrap">
+                <v-img width="120"></v-img>
                 <div class="text text--organizer">
-                    {{ card.name }}
+                    {{ organizator.name }}
                 </div>
                 <div class="text text--status">
-                    {{ card.status }}
                 </div>
             </v-card>
         </div>
@@ -289,12 +284,48 @@ import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { Button } from '@shared/components/buttons';
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
+import { getAction, getOrganizator } from '@services/ActionService';
 
 const route = useRoute();
 const router = useRouter();
 
+const event = ref({
+    id: String,
+    author: String,
+    format: String,
+    direction: String,
+    status: String,
+    scale: String,
+    created_at: String,
+    name: String,
+    banner: String,
+    conference_link: String,
+    address: String,
+    description: String,
+    application_type: String,
+    available_structural_units: String,
+    participants_number: String,
+    time_data: {
+        start_date: String,
+        start_time: String
+    }
+})
+
+const organizators = ref([])
+getAction(route.params.id)
+    .then((resp)=>{
+        event.value = resp.data;
+        console.log("Форма мероприятия", event.value)
+        getOrganizator(route.params.id)
+        .then((resp)=>{
+            organizators.value = resp.data;
+            console.log("Организаторы", organizators.value)
+        })
+    })
+    .catch((e)=>{
+        console.log(e)
+    })
 function EditAction(){
-    console.log("Test")
     router.push({ name: 'editAction', params: { id: route.params.id } });
 }
 const pages = ref([

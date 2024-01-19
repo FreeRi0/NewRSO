@@ -756,6 +756,8 @@ const maininfo = ref({
     available_structural_units: ''
 })
 
+const organizators = ref([]);
+
 const available_structural_units = ref([
     {name: "Отряды"},
     {name: "Образовательные Отряды"},

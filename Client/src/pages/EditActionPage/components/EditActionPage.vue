@@ -192,15 +192,15 @@
                                 <label class='flex align-items-center' style='display: flex'>
                                     <div class="flex align-items-center">
                                         <input v-model='maininfo.application_type' value='Персональная' type='radio' class='form-radio'/>
-                                        <label class="ml-2">Персональная</label>
+                                        <label class="ml-2 form-label">Персональная</label>
                                     </div>
                                     <div class="flex align-items-center">
                                         <input v-model='maininfo.application_type' value='Групповая' type='radio' class='form-radio'/>
-                                        <label class="ml-2">Групповая</label>
+                                        <label class="ml-2 form-label">Групповая</label>
                                     </div>
                                     <div class="flex align-items-center">
                                         <input v-model='maininfo.application_type' value='Многоэтапная' type='radio' class='form-radio'/>
-                                        <label class="ml-2">Многоэтапная</label>
+                                        <label class="ml-2 form-label">Многоэтапная</label>
                                     </div>
                                 </label>
                             </div>
@@ -727,6 +727,14 @@ const router = useRoute();
 
 const id = router.params.id;
 
+getAction(id)
+    .then((resp)=>{
+        console.log(resp.data)
+    })
+    .catch((e)=>{
+        console.log(e)
+    })
+
 //Переменные для основной формы
 
 const scale_massive = ref([
@@ -936,7 +944,7 @@ function AddQuestion(){
   }
   &-label{
     font-family: Bert Sans;
-    font-size: 16px;
+    font-size: 1.3vw;
     font-style: normal;
     font-weight: 600;
     line-height: 24px;

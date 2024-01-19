@@ -144,6 +144,7 @@ import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { getListActions } from '@services/ActionService';
+import { computed } from "vue";
 
 let actionsList = ref([]);
 
@@ -158,6 +159,10 @@ getListActions()
 
 //Переменные компонента
 const nameSearch = ref('');
+
+const actionNewList = computed(() => {
+  
+})
 
 //Сортировка
 const vertical = ref(true);
