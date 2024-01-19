@@ -1,10 +1,12 @@
 <template>
-    <districtItem
-        v-for="districtHeadquarter in districtHeadquarters"
-        :district-headquarter="districtHeadquarter"
-        :key="districtHeadquarter.id"
-        v-if="districtHeadquarters.length > 0"
-    ></districtItem>
+    <div class="headquarters-wrapper" v-if="districtHeadquarters.length > 0">
+        <districtItem
+            v-for="districtHeadquarter in districtHeadquarters"
+            :district-headquarter="districtHeadquarter"
+            :key="districtHeadquarter.id"
+        ></districtItem>
+    </div>
+
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
@@ -17,16 +19,6 @@ const props = defineProps({
 });
 </script>
 <style lang="scss" scoped>
-.round-img {
-    width: 128px;
-    height: 128px;
-    display: block;
-    margin: 0px auto;
-    @media screen and (max-width: 575px) {
-        width: 100px;
-        height: 100px;
-    }
-}
 .headquarters-wrapper__item {
     margin: 0px auto;
     width: 180px;

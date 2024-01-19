@@ -28,7 +28,10 @@
                         v-if="picked === true"
                         :participants="member"
                     />
-                    <VerifiedList  v-else="picked === false" :verified="isVerified"></VerifiedList>
+                    <VerifiedList
+                        v-else="picked === false"
+                        :verified="isVerified"
+                    ></VerifiedList>
                 </div>
                 <div>
                     <router-link
@@ -90,24 +93,7 @@ const getVerified = async () => {
         });
 };
 
-const aboutPosition = async () => {
-    let { id, ...rest } = props.member;
-    await HTTP.get(`/positions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            position.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 onMounted(() => {
-    aboutPosition();
     getVerified();
 });
 </script>
@@ -128,10 +114,19 @@ onMounted(() => {
     background: #fff;
     box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.05);
     margin-bottom: 80px;
+    @media screen and (max-width: 1024px) {
+        padding: 24px 34px 24px 34px
+    }
+    @media screen and (max-width: 768px) {
+        padding: 24px 24px 24px 24px
+    }
+    @media screen and (max-width: 575px) {
+        padding: 24px 7px 24px 7px
+    }
     &-route {
         margin-top: 40px;
         text-align: center;
-        color: #5E5C5C;
+        color: #5e5c5c;
         text-decoration: underline;
     }
 
@@ -140,13 +135,13 @@ onMounted(() => {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
         @media screen and (max-width: 1024px) {
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        }
-        @media screen and (max-width: 768px) {
             grid-template-columns: 1fr 1fr 1fr 1fr;
         }
-        @media screen and (max-width: 575px) {
+        @media screen and (max-width: 768px) {
             grid-template-columns: 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 575px) {
+            grid-template-columns: 1fr 1fr;
         }
     }
 }

@@ -66,14 +66,13 @@
     </div>
 </template>
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
-// banner condition
 const showLocalHQ = ref(true);
 const showHQ = ref(false);
 const showDistrictHQ = ref(false);
@@ -85,6 +84,8 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const aboutlocalHQ = async () => {
     await HTTP.get(`/locals/${id}/`, {
         headers: {
@@ -94,22 +95,7 @@ const aboutlocalHQ = async () => {
     })
         .then((response) => {
             localHeadquarter.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
+            replaceTargetObjects([localHeadquarter.value]);
             console.log(response);
         })
         .catch(function (error) {
@@ -137,7 +123,6 @@ onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutlocalHQ();
         aboutMembers();
-        aboutEduc();
     }
 });
 watch(
@@ -147,15 +132,14 @@ watch(
         id = newId;
         aboutlocalHQ();
         aboutMembers();
-        aboutEduc();
     },
 );
 
 onMounted(() => {
     aboutlocalHQ();
     aboutMembers();
-    aboutEduc();
 });
+
 
 const pages = [
     { pageTitle: 'Структура', href: '#' },
@@ -173,8 +157,10 @@ const HQandSquads = ref([
         link: '/AllSquads',
     },
 ]);
+
 </script>
 <style scoped lang="scss">
+
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;

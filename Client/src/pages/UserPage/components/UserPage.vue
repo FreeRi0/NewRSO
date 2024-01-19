@@ -8,7 +8,6 @@
             </h2>
             <BannerComp
                 :user="user"
-
                 :education="education"
                 :user_region="region"
                 :edited="false"
@@ -33,28 +32,28 @@
             </div>
 
             <div class="mt-14" v-if="user.is_verified">{{ user.bio }}</div>
-            <div class="mt-8 d-flex">
-            <userPhoto
-                class="photo-item"
-                :photo="user?.media?.photo1"
-                :add="false"
-            ></userPhoto>
-            <userPhoto2
-                class="photo-item"
-                :photo="user?.media?.photo2"
-                :add="false"
-            ></userPhoto2>
-            <userPhoto3
-                class="photo-item"
-                :photo="user?.media?.photo3"
-                :add="false"
-            ></userPhoto3>
-            <userPhoto4
-                class="photo-item"
-                :photo="user?.media?.photo4"
-                :add="false"
-            ></userPhoto4>
-        </div>
+            <div class="mt-8 photoWrapper">
+                <userPhoto
+                    class="photo-item"
+                    :photo="user?.media?.photo1"
+                    :add="false"
+                ></userPhoto>
+                <userPhoto2
+                    class="photo-item"
+                    :photo="user?.media?.photo2"
+                    :add="false"
+                ></userPhoto2>
+                <userPhoto3
+                    class="photo-item"
+                    :photo="user?.media?.photo3"
+                    :add="false"
+                ></userPhoto3>
+                <userPhoto4
+                    class="photo-item"
+                    :photo="user?.media?.photo4"
+                    :add="false"
+                ></userPhoto4>
+            </div>
         </div>
     </div>
 </template>
@@ -62,7 +61,12 @@
 import { Button } from '@shared/components/buttons';
 import { BannerComp } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
-import { userPhoto, userPhoto2, userPhoto3, userPhoto4 } from '@shared/components/imagescomp';
+import {
+    userPhoto,
+    userPhoto2,
+    userPhoto3,
+    userPhoto4,
+} from '@shared/components/imagescomp';
 
 import { ref, computed, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
@@ -79,11 +83,6 @@ const education = ref({});
 const region = ref({});
 const route = useRoute();
 let id = route.params.id;
-
-const props = defineProps({
-    currentUsser: Boolean,
-});
-
 
 const getUser = async () => {
     await HTTP.get(`/rsousers/${id}/`, {
@@ -117,22 +116,6 @@ const getMedia = async () => {
         });
 };
 
-const getCurrentUser = async () => {
-    await HTTP.get('/rsousers/me/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            currentUser.value = response.data;
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log('failed ' + error);
-        });
-};
-
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         getUser();
@@ -149,41 +132,67 @@ watch(
 );
 
 onMounted(() => {
-
-        getCurrentUser();
-
-        getUser();
-
+    getUser();
 });
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
     padding: 60px 0px 80px 0px;
 }
+
+.photoWrapper {
+    display: flex;
+    @media screen and (max-width: 768px) {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
 .user-verify {
     margin-top: 60px;
     margin-bottom: 40px;
     &__title {
         font-size: 32px;
+        color: #35383f;
         font-weight: 600;
+        @media screen and (max-width: 575px) {
+            font-size: 28px;
+        }
     }
     &__desc {
         font-size: 18px;
+        color: #35383f;
         font-weight: 40;
         margin-top: 40px;
-        width: 835px;
+        max-width: 835px;
         margin-bottom: 40px;
+        @media screen and (max-width: 768px) {
+            max-width: 620px;
+        }
+        @media screen and (max-width: 575px) {
+            width: 100%;
+        }
     }
 }
-
 
 .photo-item {
     width: 260px;
     margin-right: 20px;
+    @media screen and (max-width: 768px) {
+        margin-bottom: 16px;
+    }
+    @media screen and (max-width: 575px) {
+        height: 206px;
+        width: 156px;
+        margin-right: 16px;
+    }
 }
 .btn {
     margin: 0px;
     padding: 12px 62px;
     height: 52px;
+    @media screen and (max-width: 575px) {
+        margin: 0px auto;
+        width: 100%;
+    }
 }
 </style>

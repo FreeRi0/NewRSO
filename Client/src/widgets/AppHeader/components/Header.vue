@@ -90,8 +90,6 @@
                         <span v-else>Выберите региональное отделение</span>
                     </button>
 
-                    <!-- <p>{{  user?.user_region?.reg_region}}</p> -->
-
                     <div
                         class="header__overlay"
                         @click="show = !show"
@@ -129,8 +127,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <p>id: {{ user.id }}</p> -->
-                <!-- <router-link  :to="{ name: 'userpage', params: { id: user.id } }">Моя страница</router-link> -->
+
                 <div class="nav-user__menu user-menu" v-if="user">
                     <Dropdown
                         :items="userPages"
@@ -147,17 +144,20 @@
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
-// import { Input } from '@shared/components/inputs';
 import { Select } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+const roleStore = useRoleStore();
+roleStore.getRoles();
 
+const roles = storeToRefs(roleStore);
 const router = useRouter();
 const user = ref({});
 const route = useRoute();
 let id = route.params.id;
-// let { id, ...rest } = user;
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
@@ -165,7 +165,7 @@ const pages = ref([
     { title: 'Местные штабы', link: '/LocalHeadquarters' },
     { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
     { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '/CentralHQ' },
+    { title: 'Центральный штаб', link: '/CentralHQ/1' },
 ]);
 
 const userPages = computed(() => [
@@ -176,27 +176,27 @@ const userPages = computed(() => [
             id: user.value.id,
         },
     },
-    {
-        title: 'Мой отряд',
-        name: 'lso',
-        params: {
-            id: user.value.detachment_id,
-        },
-    },
-    {
-        title: 'Штаб СО ОО',
-        name: 'HQ',
-        params: {
-            id: user.value.educational_headquarter_id,
-        },
-    },
-    {
-        title: 'Местный штаб',
-        name: 'LocalHQ',
-        params: {
-            id: user.value.local_headquarter_id,
-        },
-    },
+    // {
+    //     title: 'Мой отряд',
+    //     name: 'lso',
+    //     params: {
+    //         id: user.value.detachment_id,
+    //     },
+    // },
+    // {
+    //     title: 'Штаб СО ОО',
+    //     name: 'HQ',
+    //     params: {
+    //         id: user.value.educational_headquarter_id,
+    //     },
+    // },
+    // {
+    //     title: 'Местный штаб',
+    //     name: 'LocalHQ',
+    //     params: {
+    //         id: user.value.local_headquarter_id,
+    //     },
+    // },
     // {
     //     title: 'Региональный штаб',
     //     name: 'RegionalHQ',
@@ -204,17 +204,17 @@ const userPages = computed(() => [
     //         id: user.value.regional_headquarter_id,
     //     },
     // },
-    {
-        title: 'Окружной штаб',
-        name: 'DistrictHQ',
-        params: {
-            id: user.value.district_headquarter_id,
-        },
-    },
-    // { title: 'Центральный штаб',  name: 'CentralHQ',
+    // {
+    //     title: 'Окружной штаб',
+    //     name: 'DistrictHQ',
     //     params: {
-    //         id: user.value.central_headquarter_id,
-    //     }, },
+    //         id: user.value.district_headquarter_id,
+    //     },
+    // },
+    { title: 'Центральный штаб',  name: 'CentralHQ',
+        params: {
+            id: user.value.central_headquarter_id,
+        }, },
     { title: 'Активные заявки', name: 'active' },
     // { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', name: 'contributorPay' },
@@ -337,6 +337,7 @@ onMounted(() => {
     color: #35383f;
     position: relative;
     border-bottom: 1px solid #d9d9d9;
+    // margin-bottom: 60px;
 
     @media (max-width: 1024px) {
         padding: 0;

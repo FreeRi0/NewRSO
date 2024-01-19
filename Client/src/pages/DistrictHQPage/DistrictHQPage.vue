@@ -66,14 +66,13 @@
     </div>
 </template>
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
-// banner condition
 const showDistrictHQ = ref(true);
 const showLocalHQ = ref(false);
 const showHQ = ref(false);
@@ -85,6 +84,8 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const aboutDistrictHQ = async () => {
     await HTTP.get(`/districts/${id}/`, {
         headers: {
@@ -94,23 +95,8 @@ const aboutDistrictHQ = async () => {
     })
         .then((response) => {
             districtHeadquarter.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
+            replaceTargetObjects([districtHeadquarter.value]);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -126,7 +112,7 @@ const aboutMembers = async () => {
     })
         .then((response) => {
             member.value = response.data;
-            console.log(response);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -137,7 +123,6 @@ onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutDistrictHQ();
         aboutMembers();
-        aboutEduc();
     }
 });
 watch(
@@ -147,14 +132,12 @@ watch(
         id = newId;
         aboutDistrictHQ();
         aboutMembers();
-        aboutEduc();
     },
 );
 
 onMounted(() => {
     aboutDistrictHQ();
     aboutMembers();
-    aboutEduc();
 });
 
 const pages = [
@@ -181,8 +164,10 @@ const HQandSquads = ref([
         link: '/AllSquads',
     },
 ]);
+
 </script>
 <style lang="scss" scoped>
+
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;

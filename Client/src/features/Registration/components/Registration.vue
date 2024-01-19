@@ -1,11 +1,14 @@
 <template>
-    <div class="d-flex justify-end">
-        <v-card class="py-15" max-width="580">
-            <v-card-title class="text-h4 text-center">Регистрация</v-card-title>
+    <div class="wrap">
+        <v-card class="regWrapper">
+            <v-card-title class="text-h4 text-center regTitle"
+                >Регистрация</v-card-title
+            >
             <v-form action="#" method="post" @submit.prevent="RegisterUser">
                 <Select
                     variant="outlined"
                     clearable
+                    class="regSelect"
                     name="select_region"
                     id="select-region"
                     placeholder="Москва"
@@ -85,10 +88,23 @@
                 <p class="error" v-else-if="isError.non_field_errors">
                     Пароли не совпадают
                 </p>
-                <v-checkbox
+                <!-- <v-checkbox
                     v-model="form.personal_data_agreement"
                     label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных."
-                ></v-checkbox>
+                ></v-checkbox> -->
+                <div class="regCheck">
+                    <input
+                        v-model="form.personal_data_agreement"
+                        type="checkbox"
+                    />
+                    <div class="regCheck_text">
+                        Даю согласие на обработку моих персональных данных в
+                        соответствии с законом от 27.07.2006 года № 152-ФЗ «О
+                        персональных данных», на условиях и для целей,
+                        определенных в Согласии на обработку персональных
+                        данных.
+                    </div>
+                </div>
 
                 <Button
                     label="Зарегистрироваться"
@@ -99,7 +115,7 @@
                 >
                 </Button>
 
-                <v-card-text class="text-center">
+                <v-card-text class="text-center goLog">
                     <router-link to="/"
                         >У меня уже есть аккаунт</router-link
                     ></v-card-text
@@ -109,10 +125,52 @@
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .btn {
     margin: 60px auto;
     margin-bottom: 15px;
+}
+
+.regWrapper {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    max-width: 580px;
+    @media screen and (max-width: 768px) {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+    @media screen and (max-width: 575px) {
+        max-width: 328px;
+    }
+}
+
+.regCheck {
+    margin-top: 20px;
+    display: flex;
+    margin-bottom: 28px;
+    input {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #35383f;
+    }
+    &_text {
+        max-width: 354px;
+        font-size: 14px;
+        color: #35383f;
+        font-weight: 500;
+        margin-left: 8px;
+        @media screen and (max-width: 575px) {
+            max-width: 270px;
+        }
+    }
+}
+
+.wrap {
+    display: flex;
+    justify-content: end;
+    @media screen and (max-width: 768px) {
+        justify-content: center;
+    }
 }
 .error {
     color: #db0000;
@@ -126,19 +184,43 @@
 .v-card {
     padding-left: 100px;
     padding-right: 100px;
+    border-radius: 10px;
+    @media screen and (max-width: 575px) {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
 }
-.v-card-title {
+.regTitle {
     padding: 0rem 1rem;
     font-size: 40px;
     font-weight: 600;
     font-family: Akrobat;
+    @media screen and (max-width: 575px) {
+        font-size: 32px;
+    }
 }
 
-a {
-    text-decoration: underline;
-    font-weight: bold;
-    font-size: 18px;
+.regSelect {
+    margin-left: 0px;
+    border: 1px solid #a3a3a3;
+    margin-bottom: 10px;
 }
+
+.v-selection-control {
+    align-items: baseline;
+}
+
+.goLog {
+    a {
+        text-decoration: underline;
+        font-weight: bold;
+        font-size: 18px;
+    }
+}
+
+// a {
+
+// }
 </style>
 
 <script setup>

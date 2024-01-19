@@ -618,14 +618,17 @@ const changePeoples = (CheckedUser, UserId) => {
         participant = participants.value.find((item) => item.id == UserId);
         selectedPeoples.value.push(participant);
     } else {
-        selectedPeoples.value = selectedPeoples.value.filter((item) => item.id !== UserId);
-
+        selectedPeoples.value = selectedPeoples.value.filter(
+            (item) => item.id !== UserId,
+        );
     }
 };
 
-const changeSelected = (changeUser) => {
-    console.log('fff', changeUser);
-    selectedPeoples.value = changeUser;
+const changeSelected = (changeUser, UserId) => {
+    console.log('fff', changeUser, UserId);
+    selectedPeoples.value = selectedPeoples.value.filter(
+        (item) => item.id == UserId,
+    );
 };
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
@@ -835,12 +838,16 @@ p {
     margin-bottom: 8px;
 }
 
-.form__select {
-    border: 1px solid #35383f;
-}
-
 .input-big {
     width: 465px;
+}
+
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 .ascend {

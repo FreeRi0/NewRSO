@@ -54,10 +54,10 @@
                                     />
                                 </a>
                             </div>
-                            <!-- <p>{{ squad.members }}</p> -->
                         </div>
                     </div>
                     <router-link
+                        v-if="comId === squad.commander"
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -65,18 +65,54 @@
                         class="user-data__link"
                         >Редактировать страницу</router-link
                     >
+
+                    <Button
+                        @click="AddApplication()"
+                        label="Подать заяку"
+                        class="AddApplication"
+                    ></Button>
+
+                    <div
+                        v-if="user.user.id === member.id"
+                        class="user-data__link"
+                    >
+                        Вы участник
+                    </div>
+                    <div v-else>
+                        <div class="user-data__link">
+                            Заявка на рассмотрении
+                        </div>
+                        <Button
+                            @click="DeleteApplication()"
+                            label="Удалить заявку"
+                            class="AddApplication"
+                        ></Button>
+                    </div>
                 </div>
+                <p class="error" v-if="isError.non_field_errors">
+                    {{ '' + isError.non_field_errors }}
+                </p>
             </div>
         </div>
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch, inject } from 'vue';
 import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
-
+import { useRoleStore } from '@layouts/store/role';
+import { useUserStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
+import { Button } from '@shared/components/buttons';
+const roleStore = useRoleStore();
+roleStore.getRoles();
+const userStore = useUserStore();
+userStore.getUser();
+const user = storeToRefs(userStore);
+const roles = storeToRefs(roleStore);
+let comId = roles.roles.value.detachment_commander;
+console.log('comId', comId);
 const props = defineProps({
     banner: {
         type: String,
@@ -95,6 +131,107 @@ const props = defineProps({
         type: Object,
     },
 });
+
+const edict = ref({});
+const data = ref({});
+const isError = ref([]);
+const swal = inject('$swal');
+
+const aboutEduc = async () => {
+    let id = props.squad.educational_institution;
+    console.log('squad', props.squad);
+    console.log('id', id);
+    await HTTP.get(`/eduicational_institutions/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            edict.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    aboutEduc();
+});
+
+watch(
+    () => props.squad,
+
+    (newSquad, oldSquad) => {
+        if (Object.keys(props.squad).length === 0) {
+            return;
+        }
+        aboutEduc();
+    },
+);
+
+const AddApplication = async () => {
+    let id = props.squad.id;
+    await HTTP.post(`/detachments/${id}/apply/`, data.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            console.log(response);
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        })
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+};
+
+const DeleteApplication = async () => {
+    let id = props.squad.id;
+    await HTTP.delete(`/detachments/${id}/apply/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            console.log(response);
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        })
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+};
 </script>
 <style lang="scss" scoped>
 .squad-metric {
@@ -113,25 +250,14 @@ const props = defineProps({
         grid-column-end: 5;
         grid-row-start: 3;
         grid-row-end: 5;
+        padding: 20px 0px 16px 300px;
+        @media screen and (max-width: 768px) {
+            padding: 20px 00px 16px 300px;
+        }
+        @media screen and (max-width: 575px) {
+            padding: 116px 14px 16px 14px;
+        }
     }
-}
-
-.squad-data__participant-counter {
-margin-top: 20px;
-}
-
-.ps__title {
-    margin: 40px 0;
-}
-
-.ps__title h2 {
-    /* Desktop/H-1 */
-    font-family: 'Akrobat';
-    font-size: 52px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    color: #35383f;
 }
 
 /* Данные пользователя */
@@ -139,7 +265,6 @@ margin-top: 20px;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    margin: 32px 0 32px 300px;
 }
 
 .squad-data__name {
@@ -163,6 +288,15 @@ margin-top: 20px;
     align-items: center;
     max-width: 700px;
     margin-bottom: 32px;
+}
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 .squad-data__list-wrapper ul {
@@ -196,6 +330,21 @@ margin-top: 20px;
     align-items: center;
 }
 
+.AddApplication {
+    margin: 0px;
+    border-radius: 10px;
+    background: #39bfbf;
+    align-self: end;
+    text-align: center;
+    font-family: 'BertSans';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    color: white;
+    padding: 16px 32px;
+}
+
 .squad-data__introductions p,
 .squad-data__introductions img {
     margin-right: 5px;
@@ -214,19 +363,30 @@ margin-top: 20px;
 }
 .Squad-HQ__list {
     margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: 380px 300px;
+    // display: grid;
+    // grid-template-columns: 360px 250px;
+    display: flex;
+    flex-wrap: wrap;
 }
 .Squad-HQ__list li {
     border-right: none;
     height: 20px;
     margin: 0;
+    @media screen and (max-width: 1024px) {
+        height: auto;
+    }
 }
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
     margin-right: 8px;
     padding-right: 8px;
     display: inline-block;
+    @media screen and (max-width: 1024px) {
+        border-right: none;
+        margin-bottom: 10px;
+        margin-right: 0;
+        padding-right: 0;
+    }
 }
 .Squad-HQ__date {
     display: flex;
@@ -250,17 +410,21 @@ margin-top: 20px;
 .squad-data__contacts-wrapper {
     display: flex;
     justify-content: space-between;
+    @media screen and (max-width: 768px) {
+        flex-wrap: wrap;
+    }
 }
-.squad-data__contacts {
-    display: grid;
-}
+
 .squad-data__contacts {
     display: flex;
     flex-direction: column;
+    @media screen and (max-width: 768px) {
+        margin-bottom: 20px;
+    }
 }
 .squad-data__social-network {
     display: flex;
     justify-content: space-between;
-    margin: 16px 16px 0px 0px;
+    margin-top: 17px;
 }
 </style>
