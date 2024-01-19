@@ -14,11 +14,11 @@
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
                         <li class="user-data__title"><p>Кандидат</p></li>
-                        <li class="user-data__title" v-if="detachment.name">
-                            <p> ССО "{{ detachment.name }}"</p>
+                        <li class="user-data__title" v-if="detachment?.name">
+                            <p> ССО "{{ detachment?.name }}"</p>
                         </li>
-                        <li class="user-data__title" v-if="educationalHeadquarter.name">
-                            <p>Штаб {{ educationalHeadquarter.name  }}</p>
+                        <li class="user-data__title" v-if="educationalHeadquarter?.name">
+                            <p>Штаб {{ educationalHeadquarter?.name  }}</p>
                         </li>
                         <li class="user-data__regional-office">
                             <p v-if="user?.user_region?.reg_region">

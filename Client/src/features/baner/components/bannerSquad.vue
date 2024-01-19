@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="comId == squad.commander"
+                        v-if="comId === squad.commander"
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -65,20 +65,29 @@
                         class="user-data__link"
                         >Редактировать страницу</router-link
                     >
+
                     <Button
                         @click="AddApplication()"
                         label="Подать заяку"
                         class="AddApplication"
-                        v-if="data"
                     ></Button>
 
-                    <Button
-                        @click="DeleteApplication()"
-                        label="Удалить заявку"
-                        class="AddApplication"
-                    ></Button>
-                    <div class="user-data__link">Заявка на рассмотрении</div>
-                    <div v-if="member.user" class="user-data__link">Вы участник</div>
+                    <div
+                        v-if="user.user.id === member.id"
+                        class="user-data__link"
+                    >
+                        Вы участник
+                    </div>
+                    <div v-else>
+                        <div class="user-data__link">
+                            Заявка на рассмотрении
+                        </div>
+                        <Button
+                            @click="DeleteApplication()"
+                            label="Удалить заявку"
+                            class="AddApplication"
+                        ></Button>
+                    </div>
                 </div>
                 <p class="error" v-if="isError.non_field_errors">
                     {{ '' + isError.non_field_errors }}
@@ -93,10 +102,14 @@ import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
+import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { Button } from '@shared/components/buttons';
 const roleStore = useRoleStore();
 roleStore.getRoles();
+const userStore = useUserStore();
+userStore.getUser();
+const user = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
 let comId = roles.roles.value.detachment_commander;
 console.log('comId', comId);

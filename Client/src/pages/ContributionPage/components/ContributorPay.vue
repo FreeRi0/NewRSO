@@ -624,9 +624,11 @@ const changePeoples = (CheckedUser, UserId) => {
     }
 };
 
-const changeSelected = (changeUser) => {
-    console.log('fff', changeUser);
-    selectedPeoples.value = changeUser;
+const changeSelected = (changeUser, UserId) => {
+    console.log('fff', changeUser, UserId);
+    selectedPeoples.value = selectedPeoples.value.filter(
+        (item) => item.id == UserId,
+    );
 };
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
@@ -751,7 +753,7 @@ const sortedParticipants = computed(() => {
     return tempParticipants;
 });
 </script>
-<style lang="scss" >
+<style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -835,8 +837,6 @@ p {
     font-weight: 600;
     margin-bottom: 8px;
 }
-
-
 
 .input-big {
     width: 465px;

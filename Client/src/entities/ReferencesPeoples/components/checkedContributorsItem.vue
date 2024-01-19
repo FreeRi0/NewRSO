@@ -49,7 +49,8 @@
                 type="checkbox"
                 v-model="checked"
                 :value="participant"
-                @change="(event) => updateMembership(participant, event)"
+
+                @change="updateMembership"
             />
         </div>
         <Button
@@ -77,13 +78,19 @@ const props = defineProps({
         type: Array,
         require: true,
     },
+    selectedParticipants: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const emit = defineEmits(['change']);
-const updateMembership = (participant, event) => {
-    console.log('dddddddft', participant, event);
-    emit('change', participant, event);
+const updateMembership = (e) => {
+    console.log('checkeed', checked.value);
+    emit('change',  props.participant.id, checked.value, );
 };
+
+
 
 const checked = ref(true);
 const isError = ref([]);
@@ -92,7 +99,7 @@ const isError = ref([]);
 // const id = route.params.id;
 
 const swal = inject('$swal');
-const selectedPeoples = ref(props.participants);
+const selectedPeoples = ref(props.selectedParticipants);
 
 const participantItem = ref({
     membership_fee: null,
@@ -106,11 +113,19 @@ const filteredPayed = ref([
     { value: 'Неоплачен', name: 'Неоплачен' },
 ]);
 
-watch(selectedPeoples, (newChecked) => {
-    if (!newChecked) return;
-    emit('change', selectedPeoples.value);
-    console.log(newChecked);
-});
+// watch(selectedPeoples, (newChecked) => {
+//     if (!newChecked) return;
+//     emit('change', selectedPeoples.value);
+//     console.log(newChecked);
+// });
+
+watch(
+    () => props.selectedParticipants,
+    (newChecked) => {
+        if (!newChecked) return;
+        selectedPeoples.value = newChecked;
+    },
+);
 
 const ChangeStatus = async () => {
     let { id, ...rest } = props.participant;
@@ -271,3 +286,4 @@ const ChangeStatus = async () => {
 </style>
 
 // v-for="participant in participants" // :key="participant.id"
+   <!-- @change="(event) => updateMembership(participant, event)" -->
