@@ -28,11 +28,11 @@
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
-                        <v-row no-gutters>
-                            <v-col cols="4" class="d-flex justify-start">
-                                Основная информация
-                            </v-col>
-                        </v-row>
+                    <v-row no-gutters>
+                        <v-col cols="4" class="d-flex justify-start">
+                            Основная информация
+                        </v-col>
+                    </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
                             <svg
@@ -2603,8 +2603,11 @@
                     type="submit"
                     label="Отправить данные на верификацию"
                 ></Button>
+
             </v-card-actions>
+
         </v-expansion-panels>
+        <p class="error" v-if="isError.error">{{ "" + isError.error }}</p>
     </form>
 </template>
 <script setup>
@@ -2614,8 +2617,6 @@ import { Input } from '@shared/components/inputs';
 // import { vMaska } from 'maska';
 import { useVuelidate } from '@vuelidate/core';
 import { useRouter } from 'vue-router';
-import { useAppStore } from '@features/store/index';
-import { storeToRefs } from 'pinia';
 import { Select, sortByEducation } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import {
@@ -2630,9 +2631,6 @@ import { HTTP } from '@app/http';
 import axios from 'axios';
 
 const router = useRouter();
-// const appStore = useAppStore();
-// appStore.getUser();
-// const { user } = storeToRefs(appStore);
 const panel = ref();
 const isError = ref('');
 const isLoading = ref(false);
@@ -2734,6 +2732,8 @@ const documents = ref({
     mil_reg_doc_ser_num: '',
     russian_passport: null,
 });
+
+const data = ref({});
 
 const statement = ref(null);
 const consent_personal_data = ref(null);
@@ -3044,18 +3044,37 @@ const updateData = async () => {
         },
     });
 
+    const axiosrequest6 = HTTP.post(
+        '/rsousers/me/apply_for_verification/',
+        data.value,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    );
+
     await axios
-        .all([axiosrequest1, axiosrequest2, axiosrequest3, axiosrequest4])
+        .all([
+            axiosrequest1,
+            axiosrequest2,
+            axiosrequest3,
+            axiosrequest4,
+            axiosrequest6,
+        ])
         .then(
-            axios.spread(function (res1, res2, res3, res4) {
+            axios.spread(function (res1, res2, res3, res4, res6) {
                 user.value = res1.data;
                 regionData.value = res2.data;
                 documents.value = res3.data;
                 education.value = res4.data;
+                data.vaalue = res6.data;
                 console.log(res1.data);
                 console.log(res2.data);
                 console.log(res3.data);
                 console.log(res4.data);
+                console.log(res6.data);
                 isLoading.value = false;
 
                 swal.fire({

@@ -151,39 +151,70 @@ const ChangeStatus = async () => {
     console.log('squad', id);
     let application_pk = props.detachment.id;
     console.log('application', application_pk);
-    HTTP.post(
-        `/detachments/${id}/applications/${application_pk}/accept/`,
-        user.value,
-        {
+    if (user.value.applications === 'Одобрить') {
+        HTTP.post(`/detachments/${id}/applications/${application_pk}/accept/`, user.value, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
-        },
-    )
-        .then((response) => {
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            // participant.value = response.data; //emit
-            console.log(response.data);
         })
+            .then((response) => {
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                // participant.value = response.data; //emit
+                console.log(response.data);
+            })
 
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
+            .catch(({ response }) => {
+                isError.value = response.data;
+                console.error('There was an error!', response.data);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'error',
+                    title: 'ошибка',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             });
-        });
+    } else {
+        HTTP.delete(
+            `/detachments/${id}/applications/${application_pk}/accept/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        )
+            .then((response) => {
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'успешно',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                // participant.value = response.data; //emit
+                console.log(response.data);
+            })
+
+            .catch(({ response }) => {
+                isError.value = response.data;
+                console.error('There was an error!', response.data);
+                swal.fire({
+                    position: 'top-center',
+                    icon: 'error',
+                    title: 'ошибка',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            });
+    }
 };
 </script>
 <style lang="scss" scoped>

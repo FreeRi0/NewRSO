@@ -65,22 +65,38 @@
                         class="user-data__link"
                         >Редактировать страницу</router-link
                     >
-                    <div class="user-data__link" v-else>Подать заявку</div>
+                    <Button
+                        @click="AddApplication()"
+                        label="Подать заяку"
+                        class="AddApplication"
+                        v-if="data"
+                    ></Button>
+
+                    <Button
+                        @click="DeleteApplication()"
+                        label="Удалить заявку"
+                        class="AddApplication"
+                    ></Button>
+                    <div class="user-data__link">Заявка на рассмотрении</div>
+                    <div v-if="member.user" class="user-data__link">Вы участник</div>
                 </div>
+                <p class="error" v-if="isError.non_field_errors">
+                    {{ '' + isError.non_field_errors }}
+                </p>
             </div>
         </div>
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, inject } from 'vue';
 import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
+import { Button } from '@shared/components/buttons';
 const roleStore = useRoleStore();
 roleStore.getRoles();
-
 const roles = storeToRefs(roleStore);
 let comId = roles.roles.value.detachment_commander;
 console.log('comId', comId);
@@ -104,6 +120,10 @@ const props = defineProps({
 });
 
 const edict = ref({});
+const data = ref({});
+const isError = ref([]);
+const swal = inject('$swal');
+
 const aboutEduc = async () => {
     let id = props.squad.educational_institution;
     console.log('squad', props.squad);
@@ -137,6 +157,68 @@ watch(
         aboutEduc();
     },
 );
+
+const AddApplication = async () => {
+    let id = props.squad.id;
+    await HTTP.post(`/detachments/${id}/apply/`, data.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            console.log(response);
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        })
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+};
+
+const DeleteApplication = async () => {
+    let id = props.squad.id;
+    await HTTP.delete(`/detachments/${id}/apply/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            console.log(response);
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        })
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+};
 </script>
 <style lang="scss" scoped>
 .squad-metric {
@@ -194,6 +276,15 @@ watch(
     max-width: 700px;
     margin-bottom: 32px;
 }
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+}
 
 .squad-data__list-wrapper ul {
     display: flex;
@@ -224,6 +315,21 @@ watch(
 .squad-data__introductions {
     display: flex;
     align-items: center;
+}
+
+.AddApplication {
+    margin: 0px;
+    border-radius: 10px;
+    background: #39bfbf;
+    align-self: end;
+    text-align: center;
+    font-family: 'BertSans';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    color: white;
+    padding: 16px 32px;
 }
 
 .squad-data__introductions p,
