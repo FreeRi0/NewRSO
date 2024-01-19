@@ -155,10 +155,7 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import {
-    HeadquartersList,
-    horizontalHeadquarters,
-} from '@features/Headquarters/components';
+import { HeadquartersList, horizontalHeadquarters } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';

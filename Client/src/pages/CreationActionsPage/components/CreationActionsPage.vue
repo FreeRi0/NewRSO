@@ -1,9 +1,6 @@
 <template>
     <div class='container action'>
         <div class='action-title'>Создание мероприятия</div>
-
-        <form method='post' enctype='multipart/form-data' @submit.prevent='SubmitEvent'>
-
         <div class='col-auto form-container'>
             <v-expansion-panels variant='accordion'>
                 <v-expansion-panel>
@@ -76,24 +73,22 @@
                                 <label class='form-label'>Выберете формат мероприятия</label>
                                 <div class='flex align-items-center' style='display: flex'>
                                     <div class="flex align-items-center">
-                                        <input v-model='format' type='radio' value='offline' class='form-radio'/>
+                                        <input v-model='maininfo.format' type='radio' value='Оффлайн' class='form-radio'/>
                                         <label class="ml-2 form-label">Оффлайн</label>
                                     </div>
                                     <div class="flex align-items-center">
-                                        <input v-model='format' type='radio' value='online' class='form-radio'/>
+                                        <input v-model='maininfo.format' type='radio' value='Онлайн' class='form-radio'/>
                                         <label class="ml-2 form-label">Онлайн</label>
                                     </div>
                                 </div>
                             <div class='form-col-100'>
                                 <div class="form__field">
-                                    <label class='form-label'>Выберите формат мероприятия<sup class="valid-red">*</sup></label>
-                                    <Dropdown
-                                        :options='massive'
-                                        optionlabel='name'
+                                    <label class='form-label'>Выберите маcштаб мероприятия<sup class="valid-red">*</sup></label>
+                                    <sortByEducation
+                                        :options='scale_massive'
                                         placeholder='Например, ЛСО'
-                                        v-model:value='selectedMassive'
-                                        class='invents-block invents-select'>
-                                    </Dropdown>
+                                        v-model='maininfo.scale'>
+                                    </sortByEducation>
                                 </div>
                             </div>
                             </div>
@@ -102,131 +97,127 @@
                             <div class='form-col'>
                                 <div class="form__field">
                                     <label class='form-label' for="name-hq">Название мероприятия<sup class="valid-red">*</sup></label>
-                                    <input
+                                    <InputText
                                         id="name-hq"
-                                        v-model='name'
+                                        v-model='maininfo.name'
                                         class="form__input form-input-container"
                                         placeholder="Название мероприятия"
 
                                         name="name_hq"
                                         :maxlength="100"
                                     />
-                                    <div class="form__counter"></div>
+                                    <div class="form__counter">{{ maininfo.name.length }}/100</div>
                                 </div>
                                 <div class="form__field">
-
-                                    <label for="telegram-owner-hq">Ссылка на конференцию</label>
-                                    <Input
+                                    <label class="form-label" for="telegram-owner-hq">Ссылка на конференцию</label>
+                                    <InputText
                                         id="telegram-owner-hq"
-                                        v-model='link'
+                                        v-model='maininfo.conference_link'
                                         class="form__input form-input-container"
                                         placeholder="https://discord.gg/s44UfkVJ"
 
                                         name="telegram-owner-hq"
-                                        :maxlength="100"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-
-                                    <label>Добавить баннер</label>
-                                    <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @uploader="banner"
-                                            chooseLabel="Выбрать файл"
-                                        />
-                                    </div>
+                                    <label class="form-label">Добавить баннер</label>
+                                    <FileUpload 
+                                        name="demo[]" 
+                                        accept=".pdf, .jpeg, .png" 
+                                        :maxFileSize="7000000"
+                                        v-model="maininfo.banner"
+                                    >
+                                        <template #header="{ chooseCallback }">
+                                            <button @click="chooseCallback()" class="upload">
+                                                <div class="upload-load">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="32"
+                                                        height="32"
+                                                        viewBox="0 0 32 32"
+                                                        fill="none"
+                                                    ></svg>
+                                                </div>
+                                            </button>
+                                            <div class="form__counter">Рекомендуемый размер файла 1024х768</div>
+                                        </template>
+                                    </FileUpload>
                                 </div>
                             </div>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="address-hq">Адрес проведения (Оффлайн)<sup class="valid-red">*</sup></label>
-                                    <Input
+                                    <label class="form-label" for="address-hq">Адрес проведения (Оффлайн)<sup class="valid-red">*</sup></label>
+                                    <InputText
                                         id="address-hq"
-                                        v-model='address'
+                                        v-model='maininfo.address'
                                         class="form__input form-input-container"
                                         placeholder="Например, Москва, Гагарина 40"
                                         name="address_hq"
 
                                         :maxlength="100"
                                     />
-                                    <div class="form__counter"></div>
+                                    <div class="form__counter">{{ maininfo.address.length }}/100</div>
                                 </div>
 
                                 <div class="form__field">
-                                    <label for="group-hq">Количество участников</label>
-                                    <Input
-                                        v-model='groupReq'
+                                    <label class="form-label" for="group-hq">Количество участников</label>
+                                    <InputText
+                                        v-model='maininfo.participants_number'
                                         id="group-hq"
                                         type='number'
                                         class="form__input form-input-container"
                                         placeholder="Например, 100"
                                         name="group-hq"
-                                        :maxlength="100"
                                     />
                                 </div>
                                 <div class="form__field">
-                                    <label>О мероприятии</label>
-                                    <v-textarea v-model='description' label="Мероприятие"></v-textarea>
+                                    <label class="form-label">О мероприятии</label>
+                                    <textarea class="form__textarea" v-model="maininfo.description" />
                                 </div>
                             </div>
                         </div>
                         <div class='form-container'>
                             <div class='form-col-100'>
                                 <div class="form__field">
-                                    <label for="road-hq">Добавьте направление<sup class="valid-red">*</sup></label>
-                                    <Input
+                                    <label class="form-label" for="road-hq">Добавьте направление<sup class="valid-red">*</sup></label>
+                                    <sortByEducation
                                         id="road-hq"
-                                        v-model='road'
-                                        class="form__input form-input-container"
-                                        placeholder="Например, ССО"
-                                        name="road_hq"
-
-                                        :maxlength="100"
-                                    />
-                                    <div class="form__counter"></div>
+                                        :options='direction_massive'
+                                        optionLabel='name'
+                                        placeholder='Например, ЛСО'
+                                        v-model='maininfo.direction'
+                                    ></sortByEducation>
                                 </div>
 
                             </div>
                         </div>
                         <div class='form-container'>
                             <div class='form-col'>
-                                <label>Выберите вид принимаемых к подаче заявок на мероприятие</label>
+                                <label class="form-label">Выберите вид принимаемых к подаче на мероприятие заявок</label>
                                 <label class='flex align-items-center' style='display: flex'>
                                     <div class="flex align-items-center">
-                                        <input v-model='type' value='personal' type='radio' class='form-radio'/>
-                                        <label class="ml-2">Персональная</label>
+                                        <input v-model='maininfo.application_type' value='Персональная' type='radio' class='form-radio'/>
+                                        <label class="ml-2 form-label">Персональная</label>
                                     </div>
                                     <div class="flex align-items-center">
-                                        <input v-model='type'  value='group' type='radio' class='form-radio'/>
-                                        <label class="ml-2">Групповая</label>
+                                        <input v-model='maininfo.application_type' value='Групповая' type='radio' class='form-radio'/>
+                                        <label class="ml-2 form-label">Групповая</label>
                                     </div>
                                     <div class="flex align-items-center">
-                                        <input v-model='type' value='manygroup' type='radio' class='form-radio'/>
-                                        <label class="ml-2">Многоэтапная</label>
+                                        <input v-model='maininfo.application_type' value='Многоэтапная' type='radio' class='form-radio'/>
+                                        <label class="ml-2 form-label">Многоэтапная</label>
                                     </div>
                                 </label>
                             </div>
                             <div class='form-col'>
-                                <label>На какую область расчитано мероприятие</label>
-                                <Dropdown
-                                          optionlabel='name'
-                                          placeholder='Например, ЛСО'
-                                          :options='area'
-                                          v-model='selectedArea'
-                                          class='invents-block invents-select'>
-                                </Dropdown>
-                            </div>
-
+                                <label class="form-label">Какие объекты могут формировать групповые заявки</label>
+                                <sortByEducation
+                                    v-model='area'
+                                    :options='area_massive'
+                                    placeholder='Например, ЛСО'
+                                ></sortByEducation>
+                            </div> 
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -297,11 +288,10 @@
                         <div class='form-container'>
                             <div class='form-col'>
                                 <div class="form__field">
-
-                                    <label for="action-start-hq">Начало мероприятия<sup class="valid-red">*</sup></label>
-                                    <Input
+                                    <label class="form-label" for="action-start-hq">Начало мероприятия<sup class="valid-red">*</sup></label>
+                                    <InputText
                                         id="action-start-hq"
-                                        v-model='timeStart'
+                                        v-model='timeData.timeStart'
                                         class="form__input form-input-container"
                                         placeholder="Например 26.06.2024"
                                         name="action-start-hq"
@@ -309,10 +299,10 @@
                                     />
                                 </div>
                                 <div class="form__field">
-                                    <label for="action-end-hq">Окончание мероприятия</label>
-                                    <Input
+                                    <label class="form-label" for="action-end-hq">Окончание мероприятия</label>
+                                    <InputText
                                         id="action-end-hq"
-                                        v-model='timeEnd'
+                                        v-model='timeData.timeEnd'
                                         class="form__input form-input-container"
                                         placeholder="Например 27.06.2024"
                                         name="action-end-hq"
@@ -321,58 +311,55 @@
 
                                 </div>
                                 <div class="form__field">
-                                    <label for="telegram-squad-hq">Telegram отряда</label>
-                                    <Input
-                                        id="telegram-squad-hq"
+                                    <label class="form-label" for="end-registration-hq">Окончение регистрации</label>
+                                    <InputText
+                                        id="end-registration-hq"
                                         class="form__input form-input-container"
-
-                                        v-model='telegramSquad'
-                                        placeholder="@Invar"
-                                        name="telegram-squad-hq"
+                                        v-model='timeData.timeregistrationEnd'
+                                        placeholder="Например, 15.05.2023"
+                                        name="end-registration-hq"
+                                        type='date'
                                     />
 
                                 </div>
                             </div>
                             <div class='form-col'>
                                 <div class="form__field">
-
-                                    <label for="action-hours-start-hq">Время в часах</label>
-                                    <Input
+                                    <label class="form-label" for="action-hours-start-hq">Время в часах</label>
+                                    <InputText
                                         id="action-hours-start-hq"
                                         class="form__input form-input-container"
-                                        v-model="timehourStart"
+                                        v-model="timeData.timehourStart"
                                         placeholder="Например 7:30"
                                         name="action-hours-start-hq"
-
+                                        type="time"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-
-                                    <label for="action-hours-end-hq">Время в часах</label>
-                                    <Input
+                                    <label class="form-label" for="action-hours-end-hq">Время в часах</label>
+                                    <InputText
                                         id="action-hours-end-hq"
                                         class="form__input form-input-container"
-                                        v-model="timehourEnd"
+                                        v-model="timeData.timehourEnd"
                                         placeholder="Например 18:30"
                                         name="action-hours-end-hq"
-
+                                        type="time"
                                     />
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
                                     <label class='flex align-items-center' style='display: flex'>
                                         <div class="flex align-items-center">
-
-                                            <input v-model='hour' value="1" name='houre1' type='radio' class='form-radio'/>
+                                            <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
                                             <label for="hours1" class="ml-2">За час</label>
                                         </div>
                                         <div class="flex align-items-center">
-                                            <input v-model='hour' value="2" name="hours2" type='radio' class='form-radio'/>
+                                            <input v-model='timeData.hour' value="2" name="hours2" type='radio' class='form-radio'/>
                                             <label for="hours2" class="ml-2">За 2 часа</label>
                                         </div>
                                         <div class="flex align-items-center">
-                                            <input v-model='hour' value="3" name="hours3" type='radio' class='form-radio'/>
+                                            <input v-model='timeData.hour' value="3" name="hours3" type='radio' class='form-radio'/>
                                             <label for="hours3" class="ml-2">За 3 часа</label>
                                         </div>
                                     </label>
@@ -448,37 +435,42 @@
                     <v-expansion-panel-text>
                         <div class='form-container'>
                             <div class='form-col-100'>
-                                Какие личные данные участников вам нужны?
-                                Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.
+                                <label class="form-label">Какие личные данные участников вам нужны?
+                                Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.</label>
                                 <v-container fluid>
                                     <v-checkbox
-
-                                        v-model="passport"
+                                        v-model="documents.passport"
+                                        :binary="true"
                                         label="Паспорт"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="snils"
+                                        v-model="documents.snils"
+                                        :binary="true"
                                         label="СНИЛС"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="inn"
+                                        v-model="documents.inn"
+                                        :binary="true"
                                         label="ИНН"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="work_book"
+                                        v-model="documents.work_book"
+                                        :binary="true"
                                         label="Трудовая книжка"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="military_document"
+                                        v-model="documents.military_document"
+                                        :binary="true"
                                         label="Военный билет или препистное свидетельство"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="consent_personal_data"
+                                        v-model="documents.consent_personal_data"
+                                        :binary="true"
                                         label="Согласие на обработку персональных данных"
 
                                     ></v-checkbox>
                                 </v-container>
-                                Добавьте документы:
+                                <label class='form-label'>Добавьте Документы</label>
                                 <div class='form-col'>
 
                                     <div class="statement-item">
@@ -492,15 +484,13 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectParentPersonal"
                                             chooseLabel="Выбрать файл"
-                                        />
+                                        ></FileUpload>
                                     </div>
                                 </div>
                                 <div class='form-col-100'>
-                                    Расскажите, с какими документами необходимо просто ознакомиться, а какие скачать и заполнить
-                                    <v-textarea></v-textarea>
-
+                                    <label class="form-label">Расскажите, с какими документами необходимо просто ознакомиться, а какие скачать и заполнить</label>
+                                    <textarea class="form__textarea" />
                                 </div>
                             </div>
                         </div>
@@ -573,15 +563,13 @@
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
-                        <div class='form-container'>
+                        <div v-for="organizator in organizators" class='form-container'>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="name-hq">ФИО организатора<sup class="valid-red">*</sup></label>
-                                    <Input
+                                    <label class="form-label" for="name-hq">ФИО организатора<sup class="valid-red">*</sup></label>
+                                    <InputText
                                         id="name-hq"
-
-                                        v-model="organizer"
-
+                                        v-model="organizator.organizer"
                                         class="form__input form-input-container"
                                         placeholder="Фамилия Имя Отчество"
                                         name="name_hq"
@@ -590,12 +578,10 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="telegram-owner-hq">Telegram организатора</label>
-                                    <Input
+                                    <label class="form-label" for="telegram-owner-hq">Telegram организатора</label>
+                                    <InputText
                                         id="telegram-owner-hq"
-
-                                        v-model="telegram"
-
+                                        v-model="organizator.telegram"
                                         class="form__input form-input-container"
                                         placeholder="@modestra"
                                         name="telegram-owner-hq"
@@ -604,12 +590,10 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="telegram-squad-hq">Telegram отряда</label>
-                                    <Input
+                                    <label class="form-label" for="telegram-squad-hq">Telegram отряда</label>
+                                    <InputText
                                         id="telegram-squad-hq"
-
-                                        v-model="telegramSquad"
-
+                                        v-model="organizator.telegramSquad"
                                         class="form__input form-input-container"
                                         placeholder="@Invar"
                                         name="telegram-squad-hq"
@@ -620,12 +604,10 @@
                             </div>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="email-hq">Email организатора<sup class="valid-red">*</sup></label>
-                                    <Input
+                                    <label class="form-label" for="email-hq">Email организатора<sup class="valid-red">*</sup></label>
+                                    <InputText
                                         id="email-hq"
-
-                                        v-model="organizer_email"
-
+                                        v-model="organizator.organizer_email"
                                         class="form__input form-input-container"
                                         placeholder="email@gmail.com"
                                         name="email_hq"
@@ -634,12 +616,10 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label for="organization-hq">Организация</label>
-                                    <Input
+                                    <label class="form-label" for="organization-hq">Организация</label>
+                                    <InputText
                                         id="organization-hq"
-
-                                        v-model="organization"
-
+                                        v-model="organizator.organization"
                                         class="form__input form-input-container"
                                         placeholder="Например КузГТУ"
                                         name="organization-hq"
@@ -647,12 +627,9 @@
                                     />
                                     <div class="form__counter"></div>
                                 </div>
-                                <div class="form__field"></div>
                             </div>
                         </div>
-
-                        <div class='form-add'>+ Добавить организатора</div>
-
+                        <div class='form-add' @click="AddOrganizator">+ Добавить организатора</div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
@@ -719,33 +696,29 @@
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
-                        <div class='form-container'>
+                        <div v-for="answer in answers" class='form-container'>
                             <div class='form-col'>
                                 <div class="form__field">
-                                    <label for="sub-questions-hq">Задайте интересующие вопросы участникам мероприятия</label>
-                                    <Input
+                                    <label class="form-label" for="sub-questions-hq">Задайте интересующие вопросы участникам мероприятия</label>
+                                    <InputText
                                         id="sub-questions-hq"
+                                        v-model="answer.question"
                                         class="form__input form-input-container"
                                         placeholder="Например: Какой у вас размер футболки"
                                         name="name_hq"
                                         :maxlength="100"
                                     />
-
-                                    <div class='form-add' @click='AddQuestion'>+ Добавить вопрос</div>
-
                                 </div>
                             </div>
                         </div>
+                        <div class='form-add' @click='AddQuestion'>+ Добавить вопрос</div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
             </v-expansion-panels>
         </div>
-            <div class='form-col-100'>
-
-                <Button type='submit' label='Сохранить'></Button>
-
-            </div>
-        </form>
+        <div class='form-col-100'>
+            <Button @click="SubmitEvent" label='Сохранить'></Button>
+        </div>
     </div>
 </template>
 
@@ -753,74 +726,107 @@
 
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
-import { createAction } from '@services/ActionService';
+import { createAction, createOrganizator } from '@services/ActionService';
+import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
+import { uploadPhoto } from '@shared/components/imagescomp';
+import FileUpload from 'primevue/fileupload';
 import Dropdown from 'primevue/dropdown';
+import InputText from 'primevue/inputtext';
+import textarea from '@shared/components/inputs/textarea.vue'
 const router = useRoute();
-const datahour = ref("");
 
-//Переменные для формы
+//Переменные для основной формы
 
-const format = ref('')
-const name = ref('')
-const link = ref('')
-const banner = ref('')
-const address = ref('')
-const road = ref('')
-const type = ref('')
-const massive = ref([
-    {name: "Строительное", value: "build"},
-    {name: "Проводники", value: "train"}
+const scale_massive = ref([
+    {name: "Отрядное"},
+    {name:"Образовательное"},
+    {name:"Городское"},
+    {name:"Региональное"},
+    {name:"Окружное"},
+    {name:"Городское"}])
+
+const direction_massive = ref([
+    {name:"Добровольческое"},
+    {name:"Образовательное"},
+    {name:"Патриотическое"},
+    {name:"Региональное"},
+    {name:"Окружное"},
+    {name:"Всероссийское"}])
+
+const maininfo = ref({
+    format: '',
+    direction: '',
+    name: '',
+    scale: '',
+    banner: 'http://example.com',
+    conference_link: '',
+    address: '',
+    description: '',
+    participants_number: Number,
+    application_type: '',
+    available_structural_units: ''
+})
+
+const organizators = ref([]);
+
+const available_structural_units = ref([
+    {name: "Отряды"},
+    {name: "Образовательные Отряды"},
+    {name: "Местные штабы"},
+    {name: "Региональные штабы"},
+    {name: "Окружные штабы"},
+    {name: "Центральные штабы"},
 ])
-const selectedMassive = ref('')
-const area = ref([
-    {name: "ЛСО", value: "LSO"},
-    {name: "Региональный штаб", value: "regional"},
-    {name: "Окружной штаб", value: "area"}
+const area = ref('')
+const area_massive = ref([
+    {name: "ЛСО"},
+    {name: "Региональный штаб"},
+    {name: "Окружной штаб"}
 ])
-const selectedArea = ref('');
-const groupReq = ref(Number);
-const description = ref('');
-const timeStart = ref('');
-const timehourStart = ref('');
-const timeEnd = ref('');
-const timehourEnd = ref('')
-const hour = ref('')
 
-const organizer = ref('');
-const organizer_phone_number = ref('');
-const organizer_email = ref('');
-const organization = ref('');
-const telegram = ref('');
-const telegramSquad = ref('')
-const is_contact_person = ref('')
-const organizator = ref([{
-    organizer: organizer.value,
-    organizer_phone_number: organizer_phone_number.value,
-    organizer_email: organizer_email.value,
-    organization: organization.value,
-    telegram: telegram.value,
-    is_contact_person: is_contact_person.value
+//Переменные даты 
+
+const timeData = ref({
+    timeStart: '',
+    timehourStart: '',
+    timeEnd: '',
+    timehourEnd: '',
+    timeregistrationEnd: '',
+    hour: '',
+})
+
+//Переменные организаторов
+
+const organizators = ref([{
+    organizer: '',
+    organizer_phone_number: '',
+    organizer_email: '',
+    organization: '',
+    telegram: '',
+    is_contact_person: false
 }])
 
-const passport = ref('');
-const snils = ref('')
-const inn = ref()
-const work_book = ref('')
-const military_document = ref('')
-const consent_personal_data = ref('')
-const additional_info = ref('')
+//Форма документов
 const documents = ref({
-    passport: passport.value,
-    snils: snils.value,
-    inn: inn.value,
-    work_book: work_book.value,
-    military_document: military_document.value,
-    consent_personal_data: consent_personal_data.value,
-    additional_info: additional_info.value
+    passport: false,
+    snils: false,
+    inn: false,
+    work_book: false,
+    military_document: false,
+    consent_personal_data: false,
+    additional_info: ''
 })
-//Формы самой страницы
 
+//Ответы на вопросы
+const answers = ref([
+    {
+        question: '',
+        answer: ''
+    }
+])
+//Формы самой страницы
+=======
 const actionForm = ref([{
     format: String,
     direction: String,
@@ -838,13 +844,44 @@ const pages = ref([
     { pageTitle: 'Создание штаба СО ОО', href: '#' },
 ]);
 
+function AddOrganizator(){
+    organizators.value.push({
+        organizer: '',
+        organizer_phone_number: '',
+        organizer_email: '',
+        organization: '',
+        telegram: '',
+        is_contact_person: false
+    });
+}
 function SubmitEvent(){
-    console.log(documents.value, "Документы");
-    console.log(organizator.value, "Организаторы");
+    console.log("Основная информация", maininfo.value)
+    console.log("Время мероприятия", timeData.value)
+    console.log("Организаторы", organizator.value)
+    console.log("Документы", documents.value)
+    console.log("Ответы на вопросы", answers.value)
+
+    createAction(maininfo.value)
+    .then((resp)=>{
+        console.log("Форма передалась успешно", resp.value)
+        createOrganizator(resp.value.id)
+        .then((resp)=>{
+            console.log("Форма организаторов передалась успешно", resp.value)
+        })
+        .catch((e)=>{
+            console.log(e)
+        })
+    })
+    .catch((e)=>{
+        console.log(e)
+    })
 }
 
 function AddQuestion(){
-
+    answers.value.push({
+        question: '',
+        answer: ''
+    });
 }
 
 
@@ -853,9 +890,6 @@ function AddQuestion(){
 <style lang='scss' scoped>
 .action{
     margin-top: 60px;
-    &-container{
-
-    }
     &-title{
       height: 116px;
       font-size: 52px;
@@ -928,18 +962,18 @@ function AddQuestion(){
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 34px;
     margin-top: 3px;
 
     margin-bottom: 3px;
   }
   &-label{
     font-family: Bert Sans;
-    font-size: 16px;
+    font-size: 1.2vw;
     font-style: normal;
     font-weight: 600;
     line-height: 24px;
     margin-top: 5px;
+    margin-bottom: 2px;
   }
   &-add-block:hover{
     cursor: pointer;
@@ -971,4 +1005,20 @@ function AddQuestion(){
   }
 
 }
+.upload{
+    width: 100%;
+    height: 162px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 16px;
+
+    &-load{
+        width: 64px;
+        height: 64px;
+        background-color: #5153b9;
+        border-radius: 50%;
+    }
+  }
 </style>

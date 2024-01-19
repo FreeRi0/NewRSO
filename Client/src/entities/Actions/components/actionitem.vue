@@ -18,10 +18,10 @@
 
 <script setup>
 
-
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 //Параметры модели
 const props = defineProps({
     action:{
@@ -49,7 +49,7 @@ const props = defineProps({
 
 //Функция обработки перехода
 function RouteToAction(){
-    router.push(`/actionSquads/` + props.action.id);
+    router.push({name: "Action", params: {id: props.action.id}}); //Работает
 }
 
 </script>
