@@ -12,15 +12,17 @@ import { ref, watch } from 'vue';
 import { checkedContributorsItem } from '@entities/ReferencesPeoples';
 
 const emit = defineEmits(['change']);
-const changeSelected = (changePeoples) => {
-    emit('change', changePeoples)
-};
-
 const props = defineProps({
     participants: {
         type: Array,
         required: true,
     },
 });
+
+const changeSelected = (changeUser) => {
+    emit('change', changeUser)
+};
+
+
 
 </script>

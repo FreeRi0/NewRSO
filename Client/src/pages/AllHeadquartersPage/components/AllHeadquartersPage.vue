@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="headquarters">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
@@ -34,7 +33,8 @@
             </div>
             <div class="headquarters-sort">
                 <div class="sort-layout">
-                    <Button
+                    <div>
+                        <Button
                         v-if="vertical"
                         type="button"
                         class="dashboard"
@@ -44,7 +44,7 @@
                     >
                     </Button>
                     <Button
-                        v-else="!vertical"
+                        v-else
                         type="button"
                         class="dashboardD"
                         icon="icon"
@@ -52,6 +52,7 @@
                         @click="showVertical"
                     >
                     </Button>
+                    </div>
                     <Button
                         v-if="!vertical"
                         type="button"
@@ -61,7 +62,7 @@
                         @click="showVertical"
                     ></Button>
                     <Button
-                        v-else="vertical"
+                        v-else
                         type="button"
                         class="menuu"
                         icon="icon"
@@ -73,32 +74,38 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <Select
+                            clearable
                             variant="outlined"
                             name="select_district"
                             id="select-district"
                             v-model="selectedSortDistrict"
                             class="filter-district"
                             address="/districts/"
+                            placeholder="Окружные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <Select
+                            clearable
                             variant="outlined"
                             name="select_region"
                             id="select-region"
                             v-model="selectedSortRegion"
                             class="filter-region"
                             address="/regionals/"
+                            placeholder="Региональные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <Select
+                            clearable
                             variant="outlined"
                             name="select_local"
                             id="select-local"
                             v-model="selectedSortLocal"
                             class="filter-local"
                             address="/locals/"
+                            placeholder="Местные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
@@ -120,7 +127,7 @@
                 </div>
             </div>
 
-            <div class="headquarters-wrapper" v-show="vertical">
+            <div  v-show="vertical">
                 <HeadquartersList
                     :headquarters="sortedHeadquarters"
                 ></HeadquartersList>
@@ -151,20 +158,14 @@ import { Button } from '@shared/components/buttons';
 import { HeadquartersList, horizontalHeadquarters } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 // import headquarters from '@entities/HeadquartersData/headquarters';
 
 const headquarters = ref([]);
 
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
-]);
+const headquartersVisible = ref(20);
 
-const headquartersVisible = ref(1);
-
-const step = ref(3);
+const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -271,7 +272,7 @@ const sortedHeadquarters = computed(() => {
 </script>
 <style lang="scss">
 .headquarters {
-    padding: 40px 0px 60px 0px;
+    padding-bottom: 60px;
     &-title {
         margin-bottom: 40px;
         font-size: 52px;
@@ -342,6 +343,14 @@ const sortedHeadquarters = computed(() => {
         font-size: 20px;
         font-family: 'Akrobat';
         color: #1e1e1e;
+    }
+}
+
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }
 

@@ -1,42 +1,43 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--lso">ЛСО</h1>
-        <!-- <BannerComp class="user-metric mt-3">
+        <div class="squad-page">
+            <Breadcrumbs></Breadcrumbs>
+            <h1 class="title title--lso">ЛСО</h1>
+            <BannerSquad
+                :squad="squad"
+                :member="member"
+                :edict="edict"
+            ></BannerSquad>
+            <section class="about-squad">
+                <h3>Об отряде</h3>
+                <p>
+                    {{ squad.about }}
+                </p>
+            </section>
+            <div class="mt-8 d-flex">
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo1"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo2"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo3"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.photo4"
+                ></squadPhotos>
+            </div>
 
-        </BannerComp> -->
-        <BannerSquad
-            :squad="squad"
-            :edict="educt"
-            :member="member"
-        ></BannerSquad>
-        <section class="about-squad">
-            <h3>Об отряде</h3>
-            <p>
-                {{ squad.about }}
-            </p>
-        </section>
-        <div class="mt-8 d-flex">
-            <squadPhotos
-                class="photo-item"
-                :squad-photos="squad.photo1"
-            ></squadPhotos>
-            <squadPhotos
-                class="photo-item"
-                :squad-photos="squad.photo2"
-            ></squadPhotos>
-            <squadPhotos
-                class="photo-item"
-                :squad-photos="squad.photo3"
-            ></squadPhotos>
-            <squadPhotos
-                class="photo-item"
-                :squad-photos="squad.photo4"
-            ></squadPhotos>
+            <SquadParticipants
+                :squad="squad"
+                :member="member"
+            ></SquadParticipants>
         </div>
-
-
-        <SquadParticipants :squad="squad" :member="member"></SquadParticipants>
     </div>
 </template>
 <script setup>
@@ -49,8 +50,8 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 const squad = ref({});
-const member = ref([]);
-const educt = ref({});
+const member = ref({});
+const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 
@@ -70,21 +71,6 @@ const aboutSquad = async () => {
         });
 };
 
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
 const aboutMembers = async () => {
     await HTTP.get(`/detachments/${id}/members/`, {
@@ -102,11 +88,12 @@ const aboutMembers = async () => {
         });
 };
 
+
+
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutSquad();
         aboutMembers();
-        aboutEduc();
     }
 });
 
@@ -117,22 +104,21 @@ watch(
         id = newId;
         aboutSquad();
         aboutMembers();
-        aboutEduc();
+
     },
 );
 
 onMounted(() => {
     aboutSquad();
     aboutMembers();
-    aboutEduc();
 });
 
-const pages = [
-    { pageTitle: 'Личный кабинет', href: '/UserPage' },
-    { pageTitle: `${squad.name}`, href: '#' },
-];
 </script>
 <style scoped lang="scss">
+
+.squad-page {
+   padding-top: 40px;
+}
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;

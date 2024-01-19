@@ -68,6 +68,7 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
                         <div class='form-container'>
+
                             <div class='form-col-100'>
                                 <label class='form-label'>Выберете формат мероприятия</label>
                                 <div class='flex align-items-center' style='display: flex'>
@@ -101,6 +102,7 @@
                                         v-model='maininfo.name'
                                         class="form__input form-input-container"
                                         placeholder="Название мероприятия"
+
                                         name="name_hq"
                                         :maxlength="100"
                                     />
@@ -113,6 +115,7 @@
                                         v-model='maininfo.conference_link'
                                         class="form__input form-input-container"
                                         placeholder="https://discord.gg/s44UfkVJ"
+
                                         name="telegram-owner-hq"
                                     />
                                     <div class="form__counter"></div>
@@ -151,10 +154,12 @@
                                         class="form__input form-input-container"
                                         placeholder="Например, Москва, Гагарина 40"
                                         name="address_hq"
+
                                         :maxlength="100"
                                     />
                                     <div class="form__counter">{{ maininfo.address.length }}/100</div>
                                 </div>
+
                                 <div class="form__field">
                                     <label class="form-label" for="group-hq">Количество участников</label>
                                     <InputText
@@ -184,6 +189,7 @@
                                         v-model='maininfo.direction'
                                     ></sortByEducation>
                                 </div>
+
                             </div>
                         </div>
                         <div class='form-container'>
@@ -302,6 +308,7 @@
                                         name="action-end-hq"
                                         type='date'
                                     />
+
                                 </div>
                                 <div class="form__field">
                                     <label class="form-label" for="end-registration-hq">Окончение регистрации</label>
@@ -313,6 +320,7 @@
                                         name="end-registration-hq"
                                         type='date'
                                     />
+
                                 </div>
                             </div>
                             <div class='form-col'>
@@ -358,6 +366,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
@@ -458,10 +467,12 @@
                                         v-model="documents.consent_personal_data"
                                         :binary="true"
                                         label="Согласие на обработку персональных данных"
+
                                     ></v-checkbox>
                                 </v-container>
                                 <label class='form-label'>Добавьте Документы</label>
                                 <div class='form-col'>
+
                                     <div class="statement-item">
                                         <img
                                             src="@app/assets/icon/addFile.svg"
@@ -712,6 +723,7 @@
 </template>
 
 <script setup>
+
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
 import { createAction, createOrganizator } from '@services/ActionService';
@@ -814,6 +826,18 @@ const answers = ref([
     }
 ])
 //Формы самой страницы
+=======
+const actionForm = ref([{
+    format: String,
+    direction: String,
+    status: String,
+    name: String,
+    scale: String,
+    participants_number: Number,
+    description: String,
+    application_type: String,
+}]);
+
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
     { pageTitle: 'Штабы СО ОО', href: '#' },
@@ -860,6 +884,7 @@ function AddQuestion(){
     });
 }
 
+
 </script>
 
 <style lang='scss' scoped>
@@ -894,6 +919,7 @@ function AddQuestion(){
     margin-bottom: 20px;
     margin-top: 20px;
   }
+
   &-col{
     width:50%;
     padding-left: 15px;
@@ -903,9 +929,11 @@ function AddQuestion(){
     width: 100%;
     height: 40px;
   }
+
   &-radio{
     margin-left: 10px;
   }
+
   &-input-container{
     border: 1px solid black;
     border-radius: 15px;
@@ -930,10 +958,12 @@ function AddQuestion(){
   }
   &-col-100{
     width: 100%;
+
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
     margin-top: 3px;
+
     margin-bottom: 3px;
   }
   &-label{
@@ -947,6 +977,7 @@ function AddQuestion(){
   }
   &-add-block:hover{
     cursor: pointer;
+
   }
   &-btm{
     width: 114px;
@@ -964,6 +995,7 @@ function AddQuestion(){
     justify-content: center;
     align-items: center;
   }
+
   &-add{
     margin-top: 10px;
     text-decoration: underline;
@@ -971,6 +1003,7 @@ function AddQuestion(){
   &-add:hover{
     cursor: pointer;
   }
+
 }
 .upload{
     width: 100%;

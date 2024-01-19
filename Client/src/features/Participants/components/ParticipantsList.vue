@@ -11,32 +11,6 @@
 </template>
 <script setup>
 import { participantItem } from '@entities/Participants';
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { HTTP } from '@app/http';
-const position = ref({});
-const route = useRoute();
-const id = route.params.id;
-
-const aboutPosition = async () => {
-    await HTTP.get(`/positions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            position.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-onMounted(() => {
-    aboutPosition();
-});
 
 const props = defineProps({
     participants: {
@@ -45,6 +19,3 @@ const props = defineProps({
     },
 });
 </script>
-<style lang="scss" scoped>
-
-</style>

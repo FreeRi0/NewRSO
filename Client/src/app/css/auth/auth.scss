@@ -6,6 +6,9 @@
    background-position: center bottom;
    padding-top: 60px;
    padding-bottom: 60px;
+   @media screen and (max-width: 768px) {
+      background-image: url(../assets/authBG.jpg);
+  }
 }
 
 // .LoginForm {
@@ -42,9 +45,8 @@
 
 .v-label {
    font-size: 14px;
-   width: 335px;
-   margin-top: 20px;
    display: flex;
    align-items: flex-end;
+   margin-bottom: 28px;
 }
 

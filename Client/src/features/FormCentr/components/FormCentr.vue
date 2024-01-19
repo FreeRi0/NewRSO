@@ -1,5 +1,9 @@
 <template>
-    <form class="form" @submit.prevent="UploadData">
+    <form
+        class="form"
+        enctype="multipart/form-data"
+        @submit.prevent="changeHeadquarter"
+    >
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
@@ -65,7 +69,7 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="name-hq"
+                            <label for="name-hq" class="form__label"
                                 >Наименование штаба
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -74,7 +78,7 @@
                                 class="form__input"
                                 placeholder="Например, Штаб СО Алтайского государственного медицинского университета (Штаб СО АГМУ)"
                                 name="name_hq"
-                                v-model:value="name"
+                                v-model:value="headquarter.name"
                                 :maxlength="100"
                                 :clearable="true"
                             />
@@ -85,8 +89,9 @@
 
                         <div class="date_central_wrap">
                             <div class="form__field form_width">
-                                <label for="date_students"
-                                    >Дата появления студенческих отрядов в России (год)
+                                <label for="date_students" class="form__label"
+                                    >Дата появления студенческих отрядов в
+                                    России (год)
                                     <sup class="valid-red">*</sup>
                                 </label>
                                 <Input
@@ -95,13 +100,13 @@
                                     id="date_students"
                                     placeholder="1971"
                                     name="date_students"
-                                    v-model:value="date_students"
+                                    v-model:value="headquarter.date_students"
                                     :minlength="4"
                                     :maxlength="4"
                                 />
                             </div>
                             <div class="form__field form_width">
-                                <label for="date_first"
+                                <label for="date_first" class="form__label"
                                     >Дата первого учредительного съезда РСО
                                     <sup class="valid-red">*</sup>
                                 </label>
@@ -110,46 +115,35 @@
                                     type="date"
                                     id="date_first"
                                     name="date_first"
-                                    v-model:value="date_first"
+                                    v-model:value="headquarter.date_first"
                                 />
                             </div>
                         </div>
 
                         <div class="form__field">
-                            <label for="city">Город</label>
+                            <label for="city" class="form__label">Город</label>
                             <Input
                                 class="form__input"
                                 id="city"
                                 placeholder="Например, Барнаул"
                                 name="edit_city"
-                                v-model:value="city"
+                                v-model:value="headquarter.city"
                             />
                         </div>
-
-                        <div class="form__field">
-                            <label for="beast"
-                                >Командир штаба
+                        <div class="form__field form__field--commander">
+                            <label class="form__label" for="beast"
+                                >Командир штаба:
                                 <sup class="valid-red">*</sup>
                             </label>
-
-                            <!-- <Dropdown
-                                :options="leaders"
-                                id="commander"
-                                name="commander"
-                                v-model="detachment.commander"
-                                :filterPlaceholder="'Поиск по ФИО'"
-                                :resetFilterOnHide="true"
-                                @update:value="changeValue"
-                            ></Dropdown> -->
-
-                            <Select
-                                id="commander"
-                                name="commander"
+                            <Dropdown
+                                open-on-clear
+                                id="beast"
+                                name="edit_beast"
                                 placeholder="Поиск по ФИО"
-                                v-model="commander"
+                                v-model="headquarter.commander"
                                 @update:value="changeValue"
-                                address="api/v1/rsousers/"
-                            ></Select>
+                                address="rsousers/"
+                            ></Dropdown>
                         </div>
                     </div>
                     <v-card-actions class="form__button-group">
@@ -229,33 +223,35 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="social-media-vk"
+                            <label for="social-media-vk" class="form__label"
                                 >Группа штаба ВКонтакте
                             </label>
-                            <Input
-                                class="form__input"
+                            <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-vk"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
-                                v-model:value="social_vk"
-                            />
+                                v-model:value="headquarter.social_vk"
+                            ></TextareaAbout>
                         </div>
-
                         <div class="form__field">
-                            <label for="social-media-te"
-                                >Группа штаба в Телеграмме
+                            <label for="social-media-te" class="form__label"
+                                >Группа штаба в Телеграм
                             </label>
-                            <Input
-                                class="form__input"
+                           <TextareaAbout
+
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-te"
                                 placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                 name="social_media_te"
-                                v-model:value="social_tg"
-                            />
+                                v-model:value="headquarter.social_tg"
+                            ></TextareaAbout>
                         </div>
                         <div class="form__field" v-if="participants">
-                            <p>
-                                Участники отряда
+                            <p class="form__label">
+                                Назначить на должность
                                 <sup class="valid-red">*</sup>
                             </p>
                             <v-text-field
@@ -277,9 +273,8 @@
                             </v-text-field>
                             <MembersList
                                 :items="sortedMembers"
-                                :validate="v"
                                 :submited="submited"
-                                @updateMember="onUpdateMember"
+                                @update-member="onUpdateMember"
                             ></MembersList>
                         </div>
                     </div>
@@ -369,23 +364,25 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="hq-slogan">Девиз штаба</label>
-                            <Input
-                                class="form__input"
-                                type="text"
+                            <label for="hq-slogan" class="form__label"
+                                >Девиз штаба</label
+                            >
+                            <TextareaAbout
+                                maxlength="100"
+                                class="form__textarea form__textarea--mobile"
                                 id="hq-slogan"
                                 placeholder="Например, через тернии к звездам"
                                 name="hq_slogan"
-                                v-model:value="slogan"
-                                :maxlength="100"
-                            />
+                                v-model:value="headquarter.slogan"
+                            ></TextareaAbout>
                             <div class="form__counter">
                                 {{ counterSlogan }} / 100
                             </div>
                         </div>
-
                         <div class="form__field">
-                            <label for="about-hq">О штабе</label>
+                            <label for="about-hq" class="form__label"
+                                >О штабе</label
+                            >
                             <TextareaAbout
                                 :rows="6"
                                 maxlength="500"
@@ -393,260 +390,260 @@
                                 id="about-hq"
                                 placeholder="Описание регионального штаба"
                                 name="about_hq"
-                                v-model:value="about"
+                                v-model:value="headquarter.about"
                             ></TextareaAbout>
                             <div class="form__counter">
                                 {{ counterAbout }} / 1000
                             </div>
                         </div>
 
-                        <div class="form__field">
-                            <label for="upload-logo">Добавьте логотип</label>
-                            <div class="user-metric__avatar-wrapper">
-                                <div class="user-metric__avatar">
-                                    <!-- Аватар пользователя  -->
-
+                        <div class="form__field photo-add">
+                            <p class="form__label">Добавьте логотип</p>
+                            <div class="photo-add__box photo-add__box--logo">
+                                <div
+                                    class="photo-add__img photo-add__img--logo"
+                                >
                                     <img
-                                        v-if="urlEmblem"
-                                        :src="urlEmblem"
-                                        alt="avatarka"
-                                    />
-                                    <img
-                                        v-else
-                                        id="profile-pic"
-                                        src="@app/assets/user-avatar.png"
-                                        alt="Аватарка(пусто)"
+                                        class="photo-add__image"
+                                        :src="headquarter.emblem ?? urlEmblem"
                                     />
                                 </div>
-                                <!-- Иконки редактирования аватар -->
-                                <v-menu min-width="200px" rounded>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn
-                                            class="user-metric__avatar-add"
-                                            icon
-                                            v-bind="props"
+
+                                <div class="photo-add__input">
+                                    <label
+                                        class="photo-add__label photo-add__label--logo"
+                                        for="upload-logo"
+                                        v-if="!headquarter.emblem && !urlEmblem"
+                                    >
+                                        <svg
+                                            class="logo-add__svg"
+                                            aria-hidden="true"
+                                            focusable="false"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="48"
+                                            height="48"
+                                            viewBox="0 0 48 48"
+                                            fill="none"
                                         >
-                                            <v-avatar size="large">
-                                                <v-icon
-                                                    icon="mdi-plus"
-                                                ></v-icon>
-                                            </v-avatar>
-                                        </v-btn>
-                                    </template>
-                                    <v-card>
-                                        <v-card-text>
-                                            <v-row justify="center">
-                                                <v-dialog
-                                                    v-model="dialog"
-                                                    width="1024"
+                                            <g
+                                                filter="url(#filter0_b_2686_15482)"
+                                            >
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="24"
+                                                    fill="black"
+                                                    fill-opacity="0.4"
+                                                />
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="23"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                />
+                                            </g>
+                                            <path
+                                                d="M24.1328 15.1328L24.1328 33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <path
+                                                d="M15.1328 24.1328H33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <defs>
+                                                <filter
+                                                    id="filter0_b_2686_15482"
+                                                    x="-36.9643"
+                                                    y="-36.9643"
+                                                    width="121.929"
+                                                    height="121.929"
+                                                    filterUnits="userSpaceOnUse"
+                                                    color-interpolation-filters="sRGB"
                                                 >
-                                                    <template
-                                                        v-slot:activator="{
-                                                            props,
-                                                        }"
-                                                    >
-                                                        <v-btn
-                                                            rounded
-                                                            variant="text"
-                                                            v-bind="props"
-                                                        >
-                                                            Добавить логотип
-                                                        </v-btn>
-                                                    </template>
-                                                    <v-card
-                                                        class="uploadEmblem_wrap p-dropdown-items-wrapper"
-                                                    >
-                                                        <v-card-title>
-                                                            <span
-                                                                class="text-h5"
-                                                                >Загрузите ваше
-                                                                фото</span
-                                                            >
-                                                        </v-card-title>
-                                                        <v-card-text>
-                                                            <v-container>
-                                                                <v-row>
-                                                                    <v-file-input
-                                                                        @change="
-                                                                            selectFile
-                                                                        "
-                                                                        show-size
-                                                                        prepend-icon="mdi-camera"
-                                                                        counter
-                                                                    ></v-file-input>
-                                                                </v-row>
-                                                                <v-row>
-                                                                    <v-card
-                                                                        class="mt-5 mx-auto"
-                                                                    >
-                                                                        <img
-                                                                            class="uploadEmblem_img"
-                                                                            v-if="
-                                                                                urlEmblem
-                                                                            "
-                                                                            :src="
-                                                                                urlEmblem
-                                                                            "
-                                                                        />
-                                                                    </v-card>
-                                                                </v-row>
-                                                            </v-container>
-                                                        </v-card-text>
-                                                        <v-card-actions
-                                                            class="uploadBtn"
-                                                        >
-                                                            <v-btn
-                                                                color="blue-darken-1"
-                                                                variant="text"
-                                                                @click="
-                                                                    dialog = false
-                                                                "
-                                                            >
-                                                                Закрыть
-                                                            </v-btn>
-                                                            <v-btn
-                                                                :disabled="
-                                                                    !fileEmblem
-                                                                "
-                                                                color="blue-darken-1"
-                                                                variant="text"
-                                                                type="submit"
-                                                                @click="
-                                                                    uploadAvatar()
-                                                                "
-                                                            >
-                                                                Загрузить
-                                                            </v-btn>
-                                                        </v-card-actions>
-                                                    </v-card>
-                                                </v-dialog>
-                                            </v-row>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-menu>
+                                                    <feFlood
+                                                        flood-opacity="0"
+                                                        result="BackgroundImageFix"
+                                                    />
+                                                    <feGaussianBlur
+                                                        in="BackgroundImageFix"
+                                                        stdDeviation="18.4821"
+                                                    />
+                                                    <feComposite
+                                                        in2="SourceAlpha"
+                                                        operator="in"
+                                                        result="effect1_backgroundBlur_2686_15482"
+                                                    />
+                                                    <feBlend
+                                                        mode="normal"
+                                                        in="SourceGraphic"
+                                                        in2="effect1_backgroundBlur_2686_15482"
+                                                        result="shape"
+                                                    />
+                                                </filter>
+                                            </defs>
+                                        </svg>
+                                    </label>
+                                    <div
+                                        class="photo-add__edit-group photo-add__edit-group--position"
+                                        v-else
+                                    >
+                                        <label
+                                            class="photo-add__label-edit"
+                                            for="upload-logo"
+                                        >
+                                            <span class="photo-add__label-text"
+                                                >Изменить фото</span
+                                            >
+                                        </label>
+                                        <button
+                                            class="photo-add__button-clear"
+                                            type="button"
+                                            @click="deleteEmblem"
+                                        >
+                                            Удалить фото
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="file"
+                                        id="upload-logo"
+                                        name="squad-logo"
+                                        hidden
+                                        @change="selectEmblem"
+                                    />
+                                </div>
                             </div>
                             <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
-                        <div class="form__field">
-                            <label for="upload-banner">Добавьте баннер</label>
-                            <div class="user-metric__top">
-                                <div class="user-metric__top-img-wrapper">
-                                    <!-- Заглушка Банер -->
-                                    <img
-                                        v-if="urlBanner"
-                                        :src="urlBanner"
-                                        alt="Баннер личной страницы"
-                                    />
 
+                        <div class="form__field photo-add">
+                            <p class="form__label">Добавьте баннер</p>
+                            <div class="photo-add__box photo-add__box--banner">
+                                <div
+                                    class="photo-add__img photo-add__img--banner"
+                                >
+                                    <img
+                                        v-if="headquarter.banner ?? urlBanner"
+                                        class="photo-add__image"
+                                        :src="headquarter.banner ?? urlBanner"
+                                    />
                                     <img
                                         v-else
-                                        src="@/app/assets/user-banner.jpg"
-                                        alt="Баннер личной страницы(пусто)"
+                                        src="@app/assets/banner-stub.png"
+                                        alt="Баннер отряда(пусто)"
                                     />
                                 </div>
-                                <v-menu min-width="200px" rounded>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn
-                                            class="user-metric__avatar-add"
-                                            icon
-                                            v-bind="props"
+
+                                <div class="photo-add__input">
+                                    <label
+                                        class="photo-add__label"
+                                        for="upload-banner"
+                                        v-if="!headquarter.banner && !urlBanner"
+                                    >
+                                        <svg
+                                            class=""
+                                            aria-hidden="true"
+                                            focusable="false"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="48"
+                                            height="48"
+                                            viewBox="0 0 48 48"
+                                            fill="none"
                                         >
-                                            <v-avatar size="large">
-                                                <v-icon
-                                                    icon="mdi-plus"
-                                                ></v-icon>
-                                            </v-avatar>
-                                        </v-btn>
-                                    </template>
-                                    <v-card>
-                                        <v-card-text>
-                                            <v-row justify="center">
-                                                <v-dialog
-                                                    v-model="dialog"
-                                                    width="1024"
+                                            <g
+                                                filter="url(#filter0_b_2686_15482)"
+                                            >
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="24"
+                                                    fill="black"
+                                                    fill-opacity="0.4"
+                                                />
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="23"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                />
+                                            </g>
+                                            <path
+                                                d="M24.1328 15.1328L24.1328 33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <path
+                                                d="M15.1328 24.1328H33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <defs>
+                                                <filter
+                                                    id="filter0_b_2686_15482"
+                                                    x="-36.9643"
+                                                    y="-36.9643"
+                                                    width="121.929"
+                                                    height="121.929"
+                                                    filterUnits="userSpaceOnUse"
+                                                    color-interpolation-filters="sRGB"
                                                 >
-                                                    <template
-                                                        v-slot:activator="{
-                                                            props,
-                                                        }"
-                                                    >
-                                                        <v-btn
-                                                            rounded
-                                                            variant="text"
-                                                            v-bind="props"
-                                                        >
-                                                            Добавить баннер
-                                                        </v-btn>
-                                                    </template>
-                                                    <v-card>
-                                                        <v-card-title>
-                                                            <span
-                                                                class="text-h5"
-                                                                >Загрузите ваш
-                                                                баннер</span
-                                                            >
-                                                        </v-card-title>
-                                                        <v-card-text>
-                                                            <v-container>
-                                                                <v-row>
-                                                                    <v-file-input
-                                                                        @change="
-                                                                            selectBanner
-                                                                        "
-                                                                        show-size
-                                                                        prepend-icon="mdi-camera"
-                                                                        counter
-                                                                    ></v-file-input>
-                                                                </v-row>
-                                                                <v-row>
-                                                                    <v-card
-                                                                        class="mt-5 mx-auto"
-                                                                    >
-                                                                        <img
-                                                                            v-if="
-                                                                                urlBanner
-                                                                            "
-                                                                            :src="
-                                                                                urlBanner
-                                                                            "
-                                                                        />
-                                                                    </v-card>
-                                                                </v-row>
-                                                            </v-container>
-                                                        </v-card-text>
-                                                        <v-card-actions>
-                                                            <v-spacer></v-spacer>
-                                                            <v-btn
-                                                                color="blue-darken-1"
-                                                                variant="text"
-                                                                @click="
-                                                                    dialog = false
-                                                                "
-                                                            >
-                                                                Закрыть
-                                                            </v-btn>
-                                                            <v-btn
-                                                                :disabled="
-                                                                    !fileBanner
-                                                                "
-                                                                color="blue-darken-1"
-                                                                variant="text"
-                                                                type="submit"
-                                                                @click="
-                                                                    uploadBanner()
-                                                                "
-                                                            >
-                                                                Загрузить
-                                                            </v-btn>
-                                                        </v-card-actions>
-                                                    </v-card>
-                                                </v-dialog>
-                                            </v-row>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-menu>
+                                                    <feFlood
+                                                        flood-opacity="0"
+                                                        result="BackgroundImageFix"
+                                                    />
+                                                    <feGaussianBlur
+                                                        in="BackgroundImageFix"
+                                                        stdDeviation="18.4821"
+                                                    />
+                                                    <feComposite
+                                                        in2="SourceAlpha"
+                                                        operator="in"
+                                                        result="effect1_backgroundBlur_2686_15482"
+                                                    />
+                                                    <feBlend
+                                                        mode="normal"
+                                                        in="SourceGraphic"
+                                                        in2="effect1_backgroundBlur_2686_15482"
+                                                        result="shape"
+                                                    />
+                                                </filter>
+                                            </defs>
+                                        </svg>
+                                    </label>
+                                    <div class="photo-add__edit-group" v-else>
+                                        <label
+                                            class="photo-add__label-edit"
+                                            for="upload-banner"
+                                        >
+                                            <span class="photo-add__label-text"
+                                                >Изменить фото</span
+                                            >
+                                        </label>
+                                        <button
+                                            class="photo-add__button-clear"
+                                            type="delete"
+                                            @click="deleteBanner"
+                                        >
+                                            Удалить фото
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="file"
+                                        id="upload-banner"
+                                        name="squad-banner"
+                                        hidden
+                                        @change="selectBanner"
+                                    />
+                                </div>
                             </div>
                             <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
@@ -678,130 +675,71 @@
 </template>
 
 <script setup>
-import { ref, computed, inject } from 'vue';
-import { Input } from '@shared/components/inputs';
+import { ref, computed, onMounted } from 'vue';
+import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Avatar } from '@shared/components/imagescomp';
-import { bannerPhoto } from '@shared/components/imagescomp';
-import { Select } from '@shared/components/selects';
-import { Dropdown } from '@shared/components/selects';
+import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-import { TextareaAbout } from '@shared/components/inputs';
 
-import { useVuelidate } from '@vuelidate/core';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
 
-const emit = defineEmits(['update:value']);
-const router = useRouter();
+import {
+    helpers,
+    minLength,
+    required,
+    maxLength,
+    numeric,
+    email,
+    sameAs,
+} from '@vuelidate/validators';
+
+const emit = defineEmits([
+    'update:value',
+    'updateMember',
+    'changeHeadquarter',
+    'selectEmblem',
+    'deleteEmblem',
+    'selectBanner',
+    'deleteBanner',
+]);
 
 const props = defineProps({
     participants: {
         type: Boolean,
         default: false,
     },
-    unit: {
+    headquarter: {
         type: Object,
         default: () => ({}),
     },
+    submited: {
+        type: Boolean,
+        default: false,
+    },
+    fileEmblem: {
+        type: String,
+        default: null,
+    },
+    fileBanner: {
+        type: String,
+        default: null,
+    },
 });
 
-const dialog = ref(false);
-const urlEmblem = ref(null);
-const urlBanner = ref(null);
-
-const submited = ref(false);
-
-const name = ref('');
-const date_students = ref('')
-const date_first = ref('')
-const city = ref('');
-const commander = ref(null);
-const social_vk = ref('');
-const social_tg = ref('');
-const slogan = ref('');
-const about = ref('');
-const fileEmblem = ref(null);
-const fileBanner = ref(null);
-
-const selectFile = event => {
-    fileEmblem.value = event.target.files[0];
-    urlEmblem.value = URL.createObjectURL(fileEmblem.value);
-};
-
-const selectBanner = event => {
-    fileBanner.value = event.target.files[0];
-    urlBanner.value = URL.createObjectURL(fileBanner.value);
-};
-
-const uploadAvatar = () => {
-    dialog.value = false;
-};
-
-const uploadBanner = () => {
-    dialog.value = false;
-};
-
-const swal = inject('$swal');
-
-// отправка данных в бэк
-const UploadData = async () => {
-    const formData = new FormData();
-    formData.append('name', name.value);
-    formData.append('date_students', date_students.value);
-    formData.append('date_first', date_first.value)
-    formData.append('city', city.value);
-    formData.append('commander', commander.value);
-    formData.append('social_vk', social_vk.value);
-    formData.append('social_tg', social_tg.value);
-    formData.append('slogan', slogan.value);
-    formData.append('about', about.value);
-    formData.append('emblem', fileEmblem.value);
-    formData.append('banner', fileBanner.value);
-    await axios
-        .post('api/v1/regionals/', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-        .then(response => {
-            // formData = response.data;
-            console.log(response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            router.push('/AllHeadquarters');
-            // router.push({ name: 'user', params: { userId: '123' } })
-        })
-        .catch(error => {
-            console.error('There was an error!', error);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
-};
-
+const headquarter = ref(props.headquarter);
 //----------------------------------------------------------------------------------------------------------
 const counterName = computed(() => {
-    return name.value.length || 0;
+    return headquarter.value.name.length || 0;
 });
 
 const counterSlogan = computed(() => {
-    return slogan.value.length || 0;
+    return headquarter.value.slogan.length || 0;
 });
 
 const counterAbout = computed(() => {
-    return about.value.length || 0;
+    return headquarter.value.about.length || 0;
 });
 //----------------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -822,32 +760,92 @@ const showButtonPrev = computed(() => {
     return panel.value === 'panelThree';
 });
 
+//-----------------------------------------------------------------------
+const members = ref([]);
+
+const route = useRoute();
+let id = route.params.id;
+
+const getMembers = async () => {
+    HTTP.get('centrals/1/members/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            members.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    getMembers();
+});
+
 const searchMembers = ref('');
 
-// ПОТОМ НАДО ВЕРНУТЬ!!!!!!!!!!!!!!!!!!!!!
-// const sortedMembers = computed(() => {
-//     return members.value.filter(item => {
-//         return item.title
-//             .toUpperCase()
-//             .includes(searchMembers.value.toUpperCase());
-//     });
-// });
+const sortedMembers = computed(() => {
+    return members.value.filter((item) => {
+        return item.user.last_name
+            .toUpperCase()
+            .includes(searchMembers.value.toUpperCase());
+    });
+});
 
 const onUpdateMember = (event, id) => {
-    const targetMember = members.value.find(member => member.id === id);
-
+    const targetMember = members.value.find((member) => member.id === id);
     const firstkey = Object.keys(event)[0];
     targetMember[firstkey] = event[firstkey];
 };
 
-const changeValue = event => {
+const changeValue = (event) => {
     console.log(event);
     emit('update:value', event);
+};
+
+//--Добавление логотипа-----------------------------------------------------------------------------
+
+const fileEmblem = ref(props.fileEmblem);
+const urlEmblem = ref(null);
+
+const selectEmblem = (event) => {
+    fileEmblem.value = event.target.files[0];
+    headquarter.value.emblem = null;
+    urlEmblem.value = URL.createObjectURL(fileEmblem.value);
+    emit('selectEmblem', fileEmblem.value);
+};
+
+const deleteEmblem = () => {
+    headquarter.value.emblem = null;
+    urlEmblem.value = null;
+    fileEmblem.value = null;
+    emit('deleteEmblem', fileEmblem.value);
+};
+
+//--Добавление баннера-----------------------------------------------------------------------------
+const fileBanner = ref(props.fileBanner);
+const urlBanner = ref(null);
+
+const selectBanner = (event) => {
+    fileBanner.value = event.target.files[0];
+    headquarter.value.banner = null;
+    urlBanner.value = URL.createObjectURL(fileBanner.value);
+    emit('selectBanner', fileBanner.value);
+};
+
+const deleteBanner = () => {
+    headquarter.value.banner = null;
+    urlBanner.value = null;
+    fileBanner.value = null;
+    emit('deleteBanner', fileBanner.value);
 };
 </script>
 
 <style lang="scss" scoped>
-// $expansion-panel-active-title-min-height 64px
 .form-button {
     width: 132px;
     min-height: 52px;
@@ -869,6 +867,10 @@ const changeValue = event => {
         border: 2px solid #35383f;
         background-color: #ffffff;
     }
+
+    &--prev {
+        margin-right: 20px;
+    }
 }
 
 .form_textarea {
@@ -884,6 +886,11 @@ const changeValue = event => {
 
 .form_width {
     width: 46%;
+
+@media (max-width: 768px) {
+        width: 100%;
+    }
+
 }
 
 .uploadEmblem_wrap {
@@ -900,8 +907,6 @@ const changeValue = event => {
 }
 
 .p-dropdown-items-wrapper {
-    // min-height: 400px;
-
     &::-webkit-scrollbar {
         /*стили полосы прокрутки */
         width: 8px;
@@ -927,5 +932,23 @@ const changeValue = event => {
 .date_central_wrap {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 24px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        margin-bottom: 0;
+    }
+}
+
+.form_width .form-input {
+    margin-top: auto;
+
+    @media (max-width: 768px) {
+        margin-bottom: 32px;
+    }
+}
+
+.form__field.form_width {
+    margin-bottom: 0;
 }
 </style>

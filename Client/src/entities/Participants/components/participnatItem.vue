@@ -1,5 +1,5 @@
 <template>
-    <div class="participants-wrapper__item">
+    <div class="participants-wrapper__item list">
         <router-link :to="{ name: 'userpage', params: { id: participant.id } }">
             <div class="round-img">
                 <img
@@ -15,7 +15,7 @@
             </div>
             <div class="container-participants">
                 <p class="participants-wrapper__item-name">
-                    {{ participant.user.last_name }}
+                    {{ participant.user.first_name }}
                 </p>
                 <p class="participants-wrapper__item-position">
                     {{ position.name }}
@@ -25,17 +25,40 @@
     </div>
 </template>
 <script setup>
+import { ref, computed, onMounted } from 'vue';
+import { HTTP } from '@app/http';
 const props = defineProps({
     participant: {
         type: Object,
         required: true,
     },
-    image: {
-    type: string
-    },
     position: {
         type: Object,
     },
+});
+
+const position = ref({});
+
+const aboutPosition = async () => {
+    let id = props.participant.position;
+
+    await HTTP.get(`/positions/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            position.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    aboutPosition();
 });
 </script>
 <style lang="scss" scoped>
@@ -78,6 +101,15 @@ const props = defineProps({
         @media screen and (max-width: 575px) {
             font-size: 12px;
         }
+    }
+}
+
+.list {
+    @media screen and (max-width: 768px) {
+        width: 160px;
+    }
+    @media screen and (max-width: 575px) {
+        width: 100px;
     }
 }
 </style>

@@ -3,7 +3,7 @@
         <div class="horizontallso__confidant mr-3">
             <input
                 type="checkbox"
-                v-model="selectedPeoples"
+                v-model="checked"
                 :value="participant"
                 @change="updateCheck"
             />
@@ -12,9 +12,9 @@
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img
-                    :src="participant.media.photo"
+                    :src="participant.avatar.photo"
                     alt="logo"
-                    v-if="participant.media"
+                    v-if="participant.avatar"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -24,7 +24,7 @@
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ participant.users_for_verification.name }}
+                    {{ participant.user.first_name }}
                 </p>
                 <div class="horizontallso-item__list-date">
                     <span
@@ -33,7 +33,8 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <!-- <p>{{ participant.users_for_verification }}</p> -->
+                    <p>{{ participant.user.date_of_birth }}</p>
+
                 </div>
             </div>
         </div>
@@ -43,13 +44,6 @@
 import { ref, watch } from 'vue';
 
 import { HTTP } from '@app/http';
-
-const emit = defineEmits(['change']);
-
-const updateCheck = (e) => {
-    console.log('dddddd');
-    emit('change', selectedPeoples.value);
-};
 const props = defineProps({
     participant: {
         type: Object,
@@ -60,6 +54,13 @@ const props = defineProps({
         default: () => [],
     },
 });
+
+const emit = defineEmits(['change']);
+const checked = ref(false)
+const updateCheck = (e) => {
+    console.log('dddddd', checked.value);
+    emit('change', checked.value, props.participant.id);
+};
 
 const selectedPeoples = ref(props.selectedParticipants);
 

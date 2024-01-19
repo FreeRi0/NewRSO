@@ -4,7 +4,6 @@
         :participant="participant"
         @change="changePeoples"
         :selectedParticipants="selectedPeoples"
-        :isMembership="false"
         :key="participant.id"
     />
 </template>
@@ -20,10 +19,8 @@ const props = defineProps({
     },
 });
 
-const changePeoples = (selectedHumans) => {
-    emit('change', selectedHumans)
+const changePeoples = (CheckedUser, UserId) => {
+    emit('change', CheckedUser, UserId)
 };
-
-
 
 </script>

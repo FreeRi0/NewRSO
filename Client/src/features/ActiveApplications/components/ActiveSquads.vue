@@ -2,7 +2,7 @@
     <enteredSquad
         v-for="detachment in detachments"
         :detachment="detachment"
-        @change="changePeoples"
+        @change="changeSquads"
         :selectedSquads="selectedDetch"
         :key="detachment.id"
     />
@@ -19,8 +19,8 @@ const props = defineProps({
     },
 });
 
-const changePeoples = (selectedHumans) => {
-    emit('change', selectedHumans);
+const changeSquads = (CheckedSquad, SquadId) => {
+    emit('change', CheckedSquad, SquadId);
 };
 </script>
-<style lang="scss"></style>
+

@@ -13,7 +13,9 @@
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
                         <li class="Squad-HQ__university">
+                            <!-- <p >Коми государственный педагогический институт</p> -->
                             <p>{{ edict.name }}</p>
+                            <!-- <p>{{ squad.educational_institution }}</p> -->
                         </li>
                         <li class="Squad-HQ__date">
                             <p>Дата создания ЛСО</p>
@@ -54,10 +56,10 @@
                                     />
                                 </a>
                             </div>
-                            <!-- <p>{{ squad.members }}</p> -->
                         </div>
                     </div>
                     <router-link
+                    v-if="roles.roles.detachment_commander"
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -65,17 +67,25 @@
                         class="user-data__link"
                         >Редактировать страницу</router-link
                     >
+                    <div v-else>Вступить в отряд</div>
+
                 </div>
             </div>
+            <!-- <div v-else>Загрузка....</div> -->
         </div>
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+const roleStore = useRoleStore();
+roleStore.getRoles();
+
+const roles = storeToRefs(roleStore);
 
 const props = defineProps({
     banner: {
@@ -95,6 +105,49 @@ const props = defineProps({
         type: Object,
     },
 });
+
+const edict = ref({});
+
+// const isEmpty = computed(() => {
+//     for (let i in props.squad) {
+//        console.log("Объект пуст")
+//     }
+//     console.log("Объект есть")
+// });
+
+const aboutEduc = async () => {
+    let id = props.squad.educational_institution;
+    console.log('squad', props.squad);
+    console.log('id', id);
+    await HTTP.get(`/eduicational_institutions/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            edict.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    aboutEduc();
+});
+
+watch(
+    () => props.squad,
+
+    (newSquad, oldSquad) => {
+        if (Object.keys(props.squad).length === 0) {
+            return;
+        }
+        aboutEduc();
+    },
+);
 </script>
 <style lang="scss" scoped>
 .squad-metric {
@@ -113,29 +166,25 @@ const props = defineProps({
         grid-column-end: 5;
         grid-row-start: 3;
         grid-row-end: 5;
+        padding: 20px 0px 16px 300px;
+        @media screen and (max-width: 768px) {
+            padding: 20px 00px 16px 300px;
+        }
+        @media screen and (max-width: 575px) {
+            padding: 116px 14px 16px 14px;
+        }
     }
 }
 
-.ps__title {
-    margin: 40px 0;
-}
-
-.ps__title h2 {
-    /* Desktop/H-1 */
-    font-family: 'Akrobat';
-    font-size: 52px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    color: #35383f;
-}
+// .squad-data__participant-counter {
+//     margin-top: 20px;
+// }
 
 /* Данные пользователя */
 .squad-data__wrapper {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    margin: 32px 0 32px 300px;
 }
 
 .squad-data__name {
@@ -210,18 +259,30 @@ const props = defineProps({
 }
 .Squad-HQ__list {
     margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: 380px 300px;
+    // display: grid;
+    // grid-template-columns: 360px 250px;
+    display: flex;
+    flex-wrap: wrap;
 }
 .Squad-HQ__list li {
     border-right: none;
     height: 20px;
     margin: 0;
+    @media screen and (max-width: 1024px) {
+        height: auto;
+    }
 }
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
     margin-right: 8px;
     padding-right: 8px;
+    display: inline-block;
+    @media screen and (max-width: 1024px) {
+        border-right: none;
+        margin-bottom: 10px;
+        margin-right: 0;
+        padding-right: 0;
+    }
 }
 .Squad-HQ__date {
     display: flex;
@@ -245,17 +306,21 @@ const props = defineProps({
 .squad-data__contacts-wrapper {
     display: flex;
     justify-content: space-between;
+    @media screen and (max-width: 768px) {
+        flex-wrap: wrap;
+    }
 }
-.squad-data__contacts {
-    display: grid;
-}
+
 .squad-data__contacts {
     display: flex;
     flex-direction: column;
+    @media screen and (max-width: 768px) {
+        margin-bottom: 20px;
+    }
 }
 .squad-data__social-network {
     display: flex;
     justify-content: space-between;
-    margin: 16px 16px 0px 0px;
+    margin-top: 17px;
 }
 </style>

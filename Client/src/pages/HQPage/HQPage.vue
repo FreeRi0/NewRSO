@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <Breadcrumbs :label="headquarter.name"></Breadcrumbs>
+        <!-- <Breadcrumbs :items="pages"></Breadcrumbs> -->
         <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
         <BannerHQ
             v-if="showHQ"
@@ -42,7 +43,11 @@
             <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
-        <ManagementHQ :member="member" head="Руководство штаба"></ManagementHQ>
+        <ManagementHQ
+            :member="member"
+            head="Руководство штаба"
+            :position="position"
+        ></ManagementHQ>
         <DetachmentsHQ></DetachmentsHQ>
     </div>
 </template>
@@ -63,10 +68,12 @@ const showLocalHQ = ref(false);
 const showRegionalHQ = ref(false);
 
 const headquarter = ref({});
+const position = ref({});
 const member = ref([]);
 const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
+// hhhh
 
 const aboutHQ = async () => {
     await HTTP.get(`/educationals/${id}/`, {
@@ -116,6 +123,36 @@ const aboutMembers = async () => {
         });
 };
 
+// let allMembers;
+
+// const aboutMembers = async () => {
+//     try {
+//         const response = await HTTP.get(`/educationals/${id}/members/`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+
+//         member.value = response.data;
+//         console.log(response);
+//         allMembers = response.data;
+
+//         const filteredMembers = allMembers.filter(
+//             (sort) =>
+//                 sort.position === 'Командир' ||
+//                 sort.position === 'Комиссар' ||
+//                 sort.position === 'Мастер (методист)',
+//         );
+
+//         member.value = filteredMembers;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
+
+aboutMembers();
+
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutHQ();
@@ -144,7 +181,7 @@ onMounted(() => {
 const pages = [
     { pageTitle: 'Структура', href: '#' },
     { pageTitle: 'Штабы', href: '/AllHeadquarters' },
-    { pageTitle: `${headquarter.name}`, href: '#' },
+    { pageTitle: headquarter.name, href: '#' },
 ];
 </script>
 <style scoped lang="scss">
@@ -159,6 +196,10 @@ const pages = [
     &--hq {
         margin-bottom: 50px;
     }
+}
+
+.hq-page {
+    padding-top: 40px;
 }
 .user-data__wrapper {
     margin: 20px 0 12px 298px;

@@ -472,7 +472,15 @@
                             :participants="selectedPeoples"
                         ></checkedReference>
                     </div>
-
+                    <p class="error" v-if="isError.detail">
+                        {{ isError.detail }}
+                    </p>
+                    <p class="error" v-if="isError">
+                        {{ isError.cert_end_date }}
+                    </p>
+                    <p class="error" v-if="isError">
+                        {{ isError.recipient }}
+                    </p>
                     <Button type="submit" label="Получить справки"></Button>
                 </form>
             </div>
@@ -489,13 +497,14 @@ import {
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, inject } from 'vue';
 import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
 import { HTTP } from '@app/http';
 
 const participantsVisible = ref(12);
-
+const swal = inject('$swal');
 const participants = ref([]);
+const isError = ref([]);
 // const participant = ref({});
 
 const selectedPeoples = ref([]);
@@ -555,6 +564,13 @@ const SendReference = async () => {
         responseType: 'blob',
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             refData.value = response.data;
             const url = new Blob([response.data], { type: 'application/zip' });
             const link = document.createElement('a');
@@ -565,8 +581,16 @@ const SendReference = async () => {
             console.log(response, 'success');
             console.log(response);
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 };
 
@@ -888,4 +912,15 @@ p {
         margin-top: 20px;
     }
 }
+
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 10px;
+    text-align: center;
+}
+
+
 </style>

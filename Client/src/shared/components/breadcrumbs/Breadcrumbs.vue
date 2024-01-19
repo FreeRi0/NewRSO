@@ -14,6 +14,7 @@
                 {{ route.meta.label }}
             </router-link>
         </li>
+        {{label}}
     </ul>
 </template>
 
@@ -25,22 +26,34 @@ import { useRoute } from 'vue-router';
 //     items: Array,
 // });
 
+const props = defineProps({
+    label: {
+        type: String
+    },
+});
+
 const route = useRoute();
 const routes = route.matched;
 console.log(routes);
+
 </script>
 
 <style lang="scss" scoped>
 .breadcrumbs-container {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    margin-bottom: 35px;
+    margin-bottom: 40px;
     padding: 0;
     font-family: 'Akrobat';
     font-size: 14px;
     line-height: 17px;
     font-weight: 600;
     color: #35383f;
+
+    @media (max-width: 360px) {
+        margin-bottom: 20px;
+    }
 
     li {
         margin-right: 5px;

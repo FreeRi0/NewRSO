@@ -1,4 +1,4 @@
-<template lang>
+<template>
     <div class="squads-wrapper__item">
         <router-link :to="{ name: 'lso', params: { id: squad.id } }">
             <div class="round-img">
@@ -23,10 +23,13 @@ const props = defineProps({
 </script>
 <style lang="scss">
 .round-img {
-    width: 128px;
-    height: 128px;
-    display: block;
-    margin: 0px auto;
+    img {
+        width: 128px;
+        height: 128px;
+        display: block;
+        margin: 0px auto;
+        border-radius: 100%;
+    }
 }
 .squads-wrapper__item {
     margin: 0px auto;

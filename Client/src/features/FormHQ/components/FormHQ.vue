@@ -12,7 +12,18 @@
                             <v-col cols="4" class="d-flex justify-start">
                                 Основная информация
                             </v-col>
-                            <!-- <div v-if="">обязательно для заполнения</div> -->
+                            <p
+                                class="form__error form__error--title"
+                                v-if="
+                                    isError.name ||
+                                    isError.educational_institution ||
+                                    isError.founding_date ||
+                                    isError.regional_headquarter ||
+                                    isError.commander
+                                "
+                            >
+                                Заполните обязательные поля!
+                            </p>
                         </v-row>
                     </template>
                     <template v-slot:actions="{ expanded }">
@@ -84,6 +95,13 @@
                                 v-model:value="headquarter.name"
                                 :maxlength="100"
                             />
+                            <p
+                                class="form__error form__error--name"
+                                v-if="isError.name"
+                            >
+                                <!-- * обязательно для заполнения -->
+                                * {{ isError.name[0] }}
+                            </p>
                             <div class="form__counter">
                                 {{ counterTitle }} / 100
                             </div>
@@ -94,7 +112,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
-                                class="form__select--select"
+                                class="form__select form__select--select"
                                 variant="outlined"
                                 clearable
                                 name="select_institution"
@@ -103,6 +121,13 @@
                                 v-model="headquarter.educational_institution"
                                 address="eduicational_institutions/"
                             ></Select>
+                            <p
+                                class="form__error"
+                                v-if="isError.educational_institution"
+                            >
+                                * Это поле не может быть пустым.
+                                <!-- {{ isError.educational_institution[0] }} -->
+                            </p>
                         </div>
 
                         <div class="form__field">
@@ -126,6 +151,10 @@
                                 type="date"
                                 v-model:value="headquarter.founding_date"
                             />
+                            <p class="form__error" v-if="isError.founding_date">
+                                * Это поле не может быть пустым.
+                                <!-- {{ isError.founding_date[0] }} -->
+                            </p>
                         </div>
 
                         <div class="form__field">
@@ -136,7 +165,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
-                                class="form__select--select"
+                                class="form__select form__select--select"
                                 variant="outlined"
                                 clearable
                                 name="select_regional-office"
@@ -145,6 +174,13 @@
                                 v-model="headquarter.regional_headquarter"
                                 address="regionals/"
                             ></Select>
+                            <p
+                                class="form__error"
+                                v-if="isError.regional_headquarter"
+                            >
+                                * Это поле не может быть пустым.
+                                <!-- {{ isError.regional_headquarter[0] }} -->
+                            </p>
                         </div>
 
                         <div class="form__field">
@@ -164,6 +200,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
+                                open-on-clear
                                 id="beast"
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
@@ -171,6 +208,28 @@
                                 @update:value="changeValue"
                                 address="rsousers/"
                             ></Dropdown>
+                            <p
+                                class="form__error form__error--commander"
+                                v-if="isError.commander"
+                            >
+                                * Это поле не может быть пустым.
+                                <!-- {{ isError.commander[0] }} -->
+                            </p>
+                            <!-- <p
+                                class="form__error form__error--commander"
+                                v-if="
+                                    isError.commander ||
+                                    isError.non_field_errors
+                                "
+                            >
+                                <span v-if="isError.commander"
+                                    >* обязательно для заполнения</span
+                                >
+                                <span v-if="isError.non_field_errors"
+                                    >Пользователь уже является командиром
+                                    другого штаба</span
+                                >
+                            </p> -->
                         </div>
                     </div>
 
@@ -254,26 +313,28 @@
                             <label class="form__label" for="social-media-vk"
                                 >Группа штаба ВКонтакте
                             </label>
-                            <Input
-                                class="form__input"
+                            <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-vk"
                                 placeholder="Например, https://vk.com/cco_monolit"
                                 name="social_media_vk"
                                 v-model:value="headquarter.social_vk"
-                            />
+                            ></TextareaAbout>
                         </div>
 
                         <div class="form__field">
                             <label class="form__label" for="social-media-te"
                                 >Группа штаба в Телеграмме
                             </label>
-                            <Input
-                                class="form__input"
+                            <TextareaAbout
+                                maxlength="50"
+                                class="form__textarea form__textarea--mobile"
                                 id="social-media-te"
                                 placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                 name="social_media_te"
                                 v-model:value="headquarter.social_tg"
-                            />
+                            ></TextareaAbout>
                         </div>
 
                         <div class="form__field" v-if="participants">
@@ -394,7 +455,7 @@
                             <label class="form__label" for="hq-slogan"
                                 >Девиз штаба</label
                             >
-                            <Input
+                            <!-- <Input
                                 class="form__input"
                                 type="text"
                                 id="hq-slogan"
@@ -402,7 +463,15 @@
                                 name="hq_slogan"
                                 v-model:value="headquarter.slogan"
                                 :maxlength="100"
-                            />
+                            /> -->
+                            <TextareaAbout
+                                maxlength="100"
+                                class="form__textarea form__textarea--mobile"
+                                id="hq-slogan"
+                                placeholder="Например, через тернии к звездам"
+                                name="hq_slogan"
+                                v-model:value="headquarter.slogan"
+                            ></TextareaAbout>
                             <div class="form__counter">
                                 {{ counterSlogan }} / 100
                             </div>
@@ -545,7 +614,7 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
@@ -673,7 +742,7 @@
                                     />
                                 </div>
                             </div>
-                            <span class="form-field__footnote"
+                            <span class="form__footnote"
                                 >Рекомендуемый размер 1920х768</span
                             >
                         </div>
@@ -714,20 +783,16 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted } from 'vue';
-import { Input } from '@shared/components/inputs';
+import { ref, computed, onMounted } from 'vue';
+import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Avatar } from '@shared/components/imagescomp';
-import { bannerPhoto } from '@shared/components/imagescomp';
-import { Select } from '@shared/components/selects';
-import { Dropdown } from '@shared/components/selects';
+import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-import { TextareaAbout } from '@shared/components/inputs';
 
-import { useVuelidate } from '@vuelidate/core';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+
 import {
     helpers,
     minLength,
@@ -740,6 +805,7 @@ import {
 
 const emit = defineEmits([
     'update:value',
+    'updateMember',
     'changeHeadquarter',
     'selectFile',
     'resetEmblem',
@@ -767,6 +833,10 @@ const props = defineProps({
     fileBanner: {
         type: String,
         default: null,
+    },
+    isError: {
+        type: Object,
+        default: () => ({}),
     },
 });
 
@@ -866,14 +936,16 @@ const showButtonPrev = computed(() => {
 //-----------------------------------------------------------------------
 const members = ref([]);
 
+const route = useRoute();
+let id = route.params.id;
+
 const getMembers = async () => {
-    await axios
-        .get('api/v1/educationals/1/members/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+    await HTTP.get(`educationals/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
         .then((response) => {
             members.value = response.data;
             console.log(response);
@@ -881,6 +953,7 @@ const getMembers = async () => {
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
+    // console.log(id);
 };
 
 onMounted(() => {
@@ -900,7 +973,6 @@ const sortedMembers = computed(() => {
 
 const onUpdateMember = (event, id) => {
     const targetMember = members.value.find((member) => member.id === id);
-
     const firstkey = Object.keys(event)[0];
     targetMember[firstkey] = event[firstkey];
 };

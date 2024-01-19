@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container container--top">
         <Breadcrumbs></Breadcrumbs>
 
         <h1 class="title title--lso">Редактирование ЛСО</h1>
@@ -7,7 +7,8 @@
         <FormUnit
             :participants="true"
             :detachment="detachment"
-            v-if="detachment"
+            :is-error="isError"
+            v-if="detachment && isError"
             @submit.prevent="changeDetachment"
             @select-file="onSelectFile"
             @reset-file="onResetFile"
@@ -29,40 +30,15 @@
 import { ref, onMounted, inject, watch } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormUnit } from '@features/FormUnit';
-import axios from 'axios';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 
-const pages = ref([
-    { pageTitle: 'Структура' },
-    { pageTitle: 'ЛСО', href: '/AllSquads' },
-    { pageTitle: 'ССО «Инвар»', href: '#' },
-    { pageTitle: 'Редактирование', href: '#' },
-]);
-
+const router = useRouter();
 const route = useRoute();
 console.log(route);
 let id = route.params.id;
 
 const detachment = ref(null);
-// const detachment = ref({});
-
-// const getDetachment = async () => {
-//   await axios
-//     .get("api/v1/detachments/1", {
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: "Token " + localStorage.getItem("Token"),
-//       },
-//     })
-//     .then((response) => {
-//       detachment.value = response.data;
-//       console.log(response);
-//     })
-//     .catch(function (error) {
-//       console.log("an error occured " + error);
-//     });
-// };
 
 const getDetachment = async () => {
     console.log('id отряда для редактирования - ', id);
@@ -147,6 +123,8 @@ const onResetPhotoFour = (file) => {
     filePhotoFour.value = file;
 };
 
+const isError = ref({});
+
 const changeDetachment = async () => {
     // HTTP.put(`detachments/${id}/`, detachment.value, {
     //   headers: {
@@ -224,15 +202,21 @@ const changeDetachment = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            //   router.push("/AllSquads");
-            // router.push({ name: 'user', params: { userId: '123' } })
+            router.push({
+                name: 'lso',
+                params: { id: detachment.value.id },
+            });
         })
-        .catch((error) => {
-            console.error('There was an error!', error);
+        // .catch((error) => {
+        //     console.error('There was an error!', error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            console.log('Ошибки отправки формы', isError.value);
             swal.fire({
                 position: 'top-center',
                 icon: 'error',
-                title: 'ошибка',
+                title: `ошибка - ${isError.value.non_field_errors}`,
                 showConfirmButton: false,
                 timer: 1500,
             });

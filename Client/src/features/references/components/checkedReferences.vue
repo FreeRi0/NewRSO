@@ -37,8 +37,6 @@
 
             />
         </div>
-        <Button class="preview" type="button" label="Предпросмотр"></Button>
-
     </div>
 </template>
 <script setup>

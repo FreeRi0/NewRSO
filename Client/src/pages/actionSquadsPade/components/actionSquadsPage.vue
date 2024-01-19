@@ -1,7 +1,9 @@
 <template>
     <div class='container'>
         <bannerCreate desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
+
                       label="Создать мероприятие" name='createAction'></bannerCreate>
+
         <h2 class='action-title'>Мероприятия</h2>
         <div class='searcher'>
             <div class='squads-search'>
@@ -10,7 +12,9 @@
                     id='search'
                     class='squads-search__input'
                     placeholder='Найти мероприятие'
+
                     v-model='nameSearch'
+
                 />
                 <svg
                     width='28'
@@ -80,6 +84,7 @@
             <!--Привет) Страницы мероприятий писал и подключал Modestra -->
             <!--Я в поисках работы, если вам требуется Frontend разработчик, пишите сюда -->
             <!--https://t.me/Modestra -->
+
             <div class='col' style='width: 100%'>
                 <div class='sort-container'>
                     <div class='sort-layout sort-types'>
@@ -123,10 +128,12 @@
                     </div>
                 </div>
                 <div class='postcard-container'>
+
                     <div v-if='vertical' v-for='action in actionsList'>
                         <Actionitem :action='action'></Actionitem>
                     </div>
                     <div v-if='!vertical' v-for='action in actionsList' class='postcard-containerline'>
+
                         <ActionitemVertical :action='action'></ActionitemVertical>
                     </div>
                 </div>
@@ -137,6 +144,7 @@
 
 <script setup>
 //Импорт файлов
+
 import Button from "primevue/button";
 import BannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
 import { ref } from 'vue';
@@ -157,6 +165,7 @@ getListActions()
 
     })
 
+
 //Переменные компонента
 const nameSearch = ref('');
 
@@ -164,9 +173,11 @@ const actionNewList = computed(() => {
   
 })
 
+
 //Сортировка
 const vertical = ref(true);
 const ascending = ref(true);
+
 
 //События нажатия
 function ClearSearchForm() {

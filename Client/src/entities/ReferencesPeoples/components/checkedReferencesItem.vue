@@ -15,7 +15,7 @@
             </div>
             <div class="containerHorizontal">
                 <p class="checked-item__list-full">
-                    {{ participant.first_name }}
+                    {{ participant.user.first_name }}
                 </p>
                 <div class="checked-item__list-date">
                     <span
@@ -24,14 +24,14 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.date_of_birth }}</p>
+                    <p>{{ participant.user.date_of_birth }}</p>
                 </div>
             </div>
         </div>
         <div class="sort-select ml-3">
             <Select
                 variant="outlined"
-                v-model="participantItem.is_verified"
+                v-model="user.is_verified"
                 :names="filteredPayed"
             ></Select>
         </div>
@@ -49,7 +49,10 @@
             label="Сохранить"
             @click="ChangeStatus(participant.id)"
         ></Button>
+
     </div>
+    <p v-if="isError" class="error">{{ isError.detail }}</p>
+
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
@@ -72,14 +75,14 @@ const props = defineProps({
 
 });
 
+const isError = ref([]);
 
 const swal = inject('$swal');
 
 
-const participantItem = ref({
+const user = ref({
     is_verified: null,
 });
-
 
 const filteredPayed = ref([
     {
@@ -91,8 +94,8 @@ const filteredPayed = ref([
 
 
 const ChangeStatus = async () => {
-    let { id, ...rest } = props.participant;
-    HTTP.post(`rsousers/${id}/verify/`, participantItem.value, {
+    let { id, ...rest } = props.participant.user;
+    HTTP.post(`rsousers/${id}/verify/`, user.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

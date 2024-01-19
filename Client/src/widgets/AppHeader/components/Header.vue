@@ -40,13 +40,18 @@
                             </div>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="/actionSquads">Мероприятия</a>
+                            <a class="header__nav-link" href="/actionSquads"
+                                >Мероприятия</a
+                            >
                         </li>
                         <li class="header__nav-item">
                             <a class="header__nav-link" href="/FAQ"
                                 >Полезная информация</a
                             >
                         </li>
+                        <!-- <li class="header__nav-item">
+                            <a class="header__nav-link" href="#">КОНКУРС!</a>
+                        </li> -->
                     </ul>
                 </div>
             </nav>
@@ -67,12 +72,13 @@
 
                 <div class="nav-user__location" v-if="user">
                     <button class="nav-user__button" @click="show = !show">
-                        <!--прописать в span кнопки логику изменения ее названия-->
-
-                        <!-- <span
-                            >{{ user?.user_region?.reg_town }} региональное
-                            отделение</span
-                        > -->
+                        <!-- <img
+                            class="nav-user__button-mobile"
+                            src="@app/assets/icon/icon-location.svg"
+                            width="36"
+                            height="36"
+                            alt="Иконка геолокации"
+                        /> -->
 
                         <span v-if="user?.user_region?.reg_region"
                             >{{
@@ -83,7 +89,9 @@
 
                         <span v-else>Выберите региональное отделение</span>
                     </button>
+
                     <!-- <p>{{  user?.user_region?.reg_region}}</p> -->
+
                     <div
                         class="header__overlay"
                         @click="show = !show"
@@ -121,7 +129,7 @@
                         </div>
                     </div>
                 </div>
-               <!-- <p>id: {{ user.id }}</p> -->
+                <!-- <p>id: {{ user.id }}</p> -->
                 <!-- <router-link  :to="{ name: 'userpage', params: { id: user.id } }">Моя страница</router-link> -->
                 <div class="nav-user__menu user-menu" v-if="user">
                     <Dropdown
@@ -142,14 +150,14 @@ import { Button } from '@shared/components/buttons';
 // import { Input } from '@shared/components/inputs';
 import { Select } from '@shared/components/selects';
 import { HTTP } from '@app/http';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const router = useRouter();
 const user = ref({});
-// const route = useRoute();
-// let id = route.params.id
-let { id, ...rest } = user;
+const route = useRoute();
+let id = route.params.id;
+// let { id, ...rest } = user;
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
@@ -157,31 +165,67 @@ const pages = ref([
     { title: 'Местные штабы', link: '/LocalHeadquarters' },
     { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
     { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '/CentralHQ' },
+    { title: 'Центральный штаб', link: '/CentralHQ/1' },
 ]);
 
-
-const userPages = ref([
-
-    { title: 'Моя страница', link: `/UserPage/${id}/` },
-    { title: 'Мой отряд', link: '/allSquads' },
-    { title: 'Штаб СО ОО', link: '/AllHeadquarters' },
-    { title: 'Местный штаб', link: '/LocalHeadquarters' },
-    { title: 'Региональный штаб', link: '/RegionalHeadquarters' },
-    { title: 'Окружной штаб', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '/CentralHQ' },
-    { title: 'Активные заявки', link: '/activeInvents/accountVerification' },
-    { title: 'Поиск участников', link: '#' },
-    { title: 'Членский взнос', link: '/contributorPay' },
-    { title: 'Оформление справок', link: '/references' },
-    { title: 'Настройки профиля', link: '/PersonalData' },
+const userPages = computed(() => [
+    {
+        title: 'Моя страница',
+        name: 'userpage',
+        params: {
+            id: user.value.id,
+        },
+    },
+    {
+        title: 'Мой отряд',
+        name: 'lso',
+        params: {
+            id: user.value.detachment_id,
+        },
+    },
+    {
+        title: 'Штаб СО ОО',
+        name: 'HQ',
+        params: {
+            id: user.value.educational_headquarter_id,
+        },
+    },
+    {
+        title: 'Местный штаб',
+        name: 'LocalHQ',
+        params: {
+            id: user.value.local_headquarter_id,
+        },
+    },
+    // {
+    //     title: 'Региональный штаб',
+    //     name: 'RegionalHQ',
+    //     params: {
+    //         id: user.value.regional_headquarter_id,
+    //     },
+    // },
+    {
+        title: 'Окружной штаб',
+        name: 'DistrictHQ',
+        params: {
+            id: user.value.district_headquarter_id,
+        },
+    },
+    // { title: 'Центральный штаб',  name: 'CentralHQ',
+    //     params: {
+    //         id: user.value.central_headquarter_id,
+    //     }, },
+    { title: 'Активные заявки', name: 'active' },
+    // { title: 'Поиск участников', link: '#' },
+    { title: 'Членский взнос', name: 'contributorPay' },
+    { title: 'Оформление справок', name: 'references' },
+    { title: 'Настройки профиля', name: 'personaldata' },
     { title: 'Выйти из ЛК', button: true },
 ]);
 
 let show = ref(false);
 
 const isOpen = ref(false);
-
 
 const navMenu = ref(null);
 
@@ -209,8 +253,7 @@ const getUser = async () => {
             console.log('an error occured ' + error);
         });
 };
-
-console.log('dddddd', id)
+console.log('dddddd', id);
 
 const updateRegion = async () => {
     await HTTP.patch('/rsousers/me/region/', {
@@ -290,10 +333,21 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 0;
+    padding: 13px 0;
     color: #35383f;
     position: relative;
-    // border-bottom: 1px solid red; //-------------------------------------
+    border-bottom: 1px solid #d9d9d9;
+    // margin-bottom: 60px;
+
+    @media (max-width: 1024px) {
+        padding: 0;
+        min-height: 88px;
+    }
+
+    @media (max-width: 768px) {
+        padding: 0;
+        min-height: 60px;
+    }
 
     &__overlay {
         position: fixed;
@@ -313,6 +367,17 @@ onMounted(() => {
         grid-template-columns: 1fr 1fr;
         column-gap: 30px;
         max-width: 146px;
+        margin-right: 25px;
+
+        @media (max-width: 1024px) {
+            column-gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            width: 88px;
+            column-gap: 12px;
+            margin-right: 36px;
+        }
     }
 
     &__nav--order {
@@ -338,19 +403,27 @@ onMounted(() => {
     }
 
     &__nav-list {
-        display: grid;
-        grid-template-columns: auto auto auto;
-        column-gap: 32px;
+        // display: grid;
+        // grid-template-columns: auto auto auto;
+        column-gap: 12px;
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+        flex-wrap: wrap;
         align-items: center;
-        min-width: 328px;
+        // min-width: 415px;
         max-width: 445px;
+
+        min-width: 411px; // для отображения без ссылки КОНКУРС
 
         @media (max-width: 1024px) {
             position: absolute;
             right: 0;
             top: calc(100%);
+            min-width: 415px;
             padding: 28px;
             border-radius: 10px;
+            display: grid;
             grid-template-columns: 1fr;
             row-gap: 8px;
             background-color: #1f7cc0;
@@ -359,6 +432,12 @@ onMounted(() => {
             a {
                 color: #ffffff;
             }
+        }
+
+        @media (max-width: 768px) {
+            min-width: 0;
+            max-width: 415px;
+            width: 100%;
         }
     }
 
@@ -387,6 +466,10 @@ onMounted(() => {
                     0 20px 0 0#35383f;
             }
         }
+
+        @media (max-width: 768px) {
+            margin-left: 20px;
+        }
     }
 
     &__nav-item {
@@ -399,7 +482,11 @@ onMounted(() => {
 
     &__nav-link {
         display: block;
-        padding: 16px 0;
+        padding: 5px 0;
+
+        @media (max-width: 1024px) {
+            padding: 16px 0;
+        }
     }
 }
 
@@ -428,7 +515,17 @@ onMounted(() => {
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        padding: 16px 0;
+        padding: 5px 0;
+
+        @media (max-width: 1024px) {
+            color: #ffffff;
+            padding: 16px 0;
+        }
+
+        @media (max-width: 768px) {
+            color: #ffffff;
+            padding: 10px 0;
+        }
 
         svg {
             display: none;
@@ -437,10 +534,6 @@ onMounted(() => {
                 display: block;
                 stroke: #ffffff;
             }
-        }
-
-        @media (max-width: 1024px) {
-            color: #ffffff;
         }
     }
 
@@ -459,6 +552,7 @@ onMounted(() => {
 
         @media (max-width: 1024px) {
             position: relative;
+            width: 100%;
             padding: 0;
             background-color: #1f7cc0;
         }
@@ -517,8 +611,9 @@ onMounted(() => {
                 margin-right: 0;
             }
 
-            @media (max-width: 360px) {
+            @media (max-width: 768px) {
                 width: 36px;
+                height: 36px;
             }
         }
 
@@ -535,7 +630,8 @@ onMounted(() => {
 
         &__list {
             right: 0;
-            min-width: 328px;
+            // min-width: 328px;
+            width: 328px;
             padding: 28px;
             border-radius: 10px;
             background-color: #1f7cc0;
@@ -547,11 +643,7 @@ onMounted(() => {
             }
 
             @media (max-width: 768px) {
-                right: 84px;
-            }
-
-            @media (max-width: 360px) {
-                right: 56px;
+                right: 0;
             }
         }
 
@@ -569,13 +661,32 @@ onMounted(() => {
 //------------------------------------------------------------------------------------
 
 .nav-user {
-    display: grid;
-    grid-template-columns: min-content 1fr min-content;
-    column-gap: 48px;
+    // display: grid;
+    // grid-template-columns: min-content 1fr min-content;
+    column-gap: 18px;
     // column-gap: 20px;
+
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    min-width: 242px;
     max-width: 383px;
     flex-grow: 1;
+    margin-left: 25px;
+
+    @media (max-width: 1024px) {
+        margin-left: auto;
+        column-gap: 60px;
+    }
+
+    @media (max-width: 768px) {
+        column-gap: 20px;
+
+        min-width: 148px;
+        max-width: 204px;
+        flex-grow: 1;
+        // margin-left: 54px;
+    }
 
     &__application-count a {
         display: block;
@@ -587,18 +698,19 @@ onMounted(() => {
     &__location {
         max-width: 169px;
 
-        @media (max-width: 360px) {
+        @media (max-width: 768px) {
             display: flex;
-            min-width: auto;
+            // min-width: auto;
         }
     }
 
     &__button {
         font-size: 14px;
 
-        @media (max-width: 360px) {
-            width: 20px;
+        @media (max-width: 768px) {
+            width: 36px;
             height: 36px;
+            // margin-top: 5px;
             background-image: url('../../../app/assets/icon/location-mark.svg');
             background-position: center;
             // order: 1;
@@ -645,11 +757,6 @@ onMounted(() => {
         margin-left: auto;
         margin-right: -40px;
         margin-top: -24px;
-    }
-
-    @media (max-width: 1024px) {
-        margin-left: auto;
-        column-gap: 60px;
     }
 }
 
