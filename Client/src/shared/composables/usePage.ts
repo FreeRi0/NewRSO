@@ -2,11 +2,13 @@ import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
 import { onActivated, onMounted } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
-import { usePageStore } from '..';
+import { useBreadcrumbsStore, usePageStore } from '..';
+import { storeToRefs } from 'pinia';
 
 interface Params {
     targetObjects: Record<string, unknown>[];
     notUsedHooks?: boolean;
+    isHidden?: boolean;
 }
 
 function getCountIsObjectLabels(route: RouteLocationNormalizedLoaded) {
@@ -22,12 +24,21 @@ function getCountIsObjectLabels(route: RouteLocationNormalizedLoaded) {
 }
 
 export default function usePage(
-    params: Params = { targetObjects: [], notUsedHooks: false },
+    params: Params = {
+        targetObjects: [],
+        notUsedHooks: false,
+        isHidden: false,
+    },
 ) {
-    const { targetObjects, notUsedHooks } = params;
+    const { targetObjects, notUsedHooks, isHidden } = params;
 
+    /* STORES */
+    const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
+    const { excludeRoutes } = storeToRefs(useBreadcrumbsStore());
     const pageStore = usePageStore();
+    /* STORES */
 
+    /* METHODS */
     const replaceTargetObjects = (targetObjects: Record<string, unknown>[]) => {
         pageStore.replaceTargetObjects(targetObjects);
     };
@@ -41,12 +52,32 @@ export default function usePage(
         pageStore.addTargetObject(targetObject);
     }
 
+    function calculateHideBreadcrumbs() {
+        if (isHidden) {
+            setHideBreadcrumbs(true);
+            return true;
+        }
+
+        const excludedRoute = excludeRoutes.value.find(
+            (routeName) => routeName === pageStore.currentPage.name,
+        );
+
+        if (excludedRoute) {
+            setHideBreadcrumbs(true);
+            return true;
+        } else setHideBreadcrumbs(false);
+    }
+    /* METHODS */
+
+    /* HOOKS */
     if (!notUsedHooks) {
         onMounted(() => {
+            if (calculateHideBreadcrumbs()) return;
             handleReplace();
         });
 
         onActivated(() => {
+            if (calculateHideBreadcrumbs()) return;
             handleReplace();
         });
     }
@@ -59,9 +90,11 @@ export default function usePage(
 
         pageStore.removeLastObjects(devideCount * -1);
     });
+    /* HOOKS */
 
     return {
         addTargetObject,
         replaceTargetObjects,
+        toggleHideBreadcrumbs,
     };
 }

@@ -8,18 +8,24 @@ const routes: RouteRecordRaw[] = [
         meta: {
             //
             label: 'Структура',
-            namedRoute: 'Login',
+            redirectTo: 'Login',
         },
         children: [
             {
                 path: '',
                 name: 'Login',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
                 component: () =>
                     import('@pages/LoginPage/components/LoginPage.vue'),
             },
             {
                 path: '/Register',
                 name: 'Register',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
                 component: () =>
                     import('@pages/RegisterPage/components/RegisterPage.vue'),
             },
@@ -63,7 +69,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/AllSquads',
                 meta: {
                     requiresAuth: true,
-                    namedRoute: 'allsquads',
+                    redirectTo: 'allsquads',
                     label: 'ЛСО',
                 },
                 children: [
@@ -93,7 +99,7 @@ const routes: RouteRecordRaw[] = [
                         path: ':id',
                         meta: {
                             label: 'squad.name',
-                            namedRoute: 'lso',
+                            redirectTo: 'lso',
                             isObject: true,
                         },
                         children: [
@@ -135,7 +141,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/AllHeadquarters',
                 meta: {
                     requiresAuth: true,
-                    namedRoute: 'AllHeadquarters',
+                    redirectTo: 'AllHeadquarters',
                     label: 'Штабы СО ОО',
                 },
                 children: [
@@ -163,7 +169,7 @@ const routes: RouteRecordRaw[] = [
                         path: ':id',
                         meta: {
                             label: 'headquarter.name',
-                            namedRoute: 'HQ',
+                            redirectTo: 'HQ',
                             isObject: true,
                         },
                         children: [
@@ -193,7 +199,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/LocalHeadquarters',
                 meta: {
                     requiresAuth: true,
-                    namedRoute: 'LocalHeadquarters',
+                    redirectTo: 'LocalHeadquarters',
                     label: 'Местные штабы',
                 },
                 children: [
@@ -209,7 +215,7 @@ const routes: RouteRecordRaw[] = [
                         path: ':id',
                         meta: {
                             label: 'localHeadquarter.name',
-                            namedRoute: 'LocalHQ',
+                            redirectTo: 'LocalHQ',
                             isObject: true,
                         },
                         children: [
@@ -241,7 +247,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/RegionalHeadquarters',
                 meta: {
                     requiresAuth: true,
-                    namedRoute: 'regionalHeadquarters',
+                    redirectTo: 'regionalHeadquarters',
                     label: 'Региональные штабы',
                 },
                 children: [
@@ -269,7 +275,7 @@ const routes: RouteRecordRaw[] = [
                         path: ':id',
                         meta: {
                             label: 'regionalHeadquarter.name',
-                            namedRoute: 'RegionalHQ',
+                            redirectTo: 'RegionalHQ',
                             isObject: true,
                         },
                         children: [
@@ -301,7 +307,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/DistrictHeadquarters',
                 meta: {
                     requiresAuth: true,
-                    namedRoute: 'districtHeadquarters',
+                    redirectTo: 'districtHeadquarters',
                     label: 'Окружные штабы',
                 },
                 children: [
@@ -318,7 +324,7 @@ const routes: RouteRecordRaw[] = [
                         path: ':id',
                         meta: {
                             label: 'districtHeadquarter.name',
-                            namedRoute: 'DistrictHQ',
+                            redirectTo: 'DistrictHQ',
                             isObject: true,
                         },
                         children: [
@@ -350,7 +356,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/CentralHQ/:id',
                 meta: {
                     label: 'centralHeadquarter.name',
-                    namedRoute: 'CentralHQ',
+                    redirectTo: 'CentralHQ',
                     isObject: true,
                 },
                 children: [

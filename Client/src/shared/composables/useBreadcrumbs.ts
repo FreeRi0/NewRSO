@@ -94,7 +94,7 @@ export default function useBreadcrumbs(params: Params = {}) {
     ) => {
         breadcrumbs.push({
             path: element.path,
-            name: element.name || (element.meta.namedRoute as RouteRecordName),
+            name: element.name || (element.meta.redirectTo as RouteRecordName),
             params: getElementParams(element, route.params),
             query: route.query,
             label,

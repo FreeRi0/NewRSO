@@ -11,9 +11,13 @@
 
 <script setup lang="ts">
 import AppBreadcrumb from './AppBreadcrumb.vue';
-import { useBreadcrumbsStore } from '@shared/index';
+import { Breadcrumb } from '@shared/composables/useBreadcrumbs';
 
-const { breadcrumbs } = useBreadcrumbsStore();
+interface BreadcrumbsProps {
+    breadcrumbs: Breadcrumb[];
+}
+
+defineProps<BreadcrumbsProps>();
 </script>
 
 <style scoped lang="scss">
