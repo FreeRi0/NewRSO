@@ -19,30 +19,37 @@
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
                     alt="photo"
-
                 />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full">
-                    {{detachment.user.first_name }}
-                </p>
-                <!-- <div class="horizontallso-item__list-date">
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{ detachment.user.last_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ detachment.user.first_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ detachment.user.patronymic_name }}
+                    </p>
+                </div>
+                <div class="horizontallso-item__list-date">
                     <span
                         style="
                             border-left: 2px solid #b6b6b6;
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.date_of_birth }}</p>
-                </div> -->
+                    <p>{{ detachment.user.date_of_birth }}</p>
+                </div>
             </div>
         </div>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img
-                    :src="detachment.emblem"
+                    :src="squad.emblem"
                     alt="logo"
-                    v-if="detachment.emblem"
+                    v-if="squad.emblem"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -52,17 +59,29 @@
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ detachment.name }}
+                    {{ squad.name }}
                 </p>
             </div>
         </div>
     </div>
 </template>
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+
+const roleStore = useRoleStore();
+roleStore.getRoles();
+
+const roles = storeToRefs(roleStore);
 const props = defineProps({
     detachment: {
         type: Object,
+        required: true,
+    },
+    squad: {
+        type: Object
     },
     selectedSquads: {
         type: Array,
@@ -77,7 +96,30 @@ const updateCheckSquad = (e) => {
     emit('change', checked.value, props.detachment.id);
 };
 
+const squad = ref({});
+
 const selectedDetch = ref(props.selectedSquads);
+const viewSquad = async () => {
+    let id = roles?.roles?.value?.detachment_commander;
+    console.log('roles', roles.roles.value);
+    console.log('id', id);
+    await HTTP.get(`/detachments/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+           squad.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+onMounted(() => {
+    viewSquad();
+})
 
 watch(
     () => props.selectedSquads,

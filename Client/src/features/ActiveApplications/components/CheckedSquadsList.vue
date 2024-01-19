@@ -3,6 +3,7 @@
         v-for="detachment in detachments"
         @change="changeSelected"
         :detachment="detachment"
+        :squad="squad"
         :detachments="selectedSquads"
         :key="detachment.id"
     />
