@@ -75,7 +75,22 @@
 
                 <div class="sort-filters">
                     <div class="sort-select">
-                        <Select
+                        <v-select
+                            class="form__select filter-district"
+                            :items="districts"
+                            clearable
+                            variant="outlined"
+                            name="select_district"
+                            id="select-district"
+                            v-model="selectedSortDistrict"
+                            item-title="name"
+                            placeholder="Окружной штаб"
+                        >
+                            <template #selection="{ item }">
+                                <pre>{{ item.title }}</pre>
+                            </template>
+                        </v-select>
+                        <!-- <Select
                             clearable
                             variant="outlined"
                             name="select_district"
@@ -84,7 +99,7 @@
                             class="filter-district"
                             address="/districts/"
                             placeholder="Окружной штаб"
-                        ></Select>
+                        ></Select> -->
                     </div>
                     <div class="sort-select">
                         <sortByEducation
@@ -108,13 +123,13 @@
 
             <div class="headquarters-wrapper" v-show="vertical">
                 <RegionalHQList
-                    :regionalHeadquarters="sortedHeadquarters"
+                    :regionalHeadquarters="filtersDistricts"
                 ></RegionalHQList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <HorizontalRegionalHQs
-                    :regionalHeadquarters="sortedHeadquarters"
+                    :regionalHeadquarters="filtersDistricts"
                 ></HorizontalRegionalHQs>
             </div>
             <Button
@@ -159,8 +174,12 @@ const searchRegionalHeadquarters = ref('');
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
+const selectedSortDistrict = ref(
+    JSON.parse(localStorage.getItem('regionalHeadquarters_filters'))
+        ?.districtName,
+);
 
-const district = ref([]);
+const districts = ref([]);
 
 const getRegionalHeadquarters = async () => {
     await HTTP.get('/regionals/', {
@@ -178,12 +197,29 @@ const getRegionalHeadquarters = async () => {
         });
 };
 
+const filtersDistricts = computed(() =>
+    selectedSortDistrict.value
+        ? districts.value.find(
+              (district) => district.name === selectedSortDistrict.value,
+          )?.regional_headquarters ?? []
+        : regionalHeadquarters.value,
+);
+
+const getDistrictsHeadquartersForFilters = async () => {
+    try {
+        const { data } = await HTTP.get('/districts/');
+        districts.value = data;
+    } catch (e) {
+        console.log('error request districts headquarters');
+    }
+};
+
 onMounted(() => {
+    getDistrictsHeadquartersForFilters();
     getRegionalHeadquarters();
 });
 
 const selectedSort = ref(0);
-const selectedSortDistrict = ref(null);
 
 const sortOptionss = ref([
     {
@@ -195,7 +231,7 @@ const sortOptionss = ref([
 ]);
 
 const sortedHeadquarters = computed(() => {
-    let tempHeadquartes = regionalHeadquarters.value;
+    let tempHeadquartes = filtersDistricts.value;
 
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     tempHeadquartes = tempHeadquartes.filter((item) => {

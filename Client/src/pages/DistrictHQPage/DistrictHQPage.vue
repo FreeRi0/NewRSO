@@ -52,14 +52,15 @@
                 <div
                     class="card"
                     v-for="(HQandSquad, index) in HQandSquads"
+                    :key="HQandSquad.link"
                     :class="{
                         'align-left': index % 2 === 0,
                         'align-right': index % 2 !== 0,
                     }"
                 >
-                    <a v-bind:href="HQandSquad.link"
-                        ><p>{{ HQandSquad.name }}</p></a
-                    >
+                    <a v-bind:href="HQandSquad.link" @click="HQandSquad.click">
+                        <p>{{ HQandSquad.name }}</p>
+                    </a>
                 </div>
             </div>
         </section>
@@ -71,8 +72,9 @@ import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage } from '@shared';
+import { usePage, useCrosspageFilter } from '@shared';
 
+const crosspageFilters = useCrosspageFilter();
 const showDistrictHQ = ref(true);
 const showLocalHQ = ref(false);
 const showHQ = ref(false);
@@ -150,6 +152,14 @@ const HQandSquads = ref([
     {
         name: 'Региональные штабы',
         link: '/RegionalHeadquarters',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'regionalHeadquarters',
+                filters: {
+                    districtName: districtHeadquarter.value.name,
+                },
+            });
+        },
     },
     {
         name: 'Местные штабы',
@@ -164,10 +174,8 @@ const HQandSquads = ref([
         link: '/AllSquads',
     },
 ]);
-
 </script>
 <style lang="scss" scoped>
-
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;

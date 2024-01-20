@@ -8,7 +8,6 @@
         v-bind="$attrs"
         item-title="name"
         item-value="id"
-        :item-raw-name="item.raw.name"
     >
         <template #selection="{ item }">
             <span>{{ item.raw.name }}</span>
