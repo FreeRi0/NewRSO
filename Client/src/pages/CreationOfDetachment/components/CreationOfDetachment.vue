@@ -1,9 +1,6 @@
 <template>
     <div class="container container--top">
-        <Breadcrumbs></Breadcrumbs>
-
         <h1 class="title title--lso">Создание ЛСО</h1>
-
         <FormUnit
             :detachment="detachment"
             :is-error="isError"
@@ -26,7 +23,6 @@
 
 <script setup>
 import { ref, inject } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormUnit } from '@features/FormUnit';
 import { HTTP } from '@app/http';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';

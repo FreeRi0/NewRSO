@@ -22,9 +22,17 @@
                 />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full">
-                    {{ participant.first_name }}
-                </p>
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.last_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.first_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.patronymic_name }}
+                    </p>
+                </div>
                 <div class="horizontallso-item__list-date">
                     <span
                         style="
@@ -75,13 +83,10 @@ watch(
         selectedPeoples.value = newChecked;
     },
 );
-
-
 </script>
 <style lang="scss">
 .horizontallso {
     display: flex;
-    align-items: center;
     &-img {
         align-items: center;
         width: 36px;

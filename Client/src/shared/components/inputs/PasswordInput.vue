@@ -12,16 +12,8 @@
             variant="outlined"
             class="mb-2 password-field"
         />
-
-        <!-- <TransitionGroup>
-            <div
-                class="error-wrapper"
-                v-for="element of error"
-                :key="element.$uid"
-            >
-                <div class="form-error__message">{{ element.$message }}</div>
-            </div>
-        </TransitionGroup> -->
+        <input type="text" class="password-field form-control d-inline" v-model="passwordText" />
+                <span class="display-eye fa fa-eye-slash" @click="hidePassword"></span>
     </div>
 </template>
 <script setup>

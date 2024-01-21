@@ -57,11 +57,8 @@
                         </div>
                     </div>
 
-                    <!-- <router-link to="/edithq" class="hq-data__link"
-
-                        >Редактировать штаб</router-link
-                    > -->
                     <router-link
+                        v-if="educComId === headquarter.commander"
                         class="hq-data__link"
                         :to="{
                             name: 'EditHQ',
@@ -69,8 +66,6 @@
                         }"
                         >Редактировать штаб</router-link
                     >
-
-                    <!-- class="hq-data__link" -->
                 </div>
             </div>
         </div>
@@ -134,6 +129,7 @@
                         </div>
                     </div>
                     <router-link
+                        v-if="localComId === localHeadquarter.commander"
                         class="hq-data__link"
                         :to="{
                             name: 'FormLocal',
@@ -204,6 +200,7 @@
                         </div>
                     </div>
                     <router-link
+                        v-if="districtComId === districtHeadquarter.commander"
                         class="hq-data__link"
                         :to="{
                             name: 'FormDH',
@@ -274,6 +271,7 @@
                         </div>
                     </div>
                     <router-link
+                        v-if="regionComId === regionalHeadquarter.commander"
                         class="hq-data__link"
                         :to="{
                             name: 'EditingOfRS',
@@ -344,6 +342,7 @@
                         </div>
                     </div>
                     <router-link
+                        v-if="centralComId === centralHeadquarter.commander"
                         class="hq-data__link"
                         :to="{
                             name: 'FormCentral',
@@ -361,7 +360,17 @@ import { hqAvatar } from '@shared/components/imagescomp';
 import { hqBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+const roleStore = useRoleStore();
+roleStore.getRoles();
 
+const roles = storeToRefs(roleStore);
+let educComId = roles.roles.value.educationalheadquarter_commander;
+let regionComId = roles.roles.value.regionalheadquarter_commander;
+let districtComId = roles.roles.value.districtheadquarter_commander;
+let centralComId = roles.roles.value.centralheadquarter_commander;
+let localComId = roles.roles.value.localheadquarter_commander;
 const props = defineProps({
     banner: {
         type: String,
