@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--lso">
             {{ event.name }}
         </h1>
@@ -53,20 +52,7 @@
             {{ event.description }}
         </p>
         <!-- Доработать grid, при уменьшении список не сдвигается, если много текста, то не переносится на новую строчку -->
-        <v-list class="item_wrap">
-            <v-list-item
-                v-for="(item, i) in items"
-                :key="i"
-                :value="item"
-                color="primary"
-                class="list_item"
-            >
-                <template v-slot:prepend>
-                    <v-img :src="item.icon" class="icon_img"></v-img>
-                </template>
-                <v-list-item-title v-text="item.text"></v-list-item-title>
-            </v-list-item>
-        </v-list>
+
         <!-- Организаторы -->
         <h2 class="title title--subtitle">Организаторы</h2>
 
@@ -284,7 +270,8 @@ import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { Button } from '@shared/components/buttons';
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
-import { getAction, getOrganizator } from '@services/ActionService';
+import { getAction, getOrganizator, getListActions } from '@services/ActionService';
+import { onActivated } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -311,8 +298,15 @@ const event = ref({
     }
 })
 
+const otherevents = ref({});
+
 const organizators = ref([])
-getAction(route.params.id)
+onActivated(() => {
+    getListActions()
+        .then((resp)=>{
+            otherevents.value = resp.data;
+        })
+    getAction(route.params.id)
     .then((resp)=>{
         event.value = resp.data;
         console.log("Форма мероприятия", event.value)
@@ -325,17 +319,10 @@ getAction(route.params.id)
     .catch((e)=>{
         console.log(e)
     })
+})
 function EditAction(){
     router.push({ name: 'editAction', params: { id: route.params.id } });
 }
-const pages = ref([
-    { pageTitle: 'Мероприятия', href: '#' },
-    {
-        pageTitle:
-            'Всероссийский конкурс фотографий среди студенческих отрядов',
-        href: '#',
-    },
-]);
 
 const eventCategory = ref([
     'Образовательное',
@@ -351,7 +338,7 @@ const items = ref([
         icon: './assets/icon_items/list.svg',
     },
     {
-        text: 'Начало мероприятия: 06.07.2023, 10:30',
+        text: "",
         icon: './assets/icon_items/clock.svg',
     },
     {
@@ -437,6 +424,11 @@ const participants = ref([
 </script>
 
 <style lang="scss" scoped>
+
+.title--subtitle{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 .form-button {
     min-height: 52px;
     margin: 0;
@@ -590,7 +582,7 @@ const participants = ref([
 .event_btn_participant {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 80px;
+    margin-bottom: 30px;
 }
 
 .event_btn {

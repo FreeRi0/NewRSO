@@ -430,32 +430,32 @@
                                 Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.</label>
                                 <v-container fluid>
                                     <v-checkbox
-                                        v-model="documents.passport"
+                                        v-model="maininfo.document_data.passport"
                                         :binary="true"
                                         label="Паспорт"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.snils"
+                                        v-model="maininfo.document_data.snils"
                                         :binary="true"
                                         label="СНИЛС"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.inn"
+                                        v-model="maininfo.document_data.inn"
                                         :binary="true"
                                         label="ИНН"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.work_book"
+                                        v-model="maininfo.document_data.work_book"
                                         :binary="true"
                                         label="Трудовая книжка"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.military_document"
+                                        v-model="maininfo.document_data.military_document"
                                         :binary="true"
                                         label="Военный билет или препистное свидетельство"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.consent_personal_data"
+                                        v-model="maininfo.document_data.consent_personal_data"
                                         :binary="true"
                                         label="Согласие на обработку персональных данных"
                                     ></v-checkbox>
@@ -715,7 +715,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
-import { createAction, createOrganizator } from '@services/ActionService';
+import { getAction, createAction, createOrganizator } from '@services/ActionService';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { uploadPhoto } from '@shared/components/imagescomp';
@@ -730,6 +730,11 @@ const id = router.params.id;
 getAction(id)
     .then((resp)=>{
         console.log(resp.data)
+        maininfo.value = resp.data
+        getOrganizator(id)
+            .then((resp)=>{
+                
+            })
     })
     .catch((e)=>{
         console.log(e)
@@ -764,7 +769,17 @@ const maininfo = ref({
     description: '',
     participants_number: Number,
     application_type: '',
-    available_structural_units: ''
+    available_structural_units: '',
+    document_data:{
+        additional_info: '',
+        consent_personal_data: false,
+        inn: false,
+        military_document: false,
+        passport: false,
+        snils: false,
+        work_book: false
+    }
+    
 })
 
 const available_structural_units = ref([
@@ -804,24 +819,13 @@ const organizator = ref([{
     is_contact_person: false
 }])
 
-//Форма документов
-const documents = ref({
-    passport: false,
-    snils: false,
-    inn: false,
-    work_book: false,
-    military_document: false,
-    consent_personal_data: false,
-    additional_info: ''
-})
-
 //Ответы на вопросы
-const answers = ref([
+const answers = ref([[
     {
         question: '',
         answer: ''
     }
-])
+]])
 //Формы самой страницы
 const pages = ref([
     { pageTitle: 'Структура', href: '#' },
@@ -846,20 +850,6 @@ function SubmitEvent(){
     console.log("Документы", documents.value)
     console.log("Ответы на вопросы", answers.value)
 
-    createAction(maininfo.value)
-    .then((resp)=>{
-        console.log("Форма передалась успешно", resp.value)
-        createOrganizator(resp.value.id)
-        .then((resp)=>{
-            console.log("Форма организаторов передалась успешно", resp.value)
-        })
-        .catch((e)=>{
-            console.log(e)
-        })
-    })
-    .catch((e)=>{
-        console.log(e)
-    })
 }
 
 function AddQuestion(){

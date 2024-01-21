@@ -56,7 +56,9 @@ function RouteToAction(){
 
 <style lang='scss' scoped>
 .postcard{
-  width: 280px;
+  width: 275px;
+  margin-right: 1%;
+  margin-left: 1%;
   margin: 5px 5px 5px 5px;
 
   border-radius: 5px;
@@ -64,6 +66,7 @@ function RouteToAction(){
   &-container{
     display: flex;
     flex-direction: row;
+    flex-shrink: 2;
     flex-wrap: wrap;
   }
   &-image{

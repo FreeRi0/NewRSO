@@ -116,7 +116,7 @@
                               variant="outlined"
                               v-model="sortBy"
                               :options="sortOptionss"
-                              class="sort-select"
+                              class="sort-select select"
                           ></sortByEducation>
                         <Button
                             type='button'
@@ -128,12 +128,10 @@
                     </div>
                 </div>
                 <div class='postcard-container'>
-
                     <div v-if='vertical' v-for='action in actionsList'>
                         <Actionitem :action='action'></Actionitem>
                     </div>
                     <div v-if='!vertical' v-for='action in actionsList' class='postcard-containerline'>
-
                         <ActionitemVertical :action='action'></ActionitemVertical>
                     </div>
                 </div>
@@ -160,11 +158,10 @@ getListActions()
     .then((responce)=>{
     actionsList.value = responce.data;
     console.log("Список мероприятий:", actionsList.value);
-})
+    })
     .catch((e) =>{
 
     })
-
 
 //Переменные компонента
 const nameSearch = ref('');
@@ -173,11 +170,9 @@ const actionNewList = computed(() => {
   
 })
 
-
 //Сортировка
 const vertical = ref(true);
 const ascending = ref(true);
-
 
 //События нажатия
 function ClearSearchForm() {
@@ -289,7 +284,7 @@ const sortOptionss = ref([
         height: 25px;
       }
       &-alphabet {
-        width: 275px;
+        width: 320px;
         display: flex;
         justify-content: flex-end;
       }

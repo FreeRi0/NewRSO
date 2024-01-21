@@ -60,3 +60,13 @@ export function getOrganizator(id: number){
         }
     });
 }
+
+//Получить и добавить документы пользователя
+export function getDocuments(id: number){
+    return HTTP.get(`/events/${id}/user_documents`, {
+        headers:{
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        }
+    })
+}
