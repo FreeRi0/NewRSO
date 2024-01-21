@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="mt-14">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="profile-title">Настройки профиля</h2>
             <BannerComp
                 :user="user"
@@ -43,7 +42,6 @@ import { privateProfile } from '@features/PrivateProfile/components';
 import { changePassword } from '@features/ChangePassword/components';
 import { BannerComp } from '@features/baner/components';
 import { HTTP } from '@app/http';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { userData } from '@features/userData/components';
 

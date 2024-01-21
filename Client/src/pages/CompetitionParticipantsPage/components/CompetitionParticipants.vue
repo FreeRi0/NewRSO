@@ -1,12 +1,7 @@
 <template>
     <div class="container">
         <div class="squads">
-            <bannerCreate
-                desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
-                label="Создать отряд"
-                name="CreateLSO"
-            ></bannerCreate>
-            <h2 class="squads-title">Студенческие отряды</h2>
+            <h2 class="squads-title">Участники конкурса</h2>
             <div class="squads-tabs">
                 <v-btn
                     class="squads-tabs__item"
@@ -125,11 +120,11 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
+                <competitionList :squads="sortedSquads"></competitionList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
+                <horizontalCompetitionList :squads="sortedSquads"></horizontalCompetitionList>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -145,16 +140,14 @@
     </div>
 </template>
 <script setup>
-import { bannerCreate } from '@shared/components/imagescomp';
 import { Button } from '@shared/components/buttons';
-import { squadsList, horizontalList } from '@features/Squads/components';
+import {
+    competitionList,
+    horizontalCompetitionList,
+} from '@features/Squads/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-// import { usePage } from '@shared';
-
-// usePage();
-// import squads from '@entities/Squads/squads';
 
 const squads = ref([]);
 const categories = ref([]);
@@ -211,7 +204,9 @@ const getSquads = async () => {
 onMounted(() => {
     getSquads();
     getCategories();
+    getEducations();
 });
+
 const squadsVisible = ref(20);
 
 const step = ref(20);
@@ -238,6 +233,7 @@ const sortOptionss = ref([
     },
     { value: 'founding_date', name: 'Дате создания отряда' },
     { value: 'members_count', name: 'Количеству участников' },
+    { value: 'members_count', name: 'Место в рейтинге' },
 ]);
 
 const sortedSquads = computed(() => {
@@ -301,7 +297,6 @@ const sortedSquads = computed(() => {
 });
 </script>
 <style lang="scss">
-
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
@@ -454,4 +449,3 @@ const sortedSquads = computed(() => {
     }
 }
 </style>
-@shared/components/selects/inputs

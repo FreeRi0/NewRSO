@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="contributor">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="contributor-title">Членский взнос</h2>
             <div class="d-flex mt-7">
                 <button
@@ -527,7 +526,6 @@ import {
 } from '@features/Contributor/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 
 const participants = ref([]);
@@ -562,7 +560,7 @@ const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
 const viewParticipants = async () => {
-    await HTTP.get('/rsousers/', {
+    await HTTP.get('/users/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

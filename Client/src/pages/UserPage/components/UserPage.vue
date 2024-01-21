@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="user-wrapper">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="page-title" v-if="currentUser">Моя страница</h2>
             <h2 class="page-title" v-else>
                 Пользователь: {{ user.first_name }}
@@ -70,7 +69,6 @@ import {
 
 import { ref, computed, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 const pages = ref([
     { pageTitle: 'Личный кабинет', href: '#' },

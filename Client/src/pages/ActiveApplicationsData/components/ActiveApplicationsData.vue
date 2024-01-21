@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="active-app">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="profile-title">Активные заявки</h2>
 
             <div class="d-flex mt-9 mb-9">
@@ -87,7 +86,6 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { Button } from '@shared/components/buttons';
 import { activeApplications } from '@features/ActiveApplications/components';
