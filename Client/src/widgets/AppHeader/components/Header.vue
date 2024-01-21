@@ -58,8 +58,8 @@
 
             <nav class="header__nav nav-user">
                 <div class="nav-user__application-count">
-                    <a href=""
-                        ><!--КОЛОКОЛЬЧИК ЭТО ССЫЛКА?? ЧТО ПРОИСХОДИТ ПРИ НАЖАТИИ??-->
+                    <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
+                    <a href="#">
                         <img
                             src="@app/assets/icon/bell-light.svg"
                             width="36"
@@ -67,7 +67,13 @@
                             alt="Иконка уведомления"
                         />
                     </a>
-                    <div class="nav-user__quantity"></div>
+                    <!--Если есть активные заявки (isActive = true), ниже отображается их количество:-->
+                    <div v-if="isActive" class="nav-user__quantity-box">
+                        <span v-if="quantityIsActive < 100">{{
+                            quantityIsActive
+                        }}</span>
+                        <span v-else>99+</span>
+                    </div>
                 </div>
 
                 <div class="nav-user__location" v-if="user">
@@ -89,9 +95,6 @@
 
                         <span v-else>Выберите региональное отделение</span>
                     </button>
-
-                    <!-- <p>{{  user?.user_region?.reg_region}}</p> -->
-
                     <div
                         class="header__overlay"
                         @click="show = !show"
@@ -152,6 +155,18 @@ import { Select } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
+
+const props = defineProps({
+    isActive: {
+        type: Boolean,
+        default: false,
+    },
+    quantityActive: {
+        type: Number,
+    },
+});
+
+const quantityIsActive = ref(props.quantityActive);
 
 const router = useRouter();
 const user = ref({});
@@ -334,6 +349,10 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     padding: 13px 0;
+    font-family: 'BertSans', sans-serif;
+    font-size: 16px;
+    line-height: 21px;
+    font-weight: 400;
     color: #35383f;
     position: relative;
     border-bottom: 1px solid #d9d9d9;
@@ -357,7 +376,8 @@ onMounted(() => {
         z-index: 2;
     }
 
-    a {
+    a,
+    button {
         color: #35383f;
     }
 
@@ -402,17 +422,19 @@ onMounted(() => {
     }
 
     &__nav-list {
-        // display: grid;
-        // grid-template-columns: auto auto auto;
-        column-gap: 12px;
         display: flex;
         flex-grow: 1;
         justify-content: space-between;
         flex-wrap: wrap;
         align-items: center;
-        // min-width: 415px;
+        column-gap: 12px;
+        // font-family: 'BertSans', sans-serif;
+        // font-size: 16px;
+        // font-weight: 400;
+        // line-height: 21px;
         max-width: 445px;
 
+        // min-width: 415px;
         min-width: 411px; // для отображения без ссылки КОНКУРС
 
         @media (max-width: 1024px) {
@@ -488,22 +510,6 @@ onMounted(() => {
         }
     }
 }
-
-// .header__nav-container {
-// .header__overlay {
-//     display: none;
-
-//     @media (max-width: 1024px) {
-//         display: block;
-//     }
-// }
-
-// &.no-visible {
-//     @media (max-width: 1024px) {
-//         display: none;
-//     }
-// }
-// }
 //----------------------------------------------------------------------------------------
 
 //Стили для блоков с выпадающим меню
@@ -544,6 +550,11 @@ onMounted(() => {
         padding: 28px 28px;
         max-height: 820px; //---------------
         width: 328px;
+        font-family: 'Akrobat';
+        font-size: 20px;
+        line-height: 24px;
+        font-weight: 600;
+        // color
         overflow-y: auto;
         border-radius: 10px;
         background-color: #1f7cc0;
@@ -629,7 +640,6 @@ onMounted(() => {
 
         &__list {
             right: 0;
-            // min-width: 328px;
             width: 328px;
             padding: 28px;
             border-radius: 10px;
@@ -687,11 +697,30 @@ onMounted(() => {
         // margin-left: 54px;
     }
 
+    &__application-count {
+        position: relative;
+    }
+
     &__application-count a {
         display: block;
         width: 36px;
         height: 36px;
-        background-image: url('../../../app/assets/icon/bell-light.svg');
+    }
+
+    &__quantity-box {
+        position: absolute;
+        top: -7px;
+        left: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Akrobat';
+        font-size: 12px;
+        line-height: 14px;
+        width: 20px;
+        height: 14px;
+        background-color: #ffffff;
+        color: #db0000;
     }
 
     &__location {
@@ -705,6 +734,7 @@ onMounted(() => {
 
     &__button {
         font-size: 14px;
+        line-height: 18.5px;
 
         @media (max-width: 768px) {
             width: 36px;
@@ -712,7 +742,6 @@ onMounted(() => {
             // margin-top: 5px;
             background-image: url('../../../app/assets/icon/location-mark.svg');
             background-position: center;
-            // order: 1;
 
             span {
                 display: none;
@@ -763,7 +792,7 @@ onMounted(() => {
 .btn.nav-user__button-change {
     margin: 0;
     max-width: 175px;
-    min-height: 52px; //----свойство height из компонента не применилось(?)/удалить?
+    min-height: 52px;
     font-size: 16px;
     line-height: 20px;
     font-weight: 600;

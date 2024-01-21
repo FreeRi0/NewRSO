@@ -1,14 +1,15 @@
 <template>
     <div class="container container--top">
-        <Breadcrumbs></Breadcrumbs>
-
         <h1 class="title title--lso">Редактирование ЛСО</h1>
 
         <FormUnit
             :participants="true"
             :detachment="detachment"
+            :members="members"
+            :submited="submited"
             :is-error="isError"
-            v-if="detachment && isError"
+            :is-error-members="isErrorMembers"
+            v-if="detachment && isError && isErrorMembers"
             @submit.prevent="changeDetachment"
             @select-file="onSelectFile"
             @reset-file="onResetFile"
@@ -22,13 +23,13 @@
             @reset-photo-three="onResetPhotoThree"
             @select-photo-four="onSelectPhotoFour"
             @reset-photo-four="onResetPhotoFour"
+            @update-member="onUpdateMember"
         ></FormUnit>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, inject, watch } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { FormUnit } from '@features/FormUnit';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
@@ -39,10 +40,11 @@ console.log(route);
 let id = route.params.id;
 
 const detachment = ref(null);
+const members = ref([]);
 
 const getDetachment = async () => {
     console.log('id отряда для редактирования - ', id);
-    await HTTP.get(`/detachments/${id}/`, {
+    HTTP.get(`/detachments/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -63,18 +65,43 @@ onBeforeRouteUpdate(async (to, from) => {
     }
 });
 
-watch(
-    () => route.params.id,
+const getMembers = async () => {
+    HTTP.get(`detachments/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            members.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+    // console.log(id);
+};
 
-    (newId, oldId) => {
-        id = newId;
-        getDetachment();
-    },
-);
+// watch(
+//     () => route.params.id,
+
+//     (newId, oldId) => {
+//         id = newId;
+//         getDetachment();
+//     },
+// );
 
 onMounted(() => {
     getDetachment();
+    getMembers();
 });
+
+const onUpdateMember = (event, id) => {
+    const targetMember = members.value.find((member) => member.id === id);
+    const firstkey = Object.keys(event)[0];
+    targetMember[firstkey] = event[firstkey];
+    console.log(event);
+};
 
 const submited = ref(false);
 const fileEmblem = ref(null);
@@ -124,6 +151,7 @@ const onResetPhotoFour = (file) => {
 };
 
 const isError = ref({});
+const isErrorMembers = ref({});
 
 const changeDetachment = async () => {
     // HTTP.put(`detachments/${id}/`, detachment.value, {
@@ -185,6 +213,39 @@ const changeDetachment = async () => {
     formData.append('photo3', filePhotoThree.value);
     formData.append('photo4', filePhotoFour.value);
 
+    for (let member of members.value) {
+        HTTP.patch(
+            `/detachments/${id}/members/${member.id}/`,
+            {
+                position: member.position,
+                is_trusted: member.is_trusted,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        )
+            .then((response) => {
+                console.log(response.data);
+            })
+            // .catch((error) => {
+            //     console.error('There was an error!', error);
+            .catch(({ response }) => {
+                isErrorMembers.value = response.data;
+                console.error('There was an error!', response.data);
+                console.log('Ошибки отправки формы', isErrorMembers.value);
+                swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: `ошибка - ${isErrorMembers.value.non_field_errors}`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                });
+            });
+    }
+
     HTTP.put(`/detachments/${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -192,7 +253,7 @@ const changeDetachment = async () => {
         },
     })
         .then((response) => {
-            submited.value = true;
+            // submited.value = true;
             // formData = response.data;
             console.log(response.data);
             swal.fire({
@@ -214,11 +275,11 @@ const changeDetachment = async () => {
             console.error('There was an error!', response.data);
             console.log('Ошибки отправки формы', isError.value);
             swal.fire({
-                position: 'top-center',
+                position: 'center',
                 icon: 'error',
                 title: `ошибка - ${isError.value.non_field_errors}`,
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 2500,
             });
         });
 };

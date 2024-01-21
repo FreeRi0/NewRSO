@@ -100,9 +100,7 @@
     </div>
 </template>
 
-<script>
-export default {};
-</script>
+<script setup></script>
 
 <style scoped lang="scss">
 .footer {
@@ -112,16 +110,11 @@ export default {};
     background-color: #1c5c94;
 
     &__top-container {
-        // display: grid;
-        // grid-template-columns: 80px 182px 134px 200px;
-        // grid-template-columns: 80px 0.7fr 0.65fr 1fr;
-        // column-gap: 32px;
         display: flex;
         justify-content: space-between;
         margin-bottom: 40px;
 
         @media (max-width: 768px) {
-            // grid-template-columns: 1fr;
             flex-direction: column;
         }
     }
@@ -231,6 +224,7 @@ export default {};
         }
 
         p {
+            min-width: 79px;
             margin-right: 16px;
             margin-left: auto;
             color: #90959d;

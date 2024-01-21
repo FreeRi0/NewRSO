@@ -1,27 +1,29 @@
 <template>
     <div class="container container--top">
-        <Breadcrumbs></Breadcrumbs>
-
         <h1 class="title title--lso">Редактирование штаба СО ОО</h1>
 
         <FormHQ
             :participants="true"
             :headquarter="headquarter"
+            :members="members"
+            :submited="submited"
             :is-error="isError"
-            v-if="headquarter && isError"
+            :is-error-members="isErrorMembers"
+            v-if="headquarter && isError && isErrorMembers"
             @submit.prevent="changeHeadquarter"
             @select-file="onSelectFile"
             @reset-file="onResetFile"
             @select-banner="onSelectBanner"
             @reset-banner="onResetBanner"
+            @update-member="onUpdateMember"
         ></FormHQ>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, inject, watch } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
+import { ref, onMounted, inject, computed } from 'vue';
 import { FormHQ } from '@features/FormHQ';
+// import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 
@@ -32,9 +34,27 @@ let id = route.params.id;
 const submited = ref(false);
 
 const headquarter = ref(null);
+const members = ref([]);
+
+// const members = ref([
+//     {
+//         id: 1,
+//         user: {
+//             id: 5,
+//             first_name: 'strIng',
+//             last_name: 'stRing',
+//             patronymic_name: 'sTring',
+//             avatar: {
+//                 photo: null,
+//             },
+//         },
+//         position: 5,
+//         is_trusted: true,
+//     },
+// ]);
 
 const getHeadquarter = async () => {
-    await HTTP.get(`educationals/${id}/`, {
+    HTTP.get(`educationals/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -55,18 +75,43 @@ onBeforeRouteUpdate(async (to, from) => {
     }
 });
 
-watch(
-    () => route.params.id,
+const getMembers = async () => {
+    HTTP.get(`educationals/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            members.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+    // console.log(id);
+};
 
-    (newId, oldId) => {
-        id = newId;
-        getHeadquarter();
-    },
-);
+// watch(
+//     () => route.params.id,
+
+//     (newId, oldId) => {
+//         id = newId;
+//         getHeadquarter();
+//     },
+// );
 
 onMounted(() => {
     getHeadquarter();
+    getMembers();
 });
+
+const onUpdateMember = (event, id) => {
+    const targetMember = members.value.find((member) => member.id === id);
+    const firstkey = Object.keys(event)[0];
+    targetMember[firstkey] = event[firstkey];
+    console.log(event);
+};
 
 const fileEmblem = ref(null);
 const fileBanner = ref(null);
@@ -85,6 +130,7 @@ const onResetBanner = (file) => {
 };
 
 const isError = ref({});
+const isErrorMembers = ref({});
 const swal = inject('$swal');
 
 const changeHeadquarter = async () => {
@@ -109,6 +155,39 @@ const changeHeadquarter = async () => {
     formData.append('emblem', fileEmblem.value);
     formData.append('banner', fileBanner.value);
 
+    for (let member of members.value) {
+        HTTP.patch(
+            `/educationals/${id}/members/${member.id}/`,
+            {
+                position: member.position,
+                is_trusted: member.is_trusted,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        )
+            .then((response) => {
+                console.log(response.data);
+            })
+            // .catch((error) => {
+            //     console.error('There was an error!', error);
+            .catch(({ response }) => {
+                isErrorMembers.value = response.data;
+                console.error('There was an error!', response.data);
+                console.log('Ошибки отправки формы', isErrorMembers.value);
+                swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: `ошибка - ${isErrorMembers.value.non_field_errors}`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                });
+            });
+    }
+
     HTTP.put(`/educationals/${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -116,7 +195,7 @@ const changeHeadquarter = async () => {
         },
     })
         .then((response) => {
-            submited.value = true;
+            // submited.value = true;
             console.log(response.data);
             swal.fire({
                 position: 'top-center',
@@ -137,7 +216,7 @@ const changeHeadquarter = async () => {
             console.error('There was an error!', response.data);
             console.log('Ошибки отправки формы', isError.value);
             swal.fire({
-                position: 'top-center',
+                position: 'center',
                 icon: 'error',
                 title: `ошибка - ${isError.value.non_field_errors}`,
                 showConfirmButton: false,

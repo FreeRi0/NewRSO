@@ -7,6 +7,7 @@
                     v-for="item in items"
                     :key="item.id"
                     :item="item"
+                    :is-error-members="isErrorMembers"
                     @update-member="onUpdateMember"
                 ></ItemMember>
             </template>
@@ -17,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+// import { ref } from 'vue';
 import { ItemMember } from '@features/ItemMember';
 
 const props = defineProps({
@@ -33,6 +34,10 @@ const props = defineProps({
     unit: {
         type: String,
         default: 'штаб',
+    },
+    isErrorMembers: {
+        type: Object,
+        default: () => ({}),
     },
 });
 
@@ -219,6 +224,7 @@ const onUpdateMember = (event, id) => {
         margin-left: 12px;
         min-width: 224px;
         width: 224px;
+        // position: relative;
 
         .v-select__selection {
             margin: 0;
@@ -256,6 +262,12 @@ const onUpdateMember = (event, id) => {
             }
         }
     }
+
+    // &__error {
+    //     font-size: 12px;
+    //     line-height: 12px;
+    //     bottom: -12px;
+    // }
 
     &__confidant {
         margin-left: 12px;
@@ -297,8 +309,6 @@ const onUpdateMember = (event, id) => {
             min-height: 0;
         }
 
-        // .v-field__field {
-        // }
         .v-field__input,
         .v-text-field input.v-field__input {
             // max-height: 24px;
