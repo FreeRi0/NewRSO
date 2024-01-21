@@ -16,7 +16,10 @@
                 </button>
             </div>
             <div v-if="picked == 'Верификация аккаунтов' || picked == ''">
-                <div class="contributor-sort__all mb-8">
+                <div
+                    class="contributor-sort__all mb-8"
+                    v-if="participants.length > 0"
+                >
                     <input
                         type="checkbox"
                         @click="select"
@@ -27,16 +30,16 @@
                     :participants="participants"
                     @change="changePeoples"
                 />
-                <Button
+                <!-- <Button
                     @click="participantsVisible += step"
-                    v-if="participantsVisible < participants.length"
+                    v-if="participantsVisible < participants.length && participants.length > 0"
                     label="Показать еще"
                 ></Button>
                 <Button
                     @click="participantsVisible -= step"
                     v-else
                     label="Свернуть все"
-                ></Button>
+                ></Button> -->
                 <div class="selectedItems" v-if="selectedPeoples.length > 0">
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
 
@@ -47,14 +50,17 @@
                 </div>
             </div>
             <div v-else-if="picked == 'Заявка на вступление в отряд'">
-                <div class="contributor-sort__all mb-8">
+                <div
+                    class="contributor-sort__all mb-8"
+                    v-if="detachments.length > 0"
+                >
                     <input
                         type="checkbox"
                         @click="selectSquads"
                         v-model="checkboxAllSquads"
                     />
                 </div>
-                <div class="classes">
+                <div class="classes" v-if="detachments.length > 0">
                     <div>Боец</div>
                     <div>Отряд</div>
                 </div>
@@ -88,6 +94,13 @@ import { activeApplications } from '@features/ActiveApplications/components';
 import { checkedAppList } from '@features/ActiveApplications/components';
 import { CheckedSquadsList } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+
+const roleStore = useRoleStore();
+roleStore.getRoles();
+
+const roles = storeToRefs(roleStore);
 
 const picked = ref('');
 const tabs = ref([
@@ -112,7 +125,6 @@ const pages = ref([
 
 const participants = ref([]);
 const detachments = ref([]);
-const squad = ref({});
 const checkboxAll = ref(false);
 const checkboxAllSquads = ref(false);
 const participantsVisible = ref(12);
@@ -120,43 +132,13 @@ const selectedPeoples = ref([]);
 const selectedDetch = ref([]);
 const step = ref(12);
 
-// const getUser = async () => {
-//     await HTTP.get(`/rsousers/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             user.value = response.data;
-//             console.log(response.data);
-//         })
-//         .catch(function (error) {
-//             console.log('failed ' + error);
-//         });
-// };
+// let tempParticipants = participants.value;
 
-let tempParticipants = participants.value;
-
-tempParticipants = tempParticipants.slice(0, participantsVisible.value);
-const getSquad = async () => {
-    await HTTP.get(`/detachments/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squad.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
 const viewParticipants = async () => {
-    let id = squad.value.id;
+    let id = roles?.roles?.value?.detachment_commander;
+    console.log('roles', roles.roles.value);
     console.log('id', id);
     await HTTP.get(`/detachments/${id}/verifications/`, {
         headers: {
@@ -174,7 +156,10 @@ const viewParticipants = async () => {
 };
 
 const viewDetachments = async () => {
-    await HTTP.get(`/detachments/1/applications/`, {
+    let id = roles?.roles?.value?.detachment_commander;
+    console.log('roles', roles.roles.value);
+    console.log('id', id);
+    await HTTP.get(`/detachments/${id}/applications/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -192,8 +177,19 @@ const viewDetachments = async () => {
 onMounted(() => {
     viewParticipants();
     viewDetachments();
-    getSquad();
 });
+
+watch(
+    () => roles.roles.value,
+
+    (newRole, oldRole) => {
+        if (Object.keys(roles.roles.value).length === 0) {
+            return;
+        }
+        viewParticipants();
+        viewDetachments();
+    },
+);
 
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
@@ -284,6 +280,14 @@ const select = (event) => {
     p {
         font-size: 16px;
         color: #35383f;
+    }
+}
+
+.selectedItems {
+    padding-top: 60px;
+    padding-bottom: 80px;
+    h3 {
+        margin-bottom: 20px;
     }
 }
 </style>

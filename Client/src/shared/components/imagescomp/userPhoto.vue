@@ -1,14 +1,13 @@
 <template>
     <div class="avatar-upload my_photo__edit">
         <!-- Заглушка по умолчанию  -->
-        <div class="avatar-preview my_photo__plug" >
+        <div class="avatar-preview my_photo__plug">
             <img :src="photo" alt="Фото пользователя" v-if="photo" />
 
             <img
                 src="@/app/assets/user-banner.jpg"
                 alt="Фото пользователя(пусто)"
                 v-else
-
             />
         </div>
         <!-- Добавить фото -->
@@ -18,13 +17,12 @@
 <script setup>
 import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
-import { uploadPhoto} from '.';
+import { uploadPhoto } from '.';
 
 const props = defineProps({
     photo: String,
-    add: Boolean
+    add: Boolean,
 });
-
 </script>
 <style lang="scss">
 .my_photo__edit {
@@ -61,5 +59,8 @@ const props = defineProps({
     height: 371px;
     object-fit: cover;
     border-radius: 10px;
+    @media screen and (max-width: 575px) {
+       height: 206px !important;
+    }
 }
 </style>

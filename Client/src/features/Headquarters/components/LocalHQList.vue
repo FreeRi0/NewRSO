@@ -1,10 +1,12 @@
 <template>
-    <localItem
-        v-for="localHeadquarter in localHeadquarters"
-        :local-headquarter="localHeadquarter"
-        :key="localHeadquarter.id"
-        v-if="localHeadquarters.length > 0"
-    />
+    <div class="headquarters-wrapper" v-if="localHeadquarters.length > 0">
+        <localItem
+            v-for="localHeadquarter in localHeadquarters"
+            :local-headquarter="localHeadquarter"
+            :key="localHeadquarter.id"
+        />
+    </div>
+
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>

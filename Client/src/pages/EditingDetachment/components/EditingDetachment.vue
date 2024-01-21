@@ -33,6 +33,7 @@ import { ref, onMounted, inject, watch } from 'vue';
 import { FormUnit } from '@features/FormUnit';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
+import { usePage } from '@shared';
 
 const router = useRouter();
 const route = useRoute();
@@ -41,6 +42,8 @@ let id = route.params.id;
 
 const detachment = ref(null);
 const members = ref([]);
+
+const { replaceTargetObjects } = usePage();
 
 const getDetachment = async () => {
     console.log('id отряда для редактирования - ', id);
@@ -52,6 +55,7 @@ const getDetachment = async () => {
     })
         .then((response) => {
             detachment.value = response.data;
+            replaceTargetObjects([detachment.value]);
             console.log(response);
         })
         .catch(function (error) {

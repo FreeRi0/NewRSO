@@ -1,109 +1,97 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
-        <h1 class="title title--hq">Центральный штаб</h1>
-        <BannerHQ
-            v-if="showHQ"
-            :headquarter="headquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showDistrictHQ"
-            :districtHeadquarter="districtHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showLocalHQ"
-            :localHeadquarter="localHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showRegionalHQ"
-            :regionalHeadquarter="regionalHeadquarter"
-            :edict="educt"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else
-            :centralHeadquarter="centralHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <section class="about-hq">
-            <h3>Описание центрального штаба</h3>
-            <p v-if="showHQ">
-                {{ headquarter.about }}
-            </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
-        </section>
-        <ManagementHQ
-            :member="member"
-            head="Руководство центрального штаба"
-        ></ManagementHQ>
-        <HQandSquad></HQandSquad>
+            <h1 class="title title--hq">Центральный штаб</h1>
+            <BannerHQ
+                v-if="showHQ"
+                :headquarter="headquarter"
+                :edict="educt"
+                :member="member"
+            ></BannerHQ>
+            <BannerHQ
+                v-else-if="showDistrictHQ"
+                :districtHeadquarter="districtHeadquarter"
+                :edict="educt"
+                :member="member"
+            ></BannerHQ>
+            <BannerHQ
+                v-else-if="showLocalHQ"
+                :localHeadquarter="localHeadquarter"
+                :edict="educt"
+                :member="member"
+            ></BannerHQ>
+            <BannerHQ
+                v-else-if="showRegionalHQ"
+                :regionalHeadquarter="regionalHeadquarter"
+                :edict="educt"
+                :member="member"
+            ></BannerHQ>
+            <BannerHQ
+                v-else
+                :centralHeadquarter="centralHeadquarter"
+                :member="member"
+            ></BannerHQ>
+            <section class="about-hq">
+                <h3>Описание центрального штаба</h3>
+                <p v-if="showHQ">
+                    {{ headquarter.about }}
+                </p>
+                <p v-else-if="showDistrictHQ">
+                    {{ districtHeadquarter.about }}
+                </p>
+                <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
+                <p v-else-if="showRegionalHQ">
+                    {{ regionalHeadquarter.about }}
+                </p>
+                <p v-else>{{ centralHeadquarter.about }}</p>
+            </section>
+            <ManagementHQ
+                :member="member"
+                head="Руководство центрального штаба"
+            ></ManagementHQ>
+            <HQandSquad></HQandSquad>
     </div>
 </template>
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import HQandSquad from '../RegionalHQPage/components/HQandSquad.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute } from 'vue-router';
+import { usePage } from '@shared';
 
-// banner condition
 const showRegionalHQ = ref(false);
 const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showHQ = ref(false);
 
-const centralHeadquarters = ref({});
 const centralHeadquarter = ref({});
 const member = ref([]);
 const commander = ref({});
 const route = useRoute();
 let id = route.params.id;
-// let id = 1;
+
+const { replaceTargetObjects } = usePage();
 
 const aboutCentralHQs = async () => {
-    await HTTP.get(`/centrals/`, {
+    await HTTP.get(`/centrals/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            centralHeadquarters.value = response.data;
-            console.log(response);
+            centralHeadquarter.value = response.data;
+            replaceTargetObjects([centralHeadquarter.value]);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
 };
-// const aboutCentralHQ = async () => {
-//     await HTTP.get(`/centrals/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             centralHeadquarter.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
 
 const aboutMembers = async () => {
-    await HTTP.get(`/centrals/${id}/members/`, {
+    await HTTP.get('/centrals/1/members/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -111,43 +99,17 @@ const aboutMembers = async () => {
     })
         .then((response) => {
             member.value = response.data;
-            console.log(response);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
 };
 
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         // aboutCentralHQs();
-//         aboutCentralHQ();
-//         aboutMembers();
-//         aboutEduc();
-//     }
-// });
-// watch(
-//     () => route.params.id,
-
-//     (newId, oldId) => {
-//         id = newId;
-//         // aboutCentralHQs();
-//         aboutCentralHQ();
-//         aboutMembers();
-//         aboutEduc();
-//     },
-// );
-
 onMounted(() => {
     aboutCentralHQs();
-    // aboutCentralHQ();
     aboutMembers();
 });
-
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Центральный штаб', href: '#' },
-];
 </script>
 <style lang="scss" scoped>
 .title {

@@ -6,18 +6,26 @@ const routes: RouteRecordRaw[] = [
         component: () =>
             import('@layouts/MainLayout/components/MainLayout.vue'),
         meta: {
+            //
             label: 'Структура',
+            redirectTo: 'Login',
         },
         children: [
             {
                 path: '',
                 name: 'Login',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
                 component: () =>
                     import('@pages/LoginPage/components/LoginPage.vue'),
             },
             {
                 path: '/Register',
                 name: 'Register',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
                 component: () =>
                     import('@pages/RegisterPage/components/RegisterPage.vue'),
             },
@@ -37,7 +45,6 @@ const routes: RouteRecordRaw[] = [
                         '@pages/СreaturePassword/components/CreaturePasswordPage.vue'
                     ),
             },
-
             {
                 path: '/terms_of_use',
                 name: 'terms_of_use',
@@ -56,42 +63,23 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/404Page/components/404Page.vue'),
             },
-
+            //----------------------Начало----------------Штабы/Создание/Редактирование---------------------------------------------------------
+            // Штабы ЛСО
             {
                 path: '/AllSquads',
                 meta: {
                     requiresAuth: true,
+                    redirectTo: 'allsquads',
                     label: 'ЛСО',
                 },
-
                 children: [
                     {
-                        path: ':id',
-                        meta: {
-                            label: 'Отряд',
-                        },
-                        name: 'lso',
-                        component: () => import('@pages/lsoPage/lsoPage.vue'),
-                    },
-                    {
-                        path: ':id',
-                        meta: {
-                            label: 'Отряд',
-                        },
-
-                        children: [
-                            {
-                                path: 'EditLSO',
-                                name: 'EditLSO',
-                                component: () =>
-                                    import(
-                                        '@pages/EditingDetachment/components/EditingDetachment.vue'
-                                    ),
-                                meta: {
-                                    label: 'Редактирование',
-                                },
-                            },
-                        ],
+                        path: '',
+                        name: 'allsquads',
+                        component: () =>
+                            import(
+                                '@pages/AllSquadsPage/components/AllSquadsPage.vue'
+                            ),
                     },
 
                     {
@@ -106,77 +94,64 @@ const routes: RouteRecordRaw[] = [
                             label: 'Создание ЛСО',
                         },
                     },
-                ],
-            },
-            // {
-            //     path: '/HQ',
-            //     name: 'HQ',
-            //     component: () => import('@pages/HQPage/HQPage.vue'),
-            //     meta: {
-            //         requiresAuth: true,
-            //     },
-            // },
-            {
-                path: '/AllHeadquarters',
-                meta: {
-                    requiresAuth: true,
-                    label: 'Штабы СО ОО',
-                },
-                children: [
-                    {
-                        path: ':id',
-                        meta: {
-                            label: 'Штаб',
-                        },
-                        name: 'HQ',
-                        component: () => import('@pages/HQPage/HQPage.vue'),
-                    },
-                    {
-                        path: ':id',
-                        meta: {
-                            label: 'Штаб',
-                        },
 
+                    {
+                        path: ':id',
+                        meta: {
+                            label: 'squad.name',
+                            redirectTo: 'lso',
+                            isObject: true,
+                        },
                         children: [
                             {
-                                path: 'EditHQ',
-                                name: 'EditHQ',
+                                path: '',
+                                name: 'lso',
+                                component: () =>
+                                    import('@pages/lsoPage/lsoPage.vue'),
+                            },
+                            {
+                                path: 'EditLSO',
+                                name: 'EditLSO',
                                 component: () =>
                                     import(
-                                        '@pages/EditingHQ/components/EditingHQ.vue'
+                                        '@pages/EditingDetachment/components/EditingDetachment.vue'
                                     ),
                                 meta: {
                                     label: 'Редактирование',
                                 },
                             },
-
-                            //в данной структуре только штабы СО ОО, редактирование 3-х штабов, которые ниже нужно перенести в другую структуру
-                            {
-                                path: 'EditingOfLocal',
-                                name: 'FormLocal',
-                                component: () =>
-                                    import(
-                                        '@pages/EditingOfLocal/components/EditingOfLocal.vue'
-                                    ),
-                            },
-                            {
-                                path: 'EditingOfDH',
-                                name: 'FormDH',
-                                component: () =>
-                                    import(
-                                        '@pages/EditingOfDH/components/EditingOfDH.vue'
-                                    ),
-                            },
-                            {
-                                path: 'EditingOfRS',
-                                name: 'EditingOfRS',
-                                component: () =>
-                                    import(
-                                        '@pages/EditingOfRS/components/EditingOfRS.vue'
-                                    ),
-                            },
-                            //-----------------------------------------------------------------------------------------------------------------
                         ],
+                    },
+                    {
+                        path: '/CreateLSO',
+                        name: 'CreateLSO',
+                        component: () =>
+                            import(
+                                '@pages/CreationOfDetachment/components/CreationOfDetachment.vue'
+                            ),
+                        meta: {
+                            requiresAuth: true,
+                            label: 'Создание ЛСО',
+                        },
+                    },
+                ],
+            },
+            // Штабы СО ОО
+            {
+                path: '/AllHeadquarters',
+                meta: {
+                    requiresAuth: true,
+                    redirectTo: 'AllHeadquarters',
+                    label: 'Штабы СО ОО',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'AllHeadquarters',
+                        component: () =>
+                            import(
+                                '@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'
+                            ),
                     },
                     {
                         path: '/createhq',
@@ -190,40 +165,223 @@ const routes: RouteRecordRaw[] = [
                             label: 'Создание штаба СО ОО',
                         },
                     },
+                    {
+                        path: ':id',
+                        meta: {
+                            label: 'headquarter.name',
+                            redirectTo: 'HQ',
+                            isObject: true,
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'HQ',
+                                component: () =>
+                                    import('@pages/HQPage/HQPage.vue'),
+                            },
+                            {
+                                path: 'EditHQ',
+                                name: 'EditHQ',
+                                component: () =>
+                                    import(
+                                        '@pages/EditingHQ/components/EditingHQ.vue'
+                                    ),
+                                meta: {
+                                    label: 'Редактирование',
+                                },
+                            },
+                        ],
+                    },
                 ],
             },
+            // Местные штабы
             {
-                path: '/DistrictHQ/:id',
-                name: 'DistrictHQ',
-                component: () =>
-                    import('@pages/DistrictHQPage/DistrictHQPage.vue'),
-            },
-            {
-                path: '/CentralHQ',
-                name: 'CentralHQ',
-                component: () =>
-                    import('@pages/CentralHQPage/CentralHQPage.vue'),
-                meta: {
-                    label: 'Центральный штаб',
-                },
-            },
-            {
-                path: '/RegionalHQ/:id',
-                name: 'RegionalHQ',
-                component: () =>
-                    import('@pages/RegionalHQPage/RegionalHQPage.vue'),
+                path: '/LocalHeadquarters',
                 meta: {
                     requiresAuth: true,
+                    redirectTo: 'LocalHeadquarters',
+                    label: 'Местные штабы',
                 },
+                children: [
+                    {
+                        path: '',
+                        name: 'LocalHeadquarters',
+                        component: () =>
+                            import(
+                                '@pages/AllHeadquartersPage/components/LocalHeadquartersPage.vue'
+                            ),
+                    },
+                    {
+                        path: ':id',
+                        meta: {
+                            label: 'localHeadquarter.name',
+                            redirectTo: 'LocalHQ',
+                            isObject: true,
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'LocalHQ',
+                                component: () =>
+                                    import(
+                                        '@pages/LocalHQPage/LocalHQPage.vue'
+                                    ),
+                            },
+                            {
+                                path: 'EditingOfLocal',
+                                name: 'FormLocal',
+                                component: () =>
+                                    import(
+                                        '@pages/EditingOfLocal/components/EditingOfLocal.vue'
+                                    ),
+                                meta: {
+                                    label: 'Редактирование',
+                                },
+                            },
+                        ],
+                    },
+                ],
             },
+            // Региональные штабы
             {
-                path: '/LocalHQ/:id',
-                name: 'LocalHQ',
-                component: () => import('@pages/LocalHQPage/LocalHQPage.vue'),
+                path: '/RegionalHeadquarters',
                 meta: {
                     requiresAuth: true,
+                    redirectTo: 'regionalHeadquarters',
+                    label: 'Региональные штабы',
                 },
+                children: [
+                    {
+                        path: '',
+                        name: 'regionalHeadquarters',
+                        component: () =>
+                            import(
+                                '@pages/AllHeadquartersPage/components/RegionalHeadquarters.vue'
+                            ),
+                    },
+                    {
+                        path: '/CreationOfRS',
+                        name: 'CreationOfRS',
+                        component: () =>
+                            import(
+                                '@pages/CreationOfRS/components/CreationOfRS.vue'
+                            ),
+                        meta: {
+                            requiresAuth: true,
+                            label: 'Создание регионального штаба',
+                        },
+                    },
+                    {
+                        path: ':id',
+                        meta: {
+                            label: 'regionalHeadquarter.name',
+                            redirectTo: 'RegionalHQ',
+                            isObject: true,
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'RegionalHQ',
+                                component: () =>
+                                    import(
+                                        '@pages/RegionalHQPage/RegionalHQPage.vue'
+                                    ),
+                            },
+                            {
+                                path: 'EditingOfRS',
+                                name: 'EditingOfRS',
+                                component: () =>
+                                    import(
+                                        '@pages/EditingOfRS/components/EditingOfRS.vue'
+                                    ),
+                                meta: {
+                                    label: 'Редактирование',
+                                },
+                            },
+                        ],
+                    },
+                ],
             },
+            // Окружные штабы
+            {
+                path: '/DistrictHeadquarters',
+                meta: {
+                    requiresAuth: true,
+                    redirectTo: 'districtHeadquarters',
+                    label: 'Окружные штабы',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'districtHeadquarters',
+                        component: () =>
+                            import(
+                                '@pages/AllHeadquartersPage/components/DistrictsHeadquartersPage.vue'
+                            ),
+                    },
+
+                    {
+                        path: ':id',
+                        meta: {
+                            label: 'districtHeadquarter.name',
+                            redirectTo: 'DistrictHQ',
+                            isObject: true,
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'DistrictHQ',
+                                component: () =>
+                                    import(
+                                        '@pages/DistrictHQPage/DistrictHQPage.vue'
+                                    ),
+                            },
+                            {
+                                path: 'EditingOfDH',
+                                name: 'FormDH',
+                                component: () =>
+                                    import(
+                                        '@pages/EditingOfDH/components/EditingOfDH.vue'
+                                    ),
+                                meta: {
+                                    label: 'Редактирование',
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+            // Центральный штаб
+            {
+                path: '/CentralHQ/:id',
+                meta: {
+                    label: 'centralHeadquarter.name',
+                    redirectTo: 'CentralHQ',
+                    isObject: true,
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'CentralHQ',
+                        component: () =>
+                            import('@pages/CentralHQPage/CentralHQPage.vue'),
+                    },
+                    {
+                        path: 'EditingOfCentral',
+                        name: 'FormCentral',
+                        component: () =>
+                            import(
+                                '@pages/EditingOfCentral/components/EditingOfCentral.vue'
+                            ),
+                        meta: {
+                            label: 'Редактирование',
+                        },
+                    },
+                ],
+            },
+
+            //----------------------Конец----------------Штабы/Создание/Редактирование---------------------------------------------------------96cb9a («.»)
+
             // {
             //     path: '/UserPage',
             //     name: 'userpaage',
@@ -241,13 +399,6 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     label: 'Страница пользователя',
                 },
-            },
-
-            {
-                path: '/AllSquads',
-                name: 'allsquads',
-                component: () =>
-                    import('@pages/AllSquadsPage/components/AllSquadsPage.vue'),
             },
             {
                 path: '/actionSquads',
@@ -280,52 +431,6 @@ const routes: RouteRecordRaw[] = [
                         '@pages/EditActionPage/components/EditActionPage.vue'
                     ),
             },
-
-            {
-                path: '/AllHeadquarters',
-                name: 'allheadquarters',
-                component: () =>
-                    import(
-                        '@pages/AllHeadquartersPage/components/AllHeadquartersPage.vue'
-                    ),
-                meta: {
-                    requiresAuth: true,
-                    label: 'Штабы СО ОО',
-                },
-            },
-            {
-                path: '/LocalHeadquarters',
-                name: 'localHeadquarters',
-                component: () =>
-                    import(
-                        '@pages/AllHeadquartersPage/components/LocalHeadquartersPage.vue'
-                    ),
-                meta: {
-                    label: 'Местные штабы',
-                },
-            },
-            {
-                path: '/RegionalHeadquarters',
-                name: 'regionalHeadquarters',
-                component: () =>
-                    import(
-                        '@pages/AllHeadquartersPage/components/RegionalHeadquarters.vue'
-                    ),
-                meta: {
-                    label: 'Региональные штабы',
-                },
-            },
-            {
-                path: '/DistrictHeadquarters',
-                name: 'districtHeadquarters',
-                component: () =>
-                    import(
-                        '@pages/AllHeadquartersPage/components/DistrictsHeadquartersPage.vue'
-                    ),
-                meta: {
-                    label: 'Окружные штабы ',
-                },
-            },
             {
                 path: '/AllParticipants/:id',
                 name: 'allparticipants',
@@ -335,7 +440,7 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
-                    label: 'Участнки отряда',
+                    label: 'Участники отряда',
                 },
             },
             {
@@ -347,7 +452,7 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     requiresAuth: true,
-                    label: 'Участнки мероприятия',
+                    label: 'Участники мероприятия',
                 },
             },
             {
@@ -415,15 +520,6 @@ const routes: RouteRecordRaw[] = [
                 },
             },
             {
-                path: '/CreationOfRS',
-                name: 'CreationOfRS',
-                component: () =>
-                    import('@pages/CreationOfRS/components/CreationOfRS.vue'),
-                meta: {
-                    requiresAuth: true,
-                },
-            },
-            {
                 path: '/activeInvents/accountVerification',
                 name: 'accountVerification',
                 component: () =>
@@ -443,16 +539,6 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@entities/Invents/components/InventSquads.vue'),
             },
-
-            {
-                path: 'EditingOfCentral',
-                name: 'FormCentral',
-                component: () =>
-                    import(
-                        '@pages/EditingOfCentral/components/EditingOfCentral.vue'
-                    ),
-            },
-
             {
                 path: '/FAQ',
                 name: 'faq',
@@ -462,6 +548,7 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
+            // Индивидуальное мероприятие
             {
                 path: '/Event',
                 name: 'event',
@@ -470,7 +557,6 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
-
             {
                 path: '/active',
                 name: 'active',

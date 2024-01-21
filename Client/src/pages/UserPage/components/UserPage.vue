@@ -32,7 +32,7 @@
             </div>
 
             <div class="mt-14" v-if="user.is_verified">{{ user.bio }}</div>
-            <div class="mt-8 d-flex">
+            <div class="mt-8 photoWrapper">
                 <userPhoto
                     class="photo-item"
                     :photo="user?.media?.photo1"
@@ -132,7 +132,6 @@ watch(
 );
 
 onMounted(() => {
-
     getUser();
 });
 </script>
@@ -140,12 +139,20 @@ onMounted(() => {
 .user-wrapper {
     padding: 60px 0px 80px 0px;
 }
+
+.photoWrapper {
+    display: flex;
+    @media screen and (max-width: 768px) {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
 .user-verify {
     margin-top: 60px;
     margin-bottom: 40px;
     &__title {
         font-size: 32px;
-        color: #35383F;
+        color: #35383f;
         font-weight: 600;
         @media screen and (max-width: 575px) {
             font-size: 28px;
@@ -153,7 +160,7 @@ onMounted(() => {
     }
     &__desc {
         font-size: 18px;
-        color: #35383F;
+        color: #35383f;
         font-weight: 40;
         margin-top: 40px;
         max-width: 835px;
@@ -162,7 +169,7 @@ onMounted(() => {
             max-width: 620px;
         }
         @media screen and (max-width: 575px) {
-            max-width: 328px;
+            width: 100%;
         }
     }
 }
@@ -170,10 +177,22 @@ onMounted(() => {
 .photo-item {
     width: 260px;
     margin-right: 20px;
+    @media screen and (max-width: 768px) {
+        margin-bottom: 16px;
+    }
+    @media screen and (max-width: 575px) {
+        height: 206px;
+        width: 156px;
+        margin-right: 16px;
+    }
 }
 .btn {
     margin: 0px;
     padding: 12px 62px;
     height: 52px;
+    @media screen and (max-width: 575px) {
+        margin: 0px auto;
+        width: 100%;
+    }
 }
 </style>

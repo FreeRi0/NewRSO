@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--hq">Региональный штаб</h1>
         <BannerHQ
             v-if="showHQ"
@@ -68,14 +67,13 @@
 </template>
 
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
-// banner condition
 const showRegionalHQ = ref(true);
 const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
@@ -87,6 +85,8 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const aboutRegionalHQ = async () => {
     await HTTP.get(`/regionals/${id}/`, {
         headers: {
@@ -96,22 +96,7 @@ const aboutRegionalHQ = async () => {
     })
         .then((response) => {
             regionalHeadquarter.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
+            replaceTargetObjects([regionalHeadquarter.value]);
             console.log(response);
         })
         .catch(function (error) {
@@ -139,7 +124,6 @@ onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutRegionalHQ();
         aboutMembers();
-        aboutEduc();
     }
 });
 watch(
@@ -149,37 +133,13 @@ watch(
         id = newId;
         aboutRegionalHQ();
         aboutMembers();
-        aboutEduc();
     },
 );
 
 onMounted(() => {
     aboutRegionalHQ();
     aboutMembers();
-    aboutEduc();
 });
-
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Региональные штабы', href: '#' },
-    { pageTitle: `${regionalHeadquarter.name}`, href: '#' },
-];
-
-//блок отряды и штабы регионального штаба
-const HQandSquads = ref([
-    {
-        name: 'Местные штабы',
-        link: '/LocalHeadquarters',
-    },
-    {
-        name: 'Штабы СО ОО',
-        link: '/AllHeadquarters',
-    },
-    {
-        name: 'ЛСО',
-        link: '/AllSquads',
-    },
-]);
 </script>
 <style scoped lang="scss">
 .title {
