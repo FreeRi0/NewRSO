@@ -114,11 +114,13 @@ onBeforeRouteUpdate(async (to, from) => {
         aboutMembers();
     }
 });
+
 watch(
     () => route.params.id,
 
     (newId, oldId) => {
         id = newId;
+        console.log("СТРАНИЧКА ОШ. ШТАБА");
         aboutDistrictHQ();
         aboutMembers();
     },
@@ -128,6 +130,7 @@ onMounted(() => {
     aboutDistrictHQ();
     aboutMembers();
 });
+
 </script>
 <style lang="scss" scoped>
 

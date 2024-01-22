@@ -77,9 +77,11 @@ const fileEmblem = ref(null);
 const fileBanner = ref(null);
 
 const onSelectEmblem = (file) => {
+    isEmblemChange.value = true;
     fileEmblem.value = file;
 };
 const onSelectBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 
@@ -98,9 +100,15 @@ const changeHeadquarter = async () => {
     const formData = new FormData();
 
     formData.append('name', headquarter.value.name);
-    formData.append('date_students', headquarter.value.date_students);
+    formData.append(
+        'detachments_appearance_year',
+        headquarter.value.detachments_appearance_year,
+    );
     formData.append('founding_date', headquarter.value.founding_date);
-    formData.append('date_first', headquarter.value.date_first);
+    formData.append(
+        'rso_founding_congress_date',
+        headquarter.value.rso_founding_congress_date,
+    );
     formData.append('city', headquarter.value.city);
     formData.append('commander', headquarter.value.commander);
     formData.append('social_vk', headquarter.value.social_vk);
@@ -108,79 +116,14 @@ const changeHeadquarter = async () => {
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
 
-    if (fileEmblem.value) formData.append('emblem', fileEmblem.value);
-    if (fileBanner.value) formData.append('banner', fileBanner.value);
-
-    /**
-     * можно написать в этом же if, через или, но нужно указать что именно мы принимает null
-     * переписать запрос в корректный вид, чтобы не было задвоения
-     */
-    // Условия удалени фото из БД
-    if (isEmblemChange.value && !fileEmblem.value) {
-        HTTP.patch(
-            '/centrals/1/',
-            { emblem: fileEmblem.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        )
-            .then((response) => {
-                submited.value = true;
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-            .catch((error) => {
-                console.error('There was an error!', error);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    }
-
-    if (isBannerChange.value && !fileBanner.value) {
-        HTTP.patch(
-            '/centrals/1/',
-            { banner: fileBanner.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        )
-            .then((response) => {
-                submited.value = true;
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-            .catch((error) => {
-                console.error('There was an error!', error);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    }
+    if (isEmblemChange.value)
+        fileEmblem.value
+            ? formData.append('emblem', fileEmblem.value)
+            : formData.append('emblem', '');
+    if (isBannerChange.value)
+        fileBanner.value
+            ? formData.append('banner', fileBanner.value)
+            : formData.append('banner', '');
 
     HTTP.patch('/centrals/1/', formData, {
         headers: {

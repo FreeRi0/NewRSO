@@ -41,7 +41,6 @@ const getHeadquarter = async () => {
         .then((response) => {
             headquarter.value = response.data;
             replaceTargetObjects([headquarter.value]);
-            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -74,9 +73,11 @@ const fileEmblem = ref(null);
 const fileBanner = ref(null);
 
 const onSelectEmblem = (file) => {
+    isEmblemChange.value = true;
     fileEmblem.value = file;
 };
 const onSelectBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 
@@ -104,74 +105,14 @@ const changeHeadquarter = async () => {
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
 
-    if (fileEmblem.value) formData.append('emblem', fileEmblem.value);
-    if (fileBanner.value) formData.append('banner', fileBanner.value);
-
-    if (isEmblemChange.value && !fileEmblem.value) {
-        HTTP.patch(
-            `/locals/${id}/`,
-            { emblem: fileEmblem.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        )
-            .then((response) => {
-                submited.value = true;
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-            .catch((error) => {
-                console.error('There was an error!', error);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    }
-
-    if (isBannerChange.value && !fileBanner.value) {
-        HTTP.patch(
-            `/locals/${id}/`,
-            { banner: fileBanner.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        )
-            .then((response) => {
-                submited.value = true;
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-            .catch((error) => {
-                console.error('There was an error!', error);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    }
+     if (isEmblemChange.value)
+        fileEmblem.value
+            ? formData.append('emblem', fileEmblem.value)
+            : formData.append('emblem', '');
+    if (isBannerChange.value)
+        fileBanner.value
+            ? formData.append('banner', fileBanner.value)
+            : formData.append('banner', '');
 
     HTTP.patch(`/locals/${id}/`, formData, {
         headers: {
@@ -181,7 +122,6 @@ const changeHeadquarter = async () => {
     })
         .then((response) => {
             submited.value = true;
-            console.log(response.data);
             swal.fire({
                 position: 'top-center',
                 icon: 'success',

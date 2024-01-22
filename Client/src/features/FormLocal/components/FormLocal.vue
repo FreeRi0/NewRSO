@@ -665,7 +665,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Select, Dropdown } from '@shared/components/selects';
@@ -673,7 +673,7 @@ import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 import {
     helpers,
@@ -726,11 +726,11 @@ const counterName = computed(() => {
 });
 
 const counterSlogan = computed(() => {
-    return headquarter.value.slogan.length || 0;
+    return headquarter.value?.slogan?.length || 0;
 });
 
 const counterAbout = computed(() => {
-    return headquarter.value.about.length || 0;
+    return headquarter.value?.about?.length || 0;
 });
 //----------------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -766,12 +766,26 @@ const getMembers = async () => {
     })
         .then((response) => {
             members.value = response.data;
-            console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
 };
+
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         getMembers();
+//     }
+// });
+
+// watch(
+//     () => route.params.id,
+
+//     (newId, oldId) => {
+//         id = newId;
+//         getMembers();
+//     },
+// );
 
 onMounted(() => {
     getMembers();

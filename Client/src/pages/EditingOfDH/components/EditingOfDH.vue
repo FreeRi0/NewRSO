@@ -1,15 +1,17 @@
 <template>
     <div class="container">
         <h1 class="title title--lso">Редактирование окружного штаба</h1>
-        <FormDH :participants="true"
+        <FormDH
+            :participants="true"
             :headquarter="headquarter"
             v-if="headquarter"
             @submit.prevent="changeHeadquarter"
             @select-emblem="onSelectEmblem"
             @select-banner="onSelectBanner"
             @delete-emblem="onDeleteEmblem"
-            @delete-banner="onDeleteBanner">
-            </FormDH>
+            @delete-banner="onDeleteBanner"
+        >
+        </FormDH>
     </div>
 </template>
 
@@ -38,8 +40,9 @@ const getHeadquarter = async () => {
     })
         .then((response) => {
             headquarter.value = response.data;
+            console.log(response);
+            console.log('111');
             replaceTargetObjects([headquarter.value]);
-            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -72,9 +75,11 @@ const fileEmblem = ref(null);
 const fileBanner = ref(null);
 
 const onSelectEmblem = (file) => {
+    isEmblemChange.value = true;
     fileEmblem.value = file;
 };
 const onSelectBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 
@@ -101,74 +106,24 @@ const changeHeadquarter = async () => {
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
 
-    if (fileEmblem.value) formData.append('emblem', fileEmblem.value);
-    if (fileBanner.value) formData.append('banner', fileBanner.value);
+    // если в isEmblemChange, что-то есть, то отправь фоточку, а если нет, то отправь пустую строку - ничего
+    // if (isEmblemChange.value) {
+    //     if (fileEmblem.value) {
+    //         formData.append('emblem', fileEmblem.value);
+    //     } else {
+    //         formData.append('emblem', '');
+    //     }
+    // }
 
-    if (isEmblemChange.value && !fileEmblem.value) {
-        HTTP.patch(
-            `/districts/${id}/`,
-            { emblem: fileEmblem.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        )
-            .then((response) => {
-                submited.value = true;
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-            .catch((error) => {
-                console.error('There was an error!', error);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    }
+    if (isEmblemChange.value)
+        fileEmblem.value
+            ? formData.append('emblem', fileEmblem.value)
+            : formData.append('emblem', '');
+    if (isBannerChange.value)
+        fileBanner.value
+            ? formData.append('banner', fileBanner.value)
+            : formData.append('banner', '');
 
-    if (isBannerChange.value && !fileBanner.value) {
-        HTTP.patch(
-            `/districts/${id}/`,
-            { banner: fileBanner.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        )
-            .then((response) => {
-                submited.value = true;
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-            .catch((error) => {
-                console.error('There was an error!', error);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    }
     HTTP.patch(`/districts/${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -177,7 +132,6 @@ const changeHeadquarter = async () => {
     })
         .then((response) => {
             submited.value = true;
-            // console.log(response.data);
             swal.fire({
                 position: 'top-center',
                 icon: 'success',
@@ -198,4 +152,3 @@ const changeHeadquarter = async () => {
         });
 };
 </script>
-

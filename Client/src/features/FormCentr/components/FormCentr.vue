@@ -89,7 +89,7 @@
 
                         <div class="date_central_wrap">
                             <div class="form__field form_width">
-                                <label for="date_students" class="form__label"
+                                <label for="detachments_appearance_year" class="form__label"
                                     >Дата появления студенческих отрядов в
                                     России (год)
                                     <sup class="valid-red">*</sup>
@@ -97,25 +97,25 @@
                                 <Input
                                     class="form__input"
                                     type="number"
-                                    id="date_students"
+                                    id="detachments_appearance_year"
                                     placeholder="1971"
-                                    name="date_students"
-                                    v-model:value="headquarter.date_students"
+                                    name="detachments_appearance_year"
+                                    v-model:value="headquarter.detachments_appearance_year"
                                     :minlength="4"
                                     :maxlength="4"
                                 />
                             </div>
                             <div class="form__field form_width">
-                                <label for="date_first" class="form__label"
+                                <label for="rso_founding_congress_date" class="form__label"
                                     >Дата первого учредительного съезда РСО
                                     <sup class="valid-red">*</sup>
                                 </label>
                                 <Input
                                     class="form__input"
                                     type="date"
-                                    id="date_first"
-                                    name="date_first"
-                                    v-model:value="headquarter.date_first"
+                                    id="rso_founding_congress_date"
+                                    name="rso_founding_congress_date"
+                                    v-model:value="headquarter.rso_founding_congress_date"
                                 />
                             </div>
                         </div>
@@ -735,11 +735,11 @@ const counterName = computed(() => {
 });
 
 const counterSlogan = computed(() => {
-    return headquarter.value.slogan.length || 0;
+    return headquarter.value?.slogan?.length || 0;
 });
 
 const counterAbout = computed(() => {
-    return headquarter.value.about.length || 0;
+    return headquarter.value?.about?.length || 0;
 });
 //----------------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -775,7 +775,6 @@ const getMembers = async () => {
     })
         .then((response) => {
             members.value = response.data;
-            console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
