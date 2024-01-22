@@ -29,7 +29,6 @@ const classes = computed(() => ({
 </script>
 
 <style scoped lang="scss">
-
 .breadcrumb__separator {
     margin-left: 5px;
     margin-right: 5px;

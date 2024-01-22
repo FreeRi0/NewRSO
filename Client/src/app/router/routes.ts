@@ -14,12 +14,18 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '',
                 name: 'Login',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
                 component: () =>
                     import('@pages/LoginPage/components/LoginPage.vue'),
             },
             {
                 path: '/Register',
                 name: 'Register',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
                 component: () =>
                     import('@pages/RegisterPage/components/RegisterPage.vue'),
             },
@@ -62,16 +68,25 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/',
                 meta: {
-                    label: 'Структура',
-                    namedRoute: 'Login',
+                    requiresAuth: true,
+                    redirectTo: 'allsquads',
+                    label: 'ЛСО',
                 },
                 children: [
                     {
                         path: '/AllSquads',
                         meta: {
                             requiresAuth: true,
-                            namedRoute: 'allsquads',
-                            label: 'ЛСО',
+                            label: 'Создание ЛСО',
+                        },
+                    },
+
+                    {
+                        path: ':id',
+                        meta: {
+                            label: 'squad.name',
+                            redirectTo: 'lso',
+                            isObject: true,
                         },
                         children: [
                             {
@@ -125,22 +140,42 @@ const routes: RouteRecordRaw[] = [
                             },
                         ],
                     },
+                    {
+                        path: '/CreateLSO',
+                        name: 'CreateLSO',
+                        component: () =>
+                            import(
+                                '@pages/CreationOfDetachment/components/CreationOfDetachment.vue'
+                            ),
+                        meta: {
+                            requiresAuth: true,
+                            label: 'Создание ЛСО',
+                        },
+                    },
                 ],
             },
             // Штабы СО ОО
             {
                 path: '/',
                 meta: {
-                    label: 'Структура',
-                    namedRoute: 'Login',
+                    requiresAuth: true,
+                    redirectTo: 'AllHeadquarters',
+                    label: 'Штабы СО ОО',
                 },
                 children: [
                     {
                         path: '/AllHeadquarters',
                         meta: {
                             requiresAuth: true,
-                            namedRoute: 'AllHeadquarters',
-                            label: 'Штабы СО ОО',
+                            label: 'Создание штаба СО ОО',
+                        },
+                    },
+                    {
+                        path: ':id',
+                        meta: {
+                            label: 'headquarter.name',
+                            redirectTo: 'HQ',
+                            isObject: true,
                         },
                         children: [
                             {

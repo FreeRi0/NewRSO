@@ -3,12 +3,12 @@
         v-for="participant in participants"
         @change="changeSelected"
         :participant="participant"
-        :participants="selectedPeoples"
+        :selectedParticipants="selectedPeoples"
         :key="participant.id"
     />
 </template>
 <script setup>
-import { ref, watch } from 'vue';
+import { ref} from 'vue';
 import { checkedContributorsItem } from '@entities/ReferencesPeoples';
 
 const emit = defineEmits(['change']);
@@ -19,8 +19,8 @@ const props = defineProps({
     },
 });
 
-const changeSelected = (changeUser) => {
-    emit('change', changeUser)
+const changeSelected = (changeUser, UserId) => {
+    emit('change', changeUser, UserId)
 };
 
 

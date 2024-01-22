@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { contributorItem } from '@entities/ReferencesPeoples';
 const emit = defineEmits(['change']);
 const props = defineProps({
