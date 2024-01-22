@@ -404,26 +404,6 @@ const routes: RouteRecordRaw[] = [
                 component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
             },
             {
-                path: '/EditLSO',
-                name: 'EditLSO',
-                component: () =>
-                    import(
-                        '@pages/EditingDetachment/components/EditingDetachment.vue'
-                    ),
-                meta: {
-                    requiresAuth: true,
-                    label: 'ЛСО',
-                },
-            },
-            {
-                path: '/AllHeadquarters',
-                name: 'allheadquarters',
-                component: () =>
-                    import(
-                        '@pages/actionSquadsPade/components/actionSquadsPage.vue'
-                    ),
-            },
-            {
                 path: '/AllParticipants/:id',
                 name: 'allEventMembers',
                 component: () =>
