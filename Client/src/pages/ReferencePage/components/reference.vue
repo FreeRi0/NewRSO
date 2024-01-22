@@ -367,7 +367,8 @@
                     </v-expansion-panels>
 
                     <p>
-                        Найдено пользователей: {{ sortedParticipants.length }}
+                        Найдено пользователей:
+                        {{ sortedParticipantsRef.length }}
                     </p>
                 </div>
                 <!-- <filters></filters> -->
@@ -403,7 +404,7 @@
                     <div class="references-wrapper">
                         <referencesList
                             @change="changePeoples"
-                            :participants="participants"
+                            :participants="sortedParticipantsRef"
                             :selectedParticipants="selectedPeoples"
                         ></referencesList>
                     </div>
@@ -421,7 +422,7 @@
             </div>
 
             <div class="references-form" v-if="selectedPeoples.length > 0">
-                <form action="#">
+                <form action="#" @submit.prevent="SendReference()">
                     <div class="data-form refer">
                         <div class="form-field">
                             <label for="education-org"
@@ -434,6 +435,7 @@
                                 name="date_start"
                                 type="date"
                                 class="input-big"
+                                v-model:value="refData.cert_start_date"
                             />
                         </div>
                         <div class="form-field">
@@ -444,6 +446,7 @@
                                 name="date_end"
                                 type="date"
                                 class="input-big"
+                                v-model:value="refData.cert_end_date"
                             />
                         </div>
                     </div>
@@ -455,6 +458,7 @@
                         <Input
                             name="spravka-field"
                             type="text"
+                            v-model:value="refData.recipient"
                             id="course"
                             class="input-full"
                             placeholder="Ответ"
@@ -468,8 +472,16 @@
                             :participants="selectedPeoples"
                         ></checkedReference>
                     </div>
-
-                    <Button label="Получить справки"></Button>
+                    <p class="error" v-if="isError.detail">
+                        {{ isError.detail }}
+                    </p>
+                    <p class="error" v-if="isError">
+                        {{ isError.cert_end_date }}
+                    </p>
+                    <p class="error" v-if="isError">
+                        {{ isError.recipient }}
+                    </p>
+                    <Button type="submit" label="Получить справки"></Button>
                 </form>
             </div>
         </div>
@@ -482,17 +494,46 @@ import { Dropdown } from '@shared/components/dropdown';
 import { Input } from '@shared/components/inputs';
 import {
     referencesList,
-    filters,
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, inject } from 'vue';
 import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
 import { HTTP } from '@app/http';
 
 const participantsVisible = ref(12);
-
+const swal = inject('$swal');
 const participants = ref([]);
+const isError = ref([]);
+// const participant = ref({});
+
+const selectedPeoples = ref([]);
+console.log('dssdddd', selectedPeoples);
+
+// const ids = ref(selectedPeoples);
+// const arr = selectedPeoples.value.reduce(({ id }) => {}, []);
+
+// let arr = selectedPeoples.value.map((item) => item.id)
+
+const arr = computed(() => {
+    let tempPeoples = selectedPeoples.value;
+    tempPeoples = tempPeoples.map((item) => item.id);
+    return tempPeoples;
+});
+
+console.log('idssSss', arr);
+
+// console.log(getArr(selectedPeoples))
+// let { id, ...rest } = selectedPeoples;
+// console.log('id', id)
+const refData = ref({
+    cert_start_date: '',
+    cert_end_date: '',
+    ids: arr,
+    recipient: '',
+});
+
+console.log('data', refData.value.ids);
 
 const viewParticipants = async () => {
     await HTTP.get('/rsousers/', {
@@ -514,6 +555,45 @@ onMounted(() => {
     viewParticipants();
 });
 
+const SendReference = async () => {
+    await HTTP.post('/membership_certificates/external/', refData.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+        responseType: 'blob',
+    })
+        .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            refData.value = response.data;
+            const url = new Blob([response.data], { type: 'application/zip' });
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'external.zip');
+            document.body.appendChild(link);
+            link.click();
+            console.log(response, 'success');
+            console.log(response);
+        })
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+};
+
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
 const selectedSex = ref('Все');
@@ -530,17 +610,16 @@ const maxAge = ref('');
 const checkboxAll = ref(false);
 
 const step = ref(12);
-const selectedPeoples = ref([]);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const select = () => {
+const select = (event) => {
     selectedPeoples.value = [];
 
-    if (checkboxAll.value) {
-        for (let item in participants) {
-            selectedPeoples.value.push(participants[item]);
+    if (event.target.checked) {
+        for (let item in participants.value) {
+            selectedPeoples.value.push(participants.value[item]);
         }
     }
 };
@@ -590,7 +669,7 @@ const sortOptionss = ref([
     { value: 'date_of_birth', name: 'По дате вступления в РСО' },
 ]);
 
-const sortedParticipants = computed(() => {
+const sortedParticipantsRef = computed(() => {
     let tempParticipants = participants.value;
 
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);
@@ -665,13 +744,16 @@ const sortedParticipants = computed(() => {
         return tempParticipants;
     }
     tempParticipants = tempParticipants.filter((item) => {
-        return item.date_of_birth >= minAge.value && item.date_of_birth <= maxAge.value;
+        return (
+            item.date_of_birth >= minAge.value &&
+            item.date_of_birth <= maxAge.value
+        );
     });
 
     return tempParticipants;
 });
 </script>
-<style lang="scss" >
+<style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -830,4 +912,15 @@ p {
         margin-top: 20px;
     }
 }
+
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 10px;
+    text-align: center;
+}
+
+
 </style>

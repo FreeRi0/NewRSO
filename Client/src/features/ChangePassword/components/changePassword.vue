@@ -11,6 +11,10 @@
             name="surname"
             v-model:value="user.username"
         />
+        <p class="error" v-if="isError.last_name">{{ 'Фамилия пользователя, ' +  isError.last_name }}</p>
+            <p class="error" v-if="isError.first_name">{{'Имя пользователя, ' + isError.first_name }}</p>
+            <p class="error" v-if="isError.gender">{{'Гендер, ' + isError.gender }}</p>
+            <p class="error" v-if="isError.username">{{'' + isError.username }}</p>
         <Button @click="updateUsername" v-show="visible" class="save" label="Сохранить" color="primary"></Button>
     </div>
     <div class="change_Password">
@@ -34,7 +38,7 @@
     </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
@@ -44,7 +48,8 @@ const user = ref({
     password: '',
     re_password: '',
 });
-
+const swal = inject('$swal');
+const isError = ref([]);
 const visible = ref(false);
 
 const getUser = async () => {
@@ -75,11 +80,26 @@ const updateUsername = async() => {
         },
     })
         .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             user.value = response.data;
             console.log(response.data);
         })
-        .catch(function (error) {
-            console.log('failed ' + error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 }
 

@@ -17,24 +17,29 @@
         border: 1px solid #b6b6b6;
         border-radius: 10px;
         background-color: #ffffff;
+
+        @media (max-width: 768px) {
+            padding: 16px;
+        }
     }
 
     &__field {
         display: flex;
         flex-direction: column;
-        margin-bottom: 24px;
+        margin-bottom: 32px;
+        position: relative;
 
         &:last-child {
             margin-bottom: 0;
         }
 
-        label {
-            width: fit-content;
-            margin-bottom: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #35383f;
-        }
+        // label {
+        //     width: fit-content;
+        //     margin-bottom: 8px;
+        //     font-size: 16px;
+        //     font-weight: 600;
+        //     color: #35383f;
+        // }
 
         .form-input input.form__input {
             padding: 8px 44px 8px 20px;
@@ -56,6 +61,18 @@
         // }
     }
 
+    &__label {
+        width: fit-content;
+        margin-bottom: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #35383f;
+    }
+
+    &__field--commander .v-field__field {
+        margin-left: 10px;
+    }
+
     &__input {
         min-height: 40px;
     }
@@ -73,6 +90,12 @@
         border: 1px solid #b6b6b6;
         border-radius: 10px;
         overflow-y: auto;
+
+        &--mobile {
+            @media (max-width: 360px) {
+                min-height: 67px;
+            }
+        }
     }
 
     &__select {
@@ -81,6 +104,12 @@
         border-radius: 10px;
         // width: 100%;
 
+        &--select {
+            margin-right: 0;
+            border: 1px solid #b6b6b6;
+            margin-bottom: 8px;
+        }
+
         .v-field__input {
             min-height: 40px;
             padding: 8px 20px;
@@ -88,6 +117,39 @@
             line-height: 21px;
             font-weight: 400;
         }
+    }
+
+    .v-field__field {
+        font-weight: 400;
+        letter-spacing: normal;
+
+        input {
+            @media (max-width: 360px) {
+                padding-right: 15px;
+            }
+        }
+    }
+
+    .v-text-field input.v-field__input {
+        padding: 11px 44px 11px 10px;
+        min-height: 0;
+    }
+
+    // .v-select .dropdown-toggle { //не работает
+    //     // .v-menu__content {
+    //     border: 1px solid #b6b6b6;
+    //     border-radius: 10px;
+    // }
+
+    &__select-item {
+        width: calc(100% - 40px);
+        margin: 0 auto;
+    }
+
+    &__select-item:not(:last-child) {
+        //не отрабатывает :last-child
+        border-bottom: 1px solid #b6b6b6;
+        // margin-bottom: 10px;
     }
 
     &__counter {
@@ -106,13 +168,10 @@
         .v-field__field input {
             padding: 8px 20px 8px 10px;
         }
-        // input {
-        //     padding: 8px 20px 8px 10px;
-        // }
     }
 
     &__footnote {
-        margin: 16px 0 8px;
+        margin: 16px 0 0;
         font-size: 14px;
         line-height: 18.5px;
         color: #939393;
@@ -126,15 +185,52 @@
         padding: 0;
     }
 
-    &__photo-wrapper {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 20px;
-        height: 347px;
-    }
+    // &__photo-wrapper {
+    //     display: grid;
+    //     grid-template-columns: 1fr 1fr 1fr 1fr;
+    //     column-gap: 20px;
+    //     height: 347px;
+    // }
 
-    .avatar-preview.my_photo__plug img {
-        height: 347px;
+    // .avatar-preview.my_photo__plug img {
+    //     height: 347px;
+    // }
+
+    &__error {
+        position: absolute;
+        right: 0;
+        bottom: -15px;
+        color: red;
+
+        &--name {
+            bottom: 0;
+        }
+
+        &--commander {
+            bottom: -23px;
+
+            @media (max-width: 768px) {
+                bottom: -20px;
+            }
+        }
+
+        &--title {
+            top: 0;
+            bottom: 0;
+            right: 50px;
+            width: 43%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+            line-height: 24px;
+
+            @media (max-width: 768px) {
+                font-size: 16px;
+                line-height: 21px;
+                right: 30px;
+            }
+        }
     }
 
     .valid-red {
@@ -206,5 +302,9 @@
         .v-expansion-panel-text__wrapper {
             padding: 0;
         }
+    }
+
+    .v-autocomplete__selection {
+        width: 100%;
     }
 }

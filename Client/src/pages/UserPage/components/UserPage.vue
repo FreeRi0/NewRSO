@@ -2,8 +2,17 @@
     <div class="container">
         <div class="user-wrapper">
             <Breadcrumbs :items="pages"></Breadcrumbs>
-            <h2 class="page-title">Моя страница</h2>
-            <BannerComp :user="user" :education="education" :user_region="region"   class="mt-3"></BannerComp>
+            <h2 class="page-title" v-if="currentUser">Моя страница</h2>
+            <h2 class="page-title" v-else>
+                Пользователь: {{ user.first_name }}
+            </h2>
+            <BannerComp
+                :user="user"
+                :education="education"
+                :user_region="region"
+                :edited="false"
+                class="mt-3"
+            ></BannerComp>
             <div class="user-verify" v-if="!user.is_verified">
                 <p class="user-verify__title">Верификация данных</p>
                 <div class="user-verify__desc">
@@ -12,24 +21,39 @@
                     верификацию. Верификация — это документальное подтверждение
                     ваших личных данных. Она займет всего несколько минут.
                 </div>
-                <router-link to='/PersonalData'>
-                <Button
-                class="user-verify__btn"
-                    name="verify-btn"
-                    label="Пройти верификацию"
-                    color="primary"
-                ></Button
-            ></router-link>
+                <router-link to="/PersonalData">
+                    <Button
+                        class="user-verify__btn"
+                        name="verify-btn"
+                        label="Пройти верификацию"
+                        color="primary"
+                    ></Button
+                ></router-link>
             </div>
 
-
-
             <div class="mt-14" v-if="user.is_verified">{{ user.bio }}</div>
-            <v-row class="mt-8">
-                <v-col v-for="n in 4" :key="n" class="d-flex" v-if="user.is_verified">
-                  <userPhoto :photos="user?.media?.photo1" :add="false"></userPhoto>
-                </v-col>
-            </v-row>
+            <div class="mt-8 photoWrapper">
+                <userPhoto
+                    class="photo-item"
+                    :photo="user?.media?.photo1"
+                    :add="false"
+                ></userPhoto>
+                <userPhoto2
+                    class="photo-item"
+                    :photo="user?.media?.photo2"
+                    :add="false"
+                ></userPhoto2>
+                <userPhoto3
+                    class="photo-item"
+                    :photo="user?.media?.photo3"
+                    :add="false"
+                ></userPhoto3>
+                <userPhoto4
+                    class="photo-item"
+                    :photo="user?.media?.photo4"
+                    :add="false"
+                ></userPhoto4>
+            </div>
         </div>
     </div>
 </template>
@@ -39,6 +63,9 @@ import { BannerComp } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
 import {
     userPhoto,
+    userPhoto2,
+    userPhoto3,
+    userPhoto4,
 } from '@shared/components/imagescomp';
 
 import { ref, computed, onMounted, watch } from 'vue';
@@ -50,13 +77,14 @@ const pages = ref([
     { pageTitle: 'Моя страница', href: '#' },
 ]);
 
-const user = ref({})
-const education = ref({})
-const region = ref({})
+const user = ref({});
+const currentUser = ref({});
+const education = ref({});
+const region = ref({});
 const route = useRoute();
 let id = route.params.id;
 
-const getUser = async() => {
+const getUser = async () => {
     await HTTP.get(`/rsousers/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -70,11 +98,27 @@ const getUser = async() => {
         .catch(function (error) {
             console.log('failed ' + error);
         });
-}
+};
+
+const getMedia = async () => {
+    await HTTP.get(`/rsousers/me/media/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            media.value = response.data;
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+};
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
-        getUser()
+        getUser();
     }
 });
 
@@ -82,37 +126,73 @@ watch(
     () => route.params.id,
 
     (newId, oldId) => {
-        id = newId
-        getUser()
+        id = newId;
+        getUser();
     },
 );
 
 onMounted(() => {
-    getUser()
-})
+    getUser();
+});
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
     padding: 60px 0px 80px 0px;
+}
+
+.photoWrapper {
+    display: flex;
+    @media screen and (max-width: 768px) {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 .user-verify {
     margin-top: 60px;
     margin-bottom: 40px;
     &__title {
         font-size: 32px;
+        color: #35383f;
         font-weight: 600;
+        @media screen and (max-width: 575px) {
+            font-size: 28px;
+        }
     }
     &__desc {
         font-size: 18px;
+        color: #35383f;
         font-weight: 40;
         margin-top: 40px;
-        width: 835px;
+        max-width: 835px;
         margin-bottom: 40px;
+        @media screen and (max-width: 768px) {
+            max-width: 620px;
+        }
+        @media screen and (max-width: 575px) {
+            width: 100%;
+        }
+    }
+}
+
+.photo-item {
+    width: 260px;
+    margin-right: 20px;
+    @media screen and (max-width: 768px) {
+        margin-bottom: 16px;
+    }
+    @media screen and (max-width: 575px) {
+        height: 206px;
+        width: 156px;
+        margin-right: 16px;
     }
 }
 .btn {
     margin: 0px;
     padding: 12px 62px;
     height: 52px;
+    @media screen and (max-width: 575px) {
+        margin: 0px auto;
+        width: 100%;
+    }
 }
 </style>

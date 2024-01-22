@@ -1,0 +1,1 @@
+export { default as ActiveApplicationsData} from './components/ActiveApplicationsData.vue';

@@ -1,7 +1,7 @@
 <template>
-    <div class="hq-metric">
-        <hqBanner :banner="hq.banner"></hqBanner>
-        <hqAvatar :emblem="hq.emblem"></hqAvatar>
+    <div class="hq-metric" v-if="headquarter">
+        <hqBanner :banner="headquarter.banner"></hqBanner>
+        <hqAvatar :emblem="headquarter.emblem"></hqAvatar>
         <div class="hq-metric__bottom">
             <div class="hq-data__wrapper">
                 <div class="Squad-HQ__name">
@@ -16,13 +16,13 @@
                             <p>{{ edict.name }}</p>
                         </li>
                         <li class="Squad-HQ__date">
-                            <p>Дата создания ЛСО</p>
+                            <p>Дата создания штаба</p>
                             <img
                                 src="@/app/assets/icon/calendar.svg"
                                 alt="calendar"
                             />
                             <time datetime="2022-09-10">{{
-                                hq.founding_date
+                                headquarter.founding_date
                             }}</time>
                         </li>
                     </ul>
@@ -56,7 +56,297 @@
                             </div>
                         </div>
                     </div>
-                    <router-link to="/edithq" class="hq-data__link"
+
+                    <router-link
+                        v-if="educComId === headquarter.commander"
+                        class="hq-data__link"
+                        :to="{
+                            name: 'EditHQ',
+                            params: { id: headquarter.id },
+                        }"
+                        >Редактировать штаб</router-link
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hq-metric" v-else-if="localHeadquarter">
+        <hqBanner :banner="localHeadquarter.banner"></hqBanner>
+        <hqAvatar :emblem="localHeadquarter.emblem"></hqAvatar>
+        <div class="hq-metric__bottom">
+            <div class="hq-data__wrapper">
+                <div class="Squad-HQ__name">
+                    <h4>{{ localHeadquarter.name }}</h4>
+                </div>
+                <div class="slogan">
+                    <p>{{ localHeadquarter.slogan }}</p>
+                </div>
+                <div class="hq__list-wrapper">
+                    <ul class="Squad-HQ__list-Local">
+                        <li class="Squad-HQ__date">
+                            <time datetime="2022-09-10"
+                                >{{ localHeadquarter.founding_date }} — дата
+                                проведения первого Общего собрания МШ</time
+                            >
+                        </li>
+                        <li class="hq-data__participant-counter">
+                            <span>{{ member.length }} участников</span>
+                        </li>
+                        <li class="hq-data__participant-counter-">
+                            <span
+                                >{{
+                                    localHeadquarter.participants_count
+                                }}
+                                дейстующих членов</span
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="hq-data__contacts-wrapper">
+                    <div class="hq-data__contacts">
+                        <div class="hq-data__social-network-Reg">
+                            <div class="hq-data__link-vk">
+                                <a href="https://vk.com" target="_blank">
+                                    <img src="@/app/assets/icon/vk-blue.svg" />
+                                </a>
+                            </div>
+                            <div class="hq-data__link-telegram">
+                                <a href="https://t.me" target="_blank">
+                                    <img
+                                        src="@/app/assets/icon/telegram-blue.svg"
+                                        alt=""
+                                    />
+                                </a>
+                            </div>
+                            <div class="hq-data__link-share-link">
+                                <a href="#" target="_blank">
+                                    <img
+                                        src="@/app/assets/icon/to-share-link.svg"
+                                        alt=""
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <router-link
+                        v-if="localComId === localHeadquarter.commander"
+                        class="hq-data__link"
+                        :to="{
+                            name: 'FormLocal',
+                            params: { id: localHeadquarter.id },
+                        }"
+                        >Редактировать штаб</router-link
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hq-metric" v-else-if="districtHeadquarter">
+        <hqBanner :banner="districtHeadquarter.banner"></hqBanner>
+        <hqAvatar :emblem="districtHeadquarter.emblem"></hqAvatar>
+        <div class="hq-metric__bottom">
+            <div class="hq-data__wrapper">
+                <div class="Squad-HQ__name">
+                    <h4>{{ districtHeadquarter.name }}</h4>
+                </div>
+                <div class="slogan">
+                    <p>{{ districtHeadquarter.slogan }}</p>
+                </div>
+                <div class="hq__list-wrapper">
+                    <ul class="Squad-HQ__list-Reg">
+                        <li class="Squad-HQ__date">
+                            <time datetime="2022-09-10"
+                                >{{ districtHeadquarter.founding_date }} — дата
+                                начала функционирования ОШ</time
+                            >
+                        </li>
+                        <li class="hq-data__participant-counter">
+                            <span>{{ member.length }} участников</span>
+                        </li>
+                        <li class="hq-data__participant-counter-">
+                            <span
+                                >{{
+                                    districtHeadquarter.participants_count
+                                }}
+                                дейстующих членов</span
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="hq-data__contacts-wrapper">
+                    <div class="hq-data__contacts">
+                        <div class="hq-data__social-network-Reg">
+                            <div class="hq-data__link-vk">
+                                <a href="https://vk.com" target="_blank">
+                                    <img src="@/app/assets/icon/vk-blue.svg" />
+                                </a>
+                            </div>
+                            <div class="hq-data__link-telegram">
+                                <a href="https://t.me" target="_blank">
+                                    <img
+                                        src="@/app/assets/icon/telegram-blue.svg"
+                                        alt=""
+                                    />
+                                </a>
+                            </div>
+                            <div class="hq-data__link-share-link">
+                                <a href="#" target="_blank">
+                                    <img
+                                        src="@/app/assets/icon/to-share-link.svg"
+                                        alt=""
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <router-link
+                        v-if="districtComId === districtHeadquarter.commander"
+                        class="hq-data__link"
+                        :to="{
+                            name: 'FormDH',
+                            params: { id: districtHeadquarter.id },
+                        }"
+                        >Редактировать штаб</router-link
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hq-metric" v-else-if="regionalHeadquarter">
+        <hqBanner :banner="regionalHeadquarter.banner"></hqBanner>
+        <hqAvatar :emblem="regionalHeadquarter.emblem"></hqAvatar>
+        <div class="hq-metric__bottom">
+            <div class="hq-data__wrapper">
+                <div class="Squad-HQ__name">
+                    <h4>{{ regionalHeadquarter.name }}</h4>
+                </div>
+                <div class="slogan">
+                    <p>{{ regionalHeadquarter.slogan }}</p>
+                </div>
+                <div class="hq__list-wrapper">
+                    <ul class="Squad-HQ__list-Reg">
+                        <li class="Squad-HQ__date">
+                            <time datetime="2022-09-10"
+                                >{{ regionalHeadquarter.conference_date }} —
+                                дата учредительной конференции РШ</time
+                            >
+                        </li>
+                        <li class="hq-data__participant-counter">
+                            <span>{{ member.length }} участников</span>
+                        </li>
+                        <li class="hq-data__participant-counter-">
+                            <span
+                                >{{
+                                    regionalHeadquarter.participants_count
+                                }}
+                                дейстующих членов</span
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="hq-data__contacts-wrapper">
+                    <div class="hq-data__contacts">
+                        <div class="hq-data__social-network-Reg">
+                            <div class="hq-data__link-vk">
+                                <a href="https://vk.com" target="_blank">
+                                    <img src="@/app/assets/icon/vk-blue.svg" />
+                                </a>
+                            </div>
+                            <div class="hq-data__link-telegram">
+                                <a href="https://t.me" target="_blank">
+                                    <img
+                                        src="@/app/assets/icon/telegram-blue.svg"
+                                        alt=""
+                                    />
+                                </a>
+                            </div>
+                            <div class="hq-data__link-share-link">
+                                <a href="#" target="_blank">
+                                    <img
+                                        src="@/app/assets/icon/to-share-link.svg"
+                                        alt=""
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <router-link
+                        v-if="regionComId === regionalHeadquarter.commander"
+                        class="hq-data__link"
+                        :to="{
+                            name: 'EditingOfRS',
+                            params: { id: regionalHeadquarter.id },
+                        }"
+                        >Редактировать штаб</router-link
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hq-metric" v-else>
+        <hqBanner :banner="centralHeadquarter.banner"></hqBanner>
+        <hqAvatar :emblem="centralHeadquarter.emblem"></hqAvatar>
+        <div class="hq-metric__bottom">
+            <div class="hq-data__wrapper">
+                <div class="Squad-HQ__name">
+                    <h4>{{ centralHeadquarter.name }}</h4>
+                </div>
+                <div class="slogan">
+                    <p>{{ centralHeadquarter.slogan }}</p>
+                </div>
+                <div class="working_slogan">
+                    <p>
+                        {{ centralHeadquarter.working_years }}лет на благо
+                        страны!
+                    </p>
+                </div>
+                <div class="hq__list-wrapper">
+                    <ul class="Squad-HQ__list">
+                        <!-- <li class="Squad-HQ__university">
+                            <p>{{ edict.name }}</p>
+                        </li> -->
+                        <li class="Squad-HQ__date">
+                            <time datetime="2022-09-10">{{
+                                centralHeadquarter.founding_date
+                            }}</time>
+                        </li>
+                    </ul>
+                </div>
+                <div class="hq-data__contacts-wrapper">
+                    <div class="hq-data__contacts">
+                        <div class="hq-data__participant-counter">
+                            <span>{{ member.length }} участников</span>
+                        </div>
+                        <div class="hq-data__social-network">
+                            <div class="hq-data__link-vk">
+                                <a href="https://vk.com" target="_blank">
+                                    <img src="@/app/assets/icon/vk-blue.svg" />
+                                </a>
+                            </div>
+                            <div class="hq-data__link-telegram">
+                                <a href="https://t.me" target="_blank">
+                                    <img
+                                        src="@/app/assets/icon/telegram-blue.svg"
+                                        alt=""
+                                    />
+                                </a>
+                            </div>
+                            <div class="hq-data__link-share-link">
+                                <a href="#" target="_blank">
+                                    <img
+                                        src="@/app/assets/icon/to-share-link.svg"
+                                        alt=""
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <router-link
+                        v-if="centralComId === centralHeadquarter.commander"
+                        class="hq-data__link"
+                        :to="{
+                            name: 'FormCentral',
+                        }"
                         >Редактировать штаб</router-link
                     >
                 </div>
@@ -70,7 +360,17 @@ import { hqAvatar } from '@shared/components/imagescomp';
 import { hqBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+const roleStore = useRoleStore();
+roleStore.getRoles();
 
+const roles = storeToRefs(roleStore);
+let educComId = roles.roles.value.educationalheadquarter_commander;
+let regionComId = roles.roles.value.regionalheadquarter_commander;
+let districtComId = roles.roles.value.districtheadquarter_commander;
+let centralComId = roles.roles.value.centralheadquarter_commander;
+let localComId = roles.roles.value.localheadquarter_commander;
 const props = defineProps({
     banner: {
         type: String,
@@ -79,6 +379,22 @@ const props = defineProps({
         type: String,
     },
     headquarter: {
+        type: Object,
+        required: true,
+    },
+    districtHeadquarter: {
+        type: Object,
+        required: true,
+    },
+    localHeadquarter: {
+        type: Object,
+        required: true,
+    },
+    regionalHeadquarter: {
+        type: Object,
+        required: true,
+    },
+    centralHeadquarter: {
         type: Object,
         required: true,
     },
@@ -129,7 +445,7 @@ const props = defineProps({
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    margin: 32px 0 32px 300px;
+    margin: 32px 0 16px 300px;
 }
 
 .hq-data__name {
@@ -198,7 +514,8 @@ const props = defineProps({
     font-weight: 600;
     line-height: normal;
 }
-.slogan {
+.slogan,
+.working_slogan {
     margin-top: 20px;
     margin-bottom: 9.5px;
 }
@@ -207,10 +524,35 @@ const props = defineProps({
     display: grid;
     grid-template-columns: 380px 300px;
 }
+.Squad-HQ__list-Reg {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 410px 120px 180px;
+}
+.Squad-HQ__list-Local {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 480px 120px 180px;
+}
+
 .Squad-HQ__list li {
     border-right: none;
     height: 20px;
     margin: 0;
+}
+.Squad-HQ__list-Reg li {
+    border-right: none;
+    height: 20px;
+    margin: 0;
+    border-right: 1px solid #35383f;
+    margin-right: 8px;
+}
+.Squad-HQ__list-Local li {
+    border-right: none;
+    height: 20px;
+    margin: 0;
+    border-right: 1px solid #35383f;
+    margin-right: 8px;
 }
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
@@ -229,6 +571,7 @@ const props = defineProps({
     align-self: end;
     text-align: center;
     font-family: 'BertSans';
+    letter-spacing: 1.2px;
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
@@ -250,6 +593,12 @@ const props = defineProps({
 .hq-data__social-network {
     display: flex;
     justify-content: space-between;
-    margin: 16px 16px 0px 0px;
+    margin: 12px 0 0;
+}
+.hq-data__social-network-Reg {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0 0;
+    column-gap: 12px;
 }
 </style>

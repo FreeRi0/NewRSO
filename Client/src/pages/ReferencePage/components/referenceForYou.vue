@@ -403,7 +403,7 @@
                     <div class="references-wrapper">
                         <referencesList
                             @change="changePeoples"
-                            :participants="participants"
+                            :participants="sortedParticipants"
                         ></referencesList>
                     </div>
                     <Button
@@ -420,7 +420,7 @@
             </div>
 
             <div class="references-form" v-if="selectedPeoples.length > 0">
-                <form action="#">
+                <form action="#" @submit.prevent="SendReference()">
                     <div class="data-form refer">
                         <div class="form-field">
                             <label for="education-org"
@@ -468,10 +468,20 @@
                         ></checkedReference>
                     </div>
 
-                    <Button label="Получить справки"></Button>
+                    <Button type="submit" label="Получить справки"></Button>
                 </form>
+                <p class="error">
+            {{ isError }}
+        </p>
             </div>
         </div>
+
+        <!-- <p class="error" v-if="isError">
+            {{ isError.cert_end_date.recipient }}
+        </p>
+        <p class="error" v-if="isError">
+            {{ isError.recipient }}
+        </p> -->
     </div>
 </template>
 <script setup>
@@ -485,12 +495,30 @@ import {
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed , onMounted} from 'vue';
+import { ref, computed, onMounted, inject } from 'vue';
 import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
 import { HTTP } from '@app/http';
 
-const participants = ref([])
+const participants = ref([]);
+const selectedPeoples = ref([]);
+const swal = inject('$swal');
 const participantsVisible = ref(12);
+const isError = ref([]);
+
+const arr = computed(() => {
+    let tempPeoples = selectedPeoples.value;
+    tempPeoples = tempPeoples.map((item) => item.id);
+    return tempPeoples;
+});
+
+console.log('idssSss', arr);
+
+const refData = ref({
+    cert_start_date: '',
+    cert_end_date: '',
+    ids: arr,
+    recipient: '',
+});
 
 const viewParticipants = async () => {
     await HTTP.get('/rsousers/', {
@@ -512,6 +540,45 @@ onMounted(() => {
     viewParticipants();
 });
 
+const SendReference = async () => {
+    await HTTP.post('/membership_certificates/internal/', refData.value, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+        responseType: 'blob',
+    })
+        .then((response) => {
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            refData.value = response.data;
+            const url = new Blob([response.data], { type: 'application/zip' });
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'external.zip');
+            document.body.appendChild(link);
+            link.click();
+            console.log(response, 'success');
+            console.log(response);
+        })
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'ошибка',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+};
+
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
 const selectedSex = ref('Все');
@@ -528,17 +595,16 @@ const maxAge = ref('');
 const checkboxAll = ref(false);
 
 const step = ref(12);
-const selectedPeoples = ref([]);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const select = () => {
+const select = (event) => {
     selectedPeoples.value = [];
 
-    if (!checkboxAll.value) {
-        for (item in participants) {
-            selectedPeoples.push(participants[item]);
+    if (event.target.checked) {
+        for (item in participants.value) {
+            selectedPeoples.value.push(participants.value[item]);
         }
     }
 };
@@ -666,7 +732,7 @@ const sortedParticipants = computed(() => {
     return tempParticipants;
 });
 </script>
-<style lang="scss" >
+<style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;

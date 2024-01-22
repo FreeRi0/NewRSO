@@ -5,13 +5,13 @@
                 <ItemMember
                     class="member__item"
                     v-for="item in items"
-                    :key="item.title"
-                    v-bind="item"
+                    :key="item.id"
+                    :item="item"
                     @update-member="onUpdateMember"
                 ></ItemMember>
             </template>
 
-            <h2 v-else>Участники не найдены...</h2>
+            <p v-else>В {{ unit }} еще никто не вступил...</p>
         </ul>
     </div>
 </template>
@@ -30,10 +30,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    // membersList: {
-    //     type: Array,
-    //     default: () => [],
-    // },
+    unit: {
+        type: String,
+        default: 'штаб',
+    },
 });
 
 const emit = defineEmits(['updateMember']);
@@ -51,6 +51,11 @@ const onUpdateMember = (event, id) => {
     border-radius: 0 0 10px 10px;
     color: #35383f;
 
+    @media (max-width: 768px) {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
     &__wrapper {
         max-height: 350px;
         overflow: auto;
@@ -60,9 +65,18 @@ const onUpdateMember = (event, id) => {
         margin-top: -8px;
         padding-right: 16px;
 
+        @media (max-width: 768px) {
+            padding-right: 0;
+        }
+
         &::-webkit-scrollbar {
             /*стили полосы прокрутки */
             width: 8px;
+
+            @media (max-width: 768px) {
+                /*на мобильной версии убираем полосу прокрутки*/
+                width: 0;
+            }
         }
 
         &::-webkit-scrollbar-track {
@@ -88,6 +102,10 @@ const onUpdateMember = (event, id) => {
         @media (max-width: 1024px) {
             flex-wrap: wrap;
         }
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+        }
     }
 
     &__content {
@@ -105,6 +123,10 @@ const onUpdateMember = (event, id) => {
 
         @media (max-width: 1024px) {
             margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            margin-bottom: 4px;
         }
     }
 
@@ -163,8 +185,14 @@ const onUpdateMember = (event, id) => {
 
     &__date {
         margin-left: auto;
+        min-width: 82px;
         position: relative;
         color: #1c5c94;
+        align-self: center;
+
+        @media (max-width: 768px) {
+            margin-left: 0;
+        }
 
         &::before {
             position: absolute;
@@ -183,13 +211,18 @@ const onUpdateMember = (event, id) => {
 
     img {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: cover;
     }
 
     &__select-box {
         margin-left: 12px;
         min-width: 224px;
         width: 224px;
+
+        .v-select__selection {
+            margin: 0;
+        }
 
         @media (max-width: 1024px) {
             .form__select {
@@ -200,13 +233,29 @@ const onUpdateMember = (event, id) => {
             }
             margin: 0;
         }
+
+        @media (max-width: 768px) {
+            margin-bottom: 4px;
+        }
     }
 
-    // &__select {
-    //     //-------- не стилизуется
-    //     border: 1px solid #b6b6b6;
-    //     border-radius: 10px;
-    // }
+    &__select {
+        border: 1px solid #b6b6b6;
+        border-radius: 10px;
+        margin-right: 0;
+        margin-bottom: 0;
+
+        .v-field__input {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            white-space: nowrap;
+            min-height: 47px;
+
+            input {
+                margin: 0;
+            }
+        }
+    }
 
     &__confidant {
         margin-left: 12px;
@@ -218,6 +267,12 @@ const onUpdateMember = (event, id) => {
         width: 224px;
         border: 1px solid #b6b6b6;
         border-radius: 10px;
+        align-self: start;
+        min-height: 48px;
+
+        @media (max-width: 768px) {
+            margin-left: 0;
+        }
 
         label {
             margin-right: 12px;

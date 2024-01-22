@@ -5,11 +5,7 @@
         <p class="subtitle">Подал:</p>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img
-                    :src="request.user.media.photo"
-                    alt="logo"
-                    v-if="request.user.media"
-                />
+                <img :src="user.media.photo" alt="logo" v-if="user.media" />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
                     alt="photo"
@@ -18,7 +14,7 @@
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ request.user.first_name }}
+                    {{ user.first_name }}
                 </p>
                 <div class="horizontallso-item__list-date">
                     <span
@@ -27,54 +23,208 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ request.user.date_of_birth }}</p>
+                    <p>{{ user.date_of_birth }}</p>
                 </div>
             </div>
         </div>
-        <p class="subtitle">Укажите размер футболки:</p>
-        <p>{{ request.size }}</p>
-        <p class="subtitle">Расскажите о себе:</p>
-        <p>{{ request.about }}</p>
+        <template v-if="issue?.length">
+            <div
+                class="subtitle_container"
+                v-for="value in application.answers"
+                :key="value.id"
+            >
+                <p class="subtitle">
+                    {{ getIssueById(value.issue)?.issue }}
+                </p>
+                <p>{{ value.answer }}</p>
+            </div>
+        </template>
         <p class="subtitle">Сопутствующие документы:</p>
         <div class="file">
             <div class="file_name">
                 <img class="file_img" src="/assets/file_dock.svg" />{{
-                    request.file
+                    application.documents?.[0]
                 }}
             </div>
-            <a class="download_text" :href="request.file" target="_blank">
+            <a
+                class="download_text"
+                :href="application.documents"
+                target="_blank"
+            >
                 <img class="download_img" src="/assets/download.svg" />
                 скачать файл
             </a>
         </div>
         <div class="button">
-            <button type="submit" class="deny_button">Отклонить</button>
-            <button type="submit" class="submit_button">Одобрить</button>
+            <button
+                type="submit"
+                class="deny_button"
+                @click="declineApplication()"
+            >
+                Отклонить
+            </button>
+            <button
+                type="submit"
+                class="submit_button"
+                @click="acceptApplication()"
+            >
+                Одобрить
+            </button>
         </div>
     </div>
 </template>
 
 <script setup>
+import { HTTP } from '@app/http';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { ref } from 'vue';
+import { ref, onMounted, inject } from 'vue';
+import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
+let applicationId = route.params.id;
+const eventId = 8;
+const user = ref({});
+const application = ref({});
+const issue = ref(null);
+const form = ref({});
+const swal = inject('$swal');
 const pages = ref([
     { pageTitle: 'Мероприятия', href: '#' },
     { pageTitle: 'Мистер и Мисс РСО | Санкт-пете...', href: '#' },
     { pageTitle: 'Заявка на участие', href: '#' },
 ]);
-const request = {
-    id: 1,
-    user: {
-        media: {
-            photo: '123as',
+
+const requestEvent = async () => {
+    await HTTP.get(`/events/${eventId}/applications/${applicationId}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
         },
-        first_name: 'Kolya Kolya',
-        date_of_birth: '01.01.2000',
-    },
-    size: 'XL',
-    about: 'Я классный парень, готов помогать на мероприятии, работать 24/7. Легко нахожу общий язык со всеми.',
-    file: 'Согласие_на_обработку_перс_данных_Васильев.png',
+    })
+        .then((response) => {
+            application.value = response.data;
+            //console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
 };
+
+const requestUser = async () => {
+    await HTTP.get(`/rsousers/${application.value.user}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            //console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+};
+
+const requestIssue = async () => {
+    await HTTP.get(`/events/${application.value.event}/issues/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            issue.value = response.data;
+            //console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+};
+
+const getIssueById = (id) => {
+    //console.log(issue.value);
+    //console.log(id);
+    return issue.value?.find((el) => el.id === id);
+};
+
+const redirect = async () => {
+    const responce = await HTTP.get(`/events/${eventId}/applications/`, {
+        headers: {
+            '   Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+    console.log(responce.data);
+    router.push({
+        name: 'IndividualRequest',
+        params: {
+            id: responce.data?.[0]?.id,
+        },
+    });
+};
+
+const declineApplication = async () => {
+    await HTTP.delete(`/events/${eventId}/applications/${applicationId}`, {
+        headers: {
+            '   Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+    setTimeout(() => {
+        redirect();
+    }, 0);
+};
+
+const acceptApplication = async () => {
+    try {
+        const response = await HTTP.post(
+            `/events/${eventId}/applications/${applicationId}/confirm/`,
+            form.value,
+            {
+                headers: {
+                    '   Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        form.value = response.data;
+        console.log(response.data);
+        setTimeout(() => {
+            redirect();
+        }, 0);
+    } catch (error) {
+        console.error('There was an error!', error);
+        swal.fire({
+            position: 'top-center',
+            icon: 'error',
+            title: 'ошибка',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    }
+};
+
+onBeforeRouteUpdate(async (to) => {
+    applicationId = to.params.id;
+    await requestEvent();
+    await requestUser();
+    await requestIssue();
+});
+
+onMounted(async () => {
+    await requestEvent();
+    await requestUser();
+    await requestIssue();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -118,7 +268,9 @@ const request = {
 }
 .container {
     margin: 0 auto;
-    padding: 60px 130px;
+    padding-bottom: 60px;
+    padding-left: 130px;
+    padding-right: 130px;
 }
 .deny_button {
     border-radius: 10px;
@@ -150,23 +302,10 @@ const request = {
 }
 .subtitle {
     margin: 20px 0px;
-    leading-trim: both;
-    text-edge: cap;
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-}
-.horizontallso__confidant {
-    padding: 10px 10px;
-    border: 1px solid #b6b6b6;
-    border-radius: 10px;
-    height: 48px;
-    width: 48px;
-    input {
-        width: 24px;
-        height: 24px;
-    }
 }
 .horizontallso-item__wrapper {
     display: grid;
@@ -177,7 +316,6 @@ const request = {
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
-    margin-left: 12px;
     width: 100%;
     margin-bottom: 12px;
 }
@@ -196,19 +334,5 @@ const request = {
     font-size: 16px;
     font-weight: 400;
     margin-left: 10px;
-}
-.horizontallso {
-    display: flex;
-    &-img {
-        align-items: center;
-        width: 36px;
-        height: 36px;
-        justify-content: start;
-        img {
-            display: flex;
-            position: relative;
-            align-items: center;
-        }
-    }
 }
 </style>

@@ -1,18 +1,16 @@
 <template>
-    <div class="horizontal-item" v-for="headquarter in headquarters" v-if="headquarters.length > 0">
-        <div class="horizontal-img">
-            <img :src="headquarter.emblem" alt="logo" />
-        </div>
-        <div class="containerHorizontal">
-            <p class="headquarters-wrapper__item-category-full">
-                {{ headquarter.name }}
-            </p>
-        </div>
+    <div v-if="headquarters.length > 0">
+        <educationItemHorizontal
+            v-for="headquarter in headquarters"
+            :headquarter="headquarter"
+            :key="headquarter.id"
+        ></educationItemHorizontal>
     </div>
 
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
+import { educationItemHorizontal } from '@entities/HeadquartersData';
 const props = defineProps({
     headquarters: {
         type: Array,
@@ -21,24 +19,6 @@ const props = defineProps({
 });
 </script>
 <style lang="scss">
-.horizontal {
-    &-item {
-        border: 1px solid grey;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        padding: 4px 20px;
-    }
-    &-img {
-        width: 40px;
-        height: 40px;
-    }
-}
-
-.containerHorizontal {
-    display: flex;
-    align-items: center;
-}
 .headquarters-wrapper__item {
     margin: 0px auto;
     width: 180px;

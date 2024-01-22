@@ -6,7 +6,7 @@
     >
         <div class="checked-item__wrapper">
             <div class="checked-img">
-                <img :src="participant.media.photo" alt="logo" v-if="participants.media" />
+                <img :src="participant.media.photo" alt="logo" v-if="participant.media" />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
                     alt="photo"
@@ -37,8 +37,6 @@
 
             />
         </div>
-        <Button class="preview" type="button" label="Предпросмотр"></Button>
-
     </div>
 </template>
 <script setup>
@@ -57,6 +55,9 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    participant: {
+        type: Object,
+    }
 
 });
 const selectedPeoples = ref(props.participants);
@@ -64,7 +65,7 @@ const selectedPeoples = ref(props.participants);
  watch(selectedPeoples,
  (newChecked) =>{
     if(!newChecked) return;
-    emit('change', selectedPeoples)
+    emit('change', selectedPeoples.value)
     console.log(newChecked);
  })
 </script>

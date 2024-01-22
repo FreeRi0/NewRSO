@@ -1,6 +1,6 @@
 <template>
     <section class="headquarters_squads">
-        <h3>Штабы и отряды регионального штаба</h3>
+        <h3>Штабы и отряды штаба</h3>
         <div class="headquarters_squads__container">
             <div
                 class="card"
@@ -10,23 +10,40 @@
                     'align-right': index % 2 !== 0,
                 }"
             >
-                <p>{{ HQandSquad.name }}</p>
+                <a v-bind:href="HQandSquad.link"
+                    ><p>{{ HQandSquad.name }}</p></a
+                >
             </div>
         </div>
     </section>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+const route = useRoute();
+let id = route.params.id;
+
 const HQandSquads = ref([
     {
+        name: 'Окружные штабы',
+        link: '/DistrictHeadquarters',
+    },
+    {
+        name: 'Региональные штабы',
+        link: '/RegionalHeadquarters',
+    },
+    {
         name: 'Местные штабы',
+        link: '/LocalHeadquarters',
     },
     {
         name: 'Штабы СО ОО',
+        link: '/AllHeadquarters',
     },
     {
         name: 'ЛСО',
+        link: '/AllSquads',
     },
 ]);
 </script>

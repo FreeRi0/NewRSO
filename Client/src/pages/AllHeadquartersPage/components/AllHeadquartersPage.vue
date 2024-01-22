@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="headquarters">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
@@ -34,7 +33,8 @@
             </div>
             <div class="headquarters-sort">
                 <div class="sort-layout">
-                    <Button
+                    <div>
+                        <Button
                         v-if="vertical"
                         type="button"
                         class="dashboard"
@@ -44,7 +44,7 @@
                     >
                     </Button>
                     <Button
-                        v-else="!vertical"
+                        v-else
                         type="button"
                         class="dashboardD"
                         icon="icon"
@@ -52,6 +52,7 @@
                         @click="showVertical"
                     >
                     </Button>
+                    </div>
                     <Button
                         v-if="!vertical"
                         type="button"
@@ -61,7 +62,7 @@
                         @click="showVertical"
                     ></Button>
                     <Button
-                        v-else="vertical"
+                        v-else
                         type="button"
                         class="menuu"
                         icon="icon"
@@ -73,41 +74,43 @@
                 <div class="sort-filters">
                     <div class="sort-select">
                         <Select
-                            variant="outlined"
                             clearable
+                            variant="outlined"
                             name="select_district"
                             id="select-district"
                             v-model="selectedSortDistrict"
                             class="filter-district"
-                            address="api/v1/districts/"
+                            address="/districts/"
+                            placeholder="Окружные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <Select
-                            variant="outlined"
                             clearable
+                            variant="outlined"
                             name="select_region"
                             id="select-region"
                             v-model="selectedSortRegion"
                             class="filter-region"
-                            address="api/v1/regionals/"
+                            address="/regionals/"
+                            placeholder="Региональные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <Select
-                            variant="outlined"
                             clearable
+                            variant="outlined"
                             name="select_local"
                             id="select-local"
                             v-model="selectedSortLocal"
                             class="filter-local"
-                            address="api/v1/locals/"
+                            address="/locals/"
+                            placeholder="Местные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
                         <sortByEducation
                             variant="outlined"
-                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
@@ -124,7 +127,7 @@
                 </div>
             </div>
 
-            <div class="headquarters-wrapper" v-show="vertical">
+            <div  v-show="vertical">
                 <HeadquartersList
                     :headquarters="sortedHeadquarters"
                 ></HeadquartersList>
@@ -158,20 +161,14 @@ import {
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 // import headquarters from '@entities/HeadquartersData/headquarters';
 
 const headquarters = ref([]);
 
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '/AllHeadquarters' },
-]);
+const headquartersVisible = ref(20);
 
-const headquartersVisible = ref(12);
-
-const step = ref(10);
+const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -209,9 +206,9 @@ onMounted(() => {
 });
 
 const selectedSort = ref(0);
-const selectedSortLocal = ref(0);
-const selectedSortRegion = ref(0);
-const selectedSortDistrict = ref(0);
+const selectedSortLocal = ref(null);
+const selectedSortRegion = ref(null);
+const selectedSortDistrict = ref(null);
 
 const sortOptionss = ref([
     {
@@ -235,7 +232,6 @@ const sortedHeadquarters = computed(() => {
                 item.local_headquarter == selectedSortLocal.value)
         );
     });
-
     tempHeadquartes = tempHeadquartes.filter((item) => {
         return item.name
             .toUpperCase()
@@ -279,7 +275,7 @@ const sortedHeadquarters = computed(() => {
 </script>
 <style lang="scss">
 .headquarters {
-    padding: 40px 0px 60px 0px;
+    padding-bottom: 60px;
     &-title {
         margin-bottom: 40px;
         font-size: 52px;
@@ -353,6 +349,14 @@ const sortedHeadquarters = computed(() => {
     }
 }
 
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
 .horizontal {
     margin-top: 40px;
     display: grid;
@@ -362,7 +366,7 @@ const sortedHeadquarters = computed(() => {
 .form__select {
     margin-bottom: 0px;
     margin-right: 8px;
-    border: 1px solid #35383F;
+    border: 1px solid #35383f;
 }
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');

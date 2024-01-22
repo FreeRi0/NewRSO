@@ -1,8 +1,9 @@
 <template>
-        <div class="horizontallso__confidant">
+    <div class="horizontallso">
+        <div class="horizontallso__confidant mr-3">
             <input
                 type="checkbox"
-                v-model="selectedPeoples"
+                v-model="checked"
                 :value="participant"
                 @change="updateCheck"
             />
@@ -10,18 +11,29 @@
 
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img :src="'./assets/' + participant.image" alt="logo" />
                 <img
-                    v-if="participant.useIcon"
-                    class="horizontallso-item__list-img-status"
-                    :src="'./assets/icon/' + participant.icon"
-                    alt="icon"
+                    :src="participant.avatar.photo"
+                    alt="logo"
+                    v-if="participant.avatar"
+                />
+                <img
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+                    v-else
                 />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full">
-                    {{ participant.name }}
-                </p>
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.user.last_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.user.first_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.user.patronymic_name }}
+                    </p>
+                </div>
                 <div class="horizontallso-item__list-date">
                     <span
                         style="
@@ -29,32 +41,75 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.birthdate }}</p>
+                    <p>{{ participant.user.date_of_birth }}</p>
+
                 </div>
             </div>
         </div>
+    </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
-const selectedPeoples = ref([]);
-
-const emit = defineEmits(['change']);
-
-const updateCheck = (e) => {
-    console.log('dddddd');
-    emit('change', selectedPeoples.value);
-};
+import { HTTP } from '@app/http';
 const props = defineProps({
     participant: {
         type: Object,
         require: true,
     },
+    selectedParticipants: {
+        type: Array,
+        default: () => [],
+    },
 });
+
+const emit = defineEmits(['change']);
+const checked = ref(false)
+const updateCheck = (e) => {
+    console.log('dddddd', checked.value);
+    emit('change', checked.value, props.participant.id);
+};
+
+const selectedPeoples = ref(props.selectedParticipants);
+
+watch(
+    () => props.selectedParticipants,
+    (newChecked) => {
+        if (!newChecked) return;
+        selectedPeoples.value = newChecked;
+    },
+);
 </script>
 <style lang="scss" scoped>
 .horizontallso {
     display: flex;
+    align-items: flex-start;
+    &-img {
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        justify-content: start;
+        img {
+            display: flex;
+            position: relative;
+            align-items: center;
+        }
+    }
+    &-info {
+        border: 1px solid #b6b6b6;
+        border-radius: 10px;
+        padding: 11px 20px;
+        height: 46px;
+        text-align: center;
+
+        width: 185px;
+        p {
+            display: block;
+            font-size: 16px;
+            font-weight: 400;
+            color: #35383f;
+        }
+    }
 }
 .horizontallso-item__wrapper {
     display: grid;
@@ -77,13 +132,6 @@ const props = defineProps({
     justify-content: space-between;
 }
 
-.horizontallso-img {
-    align-items: center;
-    width: 36px;
-    height: 36px;
-    justify-content: start;
-}
-
 .horizontallso-item img {
     width: 36px;
     height: 36px;
@@ -96,15 +144,9 @@ const props = defineProps({
 }
 
 .horizontallso-item__list-date {
-    width: 95px;
+    // width: 95px;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
-}
-
-.horizontallso-img img {
-    display: flex;
-    position: relative;
-    align-items: center;
+    grid-template-columns: auto 1fr 0fr;
 }
 
 .horizontallso-item__list-img-status {
@@ -135,9 +177,31 @@ const props = defineProps({
 }
 
 .horizontallso__confidant {
-    padding: 12px;
-    min-width: 48px;
+    padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
+    height: 48px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.sort-select {
+    height: 46px;
+}
+
+.checked__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    height: 48px;
+    margin: 0px 12px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
 }
 </style>

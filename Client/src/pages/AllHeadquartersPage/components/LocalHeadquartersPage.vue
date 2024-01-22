@@ -1,10 +1,9 @@
 <template>
     <div class="container">
         <div class="headquarters">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
-                label="Создать штаб"
+                :button="false"
             ></bannerCreate>
             <h2 class="headquarters-title">Местные штабы</h2>
             <div class="headquarters-search">
@@ -33,7 +32,8 @@
             </div>
             <div class="headquarters-sort">
                 <div class="sort-layout">
-                    <Button
+                <div>
+                        <Button
                         v-if="vertical"
                         type="button"
                         class="dashboard"
@@ -43,7 +43,7 @@
                     >
                     </Button>
                     <Button
-                        v-else="!vertical"
+                        v-else
                         type="button"
                         class="dashboardD"
                         icon="icon"
@@ -51,7 +51,9 @@
                         @click="showVertical"
                     >
                     </Button>
-                    <Button
+                </div>
+                    <div>
+                        <Button
                         v-if="!vertical"
                         type="button"
                         class="menuuA"
@@ -60,13 +62,14 @@
                         @click="showVertical"
                     ></Button>
                     <Button
-                        v-else="vertical"
+                        v-else
                         type="button"
                         class="menuu"
                         icon="icon"
                         color="white"
                         @click="showVertical"
                     ></Button>
+                    </div>
                 </div>
 
                 <div class="sort-filters">
@@ -78,7 +81,7 @@
                             id="select-district"
                             v-model="selectedSortDistrict"
                             class="filter-district"
-                            address="api/v1/districts/"
+                            address="/districts/"
                             placeholder="Окружные штабы"
                         ></Select>
                     </div>
@@ -90,13 +93,13 @@
                             id="select-region"
                             v-model="selectedSortRegion"
                             class="filter-region"
-                            address="api/v1/regionals/"
+                            address="/regionals/"
+                            placeholder="Региональные штабы"
                         ></Select>
                     </div>
                     <div class="sort-select">
-
                         <sortByEducation
-                        variant="outlined"
+                            variant="outlined"
                             clearable
                             v-model="sortBy"
                             :options="sortOptionss"
@@ -113,17 +116,15 @@
                     ></Button>
                 </div>
             </div>
-
-            <div class="headquarters-wrapper" v-show="vertical">
-                <HeadquartersList
-                    :headquarters="sortedHeadquarters"
-                ></HeadquartersList>
+            <div v-show="vertical">
+                <LocalHQList
+                    :localHeadquarters="sortedHeadquarters"
+                ></LocalHQList>
             </div>
-
             <div class="horizontal" v-show="!vertical">
-                <horizontalHeadquarters
-                    :headquarters="sortedHeadquarters"
-                ></horizontalHeadquarters>
+                <HorizontalLocalHQs
+                    :localHeadquarters="sortedHeadquarters"
+                ></HorizontalLocalHQs>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -143,8 +144,8 @@ import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import {
-    HeadquartersList,
-    horizontalHeadquarters,
+    LocalHQList,
+    HorizontalLocalHQs,
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
@@ -154,14 +155,9 @@ import { HTTP } from '@app/http';
 
 const localHeadquarters = ref([]);
 
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Местные штабы', href: '/AllHeadquarters' },
-]);
+const headquartersVisible = ref(20);
 
-const headquartersVisible = ref(12);
-
-const step = ref(10);
+const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -265,7 +261,7 @@ const sortedHeadquarters = computed(() => {
 </script>
 <style lang="scss">
 .headquarters {
-    padding: 40px 0px 60px 0px;
+    padding-bottom: 60px;
     &-title {
         margin-bottom: 40px;
         font-size: 52px;
@@ -348,7 +344,7 @@ const sortedHeadquarters = computed(() => {
 .form__select {
     margin-bottom: 0px;
     margin-right: 8px;
-    border: 1px solid #35383F;
+    border: 1px solid #35383f;
 }
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
@@ -371,6 +367,15 @@ const sortedHeadquarters = computed(() => {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
 
 // .v-label {
 //     margin-top: 20px;
@@ -417,4 +422,3 @@ const sortedHeadquarters = computed(() => {
     }
 }
 </style>
-@shared/components/selects/inputs

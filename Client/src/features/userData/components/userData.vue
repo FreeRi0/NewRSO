@@ -1,60 +1,117 @@
 <template>
     <div class="MyPage">
-        <form action="#" method="post" @submit.prevent="AddAbout">
+        <form
+            action="#"
+            class="userBio"
+            method="post"
+            @submit.prevent="AddAbout"
+        >
             <p>Кратко о себе</p>
             <TextArea
-                class="mt-2"
+                class="mt-4"
                 name="about"
                 placeholder="Напиши что нибудь"
-                v-model:value="userBio.bio"
+                v-model:value="user.bio"
+                :max-length="400"
             ></TextArea>
+            <div class="form__counter">{{ counterSquad }} / 400</div>
+            <p class="error" v-if="isError.last_name">
+                {{ 'Фамилия пользователя, ' + isError.last_name }}
+            </p>
+            <p class="error" v-if="isError.first_name">
+                {{ 'Имя пользователя, ' + isError.first_name }}
+            </p>
+            <p class="error" v-if="isError.gender">
+                {{ 'Гендер, ' + isError.gender }}
+            </p>
             <Button
                 :loaded="isLoading"
                 :disabled="isLoading"
                 type="submit"
                 label="сохранить"
             ></Button>
+            <div class="d-flex">
+            </div>
         </form>
 
-        <v-row class="mt-8">
-            <v-col v-for="n in 4" :key="n" class="d-flex">
-                <userPhoto
-                    :photos="user?.media?.photo1"
-                    :add="true"
-                ></userPhoto>
-            </v-col>
-        </v-row>
+        <div class="mt-8 d-flex">
+            <userPhoto
+                class="photo-item"
+                :photo="media.photo1"
+                :add="true"
+            ></userPhoto>
+            <userPhoto2
+                class="photo-item"
+                :photo="media.photo2"
+                :add="true"
+            ></userPhoto2>
+            <userPhoto3
+                class="photo-item"
+                :photo="media.photo3"
+                :add="true"
+            ></userPhoto3>
+            <userPhoto4
+                class="photo-item"
+                :photo="media.photo4"
+                :add="true"
+            ></userPhoto4>
+        </div>
     </div>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { TextArea } from '@shared/components/inputs';
-import { userPhoto } from '@shared/components/imagescomp';
+import { userPhoto, userPhoto2, userPhoto3, userPhoto4 } from '@shared/components/imagescomp';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { ref, onMounted, watch, inject } from 'vue';
+import { ref, onMounted, watch, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
 
-// const data = ref({
-//     bio: '',
-// });
-const userBio = ref({
-    bio: ''
+const user = ref({
+    bio: '',
 });
+
+const media = ref({
+    photo1: null,
+    photo2: null,
+    photo3: null,
+    photo4: null,
+});
+const del = ref('');
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 const route = useRoute();
+
+const counterSquad = computed(() => {
+    return user.value?.bio?.length || 0;
+});
 let id = route.params.id;
 
 const getUser = async () => {
-    await HTTP.get(`/rsousers/${id}/`, {
+    await HTTP.get(`/rsousers/me/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            userBio.value = response.data;
+            user.value = response.data;
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log('failed ' + error);
+        });
+};
+
+const getMedia = async () => {
+    await HTTP.get(`/rsousers/me/media/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            media.value = response.data;
             console.log(response.data);
         })
         .catch(function (error) {
@@ -64,7 +121,7 @@ const getUser = async () => {
 
 const AddAbout = async () => {
     isLoading.value = true;
-    await HTTP.patch(`/rsousers/me/`, userBio.value, {
+    await HTTP.patch(`/rsousers/me/`, user.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -79,7 +136,7 @@ const AddAbout = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            userBio.value = response.data;
+            user.value = response.data;
             console.log(response.data);
         })
         .catch(({ response }) => {
@@ -96,23 +153,10 @@ const AddAbout = async () => {
         });
 };
 
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        getUser();
-    }
-});
-
-watch(
-    () => route.params.id,
-
-    (newId, oldId) => {
-        id = newId;
-        getUser();
-    },
-);
 
 onMounted(() => {
     getUser();
+    getMedia();
 });
 </script>
 <style lang="scss">
@@ -121,5 +165,14 @@ onMounted(() => {
     border-radius: 10px;
     padding: 40px;
     margin-bottom: 80px;
+}
+
+.userBio {
+    max-width: 900px;
+}
+
+.photo-item {
+    width: 260px;
+    margin-right: 20px;
 }
 </style>

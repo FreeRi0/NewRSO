@@ -4,6 +4,7 @@
         :model-value="object"
         :items="names"
         @update:model-value="changeOption"
+        :placeholder="placeholder"
         v-bind="$attrs"
         item-title="name"
         item-value="id"
@@ -13,7 +14,11 @@
         </template>
 
         <template v-slot:item="{ props, item }">
-            <v-list-item v-bind="props" :title="item?.raw?.name"></v-list-item>
+            <v-list-item
+                v-bind="props"
+                :title="item?.raw?.name"
+                class="form__select-item"
+            ></v-list-item>
         </template>
     </v-select>
     <!-- <TransitionGroup>
@@ -26,7 +31,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-
+import { HTTP } from '@app/http';
 
 defineOptions({
     inheritAttrs: false,
@@ -73,8 +78,7 @@ const changeOption = (event) => {
 const names = ref(props.names);
 
 const onChangeItem = async () => {
-    await axios
-        .get(props.address)
+    await HTTP.get(props.address)
 
         .then((res) => {
             // console.log(props.address);

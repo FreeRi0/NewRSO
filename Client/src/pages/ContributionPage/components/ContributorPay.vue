@@ -488,9 +488,8 @@
                         </div>
                         <div class="contributor-wrapper">
                             <contributorsList
-                                @change="changePeoples"
                                 :participants="sortedParticipants"
-                                :selectedParticipants="selectedPeoples"
+                                @change="changePeoples"
                             ></contributorsList>
                         </div>
                         <Button
@@ -599,22 +598,37 @@ onMounted(() => {
     isMembership();
 });
 
-const select = () => {
+const select = (event) => {
     selectedPeoples.value = [];
-
-    if (checkboxAll.value) {
-        for (let item in participants) {
-            selectedPeoples.value.push(participants[item]);
+    console.log('fffss', checkboxAll.value, event);
+    if (event.target.checked) {
+        console.log('fffss', checkboxAll.value, event);
+        for (let index in participants.value) {
+            console.log('arr', selectedPeoples.value);
+            selectedPeoples.value.push(participants.value[index]);
         }
     }
 };
 const searchParticipants = ref('');
-const changePeoples = (selectedHumans) => {
-    selectedPeoples.value = selectedHumans;
+
+const changePeoples = (CheckedUser, UserId) => {
+    let participant = {};
+    console.log('fff', CheckedUser, UserId);
+    if (CheckedUser) {
+        participant = participants.value.find((item) => item.id == UserId);
+        selectedPeoples.value.push(participant);
+    } else {
+        selectedPeoples.value = selectedPeoples.value.filter(
+            (item) => item.id !== UserId,
+        );
+    }
 };
 
-const changeSelected = (changePeoples) => {
-    selectedPeoples.value = changePeoples;
+const changeSelected = (changeUser, UserId) => {
+    console.log('fff', changeUser, UserId);
+    selectedPeoples.value = selectedPeoples.value.filter(
+        (item) => item.id == UserId,
+    );
 };
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
@@ -824,12 +838,16 @@ p {
     margin-bottom: 8px;
 }
 
-.form__select {
-    border: 1px solid #35383f;
-}
-
 .input-big {
     width: 465px;
+}
+
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 .ascend {

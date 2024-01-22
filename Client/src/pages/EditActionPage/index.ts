@@ -1,0 +1,1 @@
+export {default as EditActionPage} from "./components/EditActionPage.vue";
