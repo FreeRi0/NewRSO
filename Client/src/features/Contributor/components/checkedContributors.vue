@@ -1,11 +1,11 @@
 <template>
     <checkedContributorsItem
         v-for="participant in participants"
-        @change="changeSelected"
+        @change="changePeoples"
         :participant="participant"
-        :selectedParticipants="selectedPeoples"
         :key="participant.id"
     />
+
 </template>
 <script setup>
 import { ref} from 'vue';
@@ -19,7 +19,7 @@ const props = defineProps({
     },
 });
 
-const changeSelected = (changeUser, UserId) => {
+const changePeoples  = (changeUser, UserId) => {
     emit('change', changeUser, UserId)
 };
 

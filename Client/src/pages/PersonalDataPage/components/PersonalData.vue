@@ -9,16 +9,16 @@
                 :edited="true"
             ></BannerComp>
             <!--Табы-->
-            <div class="d-flex mt-9 mb-9">
-                <button
-                    class="contributorBtn"
-                    :class="{ active: picked === tab.name }"
-                    v-for="tab in tabs"
-                    :key="tab.id"
-                    @click="picked = tab.name"
-                >
-                    {{ tab.name }}
-                </button>
+            <div class="d-flex mt-9 mb-9 buttonWrap">
+                    <button
+                        class="contributorBtn"
+                        :class="{ active: picked === tab.name }"
+                        v-for="tab in tabs"
+                        :key="tab.id"
+                        @click="picked = tab.name"
+                    >
+                        {{ tab.name }}
+                    </button>
             </div>
             <AccordionsPersonal
                 v-if="picked == 'Персональные данные'"
@@ -123,7 +123,16 @@ const pages = ref([
     border: 1px solid #1c5c94;
     margin: 0px;
     padding: 10px 24px;
+    width: 100%;
     margin: 7px;
+    @media screen and (max-width: 768px) {
+      padding: 8px 20px;
+    }
+}
+.buttonWrap {
+    @media screen and (max-width: 768px) {
+   flex-wrap: wrap;
+    }
 }
 
 .active {

@@ -141,10 +141,25 @@ onMounted(() => {
 .photoWrapper {
     display: flex;
     @media screen and (max-width: 768px) {
-        flex-wrap: wrap;
+        // flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 0.28fr 0.28fr;
+        grid-column-gap: 20px;
+        grid-row-gap: 20px;
         justify-content: center;
     }
+    @media screen and (max-width: 575px) {
+        grid-template-columns: 0.28fr
+    }
 }
+
+// .photoWrapper {
+//     display: flex;
+//     @media screen and (max-width: 768px) {
+//         flex-wrap: wrap;
+//         justify-content: center;
+//     }
+// }
 .user-verify {
     margin-top: 60px;
     margin-bottom: 40px;
@@ -175,15 +190,25 @@ onMounted(() => {
 .photo-item {
     width: 260px;
     margin-right: 20px;
-    @media screen and (max-width: 768px) {
-        margin-bottom: 16px;
-    }
     @media screen and (max-width: 575px) {
-        height: 206px;
-        width: 156px;
-        margin-right: 16px;
+        height: 373px;
+        width: 280px;
+        margin-right: 0;
     }
 }
+
+// .photo-item {
+//     width: 260px;
+//     margin-right: 20px;
+//     @media screen and (max-width: 768px) {
+//         margin-bottom: 16px;
+//     }
+//     @media screen and (max-width: 575px) {
+//         height: 206px;
+//         width: 156px;
+//         margin-right: 16px;
+//     }
+// }
 .btn {
     margin: 0px;
     padding: 12px 62px;

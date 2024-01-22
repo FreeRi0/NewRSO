@@ -1,10 +1,9 @@
 <template>
     <checkedEnteredSquadItem
         v-for="detachment in detachments"
-        @change="changeSelected"
+        @change="changeSquads"
         :detachment="detachment"
         :squad="squad"
-        :detachments="selectedSquads"
         :key="detachment.id"
     />
 </template>
@@ -13,8 +12,8 @@ import { ref, watch } from 'vue';
 import { checkedEnteredSquadItem } from '@entities/Squads';
 
 const emit = defineEmits(['change']);
-const changeSelected = (changeSquads) => {
-    emit('change', changeSquads);
+const changeSquads = (CheckedSquad, SquadId) => {
+    emit('change', CheckedSquad, SquadId);
 };
 
 const props = defineProps({
@@ -22,18 +21,8 @@ const props = defineProps({
         type: Array,
         required: true,
     },
-    selectedDetachments: {
-        type: Array,
-        default: () => [],
-    },
 });
 
-const selectedSquads = ref(props.detachments);
 
-watch(selectedSquads, (newChecked) => {
-    if (!newChecked) return;
-    emit('change', selectedSquads.value);
-    console.log(newChecked);
-});
 </script>
 <style lang="scss"></style>

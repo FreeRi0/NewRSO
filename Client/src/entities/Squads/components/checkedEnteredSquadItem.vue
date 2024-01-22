@@ -64,7 +64,7 @@
             <div class="horizontalSquad__confidant mr-3">
                 <input
                     type="checkbox"
-                    v-model="selectedSquads"
+                    v-model="checked"
                     :value="detachment"
                     @change="updateSquads"
                 />
@@ -86,16 +86,6 @@ import { ref, onMounted, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
-
-const roleStore = useRoleStore();
-roleStore.getRoles();
-const roles = storeToRefs(roleStore);
-
-const updateSquads = (detachment, event) => {
-    console.log('dddddddft', detachment, event);
-    emit('change', detachment, event);
-};
-
 const props = defineProps({
     detachment: {
         type: Object,
@@ -104,13 +94,26 @@ const props = defineProps({
     squad: {
         type: Object,
     },
+    selectedSquads: {
+        type: Array,
+        default: () => [],
+    },
 });
+const roleStore = useRoleStore();
+roleStore.getRoles();
+const roles = storeToRefs(roleStore);
+const emit = defineEmits(['change']);
+const updateSquads = (e) => {
+    console.log('dddddddft', checked.value);
+    emit('change', checked.value, props.detachment.id);
+};
 
+const checked = ref(true);
 const squad = ref({});
 const isError = ref([]);
 
 const swal = inject('$swal');
-
+const selectedDetch = ref(props.selectedSquads);
 const viewSquad = async () => {
     let id = roles?.roles?.value?.detachment_commander;
     console.log('roles', roles.roles.value);
@@ -146,18 +149,30 @@ const filteredPayed = ref([
     { value: 'Отклонить', name: 'Отклонить' },
 ]);
 
+watch(
+    () => props.selectedSquads,
+    (newChecked) => {
+        if (!newChecked) return;
+        selectedDetch.value = newChecked;
+    },
+);
+
 const ChangeStatus = async () => {
     let id = squad.value.id;
     console.log('squad', id);
     let application_pk = props.detachment.id;
     console.log('application', application_pk);
     if (user.value.applications === 'Одобрить') {
-        HTTP.post(`/detachments/${id}/applications/${application_pk}/accept/`, user.value, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+        HTTP.post(
+            `/detachments/${id}/applications/${application_pk}/accept/`,
+            user.value,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        })
+        )
             .then((response) => {
                 swal.fire({
                     position: 'top-center',

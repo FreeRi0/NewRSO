@@ -17,10 +17,12 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    selectedPeoples: {
+        type: Array,
+    },
 });
 
 const changePeoples = (CheckedUser, UserId) => {
-    emit('change', CheckedUser, UserId)
+    emit('change', CheckedUser, UserId);
 };
-
 </script>

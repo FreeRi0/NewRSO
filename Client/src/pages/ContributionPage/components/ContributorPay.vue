@@ -488,6 +488,7 @@
                         <div class="contributor-wrapper">
                             <contributorsList
                                 :participants="sortedParticipants"
+                                :selected-peoples="selectedPeoples"
                                 @change="changePeoples"
                             ></contributorsList>
                         </div>
@@ -507,7 +508,7 @@
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
 
                     <checkedContributors
-                        @change="changeSelected"
+                        @change="changePeoples"
                         :participants="selectedPeoples"
                     ></checkedContributors>
                 </div>
@@ -620,13 +621,6 @@ const changePeoples = (CheckedUser, UserId) => {
             (item) => item.id !== UserId,
         );
     }
-};
-
-const changeSelected = (changeUser, UserId) => {
-    console.log('fff', changeUser, UserId);
-    selectedPeoples.value = selectedPeoples.value.filter(
-        (item) => item.id == UserId,
-    );
 };
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
@@ -751,7 +745,7 @@ const sortedParticipants = computed(() => {
     return tempParticipants;
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
