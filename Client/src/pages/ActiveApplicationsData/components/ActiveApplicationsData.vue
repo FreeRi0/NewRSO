@@ -16,7 +16,10 @@
                 </button>
             </div>
             <div v-if="picked == 'Верификация аккаунтов' || picked == ''">
-                <div class="contributor-sort__all mb-8">
+                <div
+                    class="contributor-sort__all mb-8"
+                    v-if="participants.length > 0"
+                >
                     <input
                         type="checkbox"
                         @click="select"
@@ -27,16 +30,16 @@
                     :participants="participants"
                     @change="changePeoples"
                 />
-                <Button
+                <!-- <Button
                     @click="participantsVisible += step"
-                    v-if="participantsVisible < participants.length"
+                    v-if="participantsVisible < participants.length && participants.length > 0"
                     label="Показать еще"
                 ></Button>
                 <Button
                     @click="participantsVisible -= step"
                     v-else
                     label="Свернуть все"
-                ></Button>
+                ></Button> -->
                 <div class="selectedItems" v-if="selectedPeoples.length > 0">
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
 
@@ -47,14 +50,17 @@
                 </div>
             </div>
             <div v-else-if="picked == 'Заявка на вступление в отряд'">
-                <div class="contributor-sort__all mb-8">
+                <div
+                    class="contributor-sort__all mb-8"
+                    v-if="detachments.length > 0"
+                >
                     <input
                         type="checkbox"
                         @click="selectSquads"
                         v-model="checkboxAllSquads"
                     />
                 </div>
-                <div class="classes">
+                <div class="classes" v-if="detachments.length > 0">
                     <div>Боец</div>
                     <div>Отряд</div>
                 </div>
@@ -126,9 +132,9 @@ const selectedPeoples = ref([]);
 const selectedDetch = ref([]);
 const step = ref(12);
 
-let tempParticipants = participants.value;
+// let tempParticipants = participants.value;
 
-tempParticipants = tempParticipants.slice(0, participantsVisible.value);
+// tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
 const viewParticipants = async () => {
     let id = roles?.roles?.value?.detachment_commander;
@@ -274,6 +280,14 @@ const select = (event) => {
     p {
         font-size: 16px;
         color: #35383f;
+    }
+}
+
+.selectedItems {
+    padding-top: 60px;
+    padding-bottom: 80px;
+    h3 {
+        margin-bottom: 20px;
     }
 }
 </style>

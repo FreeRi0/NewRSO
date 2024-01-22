@@ -23,9 +23,17 @@
                 />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full">
-                    {{ participant.user.first_name }}
-                </p>
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.user.last_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.user.first_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.user.patronymic_name }}
+                    </p>
+                </div>
                 <div class="horizontallso-item__list-date">
                     <span
                         style="

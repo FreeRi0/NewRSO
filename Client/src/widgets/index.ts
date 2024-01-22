@@ -1,4 +1,3 @@
-
-export * as Header from './AppHeader';
+export * as Header from './AppFooter';
 
 export * as Footer from './AppFooter';

@@ -8,6 +8,7 @@
                 <Select
                     variant="outlined"
                     clearable
+                    class="regSelect"
                     name="select_region"
                     id="select-region"
                     placeholder="Москва"
@@ -197,6 +198,12 @@
     @media screen and (max-width: 575px) {
         font-size: 32px;
     }
+}
+
+.regSelect {
+    margin-left: 0px;
+    border: 1px solid #a3a3a3;
+    margin-bottom: 10px;
 }
 
 .v-selection-control {

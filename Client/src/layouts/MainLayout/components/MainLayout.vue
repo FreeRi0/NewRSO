@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-breadcrumbs/>
+        <app-breadcrumbs v-if="!hidden" :breadcrumbs="breadcrumbs" />
 
         <router-view v-slot="{ Component }">
             <keep-alive>
@@ -11,7 +11,10 @@
 </template>
 
 <script setup>
-import { AppBreadcrumbs } from '@shared';
+import { AppBreadcrumbs, useBreadcrumbsStore } from '@shared/index';
+import { storeToRefs } from 'pinia';
+
+const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 
 import { useRoleStore } from '@layouts/store/role';
 const roleStore = useRoleStore();
