@@ -11,6 +11,17 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Основная информация
                         </v-col>
+                        <p
+                            class="form__error form__error--title"
+                            v-if="
+                                isError.name ||
+                                isError.founding_date ||
+                                isError.regional_headquarter ||
+                                isError.commander
+                            "
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -82,6 +93,12 @@
                                 :maxlength="100"
                                 :clearable="true"
                             />
+                            <p
+                                class="form__error form__error--name"
+                                v-if="isError.name"
+                            >
+                                * {{ isError.name[0] }}
+                            </p>
                             <div class="form__counter">
                                 {{ counterName }} / 100
                             </div>
@@ -98,9 +115,14 @@
                                 name="founding_date"
                                 v-model:value="headquarter.founding_date"
                             />
+                            <p class="form__error" v-if="isError.founding_date">
+                                * Это поле не может быть пустым.
+                            </p>
                         </div>
                         <div class="form__field">
-                            <label for="regional_headquarter" class="form__label"
+                            <label
+                                for="regional_headquarter"
+                                class="form__label"
                                 >Выберите региональное отделение
                                 <sup class="valid-red">*</sup>
                             </label>
@@ -113,6 +135,12 @@
                                 v-model="headquarter.regional_headquarter"
                                 address="/regionals/"
                             ></Select>
+                            <p
+                                class="form__error"
+                                v-if="isError.regional_headquarter"
+                            >
+                                * Это поле не может быть пустым.
+                            </p>
                         </div>
 
                         <div class="form__field">
@@ -131,7 +159,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
-                             open-on-clear
+                                open-on-clear
                                 id="beast"
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
@@ -139,6 +167,12 @@
                                 @update:value="changeValue"
                                 address="users/"
                             ></Dropdown>
+                            <p
+                                class="form__error form__error--commander"
+                                v-if="isError.commander"
+                            >
+                                * Это поле не может быть пустым.
+                            </p>
                         </div>
                     </div>
                     <v-card-actions class="form__button-group">
@@ -160,6 +194,12 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Контакты
                         </v-col>
+                        <p
+                            class="form__error form__error--title"
+                            v-if="isErrorMembers.position"
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -244,10 +284,16 @@
                                 v-model:value="headquarter.social_tg"
                             ></TextareaAbout>
                         </div>
-                       <div class="form__field" v-if="participants">
+                        <div class="form__field" v-if="participants">
                             <p class="form__label">
                                 Назначить на должность
                                 <sup class="valid-red">*</sup>
+                            </p>
+                            <p
+                                class="form__error form__error--members"
+                                v-if="isErrorMembers.position"
+                            >
+                                * Заполните должность у каждого участника
                             </p>
                             <v-text-field
                                 class="form__field-search"
@@ -269,6 +315,7 @@
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                :is-error-members="isErrorMembers"
                                 v-if="members"
                                 @update-member="onUpdateMember"
                             ></MembersList>
@@ -360,7 +407,9 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="hq-slogan" class="form__label">Девиз штаба</label>
+                            <label for="hq-slogan" class="form__label"
+                                >Девиз штаба</label
+                            >
                             <TextareaAbout
                                 maxlength="100"
                                 class="form__textarea form__textarea--mobile"
@@ -375,7 +424,9 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="about-hq" class="form__label">О штабе</label>
+                            <label for="about-hq" class="form__label"
+                                >О штабе</label
+                            >
                             <TextareaAbout
                                 :rows="6"
                                 maxlength="500"
@@ -666,25 +717,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
+import { useRoute } from 'vue-router';
 
 const emit = defineEmits([
     'update:value',
@@ -720,6 +760,14 @@ const props = defineProps({
     members: {
         type: Array,
         default: () => [],
+    },
+    isError: {
+        type: Object,
+        default: () => ({}),
+    },
+    isErrorMembers: {
+        type: Object,
+        default: () => ({}),
     },
 });
 
@@ -840,8 +888,8 @@ const deleteBanner = () => {
         border: 2px solid #35383f;
         background-color: #ffffff;
     }
-    
-        &--prev {
+
+    &--prev {
         margin-right: 20px;
     }
 }

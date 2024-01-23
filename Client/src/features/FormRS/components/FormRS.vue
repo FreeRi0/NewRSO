@@ -11,6 +11,17 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Основная информация
                         </v-col>
+                        <p
+                            class="form__error form__error--title"
+                            v-if="
+                                isError.name ||
+                                isError.district_headquarter ||
+                                isError.region ||
+                                isError.commander
+                            "
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -82,6 +93,12 @@
                                 :maxlength="100"
                                 :clearable="true"
                             />
+                            <p
+                                class="form__error form__error--name"
+                                v-if="isError.name"
+                            >
+                                * {{ isError.name[0] }}
+                            </p>
                             <div class="form__counter">
                                 {{ counterName }} / 100
                             </div>
@@ -101,6 +118,12 @@
                                 v-model="headquarter.district_headquarter"
                                 address="districts/"
                             ></Select>
+                            <p
+                                class="form__error"
+                                v-if="isError.district_headquarter"
+                            >
+                                * Это поле не может быть пустым.
+                            </p>
                         </div>
                         <div class="form__field">
                             <label for="region" class="form__label"
@@ -115,6 +138,9 @@
                                 v-model="headquarter.region"
                                 address="regions/"
                             ></Select>
+                            <p class="form__error" v-if="isError.region">
+                                * Это поле не может быть пустым.
+                            </p>
                         </div>
 
                         <div class="form__field">
@@ -132,7 +158,6 @@
                                 >Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- здесь поменяла -->
                             <Dropdown
                                 open-on-clear
                                 id="beast"
@@ -142,6 +167,12 @@
                                 @update:value="changeValue"
                                 address="users/"
                             ></Dropdown>
+                            <p
+                                class="form__error form__error--commander"
+                                v-if="isError.commander"
+                            >
+                                * Это поле не может быть пустым.
+                            </p>
                         </div>
                     </div>
                     <v-card-actions class="form__button-group">
@@ -163,6 +194,12 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Контакты
                         </v-col>
+                        <p
+                            class="form__error form__error--title"
+                            v-if="isErrorMembers.position"
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -252,6 +289,12 @@
                                 Назначить на должность
                                 <sup class="valid-red">*</sup>
                             </p>
+                            <p
+                                class="form__error form__error--members"
+                                v-if="isErrorMembers.position"
+                            >
+                                * Заполните должность у каждого участника
+                            </p>
                             <v-text-field
                                 class="form__field-search"
                                 variant="outlined"
@@ -269,10 +312,10 @@
                                     </Icon>
                                 </template>
                             </v-text-field>
-                            <!-- здесь поменяла -->
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                :is-error-members="isErrorMembers"
                                 v-if="members"
                                 @update-member="onUpdateMember"
                             ></MembersList>
@@ -305,11 +348,27 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Дополнительная информация
                         </v-col>
+                        <p
+                            class="form__error form__error--title"
+                            v-if="
+                                isError.founding_date || isError.conference_date
+                            "
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
                     <v-row no-gutters v-else>
                         <v-col cols="4" class="d-flex justify-start">
                             Оформление
                         </v-col>
+                        <p
+                            class="form__error form__error--title"
+                            v-if="
+                                isError.founding_date || isError.conference_date
+                            "
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
 
                     <template v-slot:actions="{ expanded }">
@@ -385,6 +444,9 @@
                                     :minlength="4"
                                     :maxlength="4"
                                 />
+                                <p class="form__error form__error--date" v-if="isError.founding_date">
+                                * Это поле не может быть пустым.
+                            </p>
                             </div>
 
                             <di v class="form__field form_width">
@@ -400,6 +462,9 @@
                                     name="conference_date"
                                     v-model:value="headquarter.conference_date"
                                 />
+                                <p class="form__error form__error--date" v-if="isError.conference_date">
+                                * Это поле не может быть пустым.
+                            </p>
                             </di>
                             <div class="form__field form_width">
                                 <label for="registry_number" class="form__label"
@@ -432,7 +497,9 @@
                             </div>
                         </div>
                         <div class="form__field">
-                            <label for="name_for_certificates" class="form__label"
+                            <label
+                                for="name_for_certificates"
+                                class="form__label"
                                 >Наименование регионального отделения в
                                 Именительном падеже (для справок)
                             </label>
@@ -507,7 +574,9 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="slogan" class="form__label">Девиз штаба</label>
+                            <label for="slogan" class="form__label"
+                                >Девиз штаба</label
+                            >
                             <TextareaAbout
                                 maxlength="100"
                                 class="form__textarea form__textarea--mobile"
@@ -522,7 +591,9 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="about-hq" class="form__label">О штабе</label>
+                            <label for="about-hq" class="form__label"
+                                >О штабе</label
+                            >
                             <TextareaAbout
                                 :rows="6"
                                 maxlength="500"
@@ -816,23 +887,21 @@
 import { ref, computed, onMounted } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-// здесь поменяла
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
+// import {
+//     helpers,
+//     minLength,
+//     required,
+//     maxLength,
+//     numeric,
+//     email,
+//     sameAs,
+// } from '@vuelidate/validators';
 
 const emit = defineEmits([
     'update:value',
@@ -865,10 +934,17 @@ const props = defineProps({
         type: String,
         default: null,
     },
-    // здесь поменяла
     members: {
         type: Array,
         default: () => [],
+    },
+    isError: {
+        type: Object,
+        default: () => ({}),
+    },
+    isErrorMembers: {
+        type: Object,
+        default: () => ({}),
     },
 });
 
@@ -920,30 +996,7 @@ const showButtonPrev = computed(() => {
 const route = useRoute();
 let id = route.params.id;
 
-// const getMembers = async () => {
-//     await HTTP.get(`regionals/${id}/members/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             members.value = response.data;
-            
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// onMounted(() => {
-//     getMembers();
-// });
-
-// здесь поменяла
 const members = ref(props.members);
-
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
@@ -953,7 +1006,7 @@ const sortedMembers = computed(() => {
             .includes(searchMembers.value.toUpperCase());
     });
 });
-// здесь поменяла
+
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
 };
@@ -1002,7 +1055,6 @@ const deleteBanner = () => {
 </script>
 
 <style lang="scss" scoped>
-
 .form-button {
     width: 132px;
     min-height: 52px;

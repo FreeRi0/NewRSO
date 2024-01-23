@@ -11,6 +11,17 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Основная информация
                         </v-col>
+                          <p
+                            class="form__error form__error--title"
+                            v-if="
+                                isError.name ||
+                                isError.detachments_appearance_year ||
+                                isError.rso_founding_congress_date ||
+                                isError.commander
+                            "
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -82,6 +93,12 @@
                                 :maxlength="100"
                                 :clearable="true"
                             />
+                            <p
+                                class="form__error form__error--name"
+                                v-if="isError.name"
+                            >
+                                * {{ isError.name[0] }}
+                            </p>
                             <div class="form__counter">
                                 {{ counterName }} / 100
                             </div>
@@ -104,6 +121,9 @@
                                     :minlength="4"
                                     :maxlength="4"
                                 />
+                                <p class="form__error" v-if="isError.detachments_appearance_year">
+                                * Это поле не может быть пустым.
+                            </p>
                             </div>
                             <div class="form__field form_width">
                                 <label for="rso_founding_congress_date" class="form__label"
@@ -117,6 +137,9 @@
                                     name="rso_founding_congress_date"
                                     v-model:value="headquarter.rso_founding_congress_date"
                                 />
+                                <p class="form__error" v-if="isError.rso_founding_congress_date">
+                                * Это поле не может быть пустым.
+                            </p>
                             </div>
                         </div>
 
@@ -144,6 +167,12 @@
                                 @update:value="changeValue"
                                 address="users/"
                             ></Dropdown>
+                            <p
+                                class="form__error form__error--commander"
+                                v-if="isError.commander"
+                            >
+                                * Это поле не может быть пустым.
+                            </p>
                         </div>
                     </div>
                     <v-card-actions class="form__button-group">
@@ -165,6 +194,12 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Контакты
                         </v-col>
+                        <p
+                            class="form__error form__error--title"
+                            v-if="isErrorMembers.position"
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -254,6 +289,12 @@
                                 Назначить на должность
                                 <sup class="valid-red">*</sup>
                             </p>
+                            <p
+                                class="form__error form__error--members"
+                                v-if="isErrorMembers.position"
+                            >
+                                * Заполните должность у каждого участника
+                            </p>
                             <v-text-field
                                 class="form__field-search"
                                 variant="outlined"
@@ -274,6 +315,7 @@
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                :is-error-members="isErrorMembers"
                                 v-if="members"
                                 @update-member="onUpdateMember"
                             ></MembersList>
@@ -682,19 +724,8 @@ import { Button } from '@shared/components/buttons';
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
 
 const emit = defineEmits([
     'update:value',
@@ -730,6 +761,14 @@ const props = defineProps({
     members: {
         type: Array,
         default: () => [],
+    },
+        isError: {
+        type: Object,
+        default: () => ({}),
+    },
+    isErrorMembers: {
+        type: Object,
+        default: () => ({}),
     },
 });
 

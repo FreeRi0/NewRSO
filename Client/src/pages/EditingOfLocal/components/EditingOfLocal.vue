@@ -6,7 +6,9 @@
             :headquarter="headquarter"
             :members="members"
             :submited="submited"
-            v-if="headquarter"
+            :is-error="isError"
+            :is-error-members="isErrorMembers"
+            v-if="headquarter && isError && isErrorMembers"
             @submit.prevent="changeHeadquarter"
             @select-emblem="onSelectEmblem"
             @select-banner="onSelectBanner"
@@ -18,13 +20,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject, watch } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { FormLocal } from '@features/FormLocal';
-import axios from 'axios';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { usePage } from '@shared';
 
+const router = useRouter();
 const route = useRoute();
 let id = route.params.id;
 
@@ -41,7 +43,6 @@ const getPositions = async () => {
 
         .then((res) => {
             positions.value = res.data;
-            console.log('должности - ', res.data);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -133,57 +134,84 @@ const onDeleteBanner = (file) => {
     fileBanner.value = file;
 };
 
+const isError = ref({});
+const isErrorMembers = ref({});
 const swal = inject('$swal');
 
 const changeHeadquarter = async () => {
-    const formData = new FormData();
+    try {
+        const formData = new FormData();
 
-    formData.append('name', headquarter.value.name);
-    formData.append('founding_date', headquarter.value.founding_date);
-    formData.append('regional_headquarter', headquarter.value.regional_headquarter);
-    formData.append('city', headquarter.value.city);
-    formData.append('commander', headquarter.value.commander);
-    formData.append('social_vk', headquarter.value.social_vk);
-    formData.append('social_tg', headquarter.value.social_tg);
-    formData.append('slogan', headquarter.value.slogan);
-    formData.append('about', headquarter.value.about);
+        formData.append('name', headquarter.value.name);
+        formData.append('founding_date', headquarter.value.founding_date);
+        formData.append(
+            'regional_headquarter',
+            headquarter.value.regional_headquarter,
+        );
+        formData.append('city', headquarter.value.city);
+        formData.append('commander', headquarter.value.commander);
+        formData.append('social_vk', headquarter.value.social_vk);
+        formData.append('social_tg', headquarter.value.social_tg);
+        formData.append('slogan', headquarter.value.slogan);
+        formData.append('about', headquarter.value.about);
 
-     if (isEmblemChange.value)
-        fileEmblem.value
-            ? formData.append('emblem', fileEmblem.value)
-            : formData.append('emblem', '');
-    if (isBannerChange.value)
-        fileBanner.value
-            ? formData.append('banner', fileBanner.value)
-            : formData.append('banner', '');
+        for (let member of members.value) {
+            await HTTP.patch(
+                `/locals/${id}/members/${member.id}/`,
+                {
+                    position: member.position,
+                    is_trusted: member.is_trusted,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+        }
 
-    HTTP.patch(`/locals/${id}/`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            submited.value = true;
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        })
-        .catch((error) => {
-            console.error('There was an error!', error);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+        if (isEmblemChange.value)
+            fileEmblem.value
+                ? formData.append('emblem', fileEmblem.value)
+                : formData.append('emblem', '');
+        if (isBannerChange.value)
+            fileBanner.value
+                ? formData.append('banner', fileBanner.value)
+                : formData.append('banner', '');
+
+        await HTTP.patch(`/locals/${id}/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        router.push({
+            name: 'LocalHQ',
+            params: { id: headquarter.value.id },
+        })
+    } catch (err) {
+        isError.value = err.response.data;
+        isErrorMembers.value = err.response.data;
+        if (isError.value || isErrorMembers.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка - заполните обязательные поля`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        } 
+    }
 };
+
 </script>
 
 <style lang="scss"></style>
