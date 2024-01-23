@@ -228,7 +228,7 @@
                                 placeholder="Поиск по ФИО"
                                 v-model="detachment.commander"
                                 @update:value="changeValue"
-                                address="rsousers/"
+                                address="users/"
                             ></Dropdown>
                             <p
                                 class="form__error form__error--commander"
@@ -259,12 +259,12 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Контакты
                         </v-col>
-                        <!-- <p
+                        <p
                             class="form__error form__error--title"
-                            v-if="isError.social_vk || isError.social_tg"
+                            v-if="isErrorMembers.position"
                         >
                             Заполните обязательные поля!
-                        </p> -->
+                        </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -369,6 +369,12 @@
                                 Участники отряда
                                 <sup class="valid-red">*</sup>
                             </p>
+                            <p
+                                class="form__error form__error--members"
+                                v-if="isErrorMembers.position"
+                            >
+                                * Заполните должность у каждого участника
+                            </p>
                             <v-text-field
                                 class="form__field-search"
                                 variant="outlined"
@@ -390,8 +396,11 @@
                                 :items="sortedMembers"
                                 :submited="submited"
                                 :unit="'отряд'"
+                                :is-error-members="isErrorMembers"
+                                v-if="members"
                                 @update-member="onUpdateMember"
                             ></MembersList>
+                            <!-- <pre>{{ sortedMembers }}</pre> -->
                         </div>
                     </div>
 
@@ -1353,11 +1362,9 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Avatar } from '@shared/components/imagescomp';
-import { bannerPhoto } from '@shared/components/imagescomp';
 // import { photos } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
@@ -1365,19 +1372,19 @@ import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
 // import { UnitImage } from "@shared/components/imagescomp";
-
-import { useVuelidate } from '@vuelidate/core';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
+
+// import { useVuelidate } from '@vuelidate/core';
+// import {
+//     helpers,
+//     minLength,
+//     required,
+//     maxLength,
+//     numeric,
+//     email,
+//     sameAs,
+// } from '@vuelidate/validators';
 
 const emit = defineEmits([
     'update:value',
@@ -1437,6 +1444,14 @@ const props = defineProps({
     isError: {
         type: Object,
         default: () => ({}),
+    },
+    isErrorMembers: {
+        type: Object,
+        default: () => ({}),
+    },
+    members: {
+        type: Array,
+        default: () => [],
     },
 });
 
@@ -1550,11 +1565,15 @@ const counterSquad = computed(() => {
 });
 
 const counterSlogan = computed(() => {
-    return detachment.value.slogan.length || 0;
+    if (detachment.value.slogan) {
+        return detachment.value.slogan.length;
+    } else return 0;
 });
 
 const counterAbout = computed(() => {
-    return detachment.value.about.length || 0;
+    if (detachment.value.about) {
+        return detachment.value.about.length;
+    } else return 0;
 });
 
 //------------------------------------------------------------------------------------------------
@@ -1576,30 +1595,32 @@ const showButtonPrev = computed(() => {
     return panel.value === 'panelThree';
 });
 
-const members = ref([]);
+// const members = ref([]);
 
-const route = useRoute();
-let id = route.params.id;
+// const route = useRoute();
+// let id = route.params.id;
 
-const getMembers = async () => {
-    await HTTP.get(`detachments/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            members.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const getMembers = async () => {
+//     await HTTP.get(`detachments/${id}/members/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             members.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
-onMounted(() => {
-    getMembers();
-});
+// onMounted(() => {
+//     getMembers();
+// });
+
+const members = ref(props.members);
 
 const searchMembers = ref('');
 
@@ -1612,11 +1633,15 @@ const sortedMembers = computed(() => {
     });
 });
 
-const onUpdateMember = (event, id) => {
-    const targetMember = members.value.find((member) => member.id === id);
+// const onUpdateMember = (event, id) => {
+//     const targetMember = members.value.find((member) => member.id === id);
 
-    const firstkey = Object.keys(event)[0];
-    targetMember[firstkey] = event[firstkey];
+//     const firstkey = Object.keys(event)[0];
+//     targetMember[firstkey] = event[firstkey];
+// };
+
+const onUpdateMember = (event, id) => {
+    emit('updateMember', event, id);
 };
 
 const changeValue = (event) => {

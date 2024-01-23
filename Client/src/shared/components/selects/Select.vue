@@ -46,10 +46,6 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    // object: {
-    //     type: Number,
-    //     default: null,
-    // },
     names: {
         type: Array,
         default: () => [],
@@ -78,7 +74,7 @@ const changeOption = (event) => {
 const names = ref(props.names);
 
 const onChangeItem = async () => {
-    await HTTP.get(props.address)
+    HTTP.get(props.address)
 
         .then((res) => {
             // console.log(props.address);

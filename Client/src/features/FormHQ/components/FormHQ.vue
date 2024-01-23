@@ -121,6 +121,7 @@
                                 v-model="headquarter.educational_institution"
                                 address="eduicational_institutions/"
                             ></Select>
+                            <!-- <pre>{{ headquarter.educational_institution }}</pre> -->
                             <p
                                 class="form__error"
                                 v-if="isError.educational_institution"
@@ -174,6 +175,7 @@
                                 v-model="headquarter.regional_headquarter"
                                 address="regionals/"
                             ></Select>
+                            <!-- {{ headquarter.regional_headquarter }} -->
                             <p
                                 class="form__error"
                                 v-if="isError.regional_headquarter"
@@ -206,8 +208,9 @@
                                 placeholder="Поиск по ФИО"
                                 v-model="headquarter.commander"
                                 @update:value="changeValue"
-                                address="rsousers/"
+                                address="users/"
                             ></Dropdown>
+                            <!-- {{ headquarter.commander }} -->
                             <p
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
@@ -252,6 +255,12 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Контакты
                         </v-col>
+                        <p
+                            class="form__error form__error--title"
+                            v-if="isErrorMembers.position"
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -339,8 +348,14 @@
 
                         <div class="form__field" v-if="participants">
                             <p class="form__label">
-                                Участники отряда
+                                Участники штаба
                                 <sup class="valid-red">*</sup>
+                            </p>
+                            <p
+                                class="form__error form__error--members"
+                                v-if="isErrorMembers.position"
+                            >
+                                * Заполните должность у каждого участника
                             </p>
                             <v-text-field
                                 class="form__field-search"
@@ -362,8 +377,11 @@
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                :is-error-members="isErrorMembers"
+                                v-if="members"
                                 @update-member="onUpdateMember"
                             ></MembersList>
+                            <!-- <pre>{{ sortedMembers }}</pre> -->
                         </div>
                     </div>
 
@@ -784,24 +802,26 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { Input, TextareaAbout } from '@shared/components/inputs';
+import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Select, Dropdown } from '@shared/components/selects';
+import { Select } from '@shared/components/selects';
+import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-
+import { TextareaAbout } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
+// import { useVuelidate } from '@vuelidate/core';
+// import {
+//     helpers,
+//     minLength,
+//     required,
+//     maxLength,
+//     numeric,
+//     email,
+//     sameAs,
+// } from '@vuelidate/validators';
 
 const emit = defineEmits([
     'update:value',
@@ -837,6 +857,14 @@ const props = defineProps({
     isError: {
         type: Object,
         default: () => ({}),
+    },
+    isErrorMembers: {
+        type: Object,
+        default: () => ({}),
+    },
+    members: {
+        type: Array,
+        default: () => [],
     },
 });
 
@@ -908,11 +936,15 @@ const counterTitle = computed(() => {
 });
 
 const counterSlogan = computed(() => {
-    return headquarter.value.slogan.length || 0;
+    if (headquarter.value.slogan) {
+        return headquarter.value.slogan.length;
+    } else return 0;
 });
 
 const counterAbout = computed(() => {
-    return headquarter.value.about.length || 0;
+    if (headquarter.value.about) {
+        return headquarter.value.about.length;
+    } else return 0;
 });
 //----------------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -934,31 +966,33 @@ const showButtonPrev = computed(() => {
 });
 
 //-----------------------------------------------------------------------
-const members = ref([]);
+// const members = ref([]);
 
-const route = useRoute();
-let id = route.params.id;
+// const route = useRoute();
+// let id = route.params.id;
 
-const getMembers = async () => {
-    await HTTP.get(`educationals/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            members.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-    // console.log(id);
-};
+// const getMembers = async () => {
+//     HTTP.get(`educationals/${id}/members/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             members.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+//     // console.log(id);
+// };
 
-onMounted(() => {
-    getMembers();
-});
+// onMounted(() => {
+//     getMembers();
+// });
+
+const members = ref(props.members);
 
 const searchMembers = ref('');
 
@@ -971,10 +1005,15 @@ const sortedMembers = computed(() => {
     });
 });
 
+// const onUpdateMember = (event, id) => {
+//     const targetMember = members.value.find((member) => member.id === id);
+//     const firstkey = Object.keys(event)[0];
+//     targetMember[firstkey] = event[firstkey];
+//     console.log(event);
+// };
+
 const onUpdateMember = (event, id) => {
-    const targetMember = members.value.find((member) => member.id === id);
-    const firstkey = Object.keys(event)[0];
-    targetMember[firstkey] = event[firstkey];
+    emit('updateMember', event, id);
 };
 
 const changeValue = (event) => {
@@ -1027,6 +1066,30 @@ const resetBanner = () => {
     fileBanner.value = null;
     emit('resetBanner', fileBanner.value);
 };
+
+const educationalsInstitution = ref([]);
+
+const getRegInst = async () => {
+    HTTP.get(`eduicational_institutions/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+
+        .then((res) => {
+            // console.log(props.address);
+            educationalsInstitution.value = res.data;
+            console.log(res.data);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    getRegInst();
+});
 </script>
 
 <style lang="scss" scoped>

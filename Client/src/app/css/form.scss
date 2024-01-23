@@ -214,6 +214,10 @@
             }
         }
 
+        &--members {
+            bottom: calc(100% - 24px);
+        }
+
         &--title {
             top: 0;
             bottom: 0;

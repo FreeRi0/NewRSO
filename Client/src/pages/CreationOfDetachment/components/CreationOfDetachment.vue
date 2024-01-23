@@ -1,12 +1,12 @@
 <template>
-    <div class="container container--top">
-        <h1 class="title title--lso">Создание ЛСО</h1>
+    <div class="container">
+        <h1 class="title title--mb">Создание ЛСО</h1>
         <FormUnit
             :detachment="detachment"
             :is-error="isError"
             @submit.prevent="changeDetachment"
             @select-file="onSelectFile"
-            @reset-file="onResetFile"
+            @reset-emblem="onResetEmblem"
             @select-banner="onSelectBanner"
             @reset-banner="onResetBanner"
             @select-photo-one="onSelectPhotoOne"
@@ -58,40 +58,59 @@ const filePhotoTwo = ref(null);
 const filePhotoThree = ref(null);
 const filePhotoFour = ref(null);
 
+const isEmblemChange = ref(false);
+const isBannerChange = ref(false);
+const isPhotoOne = ref(false);
+const isPhotoTwo = ref(false);
+const isPhotoThree = ref(false);
+const isPhotoFour = ref(false);
+
 const onSelectFile = (file) => {
+    isEmblemChange.value = true;
     fileEmblem.value = file;
 };
-const onResetFile = (file) => {
+const onResetEmblem = (file) => {
+    isEmblemChange.value = true;
     fileEmblem.value = file;
 };
 const onSelectBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 const onResetBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 const onSelectPhotoOne = (file) => {
+    isPhotoOne.value = true;
     filePhotoOne.value = file;
 };
 const onResetPhotoOne = (file) => {
+    isPhotoOne.value = true;
     filePhotoOne.value = file;
 };
 const onSelectPhotoTwo = (file) => {
+    isPhotoTwo.value = true;
     filePhotoTwo.value = file;
 };
 const onResetPhotoTwo = (file) => {
+    isPhotoTwo.value = true;
     filePhotoTwo.value = file;
 };
 const onSelectPhotoThree = (file) => {
+    isPhotoThree.value = true;
     filePhotoThree.value = file;
 };
 const onResetPhotoThree = (file) => {
+    isPhotoThree.value = true;
     filePhotoThree.value = file;
 };
 const onSelectPhotoFour = (file) => {
+    isPhotoFour.value = true;
     filePhotoFour.value = file;
 };
 const onResetPhotoFour = (file) => {
+    isPhotoFour.value = true;
     filePhotoFour.value = file;
 };
 
@@ -114,12 +133,32 @@ const changeDetachment = async () => {
     formData.append('social_tg', detachment.value.social_tg);
     formData.append('slogan', detachment.value.slogan);
     formData.append('about', detachment.value.about);
-    formData.append('emblem', fileEmblem.value);
-    formData.append('banner', fileBanner.value);
-    formData.append('photo1', filePhotoOne.value);
-    formData.append('photo2', filePhotoTwo.value);
-    formData.append('photo3', filePhotoThree.value);
-    formData.append('photo4', filePhotoFour.value);
+
+    if (isEmblemChange.value)
+        fileEmblem.value
+            ? formData.append('emblem', fileEmblem.value)
+            : formData.append('emblem', '');
+    if (isBannerChange.value)
+        fileBanner.value
+            ? formData.append('banner', fileBanner.value)
+            : formData.append('banner', '');
+    if (isPhotoOne.value)
+        filePhotoOne.value
+            ? formData.append('photo1', filePhotoOne.value)
+            : formData.append('photo1', '');
+    if (isPhotoTwo.value)
+        filePhotoTwo.value
+            ? formData.append('photo2', filePhotoTwo.value)
+            : formData.append('photo2', '');
+    if (isPhotoThree.value)
+        filePhotoThree.value
+            ? formData.append('photo3', filePhotoThree.value)
+            : formData.append('photo3', '');
+    if (isPhotoFour.value)
+        filePhotoFour.value
+            ? formData.append('photo4', filePhotoFour.value)
+            : formData.append('photo4', '');
+
     HTTP.post('detachments/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -128,10 +167,9 @@ const changeDetachment = async () => {
     })
         .then((response) => {
             submited.value = true;
-            //   formData = response.data;
             console.log(response.data);
             swal.fire({
-                position: 'top-center',
+                position: 'center',
                 icon: 'success',
                 title: 'успешно',
                 showConfirmButton: false,
