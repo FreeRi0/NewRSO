@@ -156,7 +156,10 @@ import {
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-// import headquarters from '@entities/HeadquartersData/headquarters';
+import { onBeforeRouteUpdate } from 'vue-router';
+import { useCrosspageFilter } from '@shared';
+
+const crosspageFilters = useCrosspageFilter();
 
 const regionalHeadquarters = ref([]);
 
@@ -204,13 +207,6 @@ const filtersDistricts = computed(() =>
           )?.regional_headquarters ?? []
         : regionalHeadquarters.value,
 );
-
-// const mergedHeadquarters = computed(() => {
-//     const regionalHQFromFilters = filtersDistricts.value;
-//     const regionalHQFromSorted = sortedHeadquarters.value;
-
-//     return [...regionalHQFromFilters, ...regionalHQFromSorted];
-// });
 
 const getDistrictsHeadquartersForFilters = async () => {
     try {
@@ -274,6 +270,13 @@ const sortedRegionalHeadquarters = computed(() => {
     }
 
     return tempHeadquarters;
+});
+
+onBeforeRouteUpdate(async (to, from) => {
+    const pageName = 'regionalHeadquarters';
+    const filtersPropertiesToRemove = ['disrictName'];
+
+    crosspageFilters.removeFilters(pageName, filtersPropertiesToRemove);
 });
 
 // ...............................................................................

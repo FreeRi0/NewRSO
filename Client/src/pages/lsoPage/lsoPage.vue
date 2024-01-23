@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="squad-page">
-            <Breadcrumbs></Breadcrumbs>
             <h1 class="title title--lso">ЛСО</h1>
             <BannerSquad
                 :squad="squad"
@@ -41,7 +40,6 @@
     </div>
 </template>
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerSquad } from '@features/baner/components';
 import { squadPhotos } from '@shared/components/imagescomp';
 import SquadParticipants from './components/SquadParticipants.vue';
@@ -71,7 +69,6 @@ const aboutSquad = async () => {
         });
 };
 
-
 const aboutMembers = async () => {
     await HTTP.get(`/detachments/${id}/members/`, {
         headers: {
@@ -88,8 +85,6 @@ const aboutMembers = async () => {
         });
 };
 
-
-
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutSquad();
@@ -104,7 +99,6 @@ watch(
         id = newId;
         aboutSquad();
         aboutMembers();
-
     },
 );
 
@@ -112,12 +106,10 @@ onMounted(() => {
     aboutSquad();
     aboutMembers();
 });
-
 </script>
 <style scoped lang="scss">
-
 .squad-page {
-   padding-top: 40px;
+    padding-top: 40px;
 }
 .title {
     //-----------------------------------общий класс для всех заголовков h1

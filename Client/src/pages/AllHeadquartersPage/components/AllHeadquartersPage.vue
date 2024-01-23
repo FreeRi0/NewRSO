@@ -208,6 +208,9 @@ import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteUpdate } from 'vue-router';
+import { useCrosspageFilter } from '@shared';
+
+const crosspageFilters = useCrosspageFilter();
 
 const headquarters = ref([]);
 
@@ -323,30 +326,14 @@ const sortOptionss = ref([
 
 const sortedHeadquarters = computed(() => {
     let tempHeadquartes = [];
-    if (
-        selectedSortDistrict.value &&
-        SelectedSortRegional.value &&
-        selectedSortLocal.value
-    ) {
-        tempHeadquartes = Array.from(
-            new Set([
-                ...filtersDistricts.value,
-                ...filtersRegionals.value,
-                ...filtersLocals.value,
-            ]),
-        );
-    } else if (selectedSortDistrict.value && SelectedSortRegional.value) {
-        tempHeadquartes = Array.from(
-            new Set([...filtersDistricts.value, ...filtersRegionals.value]),
-        );
-    } else if (selectedSortDistrict.value && selectedSortLocal.value) {
-        tempHeadquartes = Array.from(
-            new Set([...filtersDistricts.value, ...filtersLocals.value]),
-        );
-    } else if (SelectedSortRegional.value && selectedSortLocal.value) {
-        tempHeadquartes = Array.from(
-            new Set([...filtersRegionals.value, ...filtersLocals.value]),
-        );
+    const activeFilters = [
+        selectedSortDistrict.value && filtersDistricts.value,
+        SelectedSortRegional.value && filtersRegionals.value,
+        selectedSortLocal.value && filtersLocals.value,
+    ].filter(Boolean);
+
+    if (activeFilters.length > 0) {
+        tempHeadquartes = Array.from(new Set(activeFilters.flat()));
     } else if (SelectedSortRegional.value) {
         tempHeadquartes = [...filtersRegionals.value];
     } else if (selectedSortDistrict.value) {
@@ -411,12 +398,12 @@ const sortedHeadquarters = computed(() => {
 onBeforeRouteUpdate(async (to, from) => {
     const pageName = 'AllHeadquarters';
     const filtersPropertiesToRemove = [
-        'filtersDistricts',
-        'filtersRegionals',
-        'filtersLocals',
+        'disrictName',
+        'regionalName',
+        'localName',
     ];
 
-    removeFilters(pageName, filtersPropertiesToRemove);
+    crosspageFilters.removeFilters(pageName, filtersPropertiesToRemove);
 });
 </script>
 <style lang="scss">
