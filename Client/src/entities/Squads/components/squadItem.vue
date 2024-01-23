@@ -1,5 +1,5 @@
 <template>
-    <div class="squads-wrapper__item">
+    <div class="squads-wrapper__item rating_wrapper">
         <router-link :to="{ name: 'lso', params: { id: squad.id } }">
             <div class="round-img">
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
@@ -8,6 +8,11 @@
             <div class="container-squad">
                 <p class="squads-wrapper__item-title normal-title">
                     {{ squad.name }}
+                </p>
+            </div>
+            <div class="container-squad" v-if="rating">
+                <p class="squads-wrapper__item-title normal-title">
+                   Место в рейтинге: 102
                 </p>
             </div>
         </router-link>
@@ -19,6 +24,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    rating: {
+        type: Boolean,
+        default: false
+    }
 });
 </script>
 <style lang="scss">
@@ -50,5 +59,9 @@ const props = defineProps({
         font-family: 'Akrobat';
         color: #1e1e1e;
     }
+}
+
+.rating__wrapper {
+    width: 200px;
 }
 </style>

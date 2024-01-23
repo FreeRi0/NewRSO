@@ -18,14 +18,14 @@
                     {{ participant.user.first_name }}
                 </p>
                 <p class="participants-wrapper__item-position">
-                    {{ position.name }}
+                    {{ participant.position }}
                 </p>
             </div>
         </router-link>
     </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 const props = defineProps({
     participant: {
@@ -37,29 +37,41 @@ const props = defineProps({
     },
 });
 
-const position = ref({});
+// const position = ref({});
 
-const aboutPosition = async () => {
-    let id = props.participant.position;
+// const aboutPosition = async () => {
+//     let id = props.participant.position;
+//     console.log('id', id)
 
-    await HTTP.get(`/positions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            position.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+//     await HTTP.get(`/positions/${id}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             position.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
-onMounted(() => {
-    aboutPosition();
-});
+// onMounted(() => {
+//     aboutPosition();
+// });
+
+// watch(
+//     () => props.participant,
+
+//     (newParticipant, oldParticipant) => {
+//         if (Object.keys(props.participant).length === 0) {
+//             return;
+//         }
+//         aboutPosition();
+//     },
+// );
 </script>
 <style lang="scss" scoped>
 .round-img {

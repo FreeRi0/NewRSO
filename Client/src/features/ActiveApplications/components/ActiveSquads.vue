@@ -21,6 +21,9 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    selectedDetch: {
+        type: Array,
+    }
 });
 
 const changeSquads = (CheckedSquad, SquadId) => {

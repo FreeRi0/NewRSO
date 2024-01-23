@@ -120,6 +120,17 @@ const routes: RouteRecordRaw[] = [
                                     label: 'Редактирование',
                                 },
                             },
+                            {
+                                path: 'AllParticipants',
+                                name: 'allparticipants',
+                                component: () =>
+                                    import(
+                                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                                    ),
+                                meta: {
+                                    label: 'Участники отряда',
+                                },
+                            },
                         ],
                     },
                     {
@@ -382,24 +393,6 @@ const routes: RouteRecordRaw[] = [
 
             //----------------------Конец----------------Штабы/Создание/Редактирование---------------------------------------------------------96cb9a («.»)
 
-            // {
-            //     path: '/UserPage',
-            //     name: 'userpaage',
-            //     component: () =>
-            //         import('@pages/UserPage/components/UserPage.vue'),
-            //     meta: {
-            //         label: 'Моя страница',
-            //     },
-            // },
-            {
-                path: '/UserPage/:id',
-                name: 'userpage',
-                component: () =>
-                    import('@pages/UserPage/components/UserPage.vue'),
-                meta: {
-                    label: 'Страница пользователя',
-                },
-            },
             {
                 path: '/actionSquads',
                 name: 'actionSquads',
@@ -431,94 +424,21 @@ const routes: RouteRecordRaw[] = [
                         '@pages/EditActionPage/components/EditActionPage.vue'
                     ),
             },
+
             {
                 path: '/AllParticipants/:id',
-                name: 'allparticipants',
+                name: 'allParticipants',
                 component: () =>
                     import(
                         '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
                     ),
                 meta: {
-                    requiresAuth: true,
-                    label: 'Участники отряда',
-                },
-            },
-            {
-                path: '/AllParticipants/:id',
-                name: 'allEventMembers',
-                component: () =>
-                    import(
-                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
-                    ),
-                meta: {
-                    requiresAuth: true,
                     label: 'Участники мероприятия',
                 },
             },
-            {
-                path: '/PersonalData',
-                name: 'personaldata',
-                component: () =>
-                    import(
-                        '@pages/PersonalDataPage/components/PersonalData.vue'
-                    ),
-                meta: {
-                    label: 'Персональные данные',
-                },
-            },
-            // {
-            //     path: '/PersonalData/:id',
-            //     name: 'PersonalData',
-            //     component: () =>
-            //         import(
-            //             '@pages/PersonalDataPage/components/PersonalData.vue'
-            //         ),
-            //     meta: {
-            //         requiresAuth: true,
-            //     },
-            // },
 
-            {
-                path: '/reference',
-                name: 'reference',
-                component: () =>
-                    import('@pages/ReferencePage/components/reference.vue'),
-                meta: {
-                    requiresAuth: true,
-                },
-            },
-            {
-                path: '/referenceForYou',
-                name: 'referenceForYou',
-                component: () =>
-                    import(
-                        '@pages/ReferencePage/components/referenceForYou.vue'
-                    ),
-                meta: {
-                    requiresAuth: true,
-                },
-            },
 
-            {
-                path: '/references',
-                name: 'references',
-                component: () =>
-                    import('@pages/ReferencePage/components/references.vue'),
-                meta: {
-                    requiresAuth: true,
-                },
-            },
-            {
-                path: '/contributorPay',
-                name: 'contributorPay',
-                component: () =>
-                    import(
-                        '@pages/ContributionPage/components/ContributorPay.vue'
-                    ),
-                meta: {
-                    label: 'Членский взнос',
-                },
-            },
+
             {
                 path: '/activeInvents/accountVerification',
                 name: 'accountVerification',
@@ -558,6 +478,53 @@ const routes: RouteRecordRaw[] = [
                 },
             },
             {
+                path: '/CompetitionParticipants',
+                name: 'CompetitionParticipants',
+                component: () =>
+                    import(
+                        '@pages/CompetitionParticipantsPage/components/CompetitionParticipants.vue'
+                    ),
+                meta: {
+                    requiresAuth: true,
+                },
+            },
+        ],
+    },
+    {
+        path: '/',
+        component: () =>
+            import('@layouts/MainLayout/components/MainLayout.vue'),
+        meta: {
+            label: 'Личный кабинет',
+        },
+        children: [
+            {
+                path: ':id',
+                meta: {
+                    redirectTo: 'userpage',
+                    label: 'Страница пользователя',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'userpage',
+                        component: () =>
+                            import('@pages/UserPage/components/UserPage.vue'),
+                    },
+                ]
+            },
+            {
+                path: '/PersonalData',
+                name: 'personaldata',
+                component: () =>
+                    import(
+                        '@pages/PersonalDataPage/components/PersonalData.vue'
+                    ),
+                meta: {
+                    label: 'Персональные данные',
+                },
+            },
+            {
                 path: '/active',
                 name: 'active',
                 component: () =>
@@ -567,6 +534,54 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     label: 'Активные заявки',
                 },
+            },
+            {
+                path: '/contributorPay',
+                name: 'contributorPay',
+                component: () =>
+                    import(
+                        '@pages/ContributionPage/components/ContributorPay.vue'
+                    ),
+                meta: {
+                    label: 'Членский взнос',
+                },
+            },
+            {
+                path: '/references',
+                meta: {
+                    label: 'Оформление справок',
+                    redirectTo: 'references',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'references',
+                        component: () =>
+                            import('@pages/ReferencePage/components/references.vue'),
+                    },
+                    {
+                        path: 'reference',
+                        name: 'reference',
+                        component: () =>
+                            import(
+                                '@pages/ReferencePage/components/reference.vue'
+                            ),
+                        meta: {
+                            label: 'Справка о членстве в РСО(для работодателя)',
+                        },
+                    },
+                    {
+                        path: 'referenceForYou',
+                        name: 'referenceForYou',
+                        component: () =>
+                            import(
+                                '@pages/ReferencePage/components/referenceForYou.vue'
+                            ),
+                        meta: {
+                            label: 'Справка о членстве в РСО(для личного пользования)',
+                        },
+                    },
+                ],
             },
         ],
     },

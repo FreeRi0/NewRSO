@@ -11,7 +11,7 @@
                         Кто видит мой номер телефона
                     </div>
                     <sortByEducation
-                       placeholder="Все"
+                        placeholder="Все"
                         variant="outlined"
                         clearable
                         v-model="privateData.privacy_telephone"
@@ -28,7 +28,7 @@
                     </div>
 
                     <sortByEducation
-                       placeholder="Все"
+                        placeholder="Все"
                         variant="outlined"
                         clearable
                         v-model="privateData.privacy_email"
@@ -44,7 +44,7 @@
                         Кто видит мои ссылки на соцсети
                     </div>
                     <sortByEducation
-                       placeholder="Все"
+                        placeholder="Все"
                         variant="outlined"
                         clearable
                         v-model="privateData.privacy_social"
@@ -60,7 +60,7 @@
                         Кто видит информацию обо мне
                     </div>
                     <sortByEducation
-                       placeholder="Все"
+                        placeholder="Все"
                         variant="outlined"
                         clearable
                         v-model="privateData.privacy_about"
@@ -76,13 +76,13 @@
                         Кто видит мои фотографии
                     </div>
                     <sortByEducation
-                       placeholder="Все"
+                        placeholder="Все"
                         variant="outlined"
                         clearable
                         v-model="privateData.privacy_photo"
                         :options="privacies"
                     ></sortByEducation>
-         
+
                     <p class="error" v-if="isError.privacy_photo">
                         {{ '' + isError.privacy_photo }}
                     </p>
@@ -186,6 +186,9 @@ const ChangePrivate = async () => {
     grid-template-columns: 1fr 0.5fr;
     padding-bottom: 28px;
     align-items: center;
+    @media screen and (max-width: 575px) {
+        grid-template-columns: 1fr;
+    }
 }
 .changePrivate {
     width: 200px;
@@ -207,6 +210,10 @@ const ChangePrivate = async () => {
     padding-bottom: 20px;
     margin-bottom: 80px;
     margin-top: 40px;
-    width: 680px;
+    max-width: 680px;
+    @media screen and (max-width: 575px) {
+        padding-right: 16px;
+        padding-left: 16px;
+    }
 }
 </style>

@@ -64,10 +64,11 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['change']);
-const checked = ref(false)
+const checked = ref(false);
+
 const updateCheck = (e) => {
     console.log('dddddd', checked.value);
-    emit('change', checked.value, props.participant.id);
+    emit('change', checked.value, props?.participant?.user?.id);
 };
 
 const selectedPeoples = ref(props.selectedParticipants);
@@ -77,6 +78,13 @@ watch(
     (newChecked) => {
         if (!newChecked) return;
         selectedPeoples.value = newChecked;
+        console.log('newChecked', newChecked);
+        const checkedItem = newChecked.find(
+            (item) => item.id == props?.participant?.user?.id,
+        );
+        console.log('checkedItem', checkedItem);
+        if (!checkedItem) checked.value = false;
+        else checked.value = true;
     },
 );
 </script>

@@ -72,13 +72,7 @@
                         class="AddApplication"
                     ></Button>
 
-                    <div
-                        v-if="user.user.id === member.id"
-                        class="user-data__link"
-                    >
-                        Вы участник
-                    </div>
-                    <div v-else>
+                    <!-- <div v-else-if="">
                         <div class="user-data__link">
                             Заявка на рассмотрении
                         </div>
@@ -87,7 +81,16 @@
                             label="Удалить заявку"
                             class="AddApplication"
                         ></Button>
-                    </div>
+                    </div> -->
+
+                    <!--find искать id в computed-->
+                    <!--
+                    <div
+                        v-if="user.user.id ==="
+                        class="user-data__link"
+                    >
+                        Вы участник
+                    </div> -->
                 </div>
                 <p class="error" v-if="isError.non_field_errors">
                     {{ '' + isError.non_field_errors }}
@@ -138,7 +141,7 @@ const isError = ref([]);
 const swal = inject('$swal');
 
 const aboutEduc = async () => {
-    let id = props.squad.educational_institution;
+    let id = props.squad.educational_institution.id;
     console.log('squad', props.squad);
     console.log('id', id);
     await HTTP.get(`/eduicational_institutions/${id}/`, {
@@ -149,6 +152,10 @@ const aboutEduc = async () => {
     })
         .then((response) => {
             edict.value = response.data;
+            // if (edict.value.educational_institution) {
+            //     edict.value.educational_institution =
+            //         edict.value.educational_institution.id;
+            // }
             console.log(response);
         })
         .catch(function (error) {

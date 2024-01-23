@@ -39,7 +39,7 @@ const updateValue = (e) => {
     margin-top: 12px;
     padding: 16px 60px 16px 16px;
     border-radius: 10px;
-    width: 820px;
+    width: 100%;
     height: 116px;
     border: 1px solid #0000001A;
 }

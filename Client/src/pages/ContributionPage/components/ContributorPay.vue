@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="contributor">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="contributor-title">Членский взнос</h2>
             <div class="d-flex mt-7">
                 <button
@@ -489,6 +488,7 @@
                         <div class="contributor-wrapper">
                             <contributorsList
                                 :participants="sortedParticipants"
+                                :selected-peoples="selectedPeoples"
                                 @change="changePeoples"
                             ></contributorsList>
                         </div>
@@ -508,7 +508,7 @@
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
 
                     <checkedContributors
-                        @change="changeSelected"
+                        @change="changePeoples"
                         :participants="selectedPeoples"
                     ></checkedContributors>
                 </div>
@@ -527,7 +527,6 @@ import {
 } from '@features/Contributor/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 
 const participants = ref([]);
@@ -562,7 +561,7 @@ const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
 const viewParticipants = async () => {
-    await HTTP.get('/rsousers/', {
+    await HTTP.get('/users/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -622,13 +621,6 @@ const changePeoples = (CheckedUser, UserId) => {
             (item) => item.id !== UserId,
         );
     }
-};
-
-const changeSelected = (changeUser, UserId) => {
-    console.log('fff', changeUser, UserId);
-    selectedPeoples.value = selectedPeoples.value.filter(
-        (item) => item.id == UserId,
-    );
 };
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
@@ -753,7 +745,7 @@ const sortedParticipants = computed(() => {
     return tempParticipants;
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;

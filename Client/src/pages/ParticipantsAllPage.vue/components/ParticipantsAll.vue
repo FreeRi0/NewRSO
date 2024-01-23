@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="participants">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="participants-title">Участники ЛСО</h2>
             <h2 class="participants-title" v-if="event">
                 Участники Мероприятия
@@ -151,9 +150,8 @@ import {
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { useRoute } from 'vue-router';
-// import participants from '@entities/Participants/participants';
+
 const props = defineProps({
     event: {
         type: Boolean,
@@ -161,7 +159,7 @@ const props = defineProps({
 });
 const participants = ref([]);
 const participantsVisible = ref(12);
-// const picked = ref(null);
+
 
 const step = ref(12);
 const picked = ref(true);
