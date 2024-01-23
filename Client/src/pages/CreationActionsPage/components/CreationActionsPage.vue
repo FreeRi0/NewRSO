@@ -716,7 +716,7 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { createAction, createOrganizator } from '@services/ActionService';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
@@ -726,7 +726,7 @@ import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import textarea from '@shared/components/inputs/textarea.vue'
 const router = useRoute();
-
+const swal = inject('$swal');
 //Переменные для основной формы
 
 const scale_massive = ref([
@@ -838,14 +838,33 @@ function SubmitEvent(){
         console.log("Форма передалась успешно", resp.value)
         createOrganizator(resp.value.id)
         .then((resp)=>{
-            console.log("Форма организаторов передалась успешно", resp.value)
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         })
         .catch((e)=>{
-            console.log(e)
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'Не удалось добавить организаторов',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         })
     })
     .catch((e)=>{
-        console.log(e)
+        console.
+        swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'Не удалось создать мероприятие',
+                showConfirmButton: false,
+                timer: 1500,
+            });
     })
 }
 

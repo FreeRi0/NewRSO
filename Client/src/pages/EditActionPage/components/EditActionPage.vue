@@ -1,6 +1,7 @@
 <template>
     <div class='container action'>
         <div class='action-title'>Редактирование мероприятия</div>
+        <form @submit.prevent="SubmitEvent">
         <div class='col-auto form-container'>
             <v-expansion-panels variant='accordion'>
                 <v-expansion-panel>
@@ -72,11 +73,11 @@
                                 <label class='form-label'>Выберете формат мероприятия</label>
                                 <div class='flex align-items-center' style='display: flex'>
                                     <div class="flex align-items-center">
-                                        <input v-model='maininfo.format' type='radio' value='Оффлайн' class='form-radio'/>
+                                        <input v-model='actionForm.format' type='radio' value='OFFLINE' class='form-radio'/>
                                         <label class="ml-2 form-label">Оффлайн</label>
                                     </div>
                                     <div class="flex align-items-center">
-                                        <input v-model='maininfo.format' type='radio' value='Онлайн' class='form-radio'/>
+                                        <input v-model='actionForm.format' type='radio' value='ONLINE' class='form-radio'/>
                                         <label class="ml-2 form-label">Онлайн</label>
                                     </div>
                                 </div>
@@ -285,7 +286,7 @@
                                     <label class="form-label" for="action-start-hq">Начало мероприятия<sup class="valid-red">*</sup></label>
                                     <InputText
                                         id="action-start-hq"
-                                        v-model='timeData.timeStart'
+                                        v-model='timeData.start_date'
                                         class="form__input form-input-container"
                                         placeholder="Например 26.06.2024"
                                         name="action-start-hq"
@@ -296,7 +297,7 @@
                                     <label class="form-label" for="action-end-hq">Окончание мероприятия</label>
                                     <InputText
                                         id="action-end-hq"
-                                        v-model='timeData.timeEnd'
+                                        v-model='timeData.end_date'
                                         class="form__input form-input-container"
                                         placeholder="Например 27.06.2024"
                                         name="action-end-hq"
@@ -308,7 +309,7 @@
                                     <InputText
                                         id="end-registration-hq"
                                         class="form__input form-input-container"
-                                        v-model='timeData.timeregistrationEnd'
+                                        v-model='timeData.registration_end_date'
                                         placeholder="Например, 15.05.2023"
                                         name="end-registration-hq"
                                         type='date'
@@ -321,7 +322,7 @@
                                     <InputText
                                         id="action-hours-start-hq"
                                         class="form__input form-input-container"
-                                        v-model="timeData.timehourStart"
+                                        v-model="timeData.start_time"
                                         placeholder="Например 7:30"
                                         name="action-hours-start-hq"
                                         type="time"
@@ -333,7 +334,7 @@
                                     <InputText
                                         id="action-hours-end-hq"
                                         class="form__input form-input-container"
-                                        v-model="timeData.timehourEnd"
+                                        v-model="timeData.end_time"
                                         placeholder="Например 18:30"
                                         name="action-hours-end-hq"
                                         type="time"
@@ -709,6 +710,7 @@
         <div class='form-col-100'>
             <Button @click="SubmitEvent" label='Сохранить'></Button>
         </div>
+        </form>
     </div>
 </template>
 
@@ -716,6 +718,7 @@
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
 import { getAction, createAction, createOrganizator } from '@services/ActionService';
+import { actionForm } from '@entities/Actions';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { uploadPhoto } from '@shared/components/imagescomp';
@@ -729,11 +732,10 @@ const id = router.params.id;
 
 getAction(id)
     .then((resp)=>{
-        console.log(resp.data)
         maininfo.value = resp.data
         getOrganizator(id)
             .then((resp)=>{
-                
+                organizator.value = resp.data
             })
     })
     .catch((e)=>{
@@ -763,7 +765,7 @@ const maininfo = ref({
     direction: '',
     name: '',
     scale: '',
-    banner: 'http://example.com',
+    banner: '',
     conference_link: '',
     address: '',
     description: '',
@@ -797,17 +799,6 @@ const area_massive = ref([
     {name: "Окружной штаб"}
 ])
 
-//Переменные даты 
-
-const timeData = ref({
-    timeStart: '',
-    timehourStart: '',
-    timeEnd: '',
-    timehourEnd: '',
-    timeregistrationEnd: '',
-    hour: '',
-})
-
 //Переменные организаторов
 
 const organizator = ref([{
@@ -818,6 +809,15 @@ const organizator = ref([{
     telegram: '',
     is_contact_person: false
 }])
+
+const timeData = {
+        start_date: '',
+        start_time: '',
+        end_date: '',
+        end_time: '',
+        registration_end_date: '',
+        hour: '',
+    }
 
 //Ответы на вопросы
 const answers = ref([[
@@ -844,11 +844,7 @@ function AddOrganizator(){
     });
 }
 function SubmitEvent(){
-    console.log("Основная информация", maininfo.value)
-    console.log("Время мероприятия", timeData.value)
-    console.log("Организаторы", organizator.value)
-    console.log("Документы", documents.value)
-    console.log("Ответы на вопросы", answers.value)
+
 
 }
 

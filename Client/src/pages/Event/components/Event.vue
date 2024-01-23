@@ -52,7 +52,22 @@
             {{ event.description }}
         </p>
         <!-- Доработать grid, при уменьшении список не сдвигается, если много текста, то не переносится на новую строчку -->
-
+        <div class="event">
+            <div class="event-cols-2">Форма заявки: Одиночная</div>
+            <div class="event-cols-2">Начало мероприятия: {{ event.time_data.start_date }}, {{ event.time_data.start_time }} </div>
+        </div>
+        <div class="event">
+            <div class="event-cols-2">Маштаб мероприятия: {{  }}</div>
+            <div class="event-cols-2">Окончание мероприятия: {{ event.time_data.end_date }}, {{ event.time_data.end_time }} </div>
+        </div>
+        <div class="event">
+            <div class="event-cols-2">Планируемое число участников: {{ event.participants_number }}</div>
+            <div class="event-cols-2">Начало регистрации: {{ event.time_data.start_date }}, {{ event.time_data.start_time }} </div>
+        </div>
+        <div class="event">
+            <div class="event-cols-2">Адрес: {{ event.address }}</div>
+            <div class="event-cols-2">Окончание регистрации: {{ event.time_data.registration_end_date }}, {{ event.time_data.registration_end_time }} </div>
+        </div>
         <!-- Организаторы -->
         <h2 class="title title--subtitle">Организаторы</h2>
 
@@ -277,24 +292,29 @@ const route = useRoute();
 const router = useRouter();
 
 const event = ref({
-    id: String,
-    author: String,
-    format: String,
-    direction: String,
-    status: String,
-    scale: String,
-    created_at: String,
-    name: String,
-    banner: String,
-    conference_link: String,
-    address: String,
-    description: String,
-    application_type: String,
-    available_structural_units: String,
-    participants_number: String,
+    id: '',
+    author: '',
+    format: '',
+    direction: '',
+    status: '',
+    scale: '',
+    created_at: '',
+    name: '',
+    banner: '',
+    conference_link: '',
+    address: '',
+    description: '',
+    application_type: '',
+    available_structural_units: '',
+    participants_number: '',
     time_data: {
-        start_date: String,
-        start_time: String
+        start_date: '',
+        start_time: '',
+        end_date: '',
+        end_time: '',
+        registration_end_date: '',
+        registration_end_time: '',
+        hour: '',
     }
 })
 
@@ -309,11 +329,9 @@ onActivated(() => {
     getAction(route.params.id)
     .then((resp)=>{
         event.value = resp.data;
-        console.log("Форма мероприятия", event.value)
         getOrganizator(route.params.id)
         .then((resp)=>{
             organizators.value = resp.data;
-            console.log("Организаторы", organizators.value)
         })
     })
     .catch((e)=>{
@@ -425,6 +443,21 @@ const participants = ref([
 
 <style lang="scss" scoped>
 
+.event{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    &-cols-2{
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        width: 48%;
+        margin-left: 1%;
+        margin-right: 1%;
+        height: 40px;
+    }
+}
 .title--subtitle{
     margin-top: 20px;
     margin-bottom: 20px;
