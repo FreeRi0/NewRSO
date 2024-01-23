@@ -145,6 +145,17 @@ const routes: RouteRecordRaw[] = [
                                             label: 'Редактирование',
                                         },
                                     },
+                                    {
+                                        path: 'AllParticipants/:id',
+                                        name: 'allparticipants',
+                                        component: () =>
+                                            import(
+                                                '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                                            ),
+                                        meta: {
+                                            label: 'Участники отряда',
+                                        },
+                                    },
                                 ],
                             },
                             {
@@ -159,17 +170,17 @@ const routes: RouteRecordRaw[] = [
                                     label: 'Создание ЛСО',
                                 },
                             },
-                            {
-                                path: 'AllParticipants',
-                                name: 'allparticipants',
-                                component: () =>
-                                    import(
-                                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
-                                    ),
-                                meta: {
-                                    label: 'Участники отряда',
-                                },
-                            },
+                            // {
+                            //     path: 'AllParticipants/:id',
+                            //     name: 'allparticipants',
+                            //     component: () =>
+                            //         import(
+                            //             '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                            //         ),
+                            //     meta: {
+                            //         label: 'Участники отряда',
+                            //     },
+                            // },
                         ],
                     },
                     // Штабы СО ОО
