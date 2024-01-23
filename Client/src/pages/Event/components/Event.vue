@@ -48,10 +48,7 @@
         </div>
         <p class="text">
             «В объективе РСО» — Фотографический квест для членов Российских
-            студенческих отрядов!
-        </p>
-        <p class="text event_type_wrap">
-            Добро пожаловать на захватывающее мероприятие «В объективе РСО»! Это
+            студенческих отрядов! Добро пожаловать на захватывающее мероприятие «В объективе РСО»! Это
             уникальный фотографический квест, специально созданный для членов
             Региональной Студенческой Организации (РСО), с целью познакомить
             участников с искусством фотографии и развить их креативные навыки
@@ -113,7 +110,11 @@
                     :key="participant"
                 >
                     <div>
-                        <img :src="participant.image" alt="avatar" />
+                        <img
+                            class="participant_img"
+                            :src="participant.image"
+                            alt="avatar"
+                        />
                         <h5 class="text text--participant_name">
                             {{ participant.name }}
                         </h5>
@@ -135,7 +136,11 @@
                     :key="participant"
                 >
                     <div>
-                        <img :src="participant.image" alt="avatar" />
+                        <img
+                            class="participant_img"
+                            :src="participant.image"
+                            alt="avatar"
+                        />
                         <h5 class="text text--participant_name">
                             {{ participant.name }}
                         </h5>
@@ -399,17 +404,18 @@ const participants = ref([
 
 <style lang="scss" scoped>
 .form-button {
-    min-height: 52px;
+    // min-height: 52px;
     margin: 0;
     padding: 16px 32px;
     font-family: 'Bert Sans';
     font-size: 16px;
     font-weight: 600;
     line-height: 20px;
-    text-transform: none;
-    display: flex;
-    justify-content: center;
-    margin-left: 20px;
+    max-width: 248px;
+    // text-transform: none;
+    // display: flex;
+    // justify-content: center;
+    // margin-left: 20px;
 
     &--grey {
         color: white;
@@ -420,6 +426,14 @@ const participants = ref([
         color: #35383f;
         border: 2px solid #35383f;
         background-color: #ffffff;
+    }
+
+    @media (max-width: 700px) {
+        max-width: 100%;
+    }
+
+    @media (max-width: 430px) {
+        padding: 10px 32px;
     }
 }
 
@@ -433,34 +447,64 @@ const participants = ref([
     right: 32px;
     display: flex;
     flex-direction: row-reverse;
+    gap: 10px;
+
+    @media (max-width: 830px) {
+        flex-direction: column;
+    }
+
+    @media (max-width: 700px) {
+        position: static;
+        margin-top: 40px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 .event_type {
     border: 1px solid rgba(53, 56, 63, 1);
-    background: none;
-    min-height: 32px;
-    margin: 0;
-    padding: 10px 12px;
+    padding: 3px 10px;
     font-family: 'Bert Sans';
     font-size: 16px;
     font-weight: 400;
     border-radius: 18px;
-    margin-right: 16px;
+    letter-spacing: 1px;
 }
 
 .event_type_wrap {
     margin-bottom: 40px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    @media (max-width: 430px) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        // justify-items: start;
+    }
 }
 
 .item_wrap {
     pointer-events: none;
     display: grid;
     grid-template-columns: 50% 50%;
+    grid-template-columns: repeat(auto-fill, 500px);
+    justify-content: space-between;
+    row-gap: 20px;
+    margin-top: 40px;
+
+    @media (max-width: 1150px) {
+        grid-template-columns: repeat(auto-fill, 400px);
+    }
+
+    @media (max-width: 450px) {
+        grid-template-columns: repeat(auto-fill, 300px);
+    }
 }
 
 .event_card_wrap {
     max-width: 280px;
-    margin: 0 20px 20px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -468,9 +512,15 @@ const participants = ref([
 }
 
 .card_wrap {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 280px);
     justify-content: space-between;
+    column-gap: 20px;
+    row-gap: 20px;
+
+    @media (max-width: 950px) {
+        justify-content: space-around;
+    }
 }
 
 .v-list-item-title {
@@ -494,7 +544,6 @@ const participants = ref([
 .card {
     box-shadow: none;
     max-width: 280px;
-    margin-bottom: 30px;
 }
 
 .radius {
@@ -517,6 +566,7 @@ const participants = ref([
 
 .btn_wrap {
     margin: 0 auto;
+    margin-top: 60px;
     margin-bottom: 80px;
 }
 
@@ -528,14 +578,21 @@ const participants = ref([
 }
 
 .list_wrap {
-    display: flex;
-    justify-content: space-between;
     list-style-type: none;
-    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 160px);
+    justify-content: space-between;
+    column-gap: 20px;
+    row-gap: 20px;
+}
+
+.participant_img {
+    margin: 0 auto;
 }
 
 .squad-participants__link {
     margin: 0 auto;
+    margin-top: 40px;
     margin-bottom: 24px;
 }
 
@@ -576,7 +633,14 @@ const participants = ref([
 
 .other_events_wrap {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    // grid-gap: 5px;
+    // grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, 280px);
+    justify-content: space-between;
+    column-gap: 20px;
+    row-gap: 20px;
+
+    @media (max-width: 965px) {
+        justify-content: space-around;
+    }
 }
 </style>
