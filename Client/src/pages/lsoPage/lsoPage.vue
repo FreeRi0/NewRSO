@@ -46,12 +46,15 @@ import SquadParticipants from './components/SquadParticipants.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
 const squad = ref({});
 const member = ref({});
 const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
+
+const { replaceTargetObjects } = usePage();
 
 const aboutSquad = async () => {
     await HTTP.get(`/detachments/${id}/`, {
@@ -62,6 +65,7 @@ const aboutSquad = async () => {
     })
         .then((response) => {
             squad.value = response.data;
+            replaceTargetObjects([squad.value]);
             console.log(response);
         })
         .catch(function (error) {
