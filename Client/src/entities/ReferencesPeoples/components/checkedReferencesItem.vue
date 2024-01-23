@@ -3,9 +3,9 @@
         <div class="checked-item__wrapper">
             <div class="checked-img">
                 <img
-                    :src="participant.media.photo"
+                    :src="participant?.user?.avatar?.photo"
                     alt="logo"
-                    v-if="participant.media"
+                    v-if="participant?.user?.avatar?.photo"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -14,9 +14,17 @@
                 />
             </div>
             <div class="containerHorizontal">
-                <p class="checked-item__list-full">
-                    {{ participant.user.first_name }}
-                </p>
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{participant?.user?.last_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant?.user?.first_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant?.user?.patronymic_name }}
+                    </p>
+                </div>
                 <div class="checked-item__list-date">
                     <span
                         style="
@@ -24,7 +32,7 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.user.date_of_birth }}</p>
+                    <p>{{participant?.user?.date_of_birth }}</p>
                 </div>
             </div>
         </div>
@@ -40,9 +48,9 @@
         <div class="checked__confidant ml-3">
             <input
                 type="checkbox"
-                v-model="selectedPeoples"
+                v-model="checked"
                 :value="participant"
-                @change="(event) => updateMembership(participant, event)"
+                @change="updateMembership"
             />
         </div>
         <Button
@@ -60,22 +68,34 @@ import { sortByEducation } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { ref, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
-const emit = defineEmits(['change']);
 
-const updateMembership = (participant, event) => {
-    console.log('dddddddft', participant, event);
-    emit('change', participant, event);
-};
+
 
 const props = defineProps({
-    participant: {
+   participant: {
         type: Object,
         require: true,
     },
+    participants: {
+        type: Array,
+        require: true,
+    },
+    selectedParticipants: {
+        type: Array,
+        default: () => [],
+    },
 });
 
+const emit = defineEmits(['change']);
+const updateMembership = (e) => {
+    console.log('checkeed', checked.value);
+    emit('change', checked.value, props.participant.id );
+};
+
+const checked = ref(true);
 const isError = ref([]);
 
+const selectedPeoples = ref(props.selectedParticipants);
 const swal = inject('$swal');
 
 const user = ref({
@@ -89,6 +109,14 @@ const filteredPayed = ref([
     },
     { value: 'Неодобрен', name: 'Неодобрен' },
 ]);
+
+watch(
+    () => props.selectedParticipants,
+    (newChecked) => {
+        if (!newChecked) return;
+        selectedPeoples.value = newChecked;
+    },
+);
 
 const ChangeStatus = async () => {
     let { id, ...rest } = props.participant.user;
@@ -158,7 +186,7 @@ const ChangeStatus = async () => {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .checked {
     display: flex;
     align-items: center;

@@ -3,7 +3,7 @@
         <squadItem v-for="squad in squads" :squad="squad" :key="squad.id" />
     </div>
 
-    <h2 v-else>Отряд не найден...</h2>
+    <h2 class="mt-10" v-else>Отряд не найден...</h2>
 </template>
 <script setup>
 import { ref } from 'vue';

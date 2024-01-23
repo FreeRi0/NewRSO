@@ -59,8 +59,5 @@ const props = defineProps({
     height: 371px;
     object-fit: cover;
     border-radius: 10px;
-    @media screen and (max-width: 575px) {
-       height: 206px !important;
-    }
 }
 </style>

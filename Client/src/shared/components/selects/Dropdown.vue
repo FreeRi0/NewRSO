@@ -141,7 +141,12 @@ const customFilter = (itemTitle, queryText, item) => {
 const items = ref(props.items);
 
 const onChangeItem = async () => {
-    await HTTP.get(props.address)
+    await HTTP.get(props.address, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
 
         .then((res) => {
             // console.log(props.address);

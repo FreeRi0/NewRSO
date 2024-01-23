@@ -33,17 +33,18 @@
                 name="select_position"
                 id="select-position"
                 placeholder="Выберите должность"
-                v-model="position"
+                v-model="positionMember"
                 @update:value="changeOption"
             ></Select>
+            <!-- {{ positionMember }} -->
         </div>
 
         <div class="member__confidant">
             <FormCheckbox
                 label="Доверенное лицо"
-                :id="item.user.id"
+                :id="item.id"
                 :value="item.user.last_name"
-                v-model:checked="item.is_trusted"
+                v-model:checked="confidant"
                 @update:checked="changeConfidant"
             ></FormCheckbox>
         </div>
@@ -51,20 +52,19 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Select } from '@shared/components/selects';
 import { FormCheckbox } from '@shared/components/checkboxes';
-import { useVuelidate } from '@vuelidate/core';
-import { useRouter } from 'vue-router';
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
+// import { useVuelidate } from '@vuelidate/core';
+// import {
+//     helpers,
+//     minLength,
+//     required,
+//     maxLength,
+//     numeric,
+//     email,
+//     sameAs,
+// } from '@vuelidate/validators';
 import { HTTP } from '@app/http';
 
 const props = defineProps({
@@ -80,11 +80,15 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    // isErrorMembers: {
+    //     type: Object,
+    //     default: () => ({}),
+    // },
 });
 
 const emit = defineEmits(['updateMember']);
 const confidant = ref(props.item.is_trusted);
-const position = ref(props.item.position);
+const positionMember = ref(props.item.position);
 
 const changeOption = (event) => {
     console.log(event);
@@ -101,35 +105,20 @@ const changeConfidant = (event) => {
     emit(
         'updateMember',
         {
-            confidant: event,
+            is_trusted: event,
         },
         props.item.id,
     );
 };
 
-// const membersList = ref(props.membersList);
-
 // const rules = computed(() => ({
 //     position: {
 //         required: helpers.withMessage(`* обязательно для заполнения`, required),
 //     },
-//     // membersList: {
-//     //     //--------------------------------------------------------------------------------------
-//     //     required,
-//     //     $each: {
-//     //         position: {
-//     //             required: helpers.withMessage(
-//     //                 `* обязательно для заполнения`,
-//     //                 required,
-//     //             ),
-//     //         },
-//     //     },
-//     // },
 // }));
 
 // const v = useVuelidate(rules, {
 //     position,
-//     // membersList,
 // });
 
 // const UploadData = async () => {
@@ -148,7 +137,6 @@ const changeConfidant = (event) => {
 //             showConfirmButton: false,
 //             timer: 1500,
 //         });
-//         // функция очистки полей формы после успешной отправки данных на сервер
 //     }
 // };
 
@@ -160,38 +148,7 @@ const changeConfidant = (event) => {
 //     },
 // );
 
-const functions = ref(props.functions);
-
-const onChangePosition = async () => {
-    await HTTP.get('positions/')
-
-        .then((res) => {
-            // console.log(props.address);
-            functions.value = res.data;
-            // console.log(res.data);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-    // console.log(data);
-    // functions.value = data;
-};
-
-onMounted(() => {
-    // console.log('jhjih');
-    onChangePosition();
-});
-
 // onErrorCaptured((error, instance, info) => {
 //     console.log(error, instance, info);
 // });
-
-watch(
-    () => props.submited,
-    (newSubmited) => {
-        if (!newSubmited) return;
-        // UploadData();
-        onChangePosition();
-    },
-);
 </script>

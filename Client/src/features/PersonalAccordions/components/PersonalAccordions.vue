@@ -174,7 +174,7 @@
                                     :value="sex.value"
                                     :label="sex.name"
                                     :id="sex.id"
-                                    :checked="user.gender"
+                                    :checked="user.gender === sex.value"
                                     name="sex"
                                     v-model:checkedValue="user.gender"
                                 />
@@ -317,6 +317,10 @@
                                             :value="passP.name"
                                             :label="passP.name"
                                             :id="passP.id"
+                                            :checked="
+                                                selectedPassParent ===
+                                                passP.name
+                                            "
                                             name="passParent"
                                             v-model:checkedValue="
                                                 selectedPassParent
@@ -731,7 +735,10 @@
                                     :value="addr.value"
                                     :label="addr.id"
                                     :id="addr.id"
-                                    :checked="addr.checked"
+                                    :checked="
+                                        regionData.reg_fact_same_address ===
+                                        addr.value
+                                    "
                                     name="address"
                                     v-model:checkedValue="
                                         regionData.reg_fact_same_address
@@ -890,7 +897,9 @@
                                     :value="pas.value"
                                     :label="pas.id"
                                     :id="pas.id"
-                                    :checked="pas.checked"
+                                    :checked="
+                                        documents.russian_passport === pas.value
+                                    "
                                     name="passport"
                                     v-model:checkedValue="
                                         documents.russian_passport
@@ -2603,11 +2612,9 @@
                     type="submit"
                     label="Отправить данные на верификацию"
                 ></Button>
-
             </v-card-actions>
-
         </v-expansion-panels>
-        <p class="error" v-if="isError.error">{{ "" + isError.error }}</p>
+        <p class="error" v-if="isError.error">{{ '' + isError.error }}</p>
     </form>
 </template>
 <script setup>
@@ -3006,102 +3013,110 @@ const updateData = async () => {
     fd.append('inn_file', inn_file.value);
     fd.append('employment_document', military_document.value);
     fd.append('international_passport', international_passport.value);
-    const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
 
-    const axiosrequest2 = HTTP.patch('/rsousers/me/region/', regionData.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
-    const axiosrequest3 = HTTP.put('/rsousers/me/documents/', documents.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
-
-    const axiosrequest4 = HTTP.patch(
-        '/rsousers/me/education/',
-        education.value,
-        {
+    try {
+        const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
-        },
-    );
-
-    const axiosrequest5 = HTTP.patch('/rsousers/me/statement/', fd, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
-
-    const axiosrequest6 = HTTP.post(
-        '/rsousers/me/apply_for_verification/',
-        data.value,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
-    );
-
-    await axios
-        .all([
-            axiosrequest1,
-            axiosrequest2,
-            axiosrequest3,
-            axiosrequest4,
-            axiosrequest6,
-        ])
-        .then(
-            axios.spread(function (res1, res2, res3, res4, res6) {
-                user.value = res1.data;
-                regionData.value = res2.data;
-                documents.value = res3.data;
-                education.value = res4.data;
-                data.vaalue = res6.data;
-                console.log(res1.data);
-                console.log(res2.data);
-                console.log(res3.data);
-                console.log(res4.data);
-                console.log(res6.data);
-                isLoading.value = false;
-
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1000,
-                });
-                // router.push({
-                //     name: 'userpage',
-                //     params: { id: user.value?.id },
-                // });
-            }),
-        )
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
         });
+
+        const axiosrequest2 = HTTP.patch(
+            '/rsousers/me/region/',
+            regionData.value,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        const axiosrequest3 = HTTP.put(
+            '/rsousers/me/documents/',
+            documents.value,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        const axiosrequest4 = await HTTP.patch(
+            '/rsousers/me/education/',
+            education.value,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        const axiosrequest5 = await HTTP.patch('/rsousers/me/statement/', fd, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        const axiosrequest6 = await HTTP.post(
+            '/rsousers/me/apply_for_verification/',
+            data.value,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        user.value = axiosrequest1.data;
+        regionData.value = axiosrequest2.data;
+        documents.value = res3.data;
+        education.value = res4.data;
+        data.value = res6.data;
+        console.log(res1.data);
+        console.log(res2.data);
+        console.log(res3.data);
+        console.log(res4.data);
+        console.log(res6.data);
+
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1000,
+        });
+
+        isLoading.value = false;
+    } catch(error) {
+        isError.value = response.data;
+        console.error('There was an error!', response.data);
+        isLoading.value = false;
+        swal.fire({
+            position: 'top-center',
+            icon: 'error',
+            title: 'ошибка',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    }
+
+    // .catch(({ response }) => {
+    //     isError.value = response.data;
+    //     console.error('There was an error!', response.data);
+    //     isLoading.value = false;
+    //     swal.fire({
+    //         position: 'top-center',
+    //         icon: 'error',
+    //         title: 'ошибка',
+    //         showConfirmButton: false,
+    //         timer: 1500,
+    //     });
+    // });
 
     if (user.value.is_adult == false) {
         await HTTP.patch('/rsousers/me/parent/', parentData.value, {
@@ -3282,16 +3297,14 @@ const selectedPass = ref('Да');
     margin-bottom: 8px;
 }
 
-.input-big {
-    width: 465px !important;
-}
-
 .input-small {
-    width: 250px !important;
+    width: 250px;
 }
-
 .input-full {
     width: 100%;
+}
+.input-big {
+    width: 465px;
 }
 
 .nav-btn__wrapper {

@@ -402,11 +402,11 @@
                         </div>
                     </div>
                     <div class="references-wrapper">
-                        <referencesList
-                            @change="changePeoples"
+                        <contributorsList
                             :participants="sortedParticipantsRef"
-                            :selectedParticipants="selectedPeoples"
-                        ></referencesList>
+                            :selected-peoples="selectedPeoples"
+                            @change="changePeoples"
+                        ></contributorsList>
                     </div>
                     <Button
                         @click="participantsVisible += step"
@@ -467,10 +467,10 @@
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
-                        <checkedReference
-                            @change="changeSelected"
+                        <checkedContributors
+                            @change="changePeoples"
                             :participants="selectedPeoples"
-                        ></checkedReference>
+                        ></checkedContributors>
                     </div>
                     <p class="error" v-if="isError.detail">
                         {{ isError.detail }}
@@ -493,9 +493,9 @@ import { RadioButton } from '@shared/components/buttons';
 import { Dropdown } from '@shared/components/dropdown';
 import { Input } from '@shared/components/inputs';
 import {
-    referencesList,
-    checkedReference,
-} from '@features/references/components';
+    contributorsList,
+    checkedContributors,
+} from '@features/Contributor/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed, onMounted, inject } from 'vue';
 import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
@@ -505,15 +505,9 @@ const participantsVisible = ref(12);
 const swal = inject('$swal');
 const participants = ref([]);
 const isError = ref([]);
-// const participant = ref({});
 
 const selectedPeoples = ref([]);
 console.log('dssdddd', selectedPeoples);
-
-// const ids = ref(selectedPeoples);
-// const arr = selectedPeoples.value.reduce(({ id }) => {}, []);
-
-// let arr = selectedPeoples.value.map((item) => item.id)
 
 const arr = computed(() => {
     let tempPeoples = selectedPeoples.value;
@@ -523,9 +517,6 @@ const arr = computed(() => {
 
 console.log('idssSss', arr);
 
-// console.log(getArr(selectedPeoples))
-// let { id, ...rest } = selectedPeoples;
-// console.log('id', id)
 const refData = ref({
     cert_start_date: '',
     cert_end_date: '',
@@ -536,7 +527,7 @@ const refData = ref({
 console.log('data', refData.value.ids);
 
 const viewParticipants = async () => {
-    await HTTP.get('/rsousers/', {
+    await HTTP.get('/users/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -616,19 +607,27 @@ const sortBy = ref('alphabetically');
 
 const select = (event) => {
     selectedPeoples.value = [];
-
+    console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
-        for (let item in participants.value) {
-            selectedPeoples.value.push(participants.value[item]);
+        console.log('fffss', checkboxAll.value, event);
+        for (let index in participants.value) {
+            console.log('arr', selectedPeoples.value);
+            selectedPeoples.value.push(participants.value[index]);
         }
     }
 };
 const searchParticipants = ref('');
-const changePeoples = (selectedHumans) => {
-    selectedPeoples.value = selectedHumans;
-};
-const changeSelected = (changePeoples) => {
-    selectedPeoples.value = changePeoples;
+const changePeoples = (CheckedUser, UserId) => {
+    let participant = {};
+    console.log('fff', CheckedUser, UserId);
+    if (CheckedUser) {
+        participant = participants.value.find((item) => item.id == UserId);
+        selectedPeoples.value.push(participant);
+    } else {
+        selectedPeoples.value = selectedPeoples.value.filter(
+            (item) => item.id !== UserId,
+        );
+    }
 };
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
@@ -761,7 +760,7 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .references {
-    padding: 60px 0px 60px 0px;
+    padding: 0px 0px 60px 0px;
     &-title {
         font-size: 52px;
     }
@@ -913,6 +912,16 @@ p {
     }
 }
 
+
+.v-select__selection {
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+
 .error {
     color: #db0000;
     font-size: 14px;
@@ -921,6 +930,4 @@ p {
     margin-top: 10px;
     text-align: center;
 }
-
-
 </style>

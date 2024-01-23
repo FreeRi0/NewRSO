@@ -7,6 +7,8 @@
                     v-for="item in items"
                     :key="item.id"
                     :item="item"
+                    :functions="functions"
+                    :is-error-members="isErrorMembers"
                     @update-member="onUpdateMember"
                 ></ItemMember>
             </template>
@@ -17,8 +19,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { ItemMember } from '@features/ItemMember';
+import { HTTP } from '@app/http';
 
 const props = defineProps({
     items: {
@@ -34,9 +37,35 @@ const props = defineProps({
         type: String,
         default: 'штаб',
     },
+    isErrorMembers: {
+        type: Object,
+        default: () => ({}),
+    },
+    functions: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const emit = defineEmits(['updateMember']);
+
+const functions = ref(props.functions);
+
+const getPositions = async () => {
+    HTTP.get('positions/')
+
+        .then((res) => {
+            functions.value = res.data;
+            // console.log('должности в MembersList - ', res.data);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    getPositions();
+});
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
@@ -219,6 +248,7 @@ const onUpdateMember = (event, id) => {
         margin-left: 12px;
         min-width: 224px;
         width: 224px;
+        // position: relative;
 
         .v-select__selection {
             margin: 0;
@@ -256,6 +286,12 @@ const onUpdateMember = (event, id) => {
             }
         }
     }
+
+    // &__error {
+    //     font-size: 12px;
+    //     line-height: 12px;
+    //     bottom: -12px;
+    // }
 
     &__confidant {
         margin-left: 12px;
@@ -297,8 +333,6 @@ const onUpdateMember = (event, id) => {
             min-height: 0;
         }
 
-        // .v-field__field {
-        // }
         .v-field__input,
         .v-text-field input.v-field__input {
             // max-height: 24px;
