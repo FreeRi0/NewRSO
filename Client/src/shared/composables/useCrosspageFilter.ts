@@ -38,10 +38,14 @@ export default function useCrosspageFilter() {
             delete pageFilters[propName];
         });
 
-        localStorage.setItem(
-            `${pageName}_filters`,
-            JSON.stringify(pageFilters),
-        );
+        if (!Object.keys(pageFilters).length) {
+            localStorage.removeItem(`${pageName}_filters`);
+        } else {
+            localStorage.setItem(
+                `${pageName}_filters`,
+                JSON.stringify(pageFilters),
+            );
+        }
     }
 
     function replaceFilters(filter: CrosspageFilter) {
