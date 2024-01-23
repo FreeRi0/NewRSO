@@ -49,7 +49,7 @@ import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { usePage } from '@shared';
 
 const squad = ref({});
-const member = ref({});
+const member = ref([]);
 const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
@@ -73,7 +73,6 @@ const aboutSquad = async () => {
         });
 };
 
-
 const aboutMembers = async () => {
     await HTTP.get(`/detachments/${id}/members/`, {
         headers: {
@@ -90,8 +89,6 @@ const aboutMembers = async () => {
         });
 };
 
-
-
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutSquad();
@@ -106,7 +103,6 @@ watch(
         id = newId;
         aboutSquad();
         aboutMembers();
-
     },
 );
 
@@ -114,12 +110,10 @@ onMounted(() => {
     aboutSquad();
     aboutMembers();
 });
-
 </script>
 <style scoped lang="scss">
-
 .squad-page {
-   padding-top: 40px;
+    padding-top: 40px;
 }
 .title {
     //-----------------------------------общий класс для всех заголовков h1

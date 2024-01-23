@@ -12,9 +12,9 @@
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img
-                    :src="participant.avatar.photo"
+                    :src="participant?.user?.avatar?.photo"
                     alt="logo"
-                    v-if="participant.avatar"
+                    v-if="participant?.user?.avatar?.photo"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -25,13 +25,13 @@
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
-                        {{ participant.user.last_name }}
+                        {{participant.user.last_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
                         {{ participant.user.first_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ participant.user.patronymic_name }}
+                        {{ participant?.user?.patronymic_name }}
                     </p>
                 </div>
                 <div class="horizontallso-item__list-date">
@@ -41,7 +41,7 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.user.date_of_birth }}</p>
+                    <p>{{participant?.user?.date_of_birth }}</p>
 
                 </div>
             </div>
@@ -68,7 +68,7 @@ const checked = ref(false);
 
 const updateCheck = (e) => {
     console.log('dddddd', checked.value);
-    emit('change', checked.value, props?.participant?.user?.id);
+    emit('change', checked.value, props.participant.id);
 };
 
 const selectedPeoples = ref(props.selectedParticipants);
@@ -80,7 +80,7 @@ watch(
         selectedPeoples.value = newChecked;
         console.log('newChecked', newChecked);
         const checkedItem = newChecked.find(
-            (item) => item.id == props?.participant?.user?.id,
+            (item) => item.id == props.participant.id,
         );
         console.log('checkedItem', checkedItem);
         if (!checkedItem) checked.value = false;

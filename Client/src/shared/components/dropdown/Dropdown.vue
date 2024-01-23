@@ -61,7 +61,22 @@
                         :href="item.link"
                         >{{ item.title }}</a
                     >
-                     <router-link  v-if="item.name"  class="dropdown__link" :to="{ name: item.name, params: item.params }">{{ item.title }}</router-link>
+                    <router-link
+                        class="dropdown__link"
+                        :to="
+                            item.params && item.params.id
+                                ? { name: item.name, params: item.params }
+                                : { name: item.name }
+                        "
+                        >{{ item.title }}</router-link
+                    >
+                    <!-- <router-link
+                        v-else
+                        class="dropdown__link"
+                        :to="{ name: item.name }"
+                        >{{ item.title }}</router-link
+                    > -->
+                    {{ item }}
                     <button
                         class="dropdown__button-item"
                         v-if="item.button"
@@ -104,8 +119,8 @@ const props = defineProps({
         default: false,
     },
     params: {
-      type: String,
-    //   default: () => ({}),
+        type: String,
+        //   default: () => ({}),
     },
     name: {
         type: String,
@@ -114,17 +129,16 @@ const props = defineProps({
     link: {
         type: String,
         default: '',
-    }
+    },
 });
 
-const route = useRoute();
-let id = route.params.id
+// const route = useRoute();
+// let id = route.params.id
 
 const LogOut = () => {
     localStorage.removeItem('Token');
     router.push('/');
 };
-
 </script>
 
 <style lang="scss">

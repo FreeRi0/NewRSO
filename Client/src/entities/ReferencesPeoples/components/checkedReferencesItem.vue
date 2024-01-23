@@ -3,9 +3,9 @@
         <div class="checked-item__wrapper">
             <div class="checked-img">
                 <img
-                    :src="participant.user.media.photo"
+                    :src="participant?.user?.avatar?.photo"
                     alt="logo"
-                    v-if="participant.user.media"
+                    v-if="participant?.user?.avatar?.photo"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -14,9 +14,17 @@
                 />
             </div>
             <div class="containerHorizontal">
-                <p class="checked-item__list-full">
-                    {{ participant.user.first_name }}
-                </p>
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{participant?.user?.last_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant?.user?.first_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant?.user?.patronymic_name }}
+                    </p>
+                </div>
                 <div class="checked-item__list-date">
                     <span
                         style="
@@ -24,7 +32,7 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ participant.user.date_of_birth }}</p>
+                    <p>{{participant?.user?.date_of_birth }}</p>
                 </div>
             </div>
         </div>
@@ -64,7 +72,7 @@ import { HTTP } from '@app/http';
 
 
 const props = defineProps({
-    participant: {
+   participant: {
         type: Object,
         require: true,
     },
@@ -81,7 +89,7 @@ const props = defineProps({
 const emit = defineEmits(['change']);
 const updateMembership = (e) => {
     console.log('checkeed', checked.value);
-    emit('change', checked.value, props.participant.user.id );
+    emit('change', checked.value, props.participant.id );
 };
 
 const checked = ref(true);
@@ -178,7 +186,7 @@ const ChangeStatus = async () => {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .checked {
     display: flex;
     align-items: center;

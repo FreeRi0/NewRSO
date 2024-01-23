@@ -5,6 +5,7 @@
         @change="changePeoples"
         :selectedParticipants="selectedPeoples"
         :key="participant.id"
+        :reference="false"
     />
 </template>
 

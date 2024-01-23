@@ -83,7 +83,7 @@ const route = useRoute();
 let id = route.params.id;
 
 const getUser = async () => {
-    await HTTP.get(`/rsousers/${id}/`, {
+    await HTTP.get(`/users/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -99,7 +99,7 @@ const getUser = async () => {
 };
 
 const getMedia = async () => {
-    await HTTP.get(`/rsousers/me/media/`, {
+    await HTTP.get(`/users/me/media/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -135,7 +135,7 @@ onMounted(() => {
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
-    padding: 60px 0px 80px 0px;
+    padding: 0px 0px 80px 0px;
 }
 
 .photoWrapper {

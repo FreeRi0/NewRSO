@@ -11,7 +11,7 @@
             :v-maska="vmaska"
             @input="updateValue"
             variant="outlined"
-            class="mb-2 text-field"
+            class="mb-2"
             v-bind="$attrs"
         />
         <TransitionGroup>
@@ -90,7 +90,7 @@ const updateValue = (e) => {
 }
 
 input {
-    font: normal
+    font: normal;
 }
 
 .form-input input {
@@ -104,8 +104,9 @@ input {
     margin-bottom: 20px;
     font-family: 'Bert Sans';
     width: 100%;
-    color: #35383F;
+    color: #35383f;
 }
+
 
 .form-input input::placeholder {
     color: #a3a3a3;

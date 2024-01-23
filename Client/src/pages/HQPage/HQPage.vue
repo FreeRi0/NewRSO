@@ -1,7 +1,5 @@
 <template>
     <div class="container">
-        <Breadcrumbs :label="headquarter.name"></Breadcrumbs>
-        <!-- <Breadcrumbs :items="pages"></Breadcrumbs> -->
         <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
         <BannerHQ
             v-if="showHQ"
@@ -177,12 +175,6 @@ onMounted(() => {
     aboutMembers();
     aboutEduc();
 });
-
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы', href: '/AllHeadquarters' },
-    { pageTitle: headquarter.name, href: '#' },
-];
 </script>
 <style scoped lang="scss">
 .title {
