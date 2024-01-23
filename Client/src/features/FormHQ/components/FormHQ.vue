@@ -111,7 +111,7 @@
                                 >Выберите учебное заведение
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- <Select
+                            <Select
                                 class="form__select form__select--select"
                                 variant="outlined"
                                 clearable
@@ -120,24 +120,8 @@
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="headquarter.educational_institution"
                                 address="eduicational_institutions/"
-                            ></Select> -->
-                            <v-select
-                                class="form__select form__select--select"
-                                variant="outlined"
-                                :items="educationalsInstitution"
-                                clearable
-                                name="select_institution"
-                                id="select-institution"
-                                placeholder="Например, Алтайский государственный медицинский университет"
-                                v-model="headquarter.educational_institution"
-                                item-value="id"
-                                item-title="name"
-                            >
-                                <template #selection="{ item }">
-                                    <pre>{{ item.title }}</pre>
-                                </template>
-                            </v-select>
-                            <pre>{{ headquarter.educational_institution }}</pre>
+                            ></Select>
+                            <!-- <pre>{{ headquarter.educational_institution }}</pre> -->
                             <p
                                 class="form__error"
                                 v-if="isError.educational_institution"
@@ -191,6 +175,7 @@
                                 v-model="headquarter.regional_headquarter"
                                 address="regionals/"
                             ></Select>
+                            <!-- {{ headquarter.regional_headquarter }} -->
                             <p
                                 class="form__error"
                                 v-if="isError.regional_headquarter"
@@ -225,7 +210,7 @@
                                 @update:value="changeValue"
                                 address="users/"
                             ></Dropdown>
-                            {{ headquarter.commander }}
+                            <!-- {{ headquarter.commander }} -->
                             <p
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"

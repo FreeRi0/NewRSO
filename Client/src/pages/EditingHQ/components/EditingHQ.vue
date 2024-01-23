@@ -1,6 +1,6 @@
 <template>
-    <div class="container container--top">
-        <h1 class="title title--lso">Редактирование штаба СО ОО</h1>
+    <div class="container">
+        <h1 class="title title--mb">Редактирование штаба СО ОО</h1>
 
         <FormHQ
             :participants="true"
@@ -12,7 +12,7 @@
             v-if="headquarter && isError && isErrorMembers"
             @submit.prevent="changeHeadquarter"
             @select-file="onSelectFile"
-            @reset-file="onResetFile"
+            @reset-emblem="onResetEmblem"
             @select-banner="onSelectBanner"
             @reset-banner="onResetBanner"
             @update-member="onUpdateMember"
@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject, computed } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { FormHQ } from '@features/FormHQ';
 // import axios from 'axios';
 import { HTTP } from '@app/http';
@@ -35,23 +35,19 @@ const submited = ref(false);
 
 const headquarter = ref(null);
 const members = ref([]);
+const positions = ref([]);
 
-// const members = ref([
-//     {
-//         id: 1,
-//         user: {
-//             id: 5,
-//             first_name: 'strIng',
-//             last_name: 'stRing',
-//             patronymic_name: 'sTring',
-//             avatar: {
-//                 photo: null,
-//             },
-//         },
-//         position: 5,
-//         is_trusted: true,
-//     },
-// ]);
+const getPositions = async () => {
+    HTTP.get('positions/')
+
+        .then((res) => {
+            positions.value = res.data;
+            console.log('должности - ', res.data);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
 const getHeadquarter = async () => {
     HTTP.get(`educationals/${id}/`, {
@@ -62,6 +58,13 @@ const getHeadquarter = async () => {
     })
         .then((response) => {
             headquarter.value = response.data;
+            if (headquarter.value.educational_institution) {
+                headquarter.value.educational_institution =
+                    headquarter.value.educational_institution.id;
+            }
+            if (headquarter.value.commander) {
+                headquarter.value.commander = headquarter.value.commander.id;
+            }
             console.log(response);
         })
         .catch(function (error) {
@@ -84,12 +87,20 @@ const getMembers = async () => {
     })
         .then((response) => {
             members.value = response.data;
-            console.log(response);
+            // console.log('участники штаба - ', response);
+            members.value.forEach((member) => {
+                if (positions.value) {
+                    const position = positions.value.find((item) => {
+                        return item.name === member.position;
+                    });
+                    // console.log('объект должности - ', position);
+                    member.position = position.id;
+                }
+            });
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
-    // console.log(id);
 };
 
 // watch(
@@ -104,6 +115,7 @@ const getMembers = async () => {
 onMounted(() => {
     getHeadquarter();
     getMembers();
+    getPositions();
 });
 
 const onUpdateMember = (event, id) => {
@@ -113,19 +125,26 @@ const onUpdateMember = (event, id) => {
     console.log(event);
 };
 
+const isEmblemChange = ref(false);
+const isBannerChange = ref(false);
+
 const fileEmblem = ref(null);
 const fileBanner = ref(null);
 
 const onSelectFile = (file) => {
+    isEmblemChange.value = true;
     fileEmblem.value = file;
 };
-const onResetFile = (file) => {
+const onResetEmblem = (file) => {
+    isEmblemChange.value = true;
     fileEmblem.value = file;
 };
 const onSelectBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 const onResetBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 
@@ -149,11 +168,8 @@ const changeHeadquarter = async () => {
     formData.append('commander', headquarter.value.commander);
     formData.append('social_vk', headquarter.value.social_vk);
     formData.append('social_tg', headquarter.value.social_tg);
-
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
-    formData.append('emblem', fileEmblem.value);
-    formData.append('banner', fileBanner.value);
 
     for (let member of members.value) {
         HTTP.patch(
@@ -188,7 +204,16 @@ const changeHeadquarter = async () => {
             });
     }
 
-    HTTP.put(`/educationals/${id}/`, formData, {
+    if (isEmblemChange.value)
+        fileEmblem.value
+            ? formData.append('emblem', fileEmblem.value)
+            : formData.append('emblem', '');
+    if (isBannerChange.value)
+        fileBanner.value
+            ? formData.append('banner', fileBanner.value)
+            : formData.append('banner', '');
+
+    HTTP.patch(`/educationals/${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -198,7 +223,7 @@ const changeHeadquarter = async () => {
             // submited.value = true;
             console.log(response.data);
             swal.fire({
-                position: 'top-center',
+                position: 'center',
                 icon: 'success',
                 title: 'успешно',
                 showConfirmButton: false,

@@ -148,25 +148,6 @@ const changeConfidant = (event) => {
 //     },
 // );
 
-const functions = ref(props.functions);
-
-const onChangePosition = async () => {
-    HTTP.get('positions/')
-
-        .then((res) => {
-            functions.value = res.data;
-            // console.log(res.data);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-onMounted(() => {
-    // console.log('test');
-    onChangePosition();
-});
-
 // onErrorCaptured((error, instance, info) => {
 //     console.log(error, instance, info);
 // });

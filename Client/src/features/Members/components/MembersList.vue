@@ -7,6 +7,7 @@
                     v-for="item in items"
                     :key="item.id"
                     :item="item"
+                    :functions="functions"
                     :is-error-members="isErrorMembers"
                     @update-member="onUpdateMember"
                 ></ItemMember>
@@ -18,8 +19,9 @@
 </template>
 
 <script setup>
-// import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { ItemMember } from '@features/ItemMember';
+import { HTTP } from '@app/http';
 
 const props = defineProps({
     items: {
@@ -39,9 +41,31 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    functions: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const emit = defineEmits(['updateMember']);
+
+const functions = ref(props.functions);
+
+const getPositions = async () => {
+    HTTP.get('positions/')
+
+        .then((res) => {
+            functions.value = res.data;
+            // console.log('должности в MembersList - ', res.data);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+onMounted(() => {
+    getPositions();
+});
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);

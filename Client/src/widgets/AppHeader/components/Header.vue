@@ -45,13 +45,15 @@
                             >
                         </li>
                         <li class="header__nav-item">
+                            <a class="header__nav-link" href="/Contest"
+                                >Конкурс</a
+                            >
+                        </li>
+                        <li class="header__nav-item">
                             <a class="header__nav-link" href="/FAQ"
                                 >Полезная информация</a
                             >
                         </li>
-                        <!-- <li class="header__nav-item">
-                            <a class="header__nav-link" href="#">КОНКУРС!</a>
-                        </li> -->
                     </ul>
                 </div>
             </nav>
@@ -384,8 +386,7 @@ onMounted(() => {
         z-index: 2;
     }
 
-    a,
-    button {
+    a {
         color: #35383f;
     }
 
@@ -457,6 +458,9 @@ onMounted(() => {
             row-gap: 8px;
             background-color: #1f7cc0;
             z-index: 2;
+            font-size: 20px;
+            line-height: 24px;
+            font-weight: 600;
 
             a {
                 color: #ffffff;
@@ -558,7 +562,7 @@ onMounted(() => {
         padding: 28px 28px;
         max-height: 820px; //---------------
         width: 328px;
-        font-family: 'Akrobat';
+        // font-family: 'Akrobat';
         font-size: 20px;
         line-height: 24px;
         font-weight: 600;
@@ -608,6 +612,10 @@ onMounted(() => {
 .nav-menu-item {
     .dropdown__link {
         color: #ffffff;
+
+        @media (max-width: 1024px) {
+            color: #ffffff;
+        }
     }
 }
 

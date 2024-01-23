@@ -36,5 +36,7 @@ const classes = computed(() => ({
 
 .breadcrumb.active {
     color: #1c5c94;
+    background-color: transparent;
+    border: none;
 }
 </style>
