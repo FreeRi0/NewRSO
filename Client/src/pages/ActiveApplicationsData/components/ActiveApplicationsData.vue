@@ -82,6 +82,10 @@
             <div v-else-if="picked == 'Заявка на участие в мероприятии'">
                 <p class="text-h3">Блок в разработке.....</p>
             </div>
+
+            <div v-else-if="picked == 'Конкурсы'">
+                <active-competitions />
+            </div>
         </div>
     </div>
 </template>
@@ -94,6 +98,7 @@ import { activeApplications } from '@features/ActiveApplications/components';
 import { checkedAppList } from '@features/ActiveApplications/components';
 import { CheckedSquadsList } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
+import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 
@@ -115,6 +120,10 @@ const tabs = ref([
     {
         id: '3',
         name: 'Заявка на участие в мероприятии',
+    },
+    {
+        id: '4',
+        name: 'Конкурсы',
     },
 ]);
 
@@ -213,7 +222,7 @@ const selectSquads = (event) => {
             selectedDetch.value.push(detachments.value[index]);
         }
     }
-}
+};
 
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
@@ -228,7 +237,6 @@ const changePeoples = (CheckedUser, UserId) => {
     }
 };
 
-
 const changeSquads = (CheckedSquad, SquadId) => {
     let detachment = {};
     console.log('fff', CheckedSquad, SquadId);
@@ -241,8 +249,6 @@ const changeSquads = (CheckedSquad, SquadId) => {
         );
     }
 };
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -260,7 +266,6 @@ const changeSquads = (CheckedSquad, SquadId) => {
     padding: 10px 24px;
     margin: 7px;
 }
-
 
 .active {
     background-color: #1c5c94;
