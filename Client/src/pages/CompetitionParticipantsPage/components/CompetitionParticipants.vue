@@ -186,7 +186,7 @@ const getEducations = async () => {
 };
 
 const getSquads = async () => {
-    await HTTP.get('/detachments/', {
+    await HTTP.get('/competitions/1/participants/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -250,7 +250,7 @@ const sortedSquads = computed(() => {
     });
 
     tempSquads = tempSquads.filter((item) => {
-        return item.name
+        return item.detachment.name
             .toUpperCase()
             .includes(searchSquads.value.toUpperCase());
     });

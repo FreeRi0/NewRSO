@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-        <div class="sort-select ml-3">
+        <div class="sort-select ml-3" v-if="!reference">
             <sortByEducation
                 placeholder="Выберете действие"
                 variant="outlined"
@@ -53,7 +53,7 @@
                 @change="updateMembership"
             />
         </div>
-        <Button
+        <Button v-if="!reference"
             class="save"
             type="button"
             label="Сохранить"
@@ -82,6 +82,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    reference: {
+        type: Boolean,
+        default: true
+    }
 });
 
 const emit = defineEmits(['change']);
