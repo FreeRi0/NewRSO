@@ -1,0 +1,1 @@
+export { default as applicationCompetitionItem} from './components/applicationCompetitionItem.vue';

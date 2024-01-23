@@ -4,17 +4,17 @@
             <input
                 type="checkbox"
                 v-model="checked"
-                :value="detachment"
-                @change="updateCheckSquad"
+                :value="competition"
+                @change="updateCheckCompetition"
             />
         </div>
 
         <div class="horizontallso-item__wrapper mr-3">
             <div class="horizontallso-img">
                 <img
-                    :src="detachment?.user?.media?.photo"
+                    :src="competition?.user?.avatar?.photo"
                     alt="logo"
-                    v-if="detachment?.user?.media?.photo"
+                    v-if="competition?.user?.avatar?.photo"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -24,13 +24,13 @@
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
-                        {{ detachment.user.last_name }}
+                        {{ competition.user.last_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ detachment.user.first_name }}
+                        {{ competition.user.first_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ detachment.user.patronymic_name }}
+                        {{ competition.user.patronymic_name }}
                     </p>
                 </div>
                 <div class="horizontallso-item__list-date">
@@ -40,16 +40,16 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ detachment.user.date_of_birth }}</p>
+                    <p>{{ competition.user.date_of_birth }}</p>
                 </div>
             </div>
         </div>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img
-                    :src="squad.emblem"
+                    :src="competition.event.banner"
                     alt="logo"
-                    v-if="squad.emblem"
+                    v-if="competition.event.banner"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -59,7 +59,7 @@
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ squad.name }}
+                    {{ competition.event.name }}
                 </p>
             </div>
         </div>
@@ -68,22 +68,14 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoleStore } from '@layouts/store/role';
-import { storeToRefs } from 'pinia';
 
-const roleStore = useRoleStore();
-roleStore.getRoles();
 
-const roles = storeToRefs(roleStore);
 const props = defineProps({
-    detachment: {
+    competition: {
         type: Object,
         required: true,
     },
-    squad: {
-        type: Object
-    },
-    selectedSquads: {
+    selectedCompetitions: {
         type: Array,
         default: () => [],
     },
@@ -91,47 +83,41 @@ const props = defineProps({
 
 const emit = defineEmits(['change']);
 const checked = ref(false);
-const updateCheckSquad = (e) => {
+const updateCheckCompetition = (e) => {
     console.log('ddddddSquad', checked.value);
-    emit('change', checked.value, props.detachment.id);
+    emit('change', checked.value, props.competition.id);
 };
 
-const squad = ref({});
+// const squad = ref({});
 
-const selectedDetch = ref(props.selectedSquads);
-const viewSquad = async () => {
-    let id = roles?.roles?.value?.detachment_commander;
-    console.log('roles', roles.roles.value);
-    console.log('id', id);
-    await HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-           squad.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-onMounted(() => {
-    viewSquad();
-})
+const selectedEvent = ref(props.selectedCompetitions);
+// const viewSquad = async () => {
+//   let id = roles?.roles?.value?.detachment_commander;
+//   console.log('roles', roles.roles.value);
+//   console.log('id', id);
+//   await HTTP.get(`/detachments/${id}/`, {
+//       headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: 'Token ' + localStorage.getItem('Token'),
+//       },
+//   })
+//       .then((response) => {
+//          squad.value = response.data;
+//           console.log(response);
+//       })
+//       .catch(function (error) {
+//           console.log('an error occured ' + error);
+//       });
+// };
+// onMounted(() => {
+//   viewSquad();
+// })
 
 watch(
-    () => props.selectedSquads,
+    () => props.selectedCompetitions,
     (newChecked) => {
         if (!newChecked) return;
-        selectedDetch.value = newChecked;
-        const checkedItem = newChecked.find(
-            (item) => item.id == props.detachment.id,
-        );
-        console.log('checkedItem', checkedItem);
-        if (!checkedItem) checked.value = false;
-        else checked.value = true;
+        selectedEvent.value = newChecked;
     },
 );
 </script>

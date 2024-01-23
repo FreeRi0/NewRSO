@@ -54,7 +54,6 @@
 <script setup>
 import { ref, watch } from 'vue';
 
-// const selectedPeoples = ref([]);
 const props = defineProps({
     participant: {
         type: Object,
@@ -81,6 +80,13 @@ watch(
     (newChecked) => {
         if (!newChecked) return;
         selectedPeoples.value = newChecked;
+        console.log('newChecked', newChecked);
+        const checkedItem = newChecked.find(
+            (item) => item.id == props.participant.id,
+        );
+        console.log('checkedItem', checkedItem);
+        if (!checkedItem) checked.value = false;
+        else checked.value = true;
     },
 );
 </script>

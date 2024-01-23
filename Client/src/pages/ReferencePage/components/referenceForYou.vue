@@ -521,7 +521,7 @@ const refData = ref({
 });
 
 const viewParticipants = async () => {
-    await HTTP.get('/rsousers/', {
+    await HTTP.get('/users/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
