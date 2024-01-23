@@ -50,9 +50,7 @@
             <h3>Штабы и отряды регионального штаба</h3>
             <div class="headquarters_squads__container">
                 <div
-
-                    :key="index"
-
+                    :key="HQandSquad.link"
                     class="card"
                     v-for="(HQandSquad, index) in HQandSquads"
                     :class="{
@@ -60,11 +58,7 @@
                         'align-right': index % 2 !== 0,
                     }"
                 >
-
-                    <a
-                        v-bind:href="HQandSquad.link"
-                        @click="saveSortHQ(regionalHeadquarter.name)"
-
+                    <a v-bind:href="HQandSquad.link" @click="HQandSquad.click"
                         ><p>{{ HQandSquad.name }}</p></a
                     >
                 </div>
@@ -79,8 +73,9 @@ import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage } from '@shared';
+import { usePage, useCrosspageFilter } from '@shared';
 
+const crosspageFilters = useCrosspageFilter();
 const showRegionalHQ = ref(true);
 const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
@@ -148,36 +143,36 @@ onMounted(() => {
     aboutMembers();
 });
 
-
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Региональные штабы', href: '#' },
-    { pageTitle: `${regionalHeadquarter.name}`, href: '#' },
-];
-
-//блок отряды и штабы регионального штаба
 const HQandSquads = ref([
     {
         name: 'Местные штабы',
         link: '/LocalHeadquarters',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'LocalHeadquarters',
+                filters: {
+                    regionalName: regionalHeadquarter.value.name,
+                },
+            });
+        },
     },
     {
         name: 'Штабы СО ОО',
         link: '/AllHeadquarters',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'AllHeadquarters',
+                filters: {
+                    regionalName: regionalHeadquarter.value.name,
+                },
+            });
+        },
     },
     {
         name: 'ЛСО',
         link: '/AllSquads',
     },
 ]);
-
-function saveSortHQ(value) {
-    localStorage.setItem('sortHQ', value);
-}
-
-// let sortHQ = localStorage.getItem('sortHQ');
-// console.log(sortHQ);
-
 </script>
 <style scoped lang="scss">
 .title {

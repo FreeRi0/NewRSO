@@ -35,23 +35,23 @@
                 <div class="sort-layout">
                     <div>
                         <Button
-                        v-if="vertical"
-                        type="button"
-                        class="dashboard"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    >
-                    </Button>
-                    <Button
-                        v-else
-                        type="button"
-                        class="dashboardD"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    >
-                    </Button>
+                            v-if="vertical"
+                            type="button"
+                            class="dashboard"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        >
+                        </Button>
+                        <Button
+                            v-else
+                            type="button"
+                            class="dashboardD"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        >
+                        </Button>
                     </div>
                     <Button
                         v-if="!vertical"
@@ -73,7 +73,7 @@
 
                 <div class="sort-filters">
                     <div class="sort-select">
-                        <Select
+                        <!-- <Select
                             clearable
                             variant="outlined"
                             name="select_district"
@@ -82,10 +82,25 @@
                             class="filter-district"
                             address="/districts/"
                             placeholder="Окружные штабы"
-                        ></Select>
+                        ></Select> -->
+                        <v-select
+                            class="form__select filter-district"
+                            :items="districts"
+                            clearable
+                            variant="outlined"
+                            name="select_district"
+                            id="select-district"
+                            v-model="SelectedSortDistrict"
+                            item-title="name"
+                            placeholder="Окружной штаб"
+                        >
+                            <template #selection="{ item }">
+                                <pre>{{ item.title }}</pre>
+                            </template>
+                        </v-select>
                     </div>
                     <div class="sort-select">
-                        <Select
+                        <!-- <Select
                             clearable
                             variant="outlined"
                             name="select_region"
@@ -94,10 +109,25 @@
                             class="filter-region"
                             address="/regionals/"
                             placeholder="Региональные штабы"
-                        ></Select>
+                        ></Select> -->
+                        <v-select
+                            class="form__select filter-district"
+                            :items="regionals"
+                            clearable
+                            variant="outlined"
+                            name="select_region"
+                            id="select-region"
+                            v-model="SelectedSortRegional"
+                            item-title="name"
+                            placeholder="Региональные штабы"
+                        >
+                            <template #selection="{ item }">
+                                <pre>{{ item.title }}</pre>
+                            </template>
+                        </v-select>
                     </div>
                     <div class="sort-select">
-                        <Select
+                        <!-- <Select
                             clearable
                             variant="outlined"
                             name="select_local"
@@ -106,7 +136,22 @@
                             class="filter-local"
                             address="/locals/"
                             placeholder="Местные штабы"
-                        ></Select>
+                        ></Select> -->
+                        <v-select
+                            class="form__select filter-district"
+                            :items="locals"
+                            clearable
+                            variant="outlined"
+                            name="select_local"
+                            id="select-local"
+                            v-model="SelectedSortLocal"
+                            item-title="name"
+                            placeholder="Местные штабы"
+                        >
+                            <template #selection="{ item }">
+                                <pre>{{ item.title }}</pre>
+                            </template>
+                        </v-select>
                     </div>
                     <div class="sort-select">
                         <sortByEducation
@@ -127,7 +172,7 @@
                 </div>
             </div>
 
-            <div  v-show="vertical">
+            <div v-show="vertical">
                 <HeadquartersList
                     :headquarters="sortedHeadquarters"
                 ></HeadquartersList>
@@ -162,7 +207,7 @@ import {
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-// import headquarters from '@entities/HeadquartersData/headquarters';
+import { onBeforeRouteUpdate } from 'vue-router';
 
 const headquarters = ref([]);
 
@@ -180,10 +225,19 @@ const searchHeadquartes = ref('');
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
+const SelectedSortDistrict = ref(
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName,
+);
+const SelectedSortRegional = ref(
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
+);
+const SelectedSortLocal = ref(
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName,
+);
 
-const local = ref([]);
-const district = ref([]);
-const regional = ref([]);
+const locals = ref([]);
+const districts = ref([]);
+const regionals = ref([]);
 
 const getHeadquarters = async () => {
     await HTTP.get('/educationals/', {
@@ -201,8 +255,56 @@ const getHeadquarters = async () => {
         });
 };
 
+const filtersDistricts = computed(() =>
+    SelectedSortDistrict.value
+        ? districts.value.find(
+              (district) => district.name === SelectedSortDistrict.value,
+          )?.AllHeadquarters ?? []
+        : headquarters.value,
+);
+const filtersRegionals = computed(() =>
+    SelectedSortRegional.value
+        ? regionals.value.find(
+              (regional) => regional.name === SelectedSortRegional.value,
+          )?.AllHeadquarters ?? []
+        : headquarters.value,
+);
+const filtersLocals = computed(() =>
+    SelectedSortLocal.value
+        ? locals.value.find((local) => local.name === SelectedSortLocal.value)
+              ?.AllHeadquarters ?? []
+        : headquarters.value,
+);
+
+const getDistrictsHeadquartersForFilters = async () => {
+    try {
+        const { data } = await HTTP.get('/districts/');
+        districts.value = data;
+    } catch (e) {
+        console.log('error request districts headquarters');
+    }
+};
+const getRegionalsHeadquartersForFilters = async () => {
+    try {
+        const { data } = await HTTP.get('/regionals/');
+        regionals.value = data;
+    } catch (e) {
+        console.log('error request districts headquarters');
+    }
+};
+const getLocalsHeadquartersForFilters = async () => {
+    try {
+        const { data } = await HTTP.get('/locals/');
+        locals.value = data;
+    } catch (e) {
+        console.log('error request districts headquarters');
+    }
+};
 onMounted(() => {
+    getDistrictsHeadquartersForFilters();
     getHeadquarters();
+    getRegionalsHeadquartersForFilters();
+    getLocalsHeadquartersForFilters();
 });
 
 const selectedSort = ref(0);
@@ -220,7 +322,40 @@ const sortOptionss = ref([
 ]);
 
 const sortedHeadquarters = computed(() => {
-    let tempHeadquartes = headquarters.value;
+    let tempHeadquartes = [];
+    if (
+        selectedSortDistrict.value &&
+        SelectedSortRegional.value &&
+        selectedSortLocal.value
+    ) {
+        tempHeadquartes = Array.from(
+            new Set([
+                ...filtersDistricts.value,
+                ...filtersRegionals.value,
+                ...filtersLocals.value,
+            ]),
+        );
+    } else if (selectedSortDistrict.value && SelectedSortRegional.value) {
+        tempHeadquartes = Array.from(
+            new Set([...filtersDistricts.value, ...filtersRegionals.value]),
+        );
+    } else if (selectedSortDistrict.value && selectedSortLocal.value) {
+        tempHeadquartes = Array.from(
+            new Set([...filtersDistricts.value, ...filtersLocals.value]),
+        );
+    } else if (SelectedSortRegional.value && selectedSortLocal.value) {
+        tempHeadquartes = Array.from(
+            new Set([...filtersRegionals.value, ...filtersLocals.value]),
+        );
+    } else if (SelectedSortRegional.value) {
+        tempHeadquartes = [...filtersRegionals.value];
+    } else if (selectedSortDistrict.value) {
+        tempHeadquartes = [...filtersDistricts.value];
+    } else if (selectedSortLocal.value) {
+        tempHeadquartes = [...filtersLocals.value];
+    } else {
+        tempHeadquartes = [...headquarters.value];
+    }
 
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     tempHeadquartes = tempHeadquartes.filter((item) => {
@@ -271,6 +406,17 @@ const sortedHeadquarters = computed(() => {
     }
 
     return tempHeadquartes;
+});
+
+onBeforeRouteUpdate(async (to, from) => {
+    const pageName = 'AllHeadquarters';
+    const filtersPropertiesToRemove = [
+        'filtersDistricts',
+        'filtersRegionals',
+        'filtersLocals',
+    ];
+
+    removeFilters(pageName, filtersPropertiesToRemove);
 });
 </script>
 <style lang="scss">

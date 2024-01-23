@@ -57,7 +57,7 @@
                         'align-right': index % 2 !== 0,
                     }"
                 >
-                    <a v-bind:href="HQandSquad.link"
+                    <a v-bind:href="HQandSquad.link" @click="HQandSquad.click"
                         ><p>{{ HQandSquad.name }}</p></a
                     >
                 </div>
@@ -71,8 +71,9 @@ import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage } from '@shared';
+import { usePage, useCrosspageFilter } from '@shared';
 
+const crosspageFilters = useCrosspageFilter();
 const showLocalHQ = ref(true);
 const showHQ = ref(false);
 const showDistrictHQ = ref(false);
@@ -140,27 +141,26 @@ onMounted(() => {
     aboutMembers();
 });
 
-
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Местные штабы', href: '/LocalHeadquarters' },
-    { pageTitle: `${localHeadquarter.name}`, href: '#' },
-];
-
 const HQandSquads = ref([
     {
         name: 'Штабы СО ОО',
         link: '/AllHeadquarters',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'AllHeadquarters',
+                filters: {
+                    localName: localHeadquarter.value.name,
+                },
+            });
+        },
     },
     {
         name: 'ЛСО',
         link: '/AllSquads',
     },
 ]);
-
 </script>
 <style scoped lang="scss">
-
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;

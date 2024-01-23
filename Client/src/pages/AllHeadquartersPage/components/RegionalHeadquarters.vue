@@ -123,13 +123,13 @@
 
             <div class="headquarters-wrapper" v-show="vertical">
                 <RegionalHQList
-                    :regionalHeadquarters="filtersDistricts"
+                    :regionalHeadquarters="sortedRegionalHeadquarters"
                 ></RegionalHQList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <HorizontalRegionalHQs
-                    :regionalHeadquarters="filtersDistricts"
+                    :regionalHeadquarters="sortedRegionalHeadquarters"
                 ></HorizontalRegionalHQs>
             </div>
             <Button
@@ -205,6 +205,13 @@ const filtersDistricts = computed(() =>
         : regionalHeadquarters.value,
 );
 
+// const mergedHeadquarters = computed(() => {
+//     const regionalHQFromFilters = filtersDistricts.value;
+//     const regionalHQFromSorted = sortedHeadquarters.value;
+
+//     return [...regionalHQFromFilters, ...regionalHQFromSorted];
+// });
+
 const getDistrictsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/districts/');
@@ -230,26 +237,21 @@ const sortOptionss = ref([
     { value: 'members_count', name: 'Количеству участников' },
 ]);
 
-const sortedHeadquarters = computed(() => {
-    let tempHeadquartes = filtersDistricts.value;
+const sortedRegionalHeadquarters = computed(() => {
+    let tempHeadquarters = filtersDistricts.value;
 
-    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
-    tempHeadquartes = tempHeadquartes.filter((item) => {
-        // console.log(educational_institution.id);
-        return (
-            selectedSortDistrict.value == null ||
-            item.district_headquarter == selectedSortDistrict.value
-        );
-    });
+    tempHeadquarters = tempHeadquarters.slice(0, headquartersVisible.value);
 
-    tempHeadquartes = tempHeadquartes.filter((item) => {
+    // поиск
+    tempHeadquarters = tempHeadquarters.filter((item) => {
         return item.name
             .toUpperCase()
             .includes(searchRegionalHeadquarters.value.toUpperCase());
     });
 
-    tempHeadquartes = tempHeadquartes.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
+    // сортировка
+    tempHeadquarters = tempHeadquarters.sort((a, b) => {
+        if (sortBy.value === 'alphabetically') {
             let fa = a.name.toLowerCase(),
                 fb = b.name.toLowerCase();
 
@@ -260,30 +262,73 @@ const sortedHeadquarters = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'founding_date') {
-            let fc = a.founding_date,
-                fn = b.founding_date;
-
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'members_count') {
-            return a.members - b.members;
+        } else if (sortBy.value === 'founding_date') {
+            return a.founding_date - b.founding_date;
+        } else if (sortBy.value === 'members_count') {
+            return a.members_count - b.members_count;
         }
     });
 
     if (!ascending.value) {
-        tempHeadquartes.reverse();
+        tempHeadquarters.reverse();
     }
 
-    return tempHeadquartes;
+    return tempHeadquarters;
 });
-///////////////////////////////////////////////////////
-// localStorage.getItem('sortHQ');
+
+// ...............................................................................
+// const sortedHeadquarters = computed(() => {
+//     let tempHeadquartes = filtersDistricts.value;
+
+//     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
+//     tempHeadquartes = tempHeadquartes.filter((item) => {
+//         // console.log(educational_institution.id);
+//         return (
+//             selectedSortDistrict.value == null ||
+//             item.district_headquarter == selectedSortDistrict.value
+//         );
+//     });
+
+//     tempHeadquartes = tempHeadquartes.filter((item) => {
+//         return item.name
+//             .toUpperCase()
+//             .includes(searchRegionalHeadquarters.value.toUpperCase());
+//     });
+
+//     tempHeadquartes = tempHeadquartes.sort((a, b) => {
+//         if (sortBy.value == 'alphabetically') {
+//             let fa = a.name.toLowerCase(),
+//                 fb = b.name.toLowerCase();
+
+//             if (fa < fb) {
+//                 return -1;
+//             }
+//             if (fa > fb) {
+//                 return 1;
+//             }
+//             return 0;
+//         } else if (sortBy.value == 'founding_date') {
+//             let fc = a.founding_date,
+//                 fn = b.founding_date;
+
+//             if (fc < fn) {
+//                 return -1;
+//             }
+//             if (fc > fn) {
+//                 return 1;
+//             }
+//             return 0;
+//         } else if (sortBy.value == 'members_count') {
+//             return a.members - b.members;
+//         }
+//     });
+
+//     if (!ascending.value) {
+//         tempHeadquartes.reverse();
+//     }
+
+//     return tempHeadquartes;
+// });
 </script>
 <style lang="scss">
 .headquarters {

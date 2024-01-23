@@ -142,12 +142,6 @@ onMounted(() => {
     aboutMembers();
 });
 
-const pages = [
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Окружные штабы', href: '#' },
-    { pageTitle: `${districtHeadquarter.name}`, href: '#' },
-];
-
 const HQandSquads = ref([
     {
         name: 'Региональные штабы',
@@ -164,10 +158,26 @@ const HQandSquads = ref([
     {
         name: 'Местные штабы',
         link: '/LocalHeadquarters',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'LocalHeadquarters',
+                filters: {
+                    districtName: districtHeadquarter.value.name,
+                },
+            });
+        },
     },
     {
         name: 'Штабы СО ОО',
         link: '/AllHeadquarters',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'AllHeadquarters',
+                filters: {
+                    districtName: districtHeadquarter.value.name,
+                },
+            });
+        },
     },
     {
         name: 'ЛСО',
