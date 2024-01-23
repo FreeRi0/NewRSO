@@ -1,39 +1,24 @@
 <template>
     <checkedReferencesItem
         v-for="participant in participants"
-        @change="changeSelected"
+        @change="changePeoples"
         :participant="participant"
-        :participants="selectedPeoples"
-        :key="participant.id"
+        :key="participant?.user?.id"
     />
 </template>
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { checkedReferencesItem } from '@entities/ReferencesPeoples';
-
-const emit = defineEmits(['change']);
-const changeSelected = (changePeoples) => {
-    emit('change', changePeoples);
-};
-
 const props = defineProps({
     participants: {
         type: Array,
         required: true,
     },
-    selectedParticipants: {
-        type: Array,
-        default: () => []
-    },
 });
+const emit = defineEmits(['change']);
+const changePeoples  = (changeUser, UserId) => {
+    emit('change', changeUser, UserId)
+};
 
-const selectedPeoples = ref(props.participants);
-
-
-watch(selectedPeoples, (newChecked) => {
-    if (!newChecked) return;
-    emit('change', selectedPeoples.value);
-    console.log(newChecked);
-});
 </script>
-<style lang="scss"></style>
+

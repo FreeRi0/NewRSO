@@ -1,12 +1,18 @@
 <template>
     <div>
-        <router-link class="horizontal-item" :to="{ name: 'lso', params: { id: squad.id } }">
+        <router-link
+            class="horizontal-item"
+            :to="{ name: 'lso', params: { id: squad.id } }"
+        >
             <div class="horizontal-img">
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
                 <img src="@app/assets/user-avatar.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontal-item-title">"{{ squad.name }}"</p>
+                <div class="rating" v-if="rating">
+                    <p>Место в рейтинге: 102</p>
+                </div>
             </div>
         </router-link>
     </div>
@@ -17,19 +23,28 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    rating: {
+        type: Boolean,
+        default: false,
+    },
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .horizontal {
     &-item {
-        border: 1px solid grey;
-        border-radius: 10px;
-        display: flex;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: baseline;
         align-items: center;
+
         padding: 4px 20px;
+
+        border-radius: 10px;
+        border: 1px solid #b6b6b6;
+        background: #fff;
         margin-bottom: 12px;
         &-title {
-          margin-left: 10px;
+            margin-left: 10px;
         }
     }
     &-img {
@@ -44,10 +59,16 @@ const props = defineProps({
 .containerHorizontal {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     @media screen and (max-width: 575px) {
         flex-wrap: wrap;
         justify-content: space-between;
         margin-left: 10px;
     }
+}
+
+.rating {
+    display: grid;
+    grid-template-columns: auto 1fr 0fr;
 }
 </style>

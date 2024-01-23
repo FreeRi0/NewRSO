@@ -87,16 +87,13 @@ const props = defineProps({
 const emit = defineEmits(['change']);
 const updateMembership = (e) => {
     console.log('checkeed', checked.value);
-    emit('change',  props.participant.id, checked.value, );
+    emit('change', checked.value, props.participant.id );
 };
-
 
 
 const checked = ref(true);
 const isError = ref([]);
 
-// const route = useRoute();
-// const id = route.params.id;
 
 const swal = inject('$swal');
 const selectedPeoples = ref(props.selectedParticipants);
@@ -112,12 +109,6 @@ const filteredPayed = ref([
     },
     { value: 'Неоплачен', name: 'Неоплачен' },
 ]);
-
-// watch(selectedPeoples, (newChecked) => {
-//     if (!newChecked) return;
-//     emit('change', selectedPeoples.value);
-//     console.log(newChecked);
-// });
 
 watch(
     () => props.selectedParticipants,

@@ -149,7 +149,6 @@ import { bannerCreate } from '@shared/components/imagescomp';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import { sortByEducation, Select } from '@shared/components/selects';
-// import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 // import { usePage } from '@shared';
@@ -302,9 +301,6 @@ const sortedSquads = computed(() => {
 });
 </script>
 <style lang="scss">
-body {
-    border: 1px solid red;
-}
 
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');

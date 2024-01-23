@@ -335,16 +335,4 @@ const deleteAvatar = async () => {
     border-radius: 50%;
 }
 
-.vue-image-crop-upload .vicp-wrap .vicp-operate a {
-    padding: 4px 12px;
-    border-radius: 10px;
-    height: 42px;
-    color: white;
-    background: var(--primary);
-    border: 1px solid var(--primary);
-    &:hover {
-        color: white;
-        background: var(--primary);
-    }
-}
 </style>

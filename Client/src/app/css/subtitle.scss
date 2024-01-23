@@ -1,0 +1,19 @@
+//Общий класс для всех заголовков h2
+.subtitle {
+    font-family: 'Akrobat';
+    font-size: 32px;
+    line-height: 38.5px;
+    font-weight: 600;
+    color: #35383f;
+    margin-bottom: 40px;
+
+    // &--mb {
+    //     margin-bottom: 40px;
+    // }
+
+    // @media (max-width: 768px) {
+    //     font-size: 40px;
+    //     line-height: 48px;
+    //     font-weight: 600;
+    // }
+}

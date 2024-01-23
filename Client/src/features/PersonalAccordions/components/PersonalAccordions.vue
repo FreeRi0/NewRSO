@@ -174,7 +174,7 @@
                                     :value="sex.value"
                                     :label="sex.name"
                                     :id="sex.id"
-                                    :checked="user.gender"
+                                    :checked="user.gender === sex.value"
                                     name="sex"
                                     v-model:checkedValue="user.gender"
                                 />
@@ -317,6 +317,10 @@
                                             :value="passP.name"
                                             :label="passP.name"
                                             :id="passP.id"
+                                            :checked="
+                                                selectedPassParent ===
+                                                passP.name
+                                            "
                                             name="passParent"
                                             v-model:checkedValue="
                                                 selectedPassParent
@@ -731,7 +735,10 @@
                                     :value="addr.value"
                                     :label="addr.id"
                                     :id="addr.id"
-                                    :checked="addr.checked"
+                                    :checked="
+                                        regionData.reg_fact_same_address ===
+                                        addr.value
+                                    "
                                     name="address"
                                     v-model:checkedValue="
                                         regionData.reg_fact_same_address
@@ -890,7 +897,9 @@
                                     :value="pas.value"
                                     :label="pas.id"
                                     :id="pas.id"
-                                    :checked="pas.checked"
+                                    :checked="
+                                        documents.russian_passport === pas.value
+                                    "
                                     name="passport"
                                     v-model:checkedValue="
                                         documents.russian_passport
@@ -2603,11 +2612,9 @@
                     type="submit"
                     label="Отправить данные на верификацию"
                 ></Button>
-
             </v-card-actions>
-
         </v-expansion-panels>
-        <p class="error" v-if="isError.error">{{ "" + isError.error }}</p>
+        <p class="error" v-if="isError.error">{{ '' + isError.error }}</p>
     </form>
 </template>
 <script setup>
