@@ -4,12 +4,15 @@
         <FormCentr
             :participants="true"
             :headquarter="headquarter"
+            :members="members"
+            :submited="submited"
             v-if="headquarter"
             @submit.prevent="changeHeadquarter"
             @select-emblem="onSelectEmblem"
             @select-banner="onSelectBanner"
             @delete-emblem="onDeleteEmblem"
             @delete-banner="onDeleteBanner"
+            @update-member="onUpdateMember"
         >
         </FormCentr>
     </div>
@@ -25,11 +28,25 @@ import { usePage } from '@shared';
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const submited = ref(false);
 
 const headquarter = ref(null);
+const members = ref([]);
+const positions = ref([]);
 
-const { replaceTargetObjects } = usePage();
+const getPositions = async () => {
+    HTTP.get('positions/')
+
+        .then((res) => {
+            positions.value = res.data;
+            console.log('должности - ', res.data);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
 const getHeadquarter = async () => {
     await HTTP.get(`centrals/1/`, {
@@ -40,8 +57,10 @@ const getHeadquarter = async () => {
     })
         .then((response) => {
             headquarter.value = response.data;
+            if (headquarter.value.commander) {
+                headquarter.value.commander = headquarter.value.commander.id;
+            }
             replaceTargetObjects([headquarter.value]);
-            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -54,18 +73,50 @@ onBeforeRouteUpdate(async (to, from) => {
     }
 });
 
-watch(
-    () => route.params.id,
+const getMembers = async () => {
+    HTTP.get(`centrals/${id}/members/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            members.value = response.data;
+            members.value.forEach((member) => {
+                if (positions.value) {
+                    const position = positions.value.find((item) => {
+                        return item.name === member.position;
+                    });
+                    member.position = position.id;
+                }
+            });
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
-    (newId, oldId) => {
-        id = newId;
-        getHeadquarter();
-    },
-);
+// watch(
+//     () => route.params.id,
+
+//     (newId, oldId) => {
+//         id = newId;
+//         getHeadquarter();
+//     },
+// );
 
 onMounted(() => {
     getHeadquarter();
+    getMembers();
+    getPositions();
 });
+
+const onUpdateMember = (event, id) => {
+    const targetMember = members.value.find((member) => member.id === id);
+    const firstkey = Object.keys(event)[0];
+    targetMember[firstkey] = event[firstkey];
+    console.log(event);
+};
 
 /**
  * переменные на удаление фото из БД

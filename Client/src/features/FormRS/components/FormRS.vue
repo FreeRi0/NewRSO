@@ -132,6 +132,7 @@
                                 >Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
+                            <!-- здесь поменяла -->
                             <Dropdown
                                 open-on-clear
                                 id="beast"
@@ -139,7 +140,7 @@
                                 placeholder="Поиск по ФИО"
                                 v-model="headquarter.commander"
                                 @update:value="changeValue"
-                                address="rsousers/"
+                                address="users/"
                             ></Dropdown>
                         </div>
                     </div>
@@ -268,9 +269,11 @@
                                     </Icon>
                                 </template>
                             </v-text-field>
+                            <!-- здесь поменяла -->
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                v-if="members"
                                 @update-member="onUpdateMember"
                             ></MembersList>
                         </div>
@@ -657,7 +660,6 @@
                                 >Рекомендуемый размер 80х80</span
                             >
                         </div>
-
                         <div class="form__field photo-add">
                             <p class="form__label">Добавьте баннер</p>
                             <div class="photo-add__box photo-add__box--banner">
@@ -814,6 +816,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
+// здесь поменяла
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
@@ -862,6 +865,11 @@ const props = defineProps({
         type: String,
         default: null,
     },
+    // здесь поменяла
+    members: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const headquarter = ref(props.headquarter);
@@ -907,31 +915,34 @@ const showButtonPrev = computed(() => {
     return panel.value === 'panelThree';
 });
 
-//----------УЧАСТНИКИ-------------------------------------------------------
-const members = ref([]);
+//--------------------------------------------------------------
 
 const route = useRoute();
 let id = route.params.id;
 
-const getMembers = async () => {
-    await HTTP.get(`regionals/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            members.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const getMembers = async () => {
+//     await HTTP.get(`regionals/${id}/members/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             members.value = response.data;
+            
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
-onMounted(() => {
-    getMembers();
-});
+// onMounted(() => {
+//     getMembers();
+// });
+
+// здесь поменяла
+const members = ref(props.members);
 
 const searchMembers = ref('');
 
@@ -942,11 +953,9 @@ const sortedMembers = computed(() => {
             .includes(searchMembers.value.toUpperCase());
     });
 });
-
+// здесь поменяла
 const onUpdateMember = (event, id) => {
-    const targetMember = members.value.find((member) => member.id === id);
-    const firstkey = Object.keys(event)[0];
-    targetMember[firstkey] = event[firstkey];
+    emit('updateMember', event, id);
 };
 
 const changeValue = (event) => {

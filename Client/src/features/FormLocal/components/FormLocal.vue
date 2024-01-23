@@ -137,7 +137,7 @@
                                 placeholder="Поиск по ФИО"
                                 v-model="headquarter.commander"
                                 @update:value="changeValue"
-                                address="rsousers/"
+                                address="users/"
                             ></Dropdown>
                         </div>
                     </div>
@@ -269,6 +269,7 @@
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                v-if="members"
                                 @update-member="onUpdateMember"
                             ></MembersList>
                         </div>
@@ -716,6 +717,10 @@ const props = defineProps({
         type: String,
         default: null,
     },
+    members: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const headquarter = ref(props.headquarter);
@@ -752,45 +757,10 @@ const showButtonPrev = computed(() => {
 });
 
 //-----------------------------------------------------------------------
-const members = ref([]);
-
 const route = useRoute();
 let id = route.params.id;
 
-const getMembers = async () => {
-    await HTTP.get(`locals/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            members.value = response.data;
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         getMembers();
-//     }
-// });
-
-// watch(
-//     () => route.params.id,
-
-//     (newId, oldId) => {
-//         id = newId;
-//         getMembers();
-//     },
-// );
-
-onMounted(() => {
-    getMembers();
-});
-
+const members = ref(props.members);
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
@@ -802,10 +772,7 @@ const sortedMembers = computed(() => {
 });
 
 const onUpdateMember = (event, id) => {
-    const targetMember = members.value.find((member) => member.id === id);
-
-    const firstkey = Object.keys(event)[0];
-    targetMember[firstkey] = event[firstkey];
+    emit('updateMember', event, id);
 };
 
 const changeValue = (event) => {
