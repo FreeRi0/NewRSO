@@ -3223,6 +3223,8 @@ const UserApplication = computed(() => {
     return applications.value.find((item) => item.user.id === user.value.id);
 });
 
+console.log('app', UserApplication.value)
+
 const downloadBlankPersonal = async () => {
     await HTTP.get(
         '/rsousers/me/statement/download_consent_to_the_processing_of_personal_data/',
@@ -3427,7 +3429,7 @@ const updateData = async () => {
         });
         const axiosrequest6 = ref(null);
 
-        if (!UserApplication && !user.value.is_verified) {
+        if (!UserApplication.value && !user.value.is_verified) {
             const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
                 data.value,
@@ -3439,6 +3441,8 @@ const updateData = async () => {
                 },
             );
         }
+
+        console.log('ddd', !UserApplication.value)
 
         user.value = axiosrequest1.data;
         user.value.region = regions.value.find(
