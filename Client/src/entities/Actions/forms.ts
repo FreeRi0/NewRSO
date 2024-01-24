@@ -8,34 +8,34 @@ export const actionFormSearch = [{
 //Модель компонента
 
 export const actionForm = {
-    id: Number,
-    author: String,
-    format: String,
-    direction: String,
-    status: String,
-    scale: String,
-    created_at: String,
-    name: String,
-    banner: String,
-    conference_link: String,
-    address: String,
-    description: String,
-    application_type: String,
-    available_structural_units: String
-}
-export const time_data = {
-
-}
-
-export const createForm = {
-    format: String,
-    direction: String,
-    status: String,
-    name: String,
-    scale: String,
+    format: '',
+    direction: '',
+    status: '',
+    scale: '',
+    name: '',
+    conference_link: '',
+    address: '',
     participants_number: Number,
-    description: String,
-    application_type: String,
-
-}
+    description: '',
+    application_type: '',
+    available_structural_units: '',
+    time_data: {
+      event_duration_type: '',
+      start_date: '',
+      start_time: '',
+      end_date: '',
+      end_time: '',
+      registration_end_date: '',
+      registration_end_time: ''
+    },
+    document_data: {
+      passport: false,
+      snils: false,
+      inn: false,
+      work_book: false,
+      military_document: false,
+      consent_personal_data: false,
+      additional_info: ''
+    }
+  }
 

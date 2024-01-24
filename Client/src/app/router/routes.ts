@@ -417,35 +417,24 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/actionSquads',
                 name: 'actionSquads',
-
-                component: () =>
-                    import(
-                        '@pages/actionSquadsPade/components/actionSquadsPage.vue'
-                    ),
+                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
             },
             {
                 path: '/actionSquads/:id',
                 name: 'Action',
-                component: () =>
-                    import('@pages/ActionPage/components/ActionPage.vue'),
+                component: () => import('@pages/Event/components/Event.vue'),
             },
             {
-                path: '/createAction',
-                name: 'createAction',
-                component: () =>
-                    import(
-                        '@pages/CreationActionsPage/components/CreationActionsPage.vue'
-                    ),
-            },
-            {
-                path: '/EditAction',
-                name: 'editAction',
-                component: () =>
-                    import(
-                        '@pages/EditActionPage/components/EditActionPage.vue'
-                    ),
+                path: "/createAction",
+                name: "createAction",
+                component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
             },
 
+            {
+                path: "/actionSquads/:id/EditAction",
+                name: "editAction",
+                component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
+            },
             {
                 path: '/AllParticipants/:id',
                 name: 'allParticipants',
