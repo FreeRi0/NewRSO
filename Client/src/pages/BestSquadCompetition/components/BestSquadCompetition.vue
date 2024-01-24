@@ -8,7 +8,7 @@
             <div class="competition__container">
                 <div class="competition__image-box">
                     <img
-                        :src="'/assets/competition/best-squad.png'"
+                        :src="'/assets/competition/promo.png'"
                         alt="Логотип конкурса"
                         width="1180"
                         height="510"
@@ -17,9 +17,8 @@
             </div>
 
             <div class="competition__status-application">
-                <!--прописать условие - заявка еще не подана-->
                 <Button
-                    v-if="currentStatus.status === 'Участвовать'"
+                    v-if="currentStatus.status === 'Еще не участвуете'"
                     label="Участвовать"
                     class="competition__status-application-button"
                     @click="onSendApplication"
@@ -35,7 +34,6 @@
                     Заявка на рассмотрении
                 </span>
 
-                <!--прописать условие - уже участник-->
                 <span
                     v-else-if="currentStatus.status === 'Вы участник'"
                     class="competition__status-application-info"
@@ -139,7 +137,11 @@
         <CompetitionMembersBlock></CompetitionMembersBlock>
 
         <!--Модальные окна-->
-        <ModalCompetition v-if="isSendApplication"></ModalCompetition>
+        <ModalCompetition
+            v-if="isSendApplication"
+            :user="user"
+            @close-pop-up="closeSendApplication"
+        ></ModalCompetition>
     </div>
 </template>
 
@@ -155,6 +157,26 @@ import { HTTP } from '@app/http';
 // let id = route.params.id;
 
 //--id конкурса на лучший отряд--------------------------------
+
+const emit = defineEmits(['closePopUp']);
+
+const user = ref({});
+const getUser = async () => {
+    await HTTP.get('/rsousers/me/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            user.value = response.data;
+            console.log('пользователь', user.value);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
 let id = 1;
 
 const competition = ref({});
@@ -170,7 +192,7 @@ const getCompetition = async () => {
     })
         .then((response) => {
             competition.value = response.data;
-            console.log('comet', response);
+            console.log('конкурс', response);
             // console.log(competition.value.name);
         })
         .catch(function (error) {
@@ -198,9 +220,14 @@ const onSendApplication = () => {
     isSendApplication.value = true;
 };
 
+const closeSendApplication = () => {
+    isSendApplication.value = false;
+};
+
 onMounted(() => {
     getCompetition();
     getSquadStatus();
+    getUser();
 });
 </script>
 <style lang="scss"></style>
