@@ -39,8 +39,12 @@
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
                         </li>
-                        <li class="header__nav-item">
-                            <a class="header__nav-link" href="/actionSquads">
+                        <li class="header__nav-item disable">
+                            <a
+                                class="header__nav-link"
+                                @click.prevent
+                                href="/actionSquads"
+                            >
                                 Мероприятия
                             </a>
                         </li>
@@ -511,6 +515,12 @@ onMounted(() => {
             &:not(:last-child) {
                 border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             }
+        }
+    }
+
+    &__nav-item.disable {
+        & > a {
+            cursor: not-allowed;
         }
     }
 
