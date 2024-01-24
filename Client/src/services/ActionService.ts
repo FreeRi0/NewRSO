@@ -43,6 +43,14 @@ export function getQuestion(id: number){
         }
     })
 }
+export function putAction(id: number, data: object){
+    return HTTP.put(`/events/${id}/`, data, {
+        headers:{
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        }
+    })
+}
 //Отправка и изменение организаторов мероприятия
 export function createOrganizator(id: number, data: object){
     return HTTP.post(`/events/${id}/organizers`, data, {
@@ -61,9 +69,28 @@ export function getOrganizator(id: number){
     });
 }
 
+export function putOrganizator(id: number, data: object){
+    return HTTP.put(`/events/${id}/organizers`, data, {
+        headers:{
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        }
+    });
+}
+
 //Получить и добавить документы пользователя
 export function getDocuments(id: number){
     return HTTP.get(`/events/${id}/user_documents`, {
+        headers:{
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        }
+    })
+}
+
+//Получить участников мероприятия
+export function getParticipants(id: number){
+    return HTTP.get(`/events/${id}/participants`, {
         headers:{
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

@@ -44,10 +44,6 @@
                 >{{ category }}</span
             >
         </div>
-        <p class="text">
-            «В объективе РСО» — Фотографический квест для членов Российских
-            студенческих отрядов!
-        </p>
         <p class="text event_type_wrap">
             {{ event.description }}
         </p>
@@ -70,19 +66,21 @@
         </div>
         <!-- Организаторы -->
         <h2 class="title title--subtitle">Организаторы</h2>
-
-        <div class="card_wrap">
-            <v-card v-for="organizator in organizators" :key="card" class="event_card_wrap">
+        <div v-if="organizators.length == 0" class="event event-empty">Странно, но у мероприятия нет организаторов</div>
+        <div v-if="organizators.length != 0" class="card_wrap">
+            <v-card v-for="organizator in organizators" class="event_card_wrap">
                 <v-img width="120"></v-img>
                 <div class="text text--organizer">
                     {{ organizator.name }}
                 </div>
                 <div class="text text--status">
+                    {{ organizator.status }}
                 </div>
             </v-card>
         </div>
         <!-- Контактные лица -->
         <h2 class="title title--subtitle">Контактные лица</h2>
+        <div v-if="cards.length == 0" class="event event-empty">Контактные лица не указаны</div>
         <div class="card_wrap">
             <v-card v-for="card in cards" :key="card" class="event_card_wrap">
                 <v-img width="120" :src="card.avatar"></v-img>
@@ -100,8 +98,8 @@
             <button class="event_btn event_go">Уже идут</button>
             <button class="event_btn event_ok">Ожидают одобрения</button>
         </div>
-
-        <section class="section_wrap">
+        <div v-if="participants.length == 0" class="event event-empty">Никто не хочет участвовать :(</div>
+        <section v-if="participants.length != 0" class="section_wrap">
             <ul class="list_wrap">
                 <li
                     v-for="participant in participants.slice(0, 6)"
@@ -120,154 +118,13 @@
                 <!-- <h2 v-else>Участников не найдено...</h2> -->
             </ul>
             <div class="squad-participants__link">
-                <a href="#">Показать всех</a>
-            </div>
-        </section>
-        <section class="section_wrap">
-            <ul class="list_wrap">
-                <li
-                    v-for="participant in participants.slice(0, 6)"
-                    :key="participant"
-                >
-                    <div>
-                        <img :src="participant.image" alt="avatar" />
-                        <h5 class="text text--participant_name">
-                            {{ participant.name }}
-                        </h5>
-                        <p class="text text--status">
-                            {{ participant.status }}
-                        </p>
-                    </div>
-                </li>
-                <!-- <h2 v-else>Участников не найдено...</h2> -->
-            </ul>
-            <div class="squad-participants__link">
-                <a href="#">Показать всех</a>
+                <p @click="">Показать всех</p>
             </div>
         </section>
         <!-- Другие мероприятия -->
         <h2 class="title title--subtitle event_border">Другие мероприятия</h2>
+        <div class="event event-empty">На данный момент мероприятий нет</div>
         <div class="other_events_wrap">
-            <v-card class="card">
-                <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    height="200px"
-                    cover
-                    class="radius"
-                ></v-img>
-                <v-card-text class="text text--event_title">
-                    Название мероприятия очень длинное название, которое кому-то
-                    посвящено
-                </v-card-text>
-                <div class="text text--event_info">
-                    <div>06 июля 2023</div>
-                    <div>100 №</div>
-                </div>
-                <div class="event_type_card_wrap">
-                    <span class="event_type_card">Всероссийское</span>
-                    <span class="event_type_card">Образовательное</span>
-                </div>
-            </v-card>
-            <v-card class="card">
-                <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    height="200px"
-                    cover
-                    class="radius"
-                ></v-img>
-                <v-card-text class="text text--event_title">
-                    Название мероприятия очень длинное название, которое кому-то
-                    посвящено
-                </v-card-text>
-                <div class="text text--event_info">
-                    <div>06 июля 2023</div>
-                    <div>100 №</div>
-                </div>
-                <div class="event_type_card_wrap">
-                    <span class="event_type_card">Всероссийское</span>
-                    <span class="event_type_card">Образовательное</span>
-                </div>
-            </v-card>
-            <v-card class="card">
-                <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    height="200px"
-                    cover
-                    class="radius"
-                ></v-img>
-                <v-card-text class="text text--event_title">
-                    Название мероприятия очень длинное название, которое кому-то
-                    посвящено
-                </v-card-text>
-                <div class="text text--event_info">
-                    <div>06 июля 2023</div>
-                    <div>100 №</div>
-                </div>
-                <div class="event_type_card_wrap">
-                    <span class="event_type_card">Всероссийское</span>
-                    <span class="event_type_card">Образовательное</span>
-                </div>
-            </v-card>
-            <v-card class="card">
-                <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    height="200px"
-                    cover
-                    class="radius"
-                ></v-img>
-                <v-card-text class="text text--event_title">
-                    Название мероприятия очень длинное название, которое кому-то
-                    посвящено
-                </v-card-text>
-                <div class="text text--event_info">
-                    <div>06 июля 2023</div>
-                    <div>100 №</div>
-                </div>
-                <div class="event_type_card_wrap">
-                    <span class="event_type_card">Всероссийское</span>
-                    <span class="event_type_card">Образовательное</span>
-                </div>
-            </v-card>
-            <v-card class="card">
-                <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    height="200px"
-                    cover
-                    class="radius"
-                ></v-img>
-                <v-card-text class="text text--event_title">
-                    Название мероприятия очень длинное название, которое кому-то
-                    посвящено
-                </v-card-text>
-                <div class="text text--event_info">
-                    <div>06 июля 2023</div>
-                    <div>100 №</div>
-                </div>
-                <div class="event_type_card_wrap">
-                    <span class="event_type_card">Всероссийское</span>
-                    <span class="event_type_card">Образовательное</span>
-                </div>
-            </v-card>
-            <!-- <v-card class="card">
-            <v-img
-                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                height="200px"
-                cover
-                class="radius"
-            ></v-img>
-            <v-card-text class="text text--event_title">
-                Название мероприятия очень длинное название, которое кому-то
-                посвящено
-            </v-card-text>
-            <div class="text text--event_info">
-                <div>06 июля 2023</div>
-                <div>100 №</div>
-            </div>
-            <div class="event_type_card_wrap">
-                <span class="event_type_card">Всероссийское</span>
-                <span class="event_type_card">Образовательное</span>
-            </div>
-        </v-card> -->
         </div>
         <Button
             class="form-button btn_wrap"
@@ -285,7 +142,8 @@ import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { Button } from '@shared/components/buttons';
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
-import { getAction, getOrganizator, getListActions } from '@services/ActionService';
+import { ActionItem } from '@entities/index';
+import { getAction, getOrganizator, getListActions, getParticipants } from '@services/ActionService';
 import { onActivated } from 'vue';
 
 const route = useRoute();
@@ -322,6 +180,13 @@ const otherevents = ref({});
 
 const organizators = ref([])
 onActivated(() => {
+    getParticipants(route.params.id)
+        .then((resp)=>{
+            participants.value = resp.data
+        })
+        .catch((e)=>{
+            console.log(e)
+        })
     getListActions()
         .then((resp)=>{
             otherevents.value = resp.data;
@@ -341,14 +206,6 @@ onActivated(() => {
 function EditAction(){
     router.push({ name: 'editAction', params: { id: route.params.id } });
 }
-
-const eventCategory = ref([
-    'Образовательное',
-    'Спортивное',
-    'Творческое',
-    'Добровольческое',
-    'Патриотическое',
-]);
 
 const items = ref([
     {
@@ -386,7 +243,7 @@ const items = ref([
 ]);
 
 const cards = ref([
-    {
+    /*{
         avatar: './assets/avatar.png',
         name: 'Александрова Вероника Александровна',
         status: 'Командир',
@@ -405,34 +262,16 @@ const cards = ref([
         avatar: './assets/avatar.png',
         name: 'Александрова Вероника Александровна',
         status: 'Методист',
-    },
+    },*/
 ]);
 
 const participants = ref([
     {
-        name: 'Андрей',
-        status: 'Командир',
-        image: './assets/avatar.png',
-        category: 2,
-    },
-    {
-        name: 'Мария',
-        status: 'Комиссар',
-        image: './assets/avatar.png',
-        category: 1,
-    },
-    {
-        name: 'Екатерина',
-        status: 'Мастер',
-        image: './assets/avatar.png',
-        category: 1,
-    },
-    {
-        name: 'Артём',
-        status: 'Боец',
-        image: './assets/avatar.png',
-        category: 2,
-    },
+        name: '',
+        status: '',
+        image: '',
+        category: Number,
+    }
 ]);
 
 // member.value = member.value.sort((a, b) => a.is_trusted - b.is_trusted);
@@ -456,6 +295,16 @@ const participants = ref([
         margin-left: 1%;
         margin-right: 1%;
         height: 40px;
+    }
+    &-empty{
+        height: 60px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: white;
+        border-radius: 20px;
+        background-color: rgba(28, 92, 148, 1);;
+        justify-content: center;
+        align-items: center;
     }
 }
 .title--subtitle{
