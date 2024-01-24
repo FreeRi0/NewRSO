@@ -8,6 +8,7 @@
         <template v-else>
             <div class="competitions__actions">
                 <v-select
+                    variant="outlined"
                     class="form__field competitions__actions-select"
                     :items="actionsList"
                     v-model="action"
@@ -150,6 +151,7 @@ onActivated(() => {
 }
 
 .competitions__actions-select {
+    background-color: inherit;
     min-width: 224px;
 }
 

@@ -15,10 +15,16 @@
 
                 <div class="horizontallso-item__wrapper">
                     <img
+                        v-if="competition.junior_detachment.banner"
                         class="competition__avatar_circle"
                         :src="competition.junior_detachment.banner"
                         alt="Banner"
                     />
+
+                    <div
+                        v-else
+                        class="competition__avatar_circle blue-bg"
+                    ></div>
 
                     <div class="containerHorizontal">
                         <p>{{ competition.junior_detachment.name }}</p>
@@ -28,10 +34,13 @@
 
             <div class="horizontallso-item__wrapper competitition">
                 <img
+                    v-if="competition.competition?.banner"
                     class="competition__avatar_square"
                     :src="competition.competition?.banner"
                     alt=""
                 />
+
+                <div v-else class="competition__avatar_square blue-bg"></div>
 
                 <div class="containerHorizontal">
                     <p>{{ competition.competition?.name }}</p>
@@ -77,6 +86,10 @@ watch(
 .competition__item {
     display: grid;
     grid-template-columns: auto 1fr;
+}
+
+.blue-bg {
+    background-color: #c7e3fa;
 }
 
 .competition__content {
