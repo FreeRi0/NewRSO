@@ -1,0 +1,267 @@
+.competition {
+    &__promo {
+        position: relative;
+    }
+
+    &__promo-lso {
+        position: relative;
+        padding: 24px 28px;
+        margin-top: 60px;
+        margin-bottom: 60px;
+        border-radius: 20px;
+        background-color: #ffffff;
+        box-shadow: 4px 4px 30px 0px rgba(0, 0, 0, 0.06);
+
+        .competition__image-box {
+            margin-bottom: 0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+    }
+
+    &__link-group {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        display: flex;
+        flex-wrap: wrap;
+
+        li {
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+    }
+
+    &__nav-item {
+        padding: 2px 7px 2px 2px;
+        border-radius: 20px;
+        background: #ff4d2f;
+
+        @media (max-width: 1024px) {
+            background-color: #ffffff;
+            width: fit-content;
+        }
+    }
+
+    &__link.header__nav-link {
+        padding: 2px 7px 2px 31px;
+        background-image: url('@/app/assets/icon/fire-icon.svg');
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        color: #ffffff;
+
+        @media (max-width: 1024px) {
+            color: #000000;
+        }
+    }
+
+    &__rating {
+        position: absolute;
+        left: 24px;
+        bottom: 24px;
+    }
+
+    &__label {
+        font-family: 'Bert Sans';
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 20px;
+        padding: 10px 24px;
+        border-radius: 30px;
+        border: 2px solid #35383f;
+        background-color: #ffffff;
+    }
+
+    &__send-report {
+        display: block;
+        width: fit-content;
+        margin: 0 auto;
+        margin-top: 16px;
+        font-family: 'Montserrat';
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 19px;
+        letter-spacing: -0.4px;
+        color: #5e5c5c;
+        text-decoration: underline;
+    }
+    //---------------------------------------------------------------------------------
+    &__image-box {
+        margin-bottom: 40px;
+        background-color: #c4c4c4;
+        border-radius: 15px;
+        position: relative;
+    }
+
+    &__status-application {
+        position: absolute;
+        right: 32px;
+        bottom: 24px;
+        font-family: 'Bert Sans';
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 20px;
+
+        .btn.competition__status-application-button {
+            margin: 0;
+            margin-left: auto; // -----------------------------------------
+        }
+    }
+
+    &__status-application-info {
+        display: block;
+        width: fit-content;
+        margin-top: 20px; // -----------------------------------------
+        margin-left: auto; // -----------------------------------------
+        padding: 16px 32px;
+        background-color: #39bfbf;
+        color: white;
+        // box-shadow: none;
+        border-radius: 10px;
+        // border: none;
+        // cursor: pointer;
+        font-size: 16px;
+        // transition: 0.2s;
+        // text-transform: none;
+    }
+
+    &__text-about {
+        margin-bottom: 60px;
+    }
+
+    &__about {
+        display: flex;
+        margin-bottom: 60px;
+
+        li:first-child {
+            margin-right: 120px;
+        }
+
+        li:last-child .competition__list li {
+            background-image: url('@/app/assets/icon/timer.svg');
+        }
+
+        li:first-child .competition__list {
+            li:first-child {
+                background-image: url('@/app/assets/icon/map.svg');
+            }
+
+            li:nth-child(2) {
+                background-image: url('@/app/assets/icon/group_light.svg');
+            }
+
+            li:nth-child(3) {
+                background-image: url('@/app/assets/icon/funds.svg');
+            }
+
+            li:last-child {
+                background-image: url('@/app/assets/icon/telephone.svg');
+            }
+        }
+    }
+
+    &__list {
+        display: grid;
+        row-gap: 20px;
+
+        li {
+            padding-left: 36px;
+            background-repeat: no-repeat;
+            background-position: 0 0;
+        }
+
+        li span:first-child {
+            margin-right: 12px;
+        }
+    }
+
+    &__documents {
+        display: flex;
+        align-items: center;
+        margin-bottom: 60px;
+        padding: 20px;
+        border: 1px solid #b6b6b6;
+        border-radius: 10px;
+    }
+
+    &__documents-description {
+        // max-width: 900px;
+        font-family: 'Akrobat';
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    &__documents-button {
+        display: flex;
+        align-items: center;
+        max-width: 120px; //---------------------
+        height: 32px;
+        margin-left: 76px;
+        padding-right: 10px;
+        font-family: 'Akrobat';
+        font-weight: 600;
+        line-height: 16px;
+        color: #1f7cc0;
+
+        svg {
+            display: flex;
+            min-width: 24px;
+            height: 30px;
+            margin-right: 12px;
+        }
+    }
+
+    &__documents-button:hover {
+        opacity: 0.7;
+    }
+
+    &__form {
+        padding: 40px 60px 60px;
+        border-radius: 10px;
+        border: 1px solid #939393;
+        background-color: #ffffff;
+
+        p {
+            margin-bottom: 32px;
+        }
+    }
+
+    &__send-application {
+        width: 384px;
+        height: 200px;
+    }
+
+    &__send-invitation {
+        width: 500px;
+        height: 272px;
+
+        .btn.nav-user__button-agree .mt-2 .mx-auto {
+            width: 263px;
+            max-width: none;
+        }
+    }
+
+    &__group-button {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        row-gap: 20px;
+    }
+
+    &__button-close {
+        width: 24px;
+        height: 24px;
+        background-image: url('@/app/assets/icon/close-location.svg');
+        margin-left: auto;
+        // margin-right: -40px;
+        // margin-top: -24px;
+    }
+
+    &__info {
+        width: 328px;
+        height: 180px;
+        padding: 40px 16px;
+        border-radius: 10px;
+        border: 1px solid #898989;
+        background-color: #ffffff;
+    }
+}
