@@ -8,44 +8,46 @@
                 @change="updateCheck"
             />
         </div>
-
-        <div class="horizontallso-item__wrapper">
-            <div class="horizontallso-img">
-                <img
-                    :src="participant?.user?.avatar?.photo"
-                    alt="logo"
-                    v-if="participant?.user?.avatar?.photo"
-                />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                    v-else
-                />
-            </div>
-            <div class="containerHorizontal">
-                <div class="d-flex">
-                    <p class="horizontallso-item__list-full">
-                        {{participant.user.last_name }}
-                    </p>
-                    <p class="horizontallso-item__list-full">
-                        {{ participant.user.first_name }}
-                    </p>
-                    <p class="horizontallso-item__list-full">
-                        {{ participant.user.patronymic_name }}
-                    </p>
+            <router-link
+                class="horizontallso-item__wrapper"
+                :to="{ name: 'userpage', params: { id: participant.user.id } }"
+            >
+                <div class="horizontallso-img">
+                    <img
+                        :src="participant?.user?.avatar?.photo"
+                        alt="logo"
+                        v-if="participant?.user?.avatar?.photo"
+                    />
+                    <img
+                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                        alt="photo"
+                        v-else
+                    />
                 </div>
-                <div class="horizontallso-item__list-date">
-                    <span
-                        style="
-                            border-left: 2px solid #b6b6b6;
-                            padding-right: 8px;
-                        "
-                    ></span>
-                    <p>{{participant.user.date_of_birth }}</p>
-
+                <div class="containerHorizontal">
+                    <div class="d-flex">
+                        <p class="horizontallso-item__list-full">
+                            {{ participant.user.last_name }}
+                        </p>
+                        <p class="horizontallso-item__list-full">
+                            {{ participant.user.first_name }}
+                        </p>
+                        <p class="horizontallso-item__list-full">
+                            {{ participant.user.patronymic_name }}
+                        </p>
+                    </div>
+                    <div class="horizontallso-item__list-date">
+                        <span
+                            style="
+                                border-left: 2px solid #b6b6b6;
+                                padding-right: 8px;
+                            "
+                        ></span>
+                        <p>{{ participant.user?.date_of_birth }}</p>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </router-link>
+
     </div>
 </template>
 <script setup>
