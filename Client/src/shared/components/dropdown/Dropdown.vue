@@ -54,7 +54,11 @@
 
         <transition name="fade" appear>
             <ul class="dropdown__list" v-if="isOpen">
-                <li v-for="(item, i) in items" :key="i" class="dropdown__item">
+                <li
+                    v-for="(item, i) in items"
+                    :key="i"
+                    class="dropdown__item dropdown__item_not"
+                >
                     <a
                         v-if="item.link"
                         class="dropdown__link"
@@ -62,21 +66,18 @@
                         >{{ item.title }}</a
                     >
                     <router-link
+                        v-if="item.hasOwnProperty('params') && item.params.id"
                         class="dropdown__link"
-                        :to="
-                            item.params && item.params.id
-                                ? { name: item.name, params: item.params }
-                                : { name: item.name }
-                        "
+                        :to="{ name: item.name, params: item.params }"
                         >{{ item.title }}</router-link
                     >
-                    <!-- <router-link
-                        v-else
+
+                    <router-link
+                        v-else-if="!item.hasOwnProperty('params')"
                         class="dropdown__link"
                         :to="{ name: item.name }"
                         >{{ item.title }}</router-link
-                    > -->
-                    {{ item }}
+                    >
                     <button
                         class="dropdown__button-item"
                         v-if="item.button"
@@ -182,5 +183,9 @@ const LogOut = () => {
 .fade-enter,
 .fade-leave-to {
     opacity: 0;
+}
+
+.dropdown__item_not::before {
+    background-color: inherit;
 }
 </style>

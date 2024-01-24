@@ -180,8 +180,9 @@ import {
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-import { onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
+import { onActivated } from 'vue';
 
 const crosspageFilters = useCrosspageFilter();
 
@@ -340,11 +341,21 @@ const sortedLocalHeadquarters = computed(() => {
     return tempHeadquartes;
 });
 
-onBeforeRouteUpdate(async (to, from) => {
+onBeforeRouteLeave(async (to, from) => {
     const pageName = 'LocalHeadquarters';
-    const filtersPropertiesToRemove = ['disrictName', 'regionalName'];
+    const filtersPropertiesToRemove = ['districtName', 'regionalName'];
 
     crosspageFilters.removeFilters(pageName, filtersPropertiesToRemove);
+});
+
+onActivated(() => {
+    selectedSortdistrict.value = JSON.parse(
+        localStorage.getItem('LocalHeadquarters_filters'),
+    )?.districtName;
+
+    selectedSortRegional.value = JSON.parse(
+        localStorage.getItem('LocalHeadquarters_filters'),
+    )?.regionalName;
 });
 </script>
 <style lang="scss">

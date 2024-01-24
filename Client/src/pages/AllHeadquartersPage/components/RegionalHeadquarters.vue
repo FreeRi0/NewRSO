@@ -154,9 +154,9 @@ import {
     HorizontalRegionalHQs,
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onActivated } from 'vue';
 import { HTTP } from '@app/http';
-import { onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 
 const crosspageFilters = useCrosspageFilter();
@@ -179,7 +179,7 @@ const showVertical = () => {
 };
 const selectedSortDistrict = ref(
     JSON.parse(localStorage.getItem('regionalHeadquarters_filters'))
-        ?.districtName,
+        ?.districtName ?? '',
 );
 
 const districts = ref([]);
@@ -272,11 +272,19 @@ const sortedRegionalHeadquarters = computed(() => {
     return tempHeadquarters;
 });
 
-onBeforeRouteUpdate(async (to, from) => {
+onBeforeRouteLeave(async (to, from) => {
     const pageName = 'regionalHeadquarters';
-    const filtersPropertiesToRemove = ['disrictName'];
+    const filtersPropertiesToRemove = ['districtName'];
+
+    console.log('leave regional');
 
     crosspageFilters.removeFilters(pageName, filtersPropertiesToRemove);
+});
+
+onActivated(() => {
+    selectedSortDistrict.value =
+        JSON.parse(localStorage.getItem('regionalHeadquarters_filters'))
+            ?.districtName ?? null;
 });
 
 // ...............................................................................
