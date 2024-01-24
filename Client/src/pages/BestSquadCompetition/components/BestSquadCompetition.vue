@@ -1,7 +1,7 @@
 <template>
     <div class="container competition">
         <h1 class="title title--mb">
-            {{ competition.name }} не выводится название!!!!??
+            {{ competition.name }}
         </h1>
 
         <div class="competition__promo">
@@ -17,19 +17,29 @@
             <div class="competition__status-application">
                 <!--прописать условие - заявка еще не подана-->
                 <Button
+                    v-if="currentStatus.status === 'Участвовать'"
                     label="Участвовать"
                     class="competition__status-application-button"
+                    @click="onSendApplication"
                 ></Button>
 
                 <!--прописать условие - заявка на рассмотрении-->
-                <span class="competition__status-application-info"
-                    >Заявка на рассмотрении</span
+                <span
+                    v-else-if="
+                        currentStatus.status === 'Заявка на рассмотрении'
+                    "
+                    class="competition__status-application-info"
                 >
+                    Заявка на рассмотрении
+                </span>
 
                 <!--прописать условие - уже участник-->
-                <span class="competition__status-application-info"
-                    >Вы участник</span
+                <span
+                    v-else-if="currentStatus.status === 'Вы участник'"
+                    class="competition__status-application-info"
                 >
+                    Вы участник
+                </span>
             </div>
         </div>
 
@@ -127,7 +137,7 @@
         <CompetitionMembersBlock></CompetitionMembersBlock>
 
         <!--Модальные окна-->
-        <ModalCompetition></ModalCompetition>
+        <ModalCompetition v-if="isSendApplication"></ModalCompetition>
     </div>
 </template>
 
@@ -146,6 +156,8 @@ import { HTTP } from '@app/http';
 let id = 1;
 
 const competition = ref({});
+const currentStatus = ref({});
+const isSendApplication = ref(false);
 
 const getCompetition = async () => {
     HTTP.get(`competitions/${id}/`, {
@@ -156,7 +168,7 @@ const getCompetition = async () => {
     })
         .then((response) => {
             competition.value = response.data;
-            console.log(response);
+            console.log('comet', response);
             // console.log(competition.value.name);
         })
         .catch(function (error) {
@@ -172,12 +184,16 @@ const getSquadStatus = async () => {
         },
     })
         .then((response) => {
-            competition.value = response.data;
-            console.log(response);
+            currentStatus.value = response.data;
+            console.log('status', response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
+};
+
+const onSendApplication = () => {
+    isSendApplication.value = true;
 };
 
 onMounted(() => {
