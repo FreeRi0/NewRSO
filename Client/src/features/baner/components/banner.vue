@@ -13,12 +13,15 @@
 
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
-                        <li class="user-data__title"><p>Кандидат</p></li>
+                        <!-- <li class="user-data__title" ><p> Кандитат</p></li> -->
                         <li class="user-data__title" v-if="detachment?.name">
-                            <p> ССО "{{ detachment?.name }}"</p>
+                            <p>ССО "{{ detachment?.name }}"</p>
                         </li>
-                        <li class="user-data__title" v-if="educationalHeadquarter?.name">
-                            <p>Штаб {{ educationalHeadquarter?.name  }}</p>
+                        <li
+                            class="user-data__title"
+                            v-if="educationalHeadquarter?.name"
+                        >
+                            <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
                             <p v-if="user?.user_region?.reg_region">
@@ -114,6 +117,7 @@ const props = defineProps({
 const regionals = ref([]);
 const detachment = ref({});
 const educationalHeadquarter = ref({});
+const participant = ref({})
 
 const getRegionals = async () => {
     await HTTP.get(`/regionals/`, {
@@ -164,6 +168,24 @@ const getEducationalHeadquarter = async () => {
             console.log('an error occured ' + error);
         });
 };
+
+// const aboutMembers = async () => {
+//     let id = props.user.detachment_id;
+//     let membership_pk =
+//     await HTTP.get(`/detachments/${id}/members/${membership_pk}/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             participant.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
 onMounted(() => {
     getRegionals();
