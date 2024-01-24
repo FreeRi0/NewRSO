@@ -2,22 +2,16 @@
     <section class="headquarters-detachments">
         <h3>Отряды штаба</h3>
         <div class="headquarters-detachments__container">
-            <div class="squad-card" v-for="detachment in area">
+            <div class="squad-card">
                 <div class="squad-card__ava">
-                    <img
-                        :src="detachment.avatar.photo"
-                        alt="photo"
-                        v-if="detachment.avatar"
-                    />
                     <img
                         src="@app/assets/headquarters/squad-ava.png"
                         alt="photo"
-                        v-else
                     />
                 </div>
-                <a href="/AllSquads"
-                    ><h5>{{ area.name }}</h5></a
-                >
+                <a href="/AllSquads">
+                    <h5>{{ area.name }}</h5>
+                </a>
             </div>
         </div>
     </section>
@@ -26,15 +20,15 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-// import { useRoute } from 'vue-router';
-// const  = useRoute();
-// let id = route.params.id;
+import { useRoute } from 'vue-router';
+const route = useRoute();
+let id = route.params.id;
 // const areaId = ref(null);
 
 const area = ref({});
 
 const aboutArea = async () => {
-    let id = area.value.id;
+    // let id = area.value.id;
     await HTTP.get(`/areas/${id}/`, {
         headers: {
             'Content-Type': 'application/json',

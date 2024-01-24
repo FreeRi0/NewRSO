@@ -73,62 +73,64 @@ const route = useRoute();
 let id = route.params.id;
 
 const aboutHQ = async () => {
-    await HTTP.get(`/educationals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            headquarter.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/educationals/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        headquarter.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/eduicational_institutions/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        educt.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const aboutMembers = async () => {
-    await HTTP.get(`/educationals/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            member.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/educationals/${id}/members/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        member.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const fetchCommander = async () => {
     try {
-        let id = headquarter.value.commander;
+        let id = headquarter.value.commander.id;
+
         const response = await HTTP.get(`/rsousers/${id}/`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+
         commander.value = response.data;
         console.log(response);
     } catch (error) {
@@ -136,7 +138,7 @@ const fetchCommander = async () => {
     }
 };
 
-aboutMembers();
+// aboutMembers();
 
 const filteredMembers = computed(() => {
     return member.value.filter((manager) => {
@@ -164,20 +166,17 @@ onBeforeRouteUpdate(async (to, from) => {
 watch(
     () => route.params.id,
 
-    (newId) => {
+    async (newId) => {
         id = newId;
-        aboutHQ();
-        aboutMembers();
-        aboutEduc();
-        fetchCommander();
+        await aboutHQ();
+        await aboutMembers();
+        await aboutEduc();
+        await fetchCommander();
+    },
+    {
+        immediate: true,
     },
 );
-
-onMounted(() => {
-    aboutHQ();
-    aboutMembers();
-    aboutEduc();
-});
 </script>
 <style scoped lang="scss">
 .title {

@@ -5,34 +5,7 @@
             <div
                 class="manager-card"
                 :key="manager"
-                v-for="(manager, index) in commander"
-                :class="{
-                    'align-left': index % 2 === 0,
-                    'align-right': index % 2 !== 0,
-                }"
-            >
-                <div class="manager-card__avatar">
-                    <img
-                        :src="
-                            manager?.media?.photo ??
-                            '/assets/foto-leader-squad/foto-leader-squad-01.png'
-                        "
-                        alt="фото"
-                    />
-                </div>
-                <div class="manager-card__box">
-                    <h5 id="name_length">
-                        {{ manager?.first_name }}
-                        {{ manager?.last_name }}
-                        {{ manager?.patronymic_name }}
-                    </h5>
-                    <p>Командир</p>
-                </div>
-            </div>
-            <div
-                class="manager-card"
-                :key="manager"
-                v-for="(manager, index) in member"
+                v-for="(manager, index) in joinMembers"
                 :class="{
                     'align-left': index % 2 === 0,
                     'align-right': index % 2 !== 0,
@@ -61,6 +34,8 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
     member: {
         type: Array,
@@ -74,6 +49,10 @@ const props = defineProps({
     head: {
         type: String,
     },
+});
+
+const joinMembers = computed(() => {
+    return [{ user: props.commander, position: 'Командир' }, ...props.member];
 });
 </script>
 
