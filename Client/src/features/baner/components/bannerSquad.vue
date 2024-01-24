@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="comId === squad?.commander"
+                        v-if="userId == squad?.commander"
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -151,7 +151,7 @@ const data = ref({});
 const isError = ref([]);
 const applications = ref([]);
 const swal = inject('$swal');
-console.log('user', user.user.value.id)
+console.log('user', userId)
 
 const aboutEduc = async () => {
     let id = props.squad.educational_institution.id;
