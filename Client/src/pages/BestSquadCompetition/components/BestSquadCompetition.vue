@@ -8,7 +8,7 @@
             <div class="competition__container">
                 <div class="competition__image-box">
                     <img
-                        :src="'/assets/competition/promo.png'"
+                        :src="'@app/assets/competition/promo.png'"
                         alt="Логотип конкурса"
                         width="1180"
                         height="510"
