@@ -73,11 +73,11 @@
                                 <label class='form-label'>Выберете формат мероприятия</label>
                                 <div class='flex align-items-center' style='display: flex'>
                                     <div class="flex align-items-center">
-                                        <input v-model='actionForm.format' type='radio' value='OFFLINE' class='form-radio'/>
+                                        <input v-model='maininfo.format' type='radio' value='OFFLINE' class='form-radio'/>
                                         <label class="ml-2 form-label">Оффлайн</label>
                                     </div>
                                     <div class="flex align-items-center">
-                                        <input v-model='actionForm.format' type='radio' value='ONLINE' class='form-radio'/>
+                                        <input v-model='maininfo.format' type='radio' value='ONLINE' class='form-radio'/>
                                         <label class="ml-2 form-label">Онлайн</label>
                                     </div>
                                 </div>
@@ -553,7 +553,7 @@
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
-                        <div class='form-container'>
+                        <div v-for="organizator in organizators" class='form-container'>
                             <div class='form-col'>
                                 <div class="form__field">
                                     <label class="form-label" for="name-hq">ФИО организатора<sup class="valid-red">*</sup></label>
@@ -617,6 +617,11 @@
                                     />
                                     <div class="form__counter"></div>
                                 </div>
+                                <v-checkbox
+                                        v-model="organizator.is_contact_person"
+                                        :binary="true"
+                                        label="Сделать контактным лицом"
+                                    ></v-checkbox>
                                 <div class="form__field"></div>
                             </div>
                         </div>
@@ -687,21 +692,23 @@
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
-                        <div class='form-container'>
+                        <div v-for="answer in answers" class='form-container'>
                             <div class='form-col'>
                                 <div class="form__field">
                                     <label class="form-label" for="sub-questions-hq">Задайте интересующие вопросы участникам мероприятия</label>
                                     <InputText
                                         id="sub-questions-hq"
-                                        v-model="answers.question"
+                                        v-model="answer.question"
                                         class="form__input form-input-container"
                                         placeholder="Например: Какой у вас размер футболки"
                                         name="name_hq"
                                         :maxlength="100"
                                     />
-                                    <div class='form-add' @click='AddQuestion'>+ Добавить вопрос</div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-container">
+                            <div class='form-add' @click='AddQuestion'>+ Добавить вопрос</div>
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -717,7 +724,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
-import { getAction, createAction, createOrganizator } from '@services/ActionService';
+import { getAction, createAction, createOrganizator, getOrganizator, putAction, putOrganizator } from '@services/ActionService';
 import { actionForm } from '@entities/Actions';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
@@ -725,7 +732,7 @@ import { uploadPhoto } from '@shared/components/imagescomp';
 import FileUpload from 'primevue/fileupload';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
-import textarea from '@shared/components/inputs/textarea.vue'
+import textarea from '@shared/components/inputs/textarea.vue';
 const router = useRoute();
 
 const id = router.params.id;
@@ -735,7 +742,10 @@ getAction(id)
         maininfo.value = resp.data
         getOrganizator(id)
             .then((resp)=>{
-                organizator.value = resp.data
+                organizators.value = resp.data;
+            })
+            .catch((e)=>{
+                console.log(e)
             })
     })
     .catch((e)=>{
@@ -801,7 +811,8 @@ const area_massive = ref([
 
 //Переменные организаторов
 
-const organizator = ref([{
+const organizators = ref([{
+    id: Number,
     organizer: '',
     organizer_phone_number: '',
     organizer_email: '',
@@ -834,7 +845,8 @@ const pages = ref([
 ]);
 
 function AddOrganizator(){
-    this.organizator.push({
+    organizators.value.push({
+        id: Number,
         organizer: '',
         organizer_phone_number: '',
         organizer_email: '',
@@ -844,12 +856,28 @@ function AddOrganizator(){
     });
 }
 function SubmitEvent(){
-
+    console.log(maininfo.value)
+    putAction(id, maininfo)
+        .then((resp)=>{
+            putOrganizator(id, organizator)
+            .then((resp)=>{
+                router.push("/")
+            })
+            .catch((e) =>{
+                console.log(e)
+            })
+        })
+        .catch((e)=>{
+            console.log(e)
+        })
 
 }
 
 function AddQuestion(){
-    
+    answers.value.push({
+        question: '',
+        answer: ''
+    })
 }
 
 </script>
