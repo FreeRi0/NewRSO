@@ -60,11 +60,12 @@
                                     />
                                 </a>
                             </div>
+                            <!-- <pre>{{ userId }} {{ headquarter.commander.id }}</pre> -->
                         </div>
                     </div>
 
                     <router-link
-                        v-if="educComId === headquarter.commander"
+                        v-if="userId === headquarter?.commander?.id"
                         class="hq-data__link"
                         :to="{
                             name: 'EditHQ',
@@ -141,7 +142,7 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="localComId === localHeadquarter.commander"
+                        v-if="userId === localHeadquarter?.commander?.id"
                         class="hq-data__link"
                         :to="{
                             name: 'FormLocal',
@@ -218,7 +219,7 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="districtComId === districtHeadquarter.commander"
+                        v-if="userId === districtHeadquarter?.commander?.id"
                         class="hq-data__link"
                         :to="{
                             name: 'FormDH',
@@ -295,7 +296,7 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="regionComId === regionalHeadquarter.commander"
+                        v-if="userId === regionalHeadquarter?.commander?.id"
                         class="hq-data__link"
                         :to="{
                             name: 'EditingOfRS',
@@ -369,10 +370,11 @@
                                     />
                                 </a>
                             </div>
+                            <!-- <pre>{{ centralHeadquarter.commander.id }}</pre> -->
                         </div>
                     </div>
                     <router-link
-                        v-if="centralComId === centralHeadquarter.commander"
+                        v-if="userId === centralHeadquarter?.commander?.id"
                         class="hq-data__link"
                         :to="{
                             name: 'FormCentral',
@@ -385,15 +387,22 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { hqAvatar } from '@shared/components/imagescomp';
 import { hqBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { useRoleStore } from '@layouts/store/role';
+import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 const roleStore = useRoleStore();
 roleStore.getRoles();
+const userStore = useUserStore();
+userStore.getUser();
+const user = storeToRefs(userStore);
+let userId = computed(() => {
+    return user.user.value.id;
+});
 
 const roles = storeToRefs(roleStore);
 let educComId = roles.roles.value.educationalheadquarter_commander;

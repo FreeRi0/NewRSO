@@ -26,15 +26,15 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
-const route = useRoute();
-let id = route.params.id;
+// import { useRoute } from 'vue-router';
+// const  = useRoute();
+// let id = route.params.id;
 // const areaId = ref(null);
 
 const area = ref({});
 
 const aboutArea = async () => {
-    // const idToUse = areaId.value ? areaId.value : id;
+    let id = area.value.id;
     await HTTP.get(`/areas/${id}/`, {
         headers: {
             'Content-Type': 'application/json',

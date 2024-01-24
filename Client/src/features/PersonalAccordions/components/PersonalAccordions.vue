@@ -2,14 +2,25 @@
     <div class="rso-question">
         <div class="rso-question__title">Являетесь членом РСО?</div>
         <div class="checkbox" v-for="answer in answers" :key="answer.id">
-            <RadioButton
+            <!-- <RadioButton
                 :value="answer.name"
                 :label="answer.name"
                 :id="answer.id"
                 :checked="answer.checked"
                 name="answer"
                 v-model:checkedValue="selectedAnswer"
+            /> -->
+            <input
+                class="radiobutton"
+                type="radio"
+                :id="answer.id"
+                :label="answer.name"
+                :value="answer.name"
+                :name="answer.name"
+                :checked="answer.checked"
+                v-model="selectedAnswer"
             />
+            <label :for="id">{{ answer.name }}</label>
         </div>
     </div>
 
@@ -21,7 +32,7 @@
         <p class="accordion-title">
             Для вступления в РСО внесите ниже персональные данные
         </p>
-<!--
+        <!--
         <p>{{ selectedAnswer }}</p>
         <p>{{ documents.russian_passport }}</p>
         <p>{{ selectedAnswer == 'Нет' && !documents.russian_passport }}</p> -->
@@ -170,14 +181,25 @@
                                 v-for="sex in gender"
                                 :key="sex.id"
                             >
-                                <RadioButton
+                                <!-- <RadioButton
                                     :value="sex.value"
                                     :label="sex.name"
                                     :id="sex.id"
                                     :checked="user.gender === sex.value"
                                     name="sex"
                                     v-model:checkedValue="user.gender"
+                                /> -->
+                                <input
+                                    class="radiobutton"
+                                    type="radio"
+                                    :id="sex.id"
+                                    :label="sex.name"
+                                    :value="sex.value"
+                                    :name="sex.name"
+                                    :checked="user.gender === sex.value"
+                                    v-model="user.gender"
                                 />
+                                <label :for="id">{{ sex.name }}</label>
                             </div>
                         </div>
 
@@ -313,7 +335,7 @@
                                         v-for="passP in passportParent"
                                         :key="passP.id"
                                     >
-                                        <RadioButton
+                                        <!-- <RadioButton
                                             :value="passP.name"
                                             :label="passP.name"
                                             :id="passP.id"
@@ -325,7 +347,24 @@
                                             v-model:checkedValue="
                                                 selectedPassParent
                                             "
+                                        /> -->
+
+                                        <input
+                                            class="radiobutton"
+                                            type="radio"
+                                            :id="passP.id"
+                                            :label="passP.name"
+                                            :value="passP.name"
+                                            :name="passP.name"
+                                            :checked="
+                                                selectedPassParent ===
+                                                passP.name
+                                            "
+                                            v-model="selectedPassParent"
                                         />
+                                        <label :for="id">{{
+                                            passP.name
+                                        }}</label>
                                         <!-- {{ selectedPassParent }} -->
                                     </div>
                                 </div>
@@ -731,7 +770,7 @@
                                 v-for="addr in address"
                                 :key="addr.id"
                             >
-                                <RadioButton
+                                <!-- <RadioButton
                                     :value="addr.value"
                                     :label="addr.id"
                                     :id="addr.id"
@@ -743,7 +782,21 @@
                                     v-model:checkedValue="
                                         regionData.reg_fact_same_address
                                     "
+                                /> -->
+                                <input
+                                    class="radiobutton"
+                                    type="radio"
+                                    :id="addr.id"
+                                    :label="addr.id"
+                                    :value="addr.value"
+                                    :name="addr.name"
+                                    :checked="
+                                        regionData.reg_fact_same_address ===
+                                        addr.value
+                                    "
+                                    v-model="regionData.reg_fact_same_address"
                                 />
+                                <label :for="id">{{ addr.name }}</label>
                             </div>
                         </div>
                         <!-- <p>value: {{ regionData.reg_fact_same_address}}</p> -->
@@ -893,7 +946,7 @@
                                 v-for="pas in passport"
                                 :key="pas.id"
                             >
-                                <RadioButton
+                                <!-- <RadioButton
                                     :value="pas.value"
                                     :label="pas.id"
                                     :id="pas.id"
@@ -904,11 +957,24 @@
                                     v-model:checkedValue="
                                         documents.russian_passport
                                     "
+                                /> -->
+                                <input
+                                    class="radiobutton"
+                                    type="radio"
+                                    :id="pas.id"
+                                    :label="pas.id"
+                                    :value="pas.value"
+                                    :name="pas.name"
+                                    :checked="
+                                        documents.russian_passport === pas.value
+                                    "
+                                    v-model="documents.russian_passport"
                                 />
+                                <label :for="id">{{ pas.name }}</label>
                             </div>
                         </div>
+                        <!-- <pre>{{ documents.russian_passport }}</pre> -->
                         <div
-                            id="yes-passport"
                             class="form-data izm"
                             v-if="documents.russian_passport"
                         >
@@ -1045,9 +1111,8 @@
                             </div>
                         </div>
                         <div
-                            id="no-passport"
                             class="form-data izm"
-                            v-else="!documents.russian_passport"
+                            v-else-if="!documents.russian_passport"
                         >
                             <div class="form-field one">
                                 <label for="pass-num"
@@ -2860,7 +2925,6 @@ const openPanelFive = () => {
     panel.value = 'panelFive';
 };
 
-
 const user = ref({
     first_name: '',
     last_name: '',
@@ -2936,7 +3000,6 @@ const documents = ref({
     mil_reg_doc_ser_num: '',
     russian_passport: null,
 });
-
 
 const data = ref({});
 
@@ -3160,6 +3223,8 @@ const UserApplication = computed(() => {
     return applications.value.find((item) => item.user.id === user.value.id);
 });
 
+console.log('app', UserApplication.value)
+
 const downloadBlankPersonal = async () => {
     await HTTP.get(
         '/rsousers/me/statement/download_consent_to_the_processing_of_personal_data/',
@@ -3264,7 +3329,7 @@ const updateData = async () => {
         let fd = new FormData();
         // fd.append('passport', passportUpload.value);
         // fd.append('passport_representative', passport_representative.value);
-           fd.append('rso_info_from', rso_info_from.value)
+        fd.append('rso_info_from', rso_info_from.value);
         if (isStatementChange.value)
             statement.value
                 ? fd.append('statement', statement.value)
@@ -3364,7 +3429,7 @@ const updateData = async () => {
         });
         const axiosrequest6 = ref(null);
 
-        if (!UserApplication && !user.value.is_verified) {
+        if (!UserApplication.value && !user.value.is_verified) {
             const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
                 data.value,
@@ -3376,6 +3441,8 @@ const updateData = async () => {
                 },
             );
         }
+
+        console.log('ddd', !UserApplication.value)
 
         user.value = axiosrequest1.data;
         user.value.region = regions.value.find(
@@ -3511,11 +3578,11 @@ const militaryDocs = ref([
 ]);
 
 const address = ref([
-    { name: 'да', value: true, id: 'Да' },
-    { name: 'нет', value: false, id: 'Нет' },
+    { name: 'Да', value: true, id: 'Да' },
+    { name: 'Нет', value: false, id: 'Нет' },
 ]);
 
-const passport = reactive([
+const passport = ref([
     { name: 'Да', value: true, id: 'Да' },
     { name: 'Нет', value: false, id: 'Нет' },
 ]);
@@ -3664,6 +3731,25 @@ onMounted(() => {
             padding: 40px 40px 0px;
         }
     }
+}
+
+.radiobutton {
+    display: inline-flex;
+    align-items: center;
+    user-select: none;
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 15px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    border: 1px solid #adb5bd;
+    border-radius: 6px;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 50% 50%;
+    border-radius: 50%;
 }
 
 .izm {

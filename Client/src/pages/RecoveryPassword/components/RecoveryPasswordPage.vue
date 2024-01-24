@@ -7,6 +7,7 @@
                         src="@/app/assets/icon/cross.svg"
                         alt="cross"
                         class="card_cross"
+                        @click="onBack"
                     />
                     <v-card-title class="text-h4 text-center"
                         >Восстановление пароля</v-card-title
@@ -46,10 +47,12 @@ import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { helpers, required, email } from '@vuelidate/validators';
 import { IMaskDirective } from 'vue-imask';
+import { HTTP } from '@app/http';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 
+const router = useRouter();
 // const rules = computed(() => ({
 //     emailField: {
 //         required: helpers.withMessage(
@@ -69,16 +72,11 @@ const data = ref({
 });
 
 const submitForm = () => {
-    axios
-        .post(
-            'http://127.0.0.1:8000/api/v1/users/reset_password/',
-            data.value,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            },
-        )
+    HTTP.post('/reset_password/', data.value, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
         .then((response) => {
             data.value = response.data;
             console.log('Пароль сброшен!');
@@ -86,6 +84,10 @@ const submitForm = () => {
         .catch((error) => {
             console.error('Ошибка сброса пароля', error);
         });
+};
+
+const onBack = () => {
+    router.back();
 };
 </script>
 <style lang="scss" scoped>
@@ -101,6 +103,7 @@ const submitForm = () => {
     position: absolute;
     top: 16px;
     right: 16px;
+    cursor: pointer;
 }
 .v-card-title {
     padding: 0;

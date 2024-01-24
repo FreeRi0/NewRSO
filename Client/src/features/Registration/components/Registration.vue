@@ -94,6 +94,7 @@
                 ></v-checkbox> -->
                 <div class="regCheck">
                     <input
+                        required
                         v-model="form.personal_data_agreement"
                         type="checkbox"
                     />
@@ -104,6 +105,12 @@
                         определенных в Согласии на обработку персональных
                         данных.
                     </div>
+                    <!-- <v-checkbox
+                        v-model="checkbox"
+                        :rules="[(v) => !!v || 'You must agree to continue!']"
+                        label="Do you agree?"
+                        required
+                    ></v-checkbox> -->
                 </div>
 
                 <Button

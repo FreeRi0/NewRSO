@@ -16,10 +16,10 @@
                 </v-btn>
                 <v-btn
                     class="squads-tabs__item"
-                    :class="{ active: picked === area.id }"
+                    :class="{ active: picked === area.name }"
                     v-for="area in categories"
                     :key="area"
-                    @click="picked = area.id"
+                    @click="picked = area.name"
                     >{{ area.name }}
                 </v-btn>
             </div>

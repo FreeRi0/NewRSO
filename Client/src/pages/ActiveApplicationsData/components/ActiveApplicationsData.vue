@@ -102,10 +102,11 @@ import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 
+
 const roleStore = useRoleStore();
 roleStore.getRoles();
-
 const roles = storeToRefs(roleStore);
+
 
 const picked = ref('');
 const tabs = ref([
@@ -147,7 +148,7 @@ const step = ref(12);
 
 const viewParticipants = async () => {
     let id =
-        roles?.roles?.value?.detachment_commander ||
+        roles?.roles?.value?.detachment_commander ??
         roles?.roles?.value?.regionalheadquarter_commander;
     console.log('roles', roles.roles.value);
     console.log('id', id);
