@@ -11,13 +11,16 @@
     <h2 v-else>Заявок нет...</h2>
 </template>
 <script setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { referenceItem } from '@entities/ReferencesPeoples/components';
 const emit = defineEmits(['change']);
 const props = defineProps({
     participants: {
         type: Array,
         required: true,
+    },
+    selectedPeoples: {
+        type: Array,
     },
 });
 

@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="mt-14">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="profile-title">Настройки профиля</h2>
             <BannerComp
                 :user="user"
@@ -10,16 +9,16 @@
                 :edited="true"
             ></BannerComp>
             <!--Табы-->
-            <div class="d-flex mt-9 mb-9">
-                <button
-                    class="contributorBtn"
-                    :class="{ active: picked === tab.name }"
-                    v-for="tab in tabs"
-                    :key="tab.id"
-                    @click="picked = tab.name"
-                >
-                    {{ tab.name }}
-                </button>
+            <div class="d-flex mt-9 mb-9 buttonWrap">
+                    <button
+                        class="contributorBtn"
+                        :class="{ active: picked === tab.name }"
+                        v-for="tab in tabs"
+                        :key="tab.id"
+                        @click="picked = tab.name"
+                    >
+                        {{ tab.name }}
+                    </button>
             </div>
             <AccordionsPersonal
                 v-if="picked == 'Персональные данные'"
@@ -43,7 +42,6 @@ import { privateProfile } from '@features/PrivateProfile/components';
 import { changePassword } from '@features/ChangePassword/components';
 import { BannerComp } from '@features/baner/components';
 import { HTTP } from '@app/http';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { userData } from '@features/userData/components';
 
@@ -112,7 +110,7 @@ const pages = ref([
     { pageTitle: 'Настройка профиля', href: '#' },
 ]);
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .profile-title {
     font-size: 40px;
     margin-bottom: 40px;
@@ -125,7 +123,16 @@ const pages = ref([
     border: 1px solid #1c5c94;
     margin: 0px;
     padding: 10px 24px;
+    width: 100%;
     margin: 7px;
+    @media screen and (max-width: 768px) {
+      padding: 8px 20px;
+    }
+}
+.buttonWrap {
+    @media screen and (max-width: 768px) {
+   flex-wrap: wrap;
+    }
 }
 
 .active {

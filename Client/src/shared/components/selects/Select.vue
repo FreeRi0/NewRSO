@@ -32,6 +32,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { HTTP } from '@app/http';
+import { onBeforeRouteUpdate } from 'vue-router';
 
 defineOptions({
     inheritAttrs: false,
@@ -46,10 +47,6 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    // object: {
-    //     type: Number,
-    //     default: null,
-    // },
     names: {
         type: Array,
         default: () => [],
@@ -66,6 +63,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    itemRawName: {
+        type: String,
+        default: '',
+    },
 });
 
 const emit = defineEmits(['update:value']);
@@ -78,7 +79,7 @@ const changeOption = (event) => {
 const names = ref(props.names);
 
 const onChangeItem = async () => {
-    await HTTP.get(props.address)
+    HTTP.get(props.address)
 
         .then((res) => {
             // console.log(props.address);

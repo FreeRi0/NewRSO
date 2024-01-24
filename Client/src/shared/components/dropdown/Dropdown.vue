@@ -54,14 +54,30 @@
 
         <transition name="fade" appear>
             <ul class="dropdown__list" v-if="isOpen">
-                <li v-for="(item, i) in items" :key="i" class="dropdown__item">
+                <li
+                    v-for="(item, i) in items"
+                    :key="i"
+                    class="dropdown__item dropdown__item_not"
+                >
                     <a
                         v-if="item.link"
                         class="dropdown__link"
                         :href="item.link"
                         >{{ item.title }}</a
                     >
-                     <router-link  v-if="item.name"  class="dropdown__link" :to="{ name: item.name, params: item.params }">{{ item.title }}</router-link>
+                    <router-link
+                        v-if="item.hasOwnProperty('params') && item.params.id"
+                        class="dropdown__link"
+                        :to="{ name: item.name, params: item.params }"
+                        >{{ item.title }}</router-link
+                    >
+
+                    <router-link
+                        v-else-if="!item.hasOwnProperty('params')"
+                        class="dropdown__link"
+                        :to="{ name: item.name }"
+                        >{{ item.title }}</router-link
+                    >
                     <button
                         class="dropdown__button-item"
                         v-if="item.button"
@@ -104,8 +120,8 @@ const props = defineProps({
         default: false,
     },
     params: {
-      type: String,
-    //   default: () => ({}),
+        type: String,
+        //   default: () => ({}),
     },
     name: {
         type: String,
@@ -114,17 +130,16 @@ const props = defineProps({
     link: {
         type: String,
         default: '',
-    }
+    },
 });
 
-const route = useRoute();
-let id = route.params.id
+// const route = useRoute();
+// let id = route.params.id
 
 const LogOut = () => {
     localStorage.removeItem('Token');
     router.push('/');
 };
-
 </script>
 
 <style lang="scss">
@@ -168,5 +183,9 @@ const LogOut = () => {
 .fade-enter,
 .fade-leave-to {
     opacity: 0;
+}
+
+.dropdown__item_not::before {
+    background-color: inherit;
 }
 </style>

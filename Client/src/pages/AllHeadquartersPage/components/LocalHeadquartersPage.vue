@@ -32,49 +32,49 @@
             </div>
             <div class="headquarters-sort">
                 <div class="sort-layout">
-                <div>
-                        <Button
-                        v-if="vertical"
-                        type="button"
-                        class="dashboard"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    >
-                    </Button>
-                    <Button
-                        v-else
-                        type="button"
-                        class="dashboardD"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    >
-                    </Button>
-                </div>
                     <div>
                         <Button
-                        v-if="!vertical"
-                        type="button"
-                        class="menuuA"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    ></Button>
-                    <Button
-                        v-else
-                        type="button"
-                        class="menuu"
-                        icon="icon"
-                        color="white"
-                        @click="showVertical"
-                    ></Button>
+                            v-if="vertical"
+                            type="button"
+                            class="dashboard"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        >
+                        </Button>
+                        <Button
+                            v-else
+                            type="button"
+                            class="dashboardD"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        >
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
+                            v-if="!vertical"
+                            type="button"
+                            class="menuuA"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        ></Button>
+                        <Button
+                            v-else
+                            type="button"
+                            class="menuu"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        ></Button>
                     </div>
                 </div>
 
                 <div class="sort-filters">
                     <div class="sort-select">
-                        <Select
+                        <!-- <Select
                             variant="outlined"
                             clearable
                             name="select_district"
@@ -83,10 +83,25 @@
                             class="filter-district"
                             address="/districts/"
                             placeholder="Окружные штабы"
-                        ></Select>
+                        ></Select> -->
+                        <v-select
+                            class="form__select filter-district"
+                            :items="districts"
+                            clearable
+                            variant="outlined"
+                            name="select_district"
+                            id="select-district"
+                            v-model="selectedSortdistrict"
+                            item-title="name"
+                            placeholder="Окружной штаб"
+                        >
+                            <template #selection="{ item }">
+                                <pre>{{ item.title }}</pre>
+                            </template>
+                        </v-select>
                     </div>
                     <div class="sort-select">
-                        <Select
+                        <!-- <Select
                             variant="outlined"
                             clearable
                             name="select_region"
@@ -95,7 +110,22 @@
                             class="filter-region"
                             address="/regionals/"
                             placeholder="Региональные штабы"
-                        ></Select>
+                        ></Select> -->
+                        <v-select
+                            class="form__select filter-district"
+                            :items="regionals"
+                            clearable
+                            variant="outlined"
+                            name="select_region"
+                            id="select-region"
+                            v-model="selectedSortRegional"
+                            item-title="name"
+                            placeholder="Региональные штабы"
+                        >
+                            <template #selection="{ item }">
+                                <pre>{{ item.title }}</pre>
+                            </template>
+                        </v-select>
                     </div>
                     <div class="sort-select">
                         <sortByEducation
@@ -118,12 +148,12 @@
             </div>
             <div v-show="vertical">
                 <LocalHQList
-                    :localHeadquarters="sortedHeadquarters"
+                    :localHeadquarters="sortedLocalHeadquarters"
                 ></LocalHQList>
             </div>
             <div class="horizontal" v-show="!vertical">
                 <HorizontalLocalHQs
-                    :localHeadquarters="sortedHeadquarters"
+                    :localHeadquarters="sortedLocalHeadquarters"
                 ></HorizontalLocalHQs>
             </div>
             <Button
@@ -149,9 +179,12 @@ import {
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
-// import headquarters from '@entities/HeadquartersData/headquarters';
+import { onBeforeRouteLeave } from 'vue-router';
+import { useCrosspageFilter } from '@shared';
+import { onActivated } from 'vue';
+
+const crosspageFilters = useCrosspageFilter();
 
 const localHeadquarters = ref([]);
 
@@ -169,9 +202,15 @@ const searchLocalHeadquarters = ref('');
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
+const selectedSortdistrict = ref(
+    JSON.parse(localStorage.getItem('LocalHeadquarters_filters'))?.districtName,
+);
+const selectedSortRegional = ref(
+    JSON.parse(localStorage.getItem('LocalHeadquarters_filters'))?.regionalName,
+);
 
-const district = ref([]);
-const regional = ref([]);
+const districts = ref([]);
+const regionals = ref([]);
 
 const getLocalHeadquarters = async () => {
     await HTTP.get('/locals/', {
@@ -189,8 +228,41 @@ const getLocalHeadquarters = async () => {
         });
 };
 
+const filtersDistricts = computed(() =>
+    selectedSortDistrict.value
+        ? districts.value.find(
+              (district) => district.name === selectedSortDistrict.value,
+          )?.local_headquarters ?? []
+        : localHeadquarters.value,
+);
+const filtersRegionals = computed(() =>
+    selectedSortRegional.value
+        ? regionals.value.find(
+              (regional) => regional.name === selectedSortRegional.value,
+          )?.local_headquarters ?? []
+        : localHeadquarters.value,
+);
+
+const getDistrictsHeadquartersForFilters = async () => {
+    try {
+        const { data } = await HTTP.get('/districts/');
+        districts.value = data;
+    } catch (e) {
+        console.log('error request districts headquarters');
+    }
+};
+const getRegionalsHeadquartersForFilters = async () => {
+    try {
+        const { data } = await HTTP.get('/regionals/');
+        regionals.value = data;
+    } catch (e) {
+        console.log('error request districts headquarters');
+    }
+};
 onMounted(() => {
+    getDistrictsHeadquartersForFilters();
     getLocalHeadquarters();
+    getRegionalsHeadquartersForFilters();
 });
 
 const selectedSort = ref(0);
@@ -206,12 +278,22 @@ const sortOptionss = ref([
     { value: 'members_count', name: 'Количеству участников' },
 ]);
 
-const sortedHeadquarters = computed(() => {
-    let tempHeadquartes = localHeadquarters.value;
+const sortedLocalHeadquarters = computed(() => {
+    let tempHeadquartes = [];
+    if (selectedSortDistrict.value && selectedSortRegional.value) {
+        tempHeadquartes = Array.from(
+            new Set([...filtersDistricts.value, ...filtersRegionals.value]),
+        );
+    } else if (selectedSortDistrict.value) {
+        tempHeadquartes = [...filtersDistricts.value];
+    } else if (selectedSortRegional.value) {
+        tempHeadquartes = [...filtersRegionals.value];
+    } else {
+        tempHeadquartes = [...localHeadquarters.value];
+    }
 
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     tempHeadquartes = tempHeadquartes.filter((item) => {
-        // console.log(educational_institution.id);
         return (
             selectedSortRegion.value == null ||
             item.regional_headquarter == selectedSortRegion.value
@@ -257,6 +339,23 @@ const sortedHeadquarters = computed(() => {
     }
 
     return tempHeadquartes;
+});
+
+onBeforeRouteLeave(async (to, from) => {
+    const pageName = 'LocalHeadquarters';
+    const filtersPropertiesToRemove = ['districtName', 'regionalName'];
+
+    crosspageFilters.removeFilters(pageName, filtersPropertiesToRemove);
+});
+
+onActivated(() => {
+    selectedSortdistrict.value = JSON.parse(
+        localStorage.getItem('LocalHeadquarters_filters'),
+    )?.districtName;
+
+    selectedSortRegional.value = JSON.parse(
+        localStorage.getItem('LocalHeadquarters_filters'),
+    )?.regionalName;
 });
 </script>
 <style lang="scss">
@@ -375,7 +474,6 @@ const sortedHeadquarters = computed(() => {
         text-overflow: ellipsis;
     }
 }
-
 
 // .v-label {
 //     margin-top: 20px;

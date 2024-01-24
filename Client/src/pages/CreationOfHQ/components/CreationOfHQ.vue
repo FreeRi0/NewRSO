@@ -1,14 +1,13 @@
 <template>
-    <div class="container container--top">
-
-        <h1 class="title title--lso">Создание штаба СО ОО</h1>
+    <div class="container">
+        <h1 class="title title--mb">Создание штаба СО ОО</h1>
 
         <FormHQ
             :headquarter="headquarter"
             :is-error="isError"
             @submit.prevent="changeHeadquarter"
             @select-file="onSelectFile"
-            @reset-file="onResetFile"
+            @reset-emblem="onResetEmblem"
             @select-banner="onSelectBanner"
             @reset-banner="onResetBanner"
         ></FormHQ>
@@ -40,19 +39,26 @@ const headquarter = ref({
 
 const submited = ref(false);
 
+const isEmblemChange = ref(false);
+const isBannerChange = ref(false);
+
 const fileEmblem = ref(null);
 const fileBanner = ref(null);
 
 const onSelectFile = (file) => {
+    isEmblemChange.value = true;
     fileEmblem.value = file;
 };
-const onResetFile = (file) => {
+const onResetEmblem = (file) => {
+    isEmblemChange.value = true;
     fileEmblem.value = file;
 };
 const onSelectBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 const onResetBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 
@@ -78,8 +84,15 @@ const changeHeadquarter = async () => {
 
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
-    formData.append('emblem', fileEmblem.value);
-    formData.append('banner', fileBanner.value);
+
+    if (isEmblemChange.value)
+        fileEmblem.value
+            ? formData.append('emblem', fileEmblem.value)
+            : formData.append('emblem', '');
+    if (isBannerChange.value)
+        fileBanner.value
+            ? formData.append('banner', fileBanner.value)
+            : formData.append('banner', '');
 
     HTTP.post('educationals/', formData, {
         headers: {
@@ -91,7 +104,7 @@ const changeHeadquarter = async () => {
             submited.value = true;
             console.log(response.data);
             swal.fire({
-                position: 'top-center',
+                position: 'center',
                 icon: 'success',
                 title: 'успешно',
                 showConfirmButton: false,

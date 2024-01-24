@@ -3,10 +3,11 @@
         <h1 class="title title--lso">Создание регионального штаба</h1>
         <FormRS
             :headquarter="headquarter"
+            :is-error="isError"
             @submit.prevent="changeHeadquarter"
-            @select-file="onSelectFile"
-            @reset-file="onResetFile"
+            @select-emblem="onSelectEmblem"
             @select-banner="onSelectBanner"
+            @reset-emblem="onResetEmblem"
             @reset-banner="onResetBanner"
         ></FormRS>
     </div>
@@ -16,7 +17,9 @@
 import { ref, inject } from 'vue';
 import { FormRS } from '@features/FormRS';
 import { HTTP } from '@app/http';
-// import { districtItem } from '@entities/HeadquartersData/components/index';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const headquarter = ref({
     name: '',
@@ -42,28 +45,41 @@ const headquarter = ref({
 
 const submited = ref(false);
 
+const isEmblemChange = ref(false);
+const isBannerChange = ref(false);
+
 const fileEmblem = ref(null);
 const fileBanner = ref(null);
 
-const onSelectFile = (file) => {
-    fileEmblem.value = file;
-};
-const onResetFile = (file) => {
+const onSelectEmblem = (file) => {
+    isEmblemChange.value = true;
     fileEmblem.value = file;
 };
 const onSelectBanner = (file) => {
-    fileBanner.value = file;
-};
-const onResetBanner = (file) => {
+    isBannerChange.value = true;
     fileBanner.value = file;
 };
 
+const onDeleteEmblem = (file) => {
+    isEmblemChange.value = true;
+    fileEmblem.value = file;
+};
+const onDeleteBanner = (file) => {
+    isBannerChange.value = true;
+    fileBanner.value = file;
+};
+
+const isError = ref({});
 const swal = inject('$swal');
 
 const changeHeadquarter = async () => {
     const formData = new FormData();
+
     formData.append('name', headquarter.value.name);
-    formData.append('district_headquarter', headquarter.value.district_headquarter);
+    formData.append(
+        'district_headquarter',
+        headquarter.value.district_headquarter,
+    );
     formData.append('region', headquarter.value.region);
     formData.append('city', headquarter.value.city);
     formData.append('commander', headquarter.value.commander);
@@ -72,15 +88,28 @@ const changeHeadquarter = async () => {
     formData.append('founding_date', headquarter.value.founding_date);
     formData.append('conference_date', headquarter.value.conference_date);
     formData.append('registry_number', headquarter.value.registry_number);
-    formData.append('registry_date', headquarter.value.registry_date);
-    formData.append('name_for_certificates', headquarter.value.name_for_certificates);
+    formData.append(
+        'name_for_certificates',
+        headquarter.value.name_for_certificates,
+    );
     formData.append('case_name', headquarter.value.case_name);
     formData.append('legal_address', headquarter.value.legal_address);
     formData.append('requisites', headquarter.value.requisites);
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
-    formData.append('emblem', fileEmblem.value);
-    formData.append('banner', fileBanner.value);
+
+    headquarter.value.registry_date
+            ? formData.append('registry_date', headquarter.value.registry_date)
+            : formData.append('registry_date', '');
+
+    if (isEmblemChange.value)
+        fileEmblem.value
+            ? formData.append('emblem', fileEmblem.value)
+            : formData.append('emblem', '');
+    if (isBannerChange.value)
+        fileBanner.value
+            ? formData.append('banner', fileBanner.value)
+            : formData.append('banner', '');
 
     HTTP.post('regionals/', formData, {
         headers: {
@@ -92,19 +121,25 @@ const changeHeadquarter = async () => {
             submited.value = true;
             console.log(response.data);
             swal.fire({
-                position: 'top-center',
+                position: 'center',
                 icon: 'success',
                 title: 'успешно',
                 showConfirmButton: false,
                 timer: 1500,
             });
+            router.push({
+                name: 'RegionalHQ',
+                params: { id: response.data.id },
+            });
         })
-        .catch((error) => {
-            console.error('There was an error!', error);
+        .catch(({ response }) => {
+            isError.value = response.data;
+            console.error('There was an error!', response.data);
+            console.log('Ошибки отправки формы', isError.value);
             swal.fire({
                 position: 'top-center',
                 icon: 'error',
-                title: 'ошибка',
+                title: `ошибка - заполните обязательные поля`,
                 showConfirmButton: false,
                 timer: 1500,
             });

@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="comId === squad.commander"
+                        v-if="comId === squad?.commander"
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -67,19 +67,16 @@
                     >
 
                     <Button
+                        v-else-if="!IsMember && !UserApplication"
                         @click="AddApplication()"
                         label="Подать заяку"
                         class="AddApplication"
                     ></Button>
 
-                    <div
-                        v-if="user.user.id === member.id"
-                        class="user-data__link"
-                    >
-                        Вы участник
-                    </div>
-                    <div v-else>
-                        <div class="user-data__link">
+
+
+                    <div v-else-if="UserApplication" class="d-flex">
+                        <div class="user-data__link mr-2">
                             Заявка на рассмотрении
                         </div>
                         <Button
@@ -87,6 +84,16 @@
                             label="Удалить заявку"
                             class="AddApplication"
                         ></Button>
+                    </div>
+                     <!-- <pre>dddddddddddddddd{{ UserApplication }}</pre>
+                     <pre>id{{ userId }}</pre> -->
+                    <!--find искать id в computed-->
+
+                    <div
+                        v-else-if="IsMember"
+                        class="user-data__link"
+                    >
+                        Вы участник
                     </div>
                 </div>
                 <p class="error" v-if="isError.non_field_errors">
@@ -97,21 +104,26 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch, inject } from 'vue';
+import { ref, onMounted, watch, inject, computed } from 'vue';
 import { squadAvatar } from '@shared/components/imagescomp';
 import { squadBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { Button } from '@shared/components/buttons';
 const roleStore = useRoleStore();
 roleStore.getRoles();
 const userStore = useUserStore();
 userStore.getUser();
+const route = useRoute();
 const user = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
 let comId = roles.roles.value.detachment_commander;
+let userId = computed(() => {
+    return user.user.value.id;
+})
 console.log('comId', comId);
 const props = defineProps({
     banner: {
@@ -128,17 +140,21 @@ const props = defineProps({
         type: Object,
     },
     member: {
-        type: Object,
+        type: Array,
     },
 });
+
+console.log('memberAA', props.member)
 
 const edict = ref({});
 const data = ref({});
 const isError = ref([]);
+const applications = ref([]);
 const swal = inject('$swal');
+console.log('user', user.user.value.id)
 
 const aboutEduc = async () => {
-    let id = props.squad.educational_institution;
+    let id = props.squad.educational_institution.id;
     console.log('squad', props.squad);
     console.log('id', id);
     await HTTP.get(`/eduicational_institutions/${id}/`, {
@@ -156,9 +172,40 @@ const aboutEduc = async () => {
         });
 };
 
+const viewDetachments = async () => {
+    let id = route.params.id;
+    console.log('idRoute', id);
+    await HTTP.get(`/detachments/${id}/applications/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            applications.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
 onMounted(() => {
     aboutEduc();
+    viewDetachments();
 });
+
+//member сравнивать так же
+const UserApplication = computed(() => {
+    return applications.value.find((item) => item.user.id === userId.value  );
+});
+
+const IsMember = computed(() => {
+    return props.member.find((item) => item.user.id === userId.value);
+});
+
+console.log('member', IsMember)
+
 
 watch(
     () => props.squad,
@@ -170,6 +217,7 @@ watch(
         aboutEduc();
     },
 );
+
 
 const AddApplication = async () => {
     let id = props.squad.id;

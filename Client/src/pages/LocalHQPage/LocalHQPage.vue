@@ -1,57 +1,68 @@
 <template>
     <div class="container">
-        <div class="local-page">
-            <h1 class="title title--hq">Местный штаб</h1>
-            <BannerHQ
-                v-if="showHQ"
-                :headquarter="headquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showDistrictHQ"
-                :districtHeadquarter="districtHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showLocalHQ"
-                :localHeadquarter="localHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showRegionalHQ"
-                :regionalHeadquarter="regionalHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else
-                :centralHeadquarter="centralHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <section class="about-hq">
-                <h3>Описание местного штаба</h3>
-                <p v-if="showHQ">
-                    {{ localHeadquarter.about }}
-                </p>
-                <p v-else-if="showDistrictHQ">
-                    {{ districtHeadquarter.about }}
-                </p>
-                <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-                <p v-else-if="showRegionalHQ">
-                    {{ regionalHeadquarter.about }}
-                </p>
-                <p v-else>{{ centralHeadquarter.about }}</p>
-            </section>
-            <ManagementHQ
-                :member="member"
-                head="Руководство местного штаба"
-            ></ManagementHQ>
-            <HQandSquad></HQandSquad>
-        </div>
+        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <h1 class="title title--hq">Местный штаб</h1>
+        <BannerHQ
+            v-if="showHQ"
+            :headquarter="headquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showDistrictHQ"
+            :districtHeadquarter="districtHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showLocalHQ"
+            :localHeadquarter="localHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showRegionalHQ"
+            :regionalHeadquarter="regionalHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else
+            :centralHeadquarter="centralHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <section class="about-hq">
+            <h3>Описание местного штаба</h3>
+            <p v-if="showHQ">
+                {{ localHeadquarter.about }}
+            </p>
+            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
+            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
+            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
+            <p v-else>{{ centralHeadquarter.about }}</p>
+        </section>
+        <ManagementHQ
+            :member="member"
+            head="Руководство местного штаба"
+        ></ManagementHQ>
+        <section class="headquarters_squads">
+            <h3>Штабы и отряды местного штаба</h3>
+            <div class="headquarters_squads__container">
+                <div
+                    class="card"
+                    v-for="(HQandSquad, index) in HQandSquads"
+                    :class="{
+                        'align-left': index % 2 === 0,
+                        'align-right': index % 2 !== 0,
+                    }"
+                >
+                    <a v-bind:href="HQandSquad.link" @click="HQandSquad.click"
+                        ><p>{{ HQandSquad.name }}</p></a
+                    >
+                </div>
+            </div>
+        </section>
     </div>
 </template>
 <script setup>
@@ -60,8 +71,9 @@ import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage } from '@shared';
+import { usePage, useCrosspageFilter } from '@shared';
 
+const crosspageFilters = useCrosspageFilter();
 const showLocalHQ = ref(true);
 const showHQ = ref(false);
 const showDistrictHQ = ref(false);
@@ -128,9 +140,27 @@ onMounted(() => {
     aboutlocalHQ();
     aboutMembers();
 });
+
+const HQandSquads = ref([
+    {
+        name: 'Штабы СО ОО',
+        link: '/AllHeadquarters',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'AllHeadquarters',
+                filters: {
+                    localName: localHeadquarter.value.name,
+                },
+            });
+        },
+    },
+    {
+        name: 'ЛСО',
+        link: '/AllSquads',
+    },
+]);
 </script>
 <style scoped lang="scss">
-
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;

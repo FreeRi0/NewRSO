@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="active-app">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="profile-title">Активные заявки</h2>
 
             <div class="d-flex mt-9 mb-9">
@@ -29,6 +28,7 @@
                 <activeApplications
                     :participants="participants"
                     @change="changePeoples"
+                    :selected-peoples="selectedPeoples"
                 />
                 <!-- <Button
                     @click="participantsVisible += step"
@@ -44,7 +44,7 @@
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
 
                     <checkedAppList
-                        @change="changeSelected"
+                        @change="changePeoples"
                         :participants="selectedPeoples"
                     ></checkedAppList>
                 </div>
@@ -67,12 +67,13 @@
                 <ActiveSquads
                     @change="changeSquads"
                     :detachments="detachments"
+                    :selected-detch="selectedDetch"
                 />
                 <div class="selectedItems" v-if="selectedDetch.length > 0">
                     <h3>Итого: {{ selectedDetch.length }}</h3>
 
                     <CheckedSquadsList
-                        @change="changeSelectedSquads"
+                        @change="changeSquads"
                         :detachments="selectedDetch"
                     ></CheckedSquadsList>
                 </div>
@@ -81,19 +82,23 @@
             <div v-else-if="picked == 'Заявка на участие в мероприятии'">
                 <p class="text-h3">Блок в разработке.....</p>
             </div>
+
+            <div v-else-if="picked == 'Конкурсы'">
+                <active-competitions />
+            </div>
         </div>
     </div>
 </template>
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { Button } from '@shared/components/buttons';
 import { activeApplications } from '@features/ActiveApplications/components';
 import { checkedAppList } from '@features/ActiveApplications/components';
 import { CheckedSquadsList } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
+import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 
@@ -115,6 +120,10 @@ const tabs = ref([
     {
         id: '3',
         name: 'Заявка на участие в мероприятии',
+    },
+    {
+        id: '4',
+        name: 'Конкурсы',
     },
 ]);
 
@@ -191,6 +200,30 @@ watch(
     },
 );
 
+const select = (event) => {
+    selectedPeoples.value = [];
+    console.log('fffss', checkboxAll.value, event);
+    if (event.target.checked) {
+        console.log('fffss', checkboxAll.value, event);
+        for (let index in participants.value) {
+            console.log('arr', selectedPeoples.value);
+            selectedPeoples.value.push(participants.value[index]);
+        }
+    }
+};
+
+const selectSquads = (event) => {
+    selectedDetch.value = [];
+    console.log('fffss', checkboxAll.value, event);
+    if (event.target.checked) {
+        console.log('fffss', checkboxAll.value, event);
+        for (let index in detachments.value) {
+            console.log('arr', selectedDetch.value);
+            selectedDetch.value.push(detachments.value[index]);
+        }
+    }
+};
+
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
     console.log('fff', CheckedUser, UserId);
@@ -202,11 +235,6 @@ const changePeoples = (CheckedUser, UserId) => {
             (item) => item.id !== UserId,
         );
     }
-};
-
-const changeSelected = (changePeoples) => {
-    console.log('fff', changePeoples);
-    selectedPeoples.value = changePeoples;
 };
 
 const changeSquads = (CheckedSquad, SquadId) => {
@@ -221,21 +249,9 @@ const changeSquads = (CheckedSquad, SquadId) => {
         );
     }
 };
-
-const select = (event) => {
-    selectedPeoples.value = [];
-    console.log('fffss', checkboxAll.value, event);
-    if (event.target.checked) {
-        console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.value) {
-            console.log('arr', selectedPeoples.value);
-            selectedPeoples.value.push(participants.value[index]);
-        }
-    }
-};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .profile-title {
     font-size: 40px;
     margin-bottom: 40px;
@@ -249,10 +265,6 @@ const select = (event) => {
     margin: 0px;
     padding: 10px 24px;
     margin: 7px;
-}
-
-.active-app {
-    padding-top: 40px;
 }
 
 .active {

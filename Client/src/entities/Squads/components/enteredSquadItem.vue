@@ -126,6 +126,12 @@ watch(
     (newChecked) => {
         if (!newChecked) return;
         selectedDetch.value = newChecked;
+        const checkedItem = newChecked.find(
+            (item) => item.id == props.detachment.id,
+        );
+        console.log('checkedItem', checkedItem);
+        if (!checkedItem) checked.value = false;
+        else checked.value = true;
     },
 );
 </script>
