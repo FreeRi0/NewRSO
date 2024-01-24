@@ -8,6 +8,9 @@
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
                 <img src="@app/assets/user-avatar.png" alt="logo" v-else />
             </div>
+            <div class="containerHorizontal">
+                <p class="horizontal-item-title">"{{ squad.name }}"</p>
+            </div>
         </router-link>
     </div>
     <div v-if="competition">
