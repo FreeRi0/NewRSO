@@ -234,7 +234,9 @@ const userPages = computed(() => [
             id: user?.value?.district_headquarter_id,
         },
     },
-    { title: 'Центральный штаб',  name: 'CentralHQ',
+    {
+        title: 'Центральный штаб',
+        name: 'CentralHQ',
         params: {
             id: user.value.central_headquarter_id,
         },
@@ -426,10 +428,10 @@ onMounted(() => {
         // font-size: 16px;
         // font-weight: 400;
         // line-height: 21px;
-        max-width: 445px;
+        max-width: 520px;
 
-        // min-width: 415px;
-        min-width: 411px; // для отображения без ссылки КОНКУРС
+        min-width: 415px;
+        // min-width: 411px; // для отображения без ссылки КОНКУРС
 
         @media (max-width: 1024px) {
             position: absolute;
@@ -457,6 +459,10 @@ onMounted(() => {
             max-width: 415px;
             width: 100%;
         }
+    }
+
+    &__nav-item {
+        margin-right: 5px;
     }
 
     &__button-mobile-menu {
