@@ -8,38 +8,45 @@
             <div class="competition__container">
                 <div class="competition__image-box">
                     <img
-                        :src="'/assets/competition/promo.png'"
+                        src="@app/assets/competition/promo.png"
                         alt="Логотип конкурса"
-                        width="1180"
-                        height="510"
+                        width="4720"
+                        height="2040"
                     />
                 </div>
             </div>
 
             <div class="competition__status-application">
-                <Button
-                    v-if="currentStatus.status === 'Еще не участвуете'"
-                    label="Участвовать"
-                    class="competition__status-application-button"
-                    @click="onSendApplication"
-                ></Button>
-
-                <!--прописать условие - заявка на рассмотрении-->
-                <span
-                    v-else-if="
-                        currentStatus.status === 'Заявка на рассмотрении'
-                    "
-                    class="competition__status-application-info"
+                <router-link
+                    v-if="!isAuth"
+                    to="/Login"
+                    class="btn competition__status-application-button"
+                    >Участвовать</router-link
                 >
-                    Заявка на рассмотрении
-                </span>
+                <div v-else>
+                    <Button
+                        v-if="currentStatus.status === 'Еще не участвуете'"
+                        label="Участвовать"
+                        class="competition__status-application-button"
+                        @click="onSendApplication"
+                    ></Button>
 
-                <span
-                    v-else-if="currentStatus.status === 'Вы участник'"
-                    class="competition__status-application-info"
-                >
-                    Вы участник
-                </span>
+                    <span
+                        v-else-if="
+                            currentStatus.status === 'Заявка на рассмотрении'
+                        "
+                        class="competition__status-application-info"
+                    >
+                        Заявка на рассмотрении
+                    </span>
+
+                    <span
+                        v-else-if="currentStatus.status === 'Вы участник'"
+                        class="competition__status-application-info"
+                    >
+                        Вы участник
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -139,9 +146,30 @@
         <!--Модальные окна-->
         <ModalCompetition
             v-if="isSendApplication"
-            :user="user"
             @close-pop-up="closeSendApplication"
+            @sucsess="onSucsess"
+            :squad="squad"
         ></ModalCompetition>
+
+        <div
+            class="competition__overlay"
+            v-if="errorIsNoCommander"
+            @click="errorIsNoCommander = !errorIsNoCommander"
+        ></div>
+        <div v-if="errorIsNoCommander" class="competition__info">
+            <button
+                type="button"
+                @click="errorIsNoCommander = !errorIsNoCommander"
+                class="competition__button-close"
+            >
+                x
+            </button>
+            <p>
+                Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
+                в&nbsp;Конкурсе по&nbsp;причине: -подать заявку на&nbsp;участие
+                может только Командир отряда.
+            </p>
+        </div>
     </div>
 </template>
 
@@ -152,38 +180,53 @@ import { CompetitionMembersBlock } from '@features/Competition';
 import { ModalCompetition } from '@features/Competition';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';
+// const route = useRoute();
 
 const isAuth = ref(!!localStorage.getItem('Token'));
 
-// const route = useRoute();
-// let id = route.params.id;
+const userCommander = ref({});
 
-//--id конкурса на лучший отряд--------------------------------
-
-const emit = defineEmits(['closePopUp']);
-
-const user = ref({});
-const getUser = async () => {
-    await HTTP.get('/rsousers/me/', {
+const getUserCommander = async () => {
+    HTTP.get(`rsousers/me_commander/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
-            user.value = response.data;
-            console.log('пользователь', user.value);
+            userCommander.value = response.data;
+            console.log('я командир', response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
 };
 
+const squad = ref({});
+const getMeSquad = () => {
+    HTTP.get(`detachments/${userCommander.value.detachment_commander}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            squad.value = response.data;
+            console.log('я командир', response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+//--id конкурса на лучший отряд--------------------------------
+// let id = route.params.id;
 let id = 1;
 
 const competition = ref({});
 const currentStatus = ref({});
 const isSendApplication = ref(false);
+const errorIsNoCommander = ref(false);
 
 const getCompetition = async () => {
     HTTP.get(`competitions/${id}/`, {
@@ -219,7 +262,13 @@ const getSquadStatus = async () => {
 };
 
 const onSendApplication = () => {
-    isSendApplication.value = true;
+    if (!userCommander.value.detachment_commander) {
+        errorIsNoCommander.value = true;
+    } else isSendApplication.value = true;
+};
+
+const onSucsess = () => {
+    getSquadStatus();
 };
 
 const closeSendApplication = () => {
@@ -229,7 +278,8 @@ const closeSendApplication = () => {
 onMounted(() => {
     getCompetition();
     getSquadStatus();
-    getUser();
+    getUserCommander();
+    getMeSquad();
 });
 </script>
 <style lang="scss"></style>

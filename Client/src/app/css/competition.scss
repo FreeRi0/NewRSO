@@ -148,7 +148,22 @@
             bottom: 5%;
         }
 
-        .btn.competition__status-application-button {
+        a {
+            display: block;
+            margin: 20px auto;
+            padding: 16px 32px;
+            color: white;
+            box-shadow: none;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+            text-transform: none;
+        }
+
+        .btn.competition__status-application-button,
+        a.competition__status-application-button {
             margin: 0;
             margin-left: auto;
             color: #35383f;
@@ -313,6 +328,12 @@
                 font-size: 12px;
             }
         }
+    }
+
+    &__success-message {
+        margin: 0 auto;
+        width: fit-content;
+        line-height: 90px;
     }
 
     &__send-application {
