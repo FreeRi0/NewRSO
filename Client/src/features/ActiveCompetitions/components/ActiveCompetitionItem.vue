@@ -85,6 +85,7 @@ watch(
 <style scoped lang="scss">
 .competition__item {
     display: grid;
+    width: 100%;
     grid-template-columns: auto 1fr;
 }
 
@@ -94,8 +95,9 @@ watch(
 
 .competition__content {
     display: grid;
+    width: 100%;
     grid-gap: 12px;
-    grid-template-columns: 48px minmax(200px, 436px) minmax(100px, 276px) auto;
+    grid-template-columns: 48px minmax(200px, 436px) 1fr auto;
 }
 
 .competition__detachments {
