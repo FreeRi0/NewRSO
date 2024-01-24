@@ -2871,7 +2871,7 @@
                 class="form__button-group d-flex justify-space-between"
             >
                 <Button
-                    v-if="UserApplication || user.is_verified"
+                    v-if="user.sent_verification || user.is_verified"
                     :disabled="isLoading"
                     :loaded="isLoading"
                     type="submit"
@@ -3138,23 +3138,23 @@ const getParent = async () => {
             console.log('an error occured ' + error);
         });
 };
-const viewApplications = async () => {
-    // let id = route.params.id;
-    // console.log('idRoute', id);
-    await HTTP.get(`/detachments/1/verifications/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            applications.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const viewApplications = async () => {
+//     // let id = route.params.id;
+//     // console.log('idRoute', id);
+//     await HTTP.get(`/detachments/1/verifications/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             applications.value = response.data;
+//             console.log(response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
 const getEducation = async () => {
     await HTTP.get('/rsousers/me/education/', {
@@ -3222,8 +3222,6 @@ const getUserRegions = async () => {
 const UserApplication = computed(() => {
     return applications.value.find((item) => item.user.id === user.value.id);
 });
-
-console.log('app', UserApplication.value)
 
 const downloadBlankPersonal = async () => {
     await HTTP.get(
@@ -3429,7 +3427,7 @@ const updateData = async () => {
         });
         const axiosrequest6 = ref(null);
 
-        if (!UserApplication.value && !user.value.is_verified) {
+        if (!UserApplication && !user.value.is_verified) {
             const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
                 data.value,
@@ -3600,7 +3598,6 @@ onMounted(() => {
     getDocuments();
     getForeignDoc();
     getUserRegions();
-    viewApplications();
 });
 </script>
 <style lang="scss">

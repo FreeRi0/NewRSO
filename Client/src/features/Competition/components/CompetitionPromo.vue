@@ -3,10 +3,10 @@
         <div class="competition__container">
             <div class="competition__image-box">
                 <img
-                    :src="'/assets/competition/promo.png'"
+                    src="@app/assets/competition/promo.png"
                     alt="Логотип конкурса"
-                    width="1500"
-                    height="720"
+                    width="4720"
+                    height="2040"
                 />
             </div>
 
