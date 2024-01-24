@@ -102,10 +102,11 @@ import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 
+
 const roleStore = useRoleStore();
 roleStore.getRoles();
-
 const roles = storeToRefs(roleStore);
+
 
 const picked = ref('');
 const tabs = ref([
