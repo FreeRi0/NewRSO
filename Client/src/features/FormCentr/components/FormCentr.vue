@@ -11,6 +11,17 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Основная информация
                         </v-col>
+                          <p
+                            class="form__error form__error--title"
+                            v-if="
+                                isError.name ||
+                                isError.detachments_appearance_year ||
+                                isError.rso_founding_congress_date ||
+                                isError.commander
+                            "
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -82,6 +93,12 @@
                                 :maxlength="100"
                                 :clearable="true"
                             />
+                            <p
+                                class="form__error form__error--name"
+                                v-if="isError.name"
+                            >
+                                * {{ isError.name[0] }}
+                            </p>
                             <div class="form__counter">
                                 {{ counterName }} / 100
                             </div>
@@ -89,7 +106,7 @@
 
                         <div class="date_central_wrap">
                             <div class="form__field form_width">
-                                <label for="date_students" class="form__label"
+                                <label for="detachments_appearance_year" class="form__label"
                                     >Дата появления студенческих отрядов в
                                     России (год)
                                     <sup class="valid-red">*</sup>
@@ -97,26 +114,32 @@
                                 <Input
                                     class="form__input"
                                     type="number"
-                                    id="date_students"
+                                    id="detachments_appearance_year"
                                     placeholder="1971"
-                                    name="date_students"
-                                    v-model:value="headquarter.date_students"
+                                    name="detachments_appearance_year"
+                                    v-model:value="headquarter.detachments_appearance_year"
                                     :minlength="4"
                                     :maxlength="4"
                                 />
+                                <p class="form__error" v-if="isError.detachments_appearance_year">
+                                * Это поле не может быть пустым.
+                            </p>
                             </div>
                             <div class="form__field form_width">
-                                <label for="date_first" class="form__label"
+                                <label for="rso_founding_congress_date" class="form__label"
                                     >Дата первого учредительного съезда РСО
                                     <sup class="valid-red">*</sup>
                                 </label>
                                 <Input
                                     class="form__input"
                                     type="date"
-                                    id="date_first"
-                                    name="date_first"
-                                    v-model:value="headquarter.date_first"
+                                    id="rso_founding_congress_date"
+                                    name="rso_founding_congress_date"
+                                    v-model:value="headquarter.rso_founding_congress_date"
                                 />
+                                <p class="form__error" v-if="isError.rso_founding_congress_date">
+                                * Это поле не может быть пустым.
+                            </p>
                             </div>
                         </div>
 
@@ -132,7 +155,7 @@
                         </div>
                         <div class="form__field form__field--commander">
                             <label class="form__label" for="beast"
-                                >Командир штаба:
+                                >Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
@@ -142,8 +165,14 @@
                                 placeholder="Поиск по ФИО"
                                 v-model="headquarter.commander"
                                 @update:value="changeValue"
-                                address="rsousers/"
+                                address="users/"
                             ></Dropdown>
+                            <p
+                                class="form__error form__error--commander"
+                                v-if="isError.commander"
+                            >
+                                * Это поле не может быть пустым.
+                            </p>
                         </div>
                     </div>
                     <v-card-actions class="form__button-group">
@@ -165,6 +194,12 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Контакты
                         </v-col>
+                        <p
+                            class="form__error form__error--title"
+                            v-if="isErrorMembers.position"
+                        >
+                            Заполните обязательные поля!
+                        </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
@@ -254,6 +289,12 @@
                                 Назначить на должность
                                 <sup class="valid-red">*</sup>
                             </p>
+                            <p
+                                class="form__error form__error--members"
+                                v-if="isErrorMembers.position"
+                            >
+                                * Заполните должность у каждого участника
+                            </p>
                             <v-text-field
                                 class="form__field-search"
                                 variant="outlined"
@@ -274,6 +315,8 @@
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                :is-error-members="isErrorMembers"
+                                v-if="members"
                                 @update-member="onUpdateMember"
                             ></MembersList>
                         </div>
@@ -681,19 +724,8 @@ import { Button } from '@shared/components/buttons';
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
 
 const emit = defineEmits([
     'update:value',
@@ -726,6 +758,18 @@ const props = defineProps({
         type: String,
         default: null,
     },
+    members: {
+        type: Array,
+        default: () => [],
+    },
+        isError: {
+        type: Object,
+        default: () => ({}),
+    },
+    isErrorMembers: {
+        type: Object,
+        default: () => ({}),
+    },
 });
 
 const headquarter = ref(props.headquarter);
@@ -735,11 +779,11 @@ const counterName = computed(() => {
 });
 
 const counterSlogan = computed(() => {
-    return headquarter.value.slogan.length || 0;
+    return headquarter.value?.slogan?.length || 0;
 });
 
 const counterAbout = computed(() => {
-    return headquarter.value.about.length || 0;
+    return headquarter.value?.about?.length || 0;
 });
 //----------------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -761,31 +805,10 @@ const showButtonPrev = computed(() => {
 });
 
 //-----------------------------------------------------------------------
-const members = ref([]);
-
 const route = useRoute();
 let id = route.params.id;
 
-const getMembers = async () => {
-    HTTP.get('centrals/1/members/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            members.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-onMounted(() => {
-    getMembers();
-});
-
+const members = ref(props.members);
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
@@ -797,9 +820,7 @@ const sortedMembers = computed(() => {
 });
 
 const onUpdateMember = (event, id) => {
-    const targetMember = members.value.find((member) => member.id === id);
-    const firstkey = Object.keys(event)[0];
-    targetMember[firstkey] = event[firstkey];
+    emit('updateMember', event, id);
 };
 
 const changeValue = (event) => {

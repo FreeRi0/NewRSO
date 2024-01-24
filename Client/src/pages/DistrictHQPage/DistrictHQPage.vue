@@ -1,57 +1,69 @@
 <template>
     <div class="container">
-        <div class="district-page">
-            <h1 class="title title--hq">Окружной штаб</h1>
-            <BannerHQ
-                v-if="showHQ"
-                :headquarter="headquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showDistrictHQ"
-                :districtHeadquarter="districtHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showLocalHQ"
-                :localHeadquarter="localHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showRegionalHQ"
-                :regionalHeadquarter="regionalHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else
-                :centralHeadquarter="centralHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <section class="about-hq">
-                <h3>Описание окружного штаба</h3>
-                <p v-if="showHQ">
-                    {{ localHeadquarter.about }}
-                </p>
-                <p v-else-if="showDistrictHQ">
-                    {{ districtHeadquarter.about }}
-                </p>
-                <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-                <p v-else-if="showRegionalHQ">
-                    {{ regionalHeadquarter.about }}
-                </p>
-                <p v-else>{{ centralHeadquarter.about }}</p>
-            </section>
-            <ManagementHQ
-                :member="member"
-                head="Руководство окружного штаба"
-            ></ManagementHQ>
-            <HQandSquad></HQandSquad>
-        </div>
+        <Breadcrumbs :items="pages"></Breadcrumbs>
+        <h1 class="title title--hq">Окружной штаб</h1>
+        <BannerHQ
+            v-if="showHQ"
+            :headquarter="headquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showDistrictHQ"
+            :districtHeadquarter="districtHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showLocalHQ"
+            :localHeadquarter="localHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showRegionalHQ"
+            :regionalHeadquarter="regionalHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else
+            :centralHeadquarter="centralHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <section class="about-hq">
+            <h3>Описание окружного штаба</h3>
+            <p v-if="showHQ">
+                {{ localHeadquarter.about }}
+            </p>
+            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
+            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
+            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
+            <p v-else>{{ centralHeadquarter.about }}</p>
+        </section>
+        <ManagementHQ
+            :member="member"
+            head="Руководство окружного штаба"
+        ></ManagementHQ>
+        <section class="headquarters_squads">
+            <h3>Штабы и отряды окружного штаба</h3>
+            <div class="headquarters_squads__container">
+                <div
+                    class="card"
+                    v-for="(HQandSquad, index) in HQandSquads"
+                    :key="HQandSquad.link"
+                    :class="{
+                        'align-left': index % 2 === 0,
+                        'align-right': index % 2 !== 0,
+                    }"
+                >
+                    <a v-bind:href="HQandSquad.link" @click="HQandSquad.click">
+                        <p>{{ HQandSquad.name }}</p>
+                    </a>
+                </div>
+            </div>
+        </section>
     </div>
 </template>
 <script setup>
@@ -60,8 +72,9 @@ import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage } from '@shared';
+import { usePage, useCrosspageFilter } from '@shared';
 
+const crosspageFilters = useCrosspageFilter();
 const showDistrictHQ = ref(true);
 const showLocalHQ = ref(false);
 const showHQ = ref(false);
@@ -114,11 +127,13 @@ onBeforeRouteUpdate(async (to, from) => {
         aboutMembers();
     }
 });
+
 watch(
     () => route.params.id,
 
     (newId, oldId) => {
         id = newId;
+        console.log("СТРАНИЧКА ОШ. ШТАБА");
         aboutDistrictHQ();
         aboutMembers();
     },
@@ -128,9 +143,52 @@ onMounted(() => {
     aboutDistrictHQ();
     aboutMembers();
 });
+
+const HQandSquads = ref([
+    {
+        name: 'Региональные штабы',
+        link: '/RegionalHeadquarters',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'regionalHeadquarters',
+                filters: {
+                    districtName: districtHeadquarter.value.name,
+                },
+            });
+        },
+    },
+    {
+        name: 'Местные штабы',
+        link: '/LocalHeadquarters',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'LocalHeadquarters',
+                filters: {
+                    districtName: districtHeadquarter.value.name,
+                },
+            });
+        },
+    },
+    {
+        name: 'Штабы СО ОО',
+        link: '/AllHeadquarters',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'AllHeadquarters',
+                filters: {
+                    districtName: districtHeadquarter.value.name,
+                },
+            });
+        },
+    },
+    {
+        name: 'ЛСО',
+        link: '/AllSquads',
+    },
+]);
+
 </script>
 <style lang="scss" scoped>
-
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;

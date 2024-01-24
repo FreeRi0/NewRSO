@@ -55,7 +55,7 @@ import { useRoute } from 'vue-router';
 import { usePage } from '@shared';
 
 const squad = ref({});
-const member = ref({});
+const member = ref([]);
 const edict = ref({});
 const route = useRoute();
 let id = route.params.id;

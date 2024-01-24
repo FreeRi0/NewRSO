@@ -261,9 +261,6 @@ const changeSquads = (CheckedSquad, SquadId) => {
     margin: 7px;
 }
 
-.active-app {
-    padding-top: 40px;
-}
 
 .active {
     background-color: #1c5c94;

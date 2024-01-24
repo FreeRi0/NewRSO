@@ -7,7 +7,7 @@ export const useUserStore = defineStore('user', {
     }),
     actions: {
         async getUser() {
-            const response = await HTTP.get('rsousers/me', {
+            const response = await HTTP.get('users/me', {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'Token ' + localStorage.getItem('Token'),

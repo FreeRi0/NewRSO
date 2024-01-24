@@ -45,7 +45,9 @@
             </div>
         </div>
 
-        <div class="horizontallso-info mx-3">
+        <div v-if="reference"></div>
+
+        <div v-else class="horizontallso-info">
             <p v-if="participant.membership_fee">Оплачен</p>
             <p v-else>Не оплачен</p>
         </div>
@@ -62,6 +64,10 @@ const props = defineProps({
     selectedParticipants: {
         type: Array,
         default: () => [],
+    },
+    reference: {
+        type: Boolean,
+        default: true,
     },
 });
 
@@ -90,9 +96,12 @@ watch(
     },
 );
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .horizontallso {
     display: flex;
+    @media (max-width: 768px) {
+        flex-wrap: wrap;
+    }
     &-img {
         align-items: center;
         width: 36px;
@@ -109,9 +118,16 @@ watch(
         border-radius: 10px;
         padding: 11px 20px;
         height: 46px;
+        margin-right: 12px;
+        margin-left: 12px;
         text-align: center;
 
         width: 185px;
+        @media (max-width: 768px) {
+            margin-right: 0px;
+            margin-left: 0px;
+            margin-bottom: 12px;
+        }
         p {
             display: block;
             font-size: 16px;
@@ -133,12 +149,26 @@ watch(
     background: #fff;
     margin-bottom: 12px;
     width: 100%;
+    @media (max-width: 1024px) {
+        padding: 0px 5px;
+        height: 48px;
+    }
+    @media (max-width: 768px) {
+
+        margin-top: 12px;
+    }
 }
 
 .containerHorizontal {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-left: 10px;
+    @media (max-width: 1024px) {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 8px;
+    }
 }
 
 .horizontallso-item img {
@@ -153,9 +183,11 @@ watch(
 }
 
 .horizontallso-item__list-date {
-    // width: 95px;
     display: grid;
     grid-template-columns: auto 1fr 0fr;
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+    }
 }
 
 .horizontallso-item__list-img-status {
@@ -175,7 +207,7 @@ watch(
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
     font-weight: 400;
-    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .horizontallso-item__list-date p {
