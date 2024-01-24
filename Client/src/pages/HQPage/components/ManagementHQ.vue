@@ -5,6 +5,33 @@
             <div
                 class="manager-card"
                 :key="manager"
+                v-for="(manager, index) in commander"
+                :class="{
+                    'align-left': index % 2 === 0,
+                    'align-right': index % 2 !== 0,
+                }"
+            >
+                <div class="manager-card__avatar">
+                    <img
+                        :src="
+                            manager?.media?.photo ??
+                            '/assets/foto-leader-squad/foto-leader-squad-01.png'
+                        "
+                        alt="фото"
+                    />
+                </div>
+                <div class="manager-card__box">
+                    <h5 id="name_length">
+                        {{ manager?.first_name }}
+                        {{ manager?.last_name }}
+                        {{ manager?.patronymic_name }}
+                    </h5>
+                    <p>Командир</p>
+                </div>
+            </div>
+            <div
+                class="manager-card"
+                :key="manager"
                 v-for="(manager, index) in member"
                 :class="{
                     'align-left': index % 2 === 0,
@@ -22,9 +49,9 @@
                 </div>
                 <div class="manager-card__box">
                     <h5 id="name_length">
-                        {{ manager.user.first_name }}
-                        {{ manager.user.last_name }}
-                        {{ manager.user.patronymic_name }}
+                        {{ manager?.user?.first_name }}
+                        {{ manager?.user?.last_name }}
+                        {{ manager?.user?.patronymic_name }}
                     </h5>
                     <p>{{ manager.position }}</p>
                 </div>
@@ -41,7 +68,9 @@ const props = defineProps({
     position: {
         type: Object,
     },
-
+    commander: {
+        type: Object,
+    },
     head: {
         type: String,
     },

@@ -42,6 +42,7 @@
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
+            :commander="commander"
             :member="filteredMembers"
             head="Руководство штаба"
             :position="position"
@@ -63,6 +64,7 @@ const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showRegionalHQ = ref(false);
 
+const commander = ref({});
 const position = ref({});
 const headquarter = ref({});
 const member = ref([]);
@@ -118,6 +120,22 @@ const aboutMembers = async () => {
         });
 };
 
+const fetchCommander = async () => {
+    try {
+        let id = headquarter.value.commander;
+        const response = await HTTP.get(`/rsousers/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        commander.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('An error occurred:', error);
+    }
+};
+
 aboutMembers();
 
 const filteredMembers = computed(() => {
@@ -130,12 +148,16 @@ const filteredMembers = computed(() => {
         );
     });
 });
+// const management = computed(() => {
+//     return [{ user: commander.value }, ...filteredMembers.value];
+// });
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutHQ();
         aboutMembers();
         aboutEduc();
+        fetchCommander();
     }
 });
 
@@ -147,6 +169,7 @@ watch(
         aboutHQ();
         aboutMembers();
         aboutEduc();
+        fetchCommander();
     },
 );
 
