@@ -11,6 +11,8 @@ router.beforeEach((to, _from, next) => {
         to.name !== 'Login' &&
         to.name !== 'Register' &&
         to.name !== 'RecoveryPassword' &&
+        to.name !== 'RecoveryPassword' &&
+        to.name !== 'Competition' &&
         !localStorage.getItem('Token')
     )
         next({ name: 'Login' });
