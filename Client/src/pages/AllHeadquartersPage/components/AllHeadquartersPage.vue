@@ -200,10 +200,7 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import {
-    HeadquartersList,
-    horizontalHeadquarters,
-} from '@features/Headquarters/components';
+import { HeadquartersList, horizontalHeadquarters } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
@@ -453,6 +450,7 @@ onActivated(() => {
             border: 1px solid black;
         }
     }
+
     &-wrapper {
         padding: 60px 0px;
         display: grid;
@@ -466,6 +464,12 @@ onActivated(() => {
             grid-template-columns: 1fr 1fr;
         }
     }
+}
+
+pre {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .headquarters-wrapper__item {
     margin: 0px auto;

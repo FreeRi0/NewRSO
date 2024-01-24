@@ -1,10 +1,8 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--lso">
-            Всероссийский конкурс фотографий среди студенческих отрядов
+            {{ event.name }}
         </h1>
-        <!-- Баннер -->
         <div class="banner_wrap">
             <div>
                 <img
@@ -19,6 +17,7 @@
                     label="Редактировать заявку"
                     variant="text"
                     size="large"
+                    @click="EditAction"
                 ></Button>
                 <Button
                     type="button"
@@ -36,7 +35,6 @@
                 ></Button>
             </div>
         </div>
-        <!-- О мероприятии -->
         <h2 class="title title--subtitle">О мероприятии</h2>
         <div class="event_type_wrap">
             <span
@@ -46,48 +44,43 @@
                 >{{ category }}</span
             >
         </div>
-        <p class="text">
-            «В объективе РСО» — Фотографический квест для членов Российских
-            студенческих отрядов!
-        </p>
         <p class="text event_type_wrap">
-            Добро пожаловать на захватывающее мероприятие «В объективе РСО»! Это
-            уникальный фотографический квест, специально созданный для членов
-            Региональной Студенческой Организации (РСО), с целью познакомить
-            участников с искусством фотографии и развить их креативные навыки
-            через объектив фотоаппаратов.
+            {{ event.description }}
         </p>
         <!-- Доработать grid, при уменьшении список не сдвигается, если много текста, то не переносится на новую строчку -->
-        <v-list class="item_wrap">
-            <v-list-item
-                v-for="(item, i) in items"
-                :key="i"
-                :value="item"
-                color="primary"
-                class="list_item"
-            >
-                <template v-slot:prepend>
-                    <v-img :src="item.icon" class="icon_img"></v-img>
-                </template>
-                <v-list-item-title v-text="item.text"></v-list-item-title>
-            </v-list-item>
-        </v-list>
+        <div class="event">
+            <div class="event-cols-2">Форма заявки: Одиночная</div>
+            <div class="event-cols-2">Начало мероприятия: {{ event.time_data.start_date }}, {{ event.time_data.start_time }} </div>
+        </div>
+        <div class="event">
+            <div class="event-cols-2">Маштаб мероприятия: {{  }}</div>
+            <div class="event-cols-2">Окончание мероприятия: {{ event.time_data.end_date }}, {{ event.time_data.end_time }} </div>
+        </div>
+        <div class="event">
+            <div class="event-cols-2">Планируемое число участников: {{ event.participants_number }}</div>
+            <div class="event-cols-2">Начало регистрации: {{ event.time_data.start_date }}, {{ event.time_data.start_time }} </div>
+        </div>
+        <div class="event">
+            <div class="event-cols-2">Адрес: {{ event.address }}</div>
+            <div class="event-cols-2">Окончание регистрации: {{ event.time_data.registration_end_date }}, {{ event.time_data.registration_end_time }} </div>
+        </div>
         <!-- Организаторы -->
         <h2 class="title title--subtitle">Организаторы</h2>
-
-        <div class="card_wrap">
-            <v-card v-for="card in cards" :key="card" class="event_card_wrap">
-                <v-img width="120" :src="card.avatar"></v-img>
+        <div v-if="organizators.length == 0" class="event event-empty">Странно, но у мероприятия нет организаторов</div>
+        <div v-if="organizators.length != 0" class="card_wrap">
+            <v-card v-for="organizator in organizators" class="event_card_wrap">
+                <v-img width="120"></v-img>
                 <div class="text text--organizer">
-                    {{ card.name }}
+                    {{ organizator.name }}
                 </div>
                 <div class="text text--status">
-                    {{ card.status }}
+                    {{ organizator.status }}
                 </div>
             </v-card>
         </div>
         <!-- Контактные лица -->
         <h2 class="title title--subtitle">Контактные лица</h2>
+        <div v-if="cards.length == 0" class="event event-empty">Контактные лица не указаны</div>
         <div class="card_wrap">
             <v-card v-for="card in cards" :key="card" class="event_card_wrap">
                 <v-img width="120" :src="card.avatar"></v-img>
@@ -105,15 +98,19 @@
             <button class="event_btn event_go">Уже идут</button>
             <button class="event_btn event_ok">Ожидают одобрения</button>
         </div>
-
-        <section class="section_wrap">
+        <div v-if="participants.length == 0" class="event event-empty">Никто не хочет участвовать :(</div>
+        <section v-if="participants.length != 0" class="section_wrap">
             <ul class="list_wrap">
                 <li
                     v-for="participant in participants.slice(0, 6)"
                     :key="participant"
                 >
                     <div>
-                        <img :src="participant.image" alt="avatar" />
+                        <img
+                            class="participant_img"
+                            :src="participant.image"
+                            alt="avatar"
+                        />
                         <h5 class="text text--participant_name">
                             {{ participant.name }}
                         </h5>
@@ -135,7 +132,11 @@
                     :key="participant"
                 >
                     <div>
-                        <img :src="participant.image" alt="avatar" />
+                        <img
+                            class="participant_img"
+                            :src="participant.image"
+                            alt="avatar"
+                        />
                         <h5 class="text text--participant_name">
                             {{ participant.name }}
                         </h5>
@@ -147,132 +148,13 @@
                 <!-- <h2 v-else>Участников не найдено...</h2> -->
             </ul>
             <div class="squad-participants__link">
-                <a href="#">Показать всех</a>
+                <p @click="">Показать всех</p>
             </div>
         </section>
         <!-- Другие мероприятия -->
         <h2 class="title title--subtitle event_border">Другие мероприятия</h2>
+        <div class="event event-empty">На данный момент мероприятий нет</div>
         <div class="other_events_wrap">
-            <v-card class="card">
-                <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    height="200px"
-                    cover
-                    class="radius"
-                ></v-img>
-                <v-card-text class="text text--event_title">
-                    Название мероприятия очень длинное название, которое кому-то
-                    посвящено
-                </v-card-text>
-                <div class="text text--event_info">
-                    <div>06 июля 2023</div>
-                    <div>100 №</div>
-                </div>
-                <div class="event_type_card_wrap">
-                    <span class="event_type_card">Всероссийское</span>
-                    <span class="event_type_card">Образовательное</span>
-                </div>
-            </v-card>
-            <v-card class="card">
-                <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    height="200px"
-                    cover
-                    class="radius"
-                ></v-img>
-                <v-card-text class="text text--event_title">
-                    Название мероприятия очень длинное название, которое кому-то
-                    посвящено
-                </v-card-text>
-                <div class="text text--event_info">
-                    <div>06 июля 2023</div>
-                    <div>100 №</div>
-                </div>
-                <div class="event_type_card_wrap">
-                    <span class="event_type_card">Всероссийское</span>
-                    <span class="event_type_card">Образовательное</span>
-                </div>
-            </v-card>
-            <v-card class="card">
-                <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    height="200px"
-                    cover
-                    class="radius"
-                ></v-img>
-                <v-card-text class="text text--event_title">
-                    Название мероприятия очень длинное название, которое кому-то
-                    посвящено
-                </v-card-text>
-                <div class="text text--event_info">
-                    <div>06 июля 2023</div>
-                    <div>100 №</div>
-                </div>
-                <div class="event_type_card_wrap">
-                    <span class="event_type_card">Всероссийское</span>
-                    <span class="event_type_card">Образовательное</span>
-                </div>
-            </v-card>
-            <v-card class="card">
-                <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    height="200px"
-                    cover
-                    class="radius"
-                ></v-img>
-                <v-card-text class="text text--event_title">
-                    Название мероприятия очень длинное название, которое кому-то
-                    посвящено
-                </v-card-text>
-                <div class="text text--event_info">
-                    <div>06 июля 2023</div>
-                    <div>100 №</div>
-                </div>
-                <div class="event_type_card_wrap">
-                    <span class="event_type_card">Всероссийское</span>
-                    <span class="event_type_card">Образовательное</span>
-                </div>
-            </v-card>
-            <v-card class="card">
-                <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    height="200px"
-                    cover
-                    class="radius"
-                ></v-img>
-                <v-card-text class="text text--event_title">
-                    Название мероприятия очень длинное название, которое кому-то
-                    посвящено
-                </v-card-text>
-                <div class="text text--event_info">
-                    <div>06 июля 2023</div>
-                    <div>100 №</div>
-                </div>
-                <div class="event_type_card_wrap">
-                    <span class="event_type_card">Всероссийское</span>
-                    <span class="event_type_card">Образовательное</span>
-                </div>
-            </v-card>
-            <!-- <v-card class="card">
-            <v-img
-                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                height="200px"
-                cover
-                class="radius"
-            ></v-img>
-            <v-card-text class="text text--event_title">
-                Название мероприятия очень длинное название, которое кому-то
-                посвящено
-            </v-card-text>
-            <div class="text text--event_info">
-                <div>06 июля 2023</div>
-                <div>100 №</div>
-            </div>
-            <div class="event_type_card_wrap">
-                <span class="event_type_card">Всероссийское</span>
-                <span class="event_type_card">Образовательное</span>
-            </div>
-        </v-card> -->
         </div>
         <Button
             class="form-button btn_wrap"
@@ -288,23 +170,72 @@
 import { ref } from 'vue';
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { Button } from '@shared/components/buttons';
+import { useRoute, useRouter } from 'vue-router';
+import { onMounted } from 'vue';
+import { ActionItem } from '@entities/index';
+import { getAction, getOrganizator, getListActions, getParticipants } from '@services/ActionService';
+import { onActivated } from 'vue';
 
-const pages = ref([
-    { pageTitle: 'Мероприятия', href: '#' },
-    {
-        pageTitle:
-            'Всероссийский конкурс фотографий среди студенческих отрядов',
-        href: '#',
-    },
-]);
+const route = useRoute();
+const router = useRouter();
 
-const eventCategory = ref([
-    'Образовательное',
-    'Спортивное',
-    'Творческое',
-    'Добровольческое',
-    'Патриотическое',
-]);
+const event = ref({
+    id: '',
+    author: '',
+    format: '',
+    direction: '',
+    status: '',
+    scale: '',
+    created_at: '',
+    name: '',
+    banner: '',
+    conference_link: '',
+    address: '',
+    description: '',
+    application_type: '',
+    available_structural_units: '',
+    participants_number: '',
+    time_data: {
+        start_date: '',
+        start_time: '',
+        end_date: '',
+        end_time: '',
+        registration_end_date: '',
+        registration_end_time: '',
+        hour: '',
+    }
+})
+
+const otherevents = ref({});
+
+const organizators = ref([])
+onActivated(() => {
+    getParticipants(route.params.id)
+        .then((resp)=>{
+            participants.value = resp.data
+        })
+        .catch((e)=>{
+            console.log(e)
+        })
+    getListActions()
+        .then((resp)=>{
+            otherevents.value = resp.data;
+        })
+    getAction(route.params.id)
+    .then((resp)=>{
+        event.value = resp.data;
+        getOrganizator(route.params.id)
+        .then((resp)=>{
+            organizators.value = resp.data;
+        })
+    })
+    .catch((e)=>{
+        console.log(e)
+    })
+})
+function EditAction(){
+    router.push({ name: 'editAction', params: { id: route.params.id } });
+}
 
 const items = ref([
     {
@@ -312,7 +243,7 @@ const items = ref([
         icon: './assets/icon_items/list.svg',
     },
     {
-        text: 'Начало мероприятия: 06.07.2023, 10:30',
+        text: "",
         icon: './assets/icon_items/clock.svg',
     },
     {
@@ -342,7 +273,7 @@ const items = ref([
 ]);
 
 const cards = ref([
-    {
+    /*{
         avatar: './assets/avatar.png',
         name: 'Александрова Вероника Александровна',
         status: 'Командир',
@@ -361,34 +292,16 @@ const cards = ref([
         avatar: './assets/avatar.png',
         name: 'Александрова Вероника Александровна',
         status: 'Методист',
-    },
+    },*/
 ]);
 
 const participants = ref([
     {
-        name: 'Андрей',
-        status: 'Командир',
-        image: './assets/avatar.png',
-        category: 2,
-    },
-    {
-        name: 'Мария',
-        status: 'Комиссар',
-        image: './assets/avatar.png',
-        category: 1,
-    },
-    {
-        name: 'Екатерина',
-        status: 'Мастер',
-        image: './assets/avatar.png',
-        category: 1,
-    },
-    {
-        name: 'Артём',
-        status: 'Боец',
-        image: './assets/avatar.png',
-        category: 2,
-    },
+        name: '',
+        status: '',
+        image: '',
+        category: Number,
+    }
 ]);
 
 // member.value = member.value.sort((a, b) => a.is_trusted - b.is_trusted);
@@ -398,18 +311,49 @@ const participants = ref([
 </script>
 
 <style lang="scss" scoped>
+
+.event{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    &-cols-2{
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        width: 48%;
+        margin-left: 1%;
+        margin-right: 1%;
+        height: 40px;
+    }
+    &-empty{
+        height: 60px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: white;
+        border-radius: 20px;
+        background-color: rgba(28, 92, 148, 1);;
+        justify-content: center;
+        align-items: center;
+    }
+}
+.title--subtitle{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 .form-button {
-    min-height: 52px;
+    // min-height: 52px;
     margin: 0;
     padding: 16px 32px;
     font-family: 'Bert Sans';
     font-size: 16px;
     font-weight: 600;
     line-height: 20px;
-    text-transform: none;
-    display: flex;
-    justify-content: center;
-    margin-left: 20px;
+    max-width: 248px;
+    // text-transform: none;
+    // display: flex;
+    // justify-content: center;
+    // margin-left: 20px;
 
     &--grey {
         color: white;
@@ -420,6 +364,14 @@ const participants = ref([
         color: #35383f;
         border: 2px solid #35383f;
         background-color: #ffffff;
+    }
+
+    @media (max-width: 700px) {
+        max-width: 100%;
+    }
+
+    @media (max-width: 430px) {
+        padding: 10px 32px;
     }
 }
 
@@ -433,34 +385,64 @@ const participants = ref([
     right: 32px;
     display: flex;
     flex-direction: row-reverse;
+    gap: 10px;
+
+    @media (max-width: 830px) {
+        flex-direction: column;
+    }
+
+    @media (max-width: 700px) {
+        position: static;
+        margin-top: 40px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 .event_type {
     border: 1px solid rgba(53, 56, 63, 1);
-    background: none;
-    min-height: 32px;
-    margin: 0;
-    padding: 10px 12px;
+    padding: 3px 10px;
     font-family: 'Bert Sans';
     font-size: 16px;
     font-weight: 400;
     border-radius: 18px;
-    margin-right: 16px;
+    letter-spacing: 1px;
 }
 
 .event_type_wrap {
     margin-bottom: 40px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    @media (max-width: 430px) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        // justify-items: start;
+    }
 }
 
 .item_wrap {
     pointer-events: none;
     display: grid;
     grid-template-columns: 50% 50%;
+    grid-template-columns: repeat(auto-fill, 500px);
+    justify-content: space-between;
+    row-gap: 20px;
+    margin-top: 40px;
+
+    @media (max-width: 1150px) {
+        grid-template-columns: repeat(auto-fill, 400px);
+    }
+
+    @media (max-width: 450px) {
+        grid-template-columns: repeat(auto-fill, 300px);
+    }
 }
 
 .event_card_wrap {
     max-width: 280px;
-    margin: 0 20px 20px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -468,9 +450,15 @@ const participants = ref([
 }
 
 .card_wrap {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 280px);
     justify-content: space-between;
+    column-gap: 20px;
+    row-gap: 20px;
+
+    @media (max-width: 950px) {
+        justify-content: space-around;
+    }
 }
 
 .v-list-item-title {
@@ -494,7 +482,6 @@ const participants = ref([
 .card {
     box-shadow: none;
     max-width: 280px;
-    margin-bottom: 30px;
 }
 
 .radius {
@@ -517,6 +504,7 @@ const participants = ref([
 
 .btn_wrap {
     margin: 0 auto;
+    margin-top: 60px;
     margin-bottom: 80px;
 }
 
@@ -528,14 +516,21 @@ const participants = ref([
 }
 
 .list_wrap {
-    display: flex;
-    justify-content: space-between;
     list-style-type: none;
-    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 160px);
+    justify-content: space-between;
+    column-gap: 20px;
+    row-gap: 20px;
+}
+
+.participant_img {
+    margin: 0 auto;
 }
 
 .squad-participants__link {
     margin: 0 auto;
+    margin-top: 40px;
     margin-bottom: 24px;
 }
 
@@ -551,7 +546,7 @@ const participants = ref([
 .event_btn_participant {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 80px;
+    margin-bottom: 30px;
 }
 
 .event_btn {
@@ -576,7 +571,14 @@ const participants = ref([
 
 .other_events_wrap {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    // grid-gap: 5px;
+    // grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, 280px);
+    justify-content: space-between;
+    column-gap: 20px;
+    row-gap: 20px;
+
+    @media (max-width: 965px) {
+        justify-content: space-around;
+    }
 }
 </style>

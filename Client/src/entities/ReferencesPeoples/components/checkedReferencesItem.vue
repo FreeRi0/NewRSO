@@ -3,9 +3,9 @@
         <div class="checked-item__wrapper">
             <div class="checked-img">
                 <img
-                    :src="participant?.user?.avatar?.photo"
+                    :src="participant.user.avatar?.photo"
                     alt="logo"
-                    v-if="participant?.user?.avatar?.photo"
+                    v-if="participant.user.avatar?.photo"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -16,13 +16,13 @@
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
-                        {{participant?.user?.last_name }}
+                        {{participant.user.last_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ participant?.user?.first_name }}
+                        {{ participant.user.first_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ participant?.user?.patronymic_name }}
+                        {{ participant.user.patronymic_name }}
                     </p>
                 </div>
                 <div class="checked-item__list-date">
@@ -32,7 +32,7 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{participant?.user?.date_of_birth }}</p>
+                    <p>{{participant.user.date_of_birth }}</p>
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@ const props = defineProps({
 const emit = defineEmits(['change']);
 const updateMembership = (e) => {
     console.log('checkeed', checked.value);
-    emit('change', checked.value, props.participant.id );
+    emit('change', checked.value, props.participant.user.id );
 };
 
 const checked = ref(true);
@@ -221,6 +221,7 @@ const ChangeStatus = async () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-left: 10px;
 }
 
 .checked-item img {
@@ -279,7 +280,9 @@ const ChangeStatus = async () => {
         height: 24px;
     }
 }
-
+.horizontallso-item__list-full {
+    margin-right: 10px;
+}
 .save {
     // background-color: white;
     // color: #35383f;

@@ -249,6 +249,7 @@ const changeHeadquarter = async () => {
             });
         });
 };
+
 </script>
 
 <style lang="scss"></style>

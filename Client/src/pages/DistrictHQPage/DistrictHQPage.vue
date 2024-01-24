@@ -139,11 +139,13 @@ onBeforeRouteUpdate(async (to, from) => {
         aboutMembers();
     }
 });
+
 watch(
     () => route.params.id,
 
     (newId) => {
         id = newId;
+        console.log("СТРАНИЧКА ОШ. ШТАБА");
         aboutDistrictHQ();
         aboutMembers();
     },
@@ -196,6 +198,7 @@ const HQandSquads = ref([
         link: '/AllSquads',
     },
 ]);
+
 </script>
 <style lang="scss" scoped>
 .title {

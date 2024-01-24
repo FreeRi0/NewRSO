@@ -40,26 +40,29 @@
                             </div>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="/actionSquads"
-                                >Мероприятия</a
+                            <a class="header__nav-link" href="/actionSquads">
+                                Мероприятия
+                            </a>
+                        </li>
+                        <li class="header__nav-item competition__nav-item">
+                            <a
+                                class="header__nav-link competition__link"
+                                href="/Competition"
                             >
+                                Конкурс
+                            </a>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="/Contest"
-                                >Конкурс</a
-                            >
-                        </li>
-                        <li class="header__nav-item">
-                            <a class="header__nav-link" href="/FAQ"
-                                >Полезная информация</a
-                            >
+                            <a class="header__nav-link" href="/FAQ">
+                                Полезная информация
+                            </a>
                         </li>
                     </ul>
                 </div>
             </nav>
 
             <nav class="header__nav nav-user">
-                <div class="nav-user__application-count">
+                <div class="nav-user__application-count" v-if="user">
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <a href="#">
                         <img
@@ -78,7 +81,7 @@
                     </div>
                 </div>
 
-                <div class="nav-user__location" v-if="user">
+                <div class="nav-user__location">
                     <button class="nav-user__button" @click="show = !show">
                         <!-- <img
                             class="nav-user__button-mobile"
@@ -119,7 +122,7 @@
                             name="select_education"
                             id="select-education"
                             placeholder="Ваш регион"
-                            v-model="user.region"
+                            v-model="region"
                             address="regions/"
                         ></Select>
 
@@ -136,8 +139,15 @@
                     </div>
                 </div>
 
-                <div class="nav-user__menu user-menu" v-if="user">
+                <div class="nav-user__menu user-menu">
+                    <img
+                        v-if="!user"
+                        src="@app/assets/user-avatar.png"
+                        alt="Фото бойца (заглушка)"
+                    />
+
                     <Dropdown
+                        v-if="user"
                         :items="userPages"
                         :image="true"
                         :url="user?.media?.photo"
@@ -173,10 +183,11 @@ const props = defineProps({
 
 const quantityIsActive = ref(props.quantityActive);
 
+const region = ref(null);
 const roles = storeToRefs(roleStore);
 
 const router = useRouter();
-const user = ref({});
+const user = ref(null);
 // const route = useRoute();
 // let id = route.params.id;
 
@@ -194,7 +205,7 @@ const userPages = computed(() => [
         title: 'Моя страница',
         name: 'userpage',
         params: {
-            id: user.value.id,
+            id: user.value?.id,
         },
     },
     {
@@ -232,9 +243,11 @@ const userPages = computed(() => [
             id: user?.value?.district_headquarter_id,
         },
     },
-    { title: 'Центральный штаб',  name: 'CentralHQ',
+    {
+        title: 'Центральный штаб',
+        name: 'CentralHQ',
         params: {
-            id: user.value.central_headquarter_id,
+            id: user.value?.central_headquarter_id,
         },
     },
     { title: 'Активные заявки', name: 'active' },
@@ -269,6 +282,7 @@ const getUser = async () => {
     })
         .then((response) => {
             user.value = response.data;
+            region.value = user.value.region;
             console.log(user.value);
         })
         .catch(function (error) {
@@ -424,10 +438,10 @@ onMounted(() => {
         // font-size: 16px;
         // font-weight: 400;
         // line-height: 21px;
-        max-width: 445px;
+        max-width: 520px;
 
-        // min-width: 415px;
-        min-width: 411px; // для отображения без ссылки КОНКУРС
+        min-width: 415px;
+        // min-width: 411px; // для отображения без ссылки КОНКУРС
 
         @media (max-width: 1024px) {
             position: absolute;
@@ -455,6 +469,10 @@ onMounted(() => {
             max-width: 415px;
             width: 100%;
         }
+    }
+
+    &__nav-item {
+        margin-right: 5px;
     }
 
     &__button-mobile-menu {
@@ -603,6 +621,9 @@ onMounted(() => {
 }
 
 .user-menu {
+    img {
+        width: 56px;
+    }
     .dropdown {
         &__box-image {
             margin-right: 12px;

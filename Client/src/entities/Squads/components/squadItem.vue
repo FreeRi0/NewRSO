@@ -30,6 +30,24 @@
             </div>
         </router-link>
     </div>
+    <div v-if="competition" class="squads-wrapper__item rating_wrapper">
+        <router-link :to="{ name: 'lso', params: { id: squad.junior_detachment.id } }">
+            <div class="round-img">
+                <img :src="squad.junior_detachment.banner" alt="logo" v-if="squad.junior_detachment.banner" />
+                <img src="@app/assets/user-avatar.png" alt="logo" v-else />
+            </div>
+            <div class="container-squad">
+                <p class="squads-wrapper__item-title normal-title">
+                    {{ squad.junior_detachment.name }}
+                </p>
+            </div>
+            <div class="container-squad" v-if="rating">
+                <p class="squads-wrapper__item-title normal-title">
+                   Место в рейтинге: 102
+                </p>
+            </div>
+        </router-link>
+    </div>
 </template>
 <script setup>
 const props = defineProps({
