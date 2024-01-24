@@ -1,13 +1,12 @@
 <template>
     <div class="container">
         <div class="contributor">
-            <Breadcrumbs :items="pages"></Breadcrumbs>
             <h2 class="contributor-title">Членский взнос</h2>
-            <div class="d-flex mt-7">
+            <div class="d-flex mt-7 buttonWrapper">
                 <button
                     type="button"
                     class="contributorBtn"
-                    :class="{ active: picked === true }"
+                    :class="{ activee: picked === true }"
                     @click="picked = true"
                 >
                     Мой членский взнос
@@ -16,7 +15,7 @@
                 <button
                     type="button"
                     class="contributorBtn"
-                    :class="{ active: picked === false }"
+                    :class="{ activee: picked === false }"
                     @click="picked = false"
                 >
                     Данные об оплате членского взноса пользователями системы
@@ -489,6 +488,7 @@
                         <div class="contributor-wrapper">
                             <contributorsList
                                 :participants="sortedParticipants"
+                                :selected-peoples="selectedPeoples"
                                 @change="changePeoples"
                             ></contributorsList>
                         </div>
@@ -508,7 +508,7 @@
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
 
                     <checkedContributors
-                        @change="changeSelected"
+                        @change="changePeoples"
                         :participants="selectedPeoples"
                     ></checkedContributors>
                 </div>
@@ -527,7 +527,6 @@ import {
 } from '@features/Contributor/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { HTTP } from '@app/http';
 
 const participants = ref([]);
@@ -562,7 +561,7 @@ const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
 const viewParticipants = async () => {
-    await HTTP.get('/rsousers/', {
+    await HTTP.get('/users/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -622,13 +621,6 @@ const changePeoples = (CheckedUser, UserId) => {
             (item) => item.id !== UserId,
         );
     }
-};
-
-const changeSelected = (changeUser, UserId) => {
-    console.log('fff', changeUser, UserId);
-    selectedPeoples.value = selectedPeoples.value.filter(
-        (item) => item.id == UserId,
-    );
 };
 
 const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
@@ -773,14 +765,20 @@ p {
     padding: 10px 24px;
     margin: 7px;
 }
+.buttonWrapper {
+    @media (max-width: 1024px) {
+        flex-wrap: wrap;
+        max-width: 650px;
+    }
+}
 
-.active {
+.activee {
     background-color: #1c5c94;
     color: white;
 }
 
 .contributor {
-    padding: 60px 0px 60px 0px;
+    padding: 0px 0px 60px 0px;
     &-title {
         font-size: 52px;
     }
@@ -788,6 +786,11 @@ p {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+        @media (max-width: 1024px) {
+         flex-direction: column;
+         align-items: flex-start;
+         margin-top: 60px;
+    }
     }
     &-container {
         display: grid;
@@ -892,6 +895,9 @@ p {
 .sort {
     &-filters {
         align-items: flex-start;
+        @media (max-width: 1024px) {
+        margin-top: 20px;
+    }
     }
 }
 
@@ -928,5 +934,9 @@ p {
 
 .v-expansion-panel:not(:first-child)::after {
     display: none;
+}
+
+.v-expansion-panel-title {
+    padding: 7px 0px
 }
 </style>

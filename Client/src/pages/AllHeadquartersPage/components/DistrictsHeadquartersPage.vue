@@ -51,7 +51,7 @@
                 <div class="sort-filters"></div>
             </div>
 
-            <div  v-show="vertical">
+            <div v-show="vertical">
                 <DistrictHQList
                     :districtHeadquarters="districtHeadquarters"
                 ></DistrictHQList>

@@ -8,7 +8,7 @@
         >
             <p>Кратко о себе</p>
             <TextArea
-                class="mt-4"
+                class="mt-4 bio"
                 name="about"
                 placeholder="Напиши что нибудь"
                 v-model:value="user.bio"
@@ -30,11 +30,10 @@
                 type="submit"
                 label="сохранить"
             ></Button>
-            <div class="d-flex">
-            </div>
+            <div class="d-flex"></div>
         </form>
 
-        <div class="mt-8 d-flex">
+        <div class=" mt-8 photoWrapper">
             <userPhoto
                 class="photo-item"
                 :photo="media.photo1"
@@ -61,7 +60,12 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { TextArea } from '@shared/components/inputs';
-import { userPhoto, userPhoto2, userPhoto3, userPhoto4 } from '@shared/components/imagescomp';
+import {
+    userPhoto,
+    userPhoto2,
+    userPhoto3,
+    userPhoto4,
+} from '@shared/components/imagescomp';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { ref, onMounted, watch, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
@@ -153,13 +157,12 @@ const AddAbout = async () => {
         });
 };
 
-
 onMounted(() => {
     getUser();
     getMedia();
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .MyPage {
     border: 1px solid #0000001a;
     border-radius: 10px;
@@ -174,5 +177,25 @@ onMounted(() => {
 .photo-item {
     width: 260px;
     margin-right: 20px;
+    @media screen and (max-width: 575px) {
+        height: 373px;
+        width: 280px;
+        margin-right: 0;
+    }
+}
+
+.photoWrapper {
+    display: flex;
+    @media screen and (max-width: 768px) {
+        // flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 0.28fr 0.28fr;
+        grid-column-gap: 20px;
+        grid-row-gap: 20px;
+        justify-content: center;
+    }
+    @media screen and (max-width: 575px) {
+        grid-template-columns: 0.28fr;
+    }
 }
 </style>

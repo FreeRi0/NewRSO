@@ -109,7 +109,10 @@ const updateUsername = async() => {
     border: 1px solid #0000001a;
     border-radius: 6px;
     padding: 30px;
-    width: 480px;
+    max-width: 480px;
+    @media screen and (max-width: 575px) {
+      padding: 20px 16px 40px 16px;
+    }
     &_title {
         display: flex;
         justify-content: space-between;
@@ -123,7 +126,10 @@ const updateUsername = async() => {
     padding: 40px;
     margin-top: 40px;
     margin-bottom: 80px;
-    width: 480px;
+    max-width: 480px;
+    @media screen and (max-width: 575px) {
+      padding: 20px 16px 40px 16px;
+    }
 }
 
 .username-title,
