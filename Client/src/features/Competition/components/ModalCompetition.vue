@@ -18,7 +18,7 @@
                     label="Тандем"
                     color="primary"
                     size="large"
-                    @click="isChooseSquad"
+                    @click="isChooseSquad = true"
                 ></Button>
                 <Button
                     type="submit"
@@ -41,22 +41,24 @@
             >
                 x
             </button>
-            <p>Выберите номинацию</p>
-            <Select
+            <p>Выберите отряд</p>
+            <pre>{{ juniorDetachment }}</pre>
+            <v-select
                 variant="outlined"
                 clearable
+                v-model="juniorDetachment"
                 name="select_squad"
                 id="select-squad"
                 placeholder="Например, ССО Дружба"
                 :items="squadsJunour"
-            ></Select>
+            ></v-select>
             <Button
                 type="submit"
                 class="nav-user__button-agree mt-2 mx-auto"
                 label="Отправить приглашение"
                 color="primary"
                 size="large"
-                @click="sendInvitation"
+                @click="sendApplication"
             ></Button>
         </form>
     </div>
@@ -135,8 +137,9 @@ const props = defineProps({
     },
 });
 
-const isError = true;
-const isChooseSquad = true;
+const isError = ref(false);
+const isChooseSquad = ref(false);
+const juniorDetachment = ref(null);
 
 let id = 1;
 
@@ -157,6 +160,25 @@ const getSquads = async () => {
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
+};
+
+const SendApplication = async (juniorDetacmentId) => {
+    const body = {};
+
+    if (juniorDetacmentId) {
+        body.junior_detachment = juniorDetacmentId;
+    }
+
+    try {
+        await HTTP.post(`/competitions/${id}/applications/`, body, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+    } catch (e) {
+        console.log('error application', e);
+    }
 };
 
 onMounted(() => {
