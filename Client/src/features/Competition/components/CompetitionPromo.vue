@@ -3,7 +3,7 @@
         <div class="competition__container">
             <div class="competition__image-box">
                 <img
-                    :src="'/assets/competition/best-squad.png'"
+                    :src="'/assets/competition/promo.png'"
                     alt="Логотип конкурса"
                     width="1500"
                     height="720"
