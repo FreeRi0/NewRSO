@@ -1,14 +1,13 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
         <p class="main_title">Индивидуальная заявка</p>
         <p class="subtitle">Подал:</p>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img
-                    :src="request.user.media.photo"
+                    :src="request.user?.media.photo"
                     alt="logo"
-                    v-if="request.user.media"
+                    v-if="request.user?.media"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -18,7 +17,7 @@
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ request.user.first_name }}
+                    {{ request.user?.first_name }}
                 </p>
                 <div class="horizontallso-item__list-date">
                     <span
@@ -27,54 +26,131 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ request.user.date_of_birth }}</p>
+                    <p>{{ request.user?.date_of_birth }}</p>
                 </div>
             </div>
         </div>
-        <p class="subtitle">Укажите размер футболки:</p>
-        <p>{{ request.size }}</p>
-        <p class="subtitle">Расскажите о себе:</p>
-        <p>{{ request.about }}</p>
+
+        <template v-for="answer in request.answers" :key="answer.id">
+            <p class="subtitle">{{ answer.issue }}:</p>
+            <p>{{ answer.answer }}</p>
+        </template>
+
         <p class="subtitle">Сопутствующие документы:</p>
-        <div class="file">
+
+        <div class="file" v-for="document in request.documents" :key="document">
             <div class="file_name">
                 <img class="file_img" src="/assets/file_dock.svg" />{{
-                    request.file
+                    document.file
                 }}
             </div>
-            <a class="download_text" :href="request.file" target="_blank">
+            <a class="download_text" :href="document.file" target="_blank">
                 <img class="download_img" src="/assets/download.svg" />
                 скачать файл
             </a>
         </div>
+
         <div class="button">
-            <button type="submit" class="deny_button">Отклонить</button>
-            <button type="submit" class="submit_button">Одобрить</button>
+            <button @click="onCancel" class="deny_button">Отклонить</button>
+            <button @click="onAccept" class="submit_button">Одобрить</button>
         </div>
     </div>
 </template>
 
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { ref } from 'vue';
-const pages = ref([
-    { pageTitle: 'Мероприятия', href: '#' },
-    { pageTitle: 'Мистер и Мисс РСО | Санкт-пете...', href: '#' },
-    { pageTitle: 'Заявка на участие', href: '#' },
-]);
-const request = {
-    id: 1,
-    user: {
-        media: {
-            photo: '123as',
-        },
-        first_name: 'Kolya Kolya',
-        date_of_birth: '01.01.2000',
-    },
-    size: 'XL',
-    about: 'Я классный парень, готов помогать на мероприятии, работать 24/7. Легко нахожу общий язык со всеми.',
-    file: 'Согласие_на_обработку_перс_данных_Васильев.png',
+import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { HTTP } from '@app/http';
+
+const route = useRoute();
+const router = useRouter();
+
+const request = ref({});
+const currentApplicationId = ref(0);
+
+const getIndividualApplication = async () => {
+    try {
+        const { data } = await HTTP.get(
+            `/events/1/applications/${currentApplicationId.value}/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        request.value = data;
+    } catch (e) {
+        console.log('get application error', e);
+    }
 };
+
+const onCancel = async () => {
+    try {
+        await HTTP.delete(
+            `/events/1/applications/${currentApplicationId.value}/`,
+            {},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+    } catch (e) {
+        console.log('error cancel', e);
+    }
+};
+
+const onAccept = async () => {
+    try {
+        await HTTP.post(
+            `/events/1/applications/${currentApplicationId.value}/confirm/`,
+            {},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        const { data } = await HTTP.get(`/events/1/applications/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        if (data.length) {
+            router.push({
+                name: 'IndividualRequest',
+                params: {
+                    id: data[0],
+                },
+            });
+        } else {
+            console.log('not');
+        }
+    } catch (e) {
+        console.log('error accept', e);
+    }
+};
+
+watch(
+    [() => route.params.id, () => route.name],
+    ([newRouteId, newRouteName]) => {
+        if (!newRouteId || newRouteName !== 'IndividualRequest') return;
+        if (newRouteId === currentApplicationId.value) return;
+
+        currentApplicationId.value = newRouteId;
+
+        getIndividualApplication();
+    },
+    { immediate: true },
+);
 </script>
 
 <style lang="scss" scoped>

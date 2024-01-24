@@ -635,13 +635,15 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             {
-                path: '/individualrequest',
+                path: '/individualrequest/:id',
                 name: 'IndividualRequest',
                 component: () =>
-                    import('@pages/IndividualRequestPage/components/IndividualRequestPage.vue'),
-                    meta: {
-                        requiresAuth: true
-                    }
+                    import(
+                        '@pages/IndividualRequestPage/components/IndividualRequestPage.vue'
+                    ),
+                meta: {
+                    requiresAuth: true,
+                },
             },
         ],
     },
