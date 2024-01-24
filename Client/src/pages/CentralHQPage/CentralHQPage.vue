@@ -1,61 +1,62 @@
 <template>
     <div class="container">
-            <h1 class="title title--hq">Центральный штаб</h1>
-            <BannerHQ
-                v-if="showHQ"
-                :headquarter="headquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showDistrictHQ"
-                :districtHeadquarter="districtHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showLocalHQ"
-                :localHeadquarter="localHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else-if="showRegionalHQ"
-                :regionalHeadquarter="regionalHeadquarter"
-                :edict="educt"
-                :member="member"
-            ></BannerHQ>
-            <BannerHQ
-                v-else
-                :centralHeadquarter="centralHeadquarter"
-                :member="member"
-            ></BannerHQ>
-            <section class="about-hq">
-                <h3>Описание центрального штаба</h3>
-                <p v-if="showHQ">
-                    {{ headquarter.about }}
-                </p>
-                <p v-else-if="showDistrictHQ">
-                    {{ districtHeadquarter.about }}
-                </p>
-                <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-                <p v-else-if="showRegionalHQ">
-                    {{ regionalHeadquarter.about }}
-                </p>
-                <p v-else>{{ centralHeadquarter.about }}</p>
-            </section>
-            <ManagementHQ
-                :member="member"
-                head="Руководство центрального штаба"
-            ></ManagementHQ>
-            <HQandSquad></HQandSquad>
+        <h1 class="title title--hq">Центральный штаб</h1>
+        <BannerHQ
+            v-if="showHQ"
+            :headquarter="headquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showDistrictHQ"
+            :districtHeadquarter="districtHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showLocalHQ"
+            :localHeadquarter="localHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else-if="showRegionalHQ"
+            :regionalHeadquarter="regionalHeadquarter"
+            :edict="educt"
+            :member="member"
+        ></BannerHQ>
+        <BannerHQ
+            v-else
+            :centralHeadquarter="centralHeadquarter"
+            :member="member"
+        ></BannerHQ>
+        <section class="about-hq">
+            <h3>Описание центрального штаба</h3>
+            <p v-if="showHQ">
+                {{ headquarter.about }}
+            </p>
+            <p v-else-if="showDistrictHQ">
+                {{ districtHeadquarter.about }}
+            </p>
+            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
+            <p v-else-if="showRegionalHQ">
+                {{ regionalHeadquarter.about }}
+            </p>
+            <p v-else>{{ centralHeadquarter.about }}</p>
+        </section>
+        <ManagementHQ
+            :member="filteredMembers"
+            head="Руководство центрального штаба"
+            :position="position"
+        ></ManagementHQ>
+        <HQandSquad></HQandSquad>
     </div>
 </template>
 <script setup>
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import HQandSquad from '../RegionalHQPage/components/HQandSquad.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { usePage } from '@shared';
@@ -65,9 +66,9 @@ const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showHQ = ref(false);
 
+const position = ref({});
 const centralHeadquarter = ref({});
 const member = ref([]);
-const commander = ref({});
 const route = useRoute();
 let id = route.params.id;
 
@@ -105,7 +106,16 @@ const aboutMembers = async () => {
             console.log('an error occured ' + error);
         });
 };
-
+const filteredMembers = computed(() => {
+    return member.value.filter((manager) => {
+        return (
+            manager.position &&
+            (manager.position === 'Командир' ||
+                manager.position === 'Мастер (методист)' ||
+                manager.position === 'Комиссар')
+        );
+    });
+});
 onMounted(() => {
     aboutCentralHQs();
     aboutMembers();

@@ -200,15 +200,13 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import {
-    HeadquartersList,
-    horizontalHeadquarters,
-} from '@features/Headquarters/components';
+import { HeadquartersList, horizontalHeadquarters } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-import { onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
+import { onActivated } from 'vue';
 
 const crosspageFilters = useCrosspageFilter();
 
@@ -395,15 +393,27 @@ const sortedHeadquarters = computed(() => {
     return tempHeadquartes;
 });
 
-onBeforeRouteUpdate(async (to, from) => {
+onBeforeRouteLeave(async (to, from) => {
     const pageName = 'AllHeadquarters';
     const filtersPropertiesToRemove = [
-        'disrictName',
+        'districtName',
         'regionalName',
         'localName',
     ];
 
     crosspageFilters.removeFilters(pageName, filtersPropertiesToRemove);
+});
+onActivated(() => {
+    SelectedSortDistrict.value = JSON.parse(
+        localStorage.getItem('AllHeadquarters_filters'),
+    )?.districtName;
+
+    SelectedSortRegional.value = JSON.parse(
+        localStorage.getItem('AllHeadquarters_filters'),
+    )?.regionalName;
+    SelectedSortLocal.value = JSON.parse(
+        localStorage.getItem('AllHeadquarters_filters'),
+    )?.localName;
 });
 </script>
 <style lang="scss">
@@ -440,6 +450,7 @@ onBeforeRouteUpdate(async (to, from) => {
             border: 1px solid black;
         }
     }
+
     &-wrapper {
         padding: 60px 0px;
         display: grid;
@@ -453,6 +464,12 @@ onBeforeRouteUpdate(async (to, from) => {
             grid-template-columns: 1fr 1fr;
         }
     }
+}
+
+pre {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .headquarters-wrapper__item {
     margin: 0px auto;

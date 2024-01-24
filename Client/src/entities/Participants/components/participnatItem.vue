@@ -37,41 +37,8 @@ const props = defineProps({
     },
 });
 
-// const position = ref({});
 
-// const aboutPosition = async () => {
-//     let id = props.participant.position;
-//     console.log('id', id)
 
-//     await HTTP.get(`/positions/${id}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             position.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// onMounted(() => {
-//     aboutPosition();
-// });
-
-// watch(
-//     () => props.participant,
-
-//     (newParticipant, oldParticipant) => {
-//         if (Object.keys(props.participant).length === 0) {
-//             return;
-//         }
-//         aboutPosition();
-//     },
-// );
 </script>
 <style lang="scss" scoped>
 .round-img {

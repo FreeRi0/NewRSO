@@ -434,6 +434,12 @@ onActivated(() => {
     }
 }
 
+pre {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .horizontal {
     margin-top: 40px;
     display: grid;

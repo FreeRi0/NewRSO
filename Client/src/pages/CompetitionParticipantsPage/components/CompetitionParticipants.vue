@@ -233,7 +233,7 @@ const sortOptionss = ref([
     },
     { value: 'founding_date', name: 'Дате создания отряда' },
     { value: 'members_count', name: 'Количеству участников' },
-    { value: 'members_count', name: 'Место в рейтинге' },
+    { value: 'rating', name: 'Место в рейтинге' },
 ]);
 
 const sortedSquads = computed(() => {
@@ -257,8 +257,8 @@ const sortedSquads = computed(() => {
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa = a.detachment.name.toLowerCase(), 
+                fb = b.detachment.name.toLowerCase();
 
             if (fa < fb) {
                 return -1;

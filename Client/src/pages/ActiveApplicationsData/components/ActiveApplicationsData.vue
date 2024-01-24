@@ -26,8 +26,8 @@
                     />
                 </div>
                 <activeApplications
-                    :participants="participants"
                     @change="changePeoples"
+                    :participants="participants"
                     :selected-peoples="selectedPeoples"
                 />
                 <!-- <Button
@@ -146,7 +146,9 @@ const step = ref(12);
 // tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
 const viewParticipants = async () => {
-    let id = roles?.roles?.value?.detachment_commander;
+    let id =
+        roles?.roles?.value?.detachment_commander ||
+        roles?.roles?.value?.regionalheadquarter_commander;
     console.log('roles', roles.roles.value);
     console.log('id', id);
     await HTTP.get(`/detachments/${id}/verifications/`, {
@@ -226,20 +228,20 @@ const selectSquads = (event) => {
 
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
-    console.log('fff', CheckedUser, UserId);
+    console.log('fffUser', CheckedUser, UserId);
     if (CheckedUser) {
-        participant = participants.value.find((item) => item.id == UserId);
+        participant = participants.value.find((item) => item.user.id == UserId);
         selectedPeoples.value.push(participant);
     } else {
         selectedPeoples.value = selectedPeoples.value.filter(
-            (item) => item.id !== UserId,
+            (item) => item.user.id !== UserId,
         );
     }
 };
 
 const changeSquads = (CheckedSquad, SquadId) => {
     let detachment = {};
-    console.log('fff', CheckedSquad, SquadId);
+    console.log('fffSquad', CheckedSquad, SquadId);
     if (CheckedSquad) {
         detachment = detachments.value.find((item) => item.id == SquadId);
         selectedDetch.value.push(detachment);

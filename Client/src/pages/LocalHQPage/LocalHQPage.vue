@@ -43,14 +43,16 @@
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
-            :member="member"
+            :member="filteredMembers"
             head="Руководство местного штаба"
+            :position="position"
         ></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды местного штаба</h3>
             <div class="headquarters_squads__container">
                 <div
                     class="card"
+                    :key="HQandSquad.link"
                     v-for="(HQandSquad, index) in HQandSquads"
                     :class="{
                         'align-left': index % 2 === 0,
@@ -68,7 +70,7 @@
 <script setup>
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { usePage, useCrosspageFilter } from '@shared';
@@ -79,6 +81,7 @@ const showHQ = ref(false);
 const showDistrictHQ = ref(false);
 const showRegionalHQ = ref(false);
 
+const position = ref({});
 const localHeadquarter = ref({});
 const member = ref([]);
 const educt = ref({});
@@ -120,6 +123,16 @@ const aboutMembers = async () => {
         });
 };
 
+const filteredMembers = computed(() => {
+    return member.value.filter((manager) => {
+        return (
+            manager.position &&
+            (manager.position === 'Командир' ||
+                manager.position === 'Мастер (методист)' ||
+                manager.position === 'Комиссар')
+        );
+    });
+});
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutlocalHQ();
@@ -129,7 +142,7 @@ onBeforeRouteUpdate(async (to, from) => {
 watch(
     () => route.params.id,
 
-    (newId, oldId) => {
+    (newId) => {
         id = newId;
         aboutlocalHQ();
         aboutMembers();

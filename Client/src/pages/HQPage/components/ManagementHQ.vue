@@ -4,6 +4,7 @@
         <div class="headquarters-management__container">
             <div
                 class="manager-card"
+                :key="manager"
                 v-for="(manager, index) in member"
                 :class="{
                     'align-left': index % 2 === 0,
@@ -23,8 +24,9 @@
                     <h5 id="name_length">
                         {{ manager.user.first_name }}
                         {{ manager.user.last_name }}
+                        {{ manager.user.patronymic_name }}
                     </h5>
-                    <p>{{ position.name }}</p>
+                    <p>{{ manager.position }}</p>
                 </div>
             </div>
         </div>
@@ -32,13 +34,6 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
-const route = useRoute();
-let id = route.params.id;
-
-const position = ref({});
 const props = defineProps({
     member: {
         type: Array,
@@ -46,30 +41,10 @@ const props = defineProps({
     position: {
         type: Object,
     },
+
     head: {
         type: String,
     },
-});
-
-const aboutPosition = async () => {
-    let { id, ...rest } = props.member;
-    await HTTP.get(`/positions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            position.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-onMounted(() => {
-    aboutPosition();
 });
 </script>
 
@@ -177,7 +152,6 @@ section.headquarters-management h3 {
         row-gap: 16px;
     }
     .manager-card {
-        padding: 16px;
         width: 156px;
         height: 173px;
     }
@@ -193,6 +167,8 @@ section.headquarters-management h3 {
     }
     .manager-card__avatar img {
         width: 60px;
+        height: 60px;
+        margin-bottom: 0;
     }
 }
 </style>

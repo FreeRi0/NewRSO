@@ -5,7 +5,7 @@
             :participant="participant"
             @change="changePeoples"
             :selectedParticipants="selectedPeoples"
-            :key="participant.id"
+            :key="participant.user.id"
         />
     </div>
     <h2 v-else>Заявок нет...</h2>
@@ -25,6 +25,7 @@ const props = defineProps({
 });
 
 const changePeoples = (CheckedUser, UserId) => {
+    console.log('UserId', UserId)
     emit('change', CheckedUser, UserId);
 };
 </script>

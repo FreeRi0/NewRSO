@@ -42,8 +42,9 @@
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
-            :member="member"
+            :member="filteredMembers"
             head="Руководство регионального штаба"
+            :position="position"
         ></ManagementHQ>
         <!-- <HQandSquad></HQandSquad> -->
         <section class="headquarters_squads">
@@ -70,7 +71,7 @@
 <script setup>
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { usePage, useCrosspageFilter } from '@shared';
@@ -81,6 +82,7 @@ const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showHQ = ref(false);
 
+const position = ref({});
 const regionalHeadquarter = ref({});
 const member = ref([]);
 const educt = ref({});
@@ -121,6 +123,16 @@ const aboutMembers = async () => {
             console.log('an error occured ' + error);
         });
 };
+const filteredMembers = computed(() => {
+    return member.value.filter((manager) => {
+        return (
+            manager.position &&
+            (manager.position === 'Командир' ||
+                manager.position === 'Мастер (методист)' ||
+                manager.position === 'Комиссар')
+        );
+    });
+});
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
@@ -131,7 +143,7 @@ onBeforeRouteUpdate(async (to, from) => {
 watch(
     () => route.params.id,
 
-    (newId, oldId) => {
+    (newId) => {
         id = newId;
         aboutRegionalHQ();
         aboutMembers();

@@ -9,16 +9,15 @@
 <script setup>
 import { ref } from 'vue';
 import { checkedReferencesItem } from '@entities/ReferencesPeoples';
+const emit = defineEmits(['change']);
+const changePeoples = (CheckedUser, UserId) => {
+    emit('change', CheckedUser, UserId);
+};
+
 const props = defineProps({
     participants: {
         type: Array,
         required: true,
     },
 });
-const emit = defineEmits(['change']);
-const changePeoples  = (changeUser, UserId) => {
-    emit('change', changeUser, UserId)
-};
-
 </script>
-

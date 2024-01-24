@@ -29,16 +29,12 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 const route = useRoute();
 let id = route.params.id;
+// const areaId = ref(null);
 
 const area = ref({});
 
-const props = defineProps({
-    area: {
-        type: Array,
-    },
-});
-
 const aboutArea = async () => {
+    // const idToUse = areaId.value ? areaId.value : id;
     await HTTP.get(`/areas/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -56,33 +52,6 @@ const aboutArea = async () => {
 onMounted(() => {
     aboutArea();
 });
-
-// const detachments = ref([
-//     {
-//         name: 'Сервисные',
-//         image: 'squad-ava.png',
-//     },
-//     {
-//         name: 'Проводников',
-//         image: 'squad-ava2.png',
-//     },
-//     {
-//         name: 'Медицинские',
-//         image: 'squad-ava3.png',
-//     },
-//     {
-//         name: 'Сельскохозяйственные',
-//         image: 'squad-ava5.png',
-//     },
-//     {
-//         name: 'Строительные',
-//         image: 'squad-ava4.png',
-//     },
-//     {
-//         name: 'Педагогические',
-//         image: 'squad-ava6.png',
-//     },
-// ]);
 </script>
 
 <style scoped lang="scss">

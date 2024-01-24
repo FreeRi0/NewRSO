@@ -39,7 +39,7 @@
             </div>
 
             <div class="horizontallso-item__wrapper competition__nomination">
-                Nom
+                {{ competition.detachment ? 'Тандем' : 'Дебют' }}
             </div>
         </div>
     </div>
