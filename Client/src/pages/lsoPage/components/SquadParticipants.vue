@@ -52,9 +52,9 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import {
     ParticipantsList,
     VerifiedList,
@@ -63,7 +63,7 @@ import {
 const isVerified = ref([]);
 const route = useRoute();
 const picked = ref(false);
-const id = route.params.id;
+let id = route.params.id;
 
 const props = defineProps({
     member: {
@@ -92,6 +92,23 @@ const getVerified = async () => {
             console.log('an error occured ' + error);
         });
 };
+
+
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) {
+        getVerified();
+    }
+});
+
+watch(
+    () => route.params.id,
+
+    (newId, oldId) => {
+        id = newId;
+        getVerified();
+
+    },
+);
 
 onMounted(() => {
     getVerified();

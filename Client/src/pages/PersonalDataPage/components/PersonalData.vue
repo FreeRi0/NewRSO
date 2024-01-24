@@ -110,7 +110,7 @@ const pages = ref([
     { pageTitle: 'Настройка профиля', href: '#' },
 ]);
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .profile-title {
     font-size: 40px;
     margin-bottom: 40px;

@@ -11,24 +11,6 @@ const routes: RouteRecordRaw[] = [
         },
         children: [
             {
-                path: '/Contest',
-                meta: {
-                    redirectTo: 'Contest',
-                    label: 'Конкурс',
-                },
-                children: [
-                    {
-                        path: '',
-                        name: 'Contest',
-                        component: () =>
-                            import(
-                                '@pages/BestSquadContest/components/BestSquadContest.vue'
-                            ),
-                    },
-                ],
-            },
-
-            {
                 path: '',
                 name: 'Login',
                 meta: {
@@ -145,6 +127,17 @@ const routes: RouteRecordRaw[] = [
                                             label: 'Редактирование',
                                         },
                                     },
+                                    {
+                                        path: 'AllParticipants/:id',
+                                        name: 'allparticipants',
+                                        component: () =>
+                                            import(
+                                                '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                                            ),
+                                        meta: {
+                                            label: 'Участники отряда',
+                                        },
+                                    },
                                 ],
                             },
                             {
@@ -159,17 +152,17 @@ const routes: RouteRecordRaw[] = [
                                     label: 'Создание ЛСО',
                                 },
                             },
-                            {
-                                path: 'AllParticipants',
-                                name: 'allparticipants',
-                                component: () =>
-                                    import(
-                                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
-                                    ),
-                                meta: {
-                                    label: 'Участники отряда',
-                                },
-                            },
+                            // {
+                            //     path: 'AllParticipants/:id',
+                            //     name: 'allparticipants',
+                            //     component: () =>
+                            //         import(
+                            //             '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                            //         ),
+                            //     meta: {
+                            //         label: 'Участники отряда',
+                            //     },
+                            // },
                         ],
                     },
                     // Штабы СО ОО
@@ -424,35 +417,24 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/actionSquads',
                 name: 'actionSquads',
-
-                component: () =>
-                    import(
-                        '@pages/actionSquadsPade/components/actionSquadsPage.vue'
-                    ),
+                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
             },
             {
                 path: '/actionSquads/:id',
                 name: 'Action',
-                component: () =>
-                    import('@pages/ActionPage/components/ActionPage.vue'),
+                component: () => import('@pages/Event/components/Event.vue'),
             },
             {
-                path: '/createAction',
-                name: 'createAction',
-                component: () =>
-                    import(
-                        '@pages/CreationActionsPage/components/CreationActionsPage.vue'
-                    ),
-            },
-            {
-                path: '/EditAction',
-                name: 'editAction',
-                component: () =>
-                    import(
-                        '@pages/EditActionPage/components/EditActionPage.vue'
-                    ),
+                path: "/createAction",
+                name: "createAction",
+                component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
             },
 
+            {
+                path: "/actionSquads/:id/EditAction",
+                name: "editAction",
+                component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
+            },
             {
                 path: '/AllParticipants/:id',
                 name: 'allParticipants',
@@ -464,8 +446,6 @@ const routes: RouteRecordRaw[] = [
                     label: 'Участники мероприятия',
                 },
             },
-
-
 
             {
                 path: '/activeInvents/accountVerification',
@@ -505,17 +485,47 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
+
             {
-                path: '/CompetitionParticipants',
-                name: 'CompetitionParticipants',
-                component: () =>
-                    import(
-                        '@pages/CompetitionParticipantsPage/components/CompetitionParticipants.vue'
-                    ),
+                path: '/Competition',
                 meta: {
-                    requiresAuth: true,
+                    redirectTo: 'Competition',
+                    label: 'Конкурс',
                 },
+                children: [
+                    {
+                        path: '',
+                        name: 'Competition',
+                        component: () =>
+                            import(
+                                '@pages/BestSquadCompetition/components/BestSquadCompetition.vue'
+                            ),
+                    },
+                    {
+                        path: '/CompetitionParticipants',
+                        name: 'CompetitionParticipants',
+                        component: () =>
+                            import(
+                                '@pages/CompetitionParticipantsPage/components/CompetitionParticipants.vue'
+                            ),
+                        meta: {
+                            requiresAuth: true,
+                            label: 'Участники конкурса',
+                        },
+                    },
+                ],
             },
+            // {
+            //     path: '/CompetitionParticipants',
+            //     name: 'CompetitionParticipants',
+            //     component: () =>
+            //         import(
+            //             '@pages/CompetitionParticipantsPage/components/CompetitionParticipants.vue'
+            //         ),
+            //     meta: {
+            //         requiresAuth: true,
+            //     },
+            // },
         ],
     },
     {
@@ -539,7 +549,7 @@ const routes: RouteRecordRaw[] = [
                         component: () =>
                             import('@pages/UserPage/components/UserPage.vue'),
                     },
-                ]
+                ],
             },
             {
                 path: '/PersonalData',
@@ -585,7 +595,9 @@ const routes: RouteRecordRaw[] = [
                         path: '',
                         name: 'references',
                         component: () =>
-                            import('@pages/ReferencePage/components/references.vue'),
+                            import(
+                                '@pages/ReferencePage/components/references.vue'
+                            ),
                     },
                     {
                         path: 'reference',

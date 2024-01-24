@@ -3,7 +3,7 @@
         v-for="participant in participants"
         @change="changePeoples"
         :participant="participant"
-        :key="participant?.user?.id"
+        :key="participant.id"
     />
 </template>
 <script setup>

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="headquarters.length > 0">
+    <div class="headquarters-wrapper" v-if="headquarters.length > 0">
         <educationItem
             v-for="headquarter in headquarters"
             :headquarter="headquarter"

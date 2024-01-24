@@ -300,7 +300,7 @@ const sortedSquads = computed(() => {
     return tempSquads;
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
@@ -340,7 +340,7 @@ const sortedSquads = computed(() => {
 }
 
 .squads {
-    padding: 40px 0px 60px 0px;
+    padding: 0px 0px 60px 0px;
 
     &-title {
         font-size: 52px;

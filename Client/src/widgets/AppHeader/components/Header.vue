@@ -44,8 +44,10 @@
                                 >Мероприятия</a
                             >
                         </li>
-                        <li class="header__nav-item">
-                            <a class="header__nav-link" href="/Contest"
+                        <li class="header__nav-item competition__nav-item">
+                            <a
+                                class="header__nav-link competition__link"
+                                href="/Competition"
                                 >Конкурс</a
                             >
                         </li>
@@ -177,8 +179,8 @@ const roles = storeToRefs(roleStore);
 
 const router = useRouter();
 const user = ref({});
-const route = useRoute();
-let id = route.params.id;
+// const route = useRoute();
+// let id = route.params.id;
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
@@ -197,41 +199,41 @@ const userPages = computed(() => [
             id: user.value.id,
         },
     },
-    // {
-    //     title: 'Мой отряд',
-    //     name: 'lso',
-    //     params: {
-    //         id: user.value.detachment_id,
-    //     },
-    // },
-    // {
-    //     title: 'Штаб СО ОО',
-    //     name: 'HQ',
-    //     params: {
-    //         id: user.value.educational_headquarter_id,
-    //     },
-    // },
-    // {
-    //     title: 'Местный штаб',
-    //     name: 'LocalHQ',
-    //     params: {
-    //         id: user.value.local_headquarter_id,
-    //     },
-    // },
-    // {
-    //     title: 'Региональный штаб',
-    //     name: 'RegionalHQ',
-    //     params: {
-    //         id: user.value.regional_headquarter_id,
-    //     },
-    // },
-    // {
-    //     title: 'Окружной штаб',
-    //     name: 'DistrictHQ',
-    //     params: {
-    //         id: user.value.district_headquarter_id,
-    //     },
-    // },
+    {
+        title: 'Мой отряд',
+        name: 'lso',
+        params: {
+            id: user?.value?.detachment_id,
+        },
+    },
+    {
+        title: 'Штаб СО ОО',
+        name: 'HQ',
+        params: {
+            id: user?.value?.educational_headquarter_id,
+        },
+    },
+    {
+        title: 'Местный штаб',
+        name: 'LocalHQ',
+        params: {
+            id: user?.value?.local_headquarter_id,
+        },
+    },
+    {
+        title: 'Региональный штаб',
+        name: 'RegionalHQ',
+        params: {
+            id: user?.value?.regional_headquarter_id,
+        },
+    },
+    {
+        title: 'Окружной штаб',
+        name: 'DistrictHQ',
+        params: {
+            id: user?.value?.district_headquarter_id,
+        },
+    },
     {
         title: 'Центральный штаб',
         name: 'CentralHQ',
@@ -277,7 +279,7 @@ const getUser = async () => {
             console.log('an error occured ' + error);
         });
 };
-console.log('dddddd', id);
+// console.log('dddddd', id);
 
 const updateRegion = async () => {
     await HTTP.patch('/rsousers/me/region/', {
@@ -327,21 +329,6 @@ const getRegionals = async () => {
             console.log('an error occured ' + error);
         });
 };
-
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         getUser();
-//     }
-// });
-
-// watch(
-//     () => router.params.id,
-
-//     (newId, oldId) => {
-//         id = newId;
-//         getUser();
-//     },
-// );
 
 onMounted(() => {
     getUser();
@@ -441,10 +428,10 @@ onMounted(() => {
         // font-size: 16px;
         // font-weight: 400;
         // line-height: 21px;
-        max-width: 445px;
+        max-width: 520px;
 
-        // min-width: 415px;
-        min-width: 411px; // для отображения без ссылки КОНКУРС
+        min-width: 415px;
+        // min-width: 411px; // для отображения без ссылки КОНКУРС
 
         @media (max-width: 1024px) {
             position: absolute;
@@ -472,6 +459,10 @@ onMounted(() => {
             max-width: 415px;
             width: 100%;
         }
+    }
+
+    &__nav-item {
+        margin-right: 5px;
     }
 
     &__button-mobile-menu {

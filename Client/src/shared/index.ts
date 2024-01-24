@@ -11,4 +11,5 @@ export { usePageStore } from './stores/pageStore';
 
 /* exports composables */
 export { default as usePage } from './composables/usePage';
+export { default as useCrosspageFilter } from './composables/useCrosspageFilter';
 /* exports composables */

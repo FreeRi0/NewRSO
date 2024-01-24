@@ -2,11 +2,11 @@
     <div class="container">
         <div class="contributor">
             <h2 class="contributor-title">Членский взнос</h2>
-            <div class="d-flex mt-7">
+            <div class="d-flex mt-7 buttonWrapper">
                 <button
                     type="button"
                     class="contributorBtn"
-                    :class="{ active: picked === true }"
+                    :class="{ activee: picked === true }"
                     @click="picked = true"
                 >
                     Мой членский взнос
@@ -15,7 +15,7 @@
                 <button
                     type="button"
                     class="contributorBtn"
-                    :class="{ active: picked === false }"
+                    :class="{ activee: picked === false }"
                     @click="picked = false"
                 >
                     Данные об оплате членского взноса пользователями системы
@@ -745,7 +745,7 @@ const sortedParticipants = computed(() => {
     return tempParticipants;
 });
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -765,14 +765,20 @@ p {
     padding: 10px 24px;
     margin: 7px;
 }
+.buttonWrapper {
+    @media (max-width: 1024px) {
+        flex-wrap: wrap;
+        max-width: 650px;
+    }
+}
 
-.active {
+.activee {
     background-color: #1c5c94;
     color: white;
 }
 
 .contributor {
-    padding: 60px 0px 60px 0px;
+    padding: 0px 0px 60px 0px;
     &-title {
         font-size: 52px;
     }
@@ -780,6 +786,11 @@ p {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+        @media (max-width: 1024px) {
+         flex-direction: column;
+         align-items: flex-start;
+         margin-top: 60px;
+    }
     }
     &-container {
         display: grid;
@@ -884,6 +895,9 @@ p {
 .sort {
     &-filters {
         align-items: flex-start;
+        @media (max-width: 1024px) {
+        margin-top: 20px;
+    }
     }
 }
 
@@ -920,5 +934,9 @@ p {
 
 .v-expansion-panel:not(:first-child)::after {
     display: none;
+}
+
+.v-expansion-panel-title {
+    padding: 7px 0px
 }
 </style>

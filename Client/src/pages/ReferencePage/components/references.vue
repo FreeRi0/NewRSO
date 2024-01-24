@@ -24,7 +24,7 @@
 <script setup></script>
 <style lang="scss">
 .referencesMenu {
-    padding: 100px 0px 350px 0px;
+    padding: 0px 0px 350px 0px;
     &-title {
         font-size: 52px;
         font-weight: 600;

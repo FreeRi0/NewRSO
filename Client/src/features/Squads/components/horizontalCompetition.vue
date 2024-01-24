@@ -5,6 +5,7 @@
             :squad="squad"
             :rating="true"
             :key="squad.id"
+            :competition="true"
         />
     </div>
 

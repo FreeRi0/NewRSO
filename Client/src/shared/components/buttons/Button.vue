@@ -12,32 +12,15 @@
         :loaded="loaded"
         @click="clickOnButton"
     >
-        <span v-if="icon">
-
-        </span>
+        <span v-if="icon"> </span>
         <span v-else>{{ label }}</span>
         <v-progress-circular indeterminate v-if="loaded"></v-progress-circular>
     </button>
 </template>
 <script setup>
-import { ref, computed} from 'vue';
+import { ref, computed } from 'vue';
 
 const res = ref();
-
-const icons = ref([
-    {
-        name: "switch",
-        icon: "switch.svg",
-    },
-    {
-        name: "darhboard",
-        icon: "darhboard.svg",
-    },
-    {
-        name: "menu",
-        icon: "menu.svg",
-    }
-])
 
 const props = defineProps({
     label: {
@@ -73,11 +56,6 @@ const props = defineProps({
         default: 'normal',
     },
 });
-
-// const res = computed(() => {
-//  return icons.value.find((item) => item.name  == name);
-// })
-
 
 const emit = defineEmits(['click']);
 
