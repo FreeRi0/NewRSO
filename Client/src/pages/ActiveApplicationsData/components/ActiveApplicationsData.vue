@@ -147,7 +147,7 @@ const step = ref(12);
 
 const viewParticipants = async () => {
     let id =
-        roles?.roles?.value?.detachment_commander ||
+        roles?.roles?.value?.detachment_commander ??
         roles?.roles?.value?.regionalheadquarter_commander;
     console.log('roles', roles.roles.value);
     console.log('id', id);
