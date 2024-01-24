@@ -66,7 +66,6 @@ import {
     userPhoto3,
     userPhoto4,
 } from '@shared/components/imagescomp';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { ref, onMounted, watch, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
 
@@ -80,16 +79,26 @@ const media = ref({
     photo3: null,
     photo4: null,
 });
-const del = ref('');
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
-const route = useRoute();
 
 const counterSquad = computed(() => {
     return user.value?.bio?.length || 0;
 });
-let id = route.params.id;
+
+const regions = ref([]);
+const getRegions = async () => {
+    const { data } = await HTTP.get('/regions', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+
+    regions.value = data;
+};
+
 
 const getUser = async () => {
     await HTTP.get(`/rsousers/me/`, {
@@ -98,9 +107,12 @@ const getUser = async () => {
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
-        .then((response) => {
+    .then((response) => {
             user.value = response.data;
-            console.log(response.data);
+            user.value.region = regions.value.find(
+                (region) => region.name === user.value.region,
+            )?.id;
+            console.log(user.value);
         })
         .catch(function (error) {
             console.log('failed ' + error);
@@ -158,6 +170,7 @@ const AddAbout = async () => {
 };
 
 onMounted(() => {
+    getRegions();
     getUser();
     getMedia();
 });

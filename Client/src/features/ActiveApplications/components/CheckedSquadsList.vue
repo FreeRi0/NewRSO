@@ -8,7 +8,7 @@
     />
 </template>
 <script setup>
-import { ref, watch } from 'vue';
+import { ref} from 'vue';
 import { checkedEnteredSquadItem } from '@entities/Squads';
 
 const emit = defineEmits(['change']);
@@ -25,4 +25,3 @@ const props = defineProps({
 
 
 </script>
-<style lang="scss"></style>

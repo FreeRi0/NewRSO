@@ -32,13 +32,23 @@
                     @click:append-inner="visible = !visible"
                 ></v-text-field> -->
 
-                <Input
-                    type="password"
-                    placeholder="Пароль"
-                    name="password"
-                    v-model:value="data.password"
-                    class="username-password"
-                />
+                    <Input
+                        :type="showPassword ? 'text' : 'password'"
+                        placeholder="Пароль"
+                        name="password"
+                        v-model:value="data.password"
+                        class="username-password"
+                    />
+                    <!-- <button
+                        type="button"
+                        class="showPass"
+                        @click="showPassword = !showPassword"
+                    >
+                        <i
+                            :class="showPassword ? ' mdi-eye' : 'mdi-eye-off'"
+                        ></i>
+                    </button> -->
+
 
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
@@ -81,7 +91,8 @@ const data = ref({
     username: '',
     password: '',
 });
-const visible = ref(false);
+// const visible = ref(false);
+// const showPassword = ref(false);
 
 // const user = ref({});
 const isError = ref('');
@@ -142,6 +153,14 @@ const LoginUser = async () => {
 .login_btn {
     margin-top: 40px;
 }
+
+// .showPass {
+//     border: none;
+//     background-color: transparent;
+//     cursor: pointer;
+//     margin-left: -30px;
+// }
+
 
 .v-card-title {
     padding: 0rem 1rem;

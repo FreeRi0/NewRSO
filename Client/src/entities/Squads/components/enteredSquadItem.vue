@@ -199,7 +199,6 @@ watch(
 }
 
 .horizontallso-item__list-date {
-    // width: 95px;
     display: grid;
     grid-template-columns: auto 1fr 0fr;
 }

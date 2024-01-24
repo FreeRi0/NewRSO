@@ -292,33 +292,24 @@ const ChangeStatus = async () => {
     margin-left: 10px;
 }
 
-.horizontalSquad-item__list-date {
-    // width: 95px;
+.horizontallso-item__list-date {
     display: grid;
     grid-template-columns: auto 1fr 0fr;
-}
-
-.horizontalSquad-item__list-img-status {
-    position: absolute;
-    width: 18px;
-    max-height: 18px;
-    top: -17px;
-    right: -15px;
 }
 
 .horizontalSquad-item__list-img {
     margin-right: 13px;
 }
 
-.horizontalSquad-item__list-full {
+.horizontallso-item__list-full {
     color: #35383f;
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
     font-weight: 400;
-    margin-left: 10px;
+    margin-right: 10px;
 }
 
-.horizontalSquad-item__list-date p {
+.horizontallso-item__list-date p {
     color: #1c5c94;
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
@@ -370,6 +361,7 @@ const ChangeStatus = async () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-left: 10px;
 }
 
 .checked-item img {

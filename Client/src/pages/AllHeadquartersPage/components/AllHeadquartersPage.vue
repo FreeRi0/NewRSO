@@ -437,6 +437,7 @@ onBeforeRouteUpdate(async (to, from) => {
             border: 1px solid black;
         }
     }
+
     &-wrapper {
         padding: 60px 0px;
         display: grid;
@@ -450,6 +451,12 @@ onBeforeRouteUpdate(async (to, from) => {
             grid-template-columns: 1fr 1fr;
         }
     }
+}
+
+pre {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .headquarters-wrapper__item {
     margin: 0px auto;

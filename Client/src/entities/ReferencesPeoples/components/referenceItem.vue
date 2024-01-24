@@ -31,7 +31,7 @@
                         {{ participant.user.first_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ participant?.user?.patronymic_name }}
+                        {{ participant.user.patronymic_name }}
                     </p>
                 </div>
                 <div class="horizontallso-item__list-date">
@@ -41,7 +41,7 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{participant?.user?.date_of_birth }}</p>
+                    <p>{{participant.user.date_of_birth }}</p>
 
                 </div>
             </div>
@@ -67,8 +67,8 @@ const emit = defineEmits(['change']);
 const checked = ref(false);
 
 const updateCheck = (e) => {
-    console.log('dddddd', checked.value);
-    emit('change', checked.value, props.participant.id);
+    console.log('ddddddUser', checked.value, props.participant);
+    emit('change', checked.value, props.participant.user.id);
 };
 
 const selectedPeoples = ref(props.selectedParticipants);
