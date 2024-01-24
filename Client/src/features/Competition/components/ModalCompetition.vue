@@ -18,7 +18,7 @@
                     label="Тандем"
                     color="primary"
                     size="large"
-                    @click="isChooseSquad = true"
+                    @click="SendInvitation"
                 ></Button>
                 <Button
                     type="submit"
@@ -60,7 +60,7 @@
                 label="Отправить приглашение"
                 color="primary"
                 size="large"
-                @click="SendInvitation(juniorDetachment)"
+                @click="sendAppl(juniorDetachment)"
             ></Button>
         </form>
     </div>
@@ -75,8 +75,8 @@
         </button>
         <p>
             Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;номинации &laquo;Дебют&raquo; по&nbsp;причине: -дата
-            основания отряда ранее 25.01.2024&nbsp;года.
+            в&nbsp;номинации &laquo;Тандем&raquo; по&nbsp;причине: -дата
+            основания отряда позже 25.01.2024&nbsp;года.
         </p>
     </div>
 
@@ -90,8 +90,8 @@
         </button>
         <p>
             Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;номинации &laquo;Тандем&raquo; по&nbsp;причине: -дата
-            основания отряда позже 25.01.2024&nbsp;года.
+            в&nbsp;номинации &laquo;Дебют&raquo; по&nbsp;причине: -дата
+            основания отряда ранее 25.01.2024&nbsp;года.
         </p>
     </div>
 
@@ -215,13 +215,32 @@ const getSquads = async () => {
         });
 };
 
+const sliceNulls = (str) => {
+    if (str.startsWith('0')) {
+        return sliceNulls(str.slice(1));
+    }
+
+    return str;
+};
+
 //Дебют
 const SendApplication = async () => {
     const body = {};
 
-    // if (new Date(props.squad.split('-').map((num, index) => index % 2 === 1 ? parseInt(num) -1 : parseInt(num)))) {
-
-    // }
+    if (
+        new Date(
+            ...props.squad.founding_date
+                .split('-')
+                .map((num, index) =>
+                    index % 2 === 1
+                        ? parseInt(sliceNulls(num)) - 1
+                        : parseInt(sliceNulls(num)),
+                ),
+        ).getTime() < new Date(2024, 0, 25).getTime()
+    ) {
+        errorIsStatusStart.value = true;
+        return;
+    }
 
     try {
         await HTTP.post(`/competitions/${id}/applications/`, body, {
@@ -239,7 +258,27 @@ const SendApplication = async () => {
 };
 
 //Тандем
-const SendInvitation = async (juniorDetacmentId) => {
+const SendInvitation = async () => {
+    if (
+        new Date(
+            ...props.squad.founding_date
+                .split('-')
+                .map((num, index) =>
+                    index % 2 === 1
+                        ? parseInt(sliceNulls(num)) - 1
+                        : parseInt(sliceNulls(num)),
+                ),
+        ).getTime() > new Date(2024, 0, 25).getTime()
+    ) {
+        console.log('err');
+        errorIsStatusMentor.value = true;
+        return;
+    }
+
+    isChooseSquad.value = true;
+};
+
+const sendAppl = async (juniorDetacmentId) => {
     const body = {};
 
     if (juniorDetacmentId) {

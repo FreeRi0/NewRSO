@@ -187,36 +187,39 @@ const isAuth = ref(!!localStorage.getItem('Token'));
 const userCommander = ref({});
 
 const getUserCommander = async () => {
-    HTTP.get(`rsousers/me_commander/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            userCommander.value = response.data;
-            console.log('я командир', response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`rsousers/me_commander/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        userCommander.value = response.data;
+        console.log('конкурс', response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const squad = ref({});
-const getMeSquad = () => {
-    HTTP.get(`detachments/${userCommander.value.detachment_commander}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squad.value = response.data;
-            console.log('я командир', response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+const getMeSquad = async () => {
+    try {
+        const response = await HTTP.get(
+            `detachments/${userCommander.value.detachment_commander}/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        squad.value = response.data;
+        console.log('конкурс', response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 //--id конкурса на лучший отряд--------------------------------
@@ -229,36 +232,38 @@ const isSendApplication = ref(false);
 const errorIsNoCommander = ref(false);
 
 const getCompetition = async () => {
-    HTTP.get(`competitions/${id}/`, {
-        // headers: {
-        //     'Content-Type': 'application/json',
-        //     Authorization: 'Token ' + localStorage.getItem('Token'),
-        // },
-    })
-        .then((response) => {
-            competition.value = response.data;
-            console.log('конкурс', response);
-            // console.log(competition.value.name);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`competitions/${id}/`, {
+            // headers: {
+            //     'Content-Type': 'application/json',
+            //     Authorization: 'Token ' + localStorage.getItem('Token'),
+            // },
         });
+
+        competition.value = response.data;
+        console.log('конкурс', response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const getSquadStatus = async () => {
-    HTTP.get(`competitions/${id}/check_detachment_status/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            currentStatus.value = response.data;
-            console.log('status', response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+    try {
+        const response = await HTTP.get(
+            `competitions/${id}/check_detachment_status/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        currentStatus.value = response.data;
+        console.log('конкурс', response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const onSendApplication = () => {
@@ -275,11 +280,12 @@ const closeSendApplication = () => {
     isSendApplication.value = false;
 };
 
-onMounted(() => {
-    getCompetition();
-    getSquadStatus();
-    getUserCommander();
-    getMeSquad();
+onMounted(async () => {
+    await getUserCommander();
+
+    await getCompetition();
+    await getSquadStatus();
+    await getMeSquad();
 });
 </script>
 <style lang="scss"></style>
