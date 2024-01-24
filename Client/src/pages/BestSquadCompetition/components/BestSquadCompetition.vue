@@ -5,13 +5,15 @@
         </h1>
 
         <div class="competition__promo">
-            <div class="competition__image-box">
-                <img
-                    :src="'/assets/competition/best-squad.png'"
-                    alt="Логотип конкурса"
-                    width="1180"
-                    height="510"
-                />
+            <div class="competition__container">
+                <div class="competition__image-box">
+                    <img
+                        :src="'/assets/competition/best-squad.png'"
+                        alt="Логотип конкурса"
+                        width="1180"
+                        height="510"
+                    />
+                </div>
             </div>
 
             <div class="competition__status-application">
@@ -51,7 +53,7 @@
         </p>
 
         <ul class="text competition__about">
-            <li>
+            <li class="competition__item">
                 <ul class="competition__list">
                     <li>
                         <span>Масштаб конкурса:</span>

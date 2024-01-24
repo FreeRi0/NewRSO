@@ -1,12 +1,14 @@
 <template>
     <section class="competition__promo-lso">
-        <div class="competition__image-box">
-            <img
-                :src="'/assets/competition/best-squad.png'"
-                alt="Логотип конкурса"
-                width="1180"
-                height="510"
-            />
+        <div class="competition__container">
+            <div class="competition__image-box">
+                <img
+                    :src="'/assets/competition/best-squad.png'"
+                    alt="Логотип конкурса"
+                    width="1500"
+                    height="720"
+                />
+            </div>
 
             <ul class="competition__link-group">
                 <li class="competition__label">
