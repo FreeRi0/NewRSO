@@ -59,7 +59,7 @@ const routes: RouteRecordRaw[] = [
                 name: 'CreaturePassword',
                 component: () =>
                     import(
-                        '@pages/СreaturePassword/components/CreaturePasswordPage.vue'
+                        '@pages/CreaturePassword/components/CreaturePasswordPage.vue'
                     ),
             },
             {
@@ -476,8 +476,6 @@ const routes: RouteRecordRaw[] = [
                 },
             },
 
-
-
             {
                 path: '/activeInvents/accountVerification',
                 name: 'accountVerification',
@@ -550,7 +548,7 @@ const routes: RouteRecordRaw[] = [
                         component: () =>
                             import('@pages/UserPage/components/UserPage.vue'),
                     },
-                ]
+                ],
             },
             {
                 path: '/PersonalData',
@@ -596,7 +594,9 @@ const routes: RouteRecordRaw[] = [
                         path: '',
                         name: 'references',
                         component: () =>
-                            import('@pages/ReferencePage/components/references.vue'),
+                            import(
+                                '@pages/ReferencePage/components/references.vue'
+                            ),
                     },
                     {
                         path: 'reference',
