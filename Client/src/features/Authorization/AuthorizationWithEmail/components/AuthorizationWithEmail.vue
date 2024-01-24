@@ -72,7 +72,7 @@
 <script setup>
 import { ref, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { Input, PasswordInputVue } from '@shared/components/inputs';
+import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 // import axios from 'axios';
 import { useRouter } from 'vue-router';
@@ -81,7 +81,7 @@ const data = ref({
     username: '',
     password: '',
 });
-const visible = ref(false);
+const visible = ref(true);
 
 const isError = ref('');
 const isLoading = ref(false);
