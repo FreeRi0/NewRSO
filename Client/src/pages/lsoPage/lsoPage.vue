@@ -32,6 +32,11 @@
                 ></squadPhotos>
             </div>
 
+            <CompetitionPromo
+                v-if="squad.nomination"
+                :squad="squad"
+            ></CompetitionPromo>
+
             <SquadParticipants
                 :squad="squad"
                 :member="member"
@@ -43,9 +48,10 @@
 import { BannerSquad } from '@features/baner/components';
 import { squadPhotos } from '@shared/components/imagescomp';
 import SquadParticipants from './components/SquadParticipants.vue';
+import { CompetitionPromo } from '@/features/Competition';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { usePage } from '@shared';
 
 const squad = ref({});
@@ -73,7 +79,6 @@ const aboutSquad = async () => {
         });
 };
 
-
 const aboutMembers = async () => {
     await HTTP.get(`/detachments/${id}/members/`, {
         headers: {
@@ -90,23 +95,14 @@ const aboutMembers = async () => {
         });
 };
 
-
-
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        aboutSquad();
-        aboutMembers();
-    }
-});
-
 watch(
     () => route.params.id,
 
-    (newId, oldId) => {
+    (newId) => {
+        if (!newId || route.name !== 'lso') return;
         id = newId;
         aboutSquad();
         aboutMembers();
-
     },
 );
 
@@ -114,12 +110,10 @@ onMounted(() => {
     aboutSquad();
     aboutMembers();
 });
-
 </script>
 <style scoped lang="scss">
-
 .squad-page {
-   padding-top: 40px;
+    padding-top: 40px;
 }
 .title {
     //-----------------------------------общий класс для всех заголовков h1

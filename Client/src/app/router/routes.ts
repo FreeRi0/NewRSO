@@ -11,24 +11,6 @@ const routes: RouteRecordRaw[] = [
         },
         children: [
             {
-                path: '/Contest',
-                meta: {
-                    redirectTo: 'Contest',
-                    label: 'Конкурс',
-                },
-                children: [
-                    {
-                        path: '',
-                        name: 'Contest',
-                        component: () =>
-                            import(
-                                '@pages/BestSquadContest/components/BestSquadContest.vue'
-                            ),
-                    },
-                ],
-            },
-
-            {
                 path: '',
                 name: 'Login',
                 meta: {
@@ -465,8 +447,6 @@ const routes: RouteRecordRaw[] = [
                 },
             },
 
-
-
             {
                 path: '/activeInvents/accountVerification',
                 name: 'accountVerification',
@@ -505,17 +485,47 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true,
                 },
             },
+
             {
-                path: '/CompetitionParticipants',
-                name: 'CompetitionParticipants',
-                component: () =>
-                    import(
-                        '@pages/CompetitionParticipantsPage/components/CompetitionParticipants.vue'
-                    ),
+                path: '/Competition',
                 meta: {
-                    requiresAuth: true,
+                    redirectTo: 'Competition',
+                    label: 'Конкурс',
                 },
+                children: [
+                    {
+                        path: '',
+                        name: 'Competition',
+                        component: () =>
+                            import(
+                                '@pages/BestSquadCompetition/components/BestSquadCompetition.vue'
+                            ),
+                    },
+                    {
+                        path: '/CompetitionParticipants',
+                        name: 'CompetitionParticipants',
+                        component: () =>
+                            import(
+                                '@pages/CompetitionParticipantsPage/components/CompetitionParticipants.vue'
+                            ),
+                        meta: {
+                            requiresAuth: true,
+                            label: 'Участники конкурса',
+                        },
+                    },
+                ],
             },
+            // {
+            //     path: '/CompetitionParticipants',
+            //     name: 'CompetitionParticipants',
+            //     component: () =>
+            //         import(
+            //             '@pages/CompetitionParticipantsPage/components/CompetitionParticipants.vue'
+            //         ),
+            //     meta: {
+            //         requiresAuth: true,
+            //     },
+            // },
         ],
     },
     {
@@ -539,7 +549,7 @@ const routes: RouteRecordRaw[] = [
                         component: () =>
                             import('@pages/UserPage/components/UserPage.vue'),
                     },
-                ]
+                ],
             },
             {
                 path: '/PersonalData',
@@ -585,7 +595,9 @@ const routes: RouteRecordRaw[] = [
                         path: '',
                         name: 'references',
                         component: () =>
-                            import('@pages/ReferencePage/components/references.vue'),
+                            import(
+                                '@pages/ReferencePage/components/references.vue'
+                            ),
                     },
                     {
                         path: 'reference',

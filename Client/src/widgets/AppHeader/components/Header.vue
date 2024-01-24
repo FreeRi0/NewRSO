@@ -44,8 +44,10 @@
                                 >Мероприятия</a
                             >
                         </li>
-                        <li class="header__nav-item">
-                            <a class="header__nav-link" href="/Contest"
+                        <li class="header__nav-item competition__nav-item">
+                            <a
+                                class="header__nav-link competition__link"
+                                href="/Competition"
                                 >Конкурс</a
                             >
                         </li>
