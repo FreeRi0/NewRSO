@@ -11,7 +11,7 @@
                     class="regSelect"
                     name="select_region"
                     id="select-region"
-                    placeholder="Москва"
+                    placeholder="Регион ОО"
                     v-model="form.region"
                     address="/regions/"
                 ></Select>

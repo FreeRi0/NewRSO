@@ -34,12 +34,18 @@
                         </div>
                         <div class="hq-data__social-network">
                             <div class="hq-data__link-vk">
-                                <a href="https://vk.com" target="_blank">
+                                <a
+                                    :href="headquarter.social_vk"
+                                    target="_blank"
+                                >
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
                             <div class="hq-data__link-telegram">
-                                <a href="https://t.me" target="_blank">
+                                <a
+                                    :href="headquarter.social_tg"
+                                    target="_blank"
+                                >
                                     <img
                                         src="@/app/assets/icon/telegram-blue.svg"
                                         alt=""
@@ -106,12 +112,18 @@
                     <div class="hq-data__contacts">
                         <div class="hq-data__social-network-Reg">
                             <div class="hq-data__link-vk">
-                                <a href="https://vk.com" target="_blank">
+                                <a
+                                    :href="localHeadquarter.social_vk"
+                                    target="_blank"
+                                >
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
                             <div class="hq-data__link-telegram">
-                                <a href="https://t.me" target="_blank">
+                                <a
+                                    :href="localHeadquarter.social_tg"
+                                    target="_blank"
+                                >
                                     <img
                                         src="@/app/assets/icon/telegram-blue.svg"
                                         alt=""
@@ -177,12 +189,18 @@
                     <div class="hq-data__contacts">
                         <div class="hq-data__social-network-Reg">
                             <div class="hq-data__link-vk">
-                                <a href="https://vk.com" target="_blank">
+                                <a
+                                    :href="districtHeadquarter.social_vk"
+                                    target="_blank"
+                                >
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
                             <div class="hq-data__link-telegram">
-                                <a href="https://t.me" target="_blank">
+                                <a
+                                    :href="districtHeadquarter.social_tg"
+                                    target="_blank"
+                                >
                                     <img
                                         src="@/app/assets/icon/telegram-blue.svg"
                                         alt=""
@@ -248,12 +266,18 @@
                     <div class="hq-data__contacts">
                         <div class="hq-data__social-network-Reg">
                             <div class="hq-data__link-vk">
-                                <a href="https://vk.com" target="_blank">
+                                <a
+                                    :href="regionalHeadquarter.social_vk"
+                                    target="_blank"
+                                >
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
                             <div class="hq-data__link-telegram">
-                                <a href="https://t.me" target="_blank">
+                                <a
+                                    :href="regionalHeadquarter.social_tg"
+                                    target="_blank"
+                                >
                                     <img
                                         src="@/app/assets/icon/telegram-blue.svg"
                                         alt=""
@@ -319,12 +343,18 @@
                         </div>
                         <div class="hq-data__social-network">
                             <div class="hq-data__link-vk">
-                                <a href="https://vk.com" target="_blank">
+                                <a
+                                    :href="centralHeadquarter.social_vk"
+                                    target="_blank"
+                                >
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
                             <div class="hq-data__link-telegram">
-                                <a href="https://t.me" target="_blank">
+                                <a
+                                    :href="centralHeadquarter.social_tg"
+                                    target="_blank"
+                                >
                                     <img
                                         src="@/app/assets/icon/telegram-blue.svg"
                                         alt=""

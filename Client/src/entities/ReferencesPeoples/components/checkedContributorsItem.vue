@@ -194,6 +194,7 @@ const ChangeStatus = async () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-left: 10px;
 }
 
 .checked-item img {
@@ -268,6 +269,14 @@ const ChangeStatus = async () => {
 
 .v-field {
     border-radius: 10px;
+}
+
+.horizontallso-item__list-full {
+    color: #35383f;
+    font-family: 'BertSans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    margin-right: 10px;
 }
 .sort-select {
     height: 46px;

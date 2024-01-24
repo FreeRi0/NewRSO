@@ -21,10 +21,10 @@
         <p class="accordion-title">
             Для вступления в РСО внесите ниже персональные данные
         </p>
-
-        <!-- <p>{{ selectedAnswer }}</p>
-        <p>{{ selectedPass }}</p>
-        <p>{{ selectedAnswer == 'Нет' && selectedPass == 'Нет' }}</p> -->
+<!--
+        <p>{{ selectedAnswer }}</p>
+        <p>{{ documents.russian_passport }}</p>
+        <p>{{ selectedAnswer == 'Нет' && !documents.russian_passport }}</p> -->
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
@@ -760,7 +760,7 @@
                                 <Select
                                     variant="outlined"
                                     clearable
-                                    v-model="regionData.fact_region"
+                                    v-model="regionData.fact_region_id"
                                     address="/regions/"
                                 ></Select>
                             </div>
@@ -1317,7 +1317,7 @@
             <v-expansion-panel
                 value="panelFive"
                 class="no-RSO"
-                v-if="selectedAnswer == 'Нет'"
+                v-if="selectedAnswer == 'Нет' && documents.russian_passport"
             >
                 <v-expansion-panel-title>
                     <v-row no-gutters>
@@ -1432,7 +1432,7 @@
                                                 accept=".pdf, .jpeg, .png"
                                                 :maxFileSize="7000000"
                                                 :customUpload="true"
-                                                @uploader="statementUp"
+                                                @select="statementUp"
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
@@ -1480,7 +1480,7 @@
                                                 accept=".pdf, .jpeg, .png"
                                                 :maxFileSize="7000000"
                                                 :customUpload="true"
-                                                @uploader="selectPersonal"
+                                                @select="selectPersonal"
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
@@ -1530,7 +1530,7 @@
                                                 accept=".pdf, .jpeg, .png"
                                                 :maxFileSize="7000000"
                                                 :customUpload="true"
-                                                @uploader="selectParentPersonal"
+                                                @select="selectParentPersonal"
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
@@ -1587,12 +1587,15 @@
                                                 accept=".pdf, .jpeg, .png"
                                                 :maxFileSize="7000000"
                                                 :customUpload="true"
-                                                @uploader="selectPass"
+                                                @select="selectPass"
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
                                     </div>
                                 </div>
+                                <p class="error" v-if="isError.passport">
+                                    Обязательное поле
+                                </p>
                             </div>
                             <div class="pass-details__item">
                                 <p class="statement-title">
@@ -1624,12 +1627,20 @@
                                                 accept=".pdf, .jpeg, .png"
                                                 :maxFileSize="7000000"
                                                 :customUpload="true"
-                                                @uploader="selectParentPersonal"
+                                                @select="
+                                                    selectParentPersonalPass
+                                                "
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
                                     </div>
                                 </div>
+                                <p
+                                    class="error"
+                                    v-if="isError.passport_representative"
+                                >
+                                    Обязательное поле
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -1662,7 +1673,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectSnils"
+                                            @select="selectSnils"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -1692,7 +1703,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectMilitary"
+                                            @select="selectMilitary"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -1722,7 +1733,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectINN"
+                                            @select="selectINN"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -1752,7 +1763,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectIntPass"
+                                            @select="selectIntPass"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -1782,7 +1793,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectEmployment"
+                                            @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -1792,16 +1803,20 @@
                     </div>
                     <div class="know-RSO">
                         <p class="know-RSO-title">Откуда вы узнали про РСО</p>
-                        <textarea
+                        <TextArea
+                            class="know"
+                            name="know"
+                            placeholder="Напиши что нибудь"
+                            v-model:value="rso_info_from"
+                            :max-length="200"
+                        ></TextArea>
+                        <!-- <textarea
                             name="know"
                             class="know"
                             cols="1"
                             rows="1"
-                        ></textarea>
-                        <div class="counter">
-                            <span class="current">0</span>&nbsp;/
-                            <span class="total">200</span>
-                        </div>
+                        ></textarea> -->
+                        <div class="form__counter">{{ counterKnow }} / 200</div>
                     </div>
 
                     <v-card-actions class="nav-btn__wrapper">
@@ -1828,7 +1843,7 @@
             </v-expansion-panel>
             <v-expansion-panel
                 class="yes-RSO"
-                v-else-if="selectedAnswer == 'Да'"
+                v-else-if="selectedAnswer == 'Да' && documents.russian_passport"
             >
                 <v-expansion-panel-title>
                     <v-row no-gutters>
@@ -1924,7 +1939,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectPass"
+                                            @select="selectPass"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -1959,7 +1974,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectParentPersonal"
+                                            @select="selectParentPersonalPass"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -1996,7 +2011,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectSnils"
+                                            @select="selectSnils"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -2026,7 +2041,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectMilitary"
+                                            @select="selectMilitary"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -2056,7 +2071,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectINN"
+                                            @select="selectINN"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -2086,7 +2101,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectIntPass"
+                                            @select="selectIntPass"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -2116,7 +2131,7 @@
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @uploader="selectEmployment"
+                                            @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
@@ -2132,19 +2147,26 @@
                             variant="text"
                             label="Назад"
                             size="large"
-                        ></button>
+                            @click="openPanelFour"
+                        >
+                            Назад
+                        </button>
                         <button
                             type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
-                        ></button>
+                        >
+                            Далее
+                        </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
             <v-expansion-panel
                 class="no-RSO-foreign"
-                v-else-if="selectedAnswer == 'Нет' && selectedPass == 'Нет'"
+                v-else-if="
+                    selectedAnswer == 'Нет' && !documents.russian_passport
+                "
             >
                 <v-expansion-panel-title>
                     <v-row no-gutters>
@@ -2240,11 +2262,27 @@
                                         <button
                                             id="statement"
                                             class="download-blanks"
+                                            type="button"
+                                            @click="downloadBlankMembership"
                                         >
                                             Скачать бланк
                                         </button>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="statementUp"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
@@ -2267,19 +2305,36 @@
                                             alt="download"
                                         />
                                         <button
-                                            id="consent-personal"
+                                            id="statement"
                                             class="download-blanks"
+                                            type="button"
+                                            @click="downloadBlankParent"
                                         >
                                             Скачать бланк
                                         </button>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="selectPersonal"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div class="dowmload-all">
                                 <button
                                     class="download-blanks allBlanks"
                                     @click="downloadAll"
+                                    type="button"
                                 >
                                     <img
                                         src="@app/assets/icon/download.svg"
@@ -2311,7 +2366,21 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="selectPass"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2334,7 +2403,21 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="selectSnils"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div class="other-docs__item">
@@ -2350,7 +2433,21 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="selectINN"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div class="other-docs__item">
@@ -2366,44 +2463,69 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="selectEmployment"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="know-RSO">
                         <p class="know-RSO-title">Откуда вы узнали про РСО</p>
-                        <textarea
+                        <!-- <textarea
                             name="know"
                             class="know"
                             cols="1"
                             rows="1"
-                        ></textarea>
-                        <div class="counter">
-                            <span class="current">0</span>&nbsp;/
-                            <span class="total">200</span>
-                        </div>
+                        ></textarea> -->
+                        <TextArea
+                            class="know"
+                            name="know"
+                            placeholder="Напиши что нибудь"
+                            v-model:value="rso_info_from"
+                            :max-length="200"
+                        ></TextArea>
+
+                        <div class="form__counter">{{ counterKnow }} / 200</div>
                     </div>
 
                     <v-card-actions class="nav-btn__wrapper">
                         <button
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
-                        ></button>
+                            @click="openPanelFour"
+                        >
+                            Назад
+                        </button>
                         <button
                             type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
-                        ></button>
+                        >
+                            Далее
+                        </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
             <v-expansion-panel
                 class="yes-RSO-foreign"
-                v-else-if="selectedAnswer == 'Да' && selectedPass == 'Нет'"
+                v-else="selectedAnswer == 'Да' && !documents.russian_passport"
             >
                 <v-expansion-panel-title>
                     <v-row no-gutters>
@@ -2490,7 +2612,21 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="selectPass"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div class="pass-details__item">
@@ -2511,7 +2647,21 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="selectParentPersonalPass"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2534,7 +2684,21 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="selectSnils"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div class="other-docs__item">
@@ -2550,10 +2714,24 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="selectINN"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="other-docs__item">
+                            <!-- <div class="other-docs__item">
                                 <p class="statement-title">Вид на жительство</p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
@@ -2568,7 +2746,7 @@
                                     </div>
                                     <FileUpload></FileUpload>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="other-docs__item">
                                 <p class="statement-title">Трудовая книжка</p>
                                 <div class="statement-wrapper">
@@ -2582,7 +2760,21 @@
                                             размером не более 7 мб
                                         </p>
                                     </div>
-                                    <FileUpload></FileUpload>
+                                    <div class="statement-item">
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            @select="selectEmployment"
+                                            chooseLabel="Выбрать файл"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2590,16 +2782,23 @@
 
                     <v-card-actions class="nav-btn__wrapper">
                         <button
+                            type="button"
                             class="form__button form__button--prev"
                             variant="text"
                             label="Назад"
                             size="large"
-                        ></button>
+                            @click="openPanelFour"
+                        >
+                            Назад
+                        </button>
                         <button
+                            type="button"
                             class="form__button form__button--next"
                             label="Далее"
                             size="large"
-                        ></button>
+                        >
+                            Далее
+                        </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -2607,6 +2806,14 @@
                 class="form__button-group d-flex justify-space-between"
             >
                 <Button
+                    v-if="UserApplication || user.is_verified"
+                    :disabled="isLoading"
+                    :loaded="isLoading"
+                    type="submit"
+                    label="Редактировать данные"
+                ></Button>
+                <Button
+                    v-else
                     :disabled="isLoading"
                     :loaded="isLoading"
                     type="submit"
@@ -2622,28 +2829,17 @@ import { ref, computed, onMounted, reactive, inject } from 'vue';
 import { RadioButton } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 // import { vMaska } from 'maska';
-import { useVuelidate } from '@vuelidate/core';
 import { useRouter } from 'vue-router';
 import { Select, sortByEducation } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    sameAs,
-} from '@vuelidate/validators';
 import { HTTP } from '@app/http';
+import { TextArea } from '@shared/components/inputs';
 import axios from 'axios';
 
 const router = useRouter();
 const panel = ref();
-const isError = ref('');
+const isError = ref({});
 const isLoading = ref(false);
-// const isError2 = ref([]);
-// const isError3 = ref([]);
-// const isError4 = ref([]);
 const openPanelOne = () => {
     panel.value = 'panelOne';
 };
@@ -2664,12 +2860,28 @@ const openPanelFive = () => {
     panel.value = 'panelFive';
 };
 
+
+const user = ref({
+    first_name: '',
+    last_name: '',
+    patronymic_name: '',
+    date_of_birth: '',
+    last_name_lat: '',
+    first_name_lat: '',
+    patronymic_lat: '',
+    gender: null,
+    email: '',
+    social_vk: '',
+    social_tg: '',
+    phone_number: '',
+});
+
 const regionData = ref({
     reg_region_id: null,
     reg_town: '',
     reg_house: '',
     reg_fact_same_address: null,
-    fact_region: null,
+    fact_region_id: null,
     fact_town: '',
     fact_house: '',
 });
@@ -2702,21 +2914,6 @@ const parentData = ref({
 
 const swal = inject('$swal');
 
-const user = ref({
-    first_name: '',
-    last_name: '',
-    patronymic_name: '',
-    date_of_birth: '',
-    last_name_lat: '',
-    first_name_lat: '',
-    patronymic_lat: '',
-    gender: null,
-    email: '',
-    social_vk: '',
-    social_tg: '',
-    phone_number: '',
-});
-
 const education = ref({
     study_institution: null,
     study_faculty: '',
@@ -2740,62 +2937,108 @@ const documents = ref({
     russian_passport: null,
 });
 
+
 const data = ref({});
 
+const applications = ref([]);
 const statement = ref(null);
 const consent_personal_data = ref(null);
 const consent_personal_data_representative = ref(null);
 const passportUpload = ref(null);
 const passport_representative = ref(null);
-
+const rso_info_from = ref('');
 const snils_file = ref(null);
 const inn_file = ref(null);
 const international_passport = ref(null);
 const employment_document = ref(null);
 const military_document = ref(null);
 
+const isStatementChange = ref(false);
+const isConsent_personal_dataChange = ref(false);
+const isConsent_personal_data_representativeChange = ref(false);
+
+const isPassChange = ref(false);
+const isParentPassChange = ref(false);
+
+const isSnilsChange = ref(false);
+const isInnChange = ref(false);
+const isEmployeChange = ref(false);
+const isMilitaryChange = ref(false);
+const isForeignChange = ref(false);
+
 const statementUp = (event) => {
     statement.value = event.files[0];
     console.log('файл есть', statement.value);
+    isStatementChange.value = true;
 };
 
 const selectPersonal = (event) => {
     consent_personal_data.value = event.files[0];
     console.log('файл есть', consent_personal_data.value);
+    isConsent_personal_dataChange.value = true;
 };
 
 const selectParentPersonal = (event) => {
     consent_personal_data_representative.value = event.files[0];
     console.log('файл есть', consent_personal_data_representative.value);
+    isConsent_personal_data_representativeChange.value = true;
 };
 
 const selectPass = (event) => {
     passportUpload.value = event.files[0];
     console.log('файл есть', passportUpload.value);
+    isPassChange.value = true;
+};
+
+const selectParentPersonalPass = (event) => {
+    passport_representative.value = event.files[0];
+    console.log('файл есть', passport_representative.value);
+    isParentPassChange.value = true;
 };
 const selectINN = (event) => {
     inn_file.value = event.files[0];
     console.log('файл есть', inn_file.value);
+    isInnChange.value = true;
 };
 
 const selectSnils = (event) => {
     snils_file.value = event.files[0];
     console.log('файл есть', snils_file.value);
+    isSnilsChange.value = true;
 };
 
 const selectEmployment = (event) => {
-    international_passport.value = event.files[0];
-    console.log('файл есть', international_passport.value);
+    employment_document.value = event.files[0];
+    console.log('файл есть', employment_document.value);
+    isEmployeChange.value = true;
 };
 
 const selectIntPass = (event) => {
-    employment_document.value = event.files[0];
-    console.log('файл есть', employment_document.value);
+    international_passport.value = event.files[0];
+    console.log('файл есть', international_passport.value);
+    isForeignChange.value = true;
 };
 
 const selectMilitary = (event) => {
     military_document.value = event.files[0];
     console.log('файл есть', military_document.value);
+    isMilitaryChange.value = true;
+};
+
+const counterKnow = computed(() => {
+    return rso_info_from.value.length || 0;
+});
+
+const regions = ref([]);
+const getRegions = async () => {
+    const { data } = await HTTP.get('/regions', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+
+    regions.value = data;
 };
 
 const getUser = async () => {
@@ -2807,6 +3050,9 @@ const getUser = async () => {
     })
         .then((response) => {
             user.value = response.data;
+            user.value.region = regions.value.find(
+                (region) => region.name === user.value.region,
+            )?.id;
             console.log(user.value);
         })
         .catch(function (error) {
@@ -2829,6 +3075,23 @@ const getParent = async () => {
             console.log('an error occured ' + error);
         });
 };
+const viewApplications = async () => {
+    // let id = route.params.id;
+    // console.log('idRoute', id);
+    await HTTP.get(`/detachments/1/verifications/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            applications.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
 const getEducation = async () => {
     await HTTP.get('/rsousers/me/education/', {
@@ -2839,7 +3102,7 @@ const getEducation = async () => {
     })
         .then((response) => {
             education.value = response.data;
-            console.log(user.value);
+            console.log(education.value);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -2886,19 +3149,16 @@ const getUserRegions = async () => {
     })
         .then((response) => {
             regionData.value = response.data;
-            console.log(user.value);
+            console.log(regionData.value);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
 };
 
-getUser();
-getParent();
-getEducation();
-getDocuments();
-getForeignDoc();
-getUserRegions();
+const UserApplication = computed(() => {
+    return applications.value.find((item) => item.user.id === user.value.id);
+});
 
 const downloadBlankPersonal = async () => {
     await HTTP.get(
@@ -3000,29 +3260,71 @@ const downloadAll = async () => {
 };
 
 const updateData = async () => {
-    let fd = new FormData();
-    fd.append('statement', statement.value);
-    fd.append('consent_personal_data', consent_personal_data.value);
-    fd.append(
-        'consent_personal_data_representative',
-        consent_personal_data_representative.value,
-    );
-    fd.append('passport', passportUpload.value);
-    fd.append('passport_representative', passport_representative.value);
-    fd.append('snils_file', snils_file.value);
-    fd.append('inn_file', inn_file.value);
-    fd.append('employment_document', military_document.value);
-    fd.append('international_passport', international_passport.value);
-
     try {
-        const axiosrequest1 = HTTP.patch('/rsousers/me/', user.value, {
+        let fd = new FormData();
+        // fd.append('passport', passportUpload.value);
+        // fd.append('passport_representative', passport_representative.value);
+           fd.append('rso_info_from', rso_info_from.value)
+        if (isStatementChange.value)
+            statement.value
+                ? fd.append('statement', statement.value)
+                : fd.append('statement', '');
+        if (isConsent_personal_dataChange.value)
+            consent_personal_data.value
+                ? fd.append(
+                      'consent_personal_data',
+                      consent_personal_data.value,
+                  )
+                : fd.append('consent_personal_data', '');
+        if (isConsent_personal_data_representativeChange.value)
+            consent_personal_data_representative.value
+                ? fd.append(
+                      'consent_personal_data_representative',
+                      consent_personal_data_representative.value,
+                  )
+                : fd.append('consent_personal_data_representative', '');
+        if (isPassChange.value)
+            passportUpload.value
+                ? fd.append(' passport', passportUpload.value)
+                : fd.append(' passport', '');
+        if (isParentPassChange.value)
+            passport_representative.value
+                ? fd.append(
+                      'passport_representative',
+                      passport_representative.value,
+                  )
+                : fd.append('passport_representative', '');
+        if (isInnChange.value)
+            inn_file.value
+                ? fd.append(' inn_file', inn_file.value)
+                : fd.append(' inn_file', '');
+        if (isSnilsChange.value)
+            snils_file.value
+                ? fd.append('snils_file', snils_file.value)
+                : fd.append('snils_file', '');
+        if (isEmployeChange.value)
+            employment_document.value
+                ? fd.append('employment_document', employment_document.value)
+                : fd.append('employment_document', '');
+        if (isMilitaryChange.value)
+            military_document.value
+                ? fd.append('military_document', military_document.value)
+                : fd.append('military_document', '');
+        if (isForeignChange.value)
+            international_passport.value
+                ? fd.append(
+                      'international_passport',
+                      international_passport.value,
+                  )
+                : fd.append('international_passport', '');
+        const axiosrequest1 = await HTTP.patch('/rsousers/me/', user.value, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
 
-        const axiosrequest2 = HTTP.patch(
+        const axiosrequest2 = await HTTP.patch(
             '/rsousers/me/region/',
             regionData.value,
             {
@@ -3032,7 +3334,7 @@ const updateData = async () => {
                 },
             },
         );
-        const axiosrequest3 = HTTP.put(
+        const axiosrequest3 = await HTTP.patch(
             '/rsousers/me/documents/',
             documents.value,
             {
@@ -3060,29 +3362,37 @@ const updateData = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+        const axiosrequest6 = ref(null);
 
-        const axiosrequest6 = await HTTP.post(
-            '/rsousers/me/apply_for_verification/',
-            data.value,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+        if (!UserApplication && !user.value.is_verified) {
+            const axiosrequest6 = await HTTP.post(
+                '/rsousers/me/apply_for_verification/',
+                data.value,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        );
+            );
+        }
 
         user.value = axiosrequest1.data;
-        regionData.value = axiosrequest2.data;
-        documents.value = res3.data;
-        education.value = res4.data;
-        data.value = res6.data;
-        console.log(res1.data);
-        console.log(res2.data);
-        console.log(res3.data);
-        console.log(res4.data);
-        console.log(res6.data);
+        user.value.region = regions.value.find(
+            (region) => region.name === user.value.region,
+        )?.id;
 
+        regionData.value = axiosrequest2.data;
+        documents.value = axiosrequest3.data;
+        education.value = axiosrequest4.data;
+        fd = axiosrequest5.data;
+        data.value = axiosrequest6?.data;
+        console.log(axiosrequest1.data);
+        console.log(axiosrequest2.data);
+        console.log(axiosrequest3.data);
+        console.log(axiosrequest4.data);
+        console.log(axiosrequest5.data);
+        console.log(axiosrequest6?.data);
         swal.fire({
             position: 'top-center',
             icon: 'success',
@@ -3092,31 +3402,20 @@ const updateData = async () => {
         });
 
         isLoading.value = false;
-    } catch(error) {
-        isError.value = response.data;
-        console.error('There was an error!', response.data);
+    } catch (error) {
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
         isLoading.value = false;
-        swal.fire({
-            position: 'top-center',
-            icon: 'error',
-            title: 'ошибка',
-            showConfirmButton: false,
-            timer: 1500,
-        });
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка - заполните обязательные поля`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
-
-    // .catch(({ response }) => {
-    //     isError.value = response.data;
-    //     console.error('There was an error!', response.data);
-    //     isLoading.value = false;
-    //     swal.fire({
-    //         position: 'top-center',
-    //         icon: 'error',
-    //         title: 'ошибка',
-    //         showConfirmButton: false,
-    //         timer: 1500,
-    //     });
-    // });
 
     if (user.value.is_adult == false) {
         await HTTP.patch('/rsousers/me/parent/', parentData.value, {
@@ -3225,6 +3524,17 @@ const passport = reactive([
 const selectedAnswer = ref('Нет');
 const selectedPassParent = ref('Да');
 const selectedPass = ref('Да');
+
+onMounted(() => {
+    getUser();
+    getParent();
+    getEducation();
+    getRegions();
+    getDocuments();
+    getForeignDoc();
+    getUserRegions();
+    viewApplications();
+});
 </script>
 <style lang="scss">
 .accordion {
@@ -3235,6 +3545,9 @@ const selectedPass = ref('Да');
         font-weight: 700;
         margin-bottom: 40px;
         font-family: BERTSANS;
+    }
+    &-form {
+        padding-bottom: 40px;
     }
 }
 .rso-question {
@@ -3298,13 +3611,13 @@ const selectedPass = ref('Да');
 }
 
 .input-small {
-    width: 250px;
+    width: 250px !important;
 }
 .input-full {
-    width: 100%;
+    width: 100% !important;
 }
 .input-big {
-    width: 465px;
+    width: 465px !important;
 }
 
 .nav-btn__wrapper {
@@ -3420,6 +3733,7 @@ const selectedPass = ref('Да');
     border: 1px solid #a3a3a3;
     border-radius: 10px;
     padding: 40px 40px 0px 40px;
+    margin-top: 40px;
     &__title {
         font-size: 20px;
         font-weight: bold;
@@ -3458,9 +3772,10 @@ const selectedPass = ref('Да');
     margin-top: 8px;
     outline: none;
     overflow: hidden;
-    padding: 16px 0px 16px 16px;
+    padding: 8px 20px 8px 20px;
     text-align: left;
     resize: none;
+    height: 40px;
     border-radius: 10px;
     background: #fff;
 }
@@ -3560,7 +3875,7 @@ const selectedPass = ref('Да');
 }
 
 .p-icon {
-    display: none;
+    display: none !important;
 }
 
 .p-button-label {

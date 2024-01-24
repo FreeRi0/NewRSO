@@ -389,6 +389,12 @@ onActivated(() => {
         }
     }
 }
+
+pre {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 .headquarters-wrapper__item {
     margin: 0px auto;
     width: 180px;

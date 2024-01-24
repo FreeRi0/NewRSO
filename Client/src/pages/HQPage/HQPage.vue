@@ -42,20 +42,18 @@
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
-            :member="member"
+            :member="filteredMembers"
             head="Руководство штаба"
             :position="position"
         ></ManagementHQ>
         <DetachmentsHQ></DetachmentsHQ>
     </div>
 </template>
-
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from './components/ManagementHQ.vue';
 import DetachmentsHQ from './components/DetachmentsHQ.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
@@ -65,13 +63,12 @@ const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showRegionalHQ = ref(false);
 
-const headquarter = ref({});
 const position = ref({});
+const headquarter = ref({});
 const member = ref([]);
 const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
-// hhhh
 
 const aboutHQ = async () => {
     await HTTP.get(`/educationals/${id}/`, {
@@ -121,35 +118,18 @@ const aboutMembers = async () => {
         });
 };
 
-// let allMembers;
-
-// const aboutMembers = async () => {
-//     try {
-//         const response = await HTTP.get(`/educationals/${id}/members/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         member.value = response.data;
-//         console.log(response);
-//         allMembers = response.data;
-
-//         const filteredMembers = allMembers.filter(
-//             (sort) =>
-//                 sort.position === 'Командир' ||
-//                 sort.position === 'Комиссар' ||
-//                 sort.position === 'Мастер (методист)',
-//         );
-
-//         member.value = filteredMembers;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
 aboutMembers();
+
+const filteredMembers = computed(() => {
+    return member.value.filter((manager) => {
+        return (
+            manager.position &&
+            (manager.position === 'Командир' ||
+                manager.position === 'Мастер (методист)' ||
+                manager.position === 'Комиссар')
+        );
+    });
+});
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
@@ -162,7 +142,7 @@ onBeforeRouteUpdate(async (to, from) => {
 watch(
     () => route.params.id,
 
-    (newId, oldId) => {
+    (newId) => {
         id = newId;
         aboutHQ();
         aboutMembers();

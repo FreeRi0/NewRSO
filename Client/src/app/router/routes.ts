@@ -41,7 +41,7 @@ const routes: RouteRecordRaw[] = [
                 name: 'CreaturePassword',
                 component: () =>
                     import(
-                        '@pages/СreaturePassword/components/CreaturePasswordPage.vue'
+                        '@pages/CreaturePassword/components/CreaturePasswordPage.vue'
                     ),
             },
             {
@@ -417,8 +417,9 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/actionSquads',
                 name: 'actionSquads',
-                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
+                component: () => import('@entities/Actions/components/SeeYouLater.vue')
             },
+            /*
             {
                 path: '/actionSquads/:id',
                 name: 'Action',
@@ -434,7 +435,7 @@ const routes: RouteRecordRaw[] = [
                 path: "/actionSquads/:id/EditAction",
                 name: "editAction",
                 component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
-            },
+            }, */
             {
                 path: '/AllParticipants/:id',
                 name: 'allParticipants',
@@ -622,6 +623,17 @@ const routes: RouteRecordRaw[] = [
                         },
                     },
                 ],
+            },
+            {
+                path: '/individualrequest/:id',
+                name: 'IndividualRequest',
+                component: () =>
+                    import(
+                        '@pages/IndividualRequestPage/components/IndividualRequestPage.vue'
+                    ),
+                meta: {
+                    requiresAuth: true,
+                },
             },
         ],
     },

@@ -136,7 +136,7 @@
             >
         </div>
 
-        <CompetitionMembersBlock></CompetitionMembersBlock>
+        <CompetitionMembersBlock v-if="isAuth"></CompetitionMembersBlock>
 
         <!--Модальные окна-->
         <ModalCompetition v-if="isSendApplication"></ModalCompetition>
@@ -150,6 +150,8 @@ import { CompetitionMembersBlock } from '@features/Competition';
 import { ModalCompetition } from '@features/Competition';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';
+
+const isAuth = ref(!!localStorage.getItem('Token'));
 
 // const route = useRoute();
 // let id = route.params.id;
