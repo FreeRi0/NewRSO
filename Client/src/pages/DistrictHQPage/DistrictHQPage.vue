@@ -5,31 +5,27 @@
         <BannerHQ
             v-if="showHQ"
             :headquarter="headquarter"
-            :edict="educt"
+            :edict="edict"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showDistrictHQ"
             :districtHeadquarter="districtHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showLocalHQ"
             :localHeadquarter="localHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showRegionalHQ"
             :regionalHeadquarter="regionalHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else
             :centralHeadquarter="centralHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <section class="about-hq">
