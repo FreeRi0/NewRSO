@@ -23,8 +23,8 @@
                 <div class="manager-card__box">
                     <h5 id="name_length">
                         {{ manager?.user?.first_name }}
-                        {{ manager?.user?.last_name }}
                         {{ manager?.user?.patronymic_name }}
+                        {{ manager?.user?.last_name }}
                     </h5>
                     <p>{{ manager.position }}</p>
                 </div>

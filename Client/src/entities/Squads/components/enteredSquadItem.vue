@@ -12,12 +12,12 @@
         <div class="horizontallso-item__wrapper mr-3">
             <div class="horizontallso-img">
                 <img
-                    :src="detachment?.user?.media?.photo"
+                    :src="detachment.user.media?.photo"
                     alt="logo"
-                    v-if="detachment?.user?.media?.photo"
+                    v-if="detachment.user.media?.photo"
                 />
                 <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    src="@app/assets/user-avatar.png"
                     alt="photo"
                 />
             </div>
@@ -52,7 +52,7 @@
                     v-if="squad.emblem"
                 />
                 <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    src="@app/assets/hq-emblem.png"
                     alt="photo"
                     v-else
                 />

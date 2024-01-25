@@ -7,7 +7,7 @@
                         <img
                             src="@app/assets/logo/logo-rso-tablet.svg"
                             width="60"
-                            height="58"
+                            height="56"
                             alt="Логотип сайта трудкрут.рф"
                         />
                     </a>
@@ -16,7 +16,7 @@
                 <li class="header__logo-labor-cool">
                     <a href="https://trudkrutshop.ru/" target="_blank">
                         <img
-                            src="@app/assets/logo/logo-shop-tablet.svg"
+                            src="@app/assets/logo/logo-shop-tablet.png"
                             width="56"
                             height="56"
                             alt="Логотип сайта trudkrutshop.ru"
@@ -97,8 +97,10 @@
 
                         <span v-if="user?.user_region?.reg_region_id"
                             >{{
-                                regionals[user?.user_region?.reg_region_id]
-                                    ?.name
+                                regionals.find(
+                                    (reg) =>
+                                        reg.id === user.user_region.reg_region,
+                                )?.name
                             }}
                         </span>
 
@@ -222,6 +224,7 @@ const userPages = computed(() => [
     {
         title: 'Штаб СО ОО',
         name: 'HQ',
+        path: 'regionals',
         params: {
             id: user?.value?.educational_headquarter_id,
         },
@@ -229,22 +232,31 @@ const userPages = computed(() => [
     {
         title: 'Местный штаб',
         name: 'LocalHQ',
+        path: 'locals',
         params: {
-            id: user?.value?.local_headquarter_id,
+            id:
+                user?.value?.local_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
         },
     },
     {
         title: 'Региональный штаб',
         name: 'RegionalHQ',
+        path: 'regionals',
         params: {
-            id: user?.value?.regional_headquarter_id,
+            id:
+                user?.value?.regional_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
         },
     },
     {
         title: 'Окружной штаб',
         name: 'DistrictHQ',
+        path: 'districts',
         params: {
-            id: user?.value?.district_headquarter_id,
+            id:
+                user?.value?.district_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
         },
     },
     {
@@ -254,11 +266,11 @@ const userPages = computed(() => [
             id: user.value?.central_headquarter_id,
         },
     },
-    { title: 'Активные заявки', name: 'active', },
+    { title: 'Активные заявки', name: 'active' },
     // { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', name: 'contributorPay' },
-    { title: 'Оформление справок', name: 'references'  },
-    { title: 'Настройки профиля', name: 'personaldata'  },
+    { title: 'Оформление справок', name: 'references' },
+    { title: 'Настройки профиля', name: 'personaldata' },
     { title: 'Выйти из ЛК', button: true },
 ]);
 
@@ -277,21 +289,79 @@ const regions = ref({});
 
 const regionals = ref([]);
 
-const getUser = async () => {
-    await HTTP.get('/rsousers/me/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            region.value = user.value.region;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+const headquartersIds = ref([]);
+const headquertersNames = ref([
+    {
+        path: 'educationals',
+        id: 'educational_headquarter_id',
+        parentPath: 'locals',
+        parentHqId: 'local_headquarter',
+    },
+    {
+        path: 'locals',
+        id: 'local_headquarter_id',
+        parentPath: 'regionals',
+        parentHqId: 'regional_headquarter',
+    },
+    {
+        path: 'regionals',
+        id: 'regional_headquarter_id',
+        parentPath: 'districts',
+        parentHqId: 'district_headquarter',
+    },
+    {
+        path: 'dirstricts',
+        id: 'district_headquarter_id',
+        parentPath: 'centrals',
+        parentHqId: 'central_headquarter',
+    },
+]);
+
+const getHeadquarters = async () => {
+    for (let i = 0; i < headquertersNames.value.length; i++) {
+        const item = headquertersNames.value[i];
+
+        if (!user.value[item.id]) continue;
+
+        const { data } = await HTTP.get(`${item.path}/${user.value[item.id]}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        const { data: dataParent } = await HTTP.get(
+            `${item.parentPath}/${data[item.parentHqId]}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        headquartersIds.value.push({
+            path: item.parentPath,
+            id: dataParent.id,
+        });
+    }
+};
+
+const getUser = async () => {
+    try {
+        const response = await HTTP.get('/rsousers/me/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        user.value = response.data;
+        region.value = user.value.region;
+        console.log(user.value);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 // console.log('dddddd', id);
 
@@ -304,7 +374,7 @@ const updateRegion = async () => {
     })
         .then((response) => {
             user.value = response.data;
-            show = !show;
+            show.value = !show.value;
             console.log(user.value);
         })
         .catch(function (error) {
@@ -313,41 +383,43 @@ const updateRegion = async () => {
 };
 
 const getRegions = async () => {
-    await HTTP.get(`/regions/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regions.value = response.data;
-            console.log(regions.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/regions/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        regions.value = response.data;
+        console.log(regions.value);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const getRegionals = async () => {
-    await HTTP.get(`/regionals/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regionals.value = response.data;
-            console.log(regionals.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/regionals/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        regionals.value = response.data;
+        console.log(regionals.value);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-onMounted(() => {
-    getUser();
-    getRegions();
-    getRegionals();
+onMounted(async () => {
+    await getUser();
+    await getRegions();
+    await getRegionals();
+
+    await getHeadquarters();
 });
 </script>
 
@@ -355,8 +427,9 @@ onMounted(() => {
 //убрала тег scoped потому что стили к кнопке dropdown не применялись
 
 .header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 146px 1.3fr 1fr;
+    column-gap: 76px;
     align-items: center;
     padding: 13px 0;
     font-family: 'BertSans', sans-serif;
@@ -366,9 +439,10 @@ onMounted(() => {
     color: #35383f;
     position: relative;
     border-bottom: 1px solid #d9d9d9;
-    // margin-bottom: 60px;
 
     @media (max-width: 1024px) {
+        display: flex;
+        column-gap: 0;
         padding: 0;
         min-height: 88px;
     }
@@ -394,18 +468,32 @@ onMounted(() => {
     &__logo {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        align-items: center;
         column-gap: 30px;
-        max-width: 146px;
-        margin-right: 25px;
+
+        @media (max-width: 1440px) {
+            width: 146px;
+            column-gap: 30px;
+        }
 
         @media (max-width: 1024px) {
+            width: 140px;
             column-gap: 24px;
         }
 
         @media (max-width: 768px) {
             width: 88px;
+            // height: 36px;
             column-gap: 12px;
-            margin-right: 36px;
+        }
+    }
+
+    &__logo-labor-cool {
+        img {
+            @media (max-width: 768px) {
+                width: 36px;
+                height: 36px;
+            }
         }
     }
 
@@ -437,15 +525,12 @@ onMounted(() => {
         justify-content: space-between;
         flex-wrap: wrap;
         align-items: center;
-        column-gap: 12px;
+        column-gap: 14px;
         // font-family: 'BertSans', sans-serif;
         // font-size: 16px;
         // font-weight: 400;
         // line-height: 21px;
         max-width: 520px;
-
-        min-width: 415px;
-        // min-width: 411px; // для отображения без ссылки КОНКУРС
 
         @media (max-width: 1024px) {
             position: absolute;
@@ -459,6 +544,7 @@ onMounted(() => {
             row-gap: 8px;
             background-color: #1f7cc0;
             z-index: 2;
+            font-family: 'Akrobat';
             font-size: 20px;
             line-height: 24px;
             font-weight: 600;
@@ -473,10 +559,6 @@ onMounted(() => {
             max-width: 415px;
             width: 100%;
         }
-    }
-
-    &__nav-item {
-        margin-right: 5px;
     }
 
     &__button-mobile-menu {
@@ -571,13 +653,12 @@ onMounted(() => {
         display: grid;
         row-gap: 8px;
         padding: 28px 28px;
-        max-height: 820px; //---------------
+        max-height: 820px;
         width: 328px;
-        // font-family: 'Akrobat';
+        font-family: 'Akrobat';
         font-size: 20px;
         line-height: 24px;
         font-weight: 600;
-        // color
         overflow-y: auto;
         border-radius: 10px;
         background-color: #1f7cc0;
@@ -700,18 +781,13 @@ onMounted(() => {
 //------------------------------------------------------------------------------------
 
 .nav-user {
-    // display: grid;
-    // grid-template-columns: min-content 1fr min-content;
-    column-gap: 18px;
-    // column-gap: 20px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
+    column-gap: 18px;
     min-width: 242px;
     max-width: 383px;
     flex-grow: 1;
-    margin-left: 25px;
 
     @media (max-width: 1024px) {
         margin-left: auto;
@@ -720,11 +796,10 @@ onMounted(() => {
 
     @media (max-width: 768px) {
         column-gap: 20px;
-
-        min-width: 148px;
-        max-width: 204px;
-        flex-grow: 1;
-        // margin-left: 54px;
+        width: 148px;
+        min-width: 0px;
+        max-width: 148px;
+        margin-left: auto;
     }
 
     &__application-count {
@@ -758,7 +833,6 @@ onMounted(() => {
 
         @media (max-width: 768px) {
             display: flex;
-            // min-width: auto;
         }
     }
 
@@ -769,7 +843,6 @@ onMounted(() => {
         @media (max-width: 768px) {
             width: 36px;
             height: 36px;
-            // margin-top: 5px;
             background-image: url('../../../app/assets/icon/location-mark.svg');
             background-position: center;
 
@@ -796,11 +869,6 @@ onMounted(() => {
         label {
             margin-bottom: 4px;
         }
-
-        // input {
-        //   margin-bottom: 32px;
-        //   font-weight: 600;
-        // }
 
         div {
             display: flex;

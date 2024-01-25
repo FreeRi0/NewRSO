@@ -9,7 +9,7 @@
                 alt="logo"
                 v-if="headquarter.emblem"
             />
-            <img src="@app/assets/user-avatar.png" alt="logo" v-else />
+            <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
         </div>
         <div class="containerHorizontal">
             <p class="headquarters-wrapper__item-category-full">

@@ -59,7 +59,7 @@
                     </div>
 
                     <router-link
-                        v-if="userId == squad?.commander?.id"
+                        v-if="userId == squad?.commander?.id || userId == regional?.commander?.id"
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -71,7 +71,7 @@
                     <Button
                         v-else-if="!IsMember && !UserApplication"
                         @click="AddApplication()"
-                        label="Подать заяку"
+                        label="Подать заявку"
                         class="AddApplication"
                     ></Button>
 
@@ -144,6 +144,7 @@ const props = defineProps({
 console.log('memberAA', props.member);
 
 const edict = ref({});
+const regional = ref({})
 const data = ref({});
 const isError = ref([]);
 const applications = ref([]);
@@ -187,10 +188,26 @@ const viewDetachments = async () => {
         });
 };
 
-onMounted(() => {
-    aboutEduc();
-    viewDetachments();
-});
+
+const viewRegionals= async () => {
+    let id = props.squad.regional_headquarter;
+    console.log('idRouteReg', id);
+    await HTTP.get(`/regionals/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regional.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+
+
 
 //member сравнивать так же
 const UserApplication = computed(() => {
@@ -211,6 +228,7 @@ watch(
             return;
         }
         aboutEduc();
+        viewRegionals();
     },
 );
 
@@ -275,6 +293,12 @@ const DeleteApplication = async () => {
             });
         });
 };
+
+onMounted(() => {
+    aboutEduc();
+    viewDetachments();
+    viewRegionals();
+});
 </script>
 <style lang="scss" scoped>
 .squad-metric {

@@ -7,12 +7,12 @@
             >
                 <div class="horizontallso-img">
                     <img
-                        :src="participant.user.avatar.photo"
+                        :src="participant.user?.avatar?.photo"
                         alt="photo"
-                        v-if="participant.user.avatar"
+                        v-if="participant.user?.avatar?.photo"
                     />
                     <img
-                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                        src="@app/assets/user-avatar.png"
                         alt="photo"
                         v-else
                     />

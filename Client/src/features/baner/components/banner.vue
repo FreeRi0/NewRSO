@@ -1,7 +1,18 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto :banner="user?.media?.banner" v-if="user"></bannerPhoto>
-        <Avatar :avatar="user?.media?.photo" v-if="user"></Avatar>
+        <bannerPhoto
+            :banner="user?.media?.banner"
+            v-if="user"
+            @upload="uploadBan"
+            @update="updateBan"
+            @delete="deleteBan"
+        ></bannerPhoto>
+        <Avatar
+            :avatar="user?.media?.photo"
+            v-if="user"
+            @upload="uploadAva"
+            @update="updateAva"
+        ></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
@@ -26,9 +37,11 @@
                         <li class="user-data__regional-office">
                             <p v-if="user?.user_region?.reg_region_id">
                                 {{
-                                    regionals[
-                                        user?.user_region?.reg_region_id
-                                    ]?.name
+                                    regionals.find(
+                                        (reg) =>
+                                            reg.id ===
+                                            user.user_region.reg_region,
+                                    )?.name
                                 }}
                             </p>
                         </li>
@@ -115,16 +128,48 @@ const props = defineProps({
     },
 });
 
+const emit = defineEmits(['upload', 'update', 'delete']);
+
+const uploadAva = (imageAva) => {
+    console.log('photo', imageAva);
+    emit('upload', imageAva);
+    console.log('ghhhgh');
+};
+
+const updateAva = (imageAva) => {
+    console.log('photoUpdate', imageAva);
+    emit('update', imageAva);
+    console.log('update');
+};
+
+// const deleteAva = (imageAva) => {
+//     console.log('photoDel', imageAva);
+//     emit('delete', imageAva);
+//     console.log('del');
+// };
+
+// const uploadBan = (imageBan) => {
+//     console.log('ban', imageBan);
+//     emit('upload', imageBan);
+//     console.log('ghhhgh');
+// };
+
+// const updateBan = (imageBan) => {
+//     console.log('banUpdate', imageBan);
+//     emit('update', imageBan);
+//     console.log('update');
+// };
+
+// const deleteBan= (imageBan) => {
+//     console.log('photoBan', imageBan);
+//     emit('delete', imageBan);
+//     console.log('del');
+// };
+
 const regionals = ref([]);
 const detachment = ref({});
 const educationalHeadquarter = ref({});
 const participant = ref({});
-
-// console.log('reg', props.user.region.id)
-
-// const isRegionHq = computed(() => {
-//     return regionals.value.find((item) => item.region === props.user.region)
-// })
 
 const getRegionals = async () => {
     await HTTP.get(`/regionals/`, {

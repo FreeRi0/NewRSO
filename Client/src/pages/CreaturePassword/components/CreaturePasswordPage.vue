@@ -152,6 +152,21 @@ const resetPasswordForm = async () => {
         console.error(error);
     }
 };
+
+// const user = ref({
+//   uid: $route.query.uid || '',
+//   token: $route.query.token || '',
+//   newPassword: '',
+// });
+
+// const createPassword = async () => {
+//   try {
+//     const response = await axios.post('/users/reset_password_confirm/', user);
+//     console.log(response);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 </script>
 <style lang="scss" scoped>
 .btn {

@@ -25,7 +25,14 @@
                 >
                 <div v-else>
                     <Button
-                        v-if="currentStatus.status === 'Еще не участвуете'"
+                        v-if="!userCommander.detachment_commander"
+                        label="Участвовать"
+                        @click="errorIsNoCommander = !errorIsNoCommander"
+                        class="competition__status-application-button"
+                    ></Button>
+
+                    <Button
+                        v-else-if="currentStatus.status === 'Еще не участвуете'"
                         label="Участвовать"
                         class="competition__status-application-button"
                         @click="onSendApplication"
@@ -120,10 +127,18 @@
                 студенческих отрядов Молодёжной общероссийской общественной
                 организации «Российский Студенческие Отряды»
             </p>
-            <a
+            <!-- <a
                 href="http://127.0.0.1:8000/compititions/documents/%D0%9F%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BD%D0%B0_%D0%BB%D1%83%D1%87%D1%88%D0%B8%D0%B9_%D0%9B%D0%A1%D0%9E_2024.pdf"
                 target="_blank"
                 class="competition__documents-button"
+            >
+                Скачать документ</a
+            > -->
+            <button
+                type="button"
+                id="document"
+                class="competition__documents-button"
+                @click="downloadDocument"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -137,8 +152,8 @@
                         fill="#1F7CC0"
                     />
                 </svg>
-                Скачать документ</a
-            >
+                Скачать документ
+            </button>
         </div>
 
         <CompetitionMembersBlock v-if="isAuth"></CompetitionMembersBlock>
@@ -181,6 +196,9 @@ import { ModalCompetition } from '@features/Competition';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';
 // const route = useRoute();
+import { usePage } from '@shared';
+
+usePage({ isHidden: true });
 
 const isAuth = ref(!!localStorage.getItem('Token'));
 
@@ -220,6 +238,29 @@ const getMeSquad = async () => {
     } catch (error) {
         console.log('an error occured ' + error);
     }
+};
+
+const downloadDocument = async () => {
+    HTTP.get('competitions/download_regulation_file/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+        responseType: 'blob',
+    })
+        .then((response) => {
+            var FILE = window.URL.createObjectURL(new Blob([response.data]));
+
+            var docUrl = document.createElement('a');
+            docUrl.href = FILE;
+            docUrl.setAttribute('download', 'Положение_на_лучший_ЛСО_2024.pdf');
+            document.body.appendChild(docUrl);
+            docUrl.click();
+            console.log(response, 'success');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
 };
 
 //--id конкурса на лучший отряд--------------------------------

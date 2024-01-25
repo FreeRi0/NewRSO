@@ -37,7 +37,7 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
-                path: '/CreaturePass',
+                path: '/password/reset/confirm/:uid/:token',
                 name: 'CreaturePassword',
                 component: () =>
                     import(
@@ -417,7 +417,8 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/actionSquads',
                 name: 'actionSquads',
-                component: () => import('@entities/Actions/components/SeeYouLater.vue')
+                component: () =>
+                    import('@entities/Actions/components/SeeYouLater.vue'),
             },
             /*
             {

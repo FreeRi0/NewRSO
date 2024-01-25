@@ -8,7 +8,7 @@
                     v-if="detachment?.user?.media?.photo"
                 />
                 <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    src="@app/assets/user-avatar.png"
                     alt="photo"
                 />
             </div>
@@ -39,7 +39,7 @@
             <div class="horizontallso-img">
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
                 <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    src="@app/assets/hq-emblem.png"
                     alt="photo"
                     v-else
                 />

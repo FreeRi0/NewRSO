@@ -577,7 +577,7 @@
                     Фамилия пользователя
                 </p>
                 <p class="error" v-if="isError.email">
-                  {{ "" + isError.email }}
+                    {{ '' + isError.email }}
                 </p>
             </v-expansion-panel>
 
@@ -3285,7 +3285,9 @@ const downloadAll = async () => {
 };
 
 const updateData = async () => {
+
     try {
+
         let fd = new FormData();
         fd.append('rso_info_from', rso_info_from.value);
         if (isStatementChange.value)
@@ -3448,6 +3450,7 @@ const updateData = async () => {
         console.log(axiosrequestForeignDocs.data);
         console.log(axiosrequest4.data);
         console.log(axiosrequest5.data);
+        // emit('click');
         console.log(axiosrequest6?.data);
         swal.fire({
             position: 'top-center',
@@ -3456,6 +3459,13 @@ const updateData = async () => {
             showConfirmButton: false,
             timer: 1000,
         });
+        getUser();
+        getParent();
+        getEducation();
+        getRegions();
+        getDocuments();
+        getForeignDoc();
+        getUserRegions();
 
         isLoading.value = false;
     } catch (error) {
