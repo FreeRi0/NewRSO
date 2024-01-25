@@ -2883,8 +2883,6 @@ import { HTTP } from '@app/http';
 import { TextArea } from '@shared/components/inputs';
 import axios from 'axios';
 
-const emits = defineEmits(['click']);
-
 const router = useRouter();
 const panel = ref();
 const isError = ref({});
