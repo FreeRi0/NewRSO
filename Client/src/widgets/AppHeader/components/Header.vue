@@ -222,6 +222,7 @@ const userPages = computed(() => [
     {
         title: 'Штаб СО ОО',
         name: 'HQ',
+        path: 'regionals',
         params: {
             id: user?.value?.educational_headquarter_id,
         },
@@ -229,22 +230,31 @@ const userPages = computed(() => [
     {
         title: 'Местный штаб',
         name: 'LocalHQ',
+        path: 'locals',
         params: {
-            id: user?.value?.local_headquarter_id,
+            id:
+                user?.value?.local_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
         },
     },
     {
         title: 'Региональный штаб',
         name: 'RegionalHQ',
+        path: 'regionals',
         params: {
-            id: user?.value?.regional_headquarter_id,
+            id:
+                user?.value?.regional_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
         },
     },
     {
         title: 'Окружной штаб',
         name: 'DistrictHQ',
+        path: 'districts',
         params: {
-            id: user?.value?.district_headquarter_id,
+            id:
+                user?.value?.district_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
         },
     },
     {
@@ -254,11 +264,11 @@ const userPages = computed(() => [
             id: user.value?.central_headquarter_id,
         },
     },
-    { title: 'Активные заявки', name: 'active', },
+    { title: 'Активные заявки', name: 'active' },
     // { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', name: 'contributorPay' },
-    { title: 'Оформление справок', name: 'references'  },
-    { title: 'Настройки профиля', name: 'personaldata'  },
+    { title: 'Оформление справок', name: 'references' },
+    { title: 'Настройки профиля', name: 'personaldata' },
     { title: 'Выйти из ЛК', button: true },
 ]);
 
@@ -277,21 +287,79 @@ const regions = ref({});
 
 const regionals = ref([]);
 
-const getUser = async () => {
-    await HTTP.get('/rsousers/me/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            region.value = user.value.region;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+const headquartersIds = ref([]);
+const headquertersNames = ref([
+    {
+        path: 'educationals',
+        id: 'educational_headquarter_id',
+        parentPath: 'locals',
+        parentHqId: 'local_headquarter',
+    },
+    {
+        path: 'locals',
+        id: 'local_headquarter_id',
+        parentPath: 'regionals',
+        parentHqId: 'regional_headquarter',
+    },
+    {
+        path: 'regionals',
+        id: 'regional_headquarter_id',
+        parentPath: 'districts',
+        parentHqId: 'district_headquarter',
+    },
+    {
+        path: 'dirstricts',
+        id: 'district_headquarter_id',
+        parentPath: 'centrals',
+        parentHqId: 'central_headquarter',
+    },
+]);
+
+const getHeadquarters = async () => {
+    for (let i = 0; i < headquertersNames.value.length; i++) {
+        const item = headquertersNames.value[i];
+
+        if (!user.value[item.id]) continue;
+
+        const { data } = await HTTP.get(`${item.path}/${user.value[item.id]}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        const { data: dataParent } = await HTTP.get(
+            `${item.parentPath}/${data[item.parentHqId]}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        headquartersIds.value.push({
+            path: item.parentPath,
+            id: dataParent.id,
+        });
+    }
+};
+
+const getUser = async () => {
+    try {
+        const response = await HTTP.get('/rsousers/me/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        user.value = response.data;
+        region.value = user.value.region;
+        console.log(user.value);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 // console.log('dddddd', id);
 
@@ -304,7 +372,7 @@ const updateRegion = async () => {
     })
         .then((response) => {
             user.value = response.data;
-            show = !show;
+            show.value = !show.value;
             console.log(user.value);
         })
         .catch(function (error) {
@@ -313,41 +381,43 @@ const updateRegion = async () => {
 };
 
 const getRegions = async () => {
-    await HTTP.get(`/regions/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regions.value = response.data;
-            console.log(regions.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/regions/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        regions.value = response.data;
+        console.log(regions.value);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const getRegionals = async () => {
-    await HTTP.get(`/regionals/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regionals.value = response.data;
-            console.log(regionals.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/regionals/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        regionals.value = response.data;
+        console.log(regionals.value);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-onMounted(() => {
-    getUser();
-    getRegions();
-    getRegionals();
+onMounted(async () => {
+    await getUser();
+    await getRegions();
+    await getRegionals();
+
+    await getHeadquarters();
 });
 </script>
 
