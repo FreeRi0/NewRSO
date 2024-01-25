@@ -60,11 +60,12 @@
                                     />
                                 </a>
                             </div>
+                            <!-- <pre>{{ userId }} {{ headquarter.commander.id }}</pre> -->
                         </div>
                     </div>
 
                     <router-link
-                        v-if="educComId === headquarter.commander"
+                        v-if="userId === headquarter?.commander?.id"
                         class="hq-data__link"
                         :to="{
                             name: 'EditHQ',
@@ -103,7 +104,7 @@
                                 >{{
                                     localHeadquarter.participants_count
                                 }}
-                                дейстующих членов</span
+                                действующих членов</span
                             >
                         </li>
                     </ul>
@@ -141,7 +142,7 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="localComId === localHeadquarter.commander"
+                        v-if="userId === localHeadquarter?.commander?.id"
                         class="hq-data__link"
                         :to="{
                             name: 'FormLocal',
@@ -180,7 +181,7 @@
                                 >{{
                                     districtHeadquarter.participants_count
                                 }}
-                                дейстующих членов</span
+                                действующих членов</span
                             >
                         </li>
                     </ul>
@@ -218,7 +219,7 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="districtComId === districtHeadquarter.commander"
+                        v-if="userId === districtHeadquarter?.commander?.id"
                         class="hq-data__link"
                         :to="{
                             name: 'FormDH',
@@ -257,7 +258,7 @@
                                 >{{
                                     regionalHeadquarter.participants_count
                                 }}
-                                дейстующих членов</span
+                                действующих членов</span
                             >
                         </li>
                     </ul>
@@ -295,7 +296,7 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="regionComId === regionalHeadquarter.commander"
+                        v-if="userId === regionalHeadquarter?.commander?.id"
                         class="hq-data__link"
                         :to="{
                             name: 'EditingOfRS',
@@ -320,7 +321,7 @@
                 </div>
                 <div class="working_slogan">
                     <p>
-                        {{ centralHeadquarter.working_years }}лет на благо
+                        {{ centralHeadquarter.working_years }} лет на благо
                         страны!
                     </p>
                 </div>
@@ -369,10 +370,11 @@
                                     />
                                 </a>
                             </div>
+                            <!-- <pre>{{ centralHeadquarter.commander.id }}</pre> -->
                         </div>
                     </div>
                     <router-link
-                        v-if="centralComId === centralHeadquarter.commander"
+                        v-if="userId === centralHeadquarter?.commander?.id"
                         class="hq-data__link"
                         :to="{
                             name: 'FormCentral',
@@ -385,15 +387,23 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { hqAvatar } from '@shared/components/imagescomp';
 import { hqBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { useRoleStore } from '@layouts/store/role';
+import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 const roleStore = useRoleStore();
 roleStore.getRoles();
+const userStore = useUserStore();
+userStore.getUser();
+const user = storeToRefs(userStore);
+let userId = computed(() => {
+    return user.user.value.id;
+});
+const edict = ref({});
 
 const roles = storeToRefs(roleStore);
 let educComId = roles.roles.value.educationalheadquarter_commander;
@@ -434,6 +444,38 @@ const props = defineProps({
     member: {
         type: Object,
     },
+});
+
+const aboutEduc = async () => {
+    try {
+        let id = props.headquarter.educational_institution.id;
+        console.log('headquarter', props.headquarter);
+        console.log('id', id);
+        const response = await HTTP.get(`/eduicational_institutions/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        edict.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log(error);
+    }
+};
+watch(
+    () => props.headquarter,
+
+    (newheadquarter) => {
+        if (Object.keys(props.headquarter).length === 0) {
+            return;
+        }
+        aboutEduc();
+    },
+);
+onMounted(() => {
+    aboutEduc();
 });
 </script>
 <style lang="scss" scoped>

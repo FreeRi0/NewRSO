@@ -11,10 +11,10 @@
                 </v-btn>
                 <v-btn
                     class="squads-tabs__item"
-                    :class="{ active: picked === area.id }"
+                    :class="{ active: picked === area.name }"
                     v-for="area in categories"
                     :key="area"
-                    @click="picked = area.id"
+                    @click="picked = area.name"
                     >{{ area.name }}
                 </v-btn>
             </div>
@@ -257,7 +257,7 @@ const sortedSquads = computed(() => {
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.detachment.name.toLowerCase(), 
+            let fa = a.detachment.name.toLowerCase(),
                 fb = b.detachment.name.toLowerCase();
 
             if (fa < fb) {

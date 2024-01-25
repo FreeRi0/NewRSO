@@ -4,31 +4,27 @@
         <BannerHQ
             v-if="showHQ"
             :headquarter="headquarter"
-            :edict="educt"
+            :edict="edict"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showDistrictHQ"
             :districtHeadquarter="districtHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showLocalHQ"
             :localHeadquarter="localHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showRegionalHQ"
             :regionalHeadquarter="regionalHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else
             :centralHeadquarter="centralHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <section class="about-hq">
@@ -42,6 +38,7 @@
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
+            :commander="commander"
             :member="filteredMembers"
             head="Руководство штаба"
             :position="position"
@@ -53,7 +50,7 @@
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from './components/ManagementHQ.vue';
 import DetachmentsHQ from './components/DetachmentsHQ.vue';
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 
@@ -63,62 +60,80 @@ const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showRegionalHQ = ref(false);
 
+const commander = ref({});
 const position = ref({});
 const headquarter = ref({});
 const member = ref([]);
-const educt = ref({});
+const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 
 const aboutHQ = async () => {
-    await HTTP.get(`/educationals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            headquarter.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/educationals/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        headquarter.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const aboutEduc = async () => {
+//     try {
+//         const response = await HTTP.get(`/eduicational_institutions/${id}/`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+
+//         educt.value = response.data;
+//         console.log(response);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 const aboutMembers = async () => {
-    await HTTP.get(`/educationals/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            member.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/educationals/${id}/members/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        member.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-aboutMembers();
+const fetchCommander = async () => {
+    try {
+        let id = headquarter.value.commander.id;
+        const response = await HTTP.get(`/rsousers/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        commander.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+// aboutMembers();
 
 const filteredMembers = computed(() => {
     return member.value.filter((manager) => {
@@ -130,31 +145,33 @@ const filteredMembers = computed(() => {
         );
     });
 });
+// const management = computed(() => {
+//     return [{ user: commander.value }, ...filteredMembers.value];
+// });
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutHQ();
         aboutMembers();
-        aboutEduc();
+        // aboutEduc();
+        fetchCommander();
     }
 });
 
 watch(
     () => route.params.id,
 
-    (newId) => {
+    async (newId) => {
         id = newId;
-        aboutHQ();
-        aboutMembers();
-        aboutEduc();
+        await aboutHQ();
+        await aboutMembers();
+        // await aboutEduc();
+        await fetchCommander();
+    },
+    {
+        immediate: true,
     },
 );
-
-onMounted(() => {
-    aboutHQ();
-    aboutMembers();
-    aboutEduc();
-});
 </script>
 <style scoped lang="scss">
 .title {

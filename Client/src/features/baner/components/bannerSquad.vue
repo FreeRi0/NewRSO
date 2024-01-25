@@ -54,10 +54,12 @@
                                     />
                                 </a>
                             </div>
+                            <!-- <pre>dddddssss   {{ userId }}</pre> -->
                         </div>
                     </div>
+
                     <router-link
-                        v-if="comId === squad?.commander"
+                        v-if="userId == squad?.commander?.id"
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -73,8 +75,6 @@
                         class="AddApplication"
                     ></Button>
 
-
-
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="user-data__link mr-2">
                             Заявка на рассмотрении
@@ -85,14 +85,11 @@
                             class="AddApplication"
                         ></Button>
                     </div>
-                     <!-- <pre>dddddddddddddddd{{ UserApplication }}</pre>
+                    <!-- <pre>dddddddddddddddd{{ UserApplication }}</pre>
                      <pre>id{{ userId }}</pre> -->
                     <!--find искать id в computed-->
 
-                    <div
-                        v-else-if="IsMember"
-                        class="user-data__link"
-                    >
+                    <div v-else-if="IsMember" class="user-data__link">
                         Вы участник
                     </div>
                 </div>
@@ -123,7 +120,7 @@ const roles = storeToRefs(roleStore);
 let comId = roles.roles.value.detachment_commander;
 let userId = computed(() => {
     return user.user.value.id;
-})
+});
 console.log('comId', comId);
 const props = defineProps({
     banner: {
@@ -144,14 +141,14 @@ const props = defineProps({
     },
 });
 
-console.log('memberAA', props.member)
+console.log('memberAA', props.member);
 
 const edict = ref({});
 const data = ref({});
 const isError = ref([]);
 const applications = ref([]);
 const swal = inject('$swal');
-console.log('user', user.user.value.id)
+console.log('user', userId.value);
 
 const aboutEduc = async () => {
     let id = props.squad.educational_institution.id;
@@ -197,15 +194,14 @@ onMounted(() => {
 
 //member сравнивать так же
 const UserApplication = computed(() => {
-    return applications.value.find((item) => item.user.id === userId.value  );
+    return applications.value.find((item) => item.user.id === userId.value);
 });
 
 const IsMember = computed(() => {
     return props.member.find((item) => item.user.id === userId.value);
 });
 
-console.log('member', IsMember)
-
+console.log('member', IsMember);
 
 watch(
     () => props.squad,
@@ -217,7 +213,6 @@ watch(
         aboutEduc();
     },
 );
-
 
 const AddApplication = async () => {
     let id = props.squad.id;

@@ -18,7 +18,7 @@
                     label="Тандем"
                     color="primary"
                     size="large"
-                    @click="isChooseSquad = true"
+                    @click="SendInvitation"
                 ></Button>
                 <Button
                     type="submit"
@@ -60,7 +60,7 @@
                 label="Отправить приглашение"
                 color="primary"
                 size="large"
-                @click="SendApplication(juniorDetachment)"
+                @click="sendAppl(juniorDetachment)"
             ></Button>
         </form>
     </div>
@@ -73,10 +73,10 @@
         >
             x
         </button>
-        <p>
+        <p class="competition__message">
             Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;номинации &laquo;Дебют&raquo; по&nbsp;причине: -дата
-            основания отряда ранее 25.01.2024&nbsp;года.
+            в&nbsp;номинации &laquo;Тандем&raquo; по&nbsp;причине: -дата
+            основания отряда позже 25.01.2024&nbsp;года.
         </p>
     </div>
 
@@ -88,57 +88,23 @@
         >
             x
         </button>
-        <p>
+        <p class="competition__message">
             Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;номинации &laquo;Тандем&raquo; по&nbsp;причине: -дата
-            основания отряда позже 25.01.2024&nbsp;года.
+            в&nbsp;номинации &laquo;Дебют&raquo; по&nbsp;причине: -дата
+            основания отряда ранее 25.01.2024&nbsp;года.
         </p>
     </div>
 
-    <div v-if="errorIsNoCommander" class="competition__info">
+    <div v-if="isSucsess" class="competition__info">
         <button
             type="button"
-            @click="show = !show"
+            @click="closeSucsessMessage"
             class="competition__button-close"
         >
             x
         </button>
-        <p>
-            Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;Конкурсе по&nbsp;причине: -подать заявку на&nbsp;участие
-            может только Командир отряда.
-        </p>
+        <p class="competition__message">Заявка успешно отправлена!</p>
     </div>
-
-    <!-- <div v-if="isError" class="competition__info">
-        <button
-            type="button"
-            @click="show = !show"
-            class="competition__button-close"
-        >
-            x
-        </button>
-        <p>
-            Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;номинации &laquo;Тандем&raquo; по&nbsp;причине: -подать
-            заявку на&nbsp;участие может только Командир отряда.
-        </p>
-    </div>
-
-    <div v-if="isError" class="competition__info">
-        <button
-            type="button"
-            @click="show = !show"
-            class="competition__button-close"
-        >
-            x
-        </button>
-        <p>
-            Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;номинации &laquo;Дебют&raquo; по&nbsp;причине: -подать заявку
-            на&nbsp;участие может только Командир отряда.
-        </p>
-    </div> -->
 </template>
 
 <script setup>
@@ -151,55 +117,53 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    user: {
+    squad: {
         type: Object,
         default: () => ({}),
     },
 });
 
-const user = ref(props.user);
-const allSquads = ref([]);
+// const userCommander = ref({});
+// const allSquads = ref([]);
 
-const getAllSquads = async () => {
-    HTTP.get(`detachments/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            allSquads.value = response.data;
-            // в консоли выводит пустой массив
-            console.log('Все отряды', response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const getUserCommander = async () => {
+//     HTTP.get(`rsousers/me_commander/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             userCommander.value = response.data;
+//             console.log('я командир', response);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
-const getStatusInCompetition = () => {
-    if (allSquads.value.length) {
-        console.log('hhh', allSquads.value);
-        console.log('id юзера', user.value.id);
-        for (let squad of allSquads.value) {
-            if (user.value.id === squad.commander.id) {
-                console.log(squad.status);
-                return squad.status;
-            }
-        }
-        // allSquads.value.forEach((squad) => {
-        //     squad.status;
-        //     if (user.value.id === squad.commander.id) {
-        //         console.log(squad.status);
-        //         return squad.status;
-        //     }
-        // });
-    }
-};
+// const getAllSquads = async () => {
+//     HTTP.get(`detachments/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             allSquads.value = response.data;
+//             console.log('Все отряды', response);
+//             allSquads.value.forEach((member) => {
+//                 console.log(member.status);
+//             });
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
-getStatusInCompetition();
+// console.log(allSquads.value.)
 
-const emit = defineEmits(['closePopUp']);
+const emit = defineEmits(['closePopUp', 'sucsess']);
 
 const closeSendApplication = () => {
     emit('closePopUp');
@@ -210,7 +174,7 @@ let id = 1;
 const isChooseSquad = ref(false);
 let errorIsStatusStart = ref(false);
 let errorIsStatusMentor = ref(false);
-let errorIsNoCommander = ref(false);
+let isSucsess = ref(false);
 const juniorDetachment = ref(null);
 
 const closeChooseSquad = () => {
@@ -218,12 +182,18 @@ const closeChooseSquad = () => {
     closeSendApplication();
 };
 
+const closeSucsessMessage = () => {
+    isSucsess.value = false;
+    isChooseSquad.value = false;
+    closeSendApplication();
+};
+
 const closeAll = () => {
     isChooseSquad.value = false;
     closeSendApplication();
-    errorIsNoCommander.value = false;
     errorIsStatusStart.value = false;
     errorIsStatusMentor.value = false;
+    isSucsess.value = false;
 };
 
 const squadsJunour = ref([]);
@@ -245,7 +215,70 @@ const getSquads = async () => {
         });
 };
 
-const SendApplication = async (juniorDetacmentId) => {
+const sliceNulls = (str) => {
+    if (str.startsWith('0')) {
+        return sliceNulls(str.slice(1));
+    }
+
+    return str;
+};
+
+//Дебют
+const SendApplication = async () => {
+    const body = {};
+
+    if (
+        new Date(
+            ...props.squad.founding_date
+                .split('-')
+                .map((num, index) =>
+                    index % 2 === 1
+                        ? parseInt(sliceNulls(num)) - 1
+                        : parseInt(sliceNulls(num)),
+                ),
+        ).getTime() < new Date(2024, 0, 25).getTime()
+    ) {
+        errorIsStatusStart.value = true;
+        return;
+    }
+
+    try {
+        await HTTP.post(`/competitions/${id}/applications/`, body, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        isSucsess.value = true;
+        emit('sucsess');
+        //закрыть окно выбора номинации
+    } catch (e) {
+        console.log('error application', e);
+    }
+};
+
+//Тандем
+const SendInvitation = async () => {
+    if (
+        new Date(
+            ...props.squad.founding_date
+                .split('-')
+                .map((num, index) =>
+                    index % 2 === 1
+                        ? parseInt(sliceNulls(num)) - 1
+                        : parseInt(sliceNulls(num)),
+                ),
+        ).getTime() > new Date(2024, 0, 25).getTime()
+    ) {
+        console.log('err');
+        errorIsStatusMentor.value = true;
+        return;
+    }
+
+    isChooseSquad.value = true;
+};
+
+const sendAppl = async (juniorDetacmentId) => {
     const body = {};
 
     if (juniorDetacmentId) {
@@ -259,6 +292,9 @@ const SendApplication = async (juniorDetacmentId) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+        isSucsess.value = true;
+        emit('sucsess');
+        //закрыть окно выбора номинации
     } catch (e) {
         console.log('error application', e);
     }
@@ -266,7 +302,8 @@ const SendApplication = async (juniorDetacmentId) => {
 
 onMounted(() => {
     getSquads();
-    getAllSquads();
+    // getUserCommander();
+    // getAllSquads();
 });
 </script>
 <style lang="scss"></style>

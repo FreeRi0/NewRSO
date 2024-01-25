@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="active-app">
+        <div class="active-app" v-if="regComId || detComId">
             <h2 class="profile-title">Активные заявки</h2>
 
             <div class="d-flex mt-9 mb-9">
@@ -100,13 +100,15 @@ import { CheckedSquadsList } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
 import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { useRoleStore } from '@layouts/store/role';
+
 import { storeToRefs } from 'pinia';
 
 const roleStore = useRoleStore();
 roleStore.getRoles();
-
 const roles = storeToRefs(roleStore);
 
+let regComId = roles.roles.value.regionalheadquarter_commander;
+let detComId = roles.roles.value.detachment_commander;
 const picked = ref('');
 const tabs = ref([
     {
@@ -146,24 +148,39 @@ const step = ref(12);
 // tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
 const viewParticipants = async () => {
-    let id =
-        roles?.roles?.value?.detachment_commander ||
-        roles?.roles?.value?.regionalheadquarter_commander;
+    let id = regComId ?? detComId;
     console.log('roles', roles.roles.value);
     console.log('id', id);
-    await HTTP.get(`/detachments/${id}/verifications/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            participants.value = response.data;
-            console.log(response);
+
+    if (regComId) {
+        await HTTP.get(`/regionals/${id}/verifications/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+            .then((response) => {
+                participants.value = response.data;
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    } else if (detComId) {
+        await HTTP.get(`/detachments/${id}/verifications/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+            .then((response) => {
+                participants.value = response.data;
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    }
 };
 
 const viewDetachments = async () => {

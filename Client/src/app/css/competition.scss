@@ -148,7 +148,22 @@
             bottom: 5%;
         }
 
-        .btn.competition__status-application-button {
+        a {
+            display: block;
+            margin: 20px auto;
+            padding: 16px 32px;
+            color: white;
+            box-shadow: none;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+            text-transform: none;
+        }
+
+        .btn.competition__status-application-button,
+        a.competition__status-application-button {
             margin: 0;
             margin-left: auto;
             color: #35383f;
@@ -334,12 +349,12 @@
 
     &__send-invitation {
         position: absolute;
-        top: calc(50% - 136px);
+        top: calc(50% - 144px);
         right: calc(50% - 250px);
         bottom: 0;
         z-index: 2;
         width: 500px;
-        height: 272px;
+        height: 288px;
 
         @media (max-width: 600px) {
             width: 328px;
@@ -366,22 +381,33 @@
         width: 24px;
         height: 24px;
         background-image: url('@/app/assets/icon/close-location.svg');
-        margin-left: auto;
-        // margin-right: -40px;
-        // margin-top: -24px;
     }
 
     &__info {
         position: absolute;
-        top: calc(50% - 90px);
-        right: calc(50% - 164px);
+        top: calc(50% - 144px);
+        right: calc(50% - 250px);
         bottom: 0;
         z-index: 2;
-        width: 328px;
-        height: 180px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 500px;
+        height: 288px;
         padding: 40px 16px;
         border-radius: 10px;
         border: 1px solid #898989;
         background-color: #ffffff;
+
+        @media (max-width: 600px) {
+            width: 328px;
+            right: calc(50% - 164px);
+        }
+    }
+
+    &__message {
+        margin: 0 auto;
+        width: fit-content;
+        width: 380px;
     }
 }

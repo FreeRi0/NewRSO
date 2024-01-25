@@ -4,6 +4,7 @@
             v-for="squad in squads"
             :squad="squad"
             :key="squad.id"
+            :competition="false"
         />
     </div>
 

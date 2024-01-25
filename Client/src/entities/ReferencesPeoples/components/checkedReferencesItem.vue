@@ -1,6 +1,6 @@
 <template>
     <div class="checked">
-        <div class="checked-item__wrapper">
+        <router-link class="checked-item__wrapper"  :to="{ name: 'userpage', params: { id: participant.user.id } }">
             <div class="checked-img">
                 <img
                     :src="participant.user.avatar?.photo"
@@ -35,7 +35,7 @@
                     <p>{{participant.user.date_of_birth }}</p>
                 </div>
             </div>
-        </div>
+        </router-link>
         <div class="sort-select ml-3">
             <sortByEducation
                 placeholder="Выберете действие"

@@ -5,7 +5,7 @@
             <div
                 class="manager-card"
                 :key="manager"
-                v-for="(manager, index) in member"
+                v-for="(manager, index) in joinMembers"
                 :class="{
                     'align-left': index % 2 === 0,
                     'align-right': index % 2 !== 0,
@@ -22,9 +22,9 @@
                 </div>
                 <div class="manager-card__box">
                     <h5 id="name_length">
-                        {{ manager.user.first_name }}
-                        {{ manager.user.last_name }}
-                        {{ manager.user.patronymic_name }}
+                        {{ manager?.user?.first_name }}
+                        {{ manager?.user?.last_name }}
+                        {{ manager?.user?.patronymic_name }}
                     </h5>
                     <p>{{ manager.position }}</p>
                 </div>
@@ -34,6 +34,8 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
     member: {
         type: Array,
@@ -41,10 +43,16 @@ const props = defineProps({
     position: {
         type: Object,
     },
-
+    commander: {
+        type: Object,
+    },
     head: {
         type: String,
     },
+});
+
+const joinMembers = computed(() => {
+    return [{ user: props.commander, position: 'Командир' }, ...props.member];
 });
 </script>
 
