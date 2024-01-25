@@ -9,8 +9,6 @@
                     variant="outlined"
                     clearable
                     class="regSelect"
-                    name="select_region"
-                    id="select-region"
                     placeholder="Регион ОО"
                     v-model="form.region"
                     address="/regions/"
@@ -67,36 +65,43 @@
                 <p class="error" v-if="isError.username">
                     {{ isError.username }}
                 </p>
-                <Input
-                    type="password"
+
+                <v-text-field
+                    class="password-input"
+                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                    :type="visible ? 'text' : 'password'"
+                    density="compact"
+                    v-model="form.password"
                     placeholder="Придумайте пароль"
-                    name="password"
-                    v-model:value.trim="form.password"
-                ></Input>
+                    variant="outlined"
+                    @click:append-inner="visible = !visible"
+                ></v-text-field>
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
                 </p>
-                <Input
-                    type="password"
-                    placeholder="Повторите пароль"
-                    name="confirm"
-                    v-model:value.trim="form.re_password"
-                ></Input>
+                <v-text-field
+                    class="password-input"
+                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                    :type="visible ? 'text' : 'password'"
+                    density="compact"
+                    v-model="form.re_password"
+                    placeholder="Пароль"
+                    variant="outlined"
+                    @click:append-inner="visible = !visible"
+                ></v-text-field>
+
                 <p class="error" v-if="isError.re_password">
                     {{ isError.re_password }}
                 </p>
                 <p class="error" v-else-if="isError.non_field_errors">
                     Пароли не совпадают
                 </p>
-                <!-- <v-checkbox
-                    v-model="form.personal_data_agreement"
-                    label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных."
-                ></v-checkbox> -->
+
                 <div class="regCheck">
                     <input
-                        required
                         v-model="form.personal_data_agreement"
                         type="checkbox"
+                        @change="handleTermsState"
                     />
                     <div class="regCheck_text">
                         Даю согласие на обработку моих персональных данных в
@@ -105,18 +110,14 @@
                         определенных в Согласии на обработку персональных
                         данных.
                     </div>
-                    <!-- <v-checkbox
-                        v-model="checkbox"
-                        :rules="[(v) => !!v || 'You must agree to continue!']"
-                        label="Do you agree?"
-                        required
-                    ></v-checkbox> -->
+
                 </div>
+                <p class="error" v-if="termsError">Обязательное поле</p>
 
                 <Button
                     label="Зарегистрироваться"
                     :loaded="isLoading"
-                    :disabled="isLoading"
+                    :disabled="isLoading || !form.personal_data_agreement"
                     type="submit"
                     color="primary"
                 >
@@ -133,6 +134,26 @@
 </template>
 
 <style lang="scss">
+.v-field {
+    border-radius: 10px;
+}
+
+.v-field.v-field--appended {
+    --v-field-padding-end: 10px;
+}
+
+.v-input--density-compact .v-field--variant-outlined,
+.v-input--density-compact .v-field--single-line,
+.v-input--density-compact .v-field--no-label {
+    --v-field-padding-bottom: 10px;
+}
+
+.v-field--variant-outlined,
+.v-field--single-line,
+.v-field--no-label {
+    --v-field-padding-top: 5px;
+}
+
 .btn {
     margin: 60px auto;
     margin-bottom: 15px;
@@ -188,6 +209,23 @@
     margin-bottom: 5px;
     text-align: center;
 }
+
+.password-input {
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #35383f;
+    font-weight: normal;
+    font-family: 'Bert-Sans';
+    margin-bottom: 8px;
+}
+
+.password-input::placeholder {
+    color: #898989;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Bert-Sans';
+}
 .v-card {
     padding-left: 100px;
     padding-right: 100px;
@@ -231,24 +269,17 @@
 </style>
 
 <script setup>
-import { ref, computed, onMounted, inject } from 'vue';
+import { ref, inject, computed } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { Input, PasswordInputVue } from '@shared/components/inputs';
-import { useVuelidate } from '@vuelidate/core';
+import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
 import { IMaskDirective } from 'vue-imask';
 import { Select } from '@shared/components/selects';
 
+const visible = ref(false);
+// const termsState = ref(false);
+ const validated = ref(false);
 const form = ref({
     region: null,
     last_name: '',
@@ -260,7 +291,7 @@ const form = ref({
     username: '',
     password: '',
     re_password: '',
-    personal_data_agreement: null,
+    personal_data_agreement: false,
 });
 
 const isLoading = ref(false);
@@ -269,8 +300,15 @@ const isError = ref([]);
 const router = useRouter();
 const swal = inject('$swal');
 
+const termsError = computed(() => {
+    return validated.value && !form.personal_data_agreement
+})
+const handleTermsState = () => {
+    validated.value = false
+}
 const RegisterUser = async () => {
     isLoading.value = true;
+    validated.value = true;
     HTTP.post('/register/', form.value, {
         headers: {
             'Content-Type': 'application/json',

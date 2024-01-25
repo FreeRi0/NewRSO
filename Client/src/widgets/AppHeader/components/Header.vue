@@ -254,11 +254,11 @@ const userPages = computed(() => [
             id: user.value?.central_headquarter_id,
         },
     },
-    { title: 'Активные заявки', name: 'active' },
+    { title: 'Активные заявки', name: 'active', },
     // { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', name: 'contributorPay' },
-    { title: 'Оформление справок', name: 'references' },
-    { title: 'Настройки профиля', name: 'personaldata' },
+    { title: 'Оформление справок', name: 'references'  },
+    { title: 'Настройки профиля', name: 'personaldata'  },
     { title: 'Выйти из ЛК', button: true },
 ]);
 
