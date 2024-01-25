@@ -24,10 +24,11 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <p v-if="user?.user_region?.reg_region">
+                            <p v-if="user?.user_region?.reg_region_id">
                                 {{
-                                    regionals[user?.user_region?.reg_region - 1]
-                                        ?.name
+                                    regionals[
+                                        user?.user_region?.reg_region_id - 1
+                                    ]?.name
                                 }}
                             </p>
                         </li>
@@ -87,7 +88,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
@@ -117,7 +118,13 @@ const props = defineProps({
 const regionals = ref([]);
 const detachment = ref({});
 const educationalHeadquarter = ref({});
-const participant = ref({})
+const participant = ref({});
+
+// console.log('reg', props.user.region.id)
+
+// const isRegionHq = computed(() => {
+//     return regionals.value.find((item) => item.region === props.user.region)
+// })
 
 const getRegionals = async () => {
     await HTTP.get(`/regionals/`, {

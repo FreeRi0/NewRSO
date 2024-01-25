@@ -3184,11 +3184,6 @@ const getUserRegions = async () => {
         });
 };
 
-// const UserApplication = computed(() => {
-//     return applications.value.find((item) => item.user.id === user.value.id);
-// });
-
-// console.log('app', UserApplication.value)
 
 const downloadBlankPersonal = async () => {
     await HTTP.get(
@@ -3206,7 +3201,7 @@ const downloadBlankPersonal = async () => {
 
             var docUrl = document.createElement('a');
             docUrl.href = FILE;
-            docUrl.setAttribute('download', 'persnal.pdf');
+            docUrl.setAttribute('download', 'persnal.docx');
             document.body.appendChild(docUrl);
             docUrl.click();
             console.log(response, 'success');
@@ -3232,7 +3227,7 @@ const downloadBlankMembership = async () => {
 
             var docUrl = document.createElement('a');
             docUrl.href = FILE;
-            docUrl.setAttribute('download', 'membership.pdf');
+            docUrl.setAttribute('download', 'membership.docx');
             document.body.appendChild(docUrl);
             docUrl.click();
             console.log(response, 'success');
@@ -3257,7 +3252,7 @@ const downloadBlankParent = async () => {
 
             var docUrl = document.createElement('a');
             docUrl.href = FILE;
-            docUrl.setAttribute('download', 'parent.pdf');
+            docUrl.setAttribute('download', 'parent.docx');
             document.body.appendChild(docUrl);
             docUrl.click();
             console.log(response, 'success');
@@ -3420,7 +3415,7 @@ const updateData = async () => {
         });
         const axiosrequest6 = ref(null);
 
-        if (!UserApplication && !user.value.is_verified) {
+        if (!user.sent_verification && !user.value.is_verified) {
             const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
                 data.value,
@@ -3433,7 +3428,7 @@ const updateData = async () => {
             );
         }
 
-        console.log('ddd', !UserApplication.value)
+        console.log('ddd', !user.value.sent_verification)
 
         user.value = axiosrequest1.data;
         user.value.region = regions.value.find(
@@ -3464,6 +3459,7 @@ const updateData = async () => {
 
         isLoading.value = false;
     } catch (error) {
+        console.log('errr', error);
         isError.value = error.response.data;
         console.error('There was an error!', error);
         isLoading.value = false;

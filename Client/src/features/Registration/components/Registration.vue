@@ -30,7 +30,7 @@
                     {{ isError.first_name }}
                 </p>
                 <Input
-                    placeholder="Отчество(При наличии)"
+                    placeholder="Отчество (При наличии)"
                     name="patronomyc"
                     v-model:value.trim="form.patronymic_name"
                 />
@@ -52,6 +52,7 @@
                 <Input
                     name="date"
                     type="date"
+                    placeholder="Дата рождения"
                     v-model:value="form.date_of_birth"
                 />
                 <p class="error" v-if="isError.date_of_birth">
@@ -112,7 +113,7 @@
                     </div>
 
                 </div>
-                <p class="error" v-if="termsError">Обязательное поле</p>
+                <!-- <p class="error" v-if="termsError">Обязательное поле</p> -->
 
                 <Button
                     label="Зарегистрироваться"

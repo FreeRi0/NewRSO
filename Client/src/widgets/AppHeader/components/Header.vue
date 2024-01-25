@@ -95,9 +95,9 @@
                             alt="Иконка геолокации"
                         /> -->
 
-                        <span v-if="user?.user_region?.reg_region"
+                        <span v-if="user?.user_region?.reg_region_id"
                             >{{
-                                regionals[user?.user_region?.reg_region - 1]
+                                regionals[user?.user_region?.reg_region_id - 1]
                                     ?.name
                             }}
                         </span>
@@ -191,7 +191,7 @@ const region = ref(null);
 const roles = storeToRefs(roleStore);
 
 const router = useRouter();
-const user = ref(null);
+const user = ref({});
 // const route = useRoute();
 // let id = route.params.id;
 
