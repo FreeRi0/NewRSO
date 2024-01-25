@@ -179,6 +179,8 @@ const preview = ref(null);
 const isError = ref([]);
 const swal = inject('$swal');
 
+const emit = defineEmits(['uploadBan']);
+
 const props = defineProps({
     banner: String
 })
@@ -212,7 +214,7 @@ const uploadBanner = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-
+            // emit('uploadBan', response.data.banner);
             console.log(response, 'banner uploaded');
         })
         .catch(({ response }) => {
@@ -247,7 +249,7 @@ const updateBanner = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-
+            // emit('update', response.data.banner);
             console.log(response, 'banner uploaded');
         })
         .catch(({ response }) => {
@@ -277,6 +279,7 @@ const deleteBanner = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
+            // emit('delete', response.data.banner);
             console.log(response, 'deleted');
         })
         .catch(({ response }) => {

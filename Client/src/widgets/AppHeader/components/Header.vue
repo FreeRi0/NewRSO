@@ -97,8 +97,10 @@
 
                         <span v-if="user?.user_region?.reg_region"
                             >{{
-                                regionals[user?.user_region?.reg_region - 1]
-                                    ?.name
+                                regionals.find(
+                                    (reg) =>
+                                        reg.id === user.user_region.reg_region,
+                                )?.name
                             }}
                         </span>
 

@@ -19,7 +19,7 @@
                         v-if="participant?.user?.avatar?.photo"
                     />
                     <img
-                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                        src="@app/assets/user-avatar.png"
                         alt="photo"
                         v-else
                     />
