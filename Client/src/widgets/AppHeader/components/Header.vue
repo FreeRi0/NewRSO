@@ -97,7 +97,7 @@
 
                         <span v-if="user?.user_region?.reg_region_id"
                             >{{
-                                regionals[user?.user_region?.reg_region_id - 1]
+                                regionals[user?.user_region?.reg_region_id]
                                     ?.name
                             }}
                         </span>

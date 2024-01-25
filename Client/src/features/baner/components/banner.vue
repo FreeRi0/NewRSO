@@ -27,7 +27,7 @@
                             <p v-if="user?.user_region?.reg_region_id">
                                 {{
                                     regionals[
-                                        user?.user_region?.reg_region_id - 1
+                                        user?.user_region?.reg_region_id
                                     ]?.name
                                 }}
                             </p>
