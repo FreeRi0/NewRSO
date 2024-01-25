@@ -42,6 +42,7 @@
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
+            :commander="commander"
             :member="filteredMembers"
             head="Руководство регионального штаба"
             :position="position"
@@ -74,7 +75,7 @@ import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage, useCrosspageFilter } from '@shared';
+import { useCrosspageFilter } from '@shared';
 
 const crosspageFilters = useCrosspageFilter();
 const showRegionalHQ = ref(true);
@@ -82,6 +83,7 @@ const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showHQ = ref(false);
 
+const commander = ref({});
 const position = ref({});
 const regionalHeadquarter = ref({});
 const member = ref([]);
@@ -89,40 +91,38 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
-const { replaceTargetObjects } = usePage();
-
 const aboutRegionalHQ = async () => {
-    await HTTP.get(`/regionals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regionalHeadquarter.value = response.data;
-            replaceTargetObjects([regionalHeadquarter.value]);
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/regionals/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        regionalHeadquarter.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const aboutMembers = async () => {
-    await HTTP.get(`/regionals/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            member.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/regionals/${id}/members/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        member.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
+
 const filteredMembers = computed(() => {
     return member.value.filter((manager) => {
         return (
@@ -134,19 +134,41 @@ const filteredMembers = computed(() => {
     });
 });
 
+const fetchCommander = async () => {
+    try {
+        let id = regionalHeadquarter.value.commander.id;
+
+        const response = await HTTP.get(`/rsousers/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        commander.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('An error occurred:', error);
+    }
+};
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutRegionalHQ();
         aboutMembers();
+        fetchCommander();
     }
 });
 watch(
     () => route.params.id,
 
-    (newId) => {
+    async (newId) => {
         id = newId;
-        aboutRegionalHQ();
-        aboutMembers();
+        await aboutRegionalHQ();
+        await aboutMembers();
+        await fetchCommander();
+    },
+    {
+        immediate: true,
     },
 );
 
