@@ -8,7 +8,7 @@
             <v-form action="#" method="post" @submit.prevent="LoginUser">
                 <v-card-text class="text-center goReg"
                     >У вас еще нет аккаунта?
-                    <router-link to="/Register">Зарегистрироваться</router-link>
+                    <router-link class="authLinks" to="/Register">Зарегистрироваться</router-link>
                 </v-card-text>
 
                 <Input
@@ -21,17 +21,17 @@
                 <p class="error" v-if="isError.username">
                     {{ isError.username }}
                 </p>
-                <!-- <p v-if="isError">{{ isError.username }}</p> -->
-                <!-- <v-text-field
+                <v-text-field
                     class="password-input"
                     :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'"
                     density="compact"
+                    v-model="data.password"
                     placeholder="Пароль"
                     variant="outlined"
                     @click:append-inner="visible = !visible"
-                ></v-text-field> -->
-
+                ></v-text-field>
+                <!--
                     <Input
                         :type="showPassword ? 'text' : 'password'"
                         placeholder="Пароль"
@@ -39,22 +39,12 @@
                         v-model:value="data.password"
                         class="username-password"
                     />
-                    <!-- <button
-                        type="button"
-                        class="showPass"
-                        @click="showPassword = !showPassword"
-                    >
-                        <i
-                            :class="showPassword ? ' mdi-eye' : 'mdi-eye-off'"
-                        ></i>
-                    </button> -->
-
+             -->
 
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
                 </p>
 
-                <!-- <p v-if="isError">{{ isError.non_field_errors }}</p> -->
                 <p class="error" v-if="isError.non_field_errors">
                     {{ isError.non_field_errors }}
                 </p>
@@ -70,7 +60,7 @@
 
                 <v-card-text class="text-center"
                     >Забыли пароль?
-                    <router-link to="/RecoveryPass"
+                    <router-link class="authLinks" to="/RecoveryPass"
                         >Восстановить</router-link
                     ></v-card-text
                 >
@@ -91,10 +81,8 @@ const data = ref({
     username: '',
     password: '',
 });
-// const visible = ref(false);
-// const showPassword = ref(false);
+const visible = ref(false);
 
-// const user = ref({});
 const isError = ref('');
 const isLoading = ref(false);
 const swal = inject('$swal');
@@ -149,7 +137,27 @@ const LoginUser = async () => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+
+.v-field {
+    border-radius: 10px;
+}
+
+.v-field.v-field--appended {
+    --v-field-padding-end: 10px;
+}
+
+.v-input--density-compact .v-field--variant-outlined,
+.v-input--density-compact .v-field--single-line,
+.v-input--density-compact .v-field--no-label {
+    --v-field-padding-bottom: 10px;
+}
+
+.v-field--variant-outlined,
+.v-field--single-line,
+.v-field--no-label {
+    --v-field-padding-top: 5px;
+}
 .login_btn {
     margin-top: 40px;
 }
@@ -160,7 +168,6 @@ const LoginUser = async () => {
 //     cursor: pointer;
 //     margin-left: -30px;
 // }
-
 
 .v-card-title {
     padding: 0rem 1rem;
@@ -192,21 +199,23 @@ const LoginUser = async () => {
     text-align: center;
 }
 
-// .password-input {
-//     border: 1px solid #a3a3a3;
-//     border-radius: 10px;
-//     font-size: 16px;
-//     color: #35383F;
-//     font-weight: normal;
-//     font-family: 'Bert-Sans';
-// }
+.password-input {
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #35383f;
+    font-weight: normal;
+    font-family: 'Bert-Sans';
+}
 
-// .password-input::placeholder {
-//     color: #898989;
-//     font-size: 16px;
-//     font-weight: 500;
-//     font-family: 'Bert-Sans';
-// }
+.password-input::placeholder {
+    color: #898989;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Bert-Sans';
+}
+
+
 
 .v-card {
     padding: 105px 98px;
@@ -218,7 +227,7 @@ const LoginUser = async () => {
     }
 }
 
-a {
+.authLinks {
     text-decoration: underline;
     font-weight: bold;
     font-size: 18px;

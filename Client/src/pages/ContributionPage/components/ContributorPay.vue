@@ -36,7 +36,7 @@
                 Уважаемый пользователь, ваш членский взнос оплачен.
             </div>
 
-            <div v-else="picked === false">
+            <div v-else-if="picked === false && regComId">
                 <div class="contributor-search">
                     <input
                         type="text"
@@ -513,6 +513,7 @@
                     ></checkedContributors>
                 </div>
             </div>
+            <div v-else class="mt-12">Доступно только для командиров рег штабов</div>
         </div>
     </div>
 </template>
@@ -527,10 +528,16 @@ import {
 } from '@features/Contributor/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
 
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+let regComId = roles.roles.value.regionalheadquarter_commander;
 const participants = ref([]);
 const participantsVisible = ref(12);
+
 const user = ref({});
 
 const pages = ref([
@@ -787,10 +794,10 @@ p {
         justify-content: space-between;
         align-items: flex-end;
         @media (max-width: 1024px) {
-         flex-direction: column;
-         align-items: flex-start;
-         margin-top: 60px;
-    }
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 60px;
+        }
     }
     &-container {
         display: grid;
@@ -896,8 +903,8 @@ p {
     &-filters {
         align-items: flex-start;
         @media (max-width: 1024px) {
-        margin-top: 20px;
-    }
+            margin-top: 20px;
+        }
     }
 }
 
@@ -937,6 +944,6 @@ p {
 }
 
 .v-expansion-panel-title {
-    padding: 7px 0px
+    padding: 7px 0px;
 }
 </style>

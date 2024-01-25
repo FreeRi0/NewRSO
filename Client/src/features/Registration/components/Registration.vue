@@ -9,8 +9,6 @@
                     variant="outlined"
                     clearable
                     class="regSelect"
-                    name="select_region"
-                    id="select-region"
                     placeholder="Регион ОО"
                     v-model="form.region"
                     address="/regions/"
@@ -46,7 +44,7 @@
                     placeholder="Электронная почта"
                     name="email"
                     type="email"
-                    v-model:value.trim="form.email"
+                    v-model.trim="form.email"
                 />
                 <p class="error" v-if="isError.email">
                     {{ isError.email }}
@@ -67,21 +65,41 @@
                 <p class="error" v-if="isError.username">
                     {{ isError.username }}
                 </p>
-                <Input
+                <!-- <Input
                     type="password"
                     placeholder="Придумайте пароль"
                     name="password"
                     v-model:value.trim="form.password"
-                ></Input>
+                ></Input> -->
+                <v-text-field
+                    class="password-input"
+                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                    :type="visible ? 'text' : 'password'"
+                    density="compact"
+                    v-model="form.password"
+                    placeholder="Придумайте пароль"
+                    variant="outlined"
+                    @click:append-inner="visible = !visible"
+                ></v-text-field>
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
                 </p>
-                <Input
+                <v-text-field
+                    class="password-input"
+                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                    :type="visible ? 'text' : 'password'"
+                    density="compact"
+                    v-model="form.re_password"
+                    placeholder="Пароль"
+                    variant="outlined"
+                    @click:append-inner="visible = !visible"
+                ></v-text-field>
+                <!-- <Input
                     type="password"
                     placeholder="Повторите пароль"
                     name="confirm"
                     v-model:value.trim="form.re_password"
-                ></Input>
+                ></Input> -->
                 <p class="error" v-if="isError.re_password">
                     {{ isError.re_password }}
                 </p>
@@ -106,9 +124,13 @@
                         данных.
                     </div>
                     <!-- <v-checkbox
-                        v-model="checkbox"
-                        :rules="[(v) => !!v || 'You must agree to continue!']"
-                        label="Do you agree?"
+                        v-model="form.personal_data_agreement"
+                        :rules="[(v) => !!v || 'Обязательное поле!']"
+                        label="Даю согласие на обработку моих персональных данных в
+                        соответствии с законом от 27.07.2006 года № 152-ФЗ «О
+                        персональных данных», на условиях и для целей,
+                        определенных в Согласии на обработку персональных
+                        данных."
                         required
                     ></v-checkbox> -->
                 </div>
@@ -188,6 +210,23 @@
     margin-bottom: 5px;
     text-align: center;
 }
+
+.password-input {
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #35383f;
+    font-weight: normal;
+    font-family: 'Bert-Sans';
+    margin-bottom: 8px;
+}
+
+.password-input::placeholder {
+    color: #898989;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Bert-Sans';
+}
 .v-card {
     padding-left: 100px;
     padding-right: 100px;
@@ -231,24 +270,15 @@
 </style>
 
 <script setup>
-import { ref, computed, onMounted, inject } from 'vue';
+import { ref, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { Input, PasswordInputVue } from '@shared/components/inputs';
-import { useVuelidate } from '@vuelidate/core';
+import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
 import { IMaskDirective } from 'vue-imask';
 import { Select } from '@shared/components/selects';
 
+const visible = ref(false);
 const form = ref({
     region: null,
     last_name: '',
@@ -260,7 +290,7 @@ const form = ref({
     username: '',
     password: '',
     re_password: '',
-    personal_data_agreement: null,
+    personal_data_agreement: false,
 });
 
 const isLoading = ref(false);

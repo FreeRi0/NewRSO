@@ -3,13 +3,20 @@
         <div class="squads-banner__text">
            {{ desc}}
         </div>
-        <router-link :to="{name: name}"><p v-if="button" class="create">{{ label }}</p></router-link>
+
+        <router-link v-if="educComId || regComId || localComId || centralComId" :to="{name: name}"><p v-if="button" class="create">{{ label }}</p></router-link>
     </div>
 </template>
 <script setup>
 import { ref } from 'vue';
-
-
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+let educComId = roles.roles.value.educationalheadquarter_commander;
+let regComId = roles.roles.value.regionalheadquarter_commander;
+let localComId = roles.roles.value.localheadquarter_commander;
+let centralComId = roles.roles.value.centralComId;
 const props = defineProps({
     label: {
         type: String,

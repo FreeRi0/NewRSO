@@ -1,6 +1,6 @@
-<template>
-    <div class="container">
-        <div class="referencesMenu">
+<template >
+    <div class="container" v-if="regComId">
+        <div class="referencesMenu" >
             <h2 class="referencesMenu-title">Оформление справок</h2>
             <div class="referencesMenu-wrapper">
                 <div class="referencesMenu-item">
@@ -21,7 +21,14 @@
         </div>
     </div>
 </template>
-<script setup></script>
+<script setup>
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+let regComId = roles.roles.value.regionalheadquarter_commander;
+</script>
 <style lang="scss">
 .referencesMenu {
     padding: 0px 0px 350px 0px;

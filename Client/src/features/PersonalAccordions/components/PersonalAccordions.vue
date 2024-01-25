@@ -244,13 +244,14 @@
                                             >*</span
                                         ></label
                                     >
-                                    <Select
+                                    <sortByEducation
                                         class="input-small"
                                         variant="outlined"
                                         clearable
+                                        placeholder="Выберете родителя"
                                         v-model="parentData.relationship"
-                                        :names="parents"
-                                    ></Select>
+                                        :options="parents"
+                                    ></sortByEducation>
                                 </div>
 
                                 <!-- <p>{{ user.is_adult }}</p> -->
@@ -335,20 +336,6 @@
                                         v-for="passP in passportParent"
                                         :key="passP.id"
                                     >
-                                        <!-- <RadioButton
-                                            :value="passP.name"
-                                            :label="passP.name"
-                                            :id="passP.id"
-                                            :checked="
-                                                selectedPassParent ===
-                                                passP.name
-                                            "
-                                            name="passParent"
-                                            v-model:checkedValue="
-                                                selectedPassParent
-                                            "
-                                        /> -->
-
                                         <input
                                             class="radiobutton"
                                             type="radio"
@@ -3138,23 +3125,6 @@ const getParent = async () => {
             console.log('an error occured ' + error);
         });
 };
-// const viewApplications = async () => {
-//     // let id = route.params.id;
-//     // console.log('idRoute', id);
-//     await HTTP.get(`/detachments/1/verifications/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             applications.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
 
 const getEducation = async () => {
     await HTTP.get('/rsousers/me/education/', {
@@ -3218,12 +3188,6 @@ const getUserRegions = async () => {
             console.log('an error occured ' + error);
         });
 };
-
-// const UserApplication = computed(() => {
-//     return applications.value.find((item) => item.user.id === user.value.id);
-// });
-
-// console.log('app', UserApplication.value)
 
 const downloadBlankPersonal = async () => {
     await HTTP.get(
@@ -3327,8 +3291,6 @@ const downloadAll = async () => {
 const updateData = async () => {
     try {
         let fd = new FormData();
-        // fd.append('passport', passportUpload.value);
-        // fd.append('passport_representative', passport_representative.value);
         fd.append('rso_info_from', rso_info_from.value);
         if (isStatementChange.value)
             statement.value
@@ -3389,6 +3351,20 @@ const updateData = async () => {
             },
         });
 
+        const axiosrequestParent = ref(null);
+        if (!user.value.is_adult) {
+            const axiosrequestParent = await HTTP.patch(
+                '/rsousers/me/parent/',
+                parentData.value,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+        }
+
         const axiosrequest2 = await HTTP.patch(
             '/rsousers/me/region/',
             regionData.value,
@@ -3409,6 +3385,20 @@ const updateData = async () => {
                 },
             },
         );
+
+        const axiosrequestForeignDocs = ref(null);
+        if (!documents.value.russian_passport) {
+            const axiosrequestForeignDocs = await HTTP.patch(
+                '/rsousers/me/foreign_documents/',
+                foreignDoc.value,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+        }
 
         const axiosrequest4 = await HTTP.patch(
             '/rsousers/me/education/',
@@ -3446,15 +3436,18 @@ const updateData = async () => {
         user.value.region = regions.value.find(
             (region) => region.name === user.value.region,
         )?.id;
-
+        parentData.value = axiosrequestParent.data;
         regionData.value = axiosrequest2.data;
         documents.value = axiosrequest3.data;
+        foreignDoc.value = axiosrequestForeignDocs.data;
         education.value = axiosrequest4.data;
         fd = axiosrequest5.data;
         data.value = axiosrequest6?.data;
         console.log(axiosrequest1.data);
+        console.log(axiosrequestParent.data);
         console.log(axiosrequest2.data);
         console.log(axiosrequest3.data);
+        console.log(axiosrequestForeignDocs.data);
         console.log(axiosrequest4.data);
         console.log(axiosrequest5.data);
         console.log(axiosrequest6?.data);
@@ -3481,68 +3474,6 @@ const updateData = async () => {
             });
         }
     }
-
-    if (user.value.is_adult == false) {
-        await HTTP.patch('/rsousers/me/parent/', parentData.value, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-            .then((response) => {
-                console.log(response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-
-            .catch(({ response }) => {
-                isError.value = response.data;
-                console.error('There was an error!', response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    }
-
-    if (documents.value.russian_passport == false) {
-        await HTTP.patch('/rsousers/me/foreign_documents/', foreignDoc.value, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-            .then((response) => {
-                console.log(response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            })
-
-            .catch(({ response }) => {
-                isError.value = response.data;
-                console.error('There was an error!', response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    }
 };
 
 const answers = ref([
@@ -3562,9 +3493,9 @@ const passportParent = ref([
 const parents = ref([
     {
         value: 'father',
-        name: 'father',
+        name: 'Отец',
     },
-    { value: 'mother', name: 'mother' },
+    { value: 'mother', name: 'Мать' },
 ]);
 
 const militaryDocs = ref([
