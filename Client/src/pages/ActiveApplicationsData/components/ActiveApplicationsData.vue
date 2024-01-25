@@ -102,11 +102,9 @@ import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 
-
 const roleStore = useRoleStore();
 roleStore.getRoles();
 const roles = storeToRefs(roleStore);
-
 
 const picked = ref('');
 const tabs = ref([
@@ -152,19 +150,36 @@ const viewParticipants = async () => {
         roles?.roles?.value?.regionalheadquarter_commander;
     console.log('roles', roles.roles.value);
     console.log('id', id);
-    await HTTP.get(`/detachments/${id}/verifications/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            participants.value = response.data;
-            console.log(response);
+
+    if (roles?.roles?.value?.regionalheadquarter_commander) {
+        await HTTP.get(`/regionals/${id}/verifications/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+            .then((response) => {
+                participants.value = response.data;
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    } else if (roles?.roles?.value?.detachment_commander) {
+        await HTTP.get(`/detachments/${id}/verifications/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+            .then((response) => {
+                participants.value = response.data;
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    }
 };
 
 const viewDetachments = async () => {
