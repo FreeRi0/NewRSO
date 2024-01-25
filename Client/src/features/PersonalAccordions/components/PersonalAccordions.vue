@@ -181,14 +181,6 @@
                                 v-for="sex in gender"
                                 :key="sex.id"
                             >
-                                <!-- <RadioButton
-                                    :value="sex.value"
-                                    :label="sex.name"
-                                    :id="sex.id"
-                                    :checked="user.gender === sex.value"
-                                    name="sex"
-                                    v-model:checkedValue="user.gender"
-                                /> -->
                                 <input
                                     class="radiobutton"
                                     type="radio"
@@ -583,6 +575,9 @@
                 </p>
                 <p class="error" v-if="isError.first_name">
                     Фамилия пользователя
+                </p>
+                <p class="error" v-if="isError.email">
+                  {{ "" + isError.email }}
                 </p>
             </v-expansion-panel>
 
@@ -3476,7 +3471,7 @@ const updateData = async () => {
             swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: `ошибка - заполните обязательные поля`,
+                title: `ошибка`,
                 showConfirmButton: false,
                 timer: 2500,
             });
