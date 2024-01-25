@@ -7,7 +7,7 @@
                         <img
                             src="@app/assets/logo/logo-rso-tablet.svg"
                             width="60"
-                            height="58"
+                            height="56"
                             alt="Логотип сайта трудкрут.рф"
                         />
                     </a>
@@ -16,7 +16,7 @@
                 <li class="header__logo-labor-cool">
                     <a href="https://trudkrutshop.ru/" target="_blank">
                         <img
-                            src="@app/assets/logo/logo-shop-tablet.svg"
+                            src="@app/assets/logo/logo-shop-tablet.png"
                             width="56"
                             height="56"
                             alt="Логотип сайта trudkrutshop.ru"
@@ -254,11 +254,11 @@ const userPages = computed(() => [
             id: user.value?.central_headquarter_id,
         },
     },
-    { title: 'Активные заявки', name: 'active', },
+    { title: 'Активные заявки', name: 'active' },
     // { title: 'Поиск участников', link: '#' },
     { title: 'Членский взнос', name: 'contributorPay' },
-    { title: 'Оформление справок', name: 'references'  },
-    { title: 'Настройки профиля', name: 'personaldata'  },
+    { title: 'Оформление справок', name: 'references' },
+    { title: 'Настройки профиля', name: 'personaldata' },
     { title: 'Выйти из ЛК', button: true },
 ]);
 
@@ -355,8 +355,9 @@ onMounted(() => {
 //убрала тег scoped потому что стили к кнопке dropdown не применялись
 
 .header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 146px 1.3fr 1fr;
+    column-gap: 76px;
     align-items: center;
     padding: 13px 0;
     font-family: 'BertSans', sans-serif;
@@ -366,9 +367,10 @@ onMounted(() => {
     color: #35383f;
     position: relative;
     border-bottom: 1px solid #d9d9d9;
-    // margin-bottom: 60px;
 
     @media (max-width: 1024px) {
+        display: flex;
+        column-gap: 0;
         padding: 0;
         min-height: 88px;
     }
@@ -394,18 +396,32 @@ onMounted(() => {
     &__logo {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        align-items: center;
         column-gap: 30px;
-        max-width: 146px;
-        margin-right: 25px;
+
+        @media (max-width: 1440px) {
+            width: 146px;
+            column-gap: 30px;
+        }
 
         @media (max-width: 1024px) {
+            width: 140px;
             column-gap: 24px;
         }
 
         @media (max-width: 768px) {
             width: 88px;
+            // height: 36px;
             column-gap: 12px;
-            margin-right: 36px;
+        }
+    }
+
+    &__logo-labor-cool {
+        img {
+            @media (max-width: 768px) {
+                width: 36px;
+                height: 36px;
+            }
         }
     }
 
@@ -437,15 +453,12 @@ onMounted(() => {
         justify-content: space-between;
         flex-wrap: wrap;
         align-items: center;
-        column-gap: 12px;
+        column-gap: 14px;
         // font-family: 'BertSans', sans-serif;
         // font-size: 16px;
         // font-weight: 400;
         // line-height: 21px;
         max-width: 520px;
-
-        min-width: 415px;
-        // min-width: 411px; // для отображения без ссылки КОНКУРС
 
         @media (max-width: 1024px) {
             position: absolute;
@@ -459,6 +472,7 @@ onMounted(() => {
             row-gap: 8px;
             background-color: #1f7cc0;
             z-index: 2;
+            font-family: 'Akrobat';
             font-size: 20px;
             line-height: 24px;
             font-weight: 600;
@@ -473,10 +487,6 @@ onMounted(() => {
             max-width: 415px;
             width: 100%;
         }
-    }
-
-    &__nav-item {
-        margin-right: 5px;
     }
 
     &__button-mobile-menu {
@@ -571,13 +581,12 @@ onMounted(() => {
         display: grid;
         row-gap: 8px;
         padding: 28px 28px;
-        max-height: 820px; //---------------
+        max-height: 820px;
         width: 328px;
-        // font-family: 'Akrobat';
+        font-family: 'Akrobat';
         font-size: 20px;
         line-height: 24px;
         font-weight: 600;
-        // color
         overflow-y: auto;
         border-radius: 10px;
         background-color: #1f7cc0;
@@ -700,18 +709,13 @@ onMounted(() => {
 //------------------------------------------------------------------------------------
 
 .nav-user {
-    // display: grid;
-    // grid-template-columns: min-content 1fr min-content;
-    column-gap: 18px;
-    // column-gap: 20px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
+    column-gap: 18px;
     min-width: 242px;
     max-width: 383px;
     flex-grow: 1;
-    margin-left: 25px;
 
     @media (max-width: 1024px) {
         margin-left: auto;
@@ -720,11 +724,10 @@ onMounted(() => {
 
     @media (max-width: 768px) {
         column-gap: 20px;
-
-        min-width: 148px;
-        max-width: 204px;
-        flex-grow: 1;
-        // margin-left: 54px;
+        width: 148px;
+        min-width: 0px;
+        max-width: 148px;
+        margin-left: auto;
     }
 
     &__application-count {
@@ -758,7 +761,6 @@ onMounted(() => {
 
         @media (max-width: 768px) {
             display: flex;
-            // min-width: auto;
         }
     }
 
@@ -769,7 +771,6 @@ onMounted(() => {
         @media (max-width: 768px) {
             width: 36px;
             height: 36px;
-            // margin-top: 5px;
             background-image: url('../../../app/assets/icon/location-mark.svg');
             background-position: center;
 
@@ -796,11 +797,6 @@ onMounted(() => {
         label {
             margin-bottom: 4px;
         }
-
-        // input {
-        //   margin-bottom: 32px;
-        //   font-weight: 600;
-        // }
 
         div {
             display: flex;

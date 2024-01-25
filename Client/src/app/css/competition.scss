@@ -176,9 +176,8 @@
         display: block;
         width: fit-content;
         padding: 16px 32px;
-        background-color: #39bfbf;
-        color: white;
-        // box-shadow: none;
+        background-color: #ffffff;
+        color: #35383f;
         border-radius: 10px;
         // border: none;
         // cursor: pointer;
@@ -262,7 +261,7 @@
         font-weight: 500;
     }
 
-    &__documents-button {
+    button.competition__documents-button {
         display: flex;
         align-items: center;
         max-width: 120px; //---------------------
