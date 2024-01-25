@@ -3,12 +3,12 @@
         <div class="checked-item__wrapper">
             <div class="checked-img">
                 <img
-                    :src="participant.media.photo"
+                    :src="participant.media?.photo"
                     alt="logo"
-                    v-if="participant.media"
+                    v-if="participant.media?.photo"
                 />
                 <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    src="@app/assets/user-avatar.png"
                     alt="photo"
                     v-else
                 />

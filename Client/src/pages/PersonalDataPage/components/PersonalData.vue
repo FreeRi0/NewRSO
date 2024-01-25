@@ -2,12 +2,12 @@
     <div class="container">
         <div class="mt-14">
             <h2 class="profile-title">Настройки профиля</h2>
-            <BannerComp
+            <banner
                 :user="user"
                 :education="education"
                 class="mt-3"
                 :edited="true"
-            ></BannerComp>
+            ></banner>
             <!--Табы-->
             <div class="d-flex mt-9 mb-9 buttonWrap">
                     <button
@@ -40,7 +40,7 @@ import { ref, onMounted, watch } from 'vue';
 import { AccordionsPersonal } from '@features/PersonalAccordions/components';
 import { privateProfile } from '@features/PrivateProfile/components';
 import { changePassword } from '@features/ChangePassword/components';
-import { BannerComp } from '@features/baner/components';
+import { banner } from '@features/baner/components';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { userData } from '@features/userData/components';

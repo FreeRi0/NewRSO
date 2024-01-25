@@ -13,6 +13,15 @@
                     v-model="form.region"
                     address="/regions/"
                 ></Select>
+                <!-- <Dropdown
+                    open-on-clear
+                    id="beast"
+                    name="edit_beast"
+                    placeholder="Поиск по ФИО"
+                    v-model="form.region"
+                    @update:value="changeValue"
+                    address="/regions/"
+                ></Dropdown> -->
                 <Input
                     placeholder="Фамилия"
                     name="surname"
@@ -30,7 +39,7 @@
                     {{ isError.first_name }}
                 </p>
                 <Input
-                    placeholder="Отчество(При наличии)"
+                    placeholder="Отчество (при наличии)"
                     name="patronomyc"
                     v-model:value.trim="form.patronymic_name"
                 />
@@ -110,7 +119,6 @@
                         определенных в Согласии на обработку персональных
                         данных.
                     </div>
-
                 </div>
                 <p class="error" v-if="termsError">Обязательное поле</p>
 
@@ -276,10 +284,10 @@ import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { IMaskDirective } from 'vue-imask';
 import { Select } from '@shared/components/selects';
-
+import { Dropdown } from '@shared/components/selects';
 const visible = ref(false);
 // const termsState = ref(false);
- const validated = ref(false);
+const validated = ref(false);
 const form = ref({
     region: null,
     last_name: '',
@@ -301,11 +309,11 @@ const router = useRouter();
 const swal = inject('$swal');
 
 const termsError = computed(() => {
-    return validated.value && !form.personal_data_agreement
-})
+    return validated.value && !form.personal_data_agreement;
+});
 const handleTermsState = () => {
-    validated.value = false
-}
+    validated.value = false;
+};
 const RegisterUser = async () => {
     isLoading.value = true;
     validated.value = true;

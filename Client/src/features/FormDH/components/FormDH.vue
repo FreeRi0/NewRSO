@@ -124,7 +124,7 @@
                             <Input
                                 class="form__input"
                                 id="city"
-                                placeholder="Например, Барнаул"
+                                placeholder="Например, Москва"
                                 name="edit_city"
                                 v-model:value="headquarter.city"
                             />

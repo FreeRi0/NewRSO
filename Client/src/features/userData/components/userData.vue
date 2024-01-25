@@ -33,7 +33,7 @@
             <div class="d-flex"></div>
         </form>
 
-        <div class=" mt-8 photoWrapper">
+        <div class="mt-8 photoWrapper">
             <userPhoto
                 class="photo-item"
                 :photo="media.photo1"
@@ -99,7 +99,6 @@ const getRegions = async () => {
     regions.value = data;
 };
 
-
 const getUser = async () => {
     await HTTP.get(`/rsousers/me/`, {
         headers: {
@@ -107,7 +106,7 @@ const getUser = async () => {
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
-    .then((response) => {
+        .then((response) => {
             user.value = response.data;
             user.value.region = regions.value.find(
                 (region) => region.name === user.value.region,
@@ -153,6 +152,8 @@ const AddAbout = async () => {
                 timer: 1500,
             });
             user.value = response.data;
+            getRegions();
+            getUser();
             console.log(response.data);
         })
         .catch(({ response }) => {
