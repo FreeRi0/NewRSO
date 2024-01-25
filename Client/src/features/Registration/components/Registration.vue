@@ -39,7 +39,7 @@
                     {{ isError.first_name }}
                 </p>
                 <Input
-                    placeholder="Отчество(При наличии)"
+                    placeholder="Отчество (при наличии)"
                     name="patronomyc"
                     v-model:value.trim="form.patronymic_name"
                 />
