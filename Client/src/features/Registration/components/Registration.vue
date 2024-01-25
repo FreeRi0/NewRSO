@@ -13,6 +13,15 @@
                     v-model="form.region"
                     address="/regions/"
                 ></Select>
+                <!-- <Dropdown
+                    open-on-clear
+                    id="beast"
+                    name="edit_beast"
+                    placeholder="Поиск по ФИО"
+                    v-model="form.region"
+                    @update:value="changeValue"
+                    address="/regions/"
+                ></Dropdown> -->
                 <Input
                     placeholder="Фамилия"
                     name="surname"
@@ -30,7 +39,7 @@
                     {{ isError.first_name }}
                 </p>
                 <Input
-                    placeholder="Отчество(При наличии)"
+                    placeholder="Отчество (при наличии)"
                     name="patronomyc"
                     v-model:value.trim="form.patronymic_name"
                 />
@@ -44,7 +53,7 @@
                     placeholder="Электронная почта"
                     name="email"
                     type="email"
-                    v-model.trim="form.email"
+                    v-model:value.trim="form.email"
                 />
                 <p class="error" v-if="isError.email">
                     {{ isError.email }}
@@ -65,12 +74,7 @@
                 <p class="error" v-if="isError.username">
                     {{ isError.username }}
                 </p>
-                <!-- <Input
-                    type="password"
-                    placeholder="Придумайте пароль"
-                    name="password"
-                    v-model:value.trim="form.password"
-                ></Input> -->
+
                 <v-text-field
                     class="password-input"
                     :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
@@ -94,27 +98,19 @@
                     variant="outlined"
                     @click:append-inner="visible = !visible"
                 ></v-text-field>
-                <!-- <Input
-                    type="password"
-                    placeholder="Повторите пароль"
-                    name="confirm"
-                    v-model:value.trim="form.re_password"
-                ></Input> -->
+
                 <p class="error" v-if="isError.re_password">
                     {{ isError.re_password }}
                 </p>
                 <p class="error" v-else-if="isError.non_field_errors">
                     Пароли не совпадают
                 </p>
-                <!-- <v-checkbox
-                    v-model="form.personal_data_agreement"
-                    label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных."
-                ></v-checkbox> -->
+
                 <div class="regCheck">
                     <input
-                        required
                         v-model="form.personal_data_agreement"
                         type="checkbox"
+                        @change="handleTermsState"
                     />
                     <div class="regCheck_text">
                         Даю согласие на обработку моих персональных данных в
@@ -123,22 +119,13 @@
                         определенных в Согласии на обработку персональных
                         данных.
                     </div>
-                    <!-- <v-checkbox
-                        v-model="form.personal_data_agreement"
-                        :rules="[(v) => !!v || 'Обязательное поле!']"
-                        label="Даю согласие на обработку моих персональных данных в
-                        соответствии с законом от 27.07.2006 года № 152-ФЗ «О
-                        персональных данных», на условиях и для целей,
-                        определенных в Согласии на обработку персональных
-                        данных."
-                        required
-                    ></v-checkbox> -->
                 </div>
+                <p class="error" v-if="termsError">Обязательное поле</p>
 
                 <Button
                     label="Зарегистрироваться"
                     :loaded="isLoading"
-                    :disabled="isLoading"
+                    :disabled="isLoading || !form.personal_data_agreement"
                     type="submit"
                     color="primary"
                 >
@@ -155,6 +142,26 @@
 </template>
 
 <style lang="scss">
+.v-field {
+    border-radius: 10px;
+}
+
+.v-field.v-field--appended {
+    --v-field-padding-end: 10px;
+}
+
+.v-input--density-compact .v-field--variant-outlined,
+.v-input--density-compact .v-field--single-line,
+.v-input--density-compact .v-field--no-label {
+    --v-field-padding-bottom: 10px;
+}
+
+.v-field--variant-outlined,
+.v-field--single-line,
+.v-field--no-label {
+    --v-field-padding-top: 5px;
+}
+
 .btn {
     margin: 60px auto;
     margin-bottom: 15px;
@@ -270,15 +277,17 @@
 </style>
 
 <script setup>
-import { ref, inject } from 'vue';
+import { ref, inject, computed } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { IMaskDirective } from 'vue-imask';
 import { Select } from '@shared/components/selects';
-
+import { Dropdown } from '@shared/components/selects';
 const visible = ref(false);
+// const termsState = ref(false);
+const validated = ref(false);
 const form = ref({
     region: null,
     last_name: '',
@@ -299,8 +308,15 @@ const isError = ref([]);
 const router = useRouter();
 const swal = inject('$swal');
 
+const termsError = computed(() => {
+    return validated.value && !form.personal_data_agreement;
+});
+const handleTermsState = () => {
+    validated.value = false;
+};
 const RegisterUser = async () => {
     isLoading.value = true;
+    validated.value = true;
     HTTP.post('/register/', form.value, {
         headers: {
             'Content-Type': 'application/json',

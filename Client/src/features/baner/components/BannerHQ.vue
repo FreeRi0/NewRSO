@@ -104,7 +104,7 @@
                                 >{{
                                     localHeadquarter.participants_count
                                 }}
-                                дейстующих членов</span
+                                действующих членов</span
                             >
                         </li>
                     </ul>
@@ -181,7 +181,7 @@
                                 >{{
                                     districtHeadquarter.participants_count
                                 }}
-                                дейстующих членов</span
+                                действующих членов</span
                             >
                         </li>
                     </ul>
@@ -258,7 +258,7 @@
                                 >{{
                                     regionalHeadquarter.participants_count
                                 }}
-                                дейстующих членов</span
+                                действующих членов</span
                             >
                         </li>
                     </ul>
@@ -321,7 +321,7 @@
                 </div>
                 <div class="working_slogan">
                     <p>
-                        {{ centralHeadquarter.working_years }}лет на благо
+                        {{ centralHeadquarter.working_years }} лет на благо
                         страны!
                     </p>
                 </div>
@@ -387,7 +387,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { hqAvatar } from '@shared/components/imagescomp';
 import { hqBanner } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
@@ -403,6 +403,7 @@ const user = storeToRefs(userStore);
 let userId = computed(() => {
     return user.user.value.id;
 });
+const edict = ref({});
 
 const roles = storeToRefs(roleStore);
 let educComId = roles.roles.value.educationalheadquarter_commander;
@@ -443,6 +444,38 @@ const props = defineProps({
     member: {
         type: Object,
     },
+});
+
+const aboutEduc = async () => {
+    try {
+        let id = props.headquarter.educational_institution.id;
+        console.log('headquarter', props.headquarter);
+        console.log('id', id);
+        const response = await HTTP.get(`/eduicational_institutions/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        edict.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log(error);
+    }
+};
+watch(
+    () => props.headquarter,
+
+    (newheadquarter) => {
+        if (Object.keys(props.headquarter).length === 0) {
+            return;
+        }
+        aboutEduc();
+    },
+);
+onMounted(() => {
+    aboutEduc();
 });
 </script>
 <style lang="scss" scoped>

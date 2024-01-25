@@ -181,14 +181,6 @@
                                 v-for="sex in gender"
                                 :key="sex.id"
                             >
-                                <!-- <RadioButton
-                                    :value="sex.value"
-                                    :label="sex.name"
-                                    :id="sex.id"
-                                    :checked="user.gender === sex.value"
-                                    name="sex"
-                                    v-model:checkedValue="user.gender"
-                                /> -->
                                 <input
                                     class="radiobutton"
                                     type="radio"
@@ -583,6 +575,9 @@
                 </p>
                 <p class="error" v-if="isError.first_name">
                     Фамилия пользователя
+                </p>
+                <p class="error" v-if="isError.email">
+                    {{ '' + isError.email }}
                 </p>
             </v-expansion-panel>
 
@@ -3205,7 +3200,7 @@ const downloadBlankPersonal = async () => {
 
             var docUrl = document.createElement('a');
             docUrl.href = FILE;
-            docUrl.setAttribute('download', 'persnal.pdf');
+            docUrl.setAttribute('download', 'persnal.docx');
             document.body.appendChild(docUrl);
             docUrl.click();
             console.log(response, 'success');
@@ -3231,7 +3226,7 @@ const downloadBlankMembership = async () => {
 
             var docUrl = document.createElement('a');
             docUrl.href = FILE;
-            docUrl.setAttribute('download', 'membership.pdf');
+            docUrl.setAttribute('download', 'membership.docx');
             document.body.appendChild(docUrl);
             docUrl.click();
             console.log(response, 'success');
@@ -3256,7 +3251,7 @@ const downloadBlankParent = async () => {
 
             var docUrl = document.createElement('a');
             docUrl.href = FILE;
-            docUrl.setAttribute('download', 'parent.pdf');
+            docUrl.setAttribute('download', 'parent.docx');
             document.body.appendChild(docUrl);
             docUrl.click();
             console.log(response, 'success');
@@ -3289,7 +3284,9 @@ const downloadAll = async () => {
 };
 
 const updateData = async () => {
+
     try {
+
         let fd = new FormData();
         fd.append('rso_info_from', rso_info_from.value);
         if (isStatementChange.value)
@@ -3450,6 +3447,7 @@ const updateData = async () => {
         console.log(axiosrequestForeignDocs.data);
         console.log(axiosrequest4.data);
         console.log(axiosrequest5.data);
+        // emit('click');
         console.log(axiosrequest6?.data);
         swal.fire({
             position: 'top-center',
@@ -3458,6 +3456,13 @@ const updateData = async () => {
             showConfirmButton: false,
             timer: 1000,
         });
+        getUser();
+        getParent();
+        getEducation();
+        getRegions();
+        getDocuments();
+        getForeignDoc();
+        getUserRegions();
 
         isLoading.value = false;
     } catch (error) {
@@ -3468,7 +3473,7 @@ const updateData = async () => {
             swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: `ошибка - заполните обязательные поля`,
+                title: `ошибка`,
                 showConfirmButton: false,
                 timer: 2500,
             });

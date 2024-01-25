@@ -5,13 +5,15 @@
             <h2 class="page-title" v-else>
                 Пользователь: {{ user.first_name }}
             </h2>
-            <BannerComp
+            <banner
                 :user="user"
                 :education="education"
                 :user_region="region"
                 :edited="false"
                 class="mt-3"
-            ></BannerComp>
+                @upload="uploadAva"
+                @update="updateAva"
+            ></banner>
             <div class="user-verify" v-if="!user.is_verified">
                 <p class="user-verify__title">Верификация данных</p>
                 <div class="user-verify__desc">
@@ -58,7 +60,7 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { BannerComp } from '@features/baner/components';
+import { banner } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
 import {
     userPhoto,
@@ -81,6 +83,25 @@ const education = ref({});
 const region = ref({});
 const route = useRoute();
 let id = route.params.id;
+
+const uploadAva = (imageAva) => {
+    console.log('photo', imageAva)
+    user.value.media.photo = imageAva;
+    // user.value.media.banner = imageBan;
+};
+
+const updateAva = (imageAva) => {
+    console.log('photoUpdate', imageAva)
+    user.value.media.photo = imageAva;
+    // user.value.media.banner = imageBan;
+};
+
+// const deleteAva = (imageAva) => {
+//     console.log('photoDel', imageAva)
+//     user.value.media.photo = imageAva;
+//     // user.value.media.banner = imageBan;
+// };
+
 
 const getUser = async () => {
     await HTTP.get(`/users/${id}/`, {
@@ -149,7 +170,7 @@ onMounted(() => {
         justify-content: center;
     }
     @media screen and (max-width: 575px) {
-        grid-template-columns: 0.28fr
+        grid-template-columns: 0.28fr;
     }
 }
 

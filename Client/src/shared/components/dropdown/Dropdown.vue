@@ -83,7 +83,7 @@
                     >
 
                     <router-link
-                        v-else-if="!item.hasOwnProperty('params') "
+                        v-else-if="!item.hasOwnProperty('params')"
                         class="dropdown__link"
                         :to="{ name: item.name }"
                         >{{ item.title }}</router-link
@@ -139,8 +139,6 @@ const props = defineProps({
         default: false,
     },
 });
-
-
 
 // const route = useRoute();
 // let id = route.params.id
