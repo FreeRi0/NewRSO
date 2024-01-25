@@ -45,7 +45,7 @@
             padding: 8px 44px 8px 20px;
             font-size: 16px;
             line-height: 21px;
-            color: #898989;
+            color: rgba(53, 56, 63, 1);
             border: 1px solid #b6b6b6;
         }
 
@@ -62,6 +62,7 @@
     }
 
     &__label {
+        font-family: 'Bert Sans';
         width: fit-content;
         margin-bottom: 8px;
         font-size: 16px;
@@ -74,11 +75,13 @@
     }
 
     &__input {
+        font-family: 'Bert Sans';
         min-height: 40px;
     }
 
     &__textarea {
         // margin-bottom: 8px;
+        font-family: 'Bert Sans';
         padding: 12px 20px;
         width: 100%;
         font-size: 16px;
@@ -90,6 +93,7 @@
         border: 1px solid #b6b6b6;
         border-radius: 10px;
         overflow-y: auto;
+        color: rgba(53, 56, 63, 1);
 
         &--mobile {
             @media (max-width: 360px) {
@@ -99,9 +103,11 @@
     }
 
     &__select {
+        font-family: 'Bert Sans';
         margin-bottom: 8px;
         border: 1px solid #b6b6b6;
         border-radius: 10px;
+        color: rgba(53, 56, 63, 1);
         // width: 100%;
 
         &--select {
