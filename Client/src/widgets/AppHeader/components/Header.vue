@@ -95,11 +95,10 @@
                             alt="Иконка геолокации"
                         /> -->
 
-                        <span v-if="user?.user_region?.reg_region_id"
+                        <span v-if="user.region"
                             >{{
                                 regionals.find(
-                                    (reg) =>
-                                        reg.id === user.user_region.reg_region,
+                                    (reg) => reg.region === user.region,
                                 )?.name
                             }}
                         </span>

@@ -35,12 +35,12 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <p v-if="user?.user_region?.reg_region_id">
+                            <p v-if="user.region">
                                 {{
                                     regionals.find(
                                         (reg) =>
-                                            reg.id ===
-                                            user.user_region.reg_region,
+                                            reg.region ===
+                                            user.region,
                                     )?.name
                                 }}
                             </p>

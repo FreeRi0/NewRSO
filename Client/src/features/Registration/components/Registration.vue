@@ -13,19 +13,10 @@
                     v-model="form.region"
                     address="/regions/"
                 ></Select>
-                <!-- <Dropdown
-                    open-on-clear
-                    id="beast"
-                    name="edit_beast"
-                    placeholder="Поиск по ФИО"
-                    v-model="form.region"
-                    @update:value="changeValue"
-                    address="/regions/"
-                ></Dropdown> -->
                 <Input
                     placeholder="Фамилия"
                     name="surname"
-                    v-model:value.trim="form.last_name"
+                    v-model="form.last_name"
                 />
                 <p class="error" v-if="isError.last_name">
                     {{ isError.last_name }}
@@ -33,28 +24,31 @@
                 <Input
                     placeholder="Имя"
                     name="name"
-                    v-model:value.trim="form.first_name"
+                    v-model.trim="form.first_name"
                 />
+                <pre>{{ form.first_name }}</pre>
                 <p class="error" v-if="isError.first_name">
                     {{ isError.first_name }}
                 </p>
                 <Input
-                    placeholder="Отчество (При наличии)"
-
+                    placeholder="Отчество (при наличии)"
                     name="patronomyc"
-                    v-model:value.trim="form.patronymic_name"
+                    v-model.trim="form.patronymic_name"
                 />
                 <Input
                     type="tel"
                     placeholder="+7 (999) 999-99-99"
                     name="phone"
-                    v-model:value.trim="form.phone_number"
+                    v-model.trim="form.phone_number"
                 />
+                <!-- <input  type="tel"
+                    placeholder="+7 (999) 999-99-99"
+                    name="phone" v-model="form.phone_number"> -->
                 <Input
                     placeholder="Электронная почта"
                     name="email"
                     type="email"
-                    v-model:value.trim="form.email"
+                    v-model.trim="form.email"
                 />
                 <p class="error" v-if="isError.email">
                     {{ isError.email }}
@@ -63,7 +57,7 @@
                     name="date"
                     type="date"
                     placeholder="Дата рождения"
-                    v-model:value="form.date_of_birth"
+                    v-model="form.date_of_birth"
                 />
                 <p class="error" v-if="isError.date_of_birth">
                     {{ isError.date_of_birth }}
@@ -71,12 +65,22 @@
                 <Input
                     placeholder="Придумайте логин"
                     name="login"
-                    v-model:value.trim="form.username"
+                    v-model.trim="form.username"
                 />
                 <p class="error" v-if="isError.username">
                     {{ isError.username }}
                 </p>
+                <!-- <div class="form-input" :style="{ width: width }">
+                    <input
+                        :type="type"
+                        :name="name"
+                        :id="name"
+                        placeholder="placeholder"
+                        :maxlength="maxLength"
+                        class="mb-2"
 
+                    />
+                </div> -->
                 <v-text-field
                     class="password-input"
                     :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
@@ -127,7 +131,11 @@
                 <Button
                     label="Зарегистрироваться"
                     :loaded="isLoading"
-                    :disabled="isLoading || !form.personal_data_agreement"
+                    :disabled="
+                        isLoading ||
+                        !form.personal_data_agreement ||
+                        !form.region
+                    "
                     type="submit"
                     color="primary"
                 >
@@ -287,7 +295,7 @@ import { useRouter } from 'vue-router';
 import { IMaskDirective } from 'vue-imask';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
-const visible = ref(false);
+const visible = ref(true);
 // const termsState = ref(false);
 const validated = ref(false);
 const form = ref({
