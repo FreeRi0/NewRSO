@@ -13,12 +13,11 @@
             >
                 <div class="manager-card__avatar">
                     <img
-                        :src="
-                            manager.user?.avatar?.photo ??
-                            '/assets/foto-leader-squad/foto-leader-squad-01.png'
-                        "
+                        :src="manager.user?.avatar?.photo"
                         alt="фото"
+                        v-if="manager.user?.avatar?.photo"
                     />
+                    <img src="@app/assets/user-avatar.png" alt="photo" v-else />
                 </div>
                 <div class="manager-card__box">
                     <h5 id="name_length">
