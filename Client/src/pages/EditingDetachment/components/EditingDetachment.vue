@@ -9,7 +9,7 @@
             :submited="submited"
             :is-error="isError"
             :is-error-members="isErrorMembers"
-            v-if="detachment && isError && isErrorMembers"
+            v-if="detachment && isError && isErrorMembers && !loading"
             @submit.prevent="changeDetachment"
             @select-file="onSelectFile"
             @reset-emblem="onResetEmblem"
@@ -84,7 +84,10 @@ const getRegions = async () => {
 
 const { replaceTargetObjects } = usePage();
 
+const loading = ref(false);
+
 const getDetachment = async () => {
+    loading.value = true;
     console.log('id отряда для редактирования - ', id);
     HTTP.get(`/detachments/${id}/`, {
         headers: {
@@ -95,13 +98,13 @@ const getDetachment = async () => {
         .then((response) => {
             detachment.value = response.data;
 
-            if (areas.value) {
+            if (areas.value.length) {
                 const area = areas.value.find((item) => {
                     return item.name === detachment.value.area;
                 });
                 detachment.value.area = area.id;
             }
-            if (regions.value) {
+            if (regions.value.length) {
                 const region = regions.value.find((item) => {
                     return item.name === detachment.value.region;
                 });
@@ -116,6 +119,7 @@ const getDetachment = async () => {
             }
             replaceTargetObjects([detachment.value]);
             console.log(response);
+            loading.value = false;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -153,15 +157,6 @@ const getMembers = async () => {
         });
     // console.log(id);
 };
-
-// watch(
-//     () => route.params.id,
-
-//     (newId, oldId) => {
-//         id = newId;
-//         getDetachment();
-//     },
-// );
 
 onMounted(() => {
     getDetachment();

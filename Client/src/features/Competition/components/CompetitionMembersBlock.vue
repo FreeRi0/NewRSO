@@ -33,24 +33,23 @@
                         :key="member.id"
                         class="participants-wrapper__item list"
                     >
-                        <!-- <div class="member__image"> -->
                         <router-link
                             :to="{ name: 'lso', params: { id: member.id } }"
+                            class="member__link"
                         >
-                            <img
-                                :src="
-                                    member?.banner ??
-                                    '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                                "
-                                class="member__image"
-                                alt="Логотип отряда"
-                            />
-                        </router-link>
+                            <div class="member__image-box">
+                                <img
+                                    v-if="member?.banner"
+                                    :src="member?.banner"
+                                    class="member__image"
+                                    alt="Логотип отряда"
+                                />
+                            </div>
 
-                        <!-- </div> -->
-                        <p>{{ member?.area }}</p>
-                        <p class="member__name">{{ member?.name }}</p>
-                        <!-- <p>Место в рейтинге {{ member.detachment.какое-то поле }}</p> -->
+                            <p>{{ member?.area }}</p>
+                            <p class="member__name">{{ member?.name }}</p>
+                            <!-- <p>Место в рейтинге {{ member.detachment.какое-то поле }}</p> -->
+                        </router-link>
                     </div>
                 </template>
                 <div v-else>Участники не найдены...</div>
@@ -63,24 +62,23 @@
                         :key="member.id"
                         class="participants-wrapper__item list"
                     >
-                        <!-- <div class="member__image"> -->
                         <router-link
                             :to="{ name: 'lso', params: { id: member.id } }"
+                            class="member__link"
                         >
-                            <img
-                                :src="
-                                    member?.banner ??
-                                    '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                                "
-                                class="member__image"
-                                alt="Логотип отряда"
-                            />
-                        </router-link>
+                            <div class="member__image-box">
+                                <img
+                                    v-if="member?.banner"
+                                    :src="member?.banner"
+                                    class="member__image"
+                                    alt="Логотип отряда"
+                                />
+                            </div>
 
-                        <!-- </div> -->
-                        <p>{{ member?.area }}</p>
-                        <p class="member__name">{{ member?.name }}</p>
-                        <!-- <p>Место в рейтинге {{ member.detachment.какое-то поле }}</p> -->
+                            <p>{{ member?.area }}</p>
+                            <p class="member__name">{{ member?.name }}</p>
+                            <!-- <p>Место в рейтинге {{ member.detachment.какое-то поле }}</p> -->
+                        </router-link>
                     </div>
                 </template>
                 <div v-else>Участники не найдены...</div>
@@ -180,10 +178,28 @@ onMounted(() => {
     margin-bottom: 60px;
 }
 
-.member__image {
-    min-width: 128px;
-    min-height: 128px;
+.member__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.member__image-box {
+    width: 128px;
+    height: 128px;
+    margin-bottom: 10px;
+    background-color: #c7e3fa;
     border-radius: 50%;
+    overflow: hidden;
+}
+
+.member__image {
+    // min-width: 128px;
+    // min-height: 128px;
+    // border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     margin-bottom: 10px;
 }
 
