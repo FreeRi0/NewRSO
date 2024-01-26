@@ -23,7 +23,7 @@
                 </p>
                 <v-text-field
                     class="password-input"
-                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                    :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'"
                     density="compact"
                     v-model="data.password"
@@ -81,7 +81,7 @@ const data = ref({
     username: '',
     password: '',
 });
-const visible = ref(true);
+const visible = ref(false);
 
 const isError = ref('');
 const isLoading = ref(false);

@@ -3,15 +3,17 @@
         <bannerPhoto
             :banner="user?.media?.banner"
             v-if="user"
-            @upload="uploadBan"
-            @update="updateBan"
-            @delete="deleteBan"
+            @upload-wall="uploadWall"
+            @update-wall="updateWall"
+            @delete-wall="deleteWall"
+
         ></bannerPhoto>
         <Avatar
             :avatar="user?.media?.photo"
             v-if="user"
             @upload="uploadAva"
             @update="updateAva"
+            @delete="deleteAva"
         ></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
@@ -142,29 +144,31 @@ const updateAva = (imageAva) => {
     console.log('update');
 };
 
-// const deleteAva = (imageAva) => {
-//     console.log('photoDel', imageAva);
-//     emit('delete', imageAva);
-//     console.log('del');
-// };
+const deleteAva = (imageAva) => {
+    console.log('photoDel', imageAva);
+    emit('delete', imageAva);
+    console.log('del');
+};
 
-// const uploadBan = (imageBan) => {
-//     console.log('ban', imageBan);
-//     emit('upload', imageBan);
-//     console.log('ghhhgh');
-// };
+const uploadWall = (imageWall) => {
+    console.log('ban', imageWall);
+    emit('uploadWall', imageWall);
+    console.log('ghhhgh');
+};
 
-// const updateBan = (imageBan) => {
-//     console.log('banUpdate', imageBan);
-//     emit('update', imageBan);
-//     console.log('update');
-// };
+const updateWall = (imageWall) => {
+    console.log('banUpdate', imageWall);
+    emit('updateWall', imageWall);
+    console.log('update');
+};
+const deleteWall = (imageWall) => {
+    console.log('banDelete', imageWall);
+    emit('deleteWall', imageWall);
+    console.log('delete');
+};
 
-// const deleteBan= (imageBan) => {
-//     console.log('photoBan', imageBan);
-//     emit('delete', imageBan);
-//     console.log('del');
-// };
+
+
 
 const regionals = ref([]);
 const detachment = ref({});
@@ -221,23 +225,6 @@ const getEducationalHeadquarter = async () => {
         });
 };
 
-// const aboutMembers = async () => {
-//     let id = props.user.detachment_id;
-//     let membership_pk =
-//     await HTTP.get(`/detachments/${id}/members/${membership_pk}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             participant.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
 
 onMounted(() => {
     getRegionals();

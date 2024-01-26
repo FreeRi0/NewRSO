@@ -18,6 +18,7 @@
                     name="surname"
                     v-model:value.trim="form.last_name"
                 />
+                <pre>{{ form.last_name }}</pre>
                 <p class="error" v-if="isError.last_name">
                     {{ isError.last_name }}
                 </p>
@@ -40,9 +41,6 @@
                     name="phone"
                     v-model:value.trim="form.phone_number"
                 />
-                <!-- <input  type="tel"
-                    placeholder="+7 (999) 999-99-99"
-                    name="phone" v-model="form.phone_number"> -->
                 <Input
                     placeholder="Электронная почта"
                     name="email"
@@ -59,7 +57,7 @@
                     v-model:value="form.date_of_birth"
                 />
                 <p class="error" v-if="isError.date_of_birth">
-                    {{ isError.date_of_birth }}
+                    Дата рождения в формате ДД.ММ.ГГГГ
                 </p>
                 <Input
                     placeholder="Придумайте логин"
@@ -82,7 +80,7 @@
                 </div> -->
                 <v-text-field
                     class="password-input"
-                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                    :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'"
                     density="compact"
                     v-model="form.password"
@@ -95,13 +93,13 @@
                 </p>
                 <v-text-field
                     class="password-input"
-                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-                    :type="visible ? 'text' : 'password'"
+                    :append-inner-icon="!visibleRe ? 'mdi-eye-off' : 'mdi-eye'"
+                    :type="visibleRe ? 'text' : 'password'"
                     density="compact"
                     v-model="form.re_password"
                     placeholder="Пароль"
                     variant="outlined"
-                    @click:append-inner="visible = !visible"
+                    @click:append-inner="visibleRe = !visibleRe"
                 ></v-text-field>
 
                 <p class="error" v-if="isError.re_password">
@@ -294,7 +292,8 @@ import { useRouter } from 'vue-router';
 import { IMaskDirective } from 'vue-imask';
 import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
-const visible = ref(true);
+const visible = ref(false);
+const visibleRe = ref(false);
 // const termsState = ref(false);
 const validated = ref(false);
 const form = ref({

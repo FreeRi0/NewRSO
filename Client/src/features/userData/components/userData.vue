@@ -38,6 +38,8 @@
                 class="photo-item"
                 :photo="media.photo1"
                 :add="true"
+                @uploadUserPic="uploadUserPic"
+                @updateUserPic="updateUserPic"
             ></userPhoto>
             <userPhoto2
                 class="photo-item"
@@ -68,6 +70,19 @@ import {
 } from '@shared/components/imagescomp';
 import { ref, onMounted, watch, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
+const emit = defineEmits(['uploadUserPic, updateUserPic']);
+const uploadUserPic = (userPic) => {
+    console.log('photoUser', userPic);
+    emit('uploadUserPic', userPic);
+    console.log('userPic Uploaded!');
+};
+
+
+// const updateUserPic = (userPic) => {
+//     console.log('photoUpdate', userPic);
+//     user.value.media.photo1 = userPic;
+
+// };
 
 const user = ref({
     bio: '',

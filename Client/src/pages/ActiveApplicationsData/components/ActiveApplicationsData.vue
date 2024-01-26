@@ -87,6 +87,7 @@
                 <active-competitions />
             </div>
         </div>
+        <div v-else>Доступно только коммандирам отрядов и региональных штабов</div>
     </div>
 </template>
 <script setup>

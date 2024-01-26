@@ -3,27 +3,43 @@
         <div class="mt-14">
             <h2 class="profile-title">Настройки профиля</h2>
             <banner
-                :user="user"
+                :user="user.user.value"
                 :education="education"
                 class="mt-3"
                 :edited="true"
+                @upload-wall="uploadWall"
+                @update-wall="updateWall"
+                @upload="uploadAva"
+                @update="updateAva"
+                @updateUserData="updateUser"
+                @updateEducData="updateEduc"
             ></banner>
             <!--Табы-->
             <div class="d-flex mt-9 mb-9 buttonWrap">
-                    <button
-                        class="contributorBtn"
-                        :class="{ active: picked === tab.name }"
-                        v-for="tab in tabs"
-                        :key="tab.id"
-                        @click="picked = tab.name"
-                    >
-                        {{ tab.name }}
-                    </button>
+                <button
+                    class="contributorBtn"
+                    :class="{ active: picked === tab.name }"
+                    v-for="tab in tabs"
+                    :key="tab.id"
+                    @click="picked = tab.name"
+                >
+                    {{ tab.name }}
+                </button>
             </div>
+
             <AccordionsPersonal
                 v-if="picked == 'Персональные данные'"
+                @updateUserData="updateUser"
+                @updateRegionData="updateRegion"
+                @updateDocData="updateDoc"
+                @updateEducData="updateEduc"
+                @updateFileData="updateFile"
+                @updateStatus="updateStatus"
+                @updateParentData="updateParent"
             ></AccordionsPersonal>
             <userData
+                @uploadUserPic="uploadUserPic"
+                @updateUserPic="updateUserPic"
                 v-else-if="picked == 'Моя страница' || picked == ''"
             ></userData>
             <privateProfile
@@ -42,49 +58,79 @@ import { privateProfile } from '@features/PrivateProfile/components';
 import { changePassword } from '@features/ChangePassword/components';
 import { banner } from '@features/baner/components';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useUserStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
 import { userData } from '@features/userData/components';
 
-const user = ref({});
-const education = ref({});
+const userStore = useUserStore();
+const user = storeToRefs(userStore);
 
-// const route = useRoute();
-// let id = route.params.id;
-
-const getUser = async () => {
-    await HTTP.get('/rsousers/me/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log('failed ' + error);
-        });
+const uploadAva = (imageAva) => {
+    console.log('photo', imageAva);
+    user.user.value.media.photo = imageAva;
 };
 
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         getUser();
-//     }
-// });
+const updateAva = (imageAva) => {
+    console.log('photoUpdate', imageAva);
+    user.user.value.media.photo = imageAva;
+};
 
-// watch(
-//     () => route.params.id,
+const uploadWall = (imageWall) => {
+    console.log('ban', imageWall);
+    user.user.value.media.banner = imageWall;
+};
 
-//     (newId, oldId) => {
-//         id = newId;
-//         getUser();
-//     },
-// );
+const updateWall = (imageWall) => {
+    console.log('banUpdate', imageWall);
+    user.user.value.media.banner = imageWall;
+};
 
-onMounted(() => {
-    getUser();
-});
+const updateUser = (userData) => {
+    console.log('UserUpdate', userData);
+    user.user.value = userData;
+};
+const updateRegion = (userRegion) => {
+    console.log('UserRegion', userRegion);
+    user.user.value.user_region = userRegion;
+};
+const updateDoc = (userDoc) => {
+    console.log('UserDoc', userDoc);
+    user.user.value.documents = userDoc;
+};
+const updateEduc = (userEduc) => {
+    console.log('UserEduc', userEduc);
+    user.user.value.education = userEduc;
+};
+const updateFile = (userFile) => {
+    console.log('UserFile', userFile);
+    user.user.value.statement = userFile;
+};
+const updateStatus = (userStatus) => {
+    console.log('UserStatus', userStatus);
+    user.user.value.sent_verification = userStatus;
+};
+const updateParent = (userParent) => {
+    console.log('userParent', userParent);
+    user.user.value.parent = userParent;
+};
+
+const uploadUserPic = (userPic) => {
+    console.log('photoUser', userPic);
+    user.user.value.media.photo1 = userPic;
+    console.log("Phot Uploadeddd")
+
+};
+
+// const updateUserPic = (userPic) => {
+//     console.log('photoUpdate', userPic);
+//     user.user.value.media.photo1 = userPic;
+
+// };
+// const updateForeign = (userForeign) => {
+//     console.log('UserForeign', userForeign);
+//     user.value.sent_verification = userForeign
+// }
+const education = ref({});
 
 const picked = ref('');
 const tabs = ref([
@@ -126,12 +172,12 @@ const pages = ref([
     width: 100%;
     margin: 7px;
     @media screen and (max-width: 768px) {
-      padding: 8px 20px;
+        padding: 8px 20px;
     }
 }
 .buttonWrap {
     @media screen and (max-width: 768px) {
-   flex-wrap: wrap;
+        flex-wrap: wrap;
     }
 }
 

@@ -2,14 +2,6 @@
     <div class="rso-question">
         <div class="rso-question__title">Являетесь членом РСО?</div>
         <div class="checkbox" v-for="answer in answers" :key="answer.id">
-            <!-- <RadioButton
-                :value="answer.name"
-                :label="answer.name"
-                :id="answer.id"
-                :checked="answer.checked"
-                name="answer"
-                v-model:checkedValue="selectedAnswer"
-            /> -->
             <input
                 class="radiobutton"
                 type="radio"
@@ -211,7 +203,7 @@
                     </div>
                     <div class="parents-wrapper" v-if="!user.is_adult">
                         <p class="parents-wrapper__title">
-                            Законный представитель несовершенолетнего
+                            Законный представитель несовершеннолетнего
                         </p>
                         <div class="parents">
                             <div class="parents-about">
@@ -1533,14 +1525,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="statement-title">
+                                <p class="statement-title" v-if="!user.is_adult">
                                     Согласие законного представителя на
                                     обработку персональных данных
-                                    несовершенолетнего<span class="valid-red"
+                                    несовершеннолетнего<span class="valid-red"
                                         >*</span
                                     >
                                 </p>
-                                <div class="statement-wrapper">
+                                <div class="statement-wrapper" v-if="!user.is_adult">
                                     <div class="statement-item">
                                         <img
                                             src="@app/assets/icon/file.svg"
@@ -1644,7 +1636,7 @@
                                     Обязательное поле
                                 </p>
                             </div>
-                            <div class="pass-details__item">
+                            <div class="pass-details__item" v-if="!user.is_adult">
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
                                         class="valid-red"
@@ -1993,13 +1985,13 @@
                                 </div>
                             </div>
                             <div class="pass-details__item">
-                                <p class="statement-title">
+                                <p class="statement-title" v-if="!user.is_adult">
                                     Паспорт законного представителя<span
                                         class="valid-red"
                                         >*</span
                                     >
                                 </p>
-                                <div class="statement-wrapper">
+                                <div class="statement-wrapper" v-if="!user.is_adult">
                                     <div class="statement-item">
                                         <img
                                             src="@app/assets/icon/file.svg"
@@ -2676,7 +2668,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="pass-details__item">
+                            <div class="pass-details__item" v-if="!user.is_adult">
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
                                         class="valid-red"
@@ -2882,7 +2874,7 @@ import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import { TextArea } from '@shared/components/inputs';
 import axios from 'axios';
-
+const emit = defineEmits(['updateUserData', 'updateRegionData', 'updateDocData', 'updateEducData', 'updateFileData', 'updateParentData', 'updateStatus'])
 const router = useRouter();
 const panel = ref();
 const isError = ref({});
@@ -3417,7 +3409,7 @@ const updateData = async () => {
         });
         const axiosrequest6 = ref(null);
 
-        if (!user.sent_verification && !user.value.is_verified) {
+        if (!user.value.sent_verification && !user.value.is_verified) {
             const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
                 data.value,
@@ -3450,7 +3442,7 @@ const updateData = async () => {
         console.log(axiosrequestForeignDocs.data);
         console.log(axiosrequest4.data);
         console.log(axiosrequest5.data);
-        // emit('click');
+
         console.log(axiosrequest6?.data);
         swal.fire({
             position: 'top-center',
@@ -3459,14 +3451,21 @@ const updateData = async () => {
             showConfirmButton: false,
             timer: 1000,
         });
-        getUser();
-        getParent();
-        getEducation();
-        getRegions();
-        getDocuments();
-        getForeignDoc();
-        getUserRegions();
-
+        // getUser();
+        // getParent();
+        // getEducation();
+        // getRegions();
+        // getDocuments();
+        // getForeignDoc();
+        // getUserRegions();
+        console.log('resdp', axiosrequest1.data)
+        emit('updateUserData', axiosrequest1.data)
+        emit('updateRegionData', axiosrequest2.data)
+        emit('updateDocData', axiosrequest3.data)
+        emit('updateEducData', axiosrequest4.data)
+        emit('updateFileData', axiosrequest5.data)
+        emit('updateParentData', axiosrequestParent.data)
+        emit('updateStatus', axiosrequest6.data)
         isLoading.value = false;
     } catch (error) {
         console.log('errr', error);
