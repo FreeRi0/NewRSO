@@ -14,7 +14,7 @@
                 <Input
                     placeholder="Логин"
                     name="login"
-                    v-model:value="data.username"
+                    v-model="data.username"
                     class="username-input"
                 />
 
