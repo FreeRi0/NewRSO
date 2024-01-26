@@ -17,23 +17,36 @@
                         method="post"
                         @submit.prevent="resetPasswordForm"
                     >
+                        <v-text-field
+                            class="password-input"
+                            :append-inner-icon="
+                                visible ? 'mdi-eye-off' : 'mdi-eye'
+                            "
+                            :type="visible ? 'text' : 'password'"
+                            density="compact"
+                            v-model="current_password"
+                            placeholder="Текущий пароль"
+                            variant="outlined"
+                            @click:append-inner="visible = !visible"
+                        ></v-text-field>
+                        <v-text-field
+                            class="password-input"
+                            :append-inner-icon="
+                                visible ? 'mdi-eye-off' : 'mdi-eye'
+                            "
+                            :type="visible ? 'text' : 'password'"
+                            density="compact"
+                            v-model="new_password"
+                            placeholder="Новый пароль"
+                            variant="outlined"
+                            @click:append-inner="visible = !visible"
+                        ></v-text-field>
                         <p>
                             Пароль должен быть не короче 8 букв и цифр.
                             Используйте только буквы (a–z, A–Z), цифры и символы
                             ! @ # $ % ^ & * ( ) - _ + = ; : , . / ? \ | ` ~ { }
                         </p>
-                        <PasswordInputVue
-                            class="creaturePass__input"
-                            placeholder="Новый пароль"
-                            name="password"
-                            v-model:value="new_password"
-                        ></PasswordInputVue>
-                        <PasswordInputVue
-                            class="creaturePass__input"
-                            placeholder="Повторите новый пароль"
-                            name="confirm"
-                            v-model:value="current_password"
-                        ></PasswordInputVue>
+
                         <Button
                             label="Сохранить"
                             color="primary"
@@ -50,7 +63,6 @@ import { ref, computed } from 'vue';
 import axios from 'axios';
 import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
-import { PasswordInputVue } from '@shared/components/inputs';
 import { helpers, minLength, required, sameAs } from '@vuelidate/validators';
 import { useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
@@ -168,11 +180,31 @@ const resetPasswordForm = async () => {
 //   }
 // };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .btn {
     margin: 40px auto;
     margin-bottom: 15px;
     padding: 16px 32px;
+}
+
+.v-field {
+    border-radius: 10px;
+}
+
+.v-field.v-field--appended {
+    --v-field-padding-end: 10px;
+}
+
+.v-input--density-compact .v-field--variant-outlined,
+.v-input--density-compact .v-field--single-line,
+.v-input--density-compact .v-field--no-label {
+    --v-field-padding-bottom: 10px;
+}
+
+.v-field--variant-outlined,
+.v-field--single-line,
+.v-field--no-label {
+    --v-field-padding-top: 5px;
 }
 
 .py-15 {
@@ -187,6 +219,22 @@ const resetPasswordForm = async () => {
     position: absolute;
     top: 16px;
     right: 16px;
+}
+
+.password-input {
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #35383f;
+    font-weight: normal;
+    font-family: 'Bert-Sans';
+}
+
+.password-input::placeholder {
+    color: #898989;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Bert-Sans';
 }
 .v-card-title {
     padding: 0;
