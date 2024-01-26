@@ -9,7 +9,7 @@
                         class="card_cross"
                         @click="onBack"
                     />
-                    <v-card-title class="text-h4 text-center"
+                    <v-card-title class="text-center"
                         >Восстановление пароля</v-card-title
                     >
                     <v-form
@@ -50,22 +50,8 @@ import { IMaskDirective } from 'vue-imask';
 import { HTTP } from '@app/http';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { useVuelidate } from '@vuelidate/core';
 
 const router = useRouter();
-// const rules = computed(() => ({
-//     emailField: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         email: helpers.withMessage('Вы ввели неверный email', email),
-//     },
-// }));
-
-// const v = useVuelidate(rules, {
-//     emailField,
-// });
 
 const data = ref({
     email: '',
@@ -89,6 +75,39 @@ const submitForm = () => {
 const onBack = () => {
     router.back();
 };
+// const user = ref({
+//     email: '',
+//     uid: '',
+//     token: '',
+//     newPassword: '',
+// });
+
+// const createPassword = async () => {
+//     try {
+//         const response = await axios.post(
+//             '/users/reset_password_confirm/',
+//             user,
+//         );
+//         console.log(response);
+//     } catch (error) {
+//         console.error(error);
+//     }
+// };
+
+// const recoveryPassword = async () => {
+//     try {
+//         const response = await axios.post('/reset_password/', {
+//             email: user.email,
+//         });
+//         console.log(response);
+//         router.push({
+//             name: 'CreatePasswordPage',
+//             query: { uid: response.data.uid, token: response.data.token },
+//         });
+//     } catch (error) {
+//         console.error(error);
+//     }
+// };
 </script>
 <style lang="scss" scoped>
 .py-15 {
@@ -108,6 +127,23 @@ const onBack = () => {
 .v-card-title {
     padding: 0;
     overflow: visible;
+}
+.v-card-title {
+    overflow: visible;
+    font-size: 40px;
+    font-weight: 600;
+    font-family: Akrobat;
+    padding-top: 0rem;
+    @media screen and (max-width: 575px) {
+        font-size: 28px;
+    }
+}
+.v-card-text {
+    padding: 0;
+    font-size: 18px;
+    @media screen and (max-width: 575px) {
+        font-size: 16px;
+    }
 }
 .recoveryPass__input {
     text-indent: 16px;

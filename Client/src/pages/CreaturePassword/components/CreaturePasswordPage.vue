@@ -52,8 +52,10 @@ import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import { PasswordInputVue } from '@shared/components/inputs';
 import { helpers, minLength, required, sameAs } from '@vuelidate/validators';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
+
+const route = useRoute();
 
 // const rules = computed(() => ({
 //     password: {
