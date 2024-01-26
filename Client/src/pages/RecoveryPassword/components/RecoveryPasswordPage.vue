@@ -9,7 +9,7 @@
                         class="card_cross"
                         @click="onBack"
                     />
-                    <v-card-title class="text-h4 text-center"
+                    <v-card-title class="text-center"
                         >Восстановление пароля</v-card-title
                     >
                     <v-form
@@ -42,30 +42,16 @@
     </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { helpers, required, email } from '@vuelidate/validators';
-import { IMaskDirective } from 'vue-imask';
 import { HTTP } from '@app/http';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { useVuelidate } from '@vuelidate/core';
+import { usePage } from '@shared';
+
+usePage({ isHidden: true });
 
 const router = useRouter();
-// const rules = computed(() => ({
-//     emailField: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         email: helpers.withMessage('Вы ввели неверный email', email),
-//     },
-// }));
-
-// const v = useVuelidate(rules, {
-//     emailField,
-// });
 
 const data = ref({
     email: '',
@@ -109,6 +95,23 @@ const onBack = () => {
     padding: 0;
     overflow: visible;
 }
+.v-card-title {
+    overflow: visible;
+    font-size: 40px;
+    font-weight: 600;
+    font-family: Akrobat;
+    padding-top: 0rem;
+    @media screen and (max-width: 575px) {
+        font-size: 28px;
+    }
+}
+.v-card-text {
+    padding: 0;
+    font-size: 18px;
+    @media screen and (max-width: 575px) {
+        font-size: 16px;
+    }
+}
 .recoveryPass__input {
     text-indent: 16px;
     margin-top: 20px;
@@ -129,6 +132,7 @@ p {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    margin-bottom: 20px;
 }
 .btn {
     margin: 40px auto;

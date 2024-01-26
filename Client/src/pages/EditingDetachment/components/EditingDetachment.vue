@@ -59,7 +59,7 @@ const getPositions = async () => {
 };
 
 const getAreas = async () => {
-    HTTP.get('areas/')
+    await HTTP.get('areas/')
 
         .then((res) => {
             areas.value = res.data;
@@ -71,7 +71,7 @@ const getAreas = async () => {
 };
 
 const getRegions = async () => {
-    HTTP.get('regions/')
+    await HTTP.get('regions/')
 
         .then((res) => {
             regions.value = res.data;
@@ -97,11 +97,17 @@ const getDetachment = async () => {
     })
         .then((response) => {
             detachment.value = response.data;
+            // console.log('ggggggggggggggggggg', areas.value);
 
             if (areas.value.length) {
                 const area = areas.value.find((item) => {
                     return item.name === detachment.value.area;
                 });
+                // console.log(
+                //     'fffffffffffffffffffffff',
+                //     detachment.value.area,
+                //     area,
+                // );
                 detachment.value.area = area.id;
             }
             if (regions.value.length) {
@@ -159,11 +165,11 @@ const getMembers = async () => {
 };
 
 onMounted(() => {
-    getDetachment();
     getMembers();
     getPositions();
     getAreas();
     getRegions();
+    getDetachment();
 });
 
 const onUpdateMember = (event, id) => {

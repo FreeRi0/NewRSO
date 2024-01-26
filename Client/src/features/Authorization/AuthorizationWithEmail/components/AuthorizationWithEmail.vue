@@ -8,7 +8,9 @@
             <v-form action="#" method="post" @submit.prevent="LoginUser">
                 <v-card-text class="text-center goReg"
                     >У вас еще нет аккаунта?
-                    <router-link class="authLinks" to="/Register">Зарегистрироваться</router-link>
+                    <router-link class="authLinks" to="/Register"
+                        >Зарегистрироваться</router-link
+                    >
                 </v-card-text>
 
                 <Input
@@ -138,7 +140,6 @@ const LoginUser = async () => {
 </script>
 
 <style lang="scss">
-
 .v-field {
     border-radius: 10px;
 }
@@ -170,7 +171,6 @@ const LoginUser = async () => {
 // }
 
 .v-card-title {
-    padding: 0rem 1rem;
     font-size: 40px;
     font-weight: 600;
     font-family: Akrobat;
@@ -215,10 +215,8 @@ const LoginUser = async () => {
     font-family: 'Bert-Sans';
 }
 
-
-
 .v-card {
-    padding: 105px 98px;
+    padding: 98px;
     @media screen and (max-width: 768px) {
         padding: 60px 98px;
     }

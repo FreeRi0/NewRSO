@@ -8,7 +8,7 @@
                         alt="cross"
                         class="card_cross"
                     />
-                    <v-card-title class="text-h4 text-center"
+                    <v-card-title class="text-center"
                         >Создание нового пароля</v-card-title
                     >
                     <v-form
@@ -17,36 +17,24 @@
                         method="post"
                         @submit.prevent="resetPasswordForm"
                     >
-                        <v-text-field
-                            class="password-input"
-                            :append-inner-icon="
-                                visible ? 'mdi-eye-off' : 'mdi-eye'
-                            "
-                            :type="visible ? 'text' : 'password'"
-                            density="compact"
-                            v-model="current_password"
-                            placeholder="Текущий пароль"
-                            variant="outlined"
-                            @click:append-inner="visible = !visible"
-                        ></v-text-field>
-                        <v-text-field
-                            class="password-input"
-                            :append-inner-icon="
-                                visible ? 'mdi-eye-off' : 'mdi-eye'
-                            "
-                            :type="visible ? 'text' : 'password'"
-                            density="compact"
-                            v-model="new_password"
-                            placeholder="Новый пароль"
-                            variant="outlined"
-                            @click:append-inner="visible = !visible"
-                        ></v-text-field>
                         <p>
                             Пароль должен быть не короче 8 букв и цифр.
                             Используйте только буквы (a–z, A–Z), цифры и символы
                             ! @ # $ % ^ & * ( ) - _ + = ; : , . / ? \ | ` ~ { }
                         </p>
 
+                        <Input
+                            class="creaturePass__input"
+                            placeholder="Новый пароль"
+                            name="password"
+                            v-model:value="new_password"
+                        ></Input>
+                        <Input
+                            class="creaturePass__input"
+                            placeholder="Повторите новый пароль"
+                            name="confirm"
+                            v-model:value="current_password"
+                        ></Input>
                         <Button
                             label="Сохранить"
                             color="primary"
@@ -60,74 +48,26 @@
 </template>
 <script setup>
 import { ref, computed } from 'vue';
-import axios from 'axios';
 import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
-import { helpers, minLength, required, sameAs } from '@vuelidate/validators';
-import { useRouter } from 'vue-router';
-import { useVuelidate } from '@vuelidate/core';
 
-// const rules = computed(() => ({
-//     password: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         minLength: helpers.withMessage(
-//             `Минимальная длина: 5 символов`,
-//             minLength(5),
-//         ),
-//     },
-//     confirmPassword: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         sameAsPassword: helpers.withMessage(
-//             `Пароли не совпадают`,
-//             sameAs(password.value),
-//         ),
-//     },
-// }));
+import { Input } from '@shared/components/inputs';
+import { useRoute } from 'vue-router';
 
-// const v = useVuelidate(rules, {
-//     password,
-//     confirmPassword,
-// });
-//
-//
-//
-// const data = ref({
-//     new_password: '',
-//     current_password: '',
-// });
+import { usePage } from '@shared';
 
-// const resetPasswordForm = () => {
-//     if (data.new_password === data.current_password) {
-//         HTTP.post('/users/set_password/', data.value)
-//             .then((response) => {
-//                 data.value = response.data;
-//                 localStorage.setItem('Token', response.data.auth_token);
-//             })
-//             .catch((error) => {
-//                 console.error(error);
-//             });
-//     } else {
-//         // Обработка случая, когда пароли не совпадают
-//     }
-// };
+usePage({ isHidden: true });
+
+const route = useRoute();
+
 const user = ref({});
 const new_password = ref('');
 const current_password = ref('');
-const token = localStorage.getItem('Token');
 
-const uid = user.value.id;
-
-const data = ref({
-    uid,
-    token,
-    new_password: new_password.value,
-});
+const auth = computed(() => ({
+    uid: route.params.uid,
+    token: route.params.token,
+}));
 
 const getPrivate = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -154,31 +94,16 @@ const resetPasswordForm = async () => {
     }
 
     try {
-        const response = await axios.post(
-            '/users/reset_password_confirm/',
-            data,
-        );
+        const response = await HTTP.post('/users/reset_password_confirm/', {
+            ...auth.value,
+            new_password: new_password.value,
+        });
         console.log(response.data);
         localStorage.setItem('Token', response.data.auth_token);
     } catch (error) {
         console.error(error);
     }
 };
-
-// const user = ref({
-//   uid: $route.query.uid || '',
-//   token: $route.query.token || '',
-//   newPassword: '',
-// });
-
-// const createPassword = async () => {
-//   try {
-//     const response = await axios.post('/users/reset_password_confirm/', user);
-//     console.log(response);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
 </script>
 <style lang="scss">
 .btn {
@@ -215,6 +140,7 @@ const resetPasswordForm = async () => {
     padding-right: 98px !important;
     padding-left: 98px !important;
 }
+
 .card_cross {
     position: absolute;
     top: 16px;
@@ -241,6 +167,17 @@ const resetPasswordForm = async () => {
     overflow: visible;
     font-family: 'Akrobat';
 }
+.v-card-title {
+    overflow: visible;
+    font-size: 40px;
+    font-weight: 600;
+    font-family: Akrobat;
+    padding-top: 0rem;
+    @media screen and (max-width: 575px) {
+        font-size: 28px;
+    }
+}
+
 p {
     color: #35383f;
     font-family: 'BertSans';
@@ -250,9 +187,9 @@ p {
     line-height: normal;
     margin-bottom: 20px;
 }
-.text-h4 {
-    font-family: 'Akrobat' !important;
-    font-size: 40px;
+.creaturePass__input {
+    text-indent: 16px;
+    width: 100%;
 }
 </style>
 @shared/components/selects/inputs
