@@ -516,6 +516,7 @@ onMounted(() => {
 .hq-data__wrapper {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     margin: 32px 0 16px 300px;
 }
 
@@ -592,10 +593,8 @@ onMounted(() => {
 }
 .Squad-HQ__list {
     margin-bottom: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0;
-    // grid-template-columns: 380px 300px;
+    display: grid;
+    grid-template-columns: 380px 300px;
 }
 .Squad-HQ__list-Reg {
     margin-bottom: 20px;
@@ -673,31 +672,5 @@ onMounted(() => {
     justify-content: space-between;
     margin: 12px 0 0;
     column-gap: 12px;
-}
-
-@media (max-width: 1095px) {
-    .Squad-HQ__university p {
-        border-right: none;
-    }
-}
-@media (max-width: 768px) {
-    .hq-metric {
-        grid-template-columns: 20px 120px 135px 2fr 16px;
-    }
-    .hq-data__wrapper {
-        margin: 20px 0 16px 250px;
-    }
-    .hq-data__contacts-wrapper {
-        flex-direction: column;
-    }
-    .hq-data__social-network {
-        justify-content: flex-start;
-    }
-    .hq-data__social-network div {
-        margin-right: 12px;
-    }
-    .hq-data__contacts-wrapper a {
-        justify-content: flex-start;
-    }
 }
 </style>

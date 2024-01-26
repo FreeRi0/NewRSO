@@ -42,14 +42,14 @@
     </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { helpers, required, email } from '@vuelidate/validators';
-import { IMaskDirective } from 'vue-imask';
 import { HTTP } from '@app/http';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { usePage } from '@shared';
+
+usePage({ isHidden: true });
 
 const router = useRouter();
 
@@ -75,39 +75,6 @@ const submitForm = () => {
 const onBack = () => {
     router.back();
 };
-// const user = ref({
-//     email: '',
-//     uid: '',
-//     token: '',
-//     newPassword: '',
-// });
-
-// const createPassword = async () => {
-//     try {
-//         const response = await axios.post(
-//             '/users/reset_password_confirm/',
-//             user,
-//         );
-//         console.log(response);
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
-
-// const recoveryPassword = async () => {
-//     try {
-//         const response = await axios.post('/reset_password/', {
-//             email: user.email,
-//         });
-//         console.log(response);
-//         router.push({
-//             name: 'CreatePasswordPage',
-//             query: { uid: response.data.uid, token: response.data.token },
-//         });
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
 </script>
 <style lang="scss" scoped>
 .py-15 {
@@ -165,6 +132,7 @@ p {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    margin-bottom: 20px;
 }
 .btn {
     margin: 40px auto;

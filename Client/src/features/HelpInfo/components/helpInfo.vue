@@ -2746,7 +2746,11 @@
     </form>
 </template>
 
-<script setup></script>
+<script setup>
+import { usePage } from '@shared';
+
+usePage({ isHidden: true });
+</script>
 
 <style lang="scss">
 .v-card {
