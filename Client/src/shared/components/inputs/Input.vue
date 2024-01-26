@@ -19,7 +19,7 @@ defineOptions({
     inheritAttrs: false,
 });
 
-const emit = defineEmits(['update']);
+const emit = defineEmits(['update:value']);
 const props = defineProps({
     name: {
         type: String,
@@ -47,8 +47,8 @@ const props = defineProps({
 
 const updateValue = (event) => {
     console.log('textt');
-    emit('update', event.target.value);
-    console.log('textt', );
+    emit('update:value', event.target.value);
+    console.log('textt' );
 };
 </script>
 

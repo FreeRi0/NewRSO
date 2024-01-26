@@ -16,7 +16,7 @@
                 <Input
                     placeholder="Фамилия"
                     name="surname"
-                    v-model="form.last_name"
+                    v-model:value.trim="form.last_name"
                 />
                 <p class="error" v-if="isError.last_name">
                     {{ isError.last_name }}
@@ -24,22 +24,21 @@
                 <Input
                     placeholder="Имя"
                     name="name"
-                    v-model.trim="form.first_name"
+                    v-model:value.trim="form.first_name"
                 />
-                <pre>{{ form.first_name }}</pre>
                 <p class="error" v-if="isError.first_name">
                     {{ isError.first_name }}
                 </p>
                 <Input
                     placeholder="Отчество (при наличии)"
                     name="patronomyc"
-                    v-model.trim="form.patronymic_name"
+                    v-model:value.trim="form.patronymic_name"
                 />
                 <Input
                     type="tel"
                     placeholder="+7 (999) 999-99-99"
                     name="phone"
-                    v-model.trim="form.phone_number"
+                    v-model:value.trim="form.phone_number"
                 />
                 <!-- <input  type="tel"
                     placeholder="+7 (999) 999-99-99"
@@ -48,7 +47,7 @@
                     placeholder="Электронная почта"
                     name="email"
                     type="email"
-                    v-model.trim="form.email"
+                    v-model:value.trim="form.email"
                 />
                 <p class="error" v-if="isError.email">
                     {{ isError.email }}
@@ -57,7 +56,7 @@
                     name="date"
                     type="date"
                     placeholder="Дата рождения"
-                    v-model="form.date_of_birth"
+                    v-model:value="form.date_of_birth"
                 />
                 <p class="error" v-if="isError.date_of_birth">
                     {{ isError.date_of_birth }}
@@ -65,7 +64,7 @@
                 <Input
                     placeholder="Придумайте логин"
                     name="login"
-                    v-model.trim="form.username"
+                    v-model:value.trim="form.username"
                 />
                 <p class="error" v-if="isError.username">
                     {{ isError.username }}
