@@ -109,15 +109,11 @@ const route = useRoute();
 const user = ref({});
 const new_password = ref('');
 const current_password = ref('');
-const token = localStorage.getItem('Token');
 
-const uid = user.value.id;
-
-const data = ref({
-    uid,
-    token,
-    new_password: new_password.value,
-});
+const auth = computed(() => ({
+    uid: route.params.uid,
+    token: route.params.token,
+}));
 
 const getPrivate = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -144,10 +140,10 @@ const resetPasswordForm = async () => {
     }
 
     try {
-        const response = await axios.post(
-            '/users/reset_password_confirm/',
-            data,
-        );
+        const response = await axios.post('/users/reset_password_confirm/', {
+            ...auth.value,
+            new_password: new_password.value,
+        });
         console.log(response.data);
         localStorage.setItem('Token', response.data.auth_token);
     } catch (error) {
