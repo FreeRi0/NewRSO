@@ -18,7 +18,6 @@
                     name="surname"
                     v-model:value.trim="form.last_name"
                 />
-                <pre>{{ form.last_name }}</pre>
                 <p class="error" v-if="isError.last_name">
                     {{ isError.last_name }}
                 </p>
