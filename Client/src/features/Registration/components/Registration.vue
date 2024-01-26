@@ -66,17 +66,6 @@
                 <p class="error" v-if="isError.username">
                     {{ isError.username }}
                 </p>
-                <!-- <div class="form-input" :style="{ width: width }">
-                    <input
-                        :type="type"
-                        :name="name"
-                        :id="name"
-                        placeholder="placeholder"
-                        :maxlength="maxLength"
-                        class="mb-2"
-
-                    />
-                </div> -->
                 <v-text-field
                     class="password-input"
                     :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
@@ -122,7 +111,6 @@
                         данных.
                     </div>
                 </div>
-                <!-- <p class="error" v-if="termsError">Обязательное поле</p> -->
 
                 <Button
                     label="Зарегистрироваться"
@@ -276,10 +264,6 @@
         font-size: 18px;
     }
 }
-
-// a {
-
-// }
 </style>
 
 <script setup>
@@ -293,7 +277,6 @@ import { Select } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 const visible = ref(false);
 const visibleRe = ref(false);
-// const termsState = ref(false);
 const validated = ref(false);
 const form = ref({
     region: null,

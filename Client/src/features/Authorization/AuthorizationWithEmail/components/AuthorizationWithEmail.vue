@@ -33,15 +33,7 @@
                     variant="outlined"
                     @click:append-inner="visible = !visible"
                 ></v-text-field>
-                <!--
-                    <Input
-                        :type="showPassword ? 'text' : 'password'"
-                        placeholder="Пароль"
-                        name="password"
-                        v-model:value="data.password"
-                        class="username-password"
-                    />
-             -->
+
 
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
@@ -76,7 +68,6 @@ import { ref, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
-// import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 const data = ref({
@@ -121,7 +112,6 @@ const LoginUser = async () => {
                 timer: 1500,
             });
 
-            // router.push({ name: 'userpage', params: {id: response.data.id}});
         })
 
         .catch(({ response }) => {
@@ -162,13 +152,6 @@ const LoginUser = async () => {
 .login_btn {
     margin-top: 40px;
 }
-
-// .showPass {
-//     border: none;
-//     background-color: transparent;
-//     cursor: pointer;
-//     margin-left: -30px;
-// }
 
 .v-card-title {
     font-size: 40px;
