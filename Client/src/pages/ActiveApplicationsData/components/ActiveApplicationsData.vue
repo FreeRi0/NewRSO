@@ -1,6 +1,12 @@
 <template>
     <div class="container">
-        <div class="active-app" v-if="regComId || detComId">
+        <div
+            class="active-app"
+            v-if="
+                roles.roles.value.regionalheadquarter_commander ||
+                roles.roles.value.detachment_commander
+            "
+        >
             <h2 class="profile-title">Активные заявки</h2>
 
             <div class="d-flex mt-9 mb-9">
@@ -87,7 +93,9 @@
                 <active-competitions />
             </div>
         </div>
-        <div v-else>Доступно только коммандирам отрядов и региональных штабов</div>
+        <div v-else>
+            Доступно только командирам отрядов и региональных штабов.
+        </div>
     </div>
 </template>
 <script setup>
@@ -104,14 +112,12 @@ import { useRoleStore } from '@layouts/store/role';
 
 import { storeToRefs } from 'pinia';
 
-
 const roleStore = useRoleStore();
 roleStore.getRoles();
 const roles = storeToRefs(roleStore);
 
-
-let regComId = roles.roles.value.regionalheadquarter_commander;
-let detComId = roles.roles.value.detachment_commander;
+// let regComId = roles.roles.value.regionalheadquarter_commander;
+// let detComId = roles.roles.value.detachment_commander;
 const picked = ref('');
 const tabs = ref([
     {
@@ -151,10 +157,9 @@ const step = ref(12);
 // tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
 const viewParticipants = async () => {
-    let id = regComId ?? detComId;
+    // let id = regComId ?? detComId;
     console.log('roles', roles.roles.value);
-    console.log('id', id);
-
+    let id = regComId ?? detComId;
     if (regComId) {
         await HTTP.get(`/regionals/${id}/verifications/`, {
             headers: {
