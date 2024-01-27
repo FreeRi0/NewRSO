@@ -6,16 +6,10 @@
                 class="mt-4 bio"
                 name="about"
                 placeholder="Напиши что нибудь"
-                v-model:value ="user.value"
+                v-model:value="bio"
                 :max-length="400"
             ></TextArea>
-            <!-- <input
-                type="text"
-                name="about"
-                placeholder="Напиши что нибудь"
-                v-model="currentUser.currentUser.value"
-            /> -->
-            <pre>{{ user.value }}</pre>
+            <!-- <pre>{{ user.value }}</pre> -->
             <div class="form__counter">{{ counterSquad }} / 400</div>
             <p class="error" v-if="isError.last_name">
                 {{ 'Фамилия пользователя, ' + isError.last_name }}
@@ -79,12 +73,12 @@ const uploadUserPic = (userPic) => {
     emit('uploadUserPic', userPic);
     console.log('userPic Uploaded!');
 };
-const user = ref({
-    bio: '',
-});
+// const user = ref({
+//     bio: '',
+// });
 const userStore = useUserStore();
-// const currentUser = storeToRefs(userStore);
-// const regions = storeToRefs(userStore);
+let currentUser = storeToRefs(userStore);
+const regions = storeToRefs(userStore);
 userStore.getRegions();
 
 // const updateUserPic = (userPic) => {
@@ -92,7 +86,7 @@ userStore.getRegions();
 //     user.value.media.photo1 = userPic;
 
 // };
-
+let bio= ref(currentUser.currentUser.value.bio)
 
 
 const media = ref({
@@ -106,39 +100,9 @@ const isLoading = ref(false);
 const swal = inject('$swal');
 
 const counterSquad = computed(() => {
-    return user.value?.length || 0;
+    return bio.value?.length || 0;
 });
 
-// const regions = ref([]);
-// const getRegions = async () => {
-//     const { data } = await HTTP.get('/regions', {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     });
-
-//     regions.value = data;
-// };
-
-// const getUser = async () => {
-//     await HTTP.get(`/rsousers/me/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             user.value = response.data;
-//             user.value.region = regions.value.find(
-//                 (region) => region.name === user.value.region,
-//             )?.id;
-//             console.log(user.value);
-//         })
-//         .catch(function (error) {
-//             console.log('failed ' + error);
-//         });
-// };
 
 const getMedia = async () => {
     await HTTP.get(`/rsousers/me/media/`, {
@@ -158,7 +122,7 @@ const getMedia = async () => {
 
 const AddAbout = async () => {
     isLoading.value = true;
-    await HTTP.patch(`/rsousers/me/`, user.value, {
+    await HTTP.patch(`/rsousers/me/`, bio.value, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -173,7 +137,7 @@ const AddAbout = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-           user.value = response.data;
+           bio.value = response.data;
             console.log(response.data);
         })
         .catch(({ response }) => {
