@@ -57,9 +57,13 @@
                             <!-- <pre>dddddssss   {{ userId }}</pre> -->
                         </div>
                     </div>
+                    <!-- <pre>dddddddd{{ props.member }}</pre> -->
+                    <!-- <pre>{{ IsTrusted }}</pre> -->
+                    <!-- <pre>{{ regional?.commander?.id }}</pre>
+                    <pre>{{ squad?.commander?.id }}</pre> -->
 
                     <router-link
-                        v-if="userId == squad?.commander?.id || userId == regional?.commander?.id"
+                        v-if="userId == squad?.commander?.id || userId == regional?.commander?.id || IsTrusted"
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -75,6 +79,8 @@
                         class="AddApplication"
                     ></Button>
 
+
+
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="user-data__link mr-2">
                             Заявка на рассмотрении
@@ -85,8 +91,7 @@
                             class="AddApplication"
                         ></Button>
                     </div>
-                    <!-- <pre>dddddddddddddddd{{ UserApplication }}</pre>
-                     <pre>id{{ userId }}</pre> -->
+
                     <!--find искать id в computed-->
 
                     <div v-else-if="IsMember" class="user-data__link">
@@ -150,6 +155,7 @@ const isError = ref([]);
 const applications = ref([]);
 const swal = inject('$swal');
 console.log('user', userId.value);
+console.log('member', props.member)
 
 const aboutEduc = async () => {
     let id = props.squad.educational_institution.id;
@@ -217,6 +223,9 @@ const UserApplication = computed(() => {
 const IsMember = computed(() => {
     return props.member.find((item) => item.user.id === userId.value);
 });
+const IsTrusted = computed(() => {
+    return props.member.find((item) =>  item.user.id === userId.value && item.is_trusted === true)
+})
 
 console.log('member', IsMember);
 

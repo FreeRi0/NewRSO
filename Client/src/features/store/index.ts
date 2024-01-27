@@ -28,9 +28,6 @@ export const useUserStore = defineStore('user', {
             this.user = response.data;
 
         },
-
-
-
     },
 
 });

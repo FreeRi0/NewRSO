@@ -1,22 +1,31 @@
 <template>
     <div class="squads-banner">
         <div class="squads-banner__text">
-           {{ desc}}
+            {{ desc }}
         </div>
-
-        <router-link v-if="educComId || regComId || localComId || centralComId" :to="{name: name}"><p v-if="button" class="create">{{ label }}</p></router-link>
+        <router-link
+            v-if="
+                roles.roles.value.educationalheadquarter_commander ||
+                roles.roles.value.regionalheadquarter_commander ||
+                roles.roles.value.localheadquarter_commander ||
+                roles.roles.value.centralComId
+            "
+            :to="{ name: name }"
+            ><p v-if="button" class="create">{{ label }}</p></router-link
+        >
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
-let educComId = roles.roles.value.educationalheadquarter_commander;
-let regComId = roles.roles.value.regionalheadquarter_commander;
-let localComId = roles.roles.value.localheadquarter_commander;
-let centralComId = roles.roles.value.centralComId;
+// roleStore.getRoles();
+// let educComId = roles.roles.value.educationalheadquarter_commander;
+// let regComId = roles.roles.value.regionalheadquarter_commander;
+// let localComId = roles.roles.value.localheadquarter_commander;
+// let centralComId = roles.roles.value.centralComId;
 const props = defineProps({
     label: {
         type: String,
@@ -32,11 +41,20 @@ const props = defineProps({
     },
     button: {
         type: Boolean,
-        default: true
-    }
+        default: true,
+    },
 });
 
-const admin = ref(true);
+// watch(
+//     () => roles.roles.value,
+
+//     (newRole) => {
+//         if (Object.keys(roles.roles.value).length === 0) {
+//             return;
+//         }
+//         roleStore.getRoles();
+//     },
+// );
 </script>
 <style lang="scss" scoped>
 .squads-banner {
@@ -77,8 +95,8 @@ const admin = ref(true);
 }
 
 .create {
-   background-color: #ffffff;
-   padding: 16px 40px;
-   border-radius: 10px;
+    background-color: #ffffff;
+    padding: 16px 40px;
+    border-radius: 10px;
 }
 </style>

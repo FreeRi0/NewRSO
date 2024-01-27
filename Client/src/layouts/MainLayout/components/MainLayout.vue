@@ -36,7 +36,7 @@ import { useRoleStore } from '@layouts/store/role';
 const roleStore = useRoleStore();
 const userStore = useUserStore();
 userStore.getUser();
-userStore.getUserId();
+// userStore.getUserId();
 roleStore.getRoles();
 
 //запрос на коммандира

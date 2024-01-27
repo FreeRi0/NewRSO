@@ -1525,14 +1525,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="statement-title" v-if="!user.is_adult">
+                                <p
+                                    class="statement-title"
+                                    v-if="!user.is_adult"
+                                >
                                     Согласие законного представителя на
                                     обработку персональных данных
                                     несовершеннолетнего<span class="valid-red"
                                         >*</span
                                     >
                                 </p>
-                                <div class="statement-wrapper" v-if="!user.is_adult">
+                                <div
+                                    class="statement-wrapper"
+                                    v-if="!user.is_adult"
+                                >
                                     <div class="statement-item">
                                         <img
                                             src="@app/assets/icon/file.svg"
@@ -1636,7 +1642,10 @@
                                     Обязательное поле
                                 </p>
                             </div>
-                            <div class="pass-details__item" v-if="!user.is_adult">
+                            <div
+                                class="pass-details__item"
+                                v-if="!user.is_adult"
+                            >
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
                                         class="valid-red"
@@ -1985,13 +1994,19 @@
                                 </div>
                             </div>
                             <div class="pass-details__item">
-                                <p class="statement-title" v-if="!user.is_adult">
+                                <p
+                                    class="statement-title"
+                                    v-if="!user.is_adult"
+                                >
                                     Паспорт законного представителя<span
                                         class="valid-red"
                                         >*</span
                                     >
                                 </p>
-                                <div class="statement-wrapper" v-if="!user.is_adult">
+                                <div
+                                    class="statement-wrapper"
+                                    v-if="!user.is_adult"
+                                >
                                     <div class="statement-item">
                                         <img
                                             src="@app/assets/icon/file.svg"
@@ -2668,7 +2683,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="pass-details__item" v-if="!user.is_adult">
+                            <div
+                                class="pass-details__item"
+                                v-if="!user.is_adult"
+                            >
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
                                         class="valid-red"
@@ -2874,7 +2892,15 @@ import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import { TextArea } from '@shared/components/inputs';
 import axios from 'axios';
-const emit = defineEmits(['updateUserData', 'updateRegionData', 'updateDocData', 'updateEducData', 'updateFileData', 'updateParentData', 'updateStatus'])
+const emit = defineEmits([
+    'updateUserData',
+    'updateRegionData',
+    'updateDocData',
+    'updateEducData',
+    'updateFileData',
+    'updateParentData',
+    'updateStatus',
+]);
 const router = useRouter();
 const panel = ref();
 const isError = ref({});
@@ -3176,7 +3202,6 @@ const getUserRegions = async () => {
         });
 };
 
-
 const downloadBlankPersonal = async () => {
     await HTTP.get(
         '/rsousers/me/statement/download_consent_to_the_processing_of_personal_data/',
@@ -3193,7 +3218,7 @@ const downloadBlankPersonal = async () => {
 
             var docUrl = document.createElement('a');
             docUrl.href = FILE;
-            docUrl.setAttribute('download', 'persnal.docx');
+            docUrl.setAttribute('download', 'persnal.rtf');
             document.body.appendChild(docUrl);
             docUrl.click();
             console.log(response, 'success');
@@ -3219,7 +3244,7 @@ const downloadBlankMembership = async () => {
 
             var docUrl = document.createElement('a');
             docUrl.href = FILE;
-            docUrl.setAttribute('download', 'membership.docx');
+            docUrl.setAttribute('download', 'membership.rtf');
             document.body.appendChild(docUrl);
             docUrl.click();
             console.log(response, 'success');
@@ -3244,7 +3269,7 @@ const downloadBlankParent = async () => {
 
             var docUrl = document.createElement('a');
             docUrl.href = FILE;
-            docUrl.setAttribute('download', 'parent.docx');
+            docUrl.setAttribute('download', 'parent.rtf');
             document.body.appendChild(docUrl);
             docUrl.click();
             console.log(response, 'success');
@@ -3277,9 +3302,7 @@ const downloadAll = async () => {
 };
 
 const updateData = async () => {
-
     try {
-
         let fd = new FormData();
         fd.append('rso_info_from', rso_info_from.value);
         if (isStatementChange.value)
@@ -3422,7 +3445,7 @@ const updateData = async () => {
             );
         }
 
-        console.log('ddd', !user.value.sent_verification)
+        console.log('ddd', !user.value.sent_verification);
 
         user.value = axiosrequest1.data;
         user.value.region = regions.value.find(
@@ -3458,14 +3481,14 @@ const updateData = async () => {
         // getDocuments();
         // getForeignDoc();
         // getUserRegions();
-        console.log('resdp', axiosrequest1.data)
-        emit('updateUserData', axiosrequest1.data)
-        emit('updateRegionData', axiosrequest2.data)
-        emit('updateDocData', axiosrequest3.data)
-        emit('updateEducData', axiosrequest4.data)
-        emit('updateFileData', axiosrequest5.data)
-        emit('updateParentData', axiosrequestParent.data)
-        emit('updateStatus', axiosrequest6.data)
+        console.log('resdp', axiosrequest1.data);
+        emit('updateUserData', axiosrequest1.data);
+        emit('updateRegionData', axiosrequest2.data);
+        emit('updateDocData', axiosrequest3.data);
+        emit('updateEducData', axiosrequest4.data);
+        emit('updateFileData', axiosrequest5.data);
+        emit('updateParentData', axiosrequestParent.data);
+        emit('updateStatus', axiosrequest6.data);
         isLoading.value = false;
     } catch (error) {
         console.log('errr', error);
