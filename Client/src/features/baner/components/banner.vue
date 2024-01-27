@@ -2,7 +2,7 @@
     <div class="user-metric">
         <bannerPhoto
             :banner="user?.media?.banner"
-            v-if="user"
+
             @upload-wall="uploadWall"
             @update-wall="updateWall"
             @delete-wall="deleteWall"
@@ -10,10 +10,17 @@
         ></bannerPhoto>
         <Avatar
             :avatar="user?.media?.photo"
-            v-if="user"
             @upload="uploadAva"
             @update="updateAva"
             @delete="deleteAva"
+            :edited="false"
+        ></Avatar>
+        <Avatar
+            :avatar="user?.media?.photo"
+            @upload="uploadAva"
+            @update="updateAva"
+            @delete="deleteAva"
+            :edited="true"
         ></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
@@ -128,6 +135,7 @@ const props = defineProps({
     education: {
         type: Object,
     },
+
 });
 
 const emit = defineEmits(['upload', 'update', 'delete']);

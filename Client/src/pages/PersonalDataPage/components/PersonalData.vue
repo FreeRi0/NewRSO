@@ -3,7 +3,7 @@
         <div class="mt-14">
             <h2 class="profile-title">Настройки профиля</h2>
             <banner
-                :user="user.user.value"
+                :user="currentUser.currentUser.value"
                 :education="education"
                 class="mt-3"
                 :edited="true"
@@ -39,7 +39,6 @@
             ></AccordionsPersonal>
             <userData
                 @uploadUserPic="uploadUserPic"
-                @updateUserPic="updateUserPic"
                 v-else-if="picked == 'Моя страница' || picked == ''"
             ></userData>
             <privateProfile
@@ -63,60 +62,60 @@ import { storeToRefs } from 'pinia';
 import { userData } from '@features/userData/components';
 
 const userStore = useUserStore();
-const user = storeToRefs(userStore);
+const currentUser = storeToRefs(userStore);
 
 const uploadAva = (imageAva) => {
     console.log('photo', imageAva);
-    user.user.value.media.photo = imageAva;
+    currentUser.currentUser.value.media.photo = imageAva;
 };
 
 const updateAva = (imageAva) => {
     console.log('photoUpdate', imageAva);
-    user.user.value.media.photo = imageAva;
+    currentUser.currentUser.value.media.photo = imageAva;
 };
 
 const uploadWall = (imageWall) => {
     console.log('ban', imageWall);
-    user.user.value.media.banner = imageWall;
+    currentUser.currentUser.value.media.banner = imageWall;
 };
 
 const updateWall = (imageWall) => {
     console.log('banUpdate', imageWall);
-    user.user.value.media.banner = imageWall;
+    currentUser.currentUser.value.media.banner = imageWall;
 };
 
 const updateUser = (userData) => {
     console.log('UserUpdate', userData);
-    user.user.value = userData;
+    currentUser.currentUser.value = userData;
 };
 const updateRegion = (userRegion) => {
     console.log('UserRegion', userRegion);
-    user.user.value.user_region = userRegion;
+    currentUser.currentUser.value.user_region = userRegion;
 };
 const updateDoc = (userDoc) => {
     console.log('UserDoc', userDoc);
-    user.user.value.documents = userDoc;
+    currentUser.currentUser.value.documents = userDoc;
 };
 const updateEduc = (userEduc) => {
     console.log('UserEduc', userEduc);
-    user.user.value.education = userEduc;
+    currentUser.currentUser.value.education = userEduc;
 };
 const updateFile = (userFile) => {
     console.log('UserFile', userFile);
-    user.user.value.statement = userFile;
+    currentUser.currentUser.value.statement = userFile;
 };
 const updateStatus = (userStatus) => {
     console.log('UserStatus', userStatus);
-    user.user.value.sent_verification = userStatus;
+    currentUser.currentUser.value.sent_verification = userStatus;
 };
 const updateParent = (userParent) => {
     console.log('userParent', userParent);
-    user.user.value.parent = userParent;
+    currentUser.currentUser.value.parent = userParent;
 };
 
 const uploadUserPic = (userPic) => {
     console.log('photoUser', userPic);
-    user.user.value.media.photo1 = userPic;
+    currentUser.currentUser.value.media.photo1 = userPic;
     console.log("Phot Uploadeddd")
 
 };

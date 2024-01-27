@@ -34,7 +34,7 @@
                 <div ref="navMenu" class="header__nav-container no-visible">
                     <div class="header__overlay" @click="removeClass()"></div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item" v-if="user.user.value">
+                        <li class="header__nav-item" v-if="user.currentUser.value">
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
@@ -66,7 +66,7 @@
             </nav>
 
             <nav class="header__nav nav-user">
-                <div class="nav-user__application-count" v-if="user.user.value">
+                <div class="nav-user__application-count" v-if="user.currentUser.value">
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <a href="#">
                         <img
@@ -95,10 +95,10 @@
                             alt="Иконка геолокации"
                         /> -->
 
-                        <span v-if="user.user.value?.region"
+                        <span v-if="user.currentUser.value?.region"
                             >{{
                                 regionals.find(
-                                    (reg) => reg.region === user.user.value.region,
+                                    (reg) => reg.region === user.currentUser.value.region,
                                 )?.name
                             }}
                         </span>
@@ -146,16 +146,16 @@
 
                 <div class="nav-user__menu user-menu">
                     <img
-                        v-if="!user.user.value"
+                        v-if="!user.currentUser.value"
                         src="@app/assets/user-avatar.png"
                         alt="Фото бойца (заглушка)"
                     />
 
                     <Dropdown
-                        v-if="user.user.value"
+                        v-if="user.currentUser.value"
                         :items="userPages"
                         :image="true"
-                        :url="user.user.value.media?.photo"
+                        :url="user.currentUser.value.media?.photo"
                         desc="Фотография пользователя"
                         @updateUser="userUpdate"
                     />
@@ -173,9 +173,18 @@ import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
-// userStore.getUser();
+const regionalsStore = useRegionalsStore();
+regionalsStore.getRegions();
+
+const {regions, regionals} = storeToRefs(regionalsStore);
+const region = ref(null);
+
+const getByRegionals = () => {
+    regionalsStore.getRegionals(region.value)
+}
 const props = defineProps({
     isActive: {
         type: Boolean,
@@ -188,15 +197,15 @@ const props = defineProps({
 
 const quantityIsActive = ref(props.quantityActive);
 
-const region = ref(null);
+
 
 const router = useRouter();
 const user = storeToRefs(userStore);
-console.log('user', user.user.value);
+console.log('user', user.currentUser.value);
 
 const userUpdate = (userData) => {
     console.log('UserUpdate', userData);
-    user.user.value = userData;
+    user.currentUser.value = userData;
 };
 
 const pages = ref([
@@ -211,16 +220,13 @@ const pages = ref([
 const userPages = computed(() => [
     {
         title: 'Моя страница',
-        name: 'userpage',
-        params: {
-            id: user.user?.value?.id,
-        },
+        name: 'mypage',
     },
     {
         title: 'Мой отряд',
         name: 'lso',
         params: {
-            id: user.user?.value?.detachment_id,
+            id: user.currentUser?.value?.detachment_id,
         },
     },
     {
@@ -228,7 +234,7 @@ const userPages = computed(() => [
         name: 'HQ',
         path: 'regionals',
         params: {
-            id: user.user?.value?.educational_headquarter_id,
+            id: user.currentUser?.value?.educational_headquarter_id,
         },
     },
     {
@@ -237,7 +243,7 @@ const userPages = computed(() => [
         path: 'locals',
         params: {
             id:
-                user.user?.value?.local_headquarter_id ??
+                user.currentUser?.value?.local_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
         },
     },
@@ -247,7 +253,7 @@ const userPages = computed(() => [
         path: 'regionals',
         params: {
             id:
-                user.user?.value?.regional_headquarter_id ??
+                user.currentUser?.value?.regional_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
         },
     },
@@ -257,7 +263,7 @@ const userPages = computed(() => [
         path: 'districts',
         params: {
             id:
-                user.user?.value?.district_headquarter_id ??
+                user.currentUser?.value?.district_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
         },
     },
@@ -265,7 +271,7 @@ const userPages = computed(() => [
         title: 'Центральный штаб',
         name: 'CentralHQ',
         params: {
-            id: user.user.value?.central_headquarter_id,
+            id: user.currentUser.value?.central_headquarter_id,
         },
     },
     { title: 'Активные заявки', name: 'active' },
@@ -287,9 +293,10 @@ const removeClass = () => {
     menu.classList.toggle('no-visible');
 };
 
-const regions = ref({});
 
-const regionals = ref([]);
+// const regions = ref({});
+
+// const regionals = ref([]);
 
 const headquartersIds = ref([]);
 const headquertersNames = ref([
@@ -384,41 +391,41 @@ const updateRegion = async () => {
         });
 };
 
-const getRegions = async () => {
-    try {
-        const response = await HTTP.get(`/regions/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+// const getRegions = async () => {
+//     try {
+//         const response = await HTTP.get(`/regions/`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
 
-        regions.value = response.data;
-        console.log(regions.value);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+//         regions.value = response.data;
+//         console.log(regions.value);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
-const getRegionals = async () => {
-    try {
-        const response = await HTTP.get(`/regionals/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+// const getRegionals = async () => {
+//     try {
+//         const response = await HTTP.get(`/regionals/`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
 
-        regionals.value = response.data;
-        console.log(regionals.value);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+//         regionals.value = response.data;
+//         console.log(regionals.value);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 onMounted(async () => {
-    await getRegions();
-    await getRegionals();
+    // await getRegions();
+    // await getRegionals();
 
     await getHeadquarters();
 });
