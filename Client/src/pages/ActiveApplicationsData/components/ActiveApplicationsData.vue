@@ -159,8 +159,8 @@ const step = ref(12);
 const viewParticipants = async () => {
     // let id = regComId ?? detComId;
     console.log('roles', roles.roles.value);
-    let id = regComId ?? detComId;
-    if (regComId) {
+    let id = roles.roles.value.regionalheadquarter_commander ?? roles.roles.value.regionalheadquarter_commander;
+    if (roles.roles.value.regionalheadquarter_commander) {
         await HTTP.get(`/regionals/${id}/verifications/`, {
             headers: {
                 'Content-Type': 'application/json',
@@ -174,7 +174,7 @@ const viewParticipants = async () => {
             .catch(function (error) {
                 console.log('an error occured ' + error);
             });
-    } else if (detComId) {
+    } else if (roles.roles.value.regionalheadquarter_commander) {
         await HTTP.get(`/detachments/${id}/verifications/`, {
             headers: {
                 'Content-Type': 'application/json',
