@@ -2,16 +2,25 @@
     <div class="user-metric">
         <bannerPhoto
             :banner="user?.media?.banner"
-            v-if="user"
-            @upload="uploadBan"
-            @update="updateBan"
-            @delete="deleteBan"
+
+            @upload-wall="uploadWall"
+            @update-wall="updateWall"
+            @delete-wall="deleteWall"
+
         ></bannerPhoto>
         <Avatar
             :avatar="user?.media?.photo"
-            v-if="user"
             @upload="uploadAva"
             @update="updateAva"
+            @delete="deleteAva"
+            :edited="false"
+        ></Avatar>
+        <Avatar
+            :avatar="user?.media?.photo"
+            @upload="uploadAva"
+            @update="updateAva"
+            @delete="deleteAva"
+            :edited="true"
         ></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
@@ -35,12 +44,12 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <p v-if="user?.user_region?.reg_region">
+                            <p v-if="user.region">
                                 {{
                                     regionals.find(
                                         (reg) =>
-                                            reg.id ===
-                                            user.user_region.reg_region,
+                                            reg.region ===
+                                            user.region,
                                     )?.name
                                 }}
                             </p>
@@ -101,7 +110,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
@@ -126,6 +135,7 @@ const props = defineProps({
     education: {
         type: Object,
     },
+
 });
 
 const emit = defineEmits(['upload', 'update', 'delete']);
@@ -142,29 +152,31 @@ const updateAva = (imageAva) => {
     console.log('update');
 };
 
-// const deleteAva = (imageAva) => {
-//     console.log('photoDel', imageAva);
-//     emit('delete', imageAva);
-//     console.log('del');
-// };
+const deleteAva = (imageAva) => {
+    console.log('photoDel', imageAva);
+    emit('delete', imageAva);
+    console.log('del');
+};
 
-// const uploadBan = (imageBan) => {
-//     console.log('ban', imageBan);
-//     emit('upload', imageBan);
-//     console.log('ghhhgh');
-// };
+const uploadWall = (imageWall) => {
+    console.log('ban', imageWall);
+    emit('uploadWall', imageWall);
+    console.log('ghhhgh');
+};
 
-// const updateBan = (imageBan) => {
-//     console.log('banUpdate', imageBan);
-//     emit('update', imageBan);
-//     console.log('update');
-// };
+const updateWall = (imageWall) => {
+    console.log('banUpdate', imageWall);
+    emit('updateWall', imageWall);
+    console.log('update');
+};
+const deleteWall = (imageWall) => {
+    console.log('banDelete', imageWall);
+    emit('deleteWall', imageWall);
+    console.log('delete');
+};
 
-// const deleteBan= (imageBan) => {
-//     console.log('photoBan', imageBan);
-//     emit('delete', imageBan);
-//     console.log('del');
-// };
+
+
 
 const regionals = ref([]);
 const detachment = ref({});
@@ -221,23 +233,6 @@ const getEducationalHeadquarter = async () => {
         });
 };
 
-// const aboutMembers = async () => {
-//     let id = props.user.detachment_id;
-//     let membership_pk =
-//     await HTTP.get(`/detachments/${id}/members/${membership_pk}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             participant.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
 
 onMounted(() => {
     getRegionals();

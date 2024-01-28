@@ -23,6 +23,7 @@
                             Используйте только буквы (a–z, A–Z), цифры и символы
                             ! @ # $ % ^ & * ( ) - _ + = ; : , . / ? \ | ` ~ { }
                         </p>
+
                         <Input
                             class="creaturePass__input"
                             placeholder="Новый пароль"
@@ -50,6 +51,7 @@
 import { ref, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
+
 import { Input } from '@shared/components/inputs';
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
@@ -109,11 +111,31 @@ const resetPasswordForm = async () => {
     }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .btn {
     margin: 40px auto;
     margin-bottom: 15px;
     padding: 16px 32px;
+}
+
+.v-field {
+    border-radius: 10px;
+}
+
+.v-field.v-field--appended {
+    --v-field-padding-end: 10px;
+}
+
+.v-input--density-compact .v-field--variant-outlined,
+.v-input--density-compact .v-field--single-line,
+.v-input--density-compact .v-field--no-label {
+    --v-field-padding-bottom: 10px;
+}
+
+.v-field--variant-outlined,
+.v-field--single-line,
+.v-field--no-label {
+    --v-field-padding-top: 5px;
 }
 
 .py-15 {
@@ -133,6 +155,22 @@ const resetPasswordForm = async () => {
     top: 16px;
     right: 16px;
     cursor: pointer;
+}
+
+.password-input {
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #35383f;
+    font-weight: normal;
+    font-family: 'Bert-Sans';
+}
+
+.password-input::placeholder {
+    color: #898989;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Bert-Sans';
 }
 .v-card-title {
     padding: 0;

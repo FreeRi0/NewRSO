@@ -87,6 +87,7 @@
                 <active-competitions />
             </div>
         </div>
+        <div v-else>Доступно только коммандирам отрядов и региональных штабов</div>
     </div>
 </template>
 <script setup>
@@ -103,9 +104,11 @@ import { useRoleStore } from '@layouts/store/role';
 
 import { storeToRefs } from 'pinia';
 
+
 const roleStore = useRoleStore();
 roleStore.getRoles();
 const roles = storeToRefs(roleStore);
+
 
 let regComId = roles.roles.value.regionalheadquarter_commander;
 let detComId = roles.roles.value.detachment_commander;

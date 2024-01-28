@@ -1,6 +1,6 @@
 <template >
-    <div class="container" v-if="regComId">
-        <div class="referencesMenu" >
+    <div class="container" >
+        <div class="referencesMenu" v-if="regComId" >
             <h2 class="referencesMenu-title">Оформление справок</h2>
             <div class="referencesMenu-wrapper">
                 <div class="referencesMenu-item">
@@ -19,6 +19,7 @@
                 </div>
             </div>
         </div>
+        <div v-else>Доступно только коммандирам региональных штабов</div>
     </div>
 </template>
 <script setup>

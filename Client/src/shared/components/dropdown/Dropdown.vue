@@ -96,6 +96,7 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
+const emit = defineEmits(['updateUser'])
 const router = useRouter();
 const props = defineProps({
     title: {
@@ -145,6 +146,7 @@ const props = defineProps({
 
 const LogOut = () => {
     localStorage.removeItem('Token');
+    emit('updateUser', {})
     router.push('/');
 };
 </script>
