@@ -39,6 +39,7 @@
             ></AccordionsPersonal>
             <userData
                 @uploadUserPic="uploadUserPic"
+                @changeBio="changeBio"
                 v-else-if="picked == 'Моя страница' || picked == ''"
             ></userData>
             <privateProfile
@@ -118,6 +119,11 @@ const uploadUserPic = (userPic) => {
     currentUser.currentUser.value.media.photo1 = userPic;
     console.log("Phot Uploadeddd")
 
+};
+
+const changeBio = (bio) => {
+    console.log('bio', bio);
+    currentUser.currentUser.value.bio = bio;
 };
 
 // const updateUserPic = (userPic) => {

@@ -27,9 +27,9 @@ export const useUserStore = defineStore('user', {
 
             });
             this.currentUser = response.data;
-            this.currentUser.region = this.regions.find(
-                (region) => region.name === this.currentUser.region,
-            )?.id;
+            // this.currentUser.region = this.regions.find(
+            //     (region) => region.name === this.currentUser.region,
+            // )?.id;
 
         },
         async getUserId() {

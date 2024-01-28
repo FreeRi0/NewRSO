@@ -16,17 +16,17 @@ export const useRegionalsStore = defineStore('regionals', {
             });
             this.regions = responseRegions.data;
         },
-        async getRegionals(region) {
-            const responseRegionals = await HTTP.get(
-                `/regionals/?search=${region}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            this.regionals = responseRegionals.data;
-        },
+        // async getRegionals(region) {
+        //     const responseRegionals = await HTTP.get(
+        //         `/regionals/?search=${region}`,
+        //         {
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 Authorization: 'Token ' + localStorage.getItem('Token'),
+        //             },
+        //         },
+        //     );
+        //     this.regionals = responseRegionals.data;
+        // },
     },
 });

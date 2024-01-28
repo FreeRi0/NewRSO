@@ -67,15 +67,13 @@ import { ref, onMounted, watch, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
-const emit = defineEmits(['uploadUserPic, updateUserPic']);
+const emit = defineEmits(['uploadUserPic, updateUserPic', 'changeBio']);
 const uploadUserPic = (userPic) => {
     console.log('photoUser', userPic);
     emit('uploadUserPic', userPic);
     console.log('userPic Uploaded!');
 };
-// const user = ref({
-//     bio: '',
-// });
+
 const userStore = useUserStore();
 let currentUser = storeToRefs(userStore);
 const regions = storeToRefs(userStore);
@@ -86,8 +84,7 @@ userStore.getRegions();
 //     user.value.media.photo1 = userPic;
 
 // };
-let bio= ref(currentUser.currentUser.value.bio)
-
+let bio = ref(currentUser.currentUser.value.bio);
 
 const media = ref({
     photo1: null,
@@ -102,7 +99,6 @@ const swal = inject('$swal');
 const counterSquad = computed(() => {
     return bio.value?.length || 0;
 });
-
 
 const getMedia = async () => {
     await HTTP.get(`/rsousers/me/media/`, {
@@ -122,12 +118,16 @@ const getMedia = async () => {
 
 const AddAbout = async () => {
     isLoading.value = true;
-    await HTTP.patch(`/rsousers/me/`, bio.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+    await HTTP.patch(
+        `/rsousers/me/`,
+        { bio: bio.value },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         },
-    })
+    )
         .then((response) => {
             isLoading.value = false;
             swal.fire({
@@ -137,7 +137,8 @@ const AddAbout = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-           bio.value = response.data;
+            // bio.value = response.data;
+            emit('changeBio', response.data.bio)
             console.log(response.data);
         })
         .catch(({ response }) => {

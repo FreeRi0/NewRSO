@@ -173,18 +173,18 @@ import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useUserStore } from '@features/store/index';
-import { useRegionalsStore } from '@features/store/regionals';
+// import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
-const regionalsStore = useRegionalsStore();
-regionalsStore.getRegions();
+// const regionalsStore = useRegionalsStore();
+// regionalsStore.getRegions();
 
-const {regions, regionals} = storeToRefs(regionalsStore);
-const region = ref(null);
+// const {regions, regionals} = storeToRefs(regionalsStore);
+// const region = ref(null);
 
-const getByRegionals = () => {
-    regionalsStore.getRegionals(region.value)
-}
+// const getByRegionals = () => {
+//     regionalsStore.getRegionals(region.value)
+// }
 const props = defineProps({
     isActive: {
         type: Boolean,
@@ -294,9 +294,9 @@ const removeClass = () => {
 };
 
 
-// const regions = ref({});
+const regions = ref({});
 
-// const regionals = ref([]);
+const regionals = ref([]);
 
 const headquartersIds = ref([]);
 const headquertersNames = ref([
@@ -391,41 +391,41 @@ const updateRegion = async () => {
         });
 };
 
-// const getRegions = async () => {
-//     try {
-//         const response = await HTTP.get(`/regions/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
+const getRegions = async () => {
+    try {
+        const response = await HTTP.get(`/regions/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
 
-//         regions.value = response.data;
-//         console.log(regions.value);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
+        regions.value = response.data;
+        console.log(regions.value);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
 
-// const getRegionals = async () => {
-//     try {
-//         const response = await HTTP.get(`/regionals/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
+const getRegionals = async () => {
+    try {
+        const response = await HTTP.get(`/regionals/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
 
-//         regionals.value = response.data;
-//         console.log(regionals.value);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
+        regionals.value = response.data;
+        console.log(regionals.value);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
 
 onMounted(async () => {
-    // await getRegions();
-    // await getRegionals();
+    await getRegions();
+    await getRegionals();
 
     await getHeadquarters();
 });
