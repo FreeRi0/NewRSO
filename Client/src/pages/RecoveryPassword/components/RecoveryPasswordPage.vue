@@ -1,8 +1,8 @@
 <template>
     <div class="AuthWrapper">
         <div class="container">
-            <div class="d-flex justify-end">
-                <v-card class="px-14 py-15" max-width="580">
+            <div class="d-flex">
+                <v-card class="px-14 py-15">
                     <img
                         src="@/app/assets/icon/cross.svg"
                         alt="cross"
@@ -85,24 +85,29 @@ const onBack = () => {
     padding-right: 98px !important;
     padding-left: 98px !important;
 }
+.d-flex {
+    justify-content: end;
+}
 .card_cross {
     position: absolute;
     top: 16px;
     right: 16px;
     cursor: pointer;
 }
+.v-card {
+    max-width: 580px;
+}
 .v-card-title {
     padding: 0;
     overflow: visible;
 }
 .v-card-title {
-    overflow: visible;
     font-size: 40px;
     font-weight: 600;
     font-family: Akrobat;
     padding-top: 0rem;
     @media screen and (max-width: 575px) {
-        font-size: 28px;
+        font-size: 32px;
     }
 }
 .v-card-text {
@@ -138,6 +143,38 @@ p {
     margin: 40px auto;
     margin-bottom: 15px;
     padding: 16px 32px;
+}
+
+@media ((max-width: 768px)) {
+    .d-flex {
+        justify-content: center;
+    }
+    .AuthWrapper {
+        min-height: 0;
+        padding-top: 100px;
+        padding-bottom: 138px;
+    }
+}
+@media ((max-width: 550px)) {
+    .py-15 {
+        padding-top: 60px !important;
+        padding-bottom: 40px !important;
+    }
+    .px-14 {
+        padding-right: 15px !important;
+        padding-left: 15px !important;
+    }
+    .card_cross {
+        right: 8px;
+    }
+}
+@media ((max-width: 550px)) {
+    .v-card-title {
+        font-size: 30px;
+    }
+    .AuthWrapper {
+        padding-bottom: 118px;
+    }
 }
 </style>
 @shared/components/selects/inputs

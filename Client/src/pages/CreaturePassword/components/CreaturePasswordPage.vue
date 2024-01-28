@@ -1,12 +1,13 @@
 <template>
     <div class="AuthWrapper">
         <v-container>
-            <div class="d-flex justify-end">
+            <div class="d-flex">
                 <v-card class="px-14 py-15" max-width="580">
                     <img
                         src="@/app/assets/icon/cross.svg"
                         alt="cross"
                         class="card_cross"
+                        @click="onBack"
                     />
                     <v-card-title class="text-center"
                         >Создание нового пароля</v-card-title
@@ -51,12 +52,14 @@ import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 import { usePage } from '@shared';
 
 usePage({ isHidden: true });
 
 const route = useRoute();
+const router = useRouter();
 
 const user = ref({});
 const new_password = ref('');
@@ -66,9 +69,12 @@ const auth = computed(() => ({
     uid: route.params.uid,
     token: route.params.token,
 }));
+const onBack = () => {
+    router.back();
+};
 
 const getPrivate = async () => {
-    await HTTP.get('/rsousers/me/', {
+    await HTTP.get('/users/me/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -118,11 +124,15 @@ const resetPasswordForm = async () => {
     padding-right: 98px !important;
     padding-left: 98px !important;
 }
+.d-flex {
+    justify-content: end;
+}
 
 .card_cross {
     position: absolute;
     top: 16px;
     right: 16px;
+    cursor: pointer;
 }
 .v-card-title {
     padding: 0;
@@ -136,11 +146,11 @@ const resetPasswordForm = async () => {
     font-family: Akrobat;
     padding-top: 0rem;
     @media screen and (max-width: 575px) {
-        font-size: 28px;
+        font-size: 32px;
     }
 }
 
-p {
+.LoginForm p {
     color: #35383f;
     font-family: 'BertSans';
     font-size: 16px;
@@ -152,6 +162,38 @@ p {
 .creaturePass__input {
     text-indent: 16px;
     width: 100%;
+}
+@media ((max-width: 768px)) {
+    .d-flex {
+        justify-content: center;
+    }
+    .AuthWrapper {
+        min-height: 0;
+        padding-top: 100px;
+        padding-bottom: 138px;
+    }
+}
+@media ((max-width: 625px)) {
+    .py-15 {
+        padding-top: 60px !important;
+        padding-bottom: 40px !important;
+    }
+    .px-14 {
+        padding-right: 40px !important;
+        padding-left: 40px !important;
+    }
+    .card_cross {
+        right: 8px;
+    }
+}
+@media ((max-width: 440px)) {
+    .px-14 {
+        padding-right: 15px !important;
+        padding-left: 15px !important;
+    }
+    .v-card-title {
+        font-size: 30px;
+    }
 }
 </style>
 @shared/components/selects/inputs
