@@ -7,7 +7,7 @@
         :placeholder="placeholder"
         v-bind="$attrs"
         item-title="name"
-        item-value="id"
+        item-value="value"
     >
         <template #selection="{ item }">
             <span>{{ item.raw.name }}</span>

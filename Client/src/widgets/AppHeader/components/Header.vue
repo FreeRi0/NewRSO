@@ -34,7 +34,10 @@
                 <div ref="navMenu" class="header__nav-container no-visible">
                     <div class="header__overlay" @click="removeClass()"></div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item" v-if="user.user.value">
+                        <li
+                            class="header__nav-item"
+                            v-if="user.currentUser.value"
+                        >
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
@@ -66,7 +69,10 @@
             </nav>
 
             <nav class="header__nav nav-user">
-                <div class="nav-user__application-count" v-if="user.user.value">
+                <div
+                    class="nav-user__application-count"
+                    v-if="user.currentUser.value"
+                >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <a href="#">
                         <img
@@ -95,13 +101,18 @@
                             alt="Иконка геолокации"
                         /> -->
 
-                        <span v-if="user.user.value?.region"
+                        <span v-if="user.currentUser.value?.region"
                             >{{
                                 regionals.find(
-                                    (reg) => reg.region === user.user.value.region,
+                                    (reg) =>
+                                        reg.region ===
+                                        user.currentUser.value.region,
                                 )?.name
                             }}
                         </span>
+                        <!-- <p v-if="user.currentUser.value?.region">
+                            <div v-for="item in getByRegionals" :key="item.id">{{ item.name }}</div>
+                        </p> -->
 
                         <span v-else>Выберите региональное отделение</span>
                     </button>
@@ -127,6 +138,7 @@
                             name="select_education"
                             id="select-education"
                             placeholder="Ваш регион"
+                            @change="getByRegionals"
                             v-model="region"
                             address="regions/"
                         ></Select>
@@ -146,16 +158,16 @@
 
                 <div class="nav-user__menu user-menu">
                     <img
-                        v-if="!user.user.value"
+                        v-if="!user.currentUser.value"
                         src="@app/assets/user-avatar.png"
                         alt="Фото бойца (заглушка)"
                     />
 
                     <Dropdown
-                        v-if="user.user.value"
+                        v-if="user.currentUser.value"
                         :items="userPages"
                         :image="true"
-                        :url="user.user.value.media?.photo"
+                        :url="user.currentUser.value.media?.photo"
                         desc="Фотография пользователя"
                         @updateUser="userUpdate"
                     />
@@ -168,14 +180,14 @@
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
-import { Select } from '@shared/components/selects';
+import { Select, sortByEducation } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+// import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
-const userStore = useUserStore();
-// userStore.getUser();
+
 const props = defineProps({
     isActive: {
         type: Boolean,
@@ -186,17 +198,47 @@ const props = defineProps({
     },
 });
 
-const quantityIsActive = ref(props.quantityActive);
+const regionals = ref([]);
 
-const region = ref(null);
+const userStore = useUserStore();
+// const regionalsStore = useRegionalsStore();
+const getRegionals = async () => {
+    try {
+        const regionalsResp = await HTTP.get('/regionals/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        regionals.value = regionalsResp.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+// regionalsStore.getRegionals();
+
+// const regionals = storeToRefs(regionalsStore);
+// regionalsStore.getRegionals();
+
+const quantityIsActive = ref(props.quantityActive);
 
 const router = useRouter();
 const user = storeToRefs(userStore);
-console.log('user', user.user.value);
+console.log('user', user.currentUser.value);
 
+// const region = ref(null);
+// console.log('userreg', region);
+
+// const getByRegionals = computed(() => {
+//     return regionalsStore.getRegionals(region.value);
+//     console.log('reg', region.value);
+// });
+
+// console.log('regionalssss', getByRegionals);
 const userUpdate = (userData) => {
     console.log('UserUpdate', userData);
-    user.user.value = userData;
+    user.currentUser.value = userData;
 };
 
 const pages = ref([
@@ -211,16 +253,13 @@ const pages = ref([
 const userPages = computed(() => [
     {
         title: 'Моя страница',
-        name: 'userpage',
-        params: {
-            id: user.user?.value?.id,
-        },
+        name: 'mypage',
     },
     {
         title: 'Мой отряд',
         name: 'lso',
         params: {
-            id: user.user?.value?.detachment_id,
+            id: user.currentUser?.value?.detachment_id,
         },
     },
     {
@@ -228,7 +267,7 @@ const userPages = computed(() => [
         name: 'HQ',
         path: 'regionals',
         params: {
-            id: user.user?.value?.educational_headquarter_id,
+            id: user.currentUser?.value?.educational_headquarter_id,
         },
     },
     {
@@ -237,7 +276,7 @@ const userPages = computed(() => [
         path: 'locals',
         params: {
             id:
-                user.user?.value?.local_headquarter_id ??
+                user.currentUser?.value?.local_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
         },
     },
@@ -247,7 +286,7 @@ const userPages = computed(() => [
         path: 'regionals',
         params: {
             id:
-                user.user?.value?.regional_headquarter_id ??
+                user.currentUser?.value?.regional_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
         },
     },
@@ -257,7 +296,7 @@ const userPages = computed(() => [
         path: 'districts',
         params: {
             id:
-                user.user?.value?.district_headquarter_id ??
+                user.currentUser?.value?.district_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
         },
     },
@@ -265,7 +304,7 @@ const userPages = computed(() => [
         title: 'Центральный штаб',
         name: 'CentralHQ',
         params: {
-            id: user.user.value?.central_headquarter_id,
+            id: user.currentUser.value?.central_headquarter_id,
         },
     },
     { title: 'Активные заявки', name: 'active' },
@@ -286,10 +325,6 @@ const removeClass = () => {
     const menu = navMenu.value;
     menu.classList.toggle('no-visible');
 };
-
-const regions = ref({});
-
-const regionals = ref([]);
 
 const headquartersIds = ref([]);
 const headquertersNames = ref([
@@ -325,12 +360,15 @@ const getHeadquarters = async () => {
 
         if (!user.user.value[item.id]) continue;
 
-        const { data } = await HTTP.get(`${item.path}/${user.user.value[item.id]}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+        const { data } = await HTTP.get(
+            `${item.path}/${user.user.value[item.id]}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        });
+        );
 
         const { data: dataParent } = await HTTP.get(
             `${item.parentPath}/${data[item.parentHqId]}`,
@@ -349,77 +387,29 @@ const getHeadquarters = async () => {
     }
 };
 
-// const getUser = async () => {
-//     try {
-//         const response = await HTTP.get('/rsousers/me/', {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         user.value = response.data;
-//         region.value = user.value.region;
-//         console.log(user.value);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-// console.log('dddddd', id);
-
 const updateRegion = async () => {
-    await HTTP.patch('/rsousers/me/region/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            show.value = !show.value;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getRegions = async () => {
     try {
-        const response = await HTTP.get(`/regions/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+        const updateRegResponse = await HTTP.patch(
+            '/rsousers/me/',
+            {
+                region: region.value,
             },
-        });
-
-        regions.value = response.data;
-        console.log(regions.value);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const getRegionals = async () => {
-    try {
-        const response = await HTTP.get(`/regionals/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        });
-
-        regionals.value = response.data;
-        console.log(regionals.value);
+        );
+        // region.value = updateRegResponse.data;
+        show.value = !show.value;
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
 onMounted(async () => {
-    await getRegions();
     await getRegionals();
-
     await getHeadquarters();
 });
 </script>

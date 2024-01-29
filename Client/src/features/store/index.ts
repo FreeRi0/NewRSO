@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-import { useRoute} from 'vue-router';
+import { useRoute } from 'vue-router';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
         user: {},
+        currentUser: {},
     }),
     actions: {
         async getUser() {
@@ -14,7 +15,7 @@ export const useUserStore = defineStore('user', {
                     Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
             });
-            this.user = response.data;
+            this.currentUser = response.data;
         },
         async getUserId() {
             const route = useRoute();
@@ -26,8 +27,6 @@ export const useUserStore = defineStore('user', {
                 },
             });
             this.user = response.data;
-
         },
     },
-
 });

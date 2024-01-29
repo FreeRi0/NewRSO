@@ -305,38 +305,39 @@ const handleTermsState = () => {
     validated.value = false;
 };
 const RegisterUser = async () => {
-    isLoading.value = true;
-    validated.value = true;
-    HTTP.post('/register/', form.value, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((response) => {
-            form.value = response.data;
-            console.log(response.data);
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            router.push('/');
-        })
-
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+    try {
+        isLoading.value = false;
+        validated.value = true;
+        const response = await HTTP.post('/register/', form.value, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
+        form.value = response.data;
+        console.log(response.data);
+        isLoading.value = false;
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        router.push('/');
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
+    }
 };
 </script>

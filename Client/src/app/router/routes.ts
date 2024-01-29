@@ -539,6 +539,21 @@ const routes: RouteRecordRaw[] = [
         },
         children: [
             {
+                path: '/MyPage',
+                meta: {
+                    redirectTo: 'mypage',
+                    label: 'Моя страница',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'mypage',
+                        component: () =>
+                            import('@pages/UserPage/components/MyUserPage.vue'),
+                    },
+                ],
+            },
+            {
                 path: ':id',
                 meta: {
                     redirectTo: 'userpage',
