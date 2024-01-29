@@ -2,11 +2,9 @@
     <div class="user-metric">
         <bannerPhoto
             :banner="user?.media?.banner"
-
             @upload-wall="uploadWall"
             @update-wall="updateWall"
             @delete-wall="deleteWall"
-
         ></bannerPhoto>
         <Avatar
             :avatar="user?.media?.photo"
@@ -47,9 +45,7 @@
                             <p v-if="user.region">
                                 {{
                                     regionals.find(
-                                        (reg) =>
-                                            reg.region ===
-                                            user.region,
+                                        (reg) => reg.region === user.region,
                                     )?.name
                                 }}
                             </p>
@@ -110,7 +106,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
@@ -135,7 +131,6 @@ const props = defineProps({
     education: {
         type: Object,
     },
-
 });
 
 const emit = defineEmits(['upload', 'update', 'delete']);
@@ -175,70 +170,46 @@ const deleteWall = (imageWall) => {
     console.log('delete');
 };
 
-
-
-
 const regionals = ref([]);
 const detachment = ref({});
 const educationalHeadquarter = ref({});
 const participant = ref({});
 
-const getRegionals = async () => {
-    await HTTP.get(`/regionals/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regionals.value = response.data;
-            console.log(regionals.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+const getUserData = async () => {
+    try {
+        const responseRegionals = await HTTP.get(`/regionals/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        const responseSquad = ref(null);
+        if (props.user.detachment_id) {
+            let id = props.user.detachment_id;
+            const responseSquad = await HTTP.get(`/detachments/${id}/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+        }
+        const responseEducHead = ref(null);
+        if (props.user.educational_headquarter_id) {
+            let id = props.user.educational_headquarter_id;
+            const responseEducHead = await HTTP.get(`/educationals/${id}/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+        }
+        regionals.value = responseRegionals.data;
+        detachment.value = responseSquad.data;
+        educationalHeadquarter.value = responseEducHead.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
-
-const getDetachment = async () => {
-    let id = props.user.detachment_id;
-    await HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            detachment.value = response.data;
-            console.log(regionals.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getEducationalHeadquarter = async () => {
-    let id = props.user.educational_headquarter_id;
-    await HTTP.get(`/educationals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educationalHeadquarter.value = response.data;
-            console.log(regionals.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-
-onMounted(() => {
-    getRegionals();
-    getDetachment();
-    getEducationalHeadquarter();
-});
 
 watch(
     () => props.user,
@@ -247,10 +218,13 @@ watch(
         if (Object.keys(props.user).length === 0) {
             return;
         }
-        getDetachment();
-        getEducationalHeadquarter();
+        getUserData();
     },
 );
+
+onMounted(() => {
+    getUserData();
+});
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {
