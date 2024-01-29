@@ -27,7 +27,7 @@
             color="primary"
         ></Button>
     </div>
-    <div class="change_Password" @submit.prevent="resetPasswordForm">
+    <!-- <div class="change_Password" @submit.prevent="resetPasswordForm">
         <p class="pass-title">Изменить пароль</p>
         <Input
             placeholder="   Введите старый пароль"
@@ -45,10 +45,10 @@
             v-model:value="user.re_password"
         ></Input>
         <Button class="save" label="Сохранить" color="primary"></Button>
-    </div>
+    </div> -->
 </template>
 <script setup>
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, computed } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
@@ -60,15 +60,15 @@ const userStore = useUserStore();
 let currentUser = storeToRefs(userStore);
 let username = ref(currentUser.currentUser.value.username);
 const show = ref(false);
-const password = ref('');
-const re_password = ref('');
-const visible = ref(false);
-const visibleRe = ref(false);
+// const password = ref('');
+// const re_password = ref('');
+// const visible = ref(false);
+// const visibleRe = ref(false);
 
-const auth = computed(() => ({
-    uid: route.params.uid,
-    token: route.params.token,
-}));
+// const auth = computed(() => ({
+//     uid: route.params.uid,
+//     token: route.params.token,
+// }));
 
 const swal = inject('$swal');
 const isError = ref([]);
@@ -107,23 +107,23 @@ const updateUsername = async () => {
             });
         }
     }
-    const resetPasswordForm = async () => {
-        if (password.value !== re_password.value) {
-            console.error('Passwords do not match');
-            return;
-        }
+    // const resetPasswordForm = async () => {
+    //     if (password.value !== re_password.value) {
+    //         console.error('Passwords do not match');
+    //         return;
+    //     }
 
-        try {
-            const response = await HTTP.post('/users/reset_password_confirm/', {
-                ...auth.value,
-                password: password.value,
-            });
-            console.log(response.data);
-            localStorage.setItem('Token', response.data.auth_token);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    //     try {
+    //         const response = await HTTP.post('/users/reset_password_confirm/', {
+    //             ...auth.value,
+    //             password: password.value,
+    //         });
+    //         console.log(response.data);
+    //         localStorage.setItem('Token', response.data.auth_token);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 };
 </script>
 <style lang="scss" scoped>

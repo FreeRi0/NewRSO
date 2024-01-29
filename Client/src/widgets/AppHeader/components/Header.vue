@@ -204,7 +204,7 @@ const userStore = useUserStore();
 // const regionalsStore = useRegionalsStore();
 const getRegionals = async () => {
     try {
-        const regionalsResp = await HTTP.patch('/regionals//', {
+        const regionalsResp = await HTTP.get('/regionals/', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -409,7 +409,7 @@ const updateRegion = async () => {
 };
 
 onMounted(async () => {
-    await getByRegionals();
+    await getRegionals();
     await getHeadquarters();
 });
 </script>
