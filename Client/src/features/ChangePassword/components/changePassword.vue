@@ -6,23 +6,36 @@
                 {{ visible ? 'Скрыть' : 'Изменить' }}
             </button>
         </div>
-        <Input v-show="visible"
+        <Input
+            v-show="visible"
             placeholder="   login"
             name="surname"
             v-model:value="user.username"
         />
-        <p class="error" v-if="isError.last_name">{{ 'Фамилия пользователя, ' +  isError.last_name }}</p>
-            <p class="error" v-if="isError.first_name">{{'Имя пользователя, ' + isError.first_name }}</p>
-            <p class="error" v-if="isError.gender">{{'Гендер, ' + isError.gender }}</p>
-            <p class="error" v-if="isError.username">{{'' + isError.username }}</p>
-        <Button @click="updateUsername" v-show="visible" class="save" label="Сохранить" color="primary"></Button>
+        <p class="error" v-if="isError.last_name">
+            {{ 'Фамилия пользователя, ' + isError.last_name }}
+        </p>
+        <p class="error" v-if="isError.first_name">
+            {{ 'Имя пользователя, ' + isError.first_name }}
+        </p>
+        <p class="error" v-if="isError.gender">
+            {{ 'Гендер, ' + isError.gender }}
+        </p>
+        <p class="error" v-if="isError.username">{{ '' + isError.username }}</p>
+        <Button
+            @click="updateUsername"
+            v-show="visible"
+            class="save"
+            label="Сохранить"
+            color="primary"
+        ></Button>
     </div>
-    <div class="change_Password">
+    <div class="change_Password" @submit.prevent="resetPasswordForm">
         <p class="pass-title">Изменить пароль</p>
         <Input
             placeholder="   Введите старый пароль"
             name="password"
-            v-model:value="user.password"
+            v-model:value="user.password_old"
         ></Input>
         <Input
             placeholder="   Придумайте новый пароль"
@@ -42,15 +55,23 @@ import { ref, computed, onMounted, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
 
 const user = ref({
     username: '',
-    password: '',
-    re_password: '',
+    password_old: '',
 });
+const password = ref('');
+const re_password = ref('');
 const swal = inject('$swal');
 const isError = ref([]);
 const visible = ref(false);
+const route = useRoute();
+
+const auth = computed(() => ({
+    uid: route.params.uid,
+    token: route.params.token,
+}));
 
 const getUser = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -72,7 +93,7 @@ onMounted(() => {
     getUser();
 });
 
-const updateUsername = async() => {
+const updateUsername = async () => {
     await HTTP.patch('/rsousers/me/', user.value, {
         headers: {
             'Content-Type': 'application/json',
@@ -101,8 +122,24 @@ const updateUsername = async() => {
                 timer: 1500,
             });
         });
-}
+};
+const resetPasswordForm = async () => {
+    if (password.value !== re_password.value) {
+        console.error('Passwords do not match');
+        return;
+    }
 
+    try {
+        const response = await HTTP.post('/users/reset_password_confirm/', {
+            ...auth.value,
+            password: password.value,
+        });
+        console.log(response.data);
+        localStorage.setItem('Token', response.data.auth_token);
+    } catch (error) {
+        console.error(error);
+    }
+};
 </script>
 <style lang="scss" scoped>
 .change_Login {
@@ -111,7 +148,7 @@ const updateUsername = async() => {
     padding: 30px;
     max-width: 480px;
     @media screen and (max-width: 575px) {
-      padding: 20px 16px 40px 16px;
+        padding: 20px 16px 40px 16px;
     }
     &_title {
         display: flex;
@@ -128,7 +165,7 @@ const updateUsername = async() => {
     margin-bottom: 80px;
     max-width: 480px;
     @media screen and (max-width: 575px) {
-      padding: 20px 16px 40px 16px;
+        padding: 20px 16px 40px 16px;
     }
 }
 
@@ -148,7 +185,7 @@ const updateUsername = async() => {
 
 .changeLog {
     font-family: 'Akrobat';
-    color: #1F7CC0;
+    color: #1f7cc0;
     font-size: 16px;
     font-weight: 500;
 }

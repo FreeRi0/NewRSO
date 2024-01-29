@@ -76,7 +76,7 @@ const onBack = () => {
 };
 
 const getPrivate = async () => {
-    await HTTP.get('/users/me/', {
+    await HTTP.get('/rsousers/me/', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
