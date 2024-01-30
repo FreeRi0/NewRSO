@@ -28,7 +28,7 @@
                     type="text"
                     id="search"
                     class="squads-search__input"
-                    v-model="searchSquads"
+                    v-model="name"
                     placeholder="Поищем отряд?"
                 />
                 <svg
@@ -125,11 +125,11 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
+                <squadsList :squads="squads"></squadsList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
+                <horizontalList :squads="squads"></horizontalList>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -150,68 +150,54 @@ import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
+import { useSquadsStore } from '@features/store/squads';
+import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
-// import { usePage } from '@shared';
-
-// usePage();
 // import squads from '@entities/Squads/squads';
+// const squadsStore = useSquadsStore();
 
+// const squads = storeToRefs(useSquadsStore);
 const squads = ref([]);
+const filterSquads = ref([]);
 const categories = ref([]);
-const educations = ref([]);
-
-const getCategories = async () => {
-    await HTTP.get('/areas/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            categories.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getEducations = async () => {
-    await HTTP.get('/eduicational_institutions/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educations.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+const name = ref('');
 
 const getSquads = async () => {
-    await HTTP.get('/detachments/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squads.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const categoryResponse = await HTTP.get('/areas/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        const squadsResponse = await HTTP.get(`/detachments/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        categories.value = categoryResponse.data;
+        squads.value = squadsResponse.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-onMounted(() => {
-    getSquads();
-    getCategories();
-});
+const searchSquad = async (name) => {
+    try {
+        const filteredSquads = await HTTP.get(`/detachments/?search=${name}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        squads.value = filteredSquads.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
 const squadsVisible = ref(20);
 
 const step = ref(20);
@@ -223,7 +209,6 @@ const picked = ref('');
 
 const vertical = ref(true);
 
-const searchSquads = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -240,68 +225,76 @@ const sortOptionss = ref([
     { value: 'members_count', name: 'Количеству участников' },
 ]);
 
-const sortedSquads = computed(() => {
-    let tempSquads = squads.value;
+// const sortedSquads = computed(() => {
+//     let tempSquads = squads.value;
 
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
+//     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-    tempSquads = tempSquads.filter((item) => {
-        // console.log(educational_institution.id);
-        return (
-            selectedSort.value == null ||
-            item.educational_institution == selectedSort.value
-        );
-    });
+//     tempSquads = tempSquads.filter((item) => {
+//         // console.log(educational_institution.id);
+//         return (
+//             selectedSort.value == null ||
+//             item.educational_institution == selectedSort.value
+//         );
+//     });
 
-    tempSquads = tempSquads.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchSquads.value.toUpperCase());
-    });
+//     // tempSquads = tempSquads.filter((item) => {
+//     //     return item.name
+//     //         .toUpperCase()
+//     //         .includes(searchSquads.value.toUpperCase());
+//     // });
+//     searchSquad(name.value);
 
-    tempSquads = tempSquads.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+//     tempSquads = tempSquads.sort((a, b) => {
+//         if (sortBy.value == 'alphabetically') {
+//             let fa = a.name.toLowerCase(),
+//                 fb = b.name.toLowerCase();
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'founding_date') {
-            let fc = a.founding_date,
-                fn = b.founding_date;
+//             if (fa < fb) {
+//                 return -1;
+//             }
+//             if (fa > fb) {
+//                 return 1;
+//             }
+//             return 0;
+//         } else if (sortBy.value == 'founding_date') {
+//             let fc = a.founding_date,
+//                 fn = b.founding_date;
 
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'members_count') {
-            return a.members - b.members;
-        }
-    });
+//             if (fc < fn) {
+//                 return -1;
+//             }
+//             if (fc > fn) {
+//                 return 1;
+//             }
+//             return 0;
+//         } else if (sortBy.value == 'members_count') {
+//             return a.members - b.members;
+//         }
+//     });
 
-    if (!ascending.value) {
-        tempSquads.reverse();
-    }
+//     if (!ascending.value) {
+//         tempSquads.reverse();
+//     }
 
-    if (!picked.value) {
-        return tempSquads;
-    }
+//     if (!picked.value) {
+//         return tempSquads;
+//     }
 
-    tempSquads = tempSquads.filter((item) => item.area === picked.value);
+//     tempSquads = tempSquads.filter((item) => item.area === picked.value);
 
-    return tempSquads;
+//     return tempSquads;
+// });
+
+const searchSquads = computed(() => {
+    return searchSquad(name.value)
+});
+
+onMounted(() => {
+    getSquads();
 });
 </script>
 <style lang="scss" scoped>
-
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
@@ -375,7 +368,7 @@ const sortedSquads = computed(() => {
         flex-wrap: wrap;
 
         &__item {
-            padding: 6px 24px;
+            padding: 3px 24px;
             border: 1px solid black;
             border-radius: 30px;
             text-align: center;
@@ -406,6 +399,12 @@ const sortedSquads = computed(() => {
     background-color: #1c5c94;
     color: white;
     border: 1px solid #1c5c94;
+}
+
+.sort-filters {
+    flex-wrap: wrap;
+    margin-top: 30px;
+    align-items: end;
 }
 
 .squads-search {
