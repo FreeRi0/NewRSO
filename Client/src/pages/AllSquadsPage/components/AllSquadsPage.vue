@@ -28,7 +28,7 @@
                     type="text"
                     id="search"
                     class="squads-search__input"
-                    v-model="name"
+                    v-model="searchSquad"
                     placeholder="Поищем отряд?"
                 />
                 <svg
@@ -125,11 +125,11 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList :squads="squads"></squadsList>
+                <squadsList :squads="sortedSquads"></squadsList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="squads"></horizontalList>
+                <horizontalList :squads="sortedSquads"></horizontalList>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -158,7 +158,7 @@ import { HTTP } from '@app/http';
 
 // const squads = storeToRefs(useSquadsStore);
 const squads = ref([]);
-const filterSquads = ref([]);
+// const filterSquads = ref([]);
 const categories = ref([]);
 const name = ref('');
 
@@ -184,22 +184,22 @@ const getSquads = async () => {
     }
 };
 
-const searchSquad = async (name) => {
-    try {
-        const filteredSquads = await HTTP.get(`/detachments/?search=${name}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        squads.value = filteredSquads.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+// const searchSquad = async (name) => {
+//     try {
+//         const filteredSquads = await HTTP.get(`/detachments/?search=${name}`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+//         squads.value = filteredSquads.data;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 const squadsVisible = ref(20);
-
+const searchSquad = ref('');
 const step = ref(20);
 
 const ascending = ref(true);
@@ -225,70 +225,70 @@ const sortOptionss = ref([
     { value: 'members_count', name: 'Количеству участников' },
 ]);
 
-// const sortedSquads = computed(() => {
-//     let tempSquads = squads.value;
+const sortedSquads = computed(() => {
+    let tempSquads = squads.value;
 
-//     tempSquads = tempSquads.slice(0, squadsVisible.value);
+    tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-//     tempSquads = tempSquads.filter((item) => {
-//         // console.log(educational_institution.id);
-//         return (
-//             selectedSort.value == null ||
-//             item.educational_institution == selectedSort.value
-//         );
-//     });
+    tempSquads = tempSquads.filter((item) => {
+        // console.log(educational_institution.id);
+        return (
+            selectedSort.value == null ||
+            item.educational_institution == selectedSort.value
+        );
+    });
 
-//     // tempSquads = tempSquads.filter((item) => {
-//     //     return item.name
-//     //         .toUpperCase()
-//     //         .includes(searchSquads.value.toUpperCase());
-//     // });
-//     searchSquad(name.value);
+    tempSquads = tempSquads.filter((item) => {
+        return item.name
+            .toUpperCase()
+            .includes(searchSquad.value.toUpperCase());
+    });
+    // searchSquad(name.value);
 
-//     tempSquads = tempSquads.sort((a, b) => {
-//         if (sortBy.value == 'alphabetically') {
-//             let fa = a.name.toLowerCase(),
-//                 fb = b.name.toLowerCase();
+    tempSquads = tempSquads.sort((a, b) => {
+        if (sortBy.value == 'alphabetically') {
+            let fa = a.name.toLowerCase(),
+                fb = b.name.toLowerCase();
 
-//             if (fa < fb) {
-//                 return -1;
-//             }
-//             if (fa > fb) {
-//                 return 1;
-//             }
-//             return 0;
-//         } else if (sortBy.value == 'founding_date') {
-//             let fc = a.founding_date,
-//                 fn = b.founding_date;
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        } else if (sortBy.value == 'founding_date') {
+            let fc = a.founding_date,
+                fn = b.founding_date;
 
-//             if (fc < fn) {
-//                 return -1;
-//             }
-//             if (fc > fn) {
-//                 return 1;
-//             }
-//             return 0;
-//         } else if (sortBy.value == 'members_count') {
-//             return a.members - b.members;
-//         }
-//     });
+            if (fc < fn) {
+                return -1;
+            }
+            if (fc > fn) {
+                return 1;
+            }
+            return 0;
+        } else if (sortBy.value == 'members_count') {
+            return a.members - b.members;
+        }
+    });
 
-//     if (!ascending.value) {
-//         tempSquads.reverse();
-//     }
+    if (!ascending.value) {
+        tempSquads.reverse();
+    }
 
-//     if (!picked.value) {
-//         return tempSquads;
-//     }
+    if (!picked.value) {
+        return tempSquads;
+    }
 
-//     tempSquads = tempSquads.filter((item) => item.area === picked.value);
+    tempSquads = tempSquads.filter((item) => item.area === picked.value);
 
-//     return tempSquads;
-// });
-
-const searchSquads = computed(() => {
-    return searchSquad(name.value)
+    return tempSquads;
 });
+
+// const searchSquads = computed(() => {
+//     return searchSquad(name.value)
+// });
 
 onMounted(() => {
     getSquads();
