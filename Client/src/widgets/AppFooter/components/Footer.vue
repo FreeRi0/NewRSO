@@ -64,7 +64,7 @@
                 <ul class="footer__privacy-policy-list">
                     <li class="footer__privacy-policy-item">
                         <router-link to="/privacy_policy"
-                            >Политика конфидициальности</router-link
+                            >Политика конфиденциальности</router-link
                         >
                     </li>
                     <li class="footer__user-agreement">

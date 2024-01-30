@@ -29,8 +29,13 @@
                 </div>
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
-                        <div class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
+                        <div class="hq-data__participant-counter-HQ">
+                            <span
+                                >{{
+                                    headquarter.participants_count
+                                }}
+                                участников</span
+                            >
                         </div>
                         <div class="hq-data__social-network">
                             <div class="hq-data__link-vk">
@@ -90,19 +95,24 @@
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list-Local">
-                        <li class="Squad-HQ__date">
+                        <li class="Squad-HQ__date-local">
                             <time datetime="2022-09-10"
                                 >{{ localHeadquarter.founding_date }} — дата
                                 проведения первого Общего собрания МШ</time
                             >
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
+                            <span
+                                >{{
+                                    localHeadquarter.participants_count
+                                }}
+                                участников</span
+                            >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{
-                                    localHeadquarter.participants_count
+                                    districtHeadquarter.members_count
                                 }}
                                 действующих членов</span
                             >
@@ -167,19 +177,24 @@
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list-Reg">
-                        <li class="Squad-HQ__date">
+                        <li class="Squad-HQ__date-Reg">
                             <time datetime="2022-09-10"
                                 >{{ districtHeadquarter.founding_date }} — дата
                                 начала функционирования ОШ</time
                             >
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
+                            <span
+                                >{{
+                                    districtHeadquarter.participants_count
+                                }}
+                                участников</span
+                            >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{
-                                    districtHeadquarter.participants_count
+                                    districtHeadquarter.members_count
                                 }}
                                 действующих членов</span
                             >
@@ -244,19 +259,24 @@
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list-Reg">
-                        <li class="Squad-HQ__date">
+                        <li class="Squad-HQ__date-Reg">
                             <time datetime="2022-09-10"
                                 >{{ regionalHeadquarter.conference_date }} —
                                 дата учредительной конференции РШ</time
                             >
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
+                            <span
+                                >{{
+                                    regionalHeadquarter.participants_count
+                                }}
+                                участников</span
+                            >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{
-                                    regionalHeadquarter.participants_count
+                                    regionalHeadquarter.members_count
                                 }}
                                 действующих членов</span
                             >
@@ -327,22 +347,35 @@
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list">
-                        <!-- <li class="Squad-HQ__university">
-                            <p>{{ edict.name }}</p>
-                        </li> -->
-                        <li class="Squad-HQ__date">
-                            <time datetime="2022-09-10">{{
-                                centralHeadquarter.founding_date
-                            }}</time>
+                        <li class="Squad-HQ__date-central">
+                            <time datetime="2022-09-10"
+                                >{{
+                                    centralHeadquarter.rso_founding_congress_date
+                                }}
+                                — дата первого Учредительного Съезда РСО</time
+                            >
+                        </li>
+                        <li class="hq-data__participant-counter">
+                            <span
+                                >{{
+                                    centralHeadquarter.participants_count
+                                }}
+                                участников</span
+                            >
+                        </li>
+                        <li class="hq-data__participant-counter-">
+                            <span
+                                >{{
+                                    centralHeadquarter.members_count
+                                }}
+                                действующих членов</span
+                            >
                         </li>
                     </ul>
                 </div>
                 <div class="hq-data__contacts-wrapper">
-                    <div class="hq-data__contacts">
-                        <div class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
-                        </div>
-                        <div class="hq-data__social-network">
+                    <div class="hq-data__contacts-central">
+                        <div class="hq-data__social-network-central">
                             <div class="hq-data__link-vk">
                                 <a
                                     :href="centralHeadquarter.social_vk"
@@ -586,57 +619,65 @@ onMounted(() => {
     font-weight: 600;
     line-height: normal;
 }
-.slogan,
+.slogan {
+    margin-top: 28px;
+    margin-bottom: 9.5px;
+}
 .working_slogan {
-    margin-top: 20px;
     margin-bottom: 9.5px;
 }
 .Squad-HQ__list {
     margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: 380px 300px;
+    display: flex;
+    flex-wrap: wrap;
 }
 .Squad-HQ__list-Reg {
     margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: 410px 120px 180px;
+    display: flex;
+    flex-wrap: wrap;
 }
 .Squad-HQ__list-Local {
     margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: 480px 120px 180px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.Squad-HQ__list li {
-    border-right: none;
-    height: 20px;
-    margin: 0;
-}
+.Squad-HQ__list li,
+.Squad-HQ__list-Local li,
 .Squad-HQ__list-Reg li {
     border-right: none;
-    height: 20px;
     margin: 0;
-    border-right: 1px solid #35383f;
-    margin-right: 8px;
 }
-.Squad-HQ__list-Local li {
-    border-right: none;
-    height: 20px;
-    margin: 0;
-    border-right: 1px solid #35383f;
-    margin-right: 8px;
-}
+
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
     margin-right: 8px;
     padding-right: 8px;
 }
-.Squad-HQ__date {
+.Squad-HQ__date,
+.Squad-HQ__date-local,
+.Squad-HQ__date-Reg {
     display: flex;
+}
+.Squad-HQ__date-local time,
+.Squad-HQ__date-Reg time,
+.Squad-HQ__date-central time {
+    border-right: 1px solid #35383f;
+    margin-right: 8px;
+    padding-right: 8px;
 }
 .Squad-HQ__date p {
     margin-right: 22px;
 }
+.hq-data__participant-counter-HQ span {
+    border-right: none;
+}
+.hq-data__participant-counter span {
+    border-right: 1px solid #35383f;
+    margin-right: 8px;
+    padding-right: 8px;
+}
+
 .hq-data__link {
     border-radius: 10px;
     background: #39bfbf;
@@ -655,22 +696,70 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
 }
-.hq-data__contacts {
-    display: grid;
-}
+
 .hq-data__contacts {
     display: flex;
     flex-direction: column;
 }
+
 .hq-data__social-network {
     display: flex;
     justify-content: space-between;
     margin: 12px 0 0;
 }
-.hq-data__social-network-Reg {
+.hq-data__social-network-Reg,
+.hq-data__social-network-central {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     margin: 12px 0 0;
     column-gap: 12px;
+}
+
+@media ((max-width: 1095px)) {
+    .Squad-HQ__university p {
+        border-right: none;
+    }
+    .hq-data__wrapper {
+        margin: 22px 0 16px 260px;
+    }
+}
+@media ((max-width: 841px)) {
+    .Squad-HQ__date-local time,
+    .Squad-HQ__date-central time {
+        border-right: none;
+    }
+}
+
+@media ((max-width: 768px)) {
+    .hq-metric {
+        grid-template-columns: 10px 135px 135px 2fr 16px;
+    }
+    .hq-data__wrapper {
+        margin: 22px 0 16px 240px;
+    }
+    .hq-data__contacts-wrapper {
+        display: grid;
+        row-gap: 20px;
+    }
+    .hq-data__contacts {
+        align-items: start;
+    }
+    .hq-data__social-network {
+        column-gap: 12px;
+    }
+    .Squad-HQ__date-Reg time {
+        border-right: none;
+    }
+}
+@media ((max-width: 590px)) {
+    .hq-data__wrapper {
+        margin: 0px 0 16px 18px;
+    }
+    .hq-metric__bottom {
+        grid-row-start: 4;
+    }
+    .Squad-HQ__date p {
+        margin-right: 10px;
+    }
 }
 </style>

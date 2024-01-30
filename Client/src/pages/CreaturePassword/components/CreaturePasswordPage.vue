@@ -1,14 +1,15 @@
 <template>
     <div class="AuthWrapper">
         <v-container>
-            <div class="d-flex justify-end">
+            <div class="d-flex">
                 <v-card class="px-14 py-15" max-width="580">
                     <img
                         src="@/app/assets/icon/cross.svg"
                         alt="cross"
                         class="card_cross"
+                        @click="onBack"
                     />
-                    <v-card-title class="text-h4 text-center"
+                    <v-card-title class="text-center"
                         >Создание нового пароля</v-card-title
                     >
                     <v-form
@@ -22,18 +23,19 @@
                             Используйте только буквы (a–z, A–Z), цифры и символы
                             ! @ # $ % ^ & * ( ) - _ + = ; : , . / ? \ | ` ~ { }
                         </p>
-                        <PasswordInputVue
+
+                        <Input
                             class="creaturePass__input"
                             placeholder="Новый пароль"
                             name="password"
                             v-model:value="new_password"
-                        ></PasswordInputVue>
-                        <PasswordInputVue
+                        ></Input>
+                        <Input
                             class="creaturePass__input"
                             placeholder="Повторите новый пароль"
                             name="confirm"
                             v-model:value="current_password"
-                        ></PasswordInputVue>
+                        ></Input>
                         <Button
                             label="Сохранить"
                             color="primary"
@@ -47,75 +49,31 @@
 </template>
 <script setup>
 import { ref, computed } from 'vue';
-import axios from 'axios';
 import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
-import { PasswordInputVue } from '@shared/components/inputs';
-import { helpers, minLength, required, sameAs } from '@vuelidate/validators';
+
+import { Input } from '@shared/components/inputs';
+import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
-import { useVuelidate } from '@vuelidate/core';
 
-// const rules = computed(() => ({
-//     password: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         minLength: helpers.withMessage(
-//             `Минимальная длина: 5 символов`,
-//             minLength(5),
-//         ),
-//     },
-//     confirmPassword: {
-//         required: helpers.withMessage(
-//             `Поле обязательно для заполнения`,
-//             required,
-//         ),
-//         sameAsPassword: helpers.withMessage(
-//             `Пароли не совпадают`,
-//             sameAs(password.value),
-//         ),
-//     },
-// }));
+import { usePage } from '@shared';
 
-// const v = useVuelidate(rules, {
-//     password,
-//     confirmPassword,
-// });
-//
-//
-//
-// const data = ref({
-//     new_password: '',
-//     current_password: '',
-// });
+usePage({ isHidden: true });
 
-// const resetPasswordForm = () => {
-//     if (data.new_password === data.current_password) {
-//         HTTP.post('/users/set_password/', data.value)
-//             .then((response) => {
-//                 data.value = response.data;
-//                 localStorage.setItem('Token', response.data.auth_token);
-//             })
-//             .catch((error) => {
-//                 console.error(error);
-//             });
-//     } else {
-//         // Обработка случая, когда пароли не совпадают
-//     }
-// };
+const route = useRoute();
+const router = useRouter();
+
 const user = ref({});
 const new_password = ref('');
 const current_password = ref('');
-const token = localStorage.getItem('Token');
 
-const uid = user.value.id;
-
-const data = ref({
-    uid,
-    token,
-    new_password: new_password.value,
-});
+const auth = computed(() => ({
+    uid: route.params.uid,
+    token: route.params.token,
+}));
+const onBack = () => {
+    router.back();
+};
 
 const getPrivate = async () => {
     await HTTP.get('/rsousers/me/', {
@@ -142,37 +100,42 @@ const resetPasswordForm = async () => {
     }
 
     try {
-        const response = await axios.post(
-            '/users/reset_password_confirm/',
-            data,
-        );
+        const response = await HTTP.post('/users/reset_password_confirm/', {
+            ...auth.value,
+            new_password: new_password.value,
+        });
         console.log(response.data);
         localStorage.setItem('Token', response.data.auth_token);
     } catch (error) {
         console.error(error);
     }
 };
-
-// const user = ref({
-//   uid: $route.query.uid || '',
-//   token: $route.query.token || '',
-//   newPassword: '',
-// });
-
-// const createPassword = async () => {
-//   try {
-//     const response = await axios.post('/users/reset_password_confirm/', user);
-//     console.log(response);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .btn {
     margin: 40px auto;
     margin-bottom: 15px;
     padding: 16px 32px;
+}
+
+.v-field {
+    border-radius: 10px;
+}
+
+.v-field.v-field--appended {
+    --v-field-padding-end: 10px;
+}
+
+.v-input--density-compact .v-field--variant-outlined,
+.v-input--density-compact .v-field--single-line,
+.v-input--density-compact .v-field--no-label {
+    --v-field-padding-bottom: 10px;
+}
+
+.v-field--variant-outlined,
+.v-field--single-line,
+.v-field--no-label {
+    --v-field-padding-top: 5px;
 }
 
 .py-15 {
@@ -183,17 +146,49 @@ const resetPasswordForm = async () => {
     padding-right: 98px !important;
     padding-left: 98px !important;
 }
+.d-flex {
+    justify-content: end;
+}
+
 .card_cross {
     position: absolute;
     top: 16px;
     right: 16px;
+    cursor: pointer;
+}
+
+.password-input {
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #35383f;
+    font-weight: normal;
+    font-family: 'Bert-Sans';
+}
+
+.password-input::placeholder {
+    color: #898989;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Bert-Sans';
 }
 .v-card-title {
     padding: 0;
     overflow: visible;
     font-family: 'Akrobat';
 }
-p {
+.v-card-title {
+    overflow: visible;
+    font-size: 40px;
+    font-weight: 600;
+    font-family: Akrobat;
+    padding-top: 0rem;
+    @media screen and (max-width: 575px) {
+        font-size: 32px;
+    }
+}
+
+.LoginForm p {
     color: #35383f;
     font-family: 'BertSans';
     font-size: 16px;
@@ -202,9 +197,41 @@ p {
     line-height: normal;
     margin-bottom: 20px;
 }
-.text-h4 {
-    font-family: 'Akrobat' !important;
-    font-size: 40px;
+.creaturePass__input {
+    text-indent: 16px;
+    width: 100%;
+}
+@media ((max-width: 768px)) {
+    .d-flex {
+        justify-content: center;
+    }
+    .AuthWrapper {
+        min-height: 0;
+        padding-top: 100px;
+        padding-bottom: 138px;
+    }
+}
+@media ((max-width: 625px)) {
+    .py-15 {
+        padding-top: 60px !important;
+        padding-bottom: 40px !important;
+    }
+    .px-14 {
+        padding-right: 40px !important;
+        padding-left: 40px !important;
+    }
+    .card_cross {
+        right: 8px;
+    }
+}
+@media ((max-width: 440px)) {
+    .px-14 {
+        padding-right: 15px !important;
+        padding-left: 15px !important;
+    }
+    .v-card-title {
+        font-size: 30px;
+    }
 }
 </style>
 @shared/components/selects/inputs

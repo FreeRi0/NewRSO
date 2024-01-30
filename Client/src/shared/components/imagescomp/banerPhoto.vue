@@ -3,11 +3,7 @@
         <div class="user-metric__top-img-wrapper">
             <!-- Заглушка Банер -->
 
-            <img
-                v-if="banner"
-                :src="banner"
-                alt="Баннер личной страницы"
-            />
+            <img v-if="banner" :src="banner" alt="Баннер личной страницы" />
 
             <img
                 v-else
@@ -15,7 +11,7 @@
                 alt="Баннер личной страницы(пусто)"
             />
         </div>
-        <v-menu min-width="200px" rounded v-if="!props.banner" >
+        <v-menu min-width="200px" rounded v-if="!props.banner">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -76,9 +72,10 @@
                                     >
                                         Загрузить
                                     </v-btn>
-
                                 </v-card-actions>
-                                <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
+                                <p class="error" v-if="isError.detail">
+                                    {{ isError.detail }}
+                                </p>
                             </v-card>
                         </v-dialog>
                     </v-row>
@@ -152,7 +149,9 @@
                                             Загрузить
                                         </v-btn>
                                     </v-card-actions>
-                                    <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
+                                    <p class="error" v-if="isError.detail">
+                                        {{ isError.detail }}
+                                    </p>
                                 </v-card>
                             </v-dialog>
                         </v-row>
@@ -179,16 +178,15 @@ const preview = ref(null);
 const isError = ref([]);
 const swal = inject('$swal');
 
-const emit = defineEmits(['uploadBan']);
+const emit = defineEmits(['uploadWall, updateWall', 'deleteWall']);
 
 const props = defineProps({
-    banner: String
-})
+    banner: String,
+});
 // const file = ref(null);
 const media = ref({
     banner: null,
 });
-
 
 const selectBanner = (event) => {
     media.value = event.target.files[0];
@@ -214,7 +212,8 @@ const uploadBanner = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-            // emit('uploadBan', response.data.banner);
+            console.log('resp', response.data);
+            emit('uploadWall', response.data.banner);
             console.log(response, 'banner uploaded');
         })
         .catch(({ response }) => {
@@ -249,7 +248,7 @@ const updateBanner = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-            // emit('update', response.data.banner);
+            emit('updateWall', response.data.banner);
             console.log(response, 'banner uploaded');
         })
         .catch(({ response }) => {
@@ -265,12 +264,16 @@ const updateBanner = async () => {
         });
 };
 const deleteBanner = async () => {
-    await HTTP.put('/rsousers/me/media/', media.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+    await HTTP.put(
+        '/rsousers/me/media/',
+        { banner: null },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         },
-    })
+    )
         .then((response) => {
             swal.fire({
                 position: 'top-center',
@@ -279,7 +282,7 @@ const deleteBanner = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            // emit('delete', response.data.banner);
+            emit('deleteWall', response.data.banner);
             console.log(response, 'deleted');
         })
         .catch(({ response }) => {

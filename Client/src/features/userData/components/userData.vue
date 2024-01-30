@@ -1,19 +1,15 @@
 <template>
     <div class="MyPage">
-        <form
-            action="#"
-            class="userBio"
-            method="post"
-            @submit.prevent="AddAbout"
-        >
+        <form class="userBio" @submit.prevent="AddAbout">
             <p>Кратко о себе</p>
             <TextArea
                 class="mt-4 bio"
                 name="about"
                 placeholder="Напиши что нибудь"
-                v-model:value="user.bio"
+                v-model:value="bio"
                 :max-length="400"
             ></TextArea>
+            <!-- <pre>{{ user.value }}</pre> -->
             <div class="form__counter">{{ counterSquad }} / 400</div>
             <p class="error" v-if="isError.last_name">
                 {{ 'Фамилия пользователя, ' + isError.last_name }}
@@ -38,6 +34,7 @@
                 class="photo-item"
                 :photo="media.photo1"
                 :add="true"
+                @uploadUserPic="uploadUserPic"
             ></userPhoto>
             <userPhoto2
                 class="photo-item"
@@ -68,10 +65,23 @@ import {
 } from '@shared/components/imagescomp';
 import { ref, onMounted, watch, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
+import { useUserStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
+const emit = defineEmits(['uploadUserPic, updateUserPic', 'changeBio']);
+const uploadUserPic = (userPic) => {
+    console.log('photoUser', userPic);
+    emit('uploadUserPic', userPic);
+    console.log('userPic Uploaded!');
+};
 
-const user = ref({
-    bio: '',
-});
+const userStore = useUserStore();
+let currentUser = storeToRefs(userStore);
+// const updateUserPic = (userPic) => {
+//     console.log('photoUpdate', userPic);
+//     user.value.media.photo1 = userPic;
+
+// };
+let bio = ref(currentUser.currentUser.value.bio);
 
 const media = ref({
     photo1: null,
@@ -79,100 +89,70 @@ const media = ref({
     photo3: null,
     photo4: null,
 });
-const isError = ref([]);
+const isError = ref({});
 const isLoading = ref(false);
 const swal = inject('$swal');
 
 const counterSquad = computed(() => {
-    return user.value?.bio?.length || 0;
+    return bio.value?.length || 0;
 });
 
-const regions = ref([]);
-const getRegions = async () => {
-    const { data } = await HTTP.get('/regions', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
-
-    regions.value = data;
-};
-
-const getUser = async () => {
-    await HTTP.get(`/rsousers/me/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            user.value.region = regions.value.find(
-                (region) => region.name === user.value.region,
-            )?.id;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('failed ' + error);
-        });
-};
-
 const getMedia = async () => {
-    await HTTP.get(`/rsousers/me/media/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            media.value = response.data;
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log('failed ' + error);
+    try {
+        const response = await HTTP.get(`/rsousers/me/media/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        media.value = response.data;
+        console.log(response.data);
+    } catch (error) {
+        console.log('failed ' + error);
+    }
 };
+
 
 const AddAbout = async () => {
-    isLoading.value = true;
-    await HTTP.patch(`/rsousers/me/`, user.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            user.value = response.data;
-            getRegions();
-            getUser();
-            console.log(response.data);
-        })
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+    try {
+        isLoading.value = false;
+        const response = await HTTP.patch(
+            '/rsousers/me/',
+            { bio: bio.value },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        isLoading.value = false;
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
         });
+        emit('changeBio', response.data.bio);
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
+    }
 };
 
 onMounted(() => {
-    getRegions();
-    getUser();
     getMedia();
 });
 </script>

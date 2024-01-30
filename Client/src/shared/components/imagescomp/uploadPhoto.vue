@@ -1,5 +1,5 @@
 <template>
-    <div class="avatar-edit my_photo__add" >
+    <div class="avatar-edit my_photo__add">
         <v-menu min-width="200px" rounded v-if="!props.photo">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__baner-add" icon v-bind="props">
@@ -28,13 +28,11 @@
                                     <v-container>
                                         <v-row>
                                             <v-file-input
-
                                                 @change="selectFile"
                                                 show-size
                                                 prepend-icon="mdi-camera"
                                                 counter
                                             ></v-file-input>
-
                                         </v-row>
                                         <v-row>
                                             <v-card class="mt-5 mx-auto">
@@ -106,13 +104,11 @@
                                         <v-container>
                                             <v-row>
                                                 <v-file-input
-
                                                     @change="selectFile"
                                                     show-size
                                                     prepend-icon="mdi-camera"
                                                     counter
                                                 ></v-file-input>
-
                                             </v-row>
                                             <v-row>
                                                 <v-card class="mt-5 mx-auto">
@@ -134,7 +130,6 @@
                                             Закрыть
                                         </v-btn>
                                         <v-btn
-
                                             :disabled="!userPhotos"
                                             color="blue-darken-1"
                                             variant="text"
@@ -143,7 +138,6 @@
                                         >
                                             Загрузить
                                         </v-btn>
-
                                     </v-card-actions>
                                     <p class="error" v-if="isError.detail">
                                         {{ isError.detail }}
@@ -164,6 +158,20 @@
 <script setup>
 import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
+
+const emit = defineEmits(['uploadUserPic, updateUserPic']);
+
+const uploadUserPic = (userPic) => {
+    console.log('photo', userPic);
+    emit('uploadUserPic', userPic);
+    console.log('uploadUserPic');
+};
+
+const updateUserPic = (userPic) => {
+    console.log('photoUpdate', userPic);
+    emit('updateUserPic', userPic);
+    console.log('updateUserPic');
+};
 const props = defineProps({
     photo: String,
 });
@@ -178,14 +186,9 @@ const userPhotos = ref({
     photo1: null,
 });
 
-
 const selectFile = (event) => {
     userPhotos.value.photo1 = event.target.files[0];
     preview.value = URL.createObjectURL(userPhotos.value.photo1);
-    // userPhotos.value.photo2 = event.target.files[0];
-    // preview.value = URL.createObjectURL(userPhotos.value.photo2);
-    // userPhotos.value.photo3 = event.target.files[0];
-    // preview.value = URL.createObjectURL(userPhotos.value.photo3);
 };
 
 const uploadPhoto = async () => {
@@ -207,8 +210,10 @@ const uploadPhoto = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
+            console.log('resp', response.data);
+            emit('uploadUserPic', response.data.photo1);
             dialog.value = false;
-            console.log(response, 'photo uploaded');
+            console.log(response, 'photoUser uploaded');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -241,6 +246,7 @@ const updatePhoto = async () => {
                 timer: 1500,
             });
             dialog.value = false;
+            emit('updateUserPic', response.data.photo1);
             console.log(response, 'updated');
         })
         .catch(({ response }) => {
