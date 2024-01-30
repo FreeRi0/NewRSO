@@ -30,7 +30,12 @@
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
                         <div class="hq-data__participant-counter-HQ">
-                            <span>{{ member.length }} участников</span>
+                            <span
+                                >{{
+                                    headquarter.participants_count
+                                }}
+                                участников</span
+                            >
                         </div>
                         <div class="hq-data__social-network">
                             <div class="hq-data__link-vk">
@@ -99,12 +104,17 @@
                             >
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
+                            <span
+                                >{{
+                                    localHeadquarter.participants_count
+                                }}
+                                участников</span
+                            >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{
-                                    localHeadquarter.participants_count
+                                    districtHeadquarter.members_count
                                 }}
                                 действующих членов</span
                             >
@@ -179,12 +189,17 @@
                             >
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
+                            <span
+                                >{{
+                                    districtHeadquarter.participants_count
+                                }}
+                                участников</span
+                            >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{
-                                    districtHeadquarter.participants_count
+                                    districtHeadquarter.members_count
                                 }}
                                 действующих членов</span
                             >
@@ -259,12 +274,17 @@
                             >
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
+                            <span
+                                >{{
+                                    regionalHeadquarter.participants_count
+                                }}
+                                участников</span
+                            >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{
-                                    regionalHeadquarter.participants_count
+                                    regionalHeadquarter.members_count
                                 }}
                                 действующих членов</span
                             >
@@ -347,12 +367,17 @@
                             >
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
+                            <span
+                                >{{
+                                    centralHeadquarter.participants_count
+                                }}
+                                участников</span
+                            >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{
-                                    centralHeadquarter.participants_count
+                                    centralHeadquarter.members_count
                                 }}
                                 действующих членов</span
                             >
