@@ -101,7 +101,9 @@
                                 clearable
                                 placeholder="Введите фамилию"
                                 name="surname"
-                                v-model:value="currentUser.last_name"
+                                v-model:value="
+                                    currentUser.currentUser.value.last_name
+                                "
                             />
                         </div>
                         <p class="error" v-if="isError.last_name">
@@ -114,7 +116,9 @@
                                 clearable
                                 placeholder="familia"
                                 name="surname-lat"
-                                v-model:value="currentUser.last_name_lat"
+                                v-model:value="
+                                    currentUser.currentUser.value.last_name_lat
+                                "
                             />
                         </div>
                         <div class="form-field">
@@ -126,7 +130,9 @@
                                 clearable
                                 placeholder="Введите имя"
                                 name="name"
-                                v-model:value="currentUser.first_name"
+                                v-model:value="
+                                    currentUser.currentUser.value.first_name
+                                "
                             />
                         </div>
                         <p class="error" v-if="isError.first_name">
@@ -139,7 +145,9 @@
                                 clearable
                                 placeholder="name"
                                 name="name-lat"
-                                v-model:value="currentUser.first_name_lat"
+                                v-model:value="
+                                    currentUser.currentUser.value.first_name_lat
+                                "
                             />
                         </div>
                         <div class="form-field">
@@ -149,7 +157,10 @@
                                 clearable
                                 placeholder="Отчество"
                                 name="patronomyc"
-                                v-model:value="currentUser.patronymic_name"
+                                v-model:value="
+                                    currentUser.currentUser.value
+                                        .patronymic_name
+                                "
                             />
                         </div>
                         <div class="form-field">
@@ -161,7 +172,9 @@
                                 clearable
                                 placeholder="patronomyc"
                                 name="patronomyc-lat"
-                                v-model:value="currentUser.patronymic_lat"
+                                v-model:value="
+                                    currentUser.currentUser.value.patronymic_lat
+                                "
                             />
                         </div>
                         <div class="checkbox-wrapper">
@@ -180,8 +193,13 @@
                                     :label="sex.name"
                                     :value="sex.value"
                                     :name="sex.name"
-                                    :checked="currentUser.gender === sex.value"
-                                    v-model="currentUser.gender"
+                                    :checked="
+                                        currentUser.currentUser.value.gender ===
+                                        sex.value
+                                    "
+                                    v-model="
+                                        currentUser.currentUser.value.gender
+                                    "
                                 />
                                 <label :for="id">{{ sex.name }}</label>
                             </div>
@@ -197,11 +215,16 @@
                                 type="date"
                                 name="date_of_birth"
                                 class="input-small"
-                                v-model:value="currentUser.date_of_birth"
+                                v-model:value="
+                                    currentUser.currentUser.value.date_of_birth
+                                "
                             />
                         </div>
                     </div>
-                    <div class="parents-wrapper" v-if="!currentUser.is_adult">
+                    <div
+                        class="parents-wrapper"
+                        v-if="!currentUser.currentUser.value.is_adult"
+                    >
                         <p class="parents-wrapper__title">
                             Законный представитель несовершеннолетнего
                         </p>
@@ -649,7 +672,9 @@
                                 name="phone-contact"
                                 class="input-small phone"
                                 placeholder="+7(__) __ __ _"
-                                v-model:value="currentUser.phone_number"
+                                v-model:value="
+                                    currentUser.currentUser.value.phone_number
+                                "
                             />
                         </div>
                         <div class="form-field">
@@ -675,7 +700,9 @@
                                 name="email-сontact"
                                 class="input-big mask-email"
                                 placeholder="mail@mail.com"
-                                v-model:value="currentUser.email"
+                                v-model:value="
+                                    currentUser.currentUser.value.email
+                                "
                             />
                         </div>
                         <div class="form-field">
@@ -700,7 +727,10 @@
                                         name="socials"
                                         class="input-big mask-vk"
                                         placeholder="https://vk.com/danya_porg"
-                                        v-model:value="currentUser.social_vk"
+                                        v-model:value="
+                                            currentUser.currentUser.value
+                                                .social_vk
+                                        "
                                     />
                                 </div>
                                 <div class="form-field">
@@ -711,7 +741,10 @@
                                         name="socials"
                                         class="input-big mask-tg"
                                         placeholder="https://t.me/allenom"
-                                        v-model:value="currentUser.social_tg"
+                                        v-model:value="
+                                            currentUser.currentUser.value
+                                                .social_tg
+                                        "
                                     />
                                 </div>
                             </div>
@@ -744,19 +777,6 @@
                                 v-for="addr in address"
                                 :key="addr.id"
                             >
-                                <!-- <RadioButton
-                                    :value="addr.value"
-                                    :label="addr.id"
-                                    :id="addr.id"
-                                    :checked="
-                                        regionData.reg_fact_same_address ===
-                                        addr.value
-                                    "
-                                    name="address"
-                                    v-model:checkedValue="
-                                        regionData.reg_fact_same_address
-                                    "
-                                /> -->
                                 <input
                                     class="radiobutton"
                                     type="radio"
@@ -1525,14 +1545,24 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="statement-title" v-if="!currentUser.is_adult">
+                                <p
+                                    class="statement-title"
+                                    v-if="
+                                        !currentUser.currentUser.value.is_adult
+                                    "
+                                >
                                     Согласие законного представителя на
                                     обработку персональных данных
                                     несовершеннолетнего<span class="valid-red"
                                         >*</span
                                     >
                                 </p>
-                                <div class="statement-wrapper" v-if="!currentUser.is_adult">
+                                <div
+                                    class="statement-wrapper"
+                                    v-if="
+                                        !currentUser.currentUser.value.is_adult
+                                    "
+                                >
                                     <div class="statement-item">
                                         <img
                                             src="@app/assets/icon/file.svg"
@@ -1636,7 +1666,10 @@
                                     Обязательное поле
                                 </p>
                             </div>
-                            <div class="pass-details__item" v-if="!currentUser.is_adult">
+                            <div
+                                class="pass-details__item"
+                                v-if="!currentUser.currentUser.value.is_adult"
+                            >
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
                                         class="valid-red"
@@ -1985,13 +2018,23 @@
                                 </div>
                             </div>
                             <div class="pass-details__item">
-                                <p class="statement-title" v-if="!currentUser.is_adult">
+                                <p
+                                    class="statement-title"
+                                    v-if="
+                                        !currentUser.currentUser.value.is_adult
+                                    "
+                                >
                                     Паспорт законного представителя<span
                                         class="valid-red"
                                         >*</span
                                     >
                                 </p>
-                                <div class="statement-wrapper" v-if="!currentUser.is_adult">
+                                <div
+                                    class="statement-wrapper"
+                                    v-if="
+                                        !currentUser.currentUser.value.is_adult
+                                    "
+                                >
                                     <div class="statement-item">
                                         <img
                                             src="@app/assets/icon/file.svg"
@@ -2668,7 +2711,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="pass-details__item" v-if="!currentUser.is_adult">
+                            <div
+                                class="pass-details__item"
+                                v-if="!currentUser.currentUser.value.is_adult"
+                            >
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
                                         class="valid-red"
@@ -2845,18 +2891,23 @@
                 class="form__button-group d-flex justify-space-between"
             >
                 <Button
-                    v-if="currentUser.sent_verification || currentUser.is_verified"
                     :disabled="isLoading"
                     :loaded="isLoading"
+                    v-if="
+                        currentUser.currentUser.value.sent_verification ===
+                            false &&
+                        currentUser.currentUser.value.is_verified === false
+                    "
                     type="submit"
-                    label="Редактировать данные"
+                    label="Отправить данные на верификацию"
                 ></Button>
+
                 <Button
                     v-else
                     :disabled="isLoading"
                     :loaded="isLoading"
                     type="submit"
-                    label="Отправить данные на верификацию"
+                    label="Редактировать данные"
                 ></Button>
             </v-card-actions>
         </v-expansion-panels>
@@ -2875,7 +2926,15 @@ import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { TextArea } from '@shared/components/inputs';
 import { userData } from '@features/userData';
-const emit = defineEmits(['updateUserData', 'updateRegionData', 'updateDocData', 'updateEducData', 'updateFileData', 'updateParentData', 'updateStatus'])
+const emit = defineEmits([
+    'updateUserData',
+    'updateRegionData',
+    'updateDocData',
+    'updateEducData',
+    'updateFileData',
+    'updateParentData',
+    'updateStatus',
+]);
 const router = useRouter();
 const userStore = useUserStore();
 const currentUser = storeToRefs(userStore);
@@ -2901,21 +2960,6 @@ const openPanelFour = () => {
 const openPanelFive = () => {
     panel.value = 'panelFive';
 };
-
-// const currentUser = ref({
-//     first_name: '',
-//     last_name: '',
-//     patronymic_name: '',
-//     date_of_birth: '',
-//     last_name_lat: '',
-//     first_name_lat: '',
-//     patronymic_lat: '',
-//     gender: null,
-//     email: '',
-//     social_vk: '',
-//     social_tg: '',
-//     phone_number: '',
-// });
 
 const regionData = ref({
     reg_region_id: null,
@@ -3069,114 +3113,47 @@ const counterKnow = computed(() => {
     return rso_info_from.value.length || 0;
 });
 
-const regions = ref([]);
-const getRegions = async () => {
-    const { data } = await HTTP.get('/regions', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
-
-    regions.value = data;
-};
-
-// const getUser = async () => {
-//     await HTTP.get('/rsousers/me/', {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             user.value = response.data;
-//             user.value.region = regions.value.find(
-//                 (region) => region.name === user.value.region,
-//             )?.id;
-//             console.log(user.value);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-const getParent = async () => {
-    await HTTP.get('/rsousers/me/parent/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            parentData.value = response.data;
-            console.log(parentData.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+const getData = async () => {
+    try {
+        const responseParent = await HTTP.get('/rsousers/me/parent/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
-};
+        const responseRegion = await HTTP.get('/rsousers/me/region/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
 
-const getEducation = async () => {
-    await HTTP.get('/rsousers/me/education/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            education.value = response.data;
-            console.log(education.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        const responseDocuments = await HTTP.get('/rsousers/me/documents/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
-};
-const getDocuments = async () => {
-    await HTTP.get('/rsousers/me/documents/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            documents.value = response.data;
-            console.log(documents.value);
+        const responseForeignDocs = await HTTP.get('/rsousers/me/foreign_documents/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        const responseEducation = await HTTP.get('/rsousers/me/education/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
-};
-
-const getForeignDoc = async () => {
-    await HTTP.get('/rsousers/me/foreign_documents/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            foreignDoc.value = response.data;
-            console.log(foreignDoc.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getUserRegions = async () => {
-    await HTTP.get('/rsousers/me/region/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regionData.value = response.data;
-            console.log(regionData.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+        parentData.value = responseParent.data;
+        regionData.value = responseRegion.data;
+        documents.value = responseDocuments.data;
+        foreignDoc.value = responseForeignDocs.data;
+        education.value = responseEducation.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 
@@ -3269,9 +3246,9 @@ const downloadAll = async () => {
             const url = new Blob([response.data], { type: 'application/zip' });
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'file.zip'); //set download attribute to link
+            link.setAttribute('download', 'file.zip');
             document.body.appendChild(link);
-            link.click(); // this will download file.zip
+            link.click();
             console.log(response, 'success');
         })
         .catch(function (error) {
@@ -3280,9 +3257,7 @@ const downloadAll = async () => {
 };
 
 const updateData = async () => {
-
     try {
-
         let fd = new FormData();
         fd.append('rso_info_from', rso_info_from.value);
         if (isStatementChange.value)
@@ -3337,15 +3312,33 @@ const updateData = async () => {
                       international_passport.value,
                   )
                 : fd.append('international_passport', '');
-        const axiosrequest1 = await HTTP.patch('/rsousers/me/', user.value, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+        const axiosrequest1 = await HTTP.patch(
+            '/rsousers/me/',
+            {
+                first_name: currentUser.currentUser.value.first_name,
+                last_name: currentUser.currentUser.value.last_name,
+                patronymic_name: currentUser.currentUser.value.patronymic_name,
+                last_name_lat: currentUser.currentUser.value.last_name_lat,
+                first_name_lat: currentUser.currentUser.value.first_name_lat,
+                patronymic_name_lat:
+                    currentUser.currentUser.value.patronymic_name_lat,
+                date_of_birth: currentUser.currentUser.value.date_of_birth,
+                gender: currentUser.currentUser.value.gender,
+                email: currentUser.currentUser.value.email,
+                phone_number: currentUser.currentUser.value.phone_number,
+                social_vk: currentUser.currentUser.value.social_vk,
+                social_tg: currentUser.currentUser.value.social_tg,
             },
-        });
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
 
         const axiosrequestParent = ref(null);
-        if (!user.value.is_adult) {
+        if (!currentUser.currentUser.value.is_adult) {
             const axiosrequestParent = await HTTP.patch(
                 '/rsousers/me/parent/',
                 parentData.value,
@@ -3412,7 +3405,10 @@ const updateData = async () => {
         });
         const axiosrequest6 = ref(null);
 
-        if (!user.value.sent_verification && !user.value.is_verified) {
+        if (
+            currentUser.currentUser.value.sent_verification === false &&
+            currentUser.currentUser.value.is_verified === false
+        ) {
             const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
                 data.value,
@@ -3424,13 +3420,6 @@ const updateData = async () => {
                 },
             );
         }
-
-        console.log('ddd', !user.value.sent_verification)
-
-        user.value = axiosrequest1.data;
-        user.value.region = regions.value.find(
-            (region) => region.name === user.value.region,
-        )?.id;
         parentData.value = axiosrequestParent.data;
         regionData.value = axiosrequest2.data;
         documents.value = axiosrequest3.data;
@@ -3445,7 +3434,6 @@ const updateData = async () => {
         console.log(axiosrequestForeignDocs.data);
         console.log(axiosrequest4.data);
         console.log(axiosrequest5.data);
-
         console.log(axiosrequest6?.data);
         swal.fire({
             position: 'top-center',
@@ -3454,14 +3442,14 @@ const updateData = async () => {
             showConfirmButton: false,
             timer: 1000,
         });
-        console.log('resdp', axiosrequest1.data)
-        emit('updateUserData', axiosrequest1.data)
-        emit('updateRegionData', axiosrequest2.data)
-        emit('updateDocData', axiosrequest3.data)
-        emit('updateEducData', axiosrequest4.data)
-        emit('updateFileData', axiosrequest5.data)
-        emit('updateParentData', axiosrequestParent.data)
-        emit('updateStatus', axiosrequest6.data)
+        console.log('resdp', axiosrequest1.data);
+        emit('updateUserData', axiosrequest1.data);
+        emit('updateRegionData', axiosrequest2.data);
+        emit('updateDocData', axiosrequest3.data);
+        emit('updateEducData', axiosrequest4.data);
+        emit('updateFileData', axiosrequest5.data);
+        emit('updateParentData', axiosrequestParent.data);
+        emit('updateStatus', axiosrequest6?.data);
         isLoading.value = false;
     } catch (error) {
         console.log('errr', error);
@@ -3525,12 +3513,7 @@ const selectedPassParent = ref('Да');
 const selectedPass = ref('Да');
 
 onMounted(() => {
-    getParent();
-    getEducation();
-    getRegions();
-    getDocuments();
-    getForeignDoc();
-    getUserRegions();
+    getData();
 });
 </script>
 <style lang="scss">

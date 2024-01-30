@@ -46,6 +46,7 @@
                 v-else-if="picked == 'Настройки приватности'"
             ></privateProfile>
             <changePassword
+                @changeUsername="changeUsername"
                 v-else-if="picked == 'Логин и пароль'"
             ></changePassword>
         </div>
@@ -117,13 +118,17 @@ const updateParent = (userParent) => {
 const uploadUserPic = (userPic) => {
     console.log('photoUser', userPic);
     currentUser.currentUser.value.media.photo1 = userPic;
-    console.log("Phot Uploadeddd")
-
+    console.log('Phot Uploadeddd');
 };
 
 const changeBio = (bio) => {
     console.log('bio', bio);
     currentUser.currentUser.value.bio = bio;
+};
+
+const changeUsername = (username) => {
+    console.log('username', username);
+    currentUser.currentUser.value.username = username;
 };
 
 // const updateUserPic = (userPic) => {

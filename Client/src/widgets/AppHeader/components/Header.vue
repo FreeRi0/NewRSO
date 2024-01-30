@@ -34,7 +34,10 @@
                 <div ref="navMenu" class="header__nav-container no-visible">
                     <div class="header__overlay" @click="removeClass()"></div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item" v-if="user.currentUser.value">
+                        <li
+                            class="header__nav-item"
+                            v-if="user.currentUser.value"
+                        >
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
@@ -66,7 +69,10 @@
             </nav>
 
             <nav class="header__nav nav-user">
-                <div class="nav-user__application-count" v-if="user.currentUser.value">
+                <div
+                    class="nav-user__application-count"
+                    v-if="user.currentUser.value"
+                >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <a href="#">
                         <img
@@ -98,10 +104,15 @@
                         <span v-if="user.currentUser.value?.region"
                             >{{
                                 regionals.find(
-                                    (reg) => reg.region === user.currentUser.value.region,
+                                    (reg) =>
+                                        reg.region ===
+                                        user.currentUser.value.region,
                                 )?.name
                             }}
                         </span>
+                        <!-- <p v-if="user.currentUser.value?.region">
+                            <div v-for="item in getByRegionals" :key="item.id">{{ item.name }}</div>
+                        </p> -->
 
                         <span v-else>Выберите региональное отделение</span>
                     </button>
@@ -127,6 +138,7 @@
                             name="select_education"
                             id="select-education"
                             placeholder="Ваш регион"
+                            @change="getByRegionals"
                             v-model="region"
                             address="regions/"
                         ></Select>
@@ -168,23 +180,14 @@
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
-import { Select } from '@shared/components/selects';
+import { Select, sortByEducation } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useUserStore } from '@features/store/index';
 // import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
-const userStore = useUserStore();
-// const regionalsStore = useRegionalsStore();
-// regionalsStore.getRegions();
 
-// const {regions, regionals} = storeToRefs(regionalsStore);
-// const region = ref(null);
-
-// const getByRegionals = () => {
-//     regionalsStore.getRegionals(region.value)
-// }
 const props = defineProps({
     isActive: {
         type: Boolean,
@@ -195,14 +198,44 @@ const props = defineProps({
     },
 });
 
+const regionals = ref([]);
+
+const userStore = useUserStore();
+// const regionalsStore = useRegionalsStore();
+const getRegionals = async () => {
+    try {
+        const regionalsResp = await HTTP.get('/regionals/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        regionals.value = regionalsResp.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+// regionalsStore.getRegionals();
+
+// const regionals = storeToRefs(regionalsStore);
+// regionalsStore.getRegionals();
+
 const quantityIsActive = ref(props.quantityActive);
-
-
 
 const router = useRouter();
 const user = storeToRefs(userStore);
 console.log('user', user.currentUser.value);
 
+// const region = ref(null);
+// console.log('userreg', region);
+
+// const getByRegionals = computed(() => {
+//     return regionalsStore.getRegionals(region.value);
+//     console.log('reg', region.value);
+// });
+
+// console.log('regionalssss', getByRegionals);
 const userUpdate = (userData) => {
     console.log('UserUpdate', userData);
     user.currentUser.value = userData;
@@ -293,11 +326,6 @@ const removeClass = () => {
     menu.classList.toggle('no-visible');
 };
 
-
-const regions = ref({});
-
-const regionals = ref([]);
-
 const headquartersIds = ref([]);
 const headquertersNames = ref([
     {
@@ -332,12 +360,15 @@ const getHeadquarters = async () => {
 
         if (!user.user.value[item.id]) continue;
 
-        const { data } = await HTTP.get(`${item.path}/${user.user.value[item.id]}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+        const { data } = await HTTP.get(
+            `${item.path}/${user.user.value[item.id]}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        });
+        );
 
         const { data: dataParent } = await HTTP.get(
             `${item.parentPath}/${data[item.parentHqId]}`,
@@ -356,77 +387,29 @@ const getHeadquarters = async () => {
     }
 };
 
-// const getUser = async () => {
-//     try {
-//         const response = await HTTP.get('/rsousers/me/', {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         user.value = response.data;
-//         region.value = user.value.region;
-//         console.log(user.value);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-// console.log('dddddd', id);
-
 const updateRegion = async () => {
-    await HTTP.patch('/rsousers/me/region/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            show.value = !show.value;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getRegions = async () => {
     try {
-        const response = await HTTP.get(`/regions/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+        const updateRegResponse = await HTTP.patch(
+            '/rsousers/me/',
+            {
+                region: region.value,
             },
-        });
-
-        regions.value = response.data;
-        console.log(regions.value);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const getRegionals = async () => {
-    try {
-        const response = await HTTP.get(`/regionals/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        });
-
-        regionals.value = response.data;
-        console.log(regionals.value);
+        );
+        // region.value = updateRegResponse.data;
+        show.value = !show.value;
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
 onMounted(async () => {
-    await getRegions();
     await getRegionals();
-
     await getHeadquarters();
 });
 </script>

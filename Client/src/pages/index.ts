@@ -5,6 +5,7 @@ export * as RegisterPage from './RegisterPage';
 export * as termsPage from './terms_of_use';
 
 export * as UserPage from './UserPage';
+export * as MyPage from './UserPage'
 
 export * as CreationActionsPage from './CreationActionsPage';
 

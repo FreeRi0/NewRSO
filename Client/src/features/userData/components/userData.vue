@@ -76,9 +76,6 @@ const uploadUserPic = (userPic) => {
 
 const userStore = useUserStore();
 let currentUser = storeToRefs(userStore);
-const regions = storeToRefs(userStore);
-userStore.getRegions();
-
 // const updateUserPic = (userPic) => {
 //     console.log('photoUpdate', userPic);
 //     user.value.media.photo1 = userPic;
@@ -101,58 +98,58 @@ const counterSquad = computed(() => {
 });
 
 const getMedia = async () => {
-    await HTTP.get(`/rsousers/me/media/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            media.value = response.data;
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log('failed ' + error);
-        });
-};
-
-const AddAbout = async () => {
-    isLoading.value = true;
-    await HTTP.patch(
-        `/rsousers/me/`,
-        { bio: bio.value },
-        {
+    try {
+        const response = await HTTP.get(`/rsousers/me/media/`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
-        },
-    )
-        .then((response) => {
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            // bio.value = response.data;
-            emit('changeBio', response.data.bio)
-            console.log(response.data);
-        })
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
         });
+        media.value = response.data;
+        console.log(response.data);
+    } catch (error) {
+        console.log('failed ' + error);
+    }
+};
+
+
+const AddAbout = async () => {
+    try {
+        isLoading.value = false;
+        const response = await HTTP.patch(
+            '/rsousers/me/',
+            { bio: bio.value },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        isLoading.value = false;
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        emit('changeBio', response.data.bio);
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
+    }
 };
 
 onMounted(() => {
