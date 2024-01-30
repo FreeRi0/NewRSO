@@ -10,8 +10,8 @@
                     <img
                         src="@app/assets/competition/promo.png"
                         alt="Логотип конкурса"
-                        width="4720"
-                        height="2040"
+                        width="1180"
+                        height="510"
                     />
                 </div>
             </div>
@@ -128,7 +128,6 @@
                 организации «Российский Студенческие Отряды»
             </p>
             <a
-                href="http://127.0.0.1:8000/compititions/documents/%D0%9F%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BD%D0%B0_%D0%BB%D1%83%D1%87%D1%88%D0%B8%D0%B9_%D0%9B%D0%A1%D0%9E_2024.pdf"
                 target="_blank"
                 class="competition__documents-button"
                 @click.prevent="downloadDocument"
@@ -169,7 +168,15 @@
             </button> -->
         </div>
 
-        <CompetitionMembersBlock v-if="isAuth"></CompetitionMembersBlock>
+        <router-link
+            :to="{
+                name: 'CompetitionParticipants',
+                params: { id: competition.id },
+            }"
+            ><h2 class="subtitle subtitle--link">Участники конкурса</h2>
+        </router-link>
+
+        <!-- <CompetitionMembersBlock v-if="isAuth"></CompetitionMembersBlock> -->
 
         <!--Модальные окна-->
         <ModalCompetition
@@ -192,10 +199,10 @@
             >
                 x
             </button>
-            <p>
+            <p class="competition__message">
                 Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-                в&nbsp;Конкурсе по&nbsp;причине: -подать заявку на&nbsp;участие
-                может только Командир отряда.
+                в&nbsp;Конкурсе по&nbsp;причине:<br />- подать заявку
+                на&nbsp;участие может только Командир отряда.
             </p>
         </div>
     </div>
@@ -204,7 +211,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { CompetitionMembersBlock } from '@features/Competition';
+// import { CompetitionMembersBlock } from '@features/Competition';
 import { ModalCompetition } from '@features/Competition';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';

@@ -611,7 +611,7 @@ onMounted(async () => {
         padding: 5px 0;
 
         @media (max-width: 1024px) {
-            padding: 16px 0;
+            padding: 11px 0;
         }
     }
 }

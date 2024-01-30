@@ -75,7 +75,7 @@
         </button>
         <p class="competition__message">
             Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;номинации &laquo;Тандем&raquo; по&nbsp;причине: -дата
+            в&nbsp;номинации &laquo;Тандем&raquo; по&nbsp;причине:<br />- дата
             основания отряда позже 24.01.2024&nbsp;года.
         </p>
     </div>
@@ -90,7 +90,7 @@
         </button>
         <p class="competition__message">
             Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;номинации &laquo;Дебют&raquo; по&nbsp;причине: -дата
+            в&nbsp;номинации &laquo;Дебют&raquo; по&nbsp;причине:<br />- дата
             основания отряда ранее 25.01.2024&nbsp;года.
         </p>
     </div>
