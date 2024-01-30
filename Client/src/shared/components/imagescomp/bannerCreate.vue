@@ -3,16 +3,9 @@
         <div class="squads-banner__text">
             {{ desc }}
         </div>
-        <router-link
-            v-if="
-                roles.roles.value.educationalheadquarter_commander ||
-                roles.roles.value.regionalheadquarter_commander ||
-                roles.roles.value.localheadquarter_commander ||
-                roles.roles.value.centralComId
-            "
-            :to="{ name: name }"
-            ><p v-if="button" class="create">{{ label }}</p></router-link
-        >
+
+
+        <router-link v-if="roles.roles.value.educationalheadquarter_commander || roles.roles.value.regionalheadquarter_commander || roles.roles.value.localheadquarter_commander || roles.roles.value.centralComId" :to="{name: name}"><p v-if="button" class="create">{{ label }}</p></router-link>
     </div>
 </template>
 <script setup>

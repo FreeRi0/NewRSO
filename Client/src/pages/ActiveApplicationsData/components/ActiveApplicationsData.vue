@@ -1,12 +1,7 @@
 <template>
     <div class="container">
-        <div
-            class="active-app"
-            v-if="
-                roles.roles.value.regionalheadquarter_commander ||
-                roles.roles.value.detachment_commander
-            "
-        >
+
+        <div class="active-app" v-if="roles.roles.value.regionalheadquarter_commander || roles.roles.value.regionalheadquarter_commander">
             <h2 class="profile-title">Активные заявки</h2>
 
             <div class="d-flex mt-9 mb-9">
@@ -113,7 +108,6 @@ import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 
 const roleStore = useRoleStore();
-roleStore.getRoles();
 const roles = storeToRefs(roleStore);
 
 // let regComId = roles.roles.value.regionalheadquarter_commander;
@@ -157,10 +151,12 @@ const step = ref(12);
 // tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
 const viewParticipants = async () => {
-    // let id = regComId ?? detComId;
+
+    let id = roles.roles.value.regionalheadquarter_commander ?? roles.roles.value.detachment_commander;
     console.log('roles', roles.roles.value);
-    let id = roles.roles.value.regionalheadquarter_commander ?? roles.roles.value.regionalheadquarter_commander;
-    if (roles.roles.value.regionalheadquarter_commander) {
+    console.log('id', id);
+
+    if ( roles.roles.value.regionalheadquarter_commander) {
         await HTTP.get(`/regionals/${id}/verifications/`, {
             headers: {
                 'Content-Type': 'application/json',
@@ -174,7 +170,8 @@ const viewParticipants = async () => {
             .catch(function (error) {
                 console.log('an error occured ' + error);
             });
-    } else if (roles.roles.value.regionalheadquarter_commander) {
+
+    } else if (roles.roles.value.detachment_commander) {
         await HTTP.get(`/detachments/${id}/verifications/`, {
             headers: {
                 'Content-Type': 'application/json',

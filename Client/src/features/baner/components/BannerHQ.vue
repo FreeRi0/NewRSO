@@ -443,12 +443,10 @@ import { useRoleStore } from '@layouts/store/role';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 const roleStore = useRoleStore();
-roleStore.getRoles();
 const userStore = useUserStore();
-userStore.getUser();
 const user = storeToRefs(userStore);
 let userId = computed(() => {
-    return user.user.value.id;
+    return user.currentUser.value.id;
 });
 const edict = ref({});
 

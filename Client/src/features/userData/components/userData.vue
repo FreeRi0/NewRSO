@@ -5,7 +5,7 @@
             <TextArea
                 class="mt-4 bio"
                 name="about"
-                placeholder="Напиши что нибудь"
+                placeholder="Напиши что-нибудь"
                 v-model:value="bio"
                 :max-length="400"
             ></TextArea>
@@ -24,7 +24,7 @@
                 :loaded="isLoading"
                 :disabled="isLoading"
                 type="submit"
-                label="сохранить"
+                label="Сохранить"
             ></Button>
             <div class="d-flex"></div>
         </form>

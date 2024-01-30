@@ -6,12 +6,10 @@
     <h2 class="mt-10" v-else>Отряд не найден...</h2>
 </template>
 <script setup>
-import { ref } from 'vue';
 import { squadItem } from '@entities/Squads';
 const props = defineProps({
     squads: {
-        type: Array,
-        required: true,
+        type: Array
     },
 });
 </script>

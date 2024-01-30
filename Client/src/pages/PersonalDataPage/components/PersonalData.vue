@@ -26,9 +26,25 @@
                     {{ tab.name }}
                 </button>
             </div>
-
+            <!-- parent_last_name: props.user.parent.parent_last_name,
+                    parent_first_name: props.user.parent.parent_first_name,
+                    parent_patronymic_name:
+                        props.user.parent.parent_patronymic_name,
+                    parent_date_of_birth:
+                        props.user.parent.parent_date_of_birth,
+                    relationship: props.user.parent.relationship,
+                    parent_phone_number: props.user.parent.parent_phone_number,
+                    russian_passport: props.user.parent.russian_passport,
+                    passport_number: props.user.parent.passport_number,
+                    passport_date: props.user.parent.passport_date,
+                    passport_authority: props.user.parent.passport_authority,
+                    region: props.user.parent.region,
+                    city: props.user.parent.city,
+                    address: props.user.parent.address, -->
             <AccordionsPersonal
                 v-if="picked == 'Персональные данные'"
+                :button="true"
+                :user="currentUser.currentUser.value"
                 @updateUserData="updateUser"
                 @updateRegionData="updateRegion"
                 @updateDocData="updateDoc"

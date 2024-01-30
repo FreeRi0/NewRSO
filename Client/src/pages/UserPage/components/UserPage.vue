@@ -55,7 +55,7 @@ import {
     userPhoto4,
 } from '@shared/components/imagescomp';
 
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useUserStore } from '@features/store/index';
@@ -66,6 +66,7 @@ console.log('userTop', user.user.value);
 const education = ref({});
 const region = ref({});
 const route = useRoute();
+
 let id = route.params.id;
 
 const uploadAva = (imageAva) => {
@@ -101,7 +102,7 @@ const deleteWall = (imageWall) => {
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
-        userStore.getUserId();
+        userStore.getUserId(id);
     }
 });
 
@@ -110,11 +111,14 @@ watch(
 
     (newId) => {
         id = newId;
-        userStore.getUserId();
+        userStore.getUserId(id);
     },
 );
 
-userStore.getUserId();
+onMounted(() => {
+    userStore.getUserId(id);
+})
+
 </script>
 <style lang="scss" scoped>
 .user-wrapper {

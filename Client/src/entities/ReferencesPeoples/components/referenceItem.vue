@@ -10,7 +10,7 @@
         </div>
             <router-link
                 class="horizontallso-item__wrapper"
-                :to="{ name: 'userpage', params: { id: participant.user.id } }"
+                :to="{ name: 'PersonalDataUser', params: { id: participant.user.id } }"
             >
                 <div class="horizontallso-img">
                     <img
