@@ -107,7 +107,7 @@ const filteredPayed = ref([
         value: 'Одобрен',
         name: 'Одобрен',
     },
-    { value: 'Неодобрен', name: 'Неодобрен' },
+    { value: 'Не одобрен', name: 'Не одобрен' },
 ]);
 
 watch(
