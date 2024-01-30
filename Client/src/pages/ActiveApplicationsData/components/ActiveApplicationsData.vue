@@ -1,7 +1,7 @@
 <template>
     <div class="container">
 
-        <div class="active-app" v-if="roles.roles.value.regionalheadquarter_commander || roles.roles.value.regionalheadquarter_commander">
+        <div class="active-app" v-if="roles.roles.value.detachment_commander || roles.roles.value.regionalheadquarter_commander">
             <h2 class="profile-title">Активные заявки</h2>
 
             <div class="d-flex mt-9 mb-9">
