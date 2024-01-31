@@ -2,6 +2,7 @@
     <section class="headquarters-management">
         <h3>{{ head }}</h3>
         <div class="headquarters-management__container">
+            <!-- <router-link :to="{ name: 'userpage', params: { id: member.id } }"> -->
             <div
                 class="manager-card"
                 :key="manager"
@@ -28,6 +29,7 @@
                     <p>{{ manager.position }}</p>
                 </div>
             </div>
+            <!-- </router-link> -->
         </div>
     </section>
 </template>
@@ -97,6 +99,8 @@ section.headquarters-management h3 {
     width: 120px;
     height: 120px;
     border-radius: 100%;
+    object-fit: cover;
+    overflow: hidden;
 }
 
 .manager-card__box {
