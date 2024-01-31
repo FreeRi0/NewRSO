@@ -30,7 +30,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
 import { HTTP } from '@app/http';
 import { onBeforeRouteUpdate } from 'vue-router';
 

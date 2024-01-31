@@ -1,16 +1,19 @@
 <template>
     <div class="horizontalSquad">
-        <div class="horizontalSquad-item__wrapper mr-3">
+        <router-link
+            :to="{
+                name: 'PersonalDataUser',
+                params: { id: detachment.user.id },
+            }"
+            class="horizontalSquad-item__wrapper mr-3"
+        >
             <div class="horizontalSquad-img">
                 <img
                     :src="detachment?.user?.media?.photo"
                     alt="logo"
                     v-if="detachment?.user?.media?.photo"
                 />
-                <img
-                    src="@app/assets/user-avatar.png"
-                    alt="photo"
-                />
+                <img src="@app/assets/user-avatar.png" alt="photo" />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
@@ -34,15 +37,11 @@
                     <p>{{ detachment.user.date_of_birth }}</p>
                 </div>
             </div>
-        </div>
+        </router-link>
         <div class="horizontalSquad-item__wrapper">
             <div class="horizontallso-img">
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
-                <img
-                    src="@app/assets/hq-emblem.png"
-                    alt="photo"
-                    v-else
-                />
+                <img src="@app/assets/hq-emblem.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">

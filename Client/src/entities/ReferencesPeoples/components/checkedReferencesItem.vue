@@ -1,22 +1,24 @@
 <template>
     <div class="checked">
-        <router-link class="checked-item__wrapper"  :to="{ name: 'userpage', params: { id: participant.user.id } }">
+        <router-link
+            class="checked-item__wrapper"
+            :to="{
+                name: 'PersonalDataUser',
+                params: { id: participant.user.id },
+            }"
+        >
             <div class="checked-img">
                 <img
                     :src="participant.user.avatar?.photo"
                     alt="logo"
                     v-if="participant.user.avatar?.photo"
                 />
-                <img
-                    src="@app/assets/user-avatar.png"
-                    alt="photo"
-                    v-else
-                />
+                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
-                        {{participant.user.last_name }}
+                        {{ participant.user.last_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
                         {{ participant.user.first_name }}
@@ -32,7 +34,7 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{participant.user.date_of_birth }}</p>
+                    <p>{{ participant.user.date_of_birth }}</p>
                 </div>
             </div>
         </router-link>
@@ -69,10 +71,8 @@ import { useRoute } from 'vue-router';
 import { ref, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
 
-
-
 const props = defineProps({
-   participant: {
+    participant: {
         type: Object,
         require: true,
     },
@@ -89,7 +89,7 @@ const props = defineProps({
 const emit = defineEmits(['change']);
 const updateMembership = (e) => {
     console.log('checkeed', checked.value);
-    emit('change', checked.value, props.participant.user.id );
+    emit('change', checked.value, props.participant.user.id);
 };
 
 const checked = ref(true);
@@ -151,15 +151,12 @@ const ChangeStatus = async () => {
                 });
             });
     } else {
-        HTTP.delete(
-            `rsousers/${id}/verify/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
+        HTTP.delete(`rsousers/${id}/verify/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
             },
-        )
+        })
             .then((response) => {
                 swal.fire({
                     position: 'top-center',
@@ -199,6 +196,9 @@ const ChangeStatus = async () => {
             display: flex;
             position: relative;
             align-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 100%;
         }
     }
 }

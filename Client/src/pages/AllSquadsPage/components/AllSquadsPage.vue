@@ -28,7 +28,7 @@
                     type="text"
                     id="search"
                     class="squads-search__input"
-                    v-model="searchSquad"
+                    v-model="name"
                     placeholder="Поищем отряд?"
                 />
                 <svg
@@ -93,15 +93,15 @@
                     <div class="squads-sort">
                         <div class="sort-filters">
                             <div class="sort-select">
-                                <Select
+                                <filterSelect
                                     variant="outlined"
                                     clearable
                                     name="select_education"
                                     id="select-education"
-                                    v-model="selectedSort"
+                                    v-model="education"
                                     address="/eduicational_institutions/"
                                     placeholder="Образовательная организация"
-                                ></Select>
+                                ></filterSelect>
                             </div>
                             <div class="sort-select">
                                 <sortByEducation
@@ -148,7 +148,7 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
-import { sortByEducation, Select } from '@shared/components/selects';
+import { sortByEducation, Select, filterSelect } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
@@ -158,9 +158,10 @@ import { HTTP } from '@app/http';
 
 // const squads = storeToRefs(useSquadsStore);
 const squads = ref([]);
-// const filterSquads = ref([]);
+
 const categories = ref([]);
 const name = ref('');
+const education = ref('');
 
 const getSquads = async () => {
     try {
@@ -184,22 +185,35 @@ const getSquads = async () => {
     }
 };
 
-// const searchSquad = async (name) => {
-//     try {
-//         const filteredSquads = await HTTP.get(`/detachments/?search=${name}`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-//         squads.value = filteredSquads.data;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
+const searchSquad = async (name) => {
+    try {
+        const filteredSquads = await HTTP.get(`/detachments/?search=${name}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        squads.value = filteredSquads.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const filteredSquad = async (education) => {
+    try {
+        const filteredSquadsEduc = await HTTP.get(`/detachments/?educational_institution__name=${education}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        squads.value = filteredSquadsEduc.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
 
 const squadsVisible = ref(20);
-const searchSquad = ref('');
 const step = ref(20);
 
 const ascending = ref(true);
@@ -209,12 +223,9 @@ const picked = ref('');
 
 const vertical = ref(true);
 
-
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
-
-const selectedSort = ref(null);
 
 const sortOptionss = ref([
     {
@@ -225,25 +236,20 @@ const sortOptionss = ref([
     { value: 'members_count', name: 'Количеству участников' },
 ]);
 
+const searchSquads = computed(() => {
+    return searchSquad(name.value);
+});
+const filteredSquadsByEducation = computed(() => {
+    return filteredSquad(education.value);
+});
+
 const sortedSquads = computed(() => {
     let tempSquads = squads.value;
 
     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-    tempSquads = tempSquads.filter((item) => {
-        // console.log(educational_institution.id);
-        return (
-            selectedSort.value == null ||
-            item.educational_institution == selectedSort.value
-        );
-    });
-
-    tempSquads = tempSquads.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchSquad.value.toUpperCase());
-    });
-    // searchSquad(name.value);
+    searchSquads.value;
+    filteredSquadsByEducation.value;
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -285,10 +291,6 @@ const sortedSquads = computed(() => {
 
     return tempSquads;
 });
-
-// const searchSquads = computed(() => {
-//     return searchSquad(name.value)
-// });
 
 onMounted(() => {
     getSquads();

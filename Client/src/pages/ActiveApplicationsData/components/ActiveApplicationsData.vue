@@ -1,7 +1,12 @@
 <template>
     <div class="container">
-
-        <div class="active-app" v-if="roles.roles.value.detachment_commander || roles.roles.value.regionalheadquarter_commander">
+        <div
+            class="active-app"
+            v-if="
+                roles.roles.value.detachment_commander ||
+                roles.roles.value.regionalheadquarter_commander
+            "
+        >
             <h2 class="profile-title">Активные заявки</h2>
 
             <div class="d-flex mt-9 mb-9">
@@ -81,7 +86,7 @@
             </div>
 
             <div v-else-if="picked == 'Заявка на участие в мероприятии'">
-                <p class="text-h3">Блок в разработке.....</p>
+                <p>Блок в разработке...</p>
             </div>
 
             <div v-else-if="picked == 'Конкурсы'">
@@ -151,78 +156,61 @@ const step = ref(12);
 // tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
 const viewParticipants = async () => {
-
-    let id = roles.roles.value.regionalheadquarter_commander ?? roles.roles.value.detachment_commander;
-    console.log('roles', roles.roles.value);
-    console.log('id', id);
-
-    if ( roles.roles.value.regionalheadquarter_commander) {
-        await HTTP.get(`/regionals/${id}/verifications/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-            .then((response) => {
-                participants.value = response.data;
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log('an error occured ' + error);
-            });
-
-    } else if (roles.roles.value.detachment_commander) {
-        await HTTP.get(`/detachments/${id}/verifications/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-            .then((response) => {
-                participants.value = response.data;
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log('an error occured ' + error);
-            });
+    try {
+        let id =
+            roles.roles.value.regionalheadquarter_commander ??
+            roles.roles.value.detachment_commander;
+        console.log('roles', roles.roles.value);
+        console.log('id', id);
+        const regComReq = ref(null);
+        const detComReq = ref(null);
+        if (roles.roles.value.regionalheadquarter_commander) {
+            const regComReq = await HTTP.get(
+                `/regionals/${id}/verifications/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            participants.value = regComReq.data;
+        } else if (roles.roles.value.detachment_commander) {
+            const detComReq = await HTTP.get(
+                `/detachments/${id}/verifications/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            participants.value = detComReq.data;
+        }
+    } catch (error) {
+        console.log('an error occured ' + error);
     }
 };
 
 const viewDetachments = async () => {
-    let id = roles?.roles?.value?.detachment_commander;
-    console.log('roles', roles.roles.value);
-    console.log('id', id);
-    await HTTP.get(`/detachments/${id}/applications/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            detachments.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+    try {
+        let id = roles?.roles?.value?.detachment_commander;
+        console.log('roles', roles.roles.value);
+        console.log('id', id);
+        const detComRequest = await HTTP.get(
+            `/detachments/${id}/applications/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        detachments.value = detComRequest.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
-
-onMounted(() => {
-    viewParticipants();
-    viewDetachments();
-});
-
-watch(
-    () => roles.roles.value,
-
-    (newRole, oldRole) => {
-        if (Object.keys(roles.roles.value).length === 0) {
-            return;
-        }
-        viewParticipants();
-        viewDetachments();
-    },
-);
 
 const select = (event) => {
     selectedPeoples.value = [];
@@ -273,6 +261,23 @@ const changeSquads = (CheckedSquad, SquadId) => {
         );
     }
 };
+
+watch(
+    () => roles.roles.value,
+
+    (newRole, oldRole) => {
+        if (Object.keys(roles.roles.value).length === 0) {
+            return;
+        }
+        viewParticipants();
+        viewDetachments();
+    },
+);
+
+onMounted(() => {
+    viewParticipants();
+    viewDetachments();
+});
 </script>
 
 <style lang="scss" scoped>
