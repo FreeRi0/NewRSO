@@ -1,7 +1,8 @@
 <template>
     <section class="headquarters-management">
         <h3>{{ head }}</h3>
-        <div class="headquarters-management__container">
+
+        <router-link :to="{ name: 'userpage', params: { id: props.commander.id } }" class="headquarters-management__container">
             <div
                 class="manager-card"
                 :key="manager"
@@ -11,25 +12,47 @@
                     'align-right': index % 2 !== 0,
                 }"
             >
-                <div class="manager-card__avatar">
-                    <img
-                        :src="
-                            manager.user?.avatar?.photo ??
-                            '/assets/foto-leader-squad/foto-leader-squad-01.png'
-                        "
-                        alt="фото"
-                    />
+                <div
+                    class="manager-card"
+                    :key="manager"
+                    v-for="(manager, index) in joinMembers"
+                    :class="{
+                        'align-left': index % 2 === 0,
+                        'align-right': index % 2 !== 0,
+                    }"
+                >
+                    <div class="manager-card__avatar">
+                        <img
+                            :src="manager.user?.avatar?.photo"
+                            alt="фото"
+                            v-if="manager.user?.avatar?.photo"
+                        />
+                        <img
+                            src="@app/assets/user-avatar.png"
+                            alt="photo"
+                            v-else
+                        />
+                    </div>
+                    <div class="manager-card__box">
+                        <h5 id="name_length">
+                            {{ manager?.user?.first_name }}
+                            {{ manager?.user?.patronymic_name }}
+                            {{ manager?.user?.last_name }}
+                        </h5>
+                        <p>{{ manager.position }}</p>
+                    </div>
                 </div>
+
                 <div class="manager-card__box">
                     <h5 id="name_length">
                         {{ manager?.user?.first_name }}
-                        {{ manager?.user?.last_name }}
                         {{ manager?.user?.patronymic_name }}
+                        {{ manager?.user?.last_name }}
                     </h5>
                     <p>{{ manager.position }}</p>
                 </div>
             </div>
-        </div>
+        </router-link>
     </section>
 </template>
 
@@ -98,6 +121,8 @@ section.headquarters-management h3 {
     width: 120px;
     height: 120px;
     border-radius: 100%;
+    object-fit: cover;
+    overflow: hidden;
 }
 
 .manager-card__box {

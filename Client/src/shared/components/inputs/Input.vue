@@ -3,46 +3,24 @@
         <input
             :type="type"
             :name="name"
+            :value="value"
             :id="name"
             :placeholder="placeholder"
-            :value="value"
             :maxlength="maxLength"
-            :data-maska="maska"
-            :v-maska="vmaska"
-            @input="updateValue"
-            variant="outlined"
             class="mb-2"
+            @input="updateValue"
             v-bind="$attrs"
         />
-        <TransitionGroup>
-            <div
-                class="error-wrapper"
-                v-for="element of error"
-                :key="element.$uid"
-            >
-                <div class="form-error__message">{{ element.$message }}</div>
-            </div>
-        </TransitionGroup>
     </div>
 </template>
 
 <script setup>
-// import { vmaska } from 'maska';
-
 defineOptions({
     inheritAttrs: false,
 });
 
 const emit = defineEmits(['update:value']);
 const props = defineProps({
-    error: {
-        type: Array,
-        required: false,
-    },
-    value: {
-        type: String,
-        default: '',
-    },
     name: {
         type: String,
         required: true,
@@ -59,21 +37,18 @@ const props = defineProps({
         type: String,
         default: '',
     },
-    maska: {
-        type: String,
-        required: false,
-    },
-    vmaska: {
-        type: Boolean,
-        default: false,
-    },
     maxLength: {
         type: Number,
     },
+    value: {
+        type: String,
+    },
 });
 
-const updateValue = (e) => {
-    emit('update:value', e.target.value);
+const updateValue = (event) => {
+    console.log('textt');
+    emit('update:value', event.target.value);
+    console.log('textt', event.target.value );
 };
 </script>
 
@@ -106,7 +81,6 @@ input {
     width: 100%;
     color: #35383f;
 }
-
 
 .form-input input::placeholder {
     color: #a3a3a3;

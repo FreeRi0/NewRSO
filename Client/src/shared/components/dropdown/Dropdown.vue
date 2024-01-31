@@ -83,7 +83,7 @@
                     >
 
                     <router-link
-                        v-else-if="!item.hasOwnProperty('params') "
+                        v-else-if="!item.hasOwnProperty('params')"
                         class="dropdown__link"
                         :to="{ name: item.name }"
                         >{{ item.title }}</router-link
@@ -96,6 +96,7 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
+const emit = defineEmits(['updateUser'])
 const router = useRouter();
 const props = defineProps({
     title: {
@@ -140,13 +141,12 @@ const props = defineProps({
     },
 });
 
-
-
 // const route = useRoute();
 // let id = route.params.id
 
 const LogOut = () => {
     localStorage.removeItem('Token');
+    emit('updateUser', {})
     router.push('/');
 };
 </script>

@@ -1,7 +1,25 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto :banner="user?.media?.banner" v-if="user"></bannerPhoto>
-        <Avatar :avatar="user?.media?.photo" v-if="user"></Avatar>
+        <bannerPhoto
+            :banner="user?.media?.banner"
+            @upload-wall="uploadWall"
+            @update-wall="updateWall"
+            @delete-wall="deleteWall"
+        ></bannerPhoto>
+        <Avatar
+            :avatar="user?.media?.photo"
+            @upload="uploadAva"
+            @update="updateAva"
+            @delete="deleteAva"
+            :edited="false"
+        ></Avatar>
+        <Avatar
+            :avatar="user?.media?.photo"
+            @upload="uploadAva"
+            @update="updateAva"
+            @delete="deleteAva"
+            :edited="true"
+        ></Avatar>
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
@@ -24,10 +42,11 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <p v-if="user?.user_region?.reg_region">
+                            <p v-if="user.region">
                                 {{
-                                    regionals[user?.user_region?.reg_region - 1]
-                                        ?.name
+                                    regionals.find(
+                                        (reg) => reg.region === user.region,
+                                    )?.name
                                 }}
                             </p>
                         </li>
@@ -114,84 +133,83 @@ const props = defineProps({
     },
 });
 
+const emit = defineEmits(['upload', 'update', 'delete']);
+
+const uploadAva = (imageAva) => {
+    console.log('photo', imageAva);
+    emit('upload', imageAva);
+    console.log('ghhhgh');
+};
+
+const updateAva = (imageAva) => {
+    console.log('photoUpdate', imageAva);
+    emit('update', imageAva);
+    console.log('update');
+};
+
+const deleteAva = (imageAva) => {
+    console.log('photoDel', imageAva);
+    emit('delete', imageAva);
+    console.log('del');
+};
+
+const uploadWall = (imageWall) => {
+    console.log('ban', imageWall);
+    emit('uploadWall', imageWall);
+    console.log('ghhhgh');
+};
+
+const updateWall = (imageWall) => {
+    console.log('banUpdate', imageWall);
+    emit('updateWall', imageWall);
+    console.log('update');
+};
+const deleteWall = (imageWall) => {
+    console.log('banDelete', imageWall);
+    emit('deleteWall', imageWall);
+    console.log('delete');
+};
+
 const regionals = ref([]);
 const detachment = ref({});
 const educationalHeadquarter = ref({});
-const participant = ref({})
+const participant = ref({});
 
-const getRegionals = async () => {
-    await HTTP.get(`/regionals/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regionals.value = response.data;
-            console.log(regionals.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+const getUserData = async () => {
+    try {
+        const responseRegionals = await HTTP.get(`/regionals/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        const responseSquad = ref(null);
+        if (props.user.detachment_id) {
+            let id = props.user.detachment_id;
+            const responseSquad = await HTTP.get(`/detachments/${id}/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+        }
+        const responseEducHead = ref(null);
+        if (props.user.educational_headquarter_id) {
+            let id = props.user.educational_headquarter_id;
+            const responseEducHead = await HTTP.get(`/educationals/${id}/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+        }
+        regionals.value = responseRegionals.data;
+        detachment.value = responseSquad.data;
+        educationalHeadquarter.value = responseEducHead.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
-
-const getDetachment = async () => {
-    let id = props.user.detachment_id;
-    await HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            detachment.value = response.data;
-            console.log(regionals.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getEducationalHeadquarter = async () => {
-    let id = props.user.educational_headquarter_id;
-    await HTTP.get(`/educationals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educationalHeadquarter.value = response.data;
-            console.log(regionals.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-// const aboutMembers = async () => {
-//     let id = props.user.detachment_id;
-//     let membership_pk =
-//     await HTTP.get(`/detachments/${id}/members/${membership_pk}/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             participant.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-onMounted(() => {
-    getRegionals();
-    getDetachment();
-    getEducationalHeadquarter();
-});
 
 watch(
     () => props.user,
@@ -200,10 +218,13 @@ watch(
         if (Object.keys(props.user).length === 0) {
             return;
         }
-        getDetachment();
-        getEducationalHeadquarter();
+        getUserData();
     },
 );
+
+onMounted(() => {
+    getUserData();
+});
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {

@@ -133,7 +133,7 @@ const fetchCommander = async () => {
     try {
         let id = localHeadquarter.value.commander.id;
 
-        const response = await HTTP.get(`/rsousers/${id}/`, {
+        const response = await HTTP.get(`/users/${id}/`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),

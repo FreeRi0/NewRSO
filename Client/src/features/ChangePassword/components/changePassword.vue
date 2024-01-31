@@ -1,28 +1,38 @@
 <template>
-    <div class="change_Login">
+    <div class="change_Login mb-8">
         <div class="change_Login_title">
-            <p class="username-title">Ваш логин: {{ user.username }}</p>
-            <button class="changeLog" v-on:click="visible = !visible">
-                {{ visible ? 'Скрыть' : 'Изменить' }}
+            <p class="username-title">Ваш логин: {{ username }}</p>
+            <button class="changeLog" v-on:click="show = !show">
+                {{ show ? 'Скрыть' : 'Изменить' }}
             </button>
         </div>
-        <Input v-show="visible"
-            placeholder="   login"
-            name="surname"
-            v-model:value="user.username"
+        <Input
+            v-show="show"
+            placeholder="login"
+            name="login"
+            v-model:value="username"
         />
-        <p class="error" v-if="isError.last_name">{{ 'Фамилия пользователя, ' +  isError.last_name }}</p>
-            <p class="error" v-if="isError.first_name">{{'Имя пользователя, ' + isError.first_name }}</p>
-            <p class="error" v-if="isError.gender">{{'Гендер, ' + isError.gender }}</p>
-            <p class="error" v-if="isError.username">{{'' + isError.username }}</p>
-        <Button @click="updateUsername" v-show="visible" class="save" label="Сохранить" color="primary"></Button>
+        <!-- <p class="error" v-if="isError.last_name">
+            {{ 'Фамилия пользователя, ' + isError.last_name }}
+        </p>
+        <p class="error" v-if="isError.first_name">
+            {{ 'Имя пользователя, ' + isError.first_name }}
+        </p> -->
+        <p class="error" v-if="isError.username">{{ '' + isError.username }}</p>
+        <Button
+            @click="updateUsername"
+            v-show="show"
+            class="save"
+            label="Сохранить"
+            color="primary"
+        ></Button>
     </div>
-    <div class="change_Password">
+    <!-- <div class="change_Password" @submit.prevent="resetPasswordForm">
         <p class="pass-title">Изменить пароль</p>
         <Input
             placeholder="   Введите старый пароль"
             name="password"
-            v-model:value="user.password"
+            v-model:value="user.password_old"
         ></Input>
         <Input
             placeholder="   Придумайте новый пароль"
@@ -35,74 +45,86 @@
             v-model:value="user.re_password"
         ></Input>
         <Button class="save" label="Сохранить" color="primary"></Button>
-    </div>
+    </div> -->
 </template>
 <script setup>
-import { ref, computed, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, computed } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
+import { useUserStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
+const emit = defineEmits(['changeUsername']);
 
-const user = ref({
-    username: '',
-    password: '',
-    re_password: '',
-});
+const userStore = useUserStore();
+let currentUser = storeToRefs(userStore);
+let username = ref(currentUser.currentUser.value.username);
+const show = ref(false);
+// const password = ref('');
+// const re_password = ref('');
+// const visible = ref(false);
+// const visibleRe = ref(false);
+
+// const auth = computed(() => ({
+//     uid: route.params.uid,
+//     token: route.params.token,
+// }));
+
 const swal = inject('$swal');
 const isError = ref([]);
-const visible = ref(false);
-
-const getUser = async () => {
-    await HTTP.get('/rsousers/me/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log('failed ' + error);
+const updateUsername = async () => {
+    try {
+        const response = await HTTP.patch(
+            '/rsousers/me/',
+            { username: username.value },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
         });
-};
-
-onMounted(() => {
-    getUser();
-});
-
-const updateUsername = async() => {
-    await HTTP.patch('/rsousers/me/', user.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
+        emit('changeUsername', response.data.username);
+        console.log('username changed!');
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
             swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            user.value = response.data;
-            console.log(response.data);
-        })
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            swal.fire({
-                position: 'top-center',
+                position: 'center',
                 icon: 'error',
-                title: 'ошибка',
+                title: `ошибка`,
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 2500,
             });
-        });
-}
+        }
+    }
+    // const resetPasswordForm = async () => {
+    //     if (password.value !== re_password.value) {
+    //         console.error('Passwords do not match');
+    //         return;
+    //     }
 
+    //     try {
+    //         const response = await HTTP.post('/users/reset_password_confirm/', {
+    //             ...auth.value,
+    //             password: password.value,
+    //         });
+    //         console.log(response.data);
+    //         localStorage.setItem('Token', response.data.auth_token);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
+};
 </script>
 <style lang="scss" scoped>
 .change_Login {
@@ -111,7 +133,7 @@ const updateUsername = async() => {
     padding: 30px;
     max-width: 480px;
     @media screen and (max-width: 575px) {
-      padding: 20px 16px 40px 16px;
+        padding: 20px 16px 40px 16px;
     }
     &_title {
         display: flex;
@@ -128,7 +150,7 @@ const updateUsername = async() => {
     margin-bottom: 80px;
     max-width: 480px;
     @media screen and (max-width: 575px) {
-      padding: 20px 16px 40px 16px;
+        padding: 20px 16px 40px 16px;
     }
 }
 
@@ -148,7 +170,7 @@ const updateUsername = async() => {
 
 .changeLog {
     font-family: 'Akrobat';
-    color: #1F7CC0;
+    color: #1f7cc0;
     font-size: 16px;
     font-weight: 500;
 }

@@ -10,8 +10,8 @@
                     <img
                         src="@app/assets/competition/promo.png"
                         alt="Логотип конкурса"
-                        width="4720"
-                        height="2040"
+                        width="1180"
+                        height="510"
                     />
                 </div>
             </div>
@@ -25,7 +25,14 @@
                 >
                 <div v-else>
                     <Button
-                        v-if="currentStatus.status === 'Еще не участвуете'"
+                        v-if="!userCommander.detachment_commander"
+                        label="Участвовать"
+                        @click="errorIsNoCommander = !errorIsNoCommander"
+                        class="competition__status-application-button"
+                    ></Button>
+
+                    <Button
+                        v-else-if="currentStatus.status === 'Еще не участвуете'"
                         label="Участвовать"
                         class="competition__status-application-button"
                         @click="onSendApplication"
@@ -121,9 +128,9 @@
                 организации «Российский Студенческие Отряды»
             </p>
             <a
-                href="http://127.0.0.1:8000/compititions/documents/%D0%9F%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BD%D0%B0_%D0%BB%D1%83%D1%87%D1%88%D0%B8%D0%B9_%D0%9B%D0%A1%D0%9E_2024.pdf"
                 target="_blank"
                 class="competition__documents-button"
+                @click.prevent="downloadDocument"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -139,9 +146,37 @@
                 </svg>
                 Скачать документ</a
             >
+            <!-- <button
+                type="button"
+                id="document"
+                class="competition__documents-button"
+                @click="downloadDocument"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="30"
+                    viewBox="0 0 24 30"
+                    fill="none"
+                >
+                    <path
+                        d="M23.9988 6.79313V26.2502C23.9988 28.3212 22.3199 30 20.249 30H3.74981C1.67885 30 0 28.3212 0 26.2502V3.75132C0 1.68035 1.67885 0.00150349 3.74981 0.00150349H17.2072C17.4063 -0.0111251 17.6135 0.0552602 17.7794 0.221163L23.7791 6.22086C23.945 6.38676 24.0114 6.59402 23.9988 6.79313ZM16.4992 1.50143H3.74981C2.50723 1.50143 1.49992 2.50874 1.49992 3.75132V26.2502C1.49992 27.4928 2.50723 28.5001 3.74981 28.5001H20.249C21.4916 28.5001 22.4989 27.4928 22.4989 26.2502V7.50113H17.2491C16.8349 7.50113 16.4992 7.16536 16.4992 6.75116V1.50143ZM17.9991 2.56204V6.0012H21.4383L17.9991 2.56204ZM11.9994 21.4398L15.2189 18.2203C15.5118 17.9274 15.9866 17.9274 16.2795 18.2203C16.5724 18.5131 16.5724 18.988 16.2795 19.2809L11.8791 23.6812C11.7455 23.8874 11.5134 24.0237 11.2494 24.0237C10.9855 24.0237 10.7534 23.8874 10.6197 23.6812L6.21936 19.2809C5.92648 18.988 5.92648 18.5131 6.21936 18.2203C6.51224 17.9274 6.98709 17.9274 7.27997 18.2203L10.4995 21.4398V11.2509C10.4995 10.8367 10.8352 10.501 11.2494 10.501C11.6636 10.501 11.9994 10.8367 11.9994 11.2509V21.4398Z"
+                        fill="#1F7CC0"
+                    />
+                </svg>
+                Скачать документ
+            </button> -->
         </div>
 
-        <CompetitionMembersBlock v-if="isAuth"></CompetitionMembersBlock>
+        <router-link
+            :to="{
+                name: 'CompetitionParticipants',
+                params: { id: competition.id },
+            }"
+            ><h2 class="subtitle subtitle--link">Участники конкурса</h2>
+        </router-link>
+
+        <!-- <CompetitionMembersBlock v-if="isAuth"></CompetitionMembersBlock> -->
 
         <!--Модальные окна-->
         <ModalCompetition
@@ -164,10 +199,10 @@
             >
                 x
             </button>
-            <p>
+            <p class="competition__message">
                 Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-                в&nbsp;Конкурсе по&nbsp;причине: -подать заявку на&nbsp;участие
-                может только Командир отряда.
+                в&nbsp;Конкурсе по&nbsp;причине:<br />- подать заявку
+                на&nbsp;участие может только Командир отряда.
             </p>
         </div>
     </div>
@@ -176,11 +211,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { CompetitionMembersBlock } from '@features/Competition';
+// import { CompetitionMembersBlock } from '@features/Competition';
 import { ModalCompetition } from '@features/Competition';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';
 // const route = useRoute();
+import { usePage } from '@shared';
+
+usePage({ isHidden: true });
 
 const isAuth = ref(!!localStorage.getItem('Token'));
 
@@ -220,6 +258,30 @@ const getMeSquad = async () => {
     } catch (error) {
         console.log('an error occured ' + error);
     }
+};
+
+const downloadDocument = async () => {
+    HTTP.get('competitions/download_regulation_file/', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+        responseType: 'blob',
+    })
+        .then((response) => {
+            var FILE = window.URL.createObjectURL(response.data);
+
+            var docUrl = document.createElement('a');
+            docUrl.href = FILE;
+            docUrl.setAttribute('target', '_blank');
+            docUrl.setAttribute('type', 'application/pdf');
+            document.body.appendChild(docUrl);
+            docUrl.click();
+            console.log(response, 'success');
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
 };
 
 //--id конкурса на лучший отряд--------------------------------

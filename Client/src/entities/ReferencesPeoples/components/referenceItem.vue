@@ -4,50 +4,49 @@
             <input
                 type="checkbox"
                 v-model="checked"
-                :value="participant"
+                :value="participant.user"
                 @change="updateCheck"
             />
         </div>
-            <router-link
-                class="horizontallso-item__wrapper"
-                :to="{ name: 'userpage', params: { id: participant.user.id } }"
-            >
-                <div class="horizontallso-img">
-                    <img
-                        :src="participant?.user?.avatar?.photo"
-                        alt="logo"
-                        v-if="participant?.user?.avatar?.photo"
-                    />
-                    <img
-                        src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                        alt="photo"
-                        v-else
-                    />
+        <router-link
+            class="horizontallso-item__wrapper"
+            :to="{
+                name: 'PersonalDataUser',
+                params: { id: participant.user.id },
+            }"
+        >
+            <div class="horizontallso-img">
+                <img
+                    :src="participant.user.avatar?.photo"
+                    alt="logo"
+                    v-if="participant.user.avatar?.photo"
+                />
+                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
+            </div>
+            <!-- <pre>{{ participant.user.avatar?.photo }}</pre> -->
+            <div class="containerHorizontal">
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.user.last_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.user.first_name }}
+                    </p>
+                    <p class="horizontallso-item__list-full">
+                        {{ participant.user.patronymic_name }}
+                    </p>
                 </div>
-                <div class="containerHorizontal">
-                    <div class="d-flex">
-                        <p class="horizontallso-item__list-full">
-                            {{ participant.user.last_name }}
-                        </p>
-                        <p class="horizontallso-item__list-full">
-                            {{ participant.user.first_name }}
-                        </p>
-                        <p class="horizontallso-item__list-full">
-                            {{ participant.user.patronymic_name }}
-                        </p>
-                    </div>
-                    <div class="horizontallso-item__list-date">
-                        <span
-                            style="
-                                border-left: 2px solid #b6b6b6;
-                                padding-right: 8px;
-                            "
-                        ></span>
-                        <p>{{ participant.user?.date_of_birth }}</p>
-                    </div>
+                <div class="horizontallso-item__list-date">
+                    <span
+                        style="
+                            border-left: 2px solid #b6b6b6;
+                            padding-right: 8px;
+                        "
+                    ></span>
+                    <p>{{ participant.user?.date_of_birth }}</p>
                 </div>
-            </router-link>
-
+            </div>
+        </router-link>
     </div>
 </template>
 <script setup>
@@ -69,7 +68,7 @@ const emit = defineEmits(['change']);
 const checked = ref(false);
 
 const updateCheck = (e) => {
-    console.log('ddddddUser', checked.value, props.participant);
+    console.log('ddddddUser', checked.value, props.participant.user.id);
     emit('change', checked.value, props.participant.user.id);
 };
 
@@ -100,9 +99,12 @@ watch(
         height: 36px;
         justify-content: start;
         img {
+            width: 36px;
+            height: 36px;
             display: flex;
             position: relative;
             align-items: center;
+            border-radius: 100%;
         }
     }
     &-info {

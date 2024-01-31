@@ -9,7 +9,7 @@
             :key="detachment.id"
         />
     </div>
-    <h2 v-else>Заявок нет...</h2>
+    <p v-else>Заявок нет...</p>
 </template>
 <script setup>
 import { ref } from 'vue';

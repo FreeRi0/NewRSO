@@ -6,7 +6,7 @@
         >
             <div class="horizontal-img">
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
-                <img src="@app/assets/user-avatar.png" alt="logo" v-else />
+                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontal-item-title">"{{ squad.name }}"</p>

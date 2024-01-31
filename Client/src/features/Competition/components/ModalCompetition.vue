@@ -75,8 +75,8 @@
         </button>
         <p class="competition__message">
             Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;номинации &laquo;Тандем&raquo; по&nbsp;причине: -дата
-            основания отряда позже 25.01.2024&nbsp;года.
+            в&nbsp;номинации &laquo;Тандем&raquo; по&nbsp;причине:<br />- дата
+            основания отряда позже 24.01.2024&nbsp;года.
         </p>
     </div>
 
@@ -90,7 +90,7 @@
         </button>
         <p class="competition__message">
             Извините, вы&nbsp;не&nbsp;можете подать заявку на&nbsp;участие
-            в&nbsp;номинации &laquo;Дебют&raquo; по&nbsp;причине: -дата
+            в&nbsp;номинации &laquo;Дебют&raquo; по&nbsp;причине:<br />- дата
             основания отряда ранее 25.01.2024&nbsp;года.
         </p>
     </div>
@@ -207,7 +207,6 @@ const getSquads = async () => {
     })
         .then((response) => {
             squadsJunour.value = response.data;
-            // в консоли выводит пустой массив
             console.log('Юниор-отряды', response);
         })
         .catch(function (error) {
@@ -251,7 +250,6 @@ const SendApplication = async () => {
         });
         isSucsess.value = true;
         emit('sucsess');
-        //закрыть окно выбора номинации
     } catch (e) {
         console.log('error application', e);
     }
@@ -268,7 +266,7 @@ const SendInvitation = async () => {
                         ? parseInt(sliceNulls(num)) - 1
                         : parseInt(sliceNulls(num)),
                 ),
-        ).getTime() > new Date(2024, 0, 25).getTime()
+        ).getTime() >= new Date(2024, 0, 25).getTime()
     ) {
         console.log('err');
         errorIsStatusMentor.value = true;
@@ -294,7 +292,6 @@ const sendAppl = async (juniorDetacmentId) => {
         });
         isSucsess.value = true;
         emit('sucsess');
-        //закрыть окно выбора номинации
     } catch (e) {
         console.log('error application', e);
     }

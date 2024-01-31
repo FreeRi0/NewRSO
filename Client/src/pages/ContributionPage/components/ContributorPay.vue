@@ -36,7 +36,7 @@
                 Уважаемый пользователь, ваш членский взнос оплачен.
             </div>
 
-            <div v-else-if="picked === false && regComId">
+            <div v-else-if="picked === false && roles.roles.value.regionalheadquarter_commander">
                 <div class="contributor-search">
                     <input
                         type="text"
@@ -534,7 +534,7 @@ import { HTTP } from '@app/http';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
-let regComId = roles.roles.value.regionalheadquarter_commander;
+// let regComId = roles.roles.value.regionalheadquarter_commander;
 const participants = ref([]);
 const participantsVisible = ref(12);
 

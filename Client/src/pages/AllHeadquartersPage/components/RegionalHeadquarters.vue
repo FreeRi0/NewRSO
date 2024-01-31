@@ -12,7 +12,7 @@
                     type="text"
                     id="search"
                     class="headquarters-search__input"
-                    v-model="searchRegionalHeadquarters"
+                    v-model="name"
                     placeholder="Начните вводить название штаба."
                 />
                 <svg
@@ -90,16 +90,6 @@
                                 <pre>{{ item.title }}</pre>
                             </template>
                         </v-select>
-                        <!-- <Select
-                            clearable
-                            variant="outlined"
-                            name="select_district"
-                            id="select-district"
-                            v-model="selectedSortDistrict"
-                            class="filter-district"
-                            address="/districts/"
-                            placeholder="Окружной штаб"
-                        ></Select> -->
                     </div>
                     <div class="sort-select">
                         <sortByEducation
@@ -172,7 +162,7 @@ const sortBy = ref('alphabetically');
 
 const vertical = ref(true);
 
-const searchRegionalHeadquarters = ref('');
+const name = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -185,20 +175,33 @@ const selectedSortDistrict = ref(
 const districts = ref([]);
 
 const getRegionalHeadquarters = async () => {
-    await HTTP.get('/regionals/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regionalHeadquarters.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const regResponse = await HTTP.get('/regionals/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        regionalHeadquarters.value = regResponse.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
+
+const searchRegional = async (name) => {
+    try {
+        const filteredRegional = await HTTP.get(`/regionals/?search=${name}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        regionalHeadquarters.value = filteredRegional.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
 
 const filtersDistricts = computed(() =>
     selectedSortDistrict.value
@@ -207,6 +210,10 @@ const filtersDistricts = computed(() =>
           )?.regional_headquarters ?? []
         : regionalHeadquarters.value,
 );
+
+const searchReg = computed(() => {
+    return searchRegional(name.value);
+});
 
 const getDistrictsHeadquartersForFilters = async () => {
     try {
@@ -217,10 +224,6 @@ const getDistrictsHeadquartersForFilters = async () => {
     }
 };
 
-onMounted(() => {
-    getDistrictsHeadquartersForFilters();
-    getRegionalHeadquarters();
-});
 
 const selectedSort = ref(0);
 
@@ -239,12 +242,7 @@ const sortedRegionalHeadquarters = computed(() => {
     tempHeadquarters = tempHeadquarters.slice(0, headquartersVisible.value);
 
     // поиск
-    tempHeadquarters = tempHeadquarters.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchRegionalHeadquarters.value.toUpperCase());
-    });
-
+     searchReg.value;
     // сортировка
     tempHeadquarters = tempHeadquarters.sort((a, b) => {
         if (sortBy.value === 'alphabetically') {
@@ -287,59 +285,11 @@ onActivated(() => {
             ?.districtName ?? null;
 });
 
-// ...............................................................................
-// const sortedHeadquarters = computed(() => {
-//     let tempHeadquartes = filtersDistricts.value;
+onMounted(() => {
+    getDistrictsHeadquartersForFilters();
+    getRegionalHeadquarters();
+});
 
-//     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
-//     tempHeadquartes = tempHeadquartes.filter((item) => {
-//         // console.log(educational_institution.id);
-//         return (
-//             selectedSortDistrict.value == null ||
-//             item.district_headquarter == selectedSortDistrict.value
-//         );
-//     });
-
-//     tempHeadquartes = tempHeadquartes.filter((item) => {
-//         return item.name
-//             .toUpperCase()
-//             .includes(searchRegionalHeadquarters.value.toUpperCase());
-//     });
-
-//     tempHeadquartes = tempHeadquartes.sort((a, b) => {
-//         if (sortBy.value == 'alphabetically') {
-//             let fa = a.name.toLowerCase(),
-//                 fb = b.name.toLowerCase();
-
-//             if (fa < fb) {
-//                 return -1;
-//             }
-//             if (fa > fb) {
-//                 return 1;
-//             }
-//             return 0;
-//         } else if (sortBy.value == 'founding_date') {
-//             let fc = a.founding_date,
-//                 fn = b.founding_date;
-
-//             if (fc < fn) {
-//                 return -1;
-//             }
-//             if (fc > fn) {
-//                 return 1;
-//             }
-//             return 0;
-//         } else if (sortBy.value == 'members_count') {
-//             return a.members - b.members;
-//         }
-//     });
-
-//     if (!ascending.value) {
-//         tempHeadquartes.reverse();
-//     }
-
-//     return tempHeadquartes;
-// });
 </script>
 <style lang="scss">
 .headquarters {
