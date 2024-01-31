@@ -70,7 +70,9 @@
                     </div>
 
                     <router-link
-                        v-if="userId === headquarter?.commander?.id"
+                        v-if="
+                            userId === headquarter?.commander?.id || IsTrusted
+                        "
                         class="hq-data__link"
                         :to="{
                             name: 'EditHQ',
@@ -152,7 +154,10 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="userId === localHeadquarter?.commander?.id"
+                        v-if="
+                            userId === localHeadquarter?.commander?.id ||
+                            IsTrusted
+                        "
                         class="hq-data__link"
                         :to="{
                             name: 'FormLocal',
@@ -234,7 +239,10 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="userId === districtHeadquarter?.commander?.id"
+                        v-if="
+                            userId === districtHeadquarter?.commander?.id ||
+                            IsTrusted
+                        "
                         class="hq-data__link"
                         :to="{
                             name: 'FormDH',
@@ -316,7 +324,10 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="userId === regionalHeadquarter?.commander?.id"
+                        v-if="
+                            userId === regionalHeadquarter?.commander?.id ||
+                            IsTrusted
+                        "
                         class="hq-data__link"
                         :to="{
                             name: 'EditingOfRS',
@@ -407,7 +418,10 @@
                         </div>
                     </div>
                     <router-link
-                        v-if="userId === centralHeadquarter?.commander?.id"
+                        v-if="
+                            userId === centralHeadquarter?.commander?.id ||
+                            IsTrusted
+                        "
                         class="hq-data__link"
                         :to="{
                             name: 'FormCentral',
@@ -429,12 +443,10 @@ import { useRoleStore } from '@layouts/store/role';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 const roleStore = useRoleStore();
-roleStore.getRoles();
 const userStore = useUserStore();
-userStore.getUser();
 const user = storeToRefs(userStore);
 let userId = computed(() => {
-    return user.user.value.id;
+    return user.currentUser.value.id;
 });
 const edict = ref({});
 
@@ -497,6 +509,12 @@ const aboutEduc = async () => {
         console.log(error);
     }
 };
+
+const IsTrusted = computed(() => {
+    return props.member.find(
+        (item) => item.user.id === userId.value && item.is_trusted === true,
+    );
+});
 watch(
     () => props.headquarter,
 

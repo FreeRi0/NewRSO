@@ -7,7 +7,7 @@
         :placeholder="placeholder"
         v-bind="$attrs"
         item-title="name"
-        item-value="value"
+        item-value="id"
     >
         <template #selection="{ item }">
             <span>{{ item.raw.name }}</span>
@@ -30,7 +30,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
 import { HTTP } from '@app/http';
 import { onBeforeRouteUpdate } from 'vue-router';
 

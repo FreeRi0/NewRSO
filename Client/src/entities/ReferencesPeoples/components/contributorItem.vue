@@ -108,9 +108,12 @@ watch(
         height: 36px;
         justify-content: start;
         img {
+            width: 36px;
+            height: 36px;
             display: flex;
             position: relative;
             align-items: center;
+            border-radius: 100%;
         }
     }
     &-info {
