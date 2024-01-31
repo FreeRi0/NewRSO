@@ -12,9 +12,8 @@
                     id='search'
                     class='squads-search__input'
                     placeholder='Найти мероприятие'
-
                     v-model='nameSearch'
-
+                    @keyup.enter = "SearchOnChange"
                 />
                 <svg
                     width='28'
@@ -84,7 +83,6 @@
             <!--Привет) Страницы мероприятий писал и подключал Modestra -->
             <!--Я в поисках работы, если вам требуется Frontend разработчик, пишите сюда -->
             <!--https://t.me/Modestra -->
-
             <div class='col' style='width: 100%'>
                 <div class='sort-container'>
                     <div class='sort-layout sort-types'>
@@ -144,32 +142,42 @@
 //Импорт файлов
 
 import Button from "primevue/button";
-import BannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
+import bannerCreate from "@shared/components/imagescomp/bannerCreate.vue";
 import { ref } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { getListActions } from '@services/ActionService';
 import { computed } from "vue";
+import { onActivated } from "vue";
 
 let actionsList = ref([]);
-
-getListActions()
+onActivated(()=>{
+  getListActions()
     .then((responce)=>{
-    actionsList.value = responce.data;
-    console.log("Список мероприятий:", actionsList.value);
+      actionsList.value = responce.data;
+      console.log(actionsList)
     })
     .catch((e) =>{
 
     })
+})
 
 //Переменные компонента
 const nameSearch = ref('');
 
+function SearchOnChange(){
+  SelectActionsByName();
+}
 const actionNewList = computed(() => {
-  
+  console.log(sortBy);
 })
 
+function SelectActionsByName(){
+  return actionForm.map((action)=> {
+      return (action.name.indexOf(nameSearch) === 'true') ? action : null
+  });
+}
 //Сортировка
 const vertical = ref(true);
 const ascending = ref(true);

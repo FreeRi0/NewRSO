@@ -417,9 +417,9 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/actionSquads',
                 name: 'actionSquads',
-                component: () => import('@entities/Actions/components/SeeYouLater.vue')
+                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
+                //component: () => import('@entities/Actions/components/SeeYouLater.vue')
             },
-            /*
             {
                 path: '/actionSquads/:id',
                 name: 'Action',
@@ -435,7 +435,7 @@ const routes: RouteRecordRaw[] = [
                 path: "/actionSquads/:id/EditAction",
                 name: "editAction",
                 component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
-            }, */
+            }, 
             {
                 path: '/AllParticipants/:id',
                 name: 'allParticipants',
@@ -476,6 +476,12 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                 },
+            },
+            //Реестр участников
+            {
+                path: '/roster',
+                name: 'Roster',
+                component: () => import('@pages/reestrPage/components/rosterPage.vue'),
             },
             // Индивидуальное мероприятие
             {

@@ -725,7 +725,6 @@
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
 import { getAction, createAction, createOrganizator, getOrganizator, putAction, putOrganizator } from '@services/ActionService';
-import { actionForm } from '@entities/Actions';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { uploadPhoto } from '@shared/components/imagescomp';
