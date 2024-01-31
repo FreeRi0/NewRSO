@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+// import { useRoute } from 'vue-router';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
         user: {},
+        privateUser: {},
         currentUser: {},
+
     }),
     actions: {
         async getUser() {
@@ -17,9 +19,8 @@ export const useUserStore = defineStore('user', {
             });
             this.currentUser = response.data;
         },
-        async getUserId() {
-            const route = useRoute();
-            let id = route.params.id;
+
+        async getUserId(id:String) {
             const response = await HTTP.get(`users/${id}/`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,6 +28,19 @@ export const useUserStore = defineStore('user', {
                 },
             });
             this.user = response.data;
+
         },
+        async getPrivateUserId(id:String) {
+            const response = await HTTP.get(`rsousers/${id}/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.privateUser = response.data;
+
+        },
+
     },
+
 });

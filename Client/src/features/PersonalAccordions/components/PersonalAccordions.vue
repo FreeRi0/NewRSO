@@ -101,9 +101,7 @@
                                 clearable
                                 placeholder="Введите фамилию"
                                 name="surname"
-                                v-model:value="
-                                    currentUser.currentUser.value.last_name
-                                "
+                                v-model:value="props.user.last_name"
                             />
                         </div>
                         <p class="error" v-if="isError.last_name">
@@ -116,9 +114,7 @@
                                 clearable
                                 placeholder="familia"
                                 name="surname-lat"
-                                v-model:value="
-                                    currentUser.currentUser.value.last_name_lat
-                                "
+                                v-model:value="props.user.last_name_lat"
                             />
                         </div>
                         <div class="form-field">
@@ -130,9 +126,7 @@
                                 clearable
                                 placeholder="Введите имя"
                                 name="name"
-                                v-model:value="
-                                    currentUser.currentUser.value.first_name
-                                "
+                                v-model:value="props.user.first_name"
                             />
                         </div>
                         <p class="error" v-if="isError.first_name">
@@ -145,9 +139,7 @@
                                 clearable
                                 placeholder="name"
                                 name="name-lat"
-                                v-model:value="
-                                    currentUser.currentUser.value.first_name_lat
-                                "
+                                v-model:value="props.user.first_name_lat"
                             />
                         </div>
                         <div class="form-field">
@@ -157,10 +149,7 @@
                                 clearable
                                 placeholder="Отчество"
                                 name="patronomyc"
-                                v-model:value="
-                                    currentUser.currentUser.value
-                                        .patronymic_name
-                                "
+                                v-model:value="props.user.patronymic_name"
                             />
                         </div>
                         <div class="form-field">
@@ -172,9 +161,7 @@
                                 clearable
                                 placeholder="patronomyc"
                                 name="patronomyc-lat"
-                                v-model:value="
-                                    currentUser.currentUser.value.patronymic_lat
-                                "
+                                v-model:value="props.user.patronymic_lat"
                             />
                         </div>
                         <div class="checkbox-wrapper">
@@ -193,13 +180,8 @@
                                     :label="sex.name"
                                     :value="sex.value"
                                     :name="sex.name"
-                                    :checked="
-                                        currentUser.currentUser.value.gender ===
-                                        sex.value
-                                    "
-                                    v-model="
-                                        currentUser.currentUser.value.gender
-                                    "
+                                    :checked="props.user.gender === sex.value"
+                                    v-model="props.user.gender"
                                 />
                                 <label :for="id">{{ sex.name }}</label>
                             </div>
@@ -215,16 +197,11 @@
                                 type="date"
                                 name="date_of_birth"
                                 class="input-small"
-                                v-model:value="
-                                    currentUser.currentUser.value.date_of_birth
-                                "
+                                v-model:value="props.user.date_of_birth"
                             />
                         </div>
                     </div>
-                    <div
-                        class="parents-wrapper"
-                        v-if="!currentUser.currentUser.value.is_adult"
-                    >
+                    <div class="parents-wrapper" v-if="!props.user.is_adult">
                         <p class="parents-wrapper__title">
                             Законный представитель несовершеннолетнего
                         </p>
@@ -241,7 +218,7 @@
                                         class="input-big"
                                         placeholder="Введите фамилию"
                                         v-model:value="
-                                            parentData.parent_last_name
+                                            props.user.parent.parent_last_name
                                         "
                                     />
                                 </div>
@@ -256,7 +233,7 @@
                                         variant="outlined"
                                         clearable
                                         placeholder="Выберете родителя"
-                                        v-model="parentData.relationship"
+                                        v-model="props.user.parent.relationship"
                                         :options="parents"
                                     ></sortByEducation>
                                 </div>
@@ -272,7 +249,8 @@
                                         name="patronomyc-parent"
                                         placeholder="Введите Отчество"
                                         v-model:value="
-                                            parentData.parent_patronymic_name
+                                            props.user.parent
+                                                .parent_patronymic_name
                                         "
                                     />
                                 </div>
@@ -287,7 +265,8 @@
                                         name="date-parent"
                                         class="input-small"
                                         v-model:value="
-                                            parentData.parent_date_of_birth
+                                            props.user.parent
+                                                .parent_date_of_birth
                                         "
                                     />
                                 </div>
@@ -302,7 +281,7 @@
                                         class="input-big"
                                         placeholder="Введите имя"
                                         v-model:value="
-                                            parentData.parent_first_name
+                                            props.user.parent.parent_first_name
                                         "
                                     />
                                 </div>
@@ -321,7 +300,8 @@
                                         class="input-small phone"
                                         placeholder="+7(__) __ __ _"
                                         v-model:value="
-                                            parentData.parent_phone_number
+                                            props.user.parent
+                                                .parent_phone_number
                                         "
                                     />
                                 </div>
@@ -348,24 +328,28 @@
                                             type="radio"
                                             :id="passP.id"
                                             :label="passP.name"
-                                            :value="passP.name"
+                                            :value="passP.value"
                                             :name="passP.name"
                                             :checked="
-                                                selectedPassParent ===
-                                                passP.name
+                                                props.user.parent
+                                                    .russian_passport ===
+                                                passP.value
                                             "
-                                            v-model="selectedPassParent"
+                                            v-model="
+                                                props.user.parent
+                                                    .russian_passport
+                                            "
                                         />
                                         <label :for="id">{{
                                             passP.name
                                         }}</label>
-                                        <!-- {{ selectedPassParent }} -->
+
                                     </div>
                                 </div>
                                 <div
                                     class="addres"
                                     id="pass-no-addr"
-                                    v-if="selectedPassParent == 'Да'"
+                                    v-if="props.user.parent.russian_passport"
                                 >
                                     Адрес постоянной регистрации
                                 </div>
@@ -374,7 +358,7 @@
                             <div
                                 class="izm"
                                 id="passport-parent-yes"
-                                v-if="selectedPassParent == 'Да'"
+                                v-if="props.user.parent.russian_passport"
                             >
                                 <div class="form-field" id="pass-no-pass-id">
                                     <label for="passInput"
@@ -389,7 +373,7 @@
                                         maska="####-######"
                                         placeholder="__ __ ____"
                                         v-model:value="
-                                            parentData.passport_number
+                                            props.user.parent.passport_number
                                         "
                                     />
                                 </div>
@@ -404,7 +388,7 @@
                                         class="input-big"
                                         variant="outlined"
                                         clearable
-                                        v-model="parentData.region"
+                                        v-model="props.user.parent.region"
                                         address="/regions/"
                                     ></Select>
                                 </div>
@@ -419,7 +403,9 @@
                                         type="date"
                                         name="pass-date-parent"
                                         class="input-small"
-                                        v-model:value="parentData.passport_date"
+                                        v-model:value="
+                                            props.user.parent.passport_date
+                                        "
                                     />
                                 </div>
 
@@ -433,7 +419,7 @@
                                         name="locality-parent"
                                         class="input-big"
                                         placeholder="Москва"
-                                        v-model:value="parentData.city"
+                                        v-model:value="props.user.parent.city"
                                     />
                                 </div>
 
@@ -448,7 +434,7 @@
                                         class="input-big"
                                         placeholder="Название организации"
                                         v-model:value="
-                                            parentData.passport_authority
+                                            props.user.parent.passport_authority
                                         "
                                     />
                                 </div>
@@ -464,16 +450,14 @@
                                         name="addres-parent"
                                         class="input-big"
                                         placeholder="Москва"
-                                        v-model:value="parentData.address"
+                                        v-model:value="
+                                            props.user.parent.address
+                                        "
                                     />
                                 </div>
                             </div>
-                            <div
-                                id="no-passport"
-                                class="form-data izm"
-                                v-else="selectedPassParent == 'Нет'"
-                            >
-                                <div class="form-field one">
+                            <div id="no-passport" class="form-data izm" v-else="!props.user.parent.russian_passport">
+                                <!-- <div class="form-field one">
                                     <label for="pass-num"
                                         >Документ удостоверяющий личность
                                         <span class="valid-red">*</span></label
@@ -565,7 +549,7 @@
                                         vmaska
                                         maska="AA #########"
                                     />
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -672,9 +656,7 @@
                                 name="phone-contact"
                                 class="input-small phone"
                                 placeholder="+7(__) __ __ _"
-                                v-model:value="
-                                    currentUser.currentUser.value.phone_number
-                                "
+                                v-model:value="props.user.phone_number"
                             />
                         </div>
                         <div class="form-field">
@@ -684,7 +666,7 @@
                             <Select
                                 variant="outlined"
                                 clearable
-                                v-model="regionData.reg_region_id"
+                                v-model="props.user.user_region.reg_region_id"
                                 placeholder="Например, Карачаево-Черкесск"
                                 address="/regions/"
                             ></Select>
@@ -700,9 +682,7 @@
                                 name="email-сontact"
                                 class="input-big mask-email"
                                 placeholder="mail@mail.com"
-                                v-model:value="
-                                    currentUser.currentUser.value.email
-                                "
+                                v-model:value="props.user.email"
                             />
                         </div>
                         <div class="form-field">
@@ -716,7 +696,7 @@
                                 name="locality-contact"
                                 class="input-big"
                                 placeholder="Москва"
-                                v-model:value="regionData.reg_town"
+                                v-model:value="props.user.user_region.reg_town"
                             />
                         </div>
                         <div class="scoial-networks">
@@ -727,10 +707,7 @@
                                         name="socials"
                                         class="input-big mask-vk"
                                         placeholder="https://vk.com/danya_porg"
-                                        v-model:value="
-                                            currentUser.currentUser.value
-                                                .social_vk
-                                        "
+                                        v-model:value="props.user.social_vk"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -741,10 +718,7 @@
                                         name="socials"
                                         class="input-big mask-tg"
                                         placeholder="https://t.me/allenom"
-                                        v-model:value="
-                                            currentUser.currentUser.value
-                                                .social_tg
-                                        "
+                                        v-model:value="props.user.social_tg"
                                     />
                                 </div>
                             </div>
@@ -760,7 +734,7 @@
                                 name="addres-contact"
                                 class="input-big"
                                 placeholder="ул. Комсомольская, д. 42, кв. 56"
-                                v-model:value="regionData.reg_house"
+                                v-model:value="props.user.user_region.reg_house"
                             />
                         </div>
                         <div class="checkbox addr" id="checkbox">
@@ -785,10 +759,14 @@
                                     :value="addr.value"
                                     :name="addr.name"
                                     :checked="
-                                        regionData.reg_fact_same_address ===
+                                        props.user.user_region
+                                            .reg_fact_same_address ===
                                         addr.value
                                     "
-                                    v-model="regionData.reg_fact_same_address"
+                                    v-model="
+                                        props.user.user_region
+                                            .reg_fact_same_address
+                                    "
                                 />
                                 <label :for="id">{{ addr.name }}</label>
                             </div>
@@ -797,7 +775,7 @@
                         <div
                             class="addr-fact__wrapper"
                             id="addr-fact"
-                            v-if="!regionData.reg_fact_same_address"
+                            v-if="!props.user.user_region.reg_fact_same_address"
                         >
                             <p class="accordion-block-title small">
                                 Адрес фактического проживания
@@ -807,7 +785,9 @@
                                 <Select
                                     variant="outlined"
                                     clearable
-                                    v-model="regionData.fact_region_id"
+                                    v-model="
+                                        props.user.user_region.fact_region_id
+                                    "
                                     address="/regions/"
                                 ></Select>
                             </div>
@@ -819,7 +799,9 @@
                                     name="locality-fact"
                                     class="input-big"
                                     placeholder="Москва"
-                                    v-model:value="regionData.fact_town"
+                                    v-model:value="
+                                        props.user.user_region.fact_town
+                                    "
                                 />
                             </div>
                             <div class="form-field">
@@ -831,7 +813,9 @@
                                     name="addres-fact"
                                     class="input-big"
                                     placeholder="ул. Комсомольская, д. 42, кв. 56"
-                                    v-model:value="regionData.fact_house"
+                                    v-model:value="
+                                        props.user.user_region.fact_house
+                                    "
                                 />
                             </div>
                         </div>
@@ -940,18 +924,6 @@
                                 v-for="pas in passport"
                                 :key="pas.id"
                             >
-                                <!-- <RadioButton
-                                    :value="pas.value"
-                                    :label="pas.id"
-                                    :id="pas.id"
-                                    :checked="
-                                        documents.russian_passport === pas.value
-                                    "
-                                    name="passport"
-                                    v-model:checkedValue="
-                                        documents.russian_passport
-                                    "
-                                /> -->
                                 <input
                                     class="radiobutton"
                                     type="radio"
@@ -960,9 +932,12 @@
                                     :value="pas.value"
                                     :name="pas.name"
                                     :checked="
-                                        documents.russian_passport === pas.value
+                                        props.user.documents
+                                            .russian_passport === pas.value
                                     "
-                                    v-model="documents.russian_passport"
+                                    v-model="
+                                        props.user.documents.russian_passport
+                                    "
                                 />
                                 <label :for="id">{{ pas.name }}</label>
                             </div>
@@ -970,7 +945,7 @@
                         <!-- <pre>{{ documents.russian_passport }}</pre> -->
                         <div
                             class="form-data izm"
-                            v-if="documents.russian_passport"
+                            v-if="props.user.documents.russian_passport"
                         >
                             <div class="form-field">
                                 <label for="pass-num"
@@ -983,7 +958,9 @@
                                     type="text"
                                     class="input-big"
                                     placeholder="__ __ ____"
-                                    v-model:value="documents.pass_ser_num"
+                                    v-model:value="
+                                        props.user.documents.pass_ser_num
+                                    "
                                 />
                             </div>
 
@@ -997,7 +974,9 @@
                                     type="date"
                                     name="pass_date"
                                     class="input-small"
-                                    v-model:value="documents.pass_date"
+                                    v-model:value="
+                                        props.user.documents.pass_date
+                                    "
                                 />
                             </div>
 
@@ -1008,7 +987,9 @@
                                     type="text"
                                     class="input-full"
                                     placeholder="Название организации"
-                                    v-model:value="documents.pass_whom"
+                                    v-model:value="
+                                        props.user.documents.pass_whom
+                                    "
                                 />
                             </div>
                             <div class="form-field">
@@ -1022,7 +1003,7 @@
                                     type="text"
                                     class="input-big mask-snils"
                                     placeholder="AA 999999999"
-                                    v-model:value="documents.snils"
+                                    v-model:value="props.user.documents.snils"
                                 />
                             </div>
                             <div class="form-field">
@@ -1034,7 +1015,7 @@
                                     type="text"
                                     class="input-big mask-inn"
                                     placeholder="AA 999999999"
-                                    v-model:value="documents.inn"
+                                    v-model:value="props.user.documents.inn"
                                 />
                             </div>
                             <div class="form-field">
@@ -1046,7 +1027,9 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="documents.work_book_num"
+                                    v-model:value="
+                                        props.user.documents.work_book_num
+                                    "
                                 />
                             </div>
                             <div class="form-field">
@@ -1058,7 +1041,9 @@
                                     vmaska
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
-                                    v-model:value="documents.international_pass"
+                                    v-model:value="
+                                        props.user.documents.international_pass
+                                    "
                                 />
                             </div>
                             <div class="form-field">
@@ -1074,7 +1059,9 @@
                                     placeholder="Выберите документ"
                                     clearable
                                     variant="outlined"
-                                    v-model="documents.mil_reg_doc_type"
+                                    v-model="
+                                        props.user.documents.mil_reg_doc_type
+                                    "
                                     :options="militaryDocs"
                                     class="select-big"
                                 ></sortByEducation>
@@ -1099,14 +1086,14 @@
                                     maska="AA ##########"
                                     placeholder="AA 999999999"
                                     v-model:value="
-                                        documents.mil_reg_doc_ser_num
+                                        props.user.documents.mil_reg_doc_ser_num
                                     "
                                 />
                             </div>
                         </div>
                         <div
                             class="form-data izm"
-                            v-else-if="!documents.russian_passport"
+                            v-else-if="!props.user.documents.russian_passport"
                         >
                             <div class="form-field one">
                                 <label for="pass-num"
@@ -1305,7 +1292,7 @@
                                 clearable
                                 placeholder="Выберете образовательную организацию"
                                 class="input-full"
-                                v-model="education.study_institution"
+                                v-model="props.user.education.study_institution"
                                 address="/eduicational_institutions/"
                             >
                             </Select>
@@ -1318,7 +1305,7 @@
                                 id="facultet"
                                 class="input-full"
                                 placeholder="Ввведите название факультета"
-                                v-model:value="education.study_faculty"
+                                v-model:value="props.user.education.study_faculty"
                             />
                         </div>
                         <div class="form-field">
@@ -1333,7 +1320,7 @@
                                 id="course"
                                 class="input-full"
                                 placeholder="1 курс"
-                                v-model:value="education.study_year"
+                                v-model:value="props.user.education.study_year"
                             />
                         </div>
                         <div class="form-field">
@@ -1344,7 +1331,7 @@
                                 id="speciality"
                                 class="input-full"
                                 placeholder="Введите название специальности"
-                                v-model:value="education.study_specialty"
+                                v-model:value="props.user.education.study_specialty"
                             />
                         </div>
                     </div>
@@ -1376,7 +1363,10 @@
             <v-expansion-panel
                 value="panelFive"
                 class="no-RSO"
-                v-if="selectedAnswer == 'Нет' && documents.russian_passport"
+                v-if="
+                    selectedAnswer == 'Нет' &&
+                    props.user.documents?.russian_passport
+                "
             >
                 <v-expansion-panel-title>
                     <v-row no-gutters>
@@ -1547,9 +1537,8 @@
                                 </div>
                                 <p
                                     class="statement-title"
-                                    v-if="
-                                        !currentUser.currentUser.value.is_adult
-                                    "
+
+                                    v-if="!props.user.is_adult"
                                 >
                                     Согласие законного представителя на
                                     обработку персональных данных
@@ -1559,9 +1548,8 @@
                                 </p>
                                 <div
                                     class="statement-wrapper"
-                                    v-if="
-                                        !currentUser.currentUser.value.is_adult
-                                    "
+
+                                    v-if="!props.user.is_adult"
                                 >
                                     <div class="statement-item">
                                         <img
@@ -1668,7 +1656,7 @@
                             </div>
                             <div
                                 class="pass-details__item"
-                                v-if="!currentUser.currentUser.value.is_adult"
+                                v-if="!props.user.is_adult"
                             >
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
@@ -1915,7 +1903,10 @@
             </v-expansion-panel>
             <v-expansion-panel
                 class="yes-RSO"
-                v-else-if="selectedAnswer == 'Да' && documents.russian_passport"
+                v-else-if="
+                    selectedAnswer == 'Да' &&
+                    props.user.documents?.russian_passport
+                "
             >
                 <v-expansion-panel-title>
                     <v-row no-gutters>
@@ -2020,9 +2011,8 @@
                             <div class="pass-details__item">
                                 <p
                                     class="statement-title"
-                                    v-if="
-                                        !currentUser.currentUser.value.is_adult
-                                    "
+
+                                    v-if="!props.user.is_adult"
                                 >
                                     Паспорт законного представителя<span
                                         class="valid-red"
@@ -2031,9 +2021,8 @@
                                 </p>
                                 <div
                                     class="statement-wrapper"
-                                    v-if="
-                                        !currentUser.currentUser.value.is_adult
-                                    "
+
+                                    v-if="!props.user.is_adult"
                                 >
                                     <div class="statement-item">
                                         <img
@@ -2247,7 +2236,8 @@
             <v-expansion-panel
                 class="no-RSO-foreign"
                 v-else-if="
-                    selectedAnswer == 'Нет' && !documents.russian_passport
+                    selectedAnswer == 'Нет' &&
+                    !props.user.documents?.russian_passport
                 "
             >
                 <v-expansion-panel-title>
@@ -2607,7 +2597,10 @@
             </v-expansion-panel>
             <v-expansion-panel
                 class="yes-RSO-foreign"
-                v-else="selectedAnswer == 'Да' && !documents.russian_passport"
+                v-else="
+                    selectedAnswer == 'Да' &&
+                    !props.user.documents?.russian_passport
+                "
             >
                 <v-expansion-panel-title>
                     <v-row no-gutters>
@@ -2713,7 +2706,7 @@
                             </div>
                             <div
                                 class="pass-details__item"
-                                v-if="!currentUser.currentUser.value.is_adult"
+                                v-if="!props.user.is_adult"
                             >
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
@@ -2888,15 +2881,15 @@
                 </v-expansion-panel-text>
             </v-expansion-panel>
             <v-card-actions
+                v-if="props.button"
                 class="form__button-group d-flex justify-space-between"
             >
                 <Button
                     :disabled="isLoading"
                     :loaded="isLoading"
                     v-if="
-                        currentUser.currentUser.value.sent_verification ===
-                            false &&
-                        currentUser.currentUser.value.is_verified === false
+                        props.user.sent_verification === false &&
+                        props.user.is_verified === false
                     "
                     type="submit"
                     label="Отправить данные на верификацию"
@@ -2925,10 +2918,14 @@ import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { TextArea } from '@shared/components/inputs';
+
 import { userData } from '@features/userData';
+const props = defineProps({
+    button: Boolean,
+    user: Object,
+});
 const emit = defineEmits([
     'updateUserData',
-    'updateRegionData',
     'updateDocData',
     'updateEducData',
     'updateFileData',
@@ -2937,7 +2934,7 @@ const emit = defineEmits([
 ]);
 const router = useRouter();
 const userStore = useUserStore();
-const currentUser = storeToRefs(userStore);
+// const currentUser = storeToRefs(userStore);
 const panel = ref();
 const isError = ref({});
 const isLoading = ref(false);
@@ -2961,16 +2958,6 @@ const openPanelFive = () => {
     panel.value = 'panelFive';
 };
 
-const regionData = ref({
-    reg_region_id: null,
-    reg_town: '',
-    reg_house: '',
-    reg_fact_same_address: null,
-    fact_region_id: null,
-    fact_town: '',
-    fact_house: '',
-});
-
 const foreignDoc = ref({
     name: '',
     foreign_pass_num: '',
@@ -2981,46 +2968,9 @@ const foreignDoc = ref({
     work_book_num: '',
 });
 
-const parentData = ref({
-    parent_last_name: '',
-    parent_first_name: '',
-    parent_patronymic_name: '',
-    parent_date_of_birth: '',
-    relationship: null,
-    parent_phone_number: '',
-    russian_passport: true,
-    passport_number: '',
-    passport_date: '',
-    passport_authority: '',
-    region: null,
-    city: '',
-    address: '',
-});
 
 const swal = inject('$swal');
 
-const education = ref({
-    study_institution: null,
-    study_faculty: '',
-    study_year: '',
-    study_specialty: '',
-});
-
-const documents = ref({
-    snils: '',
-    inn: '',
-    pass_ser_num: '',
-    pass_town: '',
-    pass_whom: '',
-    pass_date: '',
-    pass_code: '',
-    pass_address: '',
-    work_book_num: '',
-    international_pass: '',
-    mil_reg_doc_type: null,
-    mil_reg_doc_ser_num: '',
-    russian_passport: null,
-});
 
 const data = ref({});
 
@@ -3115,47 +3065,21 @@ const counterKnow = computed(() => {
 
 const getData = async () => {
     try {
-        const responseParent = await HTTP.get('/rsousers/me/parent/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+        const responseForeignDocs = await HTTP.get(
+            '/rsousers/me/foreign_documents/',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        });
-        const responseRegion = await HTTP.get('/rsousers/me/region/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+        );
 
-        const responseDocuments = await HTTP.get('/rsousers/me/documents/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        const responseForeignDocs = await HTTP.get('/rsousers/me/foreign_documents/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-        const responseEducation = await HTTP.get('/rsousers/me/education/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        parentData.value = responseParent.data;
-        regionData.value = responseRegion.data;
-        documents.value = responseDocuments.data;
         foreignDoc.value = responseForeignDocs.data;
-        education.value = responseEducation.data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
-
 
 const downloadBlankPersonal = async () => {
     await HTTP.get(
@@ -3258,6 +3182,7 @@ const downloadAll = async () => {
 
 const updateData = async () => {
     try {
+        isLoading.value = false;
         let fd = new FormData();
         fd.append('rso_info_from', rso_info_from.value);
         if (isStatementChange.value)
@@ -3315,19 +3240,18 @@ const updateData = async () => {
         const axiosrequest1 = await HTTP.patch(
             '/rsousers/me/',
             {
-                first_name: currentUser.currentUser.value.first_name,
-                last_name: currentUser.currentUser.value.last_name,
-                patronymic_name: currentUser.currentUser.value.patronymic_name,
-                last_name_lat: currentUser.currentUser.value.last_name_lat,
-                first_name_lat: currentUser.currentUser.value.first_name_lat,
-                patronymic_name_lat:
-                    currentUser.currentUser.value.patronymic_name_lat,
-                date_of_birth: currentUser.currentUser.value.date_of_birth,
-                gender: currentUser.currentUser.value.gender,
-                email: currentUser.currentUser.value.email,
-                phone_number: currentUser.currentUser.value.phone_number,
-                social_vk: currentUser.currentUser.value.social_vk,
-                social_tg: currentUser.currentUser.value.social_tg,
+                first_name: props.user.first_name,
+                last_name: props.user.last_name,
+                patronymic_name: props.user.patronymic_name,
+                last_name_lat: props.user.last_name_lat,
+                first_name_lat: props.user.first_name_lat,
+                patronymic_name_lat: props.user.patronymic_name_lat,
+                date_of_birth: props.user.date_of_birth,
+                gender: props.user.gender,
+                email: props.user.email,
+                phone_number: props.user.phone_number,
+                social_vk: props.user.social_vk,
+                social_tg: props.user.social_tg,
             },
             {
                 headers: {
@@ -3338,10 +3262,26 @@ const updateData = async () => {
         );
 
         const axiosrequestParent = ref(null);
-        if (!currentUser.currentUser.value.is_adult) {
+        if (!props.user.is_adult) {
             const axiosrequestParent = await HTTP.patch(
                 '/rsousers/me/parent/',
-                parentData.value,
+                {
+                    parent_last_name: props.user.parent.parent_last_name,
+                    parent_first_name: props.user.parent.parent_first_name,
+                    parent_patronymic_name:
+                        props.user.parent.parent_patronymic_name,
+                    parent_date_of_birth:
+                        props.user.parent.parent_date_of_birth,
+                    relationship: props.user.parent.relationship,
+                    parent_phone_number: props.user.parent.parent_phone_number,
+                    russian_passport: props.user.parent.russian_passport,
+                    passport_number: props.user.parent.passport_number,
+                    passport_date: props.user.parent.passport_date,
+                    passport_authority: props.user.parent.passport_authority,
+                    region: props.user.parent.region,
+                    city: props.user.parent.city,
+                    address: props.user.parent.address,
+                },
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -3353,7 +3293,17 @@ const updateData = async () => {
 
         const axiosrequest2 = await HTTP.patch(
             '/rsousers/me/region/',
-            regionData.value,
+            {
+                reg_region_id: props.user.user_region.reg_region_id,
+                reg_town: props.user.user_region.reg_town,
+                reg_house: props.user.user_region.reg_house,
+                reg_fact_same_address:
+                    props.user.user_region.reg_fact_same_address,
+                fact_region_id: props.user.user_region.fact_region_id,
+                fact_town: props.user.user_region.fact_town,
+                fact_house: props.user.user_region.fact_house,
+            },
+
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -3363,7 +3313,21 @@ const updateData = async () => {
         );
         const axiosrequest3 = await HTTP.patch(
             '/rsousers/me/documents/',
-            documents.value,
+            {
+                snils: props.user.documents.snils,
+                russian_passport: props.user.documents.russian_passport,
+                inn: props.user.documents.inn,
+                pass_ser_num: props.user.documents.pass_ser_num,
+                pass_town: props.user.documents.pass_town,
+                pass_whom: props.user.documents.pass_whom,
+                pass_date: props.user.documents.pass_date,
+                pass_code: props.user.documents.pass_code,
+                pass_address: props.user.documents.pass_address,
+                work_book_num: props.user.documents.work_book_num,
+                international_pass: props.user.documents.international_pass,
+                mil_reg_doc_type: props.user.documents.mil_reg_doc_type,
+                mil_reg_doc_ser_num: props.user.documents.mil_reg_doc_ser_num,
+            },
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -3373,7 +3337,7 @@ const updateData = async () => {
         );
 
         const axiosrequestForeignDocs = ref(null);
-        if (!documents.value.russian_passport) {
+        if (!props.user.documents.russian_passport) {
             const axiosrequestForeignDocs = await HTTP.patch(
                 '/rsousers/me/foreign_documents/',
                 foreignDoc.value,
@@ -3388,7 +3352,12 @@ const updateData = async () => {
 
         const axiosrequest4 = await HTTP.patch(
             '/rsousers/me/education/',
-            education.value,
+            {
+                study_institution: props.user.education.study_institution,
+                study_faculty: props.user.education.study_faculty,
+                study_year: props.user.education.study_year,
+                study_specialty: props.user.education.study_specialty,
+            },
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -3406,8 +3375,8 @@ const updateData = async () => {
         const axiosrequest6 = ref(null);
 
         if (
-            currentUser.currentUser.value.sent_verification === false &&
-            currentUser.currentUser.value.is_verified === false
+            props.user.sent_verification === false &&
+            props.user.is_verified === false
         ) {
             const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
@@ -3420,11 +3389,8 @@ const updateData = async () => {
                 },
             );
         }
-        parentData.value = axiosrequestParent.data;
-        regionData.value = axiosrequest2.data;
-        documents.value = axiosrequest3.data;
+
         foreignDoc.value = axiosrequestForeignDocs.data;
-        education.value = axiosrequest4.data;
         fd = axiosrequest5.data;
         data.value = axiosrequest6?.data;
         console.log(axiosrequest1.data);
@@ -3435,6 +3401,7 @@ const updateData = async () => {
         console.log(axiosrequest4.data);
         console.log(axiosrequest5.data);
         console.log(axiosrequest6?.data);
+        isLoading.value = false;
         swal.fire({
             position: 'top-center',
             icon: 'success',
@@ -3449,6 +3416,7 @@ const updateData = async () => {
         emit('updateEducData', axiosrequest4.data);
         emit('updateFileData', axiosrequest5.data);
         emit('updateParentData', axiosrequestParent.data);
+
         emit('updateStatus', axiosrequest6?.data);
         isLoading.value = false;
     } catch (error) {
@@ -3479,8 +3447,8 @@ const gender = ref([
 ]);
 
 const passportParent = ref([
-    { name: 'Да', id: 'pp1', checked: true },
-    { name: 'Нет', id: 'pp2' },
+    { name: 'Да', value: true, id: 'pp1',  },
+    { name: 'Нет', value: false, id: 'pp2' },
 ]);
 const parents = ref([
     {

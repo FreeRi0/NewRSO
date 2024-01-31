@@ -579,17 +579,7 @@ const routes: RouteRecordRaw[] = [
                     label: 'Персональные данные',
                 },
             },
-            {
-                path: '/active',
-                name: 'active',
-                component: () =>
-                    import(
-                        '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'
-                    ),
-                meta: {
-                    label: 'Активные заявки',
-                },
-            },
+
             {
                 path: '/contributorPay',
                 name: 'contributorPay',
@@ -640,6 +630,43 @@ const routes: RouteRecordRaw[] = [
                     },
                 ],
             },
+            {
+                path: '/active',
+                meta: {
+                    redirectTo: 'active',
+                    label: 'Активные заявки',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'active',
+                        meta: {
+
+                        },
+                        component: () =>
+                            import(
+                                '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'
+                            ),
+                    },
+                    {
+                        path: ':id',
+                        meta: {
+                            label: 'Персональные данные пользователя',
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'PersonalDataUser',
+                                component: () =>
+                                    import(
+                                        '@pages/PersonalDataPage/components/PersonalDataID.vue'
+                                    ),
+                            },
+                        ],
+                    },
+                ],
+            },
+
             {
                 path: '/individualrequest/:id',
                 name: 'IndividualRequest',
