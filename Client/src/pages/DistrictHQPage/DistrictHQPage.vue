@@ -71,6 +71,7 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
+import { usePage } from '@shared';
 
 const crosspageFilters = useCrosspageFilter();
 const showDistrictHQ = ref(true);
@@ -86,6 +87,8 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const aboutDistrictHQ = async () => {
     try {
         const response = await HTTP.get(`/districts/${id}/`, {
@@ -96,6 +99,7 @@ const aboutDistrictHQ = async () => {
         });
 
         districtHeadquarter.value = response.data;
+        replaceTargetObjects([districtHeadquarter.value]);
         console.log(response);
     } catch (error) {
         console.log('an error occured ' + error);

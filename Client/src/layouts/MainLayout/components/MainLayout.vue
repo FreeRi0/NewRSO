@@ -27,6 +27,7 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import { AppBreadcrumbs, useBreadcrumbsStore } from '@shared/index';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@features/store/index';
@@ -35,8 +36,11 @@ const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 import { useRoleStore } from '@layouts/store/role';
 const roleStore = useRoleStore();
 const userStore = useUserStore();
-userStore.getUser();
-roleStore.getRoles();
+
+onMounted(() => {
+    userStore.getUser();
+    roleStore.getRoles();
+});
 
 //запрос на коммандира
 </script>

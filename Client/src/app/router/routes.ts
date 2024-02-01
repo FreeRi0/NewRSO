@@ -348,7 +348,6 @@ const routes: RouteRecordRaw[] = [
                                         '@pages/AllHeadquartersPage/components/DistrictsHeadquartersPage.vue'
                                     ),
                             },
-
                             {
                                 path: ':id',
                                 meta: {
@@ -640,9 +639,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: '',
                         name: 'active',
-                        meta: {
-
-                        },
+                        meta: {},
                         component: () =>
                             import(
                                 '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'

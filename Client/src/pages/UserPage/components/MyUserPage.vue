@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="user-wrapper">
+        <div class="user-wrapper" >
             <h2 class="page-title">Моя страница</h2>
             <banner
                 :user="currentUser.currentUser.value"

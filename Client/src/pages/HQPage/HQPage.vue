@@ -53,6 +53,7 @@ import DetachmentsHQ from './components/DetachmentsHQ.vue';
 import { ref, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
 // banner condition
 const showHQ = ref(true);
@@ -68,6 +69,8 @@ const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const aboutHQ = async () => {
     try {
         const response = await HTTP.get(`/educationals/${id}/`, {
@@ -78,6 +81,7 @@ const aboutHQ = async () => {
         });
 
         headquarter.value = response.data;
+        replaceTargetObjects([headquarter.value]);
         console.log(response);
     } catch (error) {
         console.log('an error occured ' + error);

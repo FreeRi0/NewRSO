@@ -5,6 +5,7 @@
                 desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
                 label="Создать отряд"
                 name="CreateLSO"
+                :button="true"
             ></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
             <div class="squads-tabs">
@@ -125,11 +126,29 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
+                <squadsList
+                    :squads="sortedSquads"
+                    v-if="!isSquadsLoading"
+                ></squadsList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
+                <horizontalList
+                    :squads="sortedSquads"
+                    v-if="!isSquadsLoading"
+                ></horizontalList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -148,7 +167,11 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
-import { sortByEducation, Select, filterSelect } from '@shared/components/selects';
+import {
+    sortByEducation,
+    Select,
+    filterSelect,
+} from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
@@ -160,26 +183,31 @@ import { HTTP } from '@app/http';
 const squads = ref([]);
 
 const categories = ref([]);
+const isSquadsLoading = ref(false);
 const name = ref('');
 const education = ref('');
 
 const getSquads = async () => {
     try {
-        const categoryResponse = await HTTP.get('/areas/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        const squadsResponse = await HTTP.get(`/detachments/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        isSquadsLoading.value = true;
+        setTimeout(async () => {
+            const categoryResponse = await HTTP.get('/areas/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            const squadsResponse = await HTTP.get(`/detachments/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
 
-        categories.value = categoryResponse.data;
-        squads.value = squadsResponse.data;
+            categories.value = categoryResponse.data;
+            squads.value = squadsResponse.data;
+            isSquadsLoading.value = false;
+        }, 1000);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -201,12 +229,15 @@ const searchSquad = async (name) => {
 
 const filteredSquad = async (education) => {
     try {
-        const filteredSquadsEduc = await HTTP.get(`/detachments/?educational_institution__name=${education}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+        const filteredSquadsEduc = await HTTP.get(
+            `/detachments/?educational_institution__name=${education}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        });
+        );
         squads.value = filteredSquadsEduc.data;
     } catch (error) {
         console.log('an error occured ' + error);
@@ -401,6 +432,13 @@ onMounted(() => {
     background-color: #1c5c94;
     color: white;
     border: 1px solid #1c5c94;
+}
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
 }
 
 .sort-filters {

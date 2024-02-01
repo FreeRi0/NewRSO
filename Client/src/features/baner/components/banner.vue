@@ -64,7 +64,7 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
-                    <div class="user-data__social-network">
+                    <div class="user-data__social-network" >
                         <div class="user-data__link-vk mr-2">
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -106,7 +106,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
@@ -210,6 +210,10 @@ const getUserData = async () => {
         console.log('an error occured ' + error);
     }
 };
+
+// const isMemberView = computed(() => {
+//     return props.user.detachment_id === props.currentUser.detachment_id;
+// });
 
 watch(
     () => props.user,

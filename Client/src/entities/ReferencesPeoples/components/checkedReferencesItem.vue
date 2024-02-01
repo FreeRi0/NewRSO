@@ -86,7 +86,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['change']);
+const emit = defineEmits(['change', 'approve', 'reject']);
 const updateMembership = (e) => {
     console.log('checkeed', checked.value);
     emit('change', checked.value, props.participant.user.id);
@@ -119,67 +119,62 @@ watch(
 );
 
 const ChangeStatus = async () => {
-    let { id, ...rest } = props.participant.user;
-    if (user.value.is_verified === 'Одобрен') {
-        HTTP.post(`rsousers/${id}/verify/`, user.value, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-            .then((response) => {
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                // participant.value = response.data; //emit
-                console.log(response.data);
-            })
-
-            .catch(({ response }) => {
-                isError.value = response.data;
-                console.error('There was an error!', response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+    try {
+        let { id, ...rest } = props.participant.user;
+        const approveReq = ref(null);
+        if (user.value.is_verified === 'Одобрен') {
+            const approveReq = await HTTP.post(
+                `rsousers/${id}/verify/`,
+                user.value,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
             });
-    } else {
-        HTTP.delete(`rsousers/${id}/verify/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-            .then((response) => {
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                // participant.value = response.data; //emit
-                console.log(response.data);
-            })
-
-            .catch(({ response }) => {
-                isError.value = response.data;
-                console.error('There was an error!', response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+            console.log('resp', approveReq.data);
+            emit('approve', approveReq.data);
+            console.log(approveReq.data);
+        } else {
+            const rejectReq = await HTTP.delete(`rsousers/${id}/verify/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token' + localStorage.getItem('Token'),
+                },
             });
+            swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            console.log('resp', rejectReq.data);
+            // emit('reject', approveReq.data);
+            console.log(rejectReq.data);
+        }
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
 </script>
