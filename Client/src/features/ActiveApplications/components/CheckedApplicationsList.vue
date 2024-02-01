@@ -2,6 +2,7 @@
     <checkedReferencesItem
         v-for="participant in participants"
         @change="changePeoples"
+        @approve="approveParticipant"
         :participant="participant"
         :key="participant.id"
     />
@@ -9,9 +10,14 @@
 <script setup>
 import { ref } from 'vue';
 import { checkedReferencesItem } from '@entities/ReferencesPeoples';
-const emit = defineEmits(['change']);
+const emit = defineEmits(['change', 'approve']);
 const changePeoples = (CheckedUser, UserId) => {
     emit('change', CheckedUser, UserId);
+};
+const approveParticipant = (approved) => {
+    console.log('user', approved);
+    emit('approve', approved);
+    console.log('approved');
 };
 
 const props = defineProps({

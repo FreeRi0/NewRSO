@@ -5,6 +5,7 @@
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
                 name="CreationOfRS"
+                :button="true"
             ></bannerCreate>
             <h2 class="headquarters-title">Региональные штабы</h2>
             <div class="headquarters-search">
@@ -111,16 +112,30 @@
                 </div>
             </div>
 
-            <div class="headquarters-wrapper" v-show="vertical">
+            <div class="mt-10" v-show="vertical">
                 <RegionalHQList
                     :regionalHeadquarters="sortedRegionalHeadquarters"
+                    v-if="!isRegionalLoading"
                 ></RegionalHQList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <HorizontalRegionalHQs
                     :regionalHeadquarters="sortedRegionalHeadquarters"
+                    v-if="!isRegionalLoading"
                 ></HorizontalRegionalHQs>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -154,6 +169,7 @@ const crosspageFilters = useCrosspageFilter();
 const regionalHeadquarters = ref([]);
 
 const headquartersVisible = ref(20);
+const isRegionalLoading = ref(false);
 
 const step = ref(20);
 
@@ -176,13 +192,17 @@ const districts = ref([]);
 
 const getRegionalHeadquarters = async () => {
     try {
-        const regResponse = await HTTP.get('/regionals/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        regionalHeadquarters.value = regResponse.data;
+        isRegionalLoading.value = true;
+        setTimeout(async () => {
+            const regResponse = await HTTP.get('/regionals/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            regionalHeadquarters.value = regResponse.data;
+            isRegionalLoading.value = false;
+        }, 1000);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -201,7 +221,6 @@ const searchRegional = async (name) => {
         console.log('an error occured ' + error);
     }
 };
-
 
 const filtersDistricts = computed(() =>
     selectedSortDistrict.value
@@ -224,7 +243,6 @@ const getDistrictsHeadquartersForFilters = async () => {
     }
 };
 
-
 const selectedSort = ref(0);
 
 const sortOptionss = ref([
@@ -242,7 +260,7 @@ const sortedRegionalHeadquarters = computed(() => {
     tempHeadquarters = tempHeadquarters.slice(0, headquartersVisible.value);
 
     // поиск
-     searchReg.value;
+    searchReg.value;
     // сортировка
     tempHeadquarters = tempHeadquarters.sort((a, b) => {
         if (sortBy.value === 'alphabetically') {
@@ -289,7 +307,6 @@ onMounted(() => {
     getDistrictsHeadquartersForFilters();
     getRegionalHeadquarters();
 });
-
 </script>
 <style lang="scss">
 .headquarters {
@@ -345,6 +362,14 @@ pre {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
+}
+
 .headquarters-wrapper__item {
     margin: 0px auto;
     width: 180px;

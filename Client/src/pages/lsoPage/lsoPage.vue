@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="squad-page">
+        <div class="squad-page" v-if="!isLsoLoading">
             <h1 class="title title--lso">ЛСО</h1>
             <BannerSquad
                 :squad="squad"
@@ -42,6 +42,12 @@
                 :member="member"
             ></SquadParticipants>
         </div>
+        <v-progress-circular
+            class="circleLoader"
+            v-else
+            indeterminate
+            color="blue"
+        ></v-progress-circular>
     </div>
 </template>
 <script setup>
@@ -59,40 +65,36 @@ const member = ref([]);
 const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
-
+const isLsoLoading = ref(false);
 const { replaceTargetObjects } = usePage();
 
-const aboutSquad = async () => {
-    await HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squad.value = response.data;
+const getLsoData = async () => {
+    try {
+        isLsoLoading.value = true;
+        setTimeout(async () => {
+            const squadResponse = await HTTP.get(`/detachments/${id}/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            const membersResponse = await HTTP.get(
+                `/detachments/${id}/members/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            squad.value = squadResponse.data;
             replaceTargetObjects([squad.value]);
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const aboutMembers = async () => {
-    await HTTP.get(`/detachments/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            member.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+            member.value = membersResponse.data;
+            isLsoLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 watch(
@@ -101,20 +103,15 @@ watch(
     (newId) => {
         if (!newId || route.name !== 'lso') return;
         id = newId;
-        aboutSquad();
-        aboutMembers();
+        getLsoData();
     },
 );
 
 onMounted(() => {
-    aboutSquad();
-    aboutMembers();
+    getLsoData();
 });
 </script>
 <style scoped lang="scss">
-.squad-page {
-    padding-top: 40px;
-}
 .title {
     //-----------------------------------общий класс для всех заголовков h1
     // font-family: ;
@@ -146,6 +143,12 @@ onMounted(() => {
     margin-bottom: 20px;
     display: grid;
     grid-template-columns: 380px 300px;
+}
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
 }
 .Squad-HQ__list li {
     border-right: none;

@@ -15,10 +15,6 @@ import { storeToRefs } from 'pinia';
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 // roleStore.getRoles();
-// let educComId = roles.roles.value.educationalheadquarter_commander;
-// let regComId = roles.roles.value.regionalheadquarter_commander;
-// let localComId = roles.roles.value.localheadquarter_commander;
-// let centralComId = roles.roles.value.centralComId;
 const props = defineProps({
     label: {
         type: String,
@@ -34,7 +30,7 @@ const props = defineProps({
     },
     button: {
         type: Boolean,
-        default: true,
+        default: false,
     },
 });
 
