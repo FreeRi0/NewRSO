@@ -67,8 +67,7 @@
                     <div
                         class="user-data__social-network"
                         v-if="
-                            props.user.privacy?.privacy_social ===
-                            'detachment_members'
+                            props.user.privacy?.privacy_social == 'all' || props.user.privacy?.privacy_social == 'detachment_members'
                         "
                     >
                         <div class="user-data__link-vk mr-2">
