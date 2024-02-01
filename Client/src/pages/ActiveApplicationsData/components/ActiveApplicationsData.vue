@@ -23,7 +23,7 @@
             <div v-if="picked == 'Верификация аккаунтов' || picked == ''">
                 <div
                     class="contributor-sort__all mb-8"
-                    v-if="participants.length > 0"
+                    v-if="participants?.length > 0"
                 >
                     <input
                         type="checkbox"
@@ -35,7 +35,14 @@
                     @change="changePeoples"
                     :participants="participants"
                     :selected-peoples="selectedPeoples"
+                    v-if="!isLoading"
                 />
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
                 <!-- <Button
                     @click="participantsVisible += step"
                     v-if="participantsVisible < participants.length && participants.length > 0"
@@ -51,6 +58,7 @@
 
                     <checkedAppList
                         @change="changePeoples"
+                        @approve="approveParticipant"
                         :participants="selectedPeoples"
                     ></checkedAppList>
                 </div>
@@ -74,7 +82,14 @@
                     @change="changeSquads"
                     :detachments="detachments"
                     :selected-detch="selectedDetch"
+                    v-if="!isLoading"
                 />
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
                 <div class="selectedItems" v-if="selectedDetch.length > 0">
                     <h3>Итого: {{ selectedDetch.length }}</h3>
 
@@ -115,8 +130,7 @@ import { storeToRefs } from 'pinia';
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 
-// let regComId = roles.roles.value.regionalheadquarter_commander;
-// let detComId = roles.roles.value.detachment_commander;
+const isLoading = ref(false);
 const picked = ref('');
 const tabs = ref([
     {
@@ -157,6 +171,7 @@ const step = ref(12);
 
 const viewParticipants = async () => {
     try {
+        isLoading.value = true;
         let id =
             roles.roles.value.regionalheadquarter_commander ??
             roles.roles.value.detachment_commander;
@@ -164,29 +179,35 @@ const viewParticipants = async () => {
         console.log('id', id);
         const regComReq = ref(null);
         const detComReq = ref(null);
-        if (roles.roles.value.regionalheadquarter_commander) {
-            const regComReq = await HTTP.get(
-                `/regionals/${id}/verifications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
+        setTimeout(async () => {
+            if (roles.roles.value.regionalheadquarter_commander) {
+                const regComReq = await HTTP.get(
+                    `/regionals/${id}/verifications/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
                     },
-                },
-            );
-            participants.value = regComReq.data;
-        } else if (roles.roles.value.detachment_commander) {
-            const detComReq = await HTTP.get(
-                `/detachments/${id}/verifications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                );
+                participants.value = regComReq.data;
+                isLoading.value = false;
+            } else if (roles.roles.value.detachment_commander) {
+                const detComReq = await HTTP.get(
+                    `/detachments/${id}/verifications/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
                     },
-                },
-            );
-            participants.value = detComReq.data;
-        }
+                );
+                participants.value = detComReq.data;
+                isLoading.value = false;
+            }
+        }, 1000);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -194,19 +215,23 @@ const viewParticipants = async () => {
 
 const viewDetachments = async () => {
     try {
+        isLoading.value = true;
         let id = roles?.roles?.value?.detachment_commander;
         console.log('roles', roles.roles.value);
         console.log('id', id);
-        const detComRequest = await HTTP.get(
-            `/detachments/${id}/applications/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+        setTimeout(async () => {
+            const detComRequest = await HTTP.get(
+                `/detachments/${id}/applications/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        );
-        detachments.value = detComRequest.data;
+            );
+            detachments.value = detComRequest.data;
+            isLoading.value = false;
+        }, 1000);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -248,6 +273,10 @@ const changePeoples = (CheckedUser, UserId) => {
         );
     }
 };
+const approveParticipant = (approved) => {
+    console.log('approved', approved);
+    participants.value = approved;
+}
 
 const changeSquads = (CheckedSquad, SquadId) => {
     let detachment = {};
@@ -275,6 +304,7 @@ watch(
 );
 
 onMounted(() => {
+    // roleStore.getRoles();
     viewParticipants();
     viewDetachments();
 });

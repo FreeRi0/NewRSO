@@ -146,15 +146,29 @@
                     ></Button>
                 </div>
             </div>
-            <div v-show="vertical">
+            <div v-show="vertical" class="mt-10">
                 <LocalHQList
                     :localHeadquarters="sortedLocalHeadquarters"
+                    v-if="!isLocalLoading"
                 ></LocalHQList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
             <div class="horizontal" v-show="!vertical">
                 <HorizontalLocalHQs
                     :localHeadquarters="sortedLocalHeadquarters"
+                    v-if="!isLocalLoading"
                 ></HorizontalLocalHQs>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -189,6 +203,7 @@ const crosspageFilters = useCrosspageFilter();
 const localHeadquarters = ref([]);
 
 const headquartersVisible = ref(20);
+const isLocalLoading = ref(false);
 
 const step = ref(20);
 
@@ -213,19 +228,21 @@ const districts = ref([]);
 const regionals = ref([]);
 
 const getLocalHeadquarters = async () => {
-    await HTTP.get('/locals/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            localHeadquarters.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+    try {
+        isLocalLoading.value = true;
+        setTimeout(async () => {
+            const localsResponse = await HTTP.get(`/locals/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            localHeadquarters.value = localsResponse.data;
+            isLocalLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const filtersDistricts = computed(() =>
@@ -438,6 +455,13 @@ pre {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
 }
 
 .horizontal {
