@@ -64,7 +64,13 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
-                    <div class="user-data__social-network" >
+                    <div
+                        class="user-data__social-network"
+                        v-if="
+                            props.user.privacy?.privacy_social ===
+                            'detachment_members'
+                        "
+                    >
                         <div class="user-data__link-vk mr-2">
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -123,9 +129,6 @@ const props = defineProps({
         type: Boolean,
     },
     user: {
-        type: Object,
-    },
-    currentUser: {
         type: Object,
     },
     education: {
@@ -212,7 +215,7 @@ const getUserData = async () => {
 };
 
 // const isMemberView = computed(() => {
-//     return props.user.detachment_id === props.currentUser.detachment_id;
+//     return props.user.privacy?.privacy_email == ;
 // });
 
 watch(

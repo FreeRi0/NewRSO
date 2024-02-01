@@ -82,14 +82,8 @@
                     @change="changeSquads"
                     :detachments="detachments"
                     :selected-detch="selectedDetch"
-                    v-if="!isLoading"
                 />
-                <v-progress-circular
-                    class="circleLoader"
-                    v-else
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
+
                 <div class="selectedItems" v-if="selectedDetch.length > 0">
                     <h3>Итого: {{ selectedDetch.length }}</h3>
 
@@ -275,8 +269,11 @@ const changePeoples = (CheckedUser, UserId) => {
 };
 const approveParticipant = (approved) => {
     console.log('approved', approved);
-    participants.value = approved;
-}
+    selectedPeoples.value = selectedPeoples.value.filter(
+        (item) => item.user.is_verified == approved,
+    );
+    console.log('approved', approved);
+};
 
 const changeSquads = (CheckedSquad, SquadId) => {
     let detachment = {};

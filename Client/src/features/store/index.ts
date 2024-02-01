@@ -7,12 +7,12 @@ export const useUserStore = defineStore('user', {
         user: {},
         privateUser: {},
         currentUser: {},
-        // isLoading: false,
+        isLoading: false,
     }),
     actions: {
         async getUser() {
             try {
-                // this.isLoading = true;
+                this.isLoading = true;
                 setTimeout(async () => {
                     const responseUser = await HTTP.get('rsousers/me', {
                         headers: {
@@ -22,21 +22,33 @@ export const useUserStore = defineStore('user', {
                         },
                     });
                     this.currentUser = responseUser.data;
-                    // this.isLoading = false;
+                    this.isLoading = false;
                 }, 500);
             } catch (error) {
+                this.isLoading = false;
                 console.log('an error occured ' + error);
             }
         },
 
         async getUserId(id: String) {
-            const responseUserId = await HTTP.get(`users/${id}/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-            this.user = responseUserId.data;
+            try {
+                this.isLoading = true;
+                setTimeout(async () => {
+                    const responseUserId = await HTTP.get(`users/${id}/`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    });
+                    this.user = responseUserId.data;
+                    this.isLoading = false;
+                }, 500);
+            } catch (error) {
+                this.isLoading = false;
+                console.log('an error occured ' + error);
+
+            }
         },
         async getPrivateUserId(id: String) {
             const responsePrivate = await HTTP.get(`rsousers/${id}/`, {

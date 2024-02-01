@@ -343,7 +343,7 @@ const sortedVerified = computed(() => {
 </script>
 <style lang="scss">
 .participants {
-    padding: 60px 0px 60px 0px;
+    padding: 0px 0px 60px 0px;
     &-title {
         font-size: 52px;
         @media screen and (max-width: 575px) {
