@@ -7,13 +7,6 @@
         <div class="competition__promo">
             <div class="competition__container">
                 <div class="competition__image-box">
-                    <!-- Временный код для отображения вариантов баннера на разных разрешениях, без адаптации при ресайзе -->
-                    <img
-                        :src="`/assets/competition/promo-${getSizeImage()}.png`"
-                        alt="Логотип конкурса"
-                        width="1180"
-                        height="510"
-                    />
                     <!-- Компонент для адаптивного изображения при загрузке и ресайзе ---------------------------------->
                     <!-- <img
                         :src="`/assets/competition/promo-${sizeImage}.png`"
@@ -21,6 +14,18 @@
                         width="1180"
                         height="510"
                     /> -->
+                    <!-- <img
+                        :src="sizeImage"
+                        alt="Логотип конкурса"
+                        width="1180"
+                        height="510"
+                    /> -->
+                    <img
+                        src="@app/assets/competition/promo.png"
+                        alt="Логотип конкурса"
+                        width="1180"
+                        height="510"
+                    />
                 </div>
             </div>
 
@@ -292,58 +297,36 @@ const downloadDocument = async () => {
         });
 };
 
-const imageSizeChange = ref({
-    mobile: '360',
-    tablet: '768',
-    laptop: '1024',
-    desktop: '1440',
-});
+// const imageSizeChange = ref({
+//     mobile: '@app/assets/competition/promo-360.png',
+//     tablet: '@app/assets/competition/promo-768.png',
+//     laptop: '@app/assets/competition/promo-1024.png',
+//     desktop: '@app/assets/competition/promo-1440.png',
+// });
 
 //------Компонент для адаптивного изображения при загрузке и ресайзе-----------------------------------------
 
+// const imageSizeChange = ref({
+//     mobile: '360',
+//     tablet: '768',
+//     laptop: '1024',
+//     desktop: '1440',
+// });
+
 // let sizeImage = ref('');
 
-// const getSizeImage = computed(() => {
+// const getSizeImage = () => {
+//     console.log('ширина экрана', window.innerWidth);
 //     if (window.innerWidth <= 360) {
-//         return sizeImage.value === imageSizeChange.value.mobile;
+//         sizeImage.value = imageSizeChange.value.mobile;
 //     }
 //     if (window.innerWidth > 360 && window.innerWidth <= 768) {
-//         return sizeImage.value === imageSizeChange.value.tablet;
+//         sizeImage.value = imageSizeChange.value.tablet;
 //     }
 //     if (window.innerWidth > 768 && window.innerWidth <= 1024) {
-//         return sizeImage.value === imageSizeChange.value.laptop;
-//     } else return sizeImage.value === imageSizeChange.value.desktop;
-// });
-
-//------Временный код для отображения вариантов баннера на разных разрешениях, без адаптации при ресайзе-----
-const getSizeImage = () => {
-    console.log('ширина экрана', window.innerWidth);
-    if (window.innerWidth <= 360) {
-        return imageSizeChange.value.mobile;
-    }
-    if (window.innerWidth > 360 && window.innerWidth <= 768) {
-        return imageSizeChange.value.tablet;
-    }
-    if (window.innerWidth > 768 && window.innerWidth <= 1024) {
-        return imageSizeChange.value.laptop;
-    } else return imageSizeChange.value.desktop;
-};
-
-// const getSizeImage = computed(() => {
-//     if (window.innerWidth <= 360) {
-//         return imageSizeChange.value.mobile;
-//     }
-//     if (window.innerWidth > 360 && window.innerWidth <= 768) {
-//         return imageSizeChange.value.tablet;
-//     }
-//     if (window.innerWidth > 768 && window.innerWidth <= 1024) {
-//         return imageSizeChange.value.laptop;
-//     } else return imageSizeChange.value.desktop;
-// });
-
-// watch(() => {
-//     window.addEventListener('resize', getSizeImage);
-// });
+//         sizeImage.value = imageSizeChange.value.laptop;
+//     } else sizeImage.value = imageSizeChange.value.desktop;
+// };
 
 //----------------------------------------------------------------------------------------------------------
 
@@ -412,11 +395,12 @@ onMounted(async () => {
     await getSquadStatus();
     await getMeSquad();
     // --- слушатель e.target не срабатывал, сделала через window
-    window.addEventListener('resize', getSizeImage);
+    // getSizeImage();
+    // window.addEventListener('resize', getSizeImage);
 });
 
-onUnmounted(() => {
-    window.addEventListener('resize', getSizeImage);
-});
+// onUnmounted(() => {
+//     window.removeEventListener('resize', getSizeImage);
+// });
 </script>
 <style lang="scss"></style>
