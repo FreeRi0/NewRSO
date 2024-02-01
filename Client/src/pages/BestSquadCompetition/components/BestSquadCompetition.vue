@@ -7,12 +7,20 @@
         <div class="competition__promo">
             <div class="competition__container">
                 <div class="competition__image-box">
+                    <!-- Временный код для отображения вариантов баннера на разных разрешениях, без адаптации при ресайзе -->
                     <img
-                        src="@app/assets/competition/promo.png"
+                        :src="`/assets/competition/promo-${getSizeImage()}.png`"
                         alt="Логотип конкурса"
                         width="1180"
                         height="510"
                     />
+                    <!-- Компонент для адаптивного изображения при загрузке и ресайзе ---------------------------------->
+                    <!-- <img
+                        :src="`/assets/competition/promo-${sizeImage}.png`"
+                        alt="Логотип конкурса"
+                        width="1180"
+                        height="510"
+                    /> -->
                 </div>
             </div>
 
@@ -209,7 +217,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, onUnmounted, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
 // import { CompetitionMembersBlock } from '@features/Competition';
 import { ModalCompetition } from '@features/Competition';
@@ -284,6 +292,61 @@ const downloadDocument = async () => {
         });
 };
 
+const imageSizeChange = ref({
+    mobile: '360',
+    tablet: '768',
+    laptop: '1024',
+    desktop: '1440',
+});
+
+//------Компонент для адаптивного изображения при загрузке и ресайзе-----------------------------------------
+
+// let sizeImage = ref('');
+
+// const getSizeImage = computed(() => {
+//     if (window.innerWidth <= 360) {
+//         return sizeImage.value === imageSizeChange.value.mobile;
+//     }
+//     if (window.innerWidth > 360 && window.innerWidth <= 768) {
+//         return sizeImage.value === imageSizeChange.value.tablet;
+//     }
+//     if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+//         return sizeImage.value === imageSizeChange.value.laptop;
+//     } else return sizeImage.value === imageSizeChange.value.desktop;
+// });
+
+//------Временный код для отображения вариантов баннера на разных разрешениях, без адаптации при ресайзе-----
+const getSizeImage = () => {
+    console.log('ширина экрана', window.innerWidth);
+    if (window.innerWidth <= 360) {
+        return imageSizeChange.value.mobile;
+    }
+    if (window.innerWidth > 360 && window.innerWidth <= 768) {
+        return imageSizeChange.value.tablet;
+    }
+    if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+        return imageSizeChange.value.laptop;
+    } else return imageSizeChange.value.desktop;
+};
+
+// const getSizeImage = computed(() => {
+//     if (window.innerWidth <= 360) {
+//         return imageSizeChange.value.mobile;
+//     }
+//     if (window.innerWidth > 360 && window.innerWidth <= 768) {
+//         return imageSizeChange.value.tablet;
+//     }
+//     if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+//         return imageSizeChange.value.laptop;
+//     } else return imageSizeChange.value.desktop;
+// });
+
+// watch(() => {
+//     window.addEventListener('resize', getSizeImage);
+// });
+
+//----------------------------------------------------------------------------------------------------------
+
 //--id конкурса на лучший отряд--------------------------------
 // let id = route.params.id;
 let id = 1;
@@ -348,6 +411,12 @@ onMounted(async () => {
     await getCompetition();
     await getSquadStatus();
     await getMeSquad();
+    // --- слушатель e.target не срабатывал, сделала через window
+    window.addEventListener('resize', getSizeImage);
+});
+
+onUnmounted(() => {
+    window.addEventListener('resize', getSizeImage);
 });
 </script>
 <style lang="scss"></style>
