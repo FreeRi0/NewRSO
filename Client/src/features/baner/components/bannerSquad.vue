@@ -53,8 +53,8 @@
 
           <router-link
             v-if="
-              userId == squad?.commander?.id ||
-              userId == regional?.commander?.id ||
+              userId == squad.commander?.id ||
+              userId == regional.commander?.id ||
               IsTrusted
             "
             :to="{
@@ -111,7 +111,7 @@ const user = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
 let comId = roles.roles.value.detachment_commander;
 let userId = computed(() => {
-  return user.user.value.id;
+  return user.currentUser.value.id;
 });
 console.log("comId", comId);
 const props = defineProps({

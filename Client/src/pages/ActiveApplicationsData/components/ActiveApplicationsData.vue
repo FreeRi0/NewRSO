@@ -35,6 +35,8 @@
                     @change="changePeoples"
                     :participants="participants"
                     :selected-peoples="selectedPeoples"
+                    @approve="approveParticipant"
+                    @reject="rejectParticipant"
                     v-if="!isLoading"
                 />
                 <v-progress-circular
@@ -59,6 +61,7 @@
                     <checkedAppList
                         @change="changePeoples"
                         @approve="approveParticipant"
+                        @reject="rejectParticipant"
                         :participants="selectedPeoples"
                     ></checkedAppList>
                 </div>
@@ -81,6 +84,8 @@
                 <ActiveSquads
                     @change="changeSquads"
                     :detachments="detachments"
+                    @approve="approveMember"
+                    @reject="rejectMember"
                     :selected-detch="selectedDetch"
                 />
 
@@ -89,6 +94,8 @@
 
                     <CheckedSquadsList
                         @change="changeSquads"
+                        @approve="approveMember"
+                        @reject="rejectMember"
                         :detachments="selectedDetch"
                     ></CheckedSquadsList>
                 </div>
@@ -270,9 +277,41 @@ const changePeoples = (CheckedUser, UserId) => {
 const approveParticipant = (approved) => {
     console.log('approved', approved);
     selectedPeoples.value = selectedPeoples.value.filter(
-        (item) => item.user.is_verified == approved,
+        (item) => item.user.id !== approved,
     );
+    participants.value = participants.value.filter(
+        (item) => item.user.id !== approved,
+    );
+};
+
+const rejectParticipant = (rejected) => {
+    console.log('rejected', rejected);
+    selectedPeoples.value = selectedPeoples.value.filter(
+        (item) => item.user.id !== rejected,
+    );
+    participants.value = participants.value.filter(
+        (item) => item.user.id !== rejected,
+    );
+};
+
+const approveMember = (approved) => {
     console.log('approved', approved);
+    selectedDetch.value = selectedDetch.value.filter(
+        (item) => item.id !== approved,
+    );
+    detachments.value = detachments.value.filter(
+        (item) => item.id !== approved,
+    );
+};
+
+const rejectMember = (rejected) => {
+    console.log('rejected', rejected);
+    selectedDetch.value = selectedDetch.value.filter(
+        (item) => item.id !== rejected,
+    );
+    detachments.value = detachments.value.filter(
+        (item) => item.id !== rejected,
+    );
 };
 
 const changeSquads = (CheckedSquad, SquadId) => {
@@ -291,7 +330,7 @@ const changeSquads = (CheckedSquad, SquadId) => {
 watch(
     () => roles.roles.value,
 
-    (newRole, oldRole) => {
+    (newRole) => {
         if (Object.keys(roles.roles.value).length === 0) {
             return;
         }
@@ -301,7 +340,7 @@ watch(
 );
 
 onMounted(() => {
-    // roleStore.getRoles();
+    roleStore.getRoles();
     viewParticipants();
     viewDetachments();
 });

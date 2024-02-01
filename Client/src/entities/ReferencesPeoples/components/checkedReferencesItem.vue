@@ -116,12 +116,18 @@ watch(
         if (!newChecked) return;
         selectedPeoples.value = newChecked;
     },
+    () => props.selectedParticipants,
+    (newApprove) => {
+        if (!newApprove) return;
+        selectedPeoples.value = newApproved;
+    },
 );
 
 const ChangeStatus = async () => {
     try {
         let { id, ...rest } = props.participant.user;
         const approveReq = ref(null);
+        const rejectReq = ref(null);
         if (user.value.is_verified === 'Одобрен') {
             const approveReq = await HTTP.post(
                 `rsousers/${id}/verify/`,
@@ -140,25 +146,29 @@ const ChangeStatus = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            console.log('resp', approveReq.data);
-            emit('approve', approveReq.data);
+            console.log('response', approveReq.data);
+            console.log('responseee', props.participant.user);
+            emit('approve', props.participant.user.id);
             console.log(approveReq.data);
         } else {
-            const rejectReq = await HTTP.delete(`rsousers/${id}/verify/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token' + localStorage.getItem('Token'),
+            const rejectReq = await HTTP.delete(
+                `rsousers/${id}/verify/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            });
+            );
             swal.fire({
                 position: 'top-center',
-                icon: 'error',
+                icon: 'success',
                 title: 'успешно',
                 showConfirmButton: false,
                 timer: 1500,
             });
             console.log('resp', rejectReq.data);
-            // emit('reject', approveReq.data);
+            emit('reject', props.participant.user.id);
             console.log(rejectReq.data);
         }
     } catch (error) {

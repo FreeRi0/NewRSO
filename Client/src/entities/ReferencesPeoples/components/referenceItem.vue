@@ -64,7 +64,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['change']);
+// const emit = defineEmits(['change','approve', 'reject']);
 const checked = ref(false);
 
 const updateCheck = (e) => {
