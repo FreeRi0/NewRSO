@@ -137,6 +137,25 @@ const routes: RouteRecordRaw[] = [
                                         meta: {
                                             label: 'Участники отряда',
                                         },
+                                        children: [
+                                            {
+                                                path: ':id',
+                                                meta: {
+                                                    redirectTo: 'userpage',
+                                                    label: 'Страница пользователя',
+                                                },
+                                                children: [
+                                                    {
+                                                        path: '',
+                                                        name: 'userpage',
+                                                        component: () =>
+                                                            import(
+                                                                '@pages/UserPage/components/UserPage.vue'
+                                                            ),
+                                                    },
+                                                ],
+                                            },
+                                        ],
                                     },
                                 ],
                             },
