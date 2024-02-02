@@ -51,7 +51,7 @@
             <input
                 type="checkbox"
                 v-model="checked"
-                :value="participant"
+                :value="participant.user"
                 @change="updateMembership"
             />
         </div>
@@ -115,6 +115,9 @@ watch(
     (newChecked) => {
         if (!newChecked) return;
         selectedPeoples.value = newChecked;
+        const checkedItem = newChecked.find(
+            (item) => item.user.id == props.participant.user.id,
+        );
     },
     () => props.selectedParticipants,
     (newApprove) => {

@@ -25,7 +25,8 @@ const props = defineProps({
 });
 
 const changePeoples = (CheckedUser, UserId) => {
-    console.log('UserId', UserId)
+
     emit('change', CheckedUser, UserId);
+    console.log('UserId', UserId)
 };
 </script>

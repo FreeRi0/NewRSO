@@ -64,7 +64,7 @@ const props = defineProps({
     },
 });
 
-// const emit = defineEmits(['change','approve', 'reject']);
+const emit = defineEmits(['change','approve', 'reject']);
 const checked = ref(false);
 
 const updateCheck = (e) => {
@@ -81,7 +81,7 @@ watch(
         selectedPeoples.value = newChecked;
         console.log('newChecked', newChecked);
         const checkedItem = newChecked.find(
-            (item) => item.id == props.participant.id,
+            (item) => item.user.id == props.participant.user.id,
         );
         console.log('checkedItem', checkedItem);
         if (!checkedItem) checked.value = false;

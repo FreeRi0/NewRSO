@@ -52,16 +52,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
-import { storeToRefs } from 'pinia';
 
 defineOptions({
     inheritAttrs: false,
 });
-const search = ref(null);
 const emit = defineEmits(['update:value']);
 
 const regionalsStore = useRegionalsStore();

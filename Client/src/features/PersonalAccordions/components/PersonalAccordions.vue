@@ -807,16 +807,17 @@
                                     address="/regions/"
                                 ></Select> -->
                                 <regionsDropdown
-                                open-on-clear
-                                id="reg"
-                                name="regdrop"
-                                placeholder="Поиск"
-                                v-model="props.user.user_region.fact_region_id"
-                                @update:value="changeValue"
-                                address="/regions/"
-                                class="mb-2"
-                            ></regionsDropdown>
-
+                                    open-on-clear
+                                    id="reg"
+                                    name="regdrop"
+                                    placeholder="Поиск"
+                                    v-model="
+                                        props.user.user_region.fact_region_id
+                                    "
+                                    @update:value="changeValue"
+                                    address="/regions/"
+                                    class="mb-2"
+                                ></regionsDropdown>
                             </div>
                             <div class="form-field">
                                 <label for="locality-fact"
@@ -1308,7 +1309,7 @@
                                     >*</span
                                 ></label
                             >
-                            <Select
+                            <!-- <Select
                                 variant="outlined"
                                 clearable
                                 placeholder="Выберете образовательную организацию"
@@ -1316,7 +1317,17 @@
                                 v-model="props.user.education.study_institution"
                                 address="/eduicational_institutions/"
                             >
-                            </Select>
+                            </Select> -->
+                            <educationalsDropdown
+                                open-on-clear
+                                id="reg"
+                                name="regdrop"
+                                placeholder="Поиск"
+                                v-model="props.user.education.study_institution"
+                                @update:value="changeValue"
+                                address="/eduicational_institutions/"
+                                class="mb-2"
+                            ></educationalsDropdown>
                         </div>
                         <div class="form-field">
                             <label for="facultet">Факультет</label>
@@ -3260,6 +3271,7 @@ import {
     Select,
     sortByEducation,
     regionsDropdown,
+    educationalsDropdown,
 } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
