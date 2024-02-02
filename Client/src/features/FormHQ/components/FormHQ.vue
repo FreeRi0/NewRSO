@@ -173,7 +173,7 @@
                                 >Выберите региональное отделение
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
+                            <!-- <Select
                                 class="form__select form__select--select"
                                 variant="outlined"
                                 clearable
@@ -182,8 +182,16 @@
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
                                 v-model="headquarter.regional_headquarter"
                                 address="regionals/"
-                            ></Select>
-                            <!-- {{ headquarter.regional_headquarter }} -->
+                            ></Select> -->
+                            <educInstitutionDropdown
+                                open-on-clear
+                                id="select-regional-office"
+                                name="select_regional-office"
+                                placeholder="Например, Карачаево-Черкесское региональное отделение"
+                                v-model="headquarter.regional_headquarter"
+                                @update:value="changeValue"
+                                address="regionals/"
+                            ></educInstitutionDropdown>
                             <p
                                 class="form__error"
                                 v-if="isError.regional_headquarter"
@@ -820,6 +828,7 @@ import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Select } from '@shared/components/selects';
 import { educInstitutionDropdown } from '@shared/components/selects';
+import { educationalsDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
