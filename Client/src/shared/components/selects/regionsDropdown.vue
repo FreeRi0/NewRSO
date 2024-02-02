@@ -13,7 +13,7 @@
         @update:value="changeValue"
         :address="address"
         :no-data-text="noDataText"
-        class="option"
+        class="option-select"
     >
         <template #prepend-inner>
             <Icon
@@ -34,32 +34,18 @@
                 </div>
             </div>
         </template>
-
-        <!-- <template v-slot:item="{ props, item }">
-            <v-container v-bind="props">
-                <div class="option__content option__content--option">
-                    <div class="option__wrapper">
-                        <p class="option__title">
-                            {{ item.raw.name }}
-                        </p>
-                    </div>
-                </div>
-            </v-container>
-        </template> -->
     </v-autocomplete>
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
-import { storeToRefs } from 'pinia';
 
 defineOptions({
     inheritAttrs: false,
 });
-const search = ref(null);
 const emit = defineEmits(['update:value']);
 
 const regionalsStore = useRegionalsStore();
@@ -129,13 +115,22 @@ onMounted(() => {
     font-size: 12px;
 }
 
-.option {
+.option-select {
     background-color: #ffffff;
     box-sizing: border-box;
-    // max-height: 40px;
+
     .v-field__input {
-        padding: 1px 0;
+        padding: 10px 16px;
         min-height: 40px;
+
+        input {
+            margin: 0;
+        }
+
+        .v-autocomplete__selection {
+            width: 100%;
+            margin: 0;
+        }
     }
 
     &__content {
@@ -143,13 +138,13 @@ onMounted(() => {
         display: flex;
         align-items: center;
         position: relative;
+        border: none;
 
         &--option {
             width: calc(100% - 10px);
-            margin-bottom: -20px;
-            padding: 5px 20px;
-            border: 1px solid #b6b6b6;
-            border-radius: 10px;
+            margin-top: -10px;
+            padding: 5px 0;
+            border-bottom: 1px solid #b6b6b6;
         }
     }
 
@@ -159,7 +154,7 @@ onMounted(() => {
         width: calc(100% - 49px);
         justify-content: space-between;
         font-family: 'BertSans', sans-serif;
-        line-height: 21px;
+        line-height: 20px;
 
         @media (max-width: 768px) {
             flex-wrap: wrap;
@@ -174,5 +169,10 @@ onMounted(() => {
             margin-bottom: 3px;
         }
     }
+}
+
+.option-select.v-text-field .v-field__input input {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 </style>

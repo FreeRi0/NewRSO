@@ -13,7 +13,7 @@
       @update:value="changeValue"
       :address="address"
       :no-data-text="noDataText"
-      class="option"
+      class="option-select"
   >
       <template #prepend-inner>
           <Icon
@@ -39,16 +39,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
-import { storeToRefs } from 'pinia';
 
 defineOptions({
   inheritAttrs: false,
 });
-const search = ref(null);
 const emit = defineEmits(['update:value']);
 
 const regionalsStore = useRegionalsStore();
@@ -109,59 +107,73 @@ onMounted(() => {
 <style lang="scss">
 //-----отсутствует атрибут scoped, чтобы отрабатывала высота поля
 .error-wrapper {
-  position: relative;
+    position: relative;
 }
 .form-error__message {
-  position: absolute;
-  right: 0;
-  color: var(--danger);
-  font-size: 12px;
+    position: absolute;
+    right: 0;
+    color: var(--danger);
+    font-size: 12px;
 }
 
-.option {
-  background-color: #ffffff;
-  box-sizing: border-box;
-  // max-height: 40px;
-  .v-field__input {
-      padding: 1px 0;
-      min-height: 40px;
-  }
+.option-select {
+    background-color: #ffffff;
+    box-sizing: border-box;
 
-  &__content {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      position: relative;
+    .v-field__input {
+        padding: 10px 16px;
+        min-height: 40px;
 
-      &--option {
-          width: calc(100% - 10px);
-          margin-bottom: -20px;
-          padding: 5px 20px;
-          border: 1px solid #b6b6b6;
-          border-radius: 10px;
-      }
-  }
+        input {
+            margin: 0;
+        }
 
-  &__wrapper {
-      display: flex;
-      flex-wrap: nowrap;
-      width: calc(100% - 49px);
-      justify-content: space-between;
-      font-family: 'BertSans', sans-serif;
-      line-height: 21px;
+        .v-autocomplete__selection {
+            width: 100%;
+            margin: 0;
+        }
+    }
 
-      @media (max-width: 768px) {
-          flex-wrap: wrap;
-          font-size: 12px;
-          line-height: 16px;
-      }
-  }
+    &__content {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        position: relative;
+        border: none;
 
-  &__title {
-      @media (max-width: 768px) {
-          width: 100%;
-          margin-bottom: 3px;
-      }
-  }
+        &--option {
+            width: calc(100% - 10px);
+            margin-top: -10px;
+            padding: 5px 0;
+            border-bottom: 1px solid #b6b6b6;
+        }
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+        width: calc(100% - 49px);
+        justify-content: space-between;
+        font-family: 'BertSans', sans-serif;
+        line-height: 20px;
+
+        @media (max-width: 768px) {
+            flex-wrap: wrap;
+            font-size: 12px;
+            line-height: 16px;
+        }
+    }
+
+    &__title {
+        @media (max-width: 768px) {
+            width: 100%;
+            margin-bottom: 3px;
+        }
+    }
+}
+
+.option-select.v-text-field .v-field__input input {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 </style>
