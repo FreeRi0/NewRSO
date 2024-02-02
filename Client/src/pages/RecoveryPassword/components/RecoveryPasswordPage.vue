@@ -42,7 +42,7 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
@@ -51,25 +51,52 @@ import { usePage } from '@shared';
 
 usePage({ isHidden: true });
 
+const isError = ref('');
+const isLoading = ref(false);
+const swal = inject('$swal');
 const router = useRouter();
 
 const data = ref({
     email: '',
 });
 
-const submitForm = () => {
-    HTTP.post('/reset_password/', data.value, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((response) => {
-            data.value = response.data;
-            console.log('Пароль сброшен!');
-        })
-        .catch((error) => {
-            console.error('Ошибка сброса пароля', error);
+const submitForm = async () => {
+    try {
+        isLoading.value = false;
+        const response = await HTTP.post('/reset_password/', data.value, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
+        data.value = response.data;
+        console.log(response.data);
+        isLoading.value = false;
+        router.push({
+            name: 'RecoveryPassword',
+        });
+        swal.fire({
+            position: 'top-center',
+            icon: '',
+            title: 'На указанный e-mail отправлено письмо со ссылкой.',
+            text: 'Пройдите по ней для восстановления пароля.',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
+    }
 };
 
 const onBack = () => {

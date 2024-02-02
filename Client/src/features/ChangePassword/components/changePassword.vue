@@ -27,28 +27,34 @@
             color="primary"
         ></Button>
     </div>
-    <!-- <div class="change_Password" @submit.prevent="resetPasswordForm">
+    <div class="change_Password" @submit.prevent="changePasswordForm">
         <p class="pass-title">Изменить пароль</p>
         <Input
             placeholder="   Введите старый пароль"
             name="password"
-            v-model:value="user.password_old"
+            v-model:value="current_password"
         ></Input>
         <Input
             placeholder="   Придумайте новый пароль"
             name="newPass"
-            v-model:value="user.password"
+            v-model:value="new_password"
         ></Input>
         <Input
             placeholder="   Повторите пароль"
             name="confirm"
-            v-model:value="user.re_password"
+            v-model:value="re_password"
         ></Input>
-        <Button class="save" label="Сохранить" color="primary"></Button>
-    </div> -->
+        <Button
+            @click="changePasswordForm"
+            class="save"
+            label="Сохранить"
+            color="primary"
+            type="submit"
+        ></Button>
+    </div>
 </template>
 <script setup>
-import { ref, onMounted, inject, computed } from 'vue';
+import { ref, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
@@ -60,15 +66,9 @@ const userStore = useUserStore();
 let currentUser = storeToRefs(userStore);
 let username = ref(currentUser.currentUser.value.username);
 const show = ref(false);
-// const password = ref('');
-// const re_password = ref('');
-// const visible = ref(false);
-// const visibleRe = ref(false);
-
-// const auth = computed(() => ({
-//     uid: route.params.uid,
-//     token: route.params.token,
-// }));
+const new_password = ref('');
+const re_password = ref('');
+const current_password = ref('');
 
 const swal = inject('$swal');
 const isError = ref([]);
@@ -107,23 +107,51 @@ const updateUsername = async () => {
             });
         }
     }
-    // const resetPasswordForm = async () => {
-    //     if (password.value !== re_password.value) {
-    //         console.error('Passwords do not match');
-    //         return;
-    //     }
+};
 
-    //     try {
-    //         const response = await HTTP.post('/users/reset_password_confirm/', {
-    //             ...auth.value,
-    //             password: password.value,
-    //         });
-    //         console.log(response.data);
-    //         localStorage.setItem('Token', response.data.auth_token);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
+const changePasswordForm = async () => {
+    if (new_password.value !== re_password.value) {
+        console.error('Passwords do not match');
+        return;
+    }
+
+    try {
+        const response = await HTTP.post(
+            '/users/set_password/',
+            {
+                new_password: new_password.value,
+                current_password: current_password.value,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        console.log(response.data);
+        localStorage.setItem('Token', response.data);
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    } catch (error) {
+        console.log(error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
+    }
 };
 </script>
 <style lang="scss" scoped>
