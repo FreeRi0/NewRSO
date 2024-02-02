@@ -92,7 +92,7 @@
                 <ul class="competition__list">
                     <li>
                         <span>Масштаб конкурса:</span>
-                        <span>Всероссийское</span>
+                        <span>Всероссийский</span>
                     </li>
                     <li>
                         <span>Две номинации:</span>
@@ -189,8 +189,6 @@
             ><h2 class="subtitle subtitle--link">Участники конкурса</h2>
         </router-link>
 
-        <!-- <CompetitionMembersBlock v-if="isAuth"></CompetitionMembersBlock> -->
-
         <!--Модальные окна-->
         <ModalCompetition
             v-if="isSendApplication"
@@ -224,7 +222,6 @@
 <script setup>
 import { ref, onMounted, computed, onUnmounted, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
-// import { CompetitionMembersBlock } from '@features/Competition';
 import { ModalCompetition } from '@features/Competition';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';
