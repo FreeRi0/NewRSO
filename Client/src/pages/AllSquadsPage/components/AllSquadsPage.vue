@@ -96,7 +96,6 @@
                             <div class="sort-select">
                                 <filterSelect
                                     variant="outlined"
-                                    clearable
                                     name="select_education"
                                     id="select-education"
                                     v-model="education"

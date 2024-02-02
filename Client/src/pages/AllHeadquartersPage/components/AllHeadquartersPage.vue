@@ -13,7 +13,7 @@
                     type="text"
                     id="search"
                     class="headquarters-search__input"
-                    v-model="searchHeadquartes"
+                    v-model="name"
                     placeholder="Начните вводить название штаба образовательной организации."
                 />
                 <svg
@@ -240,7 +240,7 @@ const sortBy = ref('alphabetically');
 
 const vertical = ref(true);
 
-const searchHeadquartes = ref('');
+const name = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -277,6 +277,23 @@ const getHeadquarters = async () => {
     }
 };
 
+const searchEducational = async (name) => {
+    try {
+        const filteredEducationals = await HTTP.get(
+            `/educationals/?search=${name}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        headquarters.value = filteredEducationals.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
 const filtersDistricts = computed(() =>
     SelectedSortDistrict.value
         ? districts.value.find(
@@ -297,6 +314,10 @@ const filtersLocals = computed(() =>
               ?.AllHeadquarters ?? []
         : headquarters.value,
 );
+
+const searchEducationals = computed(() => {
+    return searchEducational(name.value);
+});
 
 const getDistrictsHeadquartersForFilters = async () => {
     try {
@@ -363,6 +384,7 @@ const sortedHeadquarters = computed(() => {
         tempHeadquartes = [...headquarters.value];
     }
 
+    searchEducationals.value;
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     tempHeadquartes = tempHeadquartes.filter((item) => {
         // console.log(educational_institution.id);
@@ -373,11 +395,11 @@ const sortedHeadquarters = computed(() => {
                 item.local_headquarter == selectedSortLocal.value)
         );
     });
-    tempHeadquartes = tempHeadquartes.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchHeadquartes.value.toUpperCase());
-    });
+    // tempHeadquartes = tempHeadquartes.filter((item) => {
+    //     return item.name
+    //         .toUpperCase()
+    //         .includes(searchHeadquartes.value.toUpperCase());
+    // });
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {

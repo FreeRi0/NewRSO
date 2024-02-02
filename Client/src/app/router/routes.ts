@@ -128,7 +128,7 @@ const routes: RouteRecordRaw[] = [
                                         },
                                     },
                                     {
-                                        path: 'AllParticipants/:id',
+                                        path: 'AllParticipants',
                                         name: 'allparticipants',
                                         component: () =>
                                             import(

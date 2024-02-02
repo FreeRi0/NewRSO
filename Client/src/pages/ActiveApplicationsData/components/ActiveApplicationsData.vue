@@ -84,8 +84,8 @@
                 <ActiveSquads
                     @change="changeSquads"
                     :detachments="detachments"
-                    @approve="approveMember"
-                    @reject="rejectMember"
+                    @approveMember="approveMember"
+                    @rejectMember="rejectMember"
                     :selected-detch="selectedDetch"
                 />
 
@@ -94,8 +94,8 @@
 
                     <CheckedSquadsList
                         @change="changeSquads"
-                        @approve="approveMember"
-                        @reject="rejectMember"
+                        @approveMember="approveMember"
+                        @rejectMember="rejectMember"
                         :detachments="selectedDetch"
                     ></CheckedSquadsList>
                 </div>

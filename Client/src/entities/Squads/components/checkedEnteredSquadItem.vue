@@ -101,7 +101,7 @@ const props = defineProps({
 const roleStore = useRoleStore();
 roleStore.getRoles();
 const roles = storeToRefs(roleStore);
-const emit = defineEmits(['change', 'approve', 'reject']);
+const emit = defineEmits(['change', 'approveMember', 'rejectMember']);
 const updateSquads = (e) => {
     console.log('dddddddft', checked.value);
     emit('change', checked.value, props.detachment.id);
@@ -157,90 +157,18 @@ watch(
     () => props.selectedSquads,
     (newApprove) => {
         if (!newApprove) return;
-        selectedSquads.value = newApproved;
+        selectedDetch.value = newApproved;
     },
 );
 
-// const ChangeStatus = async () => {
-//     let id = squad.value.id;
-//     console.log('squad', id);
-//     let application_pk = props.detachment.id;
-//     console.log('application', application_pk);
-//     if (user.value.applications === 'Одобрить') {
-//         HTTP.post(
-//             `/detachments/${id}/applications/${application_pk}/accept/`,
-//             user.value,
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//         )
-//             .then((response) => {
-//                 swal.fire({
-//                     position: 'top-center',
-//                     icon: 'success',
-//                     title: 'успешно',
-//                     showConfirmButton: false,
-//                     timer: 1500,
-//                 });
-//                 // participant.value = response.data; //emit
-//                 console.log(response.data);
-//             })
-
-//             .catch(({ response }) => {
-//                 isError.value = response.data;
-//                 console.error('There was an error!', response.data);
-//                 swal.fire({
-//                     position: 'top-center',
-//                     icon: 'error',
-//                     title: 'ошибка',
-//                     showConfirmButton: false,
-//                     timer: 1500,
-//                 });
-//             });
-//     } else {
-//         HTTP.delete(
-//             `/detachments/${id}/applications/${application_pk}/accept/`,
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//         )
-//             .then((response) => {
-//                 swal.fire({
-//                     position: 'top-center',
-//                     icon: 'success',
-//                     title: 'успешно',
-//                     showConfirmButton: false,
-//                     timer: 1500,
-//                 });
-//                 // participant.value = response.data; //emit
-//                 console.log(response.data);
-//             })
-
-//             .catch(({ response }) => {
-//                 isError.value = response.data;
-//                 console.error('There was an error!', response.data);
-//                 swal.fire({
-//                     position: 'top-center',
-//                     icon: 'error',
-//                     title: 'ошибка',
-//                     showConfirmButton: false,
-//                     timer: 1500,
-//                 });
-//             });
-//     }
-// };
 const ChangeStatus = async () => {
     try {
         let id = squad.value.id;
         console.log('squad', id);
         let application_pk = props.detachment.id;
         console.log('application', application_pk);
+        const approveReq = ref(null);
+        const rejectReq = ref(null);
         if (user.value.applications === 'Одобрить') {
             const approveReq = await HTTP.post(
                 `/detachments/${id}/applications/${application_pk}/accept/`,
@@ -260,8 +188,7 @@ const ChangeStatus = async () => {
                 timer: 1500,
             });
             console.log('response', approveReq.data);
-            // console.log('responseee', props.participant.user);
-            emit('approve', props.participant.user.id);
+            emit('approveMember',  props.detachment.id);
             console.log(approveReq.data);
         } else {
             const rejectReq = await HTTP.delete(
@@ -281,7 +208,7 @@ const ChangeStatus = async () => {
                 timer: 1500,
             });
             console.log('resp', rejectReq.data);
-            emit('reject', props.participant.user.id);
+            emit('rejectMember', props.detachment.id);
             console.log(rejectReq.data);
         }
     } catch (error) {

@@ -2,8 +2,8 @@
     <checkedEnteredSquadItem
         v-for="detachment in detachments"
         @change="changeSquads"
-        @approve="approveMember"
-        @reject="rejectMember"
+        @approveMember="approveMember"
+        @rejectMember="rejectMember"
         :detachment="detachment"
         :squad="squad"
         :key="detachment.id"
@@ -13,19 +13,19 @@
 import { ref} from 'vue';
 import { checkedEnteredSquadItem } from '@entities/Squads';
 
-const emit = defineEmits(['change']);
+const emit = defineEmits(['change', 'approveMember', 'rejectMember']);
 const changeSquads = (CheckedSquad, SquadId) => {
     emit('change', CheckedSquad, SquadId);
 };
 
 const approveMember = (approved) => {
     console.log('user', approved);
-    emit('approve', approved);
+    emit('approveMember', approved);
     console.log('approved');
 };
 const rejectMember = (rejected) => {
     console.log('user', rejected);
-    emit('reject', rejected);
+    emit('rejectMember', rejected);
     console.log('rejected');
 };
 
