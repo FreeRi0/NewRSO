@@ -136,7 +136,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
-                             open-on-clear
+                                open-on-clear
                                 id="beast"
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
@@ -384,7 +384,9 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="hq-slogan" class="form__label">Девиз штаба</label>
+                            <label for="hq-slogan" class="form__label"
+                                >Девиз штаба</label
+                            >
                             <TextareaAbout
                                 maxlength="100"
                                 class="form__textarea form__textarea--mobile"
@@ -399,7 +401,9 @@
                         </div>
 
                         <div class="form__field">
-                            <label for="about-hq" class="form__label">О штабе</label>
+                            <label for="about-hq" class="form__label"
+                                >О штабе</label
+                            >
                             <TextareaAbout
                                 :rows="6"
                                 maxlength="500"
@@ -731,11 +735,11 @@ const props = defineProps({
         type: String,
         default: null,
     },
-     members: {
+    members: {
         type: Array,
         default: () => [],
     },
-        isError: {
+    isError: {
         type: Object,
         default: () => ({}),
     },
@@ -782,11 +786,11 @@ const showButtonPrev = computed(() => {
 const route = useRoute();
 let id = route.params.id;
 
-const members = ref(props.members);
+// const members = ref(props.members);
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
-    return members.value.filter((item) => {
+    return props.members.filter((item) => {
         return item.user.last_name
             .toUpperCase()
             .includes(searchMembers.value.toUpperCase());
@@ -862,7 +866,7 @@ const deleteBanner = () => {
         border: 2px solid #35383f;
         background-color: #ffffff;
     }
-    
+
     &--prev {
         margin-right: 20px;
     }
