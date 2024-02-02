@@ -9,7 +9,7 @@
         item-title="name"
         item-value="id"
         v-bind="$attrs"
-        @keyup="searchRegion"
+        @keyup="searchEducInstitution"
         @update:value="changeValue"
         :address="address"
         :no-data-text="noDataText"
@@ -106,11 +106,11 @@ const onChangeItem = async () => {
         });
 };
 
-const searchRegion = (val) => {
+const searchEducInstitution = (val) => {
     if (name.value.length < 3) {
         return;
     }
-    regionalsStore.searchRegions(name.value);
+    regionalsStore.searchInstitution(name.value);
     console.log('val', val);
 };
 

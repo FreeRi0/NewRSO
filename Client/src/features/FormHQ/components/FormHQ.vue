@@ -111,7 +111,7 @@
                                 >Выберите учебное заведение
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
+                            <!-- <Select
                                 class="form__select form__select--select"
                                 variant="outlined"
                                 clearable
@@ -120,8 +120,16 @@
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="headquarter.educational_institution"
                                 address="eduicational_institutions/"
-                            ></Select>
-                            <!-- <pre>{{ headquarter.educational_institution }}</pre> -->
+                            ></Select> -->
+                            <educInstitutionDropdown
+                                open-on-clear
+                                id="select-institution"
+                                name="select_institution"
+                                placeholder="Например, Алтайский государственный медицинский университет"
+                                v-model="headquarter.educational_institution"
+                                @update:value="changeValue"
+                                address="eduicational_institutions/"
+                            ></educInstitutionDropdown>
                             <p
                                 class="form__error"
                                 v-if="isError.educational_institution"
@@ -811,6 +819,7 @@ import { ref, computed, onMounted } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Select } from '@shared/components/selects';
+import { educInstitutionDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
