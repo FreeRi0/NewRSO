@@ -21,7 +21,7 @@
                 />
 
                 <p class="error" v-if="isError.username">
-                    {{ isError.username }}
+                    {{'' + isError.username }}
                 </p>
                 <v-text-field
                     class="password-input"
@@ -35,11 +35,11 @@
                 ></v-text-field>
 
                 <p class="error" v-if="isError.password">
-                    {{ isError.password }}
+                    {{'' + isError.password }}
                 </p>
 
                 <p class="error" v-if="isError.non_field_errors">
-                    {{ isError.non_field_errors }}
+                    {{'' + isError.non_field_errors }}
                 </p>
 
                 <Button

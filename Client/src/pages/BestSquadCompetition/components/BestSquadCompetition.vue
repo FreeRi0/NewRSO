@@ -7,6 +7,19 @@
         <div class="competition__promo">
             <div class="competition__container">
                 <div class="competition__image-box">
+                    <!-- Компонент для адаптивного изображения при загрузке и ресайзе ---------------------------------->
+                    <!-- <img
+                        :src="`/assets/competition/promo-${sizeImage}.png`"
+                        alt="Логотип конкурса"
+                        width="1180"
+                        height="510"
+                    /> -->
+                    <!-- <img
+                        :src="sizeImage"
+                        alt="Логотип конкурса"
+                        width="1180"
+                        height="510"
+                    /> -->
                     <img
                         src="@app/assets/competition/promo.png"
                         alt="Логотип конкурса"
@@ -79,7 +92,7 @@
                 <ul class="competition__list">
                     <li>
                         <span>Масштаб конкурса:</span>
-                        <span>Всероссийское</span>
+                        <span>Всероссийский</span>
                     </li>
                     <li>
                         <span>Две номинации:</span>
@@ -176,8 +189,6 @@
             ><h2 class="subtitle subtitle--link">Участники конкурса</h2>
         </router-link>
 
-        <!-- <CompetitionMembersBlock v-if="isAuth"></CompetitionMembersBlock> -->
-
         <!--Модальные окна-->
         <ModalCompetition
             v-if="isSendApplication"
@@ -209,9 +220,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, onUnmounted, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
-// import { CompetitionMembersBlock } from '@features/Competition';
 import { ModalCompetition } from '@features/Competition';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';
@@ -284,6 +294,39 @@ const downloadDocument = async () => {
         });
 };
 
+// const imageSizeChange = ref({
+//     mobile: '@app/assets/competition/promo-360.png',
+//     tablet: '@app/assets/competition/promo-768.png',
+//     laptop: '@app/assets/competition/promo-1024.png',
+//     desktop: '@app/assets/competition/promo-1440.png',
+// });
+
+//------Компонент для адаптивного изображения при загрузке и ресайзе-----------------------------------------
+
+// const imageSizeChange = ref({
+//     mobile: '360',
+//     tablet: '768',
+//     laptop: '1024',
+//     desktop: '1440',
+// });
+
+// let sizeImage = ref('');
+
+// const getSizeImage = () => {
+//     console.log('ширина экрана', window.innerWidth);
+//     if (window.innerWidth <= 360) {
+//         sizeImage.value = imageSizeChange.value.mobile;
+//     }
+//     if (window.innerWidth > 360 && window.innerWidth <= 768) {
+//         sizeImage.value = imageSizeChange.value.tablet;
+//     }
+//     if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+//         sizeImage.value = imageSizeChange.value.laptop;
+//     } else sizeImage.value = imageSizeChange.value.desktop;
+// };
+
+//----------------------------------------------------------------------------------------------------------
+
 //--id конкурса на лучший отряд--------------------------------
 // let id = route.params.id;
 let id = 1;
@@ -348,6 +391,13 @@ onMounted(async () => {
     await getCompetition();
     await getSquadStatus();
     await getMeSquad();
+    // --- слушатель e.target не срабатывал, сделала через window
+    // getSizeImage();
+    // window.addEventListener('resize', getSizeImage);
 });
+
+// onUnmounted(() => {
+//     window.removeEventListener('resize', getSizeImage);
+// });
 </script>
 <style lang="scss"></style>

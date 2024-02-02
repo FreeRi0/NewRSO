@@ -1,10 +1,12 @@
 <template>
-    <regionalItem
-        v-for="regionalHeadquarter in regionalHeadquarters"
-        :regional-headquarter="regionalHeadquarter"
-        :key="regionalHeadquarter.id"
-        v-if="regionalHeadquarters.length > 0"
-    />
+    <div class="headquarters-wrapper" v-if="regionalHeadquarters.length > 0">
+        <regionalItem
+            v-for="regionalHeadquarter in regionalHeadquarters"
+            :regional-headquarter="regionalHeadquarter"
+            :key="regionalHeadquarter.id"
+        />
+    </div>
+
     <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>

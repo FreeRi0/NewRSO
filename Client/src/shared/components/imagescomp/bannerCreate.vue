@@ -4,8 +4,30 @@
             {{ desc }}
         </div>
 
-
-        <router-link v-if="roles.roles.value.educationalheadquarter_commander || roles.roles.value.regionalheadquarter_commander || roles.roles.value.localheadquarter_commander || roles.roles.value.centralComId" :to="{name: name}"><p v-if="button" class="create">{{ label }}</p></router-link>
+        <router-link
+            v-if="
+                roles.roles.value.regionalheadquarter_commander ||
+                roles.roles.value.localheadquarter_commander ||
+                roles.roles.value.centralComId
+            "
+            :to="{ name: name }"
+            ><p v-if="button" class="create">{{ label }}</p></router-link
+        >
+        <router-link
+            v-if="
+                roles.roles.value.localheadquarter_commander ||
+                roles.roles.value.centralComId
+            "
+            :to="{ name: name }"
+            ><p v-if="regCom" class="create">{{ label }}</p></router-link
+        >
+        <router-link
+            v-if="
+                roles.roles.value.centralComId
+            "
+            :to="{ name: name }"
+            ><p v-if="locCom" class="create">{{ label }}</p></router-link
+        >
     </div>
 </template>
 <script setup>
@@ -15,10 +37,6 @@ import { storeToRefs } from 'pinia';
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 // roleStore.getRoles();
-// let educComId = roles.roles.value.educationalheadquarter_commander;
-// let regComId = roles.roles.value.regionalheadquarter_commander;
-// let localComId = roles.roles.value.localheadquarter_commander;
-// let centralComId = roles.roles.value.centralComId;
 const props = defineProps({
     label: {
         type: String,
@@ -34,7 +52,15 @@ const props = defineProps({
     },
     button: {
         type: Boolean,
-        default: true,
+        default: false,
+    },
+    locCom: {
+        type: Boolean,
+        default: false,
+    },
+    regCom: {
+        type: Boolean,
+        default: false,
     },
 });
 

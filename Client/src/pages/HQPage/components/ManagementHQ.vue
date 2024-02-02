@@ -1,13 +1,9 @@
 <template>
     <section class="headquarters-management">
         <h3>{{ head }}</h3>
-        <div class="headquarters-management__container">
-            <router-link
-                :to="{
-                    name: 'userpage',
-                    params: { id: props.commander.id ?? props.member.id },
-                }"
-            >
+
+        <router-link :to="{ name: 'userpage', params: { id: props.commander.id } }" class="headquarters-management__container">
+        
                 <div
                     class="manager-card"
                     :key="manager"
@@ -38,8 +34,9 @@
                         <p>{{ manager.position }}</p>
                     </div>
                 </div>
-            </router-link>
-        </div>
+
+
+        </router-link>
     </section>
 </template>
 

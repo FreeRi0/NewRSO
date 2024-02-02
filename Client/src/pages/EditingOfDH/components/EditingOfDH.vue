@@ -44,7 +44,6 @@ const getPositions = async () => {
 
         .then((res) => {
             positions.value = res.data;
-            console.log('должности - ', res.data);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -144,14 +143,14 @@ const changeHeadquarter = async () => {
     try {
         const formData = new FormData();
 
-    formData.append('name', headquarter.value.name);
-    formData.append('founding_date', headquarter.value.founding_date);
-    formData.append('city', headquarter.value.city);
-    formData.append('commander', headquarter.value.commander);
-    formData.append('social_vk', headquarter.value.social_vk);
-    formData.append('social_tg', headquarter.value.social_tg);
-    formData.append('slogan', headquarter.value.slogan);
-    formData.append('about', headquarter.value.about);
+        formData.append('name', headquarter.value.name);
+        formData.append('founding_date', headquarter.value.founding_date);
+        formData.append('city', headquarter.value.city);
+        formData.append('commander', headquarter.value.commander);
+        formData.append('social_vk', headquarter.value.social_vk);
+        formData.append('social_tg', headquarter.value.social_tg);
+        formData.append('slogan', headquarter.value.slogan);
+        formData.append('about', headquarter.value.about);
 
         for (let member of members.value) {
             await HTTP.patch(
@@ -194,7 +193,7 @@ const changeHeadquarter = async () => {
         router.push({
             name: 'DistrictHQ',
             params: { id: headquarter.value.id },
-        })
+        });
     } catch (err) {
         isError.value = err.response.data;
         isErrorMembers.value = err.response.data;
@@ -206,7 +205,7 @@ const changeHeadquarter = async () => {
                 showConfirmButton: false,
                 timer: 2500,
             });
-        } 
+        }
     }
 };
 </script>

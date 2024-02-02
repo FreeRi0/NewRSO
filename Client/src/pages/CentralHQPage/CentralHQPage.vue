@@ -60,6 +60,7 @@ import HQandSquad from '../RegionalHQPage/components/HQandSquad.vue';
 import { ref, onMounted, computed, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
 const showRegionalHQ = ref(false);
 const showDistrictHQ = ref(false);
@@ -73,6 +74,8 @@ const member = ref([]);
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const aboutCentralHQs = async () => {
     try {
         const response = await HTTP.get(`/centrals/${id}/`, {
@@ -83,6 +86,7 @@ const aboutCentralHQs = async () => {
         });
 
         centralHeadquarter.value = response.data;
+        replaceTargetObjects([centralHeadquarter.value]);
         console.log(response);
     } catch (error) {
         console.log('an error occured ' + error);

@@ -5,6 +5,8 @@
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
                 name="CreationOfRS"
+                :button="false"
+                :reg-com="true"
             ></bannerCreate>
             <h2 class="headquarters-title">Региональные штабы</h2>
             <div class="headquarters-search">
@@ -12,7 +14,7 @@
                     type="text"
                     id="search"
                     class="headquarters-search__input"
-                    v-model="searchRegionalHeadquarters"
+                    v-model="name"
                     placeholder="Начните вводить название штаба."
                 />
                 <svg
@@ -90,16 +92,6 @@
                                 <pre>{{ item.title }}</pre>
                             </template>
                         </v-select>
-                        <!-- <Select
-                            clearable
-                            variant="outlined"
-                            name="select_district"
-                            id="select-district"
-                            v-model="selectedSortDistrict"
-                            class="filter-district"
-                            address="/districts/"
-                            placeholder="Окружной штаб"
-                        ></Select> -->
                     </div>
                     <div class="sort-select">
                         <sortByEducation
@@ -121,16 +113,30 @@
                 </div>
             </div>
 
-            <div class="headquarters-wrapper" v-show="vertical">
+            <div class="mt-10" v-show="vertical">
                 <RegionalHQList
                     :regionalHeadquarters="sortedRegionalHeadquarters"
+                    v-if="!isRegionalLoading"
                 ></RegionalHQList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <HorizontalRegionalHQs
                     :regionalHeadquarters="sortedRegionalHeadquarters"
+                    v-if="!isRegionalLoading"
                 ></HorizontalRegionalHQs>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -164,6 +170,7 @@ const crosspageFilters = useCrosspageFilter();
 const regionalHeadquarters = ref([]);
 
 const headquartersVisible = ref(20);
+const isRegionalLoading = ref(false);
 
 const step = ref(20);
 
@@ -172,7 +179,7 @@ const sortBy = ref('alphabetically');
 
 const vertical = ref(true);
 
-const searchRegionalHeadquarters = ref('');
+const name = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -185,19 +192,35 @@ const selectedSortDistrict = ref(
 const districts = ref([]);
 
 const getRegionalHeadquarters = async () => {
-    await HTTP.get('/regionals/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regionalHeadquarters.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        isRegionalLoading.value = true;
+        setTimeout(async () => {
+            const regResponse = await HTTP.get('/regionals/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            regionalHeadquarters.value = regResponse.data;
+            isRegionalLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const searchRegional = async (name) => {
+    try {
+        const filteredRegional = await HTTP.get(`/regionals/?search=${name}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        regionalHeadquarters.value = filteredRegional.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const filtersDistricts = computed(() =>
@@ -208,6 +231,10 @@ const filtersDistricts = computed(() =>
         : regionalHeadquarters.value,
 );
 
+const searchReg = computed(() => {
+    return searchRegional(name.value);
+});
+
 const getDistrictsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/districts/');
@@ -216,11 +243,6 @@ const getDistrictsHeadquartersForFilters = async () => {
         console.log('error request districts headquarters');
     }
 };
-
-onMounted(() => {
-    getDistrictsHeadquartersForFilters();
-    getRegionalHeadquarters();
-});
 
 const selectedSort = ref(0);
 
@@ -239,12 +261,7 @@ const sortedRegionalHeadquarters = computed(() => {
     tempHeadquarters = tempHeadquarters.slice(0, headquartersVisible.value);
 
     // поиск
-    tempHeadquarters = tempHeadquarters.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchRegionalHeadquarters.value.toUpperCase());
-    });
-
+    searchReg.value;
     // сортировка
     tempHeadquarters = tempHeadquarters.sort((a, b) => {
         if (sortBy.value === 'alphabetically') {
@@ -287,59 +304,10 @@ onActivated(() => {
             ?.districtName ?? null;
 });
 
-// ...............................................................................
-// const sortedHeadquarters = computed(() => {
-//     let tempHeadquartes = filtersDistricts.value;
-
-//     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
-//     tempHeadquartes = tempHeadquartes.filter((item) => {
-//         // console.log(educational_institution.id);
-//         return (
-//             selectedSortDistrict.value == null ||
-//             item.district_headquarter == selectedSortDistrict.value
-//         );
-//     });
-
-//     tempHeadquartes = tempHeadquartes.filter((item) => {
-//         return item.name
-//             .toUpperCase()
-//             .includes(searchRegionalHeadquarters.value.toUpperCase());
-//     });
-
-//     tempHeadquartes = tempHeadquartes.sort((a, b) => {
-//         if (sortBy.value == 'alphabetically') {
-//             let fa = a.name.toLowerCase(),
-//                 fb = b.name.toLowerCase();
-
-//             if (fa < fb) {
-//                 return -1;
-//             }
-//             if (fa > fb) {
-//                 return 1;
-//             }
-//             return 0;
-//         } else if (sortBy.value == 'founding_date') {
-//             let fc = a.founding_date,
-//                 fn = b.founding_date;
-
-//             if (fc < fn) {
-//                 return -1;
-//             }
-//             if (fc > fn) {
-//                 return 1;
-//             }
-//             return 0;
-//         } else if (sortBy.value == 'members_count') {
-//             return a.members - b.members;
-//         }
-//     });
-
-//     if (!ascending.value) {
-//         tempHeadquartes.reverse();
-//     }
-
-//     return tempHeadquartes;
-// });
+onMounted(() => {
+    getDistrictsHeadquartersForFilters();
+    getRegionalHeadquarters();
+});
 </script>
 <style lang="scss">
 .headquarters {
@@ -395,6 +363,14 @@ pre {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
+}
+
 .headquarters-wrapper__item {
     margin: 0px auto;
     width: 180px;

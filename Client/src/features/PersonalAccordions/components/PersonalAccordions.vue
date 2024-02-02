@@ -343,7 +343,6 @@
                                         <label :for="id">{{
                                             passP.name
                                         }}</label>
-
                                     </div>
                                 </div>
                                 <div
@@ -384,13 +383,16 @@
                                             >*</span
                                         ></label
                                     >
-                                    <Select
-                                        class="input-big"
-                                        variant="outlined"
-                                        clearable
+                                    <regionsDropdown
+                                        open-on-clear
+                                        id="reg"
+                                        name="regdrop"
+                                        placeholder="Поиск"
                                         v-model="props.user.parent.region"
+                                        @update:value="changeValue"
                                         address="/regions/"
-                                    ></Select>
+                                        class="mb-2"
+                                    ></regionsDropdown>
                                 </div>
 
                                 <div class="form-field" id="pass-no-date">
@@ -456,7 +458,11 @@
                                     />
                                 </div>
                             </div>
-                            <div id="no-passport" class="form-data izm" v-else="!props.user.parent.russian_passport">
+                            <div
+                                id="no-passport"
+                                class="form-data izm"
+                                v-else="!props.user.parent.russian_passport"
+                            >
                                 <!-- <div class="form-field one">
                                     <label for="pass-num"
                                         >Документ удостоверяющий личность
@@ -663,13 +669,23 @@
                             <label for=""
                                 >Регион<span class="valid-red">*</span></label
                             >
-                            <Select
+                            <!-- <Select
                                 variant="outlined"
                                 clearable
                                 v-model="props.user.user_region.reg_region_id"
                                 placeholder="Например, Карачаево-Черкесск"
                                 address="/regions/"
-                            ></Select>
+                            ></Select> -->
+                            <regionsDropdown
+                                open-on-clear
+                                id="reg"
+                                name="regdrop"
+                                placeholder="Поиск"
+                                v-model="props.user.user_region.reg_region_id"
+                                @update:value="changeValue"
+                                address="/regions/"
+                                class="mb-2"
+                            ></regionsDropdown>
                         </div>
                         <div class="form-field">
                             <label for="email-contact"
@@ -782,14 +798,26 @@
                             </p>
                             <div class="form-field">
                                 <label for="">Регион</label>
-                                <Select
+                                <!-- <Select
                                     variant="outlined"
                                     clearable
                                     v-model="
                                         props.user.user_region.fact_region_id
                                     "
                                     address="/regions/"
-                                ></Select>
+                                ></Select> -->
+                                <regionsDropdown
+                                    open-on-clear
+                                    id="reg"
+                                    name="regdrop"
+                                    placeholder="Поиск"
+                                    v-model="
+                                        props.user.user_region.fact_region_id
+                                    "
+                                    @update:value="changeValue"
+                                    address="/regions/"
+                                    class="mb-2"
+                                ></regionsDropdown>
                             </div>
                             <div class="form-field">
                                 <label for="locality-fact"
@@ -1048,13 +1076,7 @@
                             </div>
                             <div class="form-field">
                                 <label for="">Документ воинского учета</label>
-                                <!-- <Select
-                                    variant="outlined"
-                                    clearable
-                                    class="select-big"
-                                    v-model="documents.mil_reg_doc_type"
-                                    :names="militaryDocs"
-                                ></Select> -->
+
                                 <sortByEducation
                                     placeholder="Выберите документ"
                                     clearable
@@ -1287,7 +1309,7 @@
                                     >*</span
                                 ></label
                             >
-                            <Select
+                            <!-- <Select
                                 variant="outlined"
                                 clearable
                                 placeholder="Выберете образовательную организацию"
@@ -1295,7 +1317,17 @@
                                 v-model="props.user.education.study_institution"
                                 address="/eduicational_institutions/"
                             >
-                            </Select>
+                            </Select> -->
+                            <educationalsDropdown
+                                open-on-clear
+                                id="reg"
+                                name="regdrop"
+                                placeholder="Поиск"
+                                v-model="props.user.education.study_institution"
+                                @update:value="changeValue"
+                                address="/eduicational_institutions/"
+                                class="mb-2"
+                            ></educationalsDropdown>
                         </div>
                         <div class="form-field">
                             <label for="facultet">Факультет</label>
@@ -1305,7 +1337,9 @@
                                 id="facultet"
                                 class="input-full"
                                 placeholder="Ввведите название факультета"
-                                v-model:value="props.user.education.study_faculty"
+                                v-model:value="
+                                    props.user.education.study_faculty
+                                "
                             />
                         </div>
                         <div class="form-field">
@@ -1331,7 +1365,9 @@
                                 id="speciality"
                                 class="input-full"
                                 placeholder="Введите название специальности"
-                                v-model:value="props.user.education.study_specialty"
+                                v-model:value="
+                                    props.user.education.study_specialty
+                                "
                             />
                         </div>
                     </div>
@@ -1485,7 +1521,22 @@
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
+                                        <div
+                                            class="statement-item"
+                                            v-if="
+                                                props.user.statement.statement
+                                            "
+                                        >
+                                            <a
+                                                :href="
+                                                    props.user.statement
+                                                        .statement
+                                                "
+                                                >Заявление</a
+                                            >
+                                        </div>
                                     </div>
+                                    <!-- <pre>{{statement.name}}</pre> -->
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
@@ -1533,11 +1584,25 @@
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
+                                        <div
+                                            class="statement-item"
+                                            v-if="
+                                                props.user.statement
+                                                    .consent_personal_data
+                                            "
+                                        >
+                                            <a
+                                                :href="
+                                                    props.user.statement
+                                                        .consent_personal_data
+                                                "
+                                                >Согласие</a
+                                            >
+                                        </div>
                                     </div>
                                 </div>
                                 <p
                                     class="statement-title"
-
                                     v-if="!props.user.is_adult"
                                 >
                                     Согласие законного представителя на
@@ -1548,7 +1613,6 @@
                                 </p>
                                 <div
                                     class="statement-wrapper"
-
                                     v-if="!props.user.is_adult"
                                 >
                                     <div class="statement-item">
@@ -1590,6 +1654,21 @@
                                                 @select="selectParentPersonal"
                                                 chooseLabel="Выбрать файл"
                                             />
+                                        </div>
+                                        <div
+                                            class="statement-item"
+                                            v-if="
+                                                props.user.statement
+                                                    .consent_personal_data_representative
+                                            "
+                                        >
+                                            <a
+                                                :href="
+                                                    props.user.statement
+                                                        .consent_personal_data_representative
+                                                "
+                                                >Согласие несовершеннолетнего</a
+                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -1648,8 +1727,21 @@
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
+                                        <div
+                                            class="statement-item"
+                                            v-if="props.user.statement.passport"
+                                        >
+                                            <a
+                                                :href="
+                                                    props.user.statement
+                                                        .passport
+                                                "
+                                                >Паспорт</a
+                                            >
+                                        </div>
                                     </div>
                                 </div>
+
                                 <p class="error" v-if="isError.passport">
                                     Обязательное поле
                                 </p>
@@ -1692,6 +1784,21 @@
                                                 "
                                                 chooseLabel="Выбрать файл"
                                             />
+                                        </div>
+                                        <div
+                                            class="statement-item"
+                                            v-if="
+                                                props.user.statement
+                                                    .passport_representative
+                                            "
+                                        >
+                                            <a
+                                                :href="
+                                                    props.user.statement
+                                                        .passport_representative
+                                                "
+                                                >Паспорт родителя</a
+                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -1737,6 +1844,17 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.snils_file"
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement.snils_file
+                                            "
+                                            >СНИЛС</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                             <div class="other-docs__item">
@@ -1766,6 +1884,21 @@
                                             @select="selectMilitary"
                                             chooseLabel="Выбрать файл"
                                         />
+                                    </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .military_document
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .military_document
+                                            "
+                                            >Военный билет</a
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -1797,6 +1930,14 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.inn_file"
+                                    >
+                                        <a :href="props.user.statement.inn_file"
+                                            >ИНН</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                             <div class="other-docs__item">
@@ -1826,6 +1967,21 @@
                                             @select="selectIntPass"
                                             chooseLabel="Выбрать файл"
                                         />
+                                    </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .international_passport
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .international_passport
+                                            "
+                                            >Загранпаспорт</a
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -1857,6 +2013,21 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .employment_document
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .employment_document
+                                            "
+                                            >Трудовая книжка</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1867,15 +2038,9 @@
                             class="know"
                             name="know"
                             placeholder="Напиши что нибудь"
-                            v-model:value="rso_info_from"
+                            v-model:value="props.user.statement.rso_info_from"
                             :max-length="200"
                         ></TextArea>
-                        <!-- <textarea
-                            name="know"
-                            class="know"
-                            cols="1"
-                            rows="1"
-                        ></textarea> -->
                         <div class="form__counter">{{ counterKnow }} / 200</div>
                     </div>
 
@@ -2006,12 +2171,19 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.passport"
+                                    >
+                                        <a :href="props.user.statement.passport"
+                                            >Паспорт</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                             <div class="pass-details__item">
                                 <p
                                     class="statement-title"
-
                                     v-if="!props.user.is_adult"
                                 >
                                     Паспорт законного представителя<span
@@ -2021,7 +2193,6 @@
                                 </p>
                                 <div
                                     class="statement-wrapper"
-
                                     v-if="!props.user.is_adult"
                                 >
                                     <div class="statement-item">
@@ -2048,6 +2219,21 @@
                                             @select="selectParentPersonalPass"
                                             chooseLabel="Выбрать файл"
                                         />
+                                    </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .passport_representative
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .passport_representative
+                                            "
+                                            >Паспорт родителя</a
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -2086,6 +2272,17 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.snils_file"
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement.snils_file
+                                            "
+                                            >СНИЛС</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                             <div class="other-docs__item">
@@ -2115,6 +2312,21 @@
                                             @select="selectMilitary"
                                             chooseLabel="Выбрать файл"
                                         />
+                                    </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .military_document
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .military_document
+                                            "
+                                            >Военный билет</a
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -2146,6 +2358,14 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.inn_file"
+                                    >
+                                        <a :href="props.user.statement.inn_file"
+                                            >ИНН</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                             <div class="other-docs__item">
@@ -2176,6 +2396,21 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .international_passport
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .international_passport
+                                            "
+                                            >Загранпаспорт</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                             <div class="other-docs__item">
@@ -2205,6 +2440,21 @@
                                             @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
                                         />
+                                    </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .employment_document
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .employment_document
+                                            "
+                                            >Трудовая книжка</a
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -2355,6 +2605,17 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.statement"
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement.statement
+                                            "
+                                            >Заявление</a
+                                        >
+                                    </div>
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
@@ -2399,6 +2660,21 @@
                                             @select="selectPersonal"
                                             chooseLabel="Выбрать файл"
                                         />
+                                    </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .consent_personal_data
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .consent_personal_data
+                                            "
+                                            >Согласие</a
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -2453,6 +2729,14 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.passport"
+                                    >
+                                        <a :href="props.user.statement.passport"
+                                            >Паспорт</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2490,6 +2774,17 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.snils_file"
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement.snils_file
+                                            "
+                                            >СНИЛС</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                             <div class="other-docs__item">
@@ -2519,6 +2814,14 @@
                                             @select="selectINN"
                                             chooseLabel="Выбрать файл"
                                         />
+                                    </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.inn_file"
+                                    >
+                                        <a :href="props.user.statement.inn_file"
+                                            >ИНН</a
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -2550,23 +2853,33 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .employment_document
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .employment_document
+                                            "
+                                            >Трудовая книжка</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="know-RSO">
                         <p class="know-RSO-title">Откуда вы узнали про РСО</p>
-                        <!-- <textarea
-                            name="know"
-                            class="know"
-                            cols="1"
-                            rows="1"
-                        ></textarea> -->
+
                         <TextArea
                             class="know"
                             name="know"
                             placeholder="Напиши что нибудь"
-                            v-model:value="rso_info_from"
+                            v-model:value="props.user.statement.rso_info_from"
                             :max-length="200"
                         ></TextArea>
 
@@ -2702,6 +3015,14 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.passport"
+                                    >
+                                        <a :href="props.user.statement.passport"
+                                            >Паспорт</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                             <div
@@ -2740,6 +3061,21 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .passport_representative
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .passport_representative
+                                            "
+                                            >Паспорт родителя</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2777,6 +3113,17 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.snils_file"
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement.snils_file
+                                            "
+                                            >СНИЛС</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
                             <div class="other-docs__item">
@@ -2807,24 +3154,17 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="props.user.statement.inn_file"
+                                    >
+                                        <a :href="props.user.statement.inn_file"
+                                            >ИНН</a
+                                        >
+                                    </div>
                                 </div>
                             </div>
-                            <!-- <div class="other-docs__item">
-                                <p class="statement-title">Вид на жительство</p>
-                                <div class="statement-wrapper">
-                                    <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/file.svg"
-                                            alt="file"
-                                        />
-                                        <p id="file-chosen-foreign-pass">
-                                            Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
-                                        </p>
-                                    </div>
-                                    <FileUpload></FileUpload>
-                                </div>
-                            </div> -->
+
                             <div class="other-docs__item">
                                 <p class="statement-title">Трудовая книжка</p>
                                 <div class="statement-wrapper">
@@ -2852,6 +3192,21 @@
                                             @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
                                         />
+                                    </div>
+                                    <div
+                                        class="statement-item"
+                                        v-if="
+                                            props.user.statement
+                                                .employment_document
+                                        "
+                                    >
+                                        <a
+                                            :href="
+                                                props.user.statement
+                                                    .employment_document
+                                            "
+                                            >Трудовая книжка</a
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -2912,7 +3267,12 @@ import { ref, computed, onMounted, reactive, inject } from 'vue';
 import { RadioButton } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { useRouter } from 'vue-router';
-import { Select, sortByEducation } from '@shared/components/selects';
+import {
+    Select,
+    sortByEducation,
+    regionsDropdown,
+    educationalsDropdown,
+} from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
@@ -2968,9 +3328,7 @@ const foreignDoc = ref({
     work_book_num: '',
 });
 
-
 const swal = inject('$swal');
-
 
 const data = ref({});
 
@@ -2980,7 +3338,6 @@ const consent_personal_data = ref(null);
 const consent_personal_data_representative = ref(null);
 const passportUpload = ref(null);
 const passport_representative = ref(null);
-const rso_info_from = ref('');
 const snils_file = ref(null);
 const inn_file = ref(null);
 const international_passport = ref(null);
@@ -3060,7 +3417,7 @@ const selectMilitary = (event) => {
 };
 
 const counterKnow = computed(() => {
-    return rso_info_from.value.length || 0;
+    return props.user.statement.rso_info_from.length || 0;
 });
 
 const getData = async () => {
@@ -3184,7 +3541,7 @@ const updateData = async () => {
     try {
         isLoading.value = false;
         let fd = new FormData();
-        fd.append('rso_info_from', rso_info_from.value);
+        fd.append('rso_info_from', props.user.statement.rso_info_from);
         if (isStatementChange.value)
             statement.value
                 ? fd.append('statement', statement.value)
@@ -3447,7 +3804,7 @@ const gender = ref([
 ]);
 
 const passportParent = ref([
-    { name: 'Да', value: true, id: 'pp1',  },
+    { name: 'Да', value: true, id: 'pp1' },
     { name: 'Нет', value: false, id: 'pp2' },
 ]);
 const parents = ref([

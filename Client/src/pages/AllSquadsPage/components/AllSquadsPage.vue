@@ -5,6 +5,7 @@
                 desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
                 label="Создать отряд"
                 name="CreateLSO"
+                :button="true"
             ></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
             <div class="squads-tabs">
@@ -28,7 +29,7 @@
                     type="text"
                     id="search"
                     class="squads-search__input"
-                    v-model="searchSquad"
+                    v-model="name"
                     placeholder="Поищем отряд?"
                 />
                 <svg
@@ -93,15 +94,14 @@
                     <div class="squads-sort">
                         <div class="sort-filters">
                             <div class="sort-select">
-                                <Select
+                                <filterSelect
                                     variant="outlined"
-                                    clearable
                                     name="select_education"
                                     id="select-education"
-                                    v-model="selectedSort"
+                                    v-model="education"
                                     address="/eduicational_institutions/"
                                     placeholder="Образовательная организация"
-                                ></Select>
+                                ></filterSelect>
                             </div>
                             <div class="sort-select">
                                 <sortByEducation
@@ -125,11 +125,29 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
+                <squadsList
+                    :squads="sortedSquads"
+                    v-if="!isSquadsLoading"
+                ></squadsList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
+                <horizontalList
+                    :squads="sortedSquads"
+                    v-if="!isSquadsLoading"
+                ></horizontalList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -148,7 +166,11 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
-import { sortByEducation, Select } from '@shared/components/selects';
+import {
+    sortByEducation,
+    Select,
+    filterSelect,
+} from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
@@ -158,48 +180,70 @@ import { HTTP } from '@app/http';
 
 // const squads = storeToRefs(useSquadsStore);
 const squads = ref([]);
-// const filterSquads = ref([]);
+
 const categories = ref([]);
+const isSquadsLoading = ref(false);
 const name = ref('');
+const education = ref('');
 
 const getSquads = async () => {
     try {
-        const categoryResponse = await HTTP.get('/areas/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        const squadsResponse = await HTTP.get(`/detachments/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        isSquadsLoading.value = true;
+        setTimeout(async () => {
+            const categoryResponse = await HTTP.get('/areas/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            const squadsResponse = await HTTP.get(`/detachments/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
 
-        categories.value = categoryResponse.data;
-        squads.value = squadsResponse.data;
+            categories.value = categoryResponse.data;
+            squads.value = squadsResponse.data;
+            isSquadsLoading.value = false;
+        }, 1000);
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
-// const searchSquad = async (name) => {
-//     try {
-//         const filteredSquads = await HTTP.get(`/detachments/?search=${name}`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-//         squads.value = filteredSquads.data;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
+const searchSquad = async (name) => {
+    try {
+        const filteredSquads = await HTTP.get(`/detachments/?search=${name}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        squads.value = filteredSquads.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const filteredSquad = async (education) => {
+    try {
+        const filteredSquadsEduc = await HTTP.get(
+            `/detachments/?educational_institution__name=${education}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        squads.value = filteredSquadsEduc.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
 
 const squadsVisible = ref(20);
-const searchSquad = ref('');
 const step = ref(20);
 
 const ascending = ref(true);
@@ -209,12 +253,9 @@ const picked = ref('');
 
 const vertical = ref(true);
 
-
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
-
-const selectedSort = ref(null);
 
 const sortOptionss = ref([
     {
@@ -225,25 +266,20 @@ const sortOptionss = ref([
     { value: 'members_count', name: 'Количеству участников' },
 ]);
 
+const searchSquads = computed(() => {
+    return searchSquad(name.value);
+});
+const filteredSquadsByEducation = computed(() => {
+    return filteredSquad(education.value);
+});
+
 const sortedSquads = computed(() => {
     let tempSquads = squads.value;
 
     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-    tempSquads = tempSquads.filter((item) => {
-        // console.log(educational_institution.id);
-        return (
-            selectedSort.value == null ||
-            item.educational_institution == selectedSort.value
-        );
-    });
-
-    tempSquads = tempSquads.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchSquad.value.toUpperCase());
-    });
-    // searchSquad(name.value);
+    searchSquads.value;
+    filteredSquadsByEducation.value;
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -285,10 +321,6 @@ const sortedSquads = computed(() => {
 
     return tempSquads;
 });
-
-// const searchSquads = computed(() => {
-//     return searchSquad(name.value)
-// });
 
 onMounted(() => {
     getSquads();
@@ -399,6 +431,13 @@ onMounted(() => {
     background-color: #1c5c94;
     color: white;
     border: 1px solid #1c5c94;
+}
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
 }
 
 .sort-filters {

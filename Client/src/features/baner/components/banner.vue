@@ -64,7 +64,9 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
-                    <div class="user-data__social-network">
+                    <div
+                        class="user-data__social-network"
+                    >
                         <div class="user-data__link-vk mr-2">
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -88,7 +90,7 @@
                         </div>
                     </div>
                     <div class="user-data__contact-contact">
-                        <div class="user-data__contact-contact_item">
+                        <div class="user-data__contact-contact_item" >
                             <img
                                 src="@/app/assets/icon/phone.svg"
                                 alt="phone"
@@ -106,7 +108,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
@@ -123,9 +125,6 @@ const props = defineProps({
         type: Boolean,
     },
     user: {
-        type: Object,
-    },
-    currentUser: {
         type: Object,
     },
     education: {
@@ -210,6 +209,10 @@ const getUserData = async () => {
         console.log('an error occured ' + error);
     }
 };
+
+// const isMemberView = computed(() => {
+//     return props.user.privacy?.privacy_email == ;
+// });
 
 watch(
     () => props.user,

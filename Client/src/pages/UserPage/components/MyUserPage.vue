@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="user-wrapper">
+        <div class="user-wrapper" v-if="!isLoading.isLoading.value">
             <h2 class="page-title">Моя страница</h2>
             <banner
                 :user="currentUser.currentUser.value"
@@ -15,7 +15,10 @@
                 @update="updateAva"
                 @delete="deleteAva"
             ></banner>
-            <div class="user-verify" v-if="!currentUser.currentUser.value.is_verified">
+            <div
+                class="user-verify"
+                v-if="!currentUser.currentUser.value.is_verified"
+            >
                 <p class="user-verify__title">Верификация данных</p>
                 <div class="user-verify__desc">
                     Уважаемый пользователь, для того, чтобы использовать полный
@@ -61,6 +64,13 @@
                 ></userPhoto4>
             </div>
         </div>
+
+        <v-progress-circular
+            class="circleLoader"
+            v-else
+            indeterminate
+            color="blue"
+        ></v-progress-circular>
     </div>
 </template>
 <script setup>
@@ -80,6 +90,7 @@ import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
 const currentUser = storeToRefs(userStore);
+const isLoading = storeToRefs(userStore);
 console.log('userTop', currentUser.currentUser.value);
 const education = ref({});
 const region = ref({});
@@ -158,6 +169,13 @@ const deleteWall = (imageWall) => {
             width: 100%;
         }
     }
+}
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
 }
 
 .photo-item {

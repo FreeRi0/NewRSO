@@ -72,6 +72,7 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
+import { usePage } from '@shared';
 
 const crosspageFilters = useCrosspageFilter();
 const showRegionalHQ = ref(true);
@@ -87,6 +88,8 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
+
 const aboutRegionalHQ = async () => {
     try {
         const response = await HTTP.get(`/regionals/${id}/`, {
@@ -97,6 +100,7 @@ const aboutRegionalHQ = async () => {
         });
 
         regionalHeadquarter.value = response.data;
+        replaceTargetObjects([regionalHeadquarter.value]);
         console.log(response);
     } catch (error) {
         console.log('an error occured ' + error);

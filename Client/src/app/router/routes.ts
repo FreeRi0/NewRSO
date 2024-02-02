@@ -128,7 +128,7 @@ const routes: RouteRecordRaw[] = [
                                         },
                                     },
                                     {
-                                        path: 'AllParticipants/:id',
+                                        path: 'AllParticipants',
                                         name: 'allparticipants',
                                         component: () =>
                                             import(
@@ -137,6 +137,25 @@ const routes: RouteRecordRaw[] = [
                                         meta: {
                                             label: 'Участники отряда',
                                         },
+                                        children: [
+                                            {
+                                                path: ':id',
+                                                meta: {
+                                                    redirectTo: 'userpage',
+                                                    label: 'Страница пользователя',
+                                                },
+                                                children: [
+                                                    {
+                                                        path: '',
+                                                        name: 'userpage',
+                                                        component: () =>
+                                                            import(
+                                                                '@pages/UserPage/components/UserPage.vue'
+                                                            ),
+                                                    },
+                                                ],
+                                            },
+                                        ],
                                     },
                                 ],
                             },
@@ -348,7 +367,6 @@ const routes: RouteRecordRaw[] = [
                                         '@pages/AllHeadquartersPage/components/DistrictsHeadquartersPage.vue'
                                     ),
                             },
-
                             {
                                 path: ':id',
                                 meta: {
@@ -640,9 +658,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: '',
                         name: 'active',
-                        meta: {
-
-                        },
+                        meta: {},
                         component: () =>
                             import(
                                 '@pages/ActiveApplicationsData/components/ActiveApplicationsData.vue'
