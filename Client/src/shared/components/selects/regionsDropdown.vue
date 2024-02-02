@@ -4,11 +4,12 @@
         :items="items"
         chips
         clearable
-        v-model:search="name"
+        v-model:search.trim="name"
         variant="outlined"
         item-title="name"
         item-value="id"
         v-bind="$attrs"
+        @keyup="searchRegion"
         @update:value="changeValue"
         :address="address"
         :no-data-text="noDataText"
@@ -95,7 +96,6 @@ const onChangeItem = async () => {
         },
     })
         .then((res) => {
-            // console.log(props.address);
             items.value = res.data;
             console.log(res.data);
         })
@@ -104,18 +104,15 @@ const onChangeItem = async () => {
         });
 };
 
+const searchRegion = (val) => {
+    if (name.value.length < 3) {
+        return;
+    }
     regionalsStore.searchRegions(name.value);
-
-
-// watch(
-//     () => search,
-//     (name) => {
-//         items.value = regionalsStore.searchRegions(name);
-//     },
-// );
+    console.log('val', val);
+};
 
 onMounted(() => {
-
     onChangeItem();
 });
 </script>

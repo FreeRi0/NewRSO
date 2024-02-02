@@ -294,7 +294,6 @@ const form = ref({
 });
 
 const isLoading = ref(false);
-
 const isError = ref([]);
 const router = useRouter();
 const swal = inject('$swal');
