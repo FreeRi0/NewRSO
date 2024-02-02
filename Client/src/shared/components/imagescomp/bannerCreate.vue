@@ -4,8 +4,30 @@
             {{ desc }}
         </div>
 
-
-        <router-link v-if="roles.roles.value.educationalheadquarter_commander || roles.roles.value.regionalheadquarter_commander || roles.roles.value.localheadquarter_commander || roles.roles.value.centralComId" :to="{name: name}"><p v-if="button" class="create">{{ label }}</p></router-link>
+        <router-link
+            v-if="
+                roles.roles.value.regionalheadquarter_commander ||
+                roles.roles.value.localheadquarter_commander ||
+                roles.roles.value.centralComId
+            "
+            :to="{ name: name }"
+            ><p v-if="button" class="create">{{ label }}</p></router-link
+        >
+        <router-link
+            v-if="
+                roles.roles.value.localheadquarter_commander ||
+                roles.roles.value.centralComId
+            "
+            :to="{ name: name }"
+            ><p v-if="regCom" class="create">{{ label }}</p></router-link
+        >
+        <router-link
+            v-if="
+                roles.roles.value.centralComId
+            "
+            :to="{ name: name }"
+            ><p v-if="locCom" class="create">{{ label }}</p></router-link
+        >
     </div>
 </template>
 <script setup>
@@ -29,6 +51,14 @@ const props = defineProps({
         default: 'lorem ipsum s',
     },
     button: {
+        type: Boolean,
+        default: false,
+    },
+    locCom: {
+        type: Boolean,
+        default: false,
+    },
+    regCom: {
         type: Boolean,
         default: false,
     },

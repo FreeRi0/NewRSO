@@ -62,12 +62,12 @@ import { usePage } from '@shared';
 
 const squad = ref({});
 const member = ref([]);
+const applications = ref([]);
 const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 const isLsoLoading = ref(false);
 const { replaceTargetObjects } = usePage();
-
 const getLsoData = async () => {
     try {
         isLsoLoading.value = true;
@@ -78,6 +78,7 @@ const getLsoData = async () => {
                     Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
             });
+
             const membersResponse = await HTTP.get(
                 `/detachments/${id}/members/`,
                 {
@@ -91,7 +92,7 @@ const getLsoData = async () => {
             replaceTargetObjects([squad.value]);
             member.value = membersResponse.data;
             isLsoLoading.value = false;
-        }, 1000);
+        }, 500);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -106,6 +107,11 @@ watch(
         getLsoData();
     },
 );
+
+// const sendApply = (apply) => {
+//     console.log('apply', apply);
+//     applications.value = apply;
+// };
 
 onMounted(() => {
     getLsoData();

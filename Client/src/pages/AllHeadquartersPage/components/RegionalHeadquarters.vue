@@ -5,7 +5,8 @@
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
                 name="CreationOfRS"
-                :button="true"
+                :button="false"
+                :reg-com="true"
             ></bannerCreate>
             <h2 class="headquarters-title">Региональные штабы</h2>
             <div class="headquarters-search">

@@ -4,6 +4,7 @@
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 :button="false"
+                :loc-com="true"
             ></bannerCreate>
             <h2 class="headquarters-title">Местные штабы</h2>
             <div class="headquarters-search">
@@ -11,7 +12,7 @@
                     type="text"
                     id="search"
                     class="headquarters-search__input"
-                    v-model="searchLocalHeadquarters"
+                    v-model="name"
                     placeholder="Начните вводить название штаба."
                 />
                 <svg
@@ -212,7 +213,7 @@ const sortBy = ref('alphabetically');
 
 const vertical = ref(true);
 
-const searchLocalHeadquarters = ref('');
+const name = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -244,6 +245,24 @@ const getLocalHeadquarters = async () => {
         console.log('an error occured ' + error);
     }
 };
+
+const searchLocal = async (name) => {
+    try {
+        const filteredLocals = await HTTP.get(`/locals/?search=${name}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        localHeadquarters.value = filteredLocals.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const searchLocals = computed(() => {
+    return searchLocal(name.value);
+});
 
 const filtersDistricts = computed(() =>
     selectedSortDistrict.value
@@ -317,11 +336,7 @@ const sortedLocalHeadquarters = computed(() => {
         );
     });
 
-    tempHeadquartes = tempHeadquartes.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchLocalHeadquarters.value.toUpperCase());
-    });
+    searchLocals.value;
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {

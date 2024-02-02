@@ -101,7 +101,7 @@ const props = defineProps({
 const roleStore = useRoleStore();
 roleStore.getRoles();
 const roles = storeToRefs(roleStore);
-const emit = defineEmits(['change']);
+const emit = defineEmits(['change', 'approveMember', 'rejectMember']);
 const updateSquads = (e) => {
     console.log('dddddddft', checked.value);
     emit('change', checked.value, props.detachment.id);
@@ -154,80 +154,77 @@ watch(
         if (!newChecked) return;
         selectedDetch.value = newChecked;
     },
+    () => props.selectedSquads,
+    (newApprove) => {
+        if (!newApprove) return;
+        selectedDetch.value = newApproved;
+    },
 );
 
 const ChangeStatus = async () => {
-    let id = squad.value.id;
-    console.log('squad', id);
-    let application_pk = props.detachment.id;
-    console.log('application', application_pk);
-    if (user.value.applications === 'Одобрить') {
-        HTTP.post(
-            `/detachments/${id}/applications/${application_pk}/accept/`,
-            user.value,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+    try {
+        let id = squad.value.id;
+        console.log('squad', id);
+        let application_pk = props.detachment.id;
+        console.log('application', application_pk);
+        const approveReq = ref(null);
+        const rejectReq = ref(null);
+        if (user.value.applications === 'Одобрить') {
+            const approveReq = await HTTP.post(
+                `/detachments/${id}/applications/${application_pk}/accept/`,
+                user.value,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        )
-            .then((response) => {
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                // participant.value = response.data; //emit
-                console.log(response.data);
-            })
-
-            .catch(({ response }) => {
-                isError.value = response.data;
-                console.error('There was an error!', response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+            );
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
             });
-    } else {
-        HTTP.delete(
-            `/detachments/${id}/applications/${application_pk}/accept/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+            console.log('response', approveReq.data);
+            emit('approveMember',  props.detachment.id);
+            console.log(approveReq.data);
+        } else {
+            const rejectReq = await HTTP.delete(
+                `/detachments/${id}/applications/${application_pk}/accept/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        )
-            .then((response) => {
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                // participant.value = response.data; //emit
-                console.log(response.data);
-            })
-
-            .catch(({ response }) => {
-                isError.value = response.data;
-                console.error('There was an error!', response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+            );
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
             });
+            console.log('resp', rejectReq.data);
+            emit('rejectMember', props.detachment.id);
+            console.log(rejectReq.data);
+        }
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
 </script>
@@ -342,7 +339,6 @@ const ChangeStatus = async () => {
     justify-content: space-between;
     margin-left: 10px;
 }
-
 
 .error {
     color: #db0000;
