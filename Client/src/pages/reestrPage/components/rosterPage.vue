@@ -165,7 +165,7 @@
                     </div>
                     </v-expansion-panel-text>
                   </v-expansion-panel>
-                  <v-expansion-panel v-if="searchLevel === 'ЛСО'" title="ЛСО">
+                  <v-expansion-panel v-if="searchLevel === 'detachments'" title="ЛСО">
                     <v-expansion-panel-text>
                       <div class='search-panel squads-search'>
                         <input
@@ -238,10 +238,11 @@
                 </div>
                 <div class="sort-container">
                   <div class="postcard-container">
-                      <div v-if="vertical">
-                        <participantItem></participantItem>
+                      <div v-if="vertical" v-for="element in SelectList">
+                        <ParticipantsCard :action="element"></ParticipantsCard>
                       </div>
-                      <div v-if="!vertical">
+                      <div v-if="!vertical" v-for="element in SelectList">
+                        
                       </div>
                   </div>
                 </div>
@@ -433,8 +434,8 @@
 import { onUpdated, ref } from 'vue';
 import Button from "primevue/button";
 import { sortByEducation, Select } from '@shared/components/selects';
-import { getDetachments } from '@services/ParticipantsService';
-import { participantItem } from '@entities/Participants';
+import ParticipantsCard from '@entities/Participants/components/ParticipantsCard.vue';
+import { getDetachments, getParticipants, getEducationals } from '@services/ParticipantsService.ts';
 import { onActivated } from 'vue';
 
 const SelectList = ref([]);
@@ -451,7 +452,21 @@ const ascending = ref(true);
 function loadParticipants(){
   switch(searchLevel.value){
     case "ЛСО":
-      console.log(searchLevel.value)
+      getDetachments()
+        .then((resp)=>{
+          SelectList.value = resp.data;
+          console.log("Линейные отряды",SelectList.value)
+        }).catch(e =>{
+          console.log(e);
+        }); break;
+    case "Местные":
+      getEducationals()
+        .then((resp)=>{
+          SelectList.value = resp.data;
+          console.log("Местные штабы",SelectList.value)
+        }).catch(e =>{
+          console.log(e);
+        }); break;
     default:
       break;
   }

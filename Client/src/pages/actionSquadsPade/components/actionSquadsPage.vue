@@ -337,19 +337,6 @@ const sortOptionss = ref([
       background-repeat: no-repeat;
       background-position: center;
     }
-    //Стиль карточки
-    .postcard{
-      &-container{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-      &-containerline{
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-      }
-    }
     //Стиль поисковика
     .searcher {
       width: 100%;
