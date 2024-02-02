@@ -11,7 +11,7 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Основная информация
                         </v-col>
-                          <p
+                        <p
                             class="form__error form__error--title"
                             v-if="
                                 isError.name ||
@@ -106,7 +106,9 @@
 
                         <div class="date_central_wrap">
                             <div class="form__field form_width">
-                                <label for="detachments_appearance_year" class="form__label"
+                                <label
+                                    for="detachments_appearance_year"
+                                    class="form__label"
                                     >Дата появления студенческих отрядов в
                                     России (год)
                                     <sup class="valid-red">*</sup>
@@ -117,16 +119,23 @@
                                     id="detachments_appearance_year"
                                     placeholder="1971"
                                     name="detachments_appearance_year"
-                                    v-model:value="headquarter.detachments_appearance_year"
+                                    v-model:value="
+                                        headquarter.detachments_appearance_year
+                                    "
                                     :minlength="4"
                                     :maxlength="4"
                                 />
-                                <p class="form__error" v-if="isError.detachments_appearance_year">
-                                * Это поле не может быть пустым.
-                            </p>
+                                <p
+                                    class="form__error"
+                                    v-if="isError.detachments_appearance_year"
+                                >
+                                    * Это поле не может быть пустым.
+                                </p>
                             </div>
                             <div class="form__field form_width">
-                                <label for="rso_founding_congress_date" class="form__label"
+                                <label
+                                    for="rso_founding_congress_date"
+                                    class="form__label"
                                     >Дата первого учредительного съезда РСО
                                     <sup class="valid-red">*</sup>
                                 </label>
@@ -135,11 +144,16 @@
                                     type="date"
                                     id="rso_founding_congress_date"
                                     name="rso_founding_congress_date"
-                                    v-model:value="headquarter.rso_founding_congress_date"
+                                    v-model:value="
+                                        headquarter.rso_founding_congress_date
+                                    "
                                 />
-                                <p class="form__error" v-if="isError.rso_founding_congress_date">
-                                * Это поле не может быть пустым.
-                            </p>
+                                <p
+                                    class="form__error"
+                                    v-if="isError.rso_founding_congress_date"
+                                >
+                                    * Это поле не может быть пустым.
+                                </p>
                             </div>
                         </div>
 
@@ -274,8 +288,7 @@
                             <label for="social-media-te" class="form__label"
                                 >Группа штаба в Телеграм
                             </label>
-                           <TextareaAbout
-
+                            <TextareaAbout
                                 maxlength="50"
                                 class="form__textarea form__textarea--mobile"
                                 id="social-media-te"
@@ -762,7 +775,7 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-        isError: {
+    isError: {
         type: Object,
         default: () => ({}),
     },
@@ -808,16 +821,19 @@ const showButtonPrev = computed(() => {
 const route = useRoute();
 let id = route.params.id;
 
-const members = ref(props.members);
+// const members = ref(props.members);
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
-    return members.value.filter((item) => {
+    // console.log(props.members, 'УЧАСТНИКИ');
+    // console.log(members);
+    return props.members.filter((item) => {
         return item.user.last_name
             .toUpperCase()
             .includes(searchMembers.value.toUpperCase());
     });
 });
+// порядок выполнения
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
@@ -908,10 +924,9 @@ const deleteBanner = () => {
 .form_width {
     width: 46%;
 
-@media (max-width: 768px) {
+    @media (max-width: 768px) {
         width: 100%;
     }
-
 }
 
 .uploadEmblem_wrap {

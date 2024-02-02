@@ -48,7 +48,7 @@
     </div>
 </template>
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, inject } from 'vue';
 import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 
@@ -62,6 +62,10 @@ usePage({ isHidden: true });
 
 const route = useRoute();
 const router = useRouter();
+const swal = inject('$swal');
+
+const isError = ref('');
+const isLoading = ref(false);
 
 const user = ref({});
 const new_password = ref('');
@@ -100,14 +104,38 @@ const resetPasswordForm = async () => {
     }
 
     try {
+        isLoading.value = false;
         const response = await HTTP.post('/users/reset_password_confirm/', {
             ...auth.value,
             new_password: new_password.value,
         });
         console.log(response.data);
         localStorage.setItem('Token', response.data.auth_token);
+        isLoading.value = false;
+        router.push({
+            name: 'mypage',
+        });
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
     } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
         console.error(error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
 </script>

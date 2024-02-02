@@ -378,9 +378,15 @@
                                 :items="sortedMembers"
                                 :submited="submited"
                                 :is-error-members="isErrorMembers"
-                                v-if="members"
+                                v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
                             ></MembersList>
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                             <!-- <pre>{{ sortedMembers }}</pre> -->
                         </div>
                     </div>
@@ -866,6 +872,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    isMembersLoading: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const headquarter = ref(props.headquarter);
@@ -992,12 +1002,12 @@ const showButtonPrev = computed(() => {
 //     getMembers();
 // });
 
-const members = ref(props.members);
+// const members = ref(props.members);
 
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
-    return members.value.filter((item) => {
+    return props.members.filter((item) => {
         // return item.title
         return item.user.last_name
             .toUpperCase()
@@ -1115,6 +1125,13 @@ onMounted(() => {
         border: 2px solid #35383f;
         background-color: #ffffff;
     }
+}
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
 }
 </style>
 @shared/components/selects/inputs@shared/components/selects/inputs

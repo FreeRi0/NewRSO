@@ -5,14 +5,16 @@
                 >Регистрация</v-card-title
             >
             <v-form action="#" method="post" @submit.prevent="RegisterUser">
-                <Select
-                    variant="outlined"
-                    clearable
-                    class="regSelect"
-                    placeholder="Регион ОО"
+                <regionsDropdown
+                    open-on-clear
+                    id="reg"
+                    name="regdrop"
+                    placeholder="Поиск"
                     v-model="form.region"
+                    @update:value="changeValue"
                     address="/regions/"
-                ></Select>
+                    class="mb-2"
+                ></regionsDropdown>
                 <Input
                     placeholder="Фамилия"
                     name="surname"
@@ -273,8 +275,7 @@ import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { IMaskDirective } from 'vue-imask';
-import { Select } from '@shared/components/selects';
-import { Dropdown } from '@shared/components/selects';
+import { Select, regionsDropdown } from '@shared/components/selects';
 const visible = ref(false);
 const visibleRe = ref(false);
 const validated = ref(false);
@@ -293,7 +294,6 @@ const form = ref({
 });
 
 const isLoading = ref(false);
-
 const isError = ref([]);
 const router = useRouter();
 const swal = inject('$swal');

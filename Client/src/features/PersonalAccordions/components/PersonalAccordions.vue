@@ -383,13 +383,16 @@
                                             >*</span
                                         ></label
                                     >
-                                    <Select
-                                        class="input-big"
-                                        variant="outlined"
-                                        clearable
+                                    <regionsDropdown
+                                        open-on-clear
+                                        id="reg"
+                                        name="regdrop"
+                                        placeholder="Поиск"
                                         v-model="props.user.parent.region"
+                                        @update:value="changeValue"
                                         address="/regions/"
-                                    ></Select>
+                                        class="mb-2"
+                                    ></regionsDropdown>
                                 </div>
 
                                 <div class="form-field" id="pass-no-date">
@@ -666,13 +669,23 @@
                             <label for=""
                                 >Регион<span class="valid-red">*</span></label
                             >
-                            <Select
+                            <!-- <Select
                                 variant="outlined"
                                 clearable
                                 v-model="props.user.user_region.reg_region_id"
                                 placeholder="Например, Карачаево-Черкесск"
                                 address="/regions/"
-                            ></Select>
+                            ></Select> -->
+                            <regionsDropdown
+                                open-on-clear
+                                id="reg"
+                                name="regdrop"
+                                placeholder="Поиск"
+                                v-model="props.user.user_region.reg_region_id"
+                                @update:value="changeValue"
+                                address="/regions/"
+                                class="mb-2"
+                            ></regionsDropdown>
                         </div>
                         <div class="form-field">
                             <label for="email-contact"
@@ -785,14 +798,26 @@
                             </p>
                             <div class="form-field">
                                 <label for="">Регион</label>
-                                <Select
+                                <!-- <Select
                                     variant="outlined"
                                     clearable
                                     v-model="
                                         props.user.user_region.fact_region_id
                                     "
                                     address="/regions/"
-                                ></Select>
+                                ></Select> -->
+                                <regionsDropdown
+                                    open-on-clear
+                                    id="reg"
+                                    name="regdrop"
+                                    placeholder="Поиск"
+                                    v-model="
+                                        props.user.user_region.fact_region_id
+                                    "
+                                    @update:value="changeValue"
+                                    address="/regions/"
+                                    class="mb-2"
+                                ></regionsDropdown>
                             </div>
                             <div class="form-field">
                                 <label for="locality-fact"
@@ -1284,7 +1309,7 @@
                                     >*</span
                                 ></label
                             >
-                            <Select
+                            <!-- <Select
                                 variant="outlined"
                                 clearable
                                 placeholder="Выберете образовательную организацию"
@@ -1292,7 +1317,17 @@
                                 v-model="props.user.education.study_institution"
                                 address="/eduicational_institutions/"
                             >
-                            </Select>
+                            </Select> -->
+                            <educationalsDropdown
+                                open-on-clear
+                                id="reg"
+                                name="regdrop"
+                                placeholder="Поиск"
+                                v-model="props.user.education.study_institution"
+                                @update:value="changeValue"
+                                address="/eduicational_institutions/"
+                                class="mb-2"
+                            ></educationalsDropdown>
                         </div>
                         <div class="form-field">
                             <label for="facultet">Факультет</label>
@@ -1501,7 +1536,7 @@
                                             >
                                         </div>
                                     </div>
-                                <!-- <pre>{{statement.name}}</pre> -->
+                                    <!-- <pre>{{statement.name}}</pre> -->
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
@@ -3232,7 +3267,12 @@ import { ref, computed, onMounted, reactive, inject } from 'vue';
 import { RadioButton } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { useRouter } from 'vue-router';
-import { Select, sortByEducation } from '@shared/components/selects';
+import {
+    Select,
+    sortByEducation,
+    regionsDropdown,
+    educationalsDropdown,
+} from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';

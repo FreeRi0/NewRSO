@@ -5,7 +5,7 @@
         @approve="approveParticipant"
         @reject="rejectParticipant"
         :participant="participant"
-        :key="participant.id"
+        :key="participant.user.id"
     />
 </template>
 <script setup>

@@ -185,6 +185,7 @@ import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
 // import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 
@@ -199,8 +200,9 @@ const props = defineProps({
 });
 
 const regionals = ref([]);
-
+const roleStore = useRoleStore();
 const userStore = useUserStore();
+const roles = storeToRefs(roleStore);
 // const regionalsStore = useRegionalsStore();
 const getRegionals = async () => {
     try {

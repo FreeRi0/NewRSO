@@ -88,6 +88,12 @@
                         :to="{ name: item.name }"
                         >{{ item.title }}</router-link
                     >
+                    <!-- <router-link
+                        v-else-if="!item.hasOwnProperty('params') && props.isPrivate"
+                        class="dropdown__link"
+                        :to="{ name: item.name }"
+                        >{{ item.title }}</router-link
+                    > -->
                 </li>
             </ul>
         </transition>

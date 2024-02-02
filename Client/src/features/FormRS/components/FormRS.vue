@@ -444,9 +444,12 @@
                                     :minlength="4"
                                     :maxlength="4"
                                 />
-                                <p class="form__error form__error--date" v-if="isError.founding_date">
-                                * Это поле не может быть пустым.
-                            </p>
+                                <p
+                                    class="form__error form__error--date"
+                                    v-if="isError.founding_date"
+                                >
+                                    * Это поле не может быть пустым.
+                                </p>
                             </div>
 
                             <di v class="form__field form_width">
@@ -462,9 +465,12 @@
                                     name="conference_date"
                                     v-model:value="headquarter.conference_date"
                                 />
-                                <p class="form__error form__error--date" v-if="isError.conference_date">
-                                * Это поле не может быть пустым.
-                            </p>
+                                <p
+                                    class="form__error form__error--date"
+                                    v-if="isError.conference_date"
+                                >
+                                    * Это поле не может быть пустым.
+                                </p>
                             </di>
                             <div class="form__field form_width">
                                 <label for="registry_number" class="form__label"
@@ -955,16 +961,16 @@ const counterName = computed(() => {
     return headquarter.value.name.length || 0;
 });
 const counterNameForCertificates = computed(() => {
-    return headquarter.value.name_for_certificates.length || 0;
+    return headquarter.value?.name_for_certificates?.length || 0;
 });
 const counterCaseName = computed(() => {
-    return headquarter.value.case_name.length || 0;
+    return headquarter.value?.case_name?.length || 0;
 });
 const counterLegalAddress = computed(() => {
-    return headquarter.value.legal_address.length || 0;
+    return headquarter.value?.legal_address?.length || 0;
 });
 const counterRequisites = computed(() => {
-    return headquarter.value.requisites.length || 0;
+    return headquarter.value?.requisites?.length || 0;
 });
 const counterSlogan = computed(() => {
     return headquarter.value?.slogan?.length || 0;
@@ -996,11 +1002,11 @@ const showButtonPrev = computed(() => {
 const route = useRoute();
 let id = route.params.id;
 
-const members = ref(props.members);
+// const members = ref(props.members);
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
-    return members.value.filter((item) => {
+    return props.members.filter((item) => {
         return item.user.last_name
             .toUpperCase()
             .includes(searchMembers.value.toUpperCase());
