@@ -66,9 +66,6 @@
                 <div class="user-data__contact">
                     <div
                         class="user-data__social-network"
-                        v-if="
-                            props.user.privacy?.privacy_social == 'all' || props.user.privacy?.privacy_social == 'detachment_members'
-                        "
                     >
                         <div class="user-data__link-vk mr-2">
                             <a :href="user.social_vk" target="_blank">
@@ -93,7 +90,7 @@
                         </div>
                     </div>
                     <div class="user-data__contact-contact">
-                        <div class="user-data__contact-contact_item">
+                        <div class="user-data__contact-contact_item" >
                             <img
                                 src="@/app/assets/icon/phone.svg"
                                 alt="phone"

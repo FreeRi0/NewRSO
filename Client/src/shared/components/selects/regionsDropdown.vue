@@ -35,7 +35,7 @@
             </div>
         </template>
 
-        <template v-slot:item="{ props, item }">
+        <!-- <template v-slot:item="{ props, item }">
             <v-container v-bind="props">
                 <div class="option__content option__content--option">
                     <div class="option__wrapper">
@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </v-container>
-        </template>
+        </template> -->
     </v-autocomplete>
 </template>
 
