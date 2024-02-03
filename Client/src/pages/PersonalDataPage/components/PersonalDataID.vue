@@ -2,12 +2,12 @@
     <div class="container">
         <div class="mt-14">
             <h2 class="profile-title">Настройки профиля</h2>
-            <banner
+            <Wall
                 :user="privateUser.privateUser.value"
                 :education="education"
                 class="mt-3"
-                :edited="false"
-            ></banner>
+
+            ></Wall>
             <AccordionsPersonal
                 :button="false"
                 :user="privateUser.privateUser.value"
@@ -18,7 +18,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { AccordionsPersonal } from '@features/PersonalAccordions/components';
-import { banner } from '@features/baner/components';
+import { Wall } from '@features/baner/components';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';

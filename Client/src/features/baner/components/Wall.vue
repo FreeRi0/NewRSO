@@ -5,7 +5,9 @@
             @upload-wall="uploadWall"
             @update-wall="updateWall"
             @delete-wall="deleteWall"
+            :edited="false"
         ></bannerPhoto>
+
         <Avatar
             :avatar="user?.media?.photo"
             @upload="uploadAva"
@@ -13,13 +15,7 @@
             @delete="deleteAva"
             :edited="false"
         ></Avatar>
-        <Avatar
-            :avatar="user?.media?.photo"
-            @upload="uploadAva"
-            @update="updateAva"
-            @delete="deleteAva"
-            :edited="true"
-        ></Avatar>
+
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
@@ -64,9 +60,7 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
-                    <div
-                        class="user-data__social-network"
-                    >
+                    <div class="user-data__social-network">
                         <div class="user-data__link-vk mr-2">
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -90,7 +84,7 @@
                         </div>
                     </div>
                     <div class="user-data__contact-contact">
-                        <div class="user-data__contact-contact_item" >
+                        <div class="user-data__contact-contact_item">
                             <img
                                 src="@/app/assets/icon/phone.svg"
                                 alt="phone"
@@ -121,17 +115,17 @@ const props = defineProps({
     avatar: {
         type: String,
     },
-    edited: {
-        type: Boolean,
-    },
     user: {
         type: Object,
     },
     education: {
         type: Object,
     },
+    // member: {
+    //     type: Array,
+    // },
 });
-
+// v-if="props.user.privacy?.privacy_telephone === 'detachment_members' && props.member "
 const emit = defineEmits(['upload', 'update', 'delete']);
 
 const uploadAva = (imageAva) => {

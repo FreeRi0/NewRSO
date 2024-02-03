@@ -11,7 +11,7 @@
                 alt="Баннер личной страницы(пусто)"
             />
         </div>
-        <v-menu min-width="200px" rounded v-if="!props.banner">
+        <v-menu min-width="200px" rounded v-if="!props.banner && props.edited">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -82,7 +82,7 @@
                 </v-card-text>
             </v-card>
         </v-menu>
-        <v-menu min-width="200px" rounded v-else>
+        <v-menu min-width="200px" rounded v-else-if="props.banner && props.edited">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -182,6 +182,10 @@ const emit = defineEmits(['uploadWall, updateWall', 'deleteWall']);
 
 const props = defineProps({
     banner: String,
+    edited: {
+        type: Boolean,
+        default: false,
+    }
 });
 // const file = ref(null);
 const media = ref({

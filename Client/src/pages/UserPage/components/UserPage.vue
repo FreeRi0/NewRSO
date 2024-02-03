@@ -2,11 +2,10 @@
     <div class="container">
         <div class="user-wrapper" v-if="!isLoading.isLoading.value">
             <h2 class="page-title">Страница пользователя</h2>
-            <banner
+            <Wall
                 :user="user.user.value"
                 :education="education"
                 :user_region="region"
-                :edited="false"
                 class="mt-3"
                 @upload-wall="uploadWall"
                 @update-wall="updateWall"
@@ -14,7 +13,7 @@
                 @upload="uploadAva"
                 @update="updateAva"
                 @delete="deleteAva"
-            ></banner>
+            ></Wall>
 
             <div class="mt-14" v-if="user.user.value.is_verified">
                 {{ user.user.value.bio }}
@@ -54,7 +53,7 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { banner } from '@features/baner/components';
+import { Wall } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
 import {
     userPhoto,
@@ -73,11 +72,26 @@ const user = storeToRefs(userStore);
 const isLoading = storeToRefs(userStore);
 console.log('userTop', user.user.value);
 const education = ref({});
+const member = ref([]);
 const region = ref({});
 const route = useRoute();
 
 let id = route.params.id;
 
+// const getMembers = async () => {
+//     try {
+//         let id = user.user.value.detachment_id;
+//         const membersResponse = await HTTP.get(`/detachments/${id}/members/`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+//         member.value = membersResponse.data;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 const uploadAva = (imageAva) => {
     console.log('photo', imageAva);
     user.user.value.media.photo = imageAva;
@@ -125,6 +139,7 @@ watch(
 
 onMounted(() => {
     userStore.getUserId(id);
+    // getMembers();
 });
 </script>
 <style lang="scss" scoped>

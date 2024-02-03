@@ -1318,7 +1318,7 @@
                                 address="/eduicational_institutions/"
                             >
                             </Select> -->
-                            <educationalsDropdown
+                            <educInstitutionDropdown
                                 open-on-clear
                                 id="reg"
                                 name="regdrop"
@@ -1327,7 +1327,7 @@
                                 @update:value="changeValue"
                                 address="/eduicational_institutions/"
                                 class="mb-2"
-                            ></educationalsDropdown>
+                            ></educInstitutionDropdown>
                         </div>
                         <div class="form-field">
                             <label for="facultet">Факультет</label>
@@ -3271,7 +3271,7 @@ import {
     Select,
     sortByEducation,
     regionsDropdown,
-    educationalsDropdown,
+    educInstitutionDropdown
 } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
