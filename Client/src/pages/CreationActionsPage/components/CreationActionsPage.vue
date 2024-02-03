@@ -121,28 +121,134 @@
                                 </div>
                                 <div class="form__field">
                                     <label class="form-label">Добавить баннер</label>
-                                    <FileUpload 
-                                        name="demo[]" 
-                                        accept=".pdf, .jpeg, .png" 
-                                        :maxFileSize="7000000"
-                                        v-model="maininfo.banner"
-                                    >
-                                        <template #header="{ chooseCallback }">
-                                            <button @click="chooseCallback()" class="upload">
-                                                <div class="upload-load">
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="32"
-                                                        height="32"
-                                                        viewBox="0 0 32 32"
-                                                        fill="none"
-                                                    ></svg>
-                                                </div>
-                                            </button>
-                                            <div class="form__counter">Рекомендуемый размер файла 1024х768</div>
-                                        </template>
-                                    </FileUpload>
+                                    <div class="form__field photo-add">
+                            <p class="form__label">Добавьте баннер</p>
+                            <div class="photo-add__box photo-add__box--banner">
+                                <div
+                                    class="photo-add__img photo-add__img--banner"
+                                >
+                                    <img
+                                        v-if="maininfo.banner ?? urlBanner"
+                                        class="photo-add__image"
+                                        :src="maininfo.banner ?? urlBanner"
+                                    />
+                                    <img
+                                        v-else
+                                        src="@app/assets/banner-stub.png"
+                                        alt="Баннер отряда(пусто)"
+                                    />
                                 </div>
+
+                                <div class="photo-add__input">
+                                    <label
+                                        class="photo-add__label"
+                                        for="upload-banner"
+                                        v-if="!maininfo.banner && !urlBanner"
+                                    >
+                                        <svg
+                                            class=""
+                                            aria-hidden="true"
+                                            focusable="false"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="48"
+                                            height="48"
+                                            viewBox="0 0 48 48"
+                                            fill="none"
+                                        >
+                                            <g
+                                                filter="url(#filter0_b_2686_15482)"
+                                            >
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="24"
+                                                    fill="black"
+                                                    fill-opacity="0.4"
+                                                />
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="23"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                />
+                                            </g>
+                                            <path
+                                                d="M24.1328 15.1328L24.1328 33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <path
+                                                d="M15.1328 24.1328H33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <defs>
+                                                <filter
+                                                    id="filter0_b_2686_15482"
+                                                    x="-36.9643"
+                                                    y="-36.9643"
+                                                    width="121.929"
+                                                    height="121.929"
+                                                    filterUnits="userSpaceOnUse"
+                                                    color-interpolation-filters="sRGB"
+                                                >
+                                                    <feFlood
+                                                        flood-opacity="0"
+                                                        result="BackgroundImageFix"
+                                                    />
+                                                    <feGaussianBlur
+                                                        in="BackgroundImageFix"
+                                                        stdDeviation="18.4821"
+                                                    />
+                                                    <feComposite
+                                                        in2="SourceAlpha"
+                                                        operator="in"
+                                                        result="effect1_backgroundBlur_2686_15482"
+                                                    />
+                                                    <feBlend
+                                                        mode="normal"
+                                                        in="SourceGraphic"
+                                                        in2="effect1_backgroundBlur_2686_15482"
+                                                        result="shape"
+                                                    />
+                                                </filter>
+                                            </defs>
+                                        </svg>
+                                    </label>
+                                    <div class="photo-add__edit-group" v-else>
+                                        <label
+                                            class="photo-add__label-edit"
+                                            for="upload-banner"
+                                        >
+                                            <span class="photo-add__label-text"
+                                                >Изменить фото</span
+                                            >
+                                        </label>
+                                        <button
+                                            class="photo-add__button-clear"
+                                            type="reset"
+                                            @click="resetBanner"
+                                        >
+                                            Удалить фото
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="file"
+                                        id="upload-banner"
+                                        name="squad-banner"
+                                        hidden
+                                        @change="selectBanner"
+                                    />
+                                </div>
+                            </div>
+                            <span class="form__footnote"
+                                >Рекомендуемый размер 1920х768</span
+                            >
+                        </div>
+                        </div>
                             </div>
                             <div class='form-col'>
                                 <div class="form__field">
@@ -719,15 +825,41 @@ import { Button } from '@shared/components/buttons';
 import { ref, inject } from 'vue';
 import { createAction, createOrganizator } from '@services/ActionService';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { uploadPhoto } from '@shared/components/imagescomp';
 import FileUpload from 'primevue/fileupload';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import textarea from '@shared/components/inputs/textarea.vue'
-const router = useRoute();
+const router = useRouter();
 const swal = inject('$swal');
-//Переменные для основной формы
+
+const maininfo = ref({
+    format: '',
+    direction: '',
+    name: '',
+    scale: '',
+    banner: null,
+    conference_link: '',
+    address: '',
+    description: '',
+    participants_number: Number,
+    application_type: '',
+    available_structural_units: ''
+})
+
+const urlBanner = ref(null);
+
+const selectBanner = (event) => {
+    maininfo.value.banner = event.target.files[0];
+    console.log('Файл есть', maininfo.value.banner);
+    urlBanner.value = URL.createObjectURL(maininfo.value.banner);
+};
+
+const resetBanner = () => {
+    maininfo.value.banner = null;
+    urlBanner.value = null;
+}
 
 const scale_massive = ref([
     {name: "Отрядное"},
@@ -744,20 +876,6 @@ const direction_massive = ref([
     {name:"Региональное"},
     {name:"Окружное"},
     {name:"Всероссийское"}])
-
-const maininfo = ref({
-    format: '',
-    direction: '',
-    name: '',
-    scale: '',
-    banner: 'http://example.com',
-    conference_link: '',
-    address: '',
-    description: '',
-    participants_number: Number,
-    application_type: '',
-    available_structural_units: ''
-})
 
 const available_structural_units = ref([
     {name: "Отряды"},
@@ -832,19 +950,15 @@ function AddOrganizator(){
     });
 }
 function SubmitEvent(){
-
+    /* //Внести все значения в FormData
+    let fd = new FormData();
+    fd.append('banner', maininfo.banner);*/
     createAction(maininfo.value)
     .then((resp)=>{
         console.log("Форма передалась успешно", resp.value)
         createOrganizator(resp.value.id)
         .then((resp)=>{
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+            router.push({name: "actionSquads"})
         })
         .catch((e)=>{
             swal.fire({
@@ -857,8 +971,7 @@ function SubmitEvent(){
         })
     })
     .catch((e)=>{
-        console.
-        swal.fire({
+        console.swal.fire({
                 position: 'top-center',
                 icon: 'error',
                 title: 'Не удалось создать мероприятие',

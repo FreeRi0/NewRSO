@@ -157,11 +157,6 @@ const actionNewList = computed(() => {
   console.log(sortBy);
 })
 
-function SelectActionsByName(){
-  return actionForm.map((action)=> {
-      return (action.name.indexOf(nameSearch) === 'true') ? action : null
-  });
-}
 //Сортировка
 const vertical = ref(true);
 const ascending = ref(true);
