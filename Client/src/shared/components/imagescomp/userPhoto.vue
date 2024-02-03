@@ -11,13 +11,25 @@
             />
         </div>
         <!-- Добавить фото -->
-        <uploadPhoto v-if="add" :photo="photo"></uploadPhoto>
+        <uploadPhoto
+            @uploadUserPic="uploadUserPic"
+            v-if="add"
+            :photo="photo"
+        ></uploadPhoto>
     </div>
 </template>
 <script setup>
 import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
 import { uploadPhoto } from '.';
+const emit = defineEmits(['uploadUserPic, updateUserPic']);
+
+const uploadUserPic = (userPic) => {
+    console.log('photoUser', userPic);
+    emit('uploadUserPic', userPic);
+    console.log('userPic Uploaded!');
+};
+
 
 const props = defineProps({
     photo: String,

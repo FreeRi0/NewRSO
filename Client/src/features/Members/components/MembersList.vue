@@ -252,6 +252,10 @@ const onUpdateMember = (event, id) => {
 
         .v-select__selection {
             margin: 0;
+
+            span {
+                white-space: pre-wrap;
+            }
         }
 
         @media (max-width: 1024px) {
@@ -303,7 +307,7 @@ const onUpdateMember = (event, id) => {
         width: 224px;
         border: 1px solid #b6b6b6;
         border-radius: 10px;
-        align-self: start;
+        // align-self: start;
         min-height: 48px;
 
         @media (max-width: 768px) {

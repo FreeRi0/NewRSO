@@ -5,16 +5,16 @@
                 >Регистрация</v-card-title
             >
             <v-form action="#" method="post" @submit.prevent="RegisterUser">
-                <Select
-                    variant="outlined"
-                    clearable
-                    class="regSelect"
-                    name="select_region"
-                    id="select-region"
-                    placeholder="Москва"
+                <regionsDropdown
+                    open-on-clear
+                    id="reg"
+                    name="regdrop"
+                    placeholder="Выберите регион обучения"
                     v-model="form.region"
+                    @update:value="changeValue"
                     address="/regions/"
-                ></Select>
+                    class="mb-2 region-input"
+                ></regionsDropdown>
                 <Input
                     placeholder="Фамилия"
                     name="surname"
@@ -32,7 +32,7 @@
                     {{ isError.first_name }}
                 </p>
                 <Input
-                    placeholder="Отчество(При наличии)"
+                    placeholder="Отчество (при наличии)"
                     name="patronomyc"
                     v-model:value.trim="form.patronymic_name"
                 />
@@ -53,11 +53,14 @@
                 </p>
                 <Input
                     name="date"
-                    type="date"
+                    type="text"
+                    placeholder="Дата рождения"
                     v-model:value="form.date_of_birth"
+                    onfocusin="(this.type='date')"
+                    onfocusout="(this.type='text')"
                 />
                 <p class="error" v-if="isError.date_of_birth">
-                    {{ isError.date_of_birth }}
+                    Дата рождения в формате ДД.ММ.ГГГГ
                 </p>
                 <Input
                     placeholder="Придумайте логин"
@@ -67,35 +70,42 @@
                 <p class="error" v-if="isError.username">
                     {{ isError.username }}
                 </p>
-                <Input
-                    type="password"
+                <v-text-field
+                    class="password-input"
+                    :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
+                    :type="visible ? 'text' : 'password'"
+                    density="compact"
+                    v-model="form.password"
                     placeholder="Придумайте пароль"
-                    name="password"
-                    v-model:value.trim="form.password"
-                ></Input>
+                    variant="outlined"
+                    @click:append-inner="visible = !visible"
+                ></v-text-field>
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
                 </p>
-                <Input
-                    type="password"
-                    placeholder="Повторите пароль"
-                    name="confirm"
-                    v-model:value.trim="form.re_password"
-                ></Input>
+                <v-text-field
+                    class="password-input"
+                    :append-inner-icon="!visibleRe ? 'mdi-eye-off' : 'mdi-eye'"
+                    :type="visibleRe ? 'text' : 'password'"
+                    density="compact"
+                    v-model="form.re_password"
+                    placeholder="Пароль"
+                    variant="outlined"
+                    @click:append-inner="visibleRe = !visibleRe"
+                ></v-text-field>
+
                 <p class="error" v-if="isError.re_password">
                     {{ isError.re_password }}
                 </p>
                 <p class="error" v-else-if="isError.non_field_errors">
                     Пароли не совпадают
                 </p>
-                <!-- <v-checkbox
-                    v-model="form.personal_data_agreement"
-                    label="Даю согласие на обработку моих  персональных данных в соответствии с законом от 27.07.2006 года № 152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на обработку персональных данных."
-                ></v-checkbox> -->
+
                 <div class="regCheck">
                     <input
                         v-model="form.personal_data_agreement"
                         type="checkbox"
+                        @change="handleTermsState"
                     />
                     <div class="regCheck_text">
                         Даю согласие на обработку моих персональных данных в
@@ -109,7 +119,11 @@
                 <Button
                     label="Зарегистрироваться"
                     :loaded="isLoading"
-                    :disabled="isLoading"
+                    :disabled="
+                        isLoading ||
+                        !form.personal_data_agreement ||
+                        !form.region
+                    "
                     type="submit"
                     color="primary"
                 >
@@ -126,6 +140,29 @@
 </template>
 
 <style lang="scss">
+.v-field {
+    border-radius: 10px;
+}
+
+.v-field.v-field--appended {
+    --v-field-padding-end: 10px;
+}
+.v-field--prepended {
+    padding-inline-start: 0px;
+}
+
+.v-input--density-compact .v-field--variant-outlined,
+.v-input--density-compact .v-field--single-line,
+.v-input--density-compact .v-field--no-label {
+    --v-field-padding-bottom: 10px;
+}
+
+.v-field--variant-outlined,
+.v-field--single-line,
+.v-field--no-label {
+    --v-field-padding-top: 5px;
+}
+
 .btn {
     margin: 60px auto;
     margin-bottom: 15px;
@@ -181,6 +218,26 @@
     margin-bottom: 5px;
     text-align: center;
 }
+
+.password-input,
+.region-input {
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #35383f;
+    font-weight: normal;
+    font-family: Akrobat;
+    margin-bottom: 8px;
+}
+
+.password-input::placeholder,
+.region-input::placeholder {
+    color: #898989;
+    font-size: 16px;
+    font-weight: normal;
+    font-family: Akrobat;
+    margin-bottom: 8px;
+}
 .v-card {
     padding-left: 100px;
     padding-right: 100px;
@@ -217,31 +274,55 @@
         font-size: 18px;
     }
 }
+.v-field__prepend-inner {
+    display: none;
+}
+#reg,
+#input-3,
+#input-5 {
+    letter-spacing: 0.9px;
+    font-size: 17px;
+    color: #35383f;
+}
+#reg {
+    padding-top: 5px;
+}
+.v-input__control {
+    min-height: 45px;
+}
 
-// a {
-
-// }
+.AuthWrapper {
+    min-height: 100vh;
+    background-image: url(/assets/regBR.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    @media screen and (max-width: 1440px) {
+        background-image: url(/assets/regBR1440.jpg);
+    }
+    @media screen and (max-width: 1024px) {
+        background-image: url(/assets/regBR1024.jpg);
+    }
+    @media screen and (max-width: 768px) {
+        background-image: none;
+        background-color: #d1d5d8;
+    }
+}
 </style>
 
 <script setup>
-import { ref, computed, onMounted, inject } from 'vue';
+import { ref, inject, computed } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { Input, PasswordInputVue } from '@shared/components/inputs';
-import { useVuelidate } from '@vuelidate/core';
+import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
-import {
-    helpers,
-    minLength,
-    required,
-    maxLength,
-    numeric,
-    email,
-    sameAs,
-} from '@vuelidate/validators';
 import { IMaskDirective } from 'vue-imask';
-import { Select } from '@shared/components/selects';
-
+import { Select, regionsDropdown } from '@shared/components/selects';
+const visible = ref(false);
+const visibleRe = ref(false);
+const validated = ref(false);
 const form = ref({
     region: null,
     last_name: '',
@@ -253,47 +334,54 @@ const form = ref({
     username: '',
     password: '',
     re_password: '',
-    personal_data_agreement: null,
+    personal_data_agreement: false,
 });
 
 const isLoading = ref(false);
-
 const isError = ref([]);
 const router = useRouter();
 const swal = inject('$swal');
 
+const termsError = computed(() => {
+    return validated.value && !form.personal_data_agreement;
+});
+const handleTermsState = () => {
+    validated.value = false;
+};
 const RegisterUser = async () => {
-    isLoading.value = true;
-    HTTP.post('/register/', form.value, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((response) => {
-            form.value = response.data;
-            console.log(response.data);
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            router.push('/');
-        })
-
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+    try {
+        isLoading.value = false;
+        validated.value = true;
+        const response = await HTTP.post('/register/', form.value, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
+        form.value = response.data;
+        console.log(response.data);
+        isLoading.value = false;
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        router.push('/');
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
+    }
 };
 </script>

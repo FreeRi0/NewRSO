@@ -4,34 +4,36 @@
             <input
                 type="checkbox"
                 v-model="checked"
-                :value="participant"
+                :value="participant.user"
                 @change="updateCheck"
             />
         </div>
-
-        <div class="horizontallso-item__wrapper">
+        <router-link
+            class="horizontallso-item__wrapper"
+            :to="{
+                name: 'PersonalDataUser',
+                params: { id: participant.user.id },
+            }"
+        >
             <div class="horizontallso-img">
                 <img
-                    :src="participant?.user?.avatar?.photo"
+                    :src="participant.user.avatar?.photo"
                     alt="logo"
-                    v-if="participant?.user?.avatar?.photo"
+                    v-if="participant.user.avatar?.photo"
                 />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                    v-else
-                />
+                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
+            <!-- <pre>{{ participant.user.avatar?.photo }}</pre> -->
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
-                        {{participant.user.last_name }}
+                        {{ participant.user.last_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
                         {{ participant.user.first_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ participant?.user?.patronymic_name }}
+                        {{ participant.user.patronymic_name }}
                     </p>
                 </div>
                 <div class="horizontallso-item__list-date">
@@ -41,11 +43,10 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{participant?.user?.date_of_birth }}</p>
-
+                    <p>{{ participant.user?.date_of_birth }}</p>
                 </div>
             </div>
-        </div>
+        </router-link>
     </div>
 </template>
 <script setup>
@@ -63,12 +64,12 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['change']);
+const emit = defineEmits(['change','approve', 'reject']);
 const checked = ref(false);
 
 const updateCheck = (e) => {
-    console.log('dddddd', checked.value);
-    emit('change', checked.value, props.participant.id);
+    console.log('ddddddUser', checked.value, props.participant.user.id);
+    emit('change', checked.value, props.participant.user.id);
 };
 
 const selectedPeoples = ref(props.selectedParticipants);
@@ -80,7 +81,7 @@ watch(
         selectedPeoples.value = newChecked;
         console.log('newChecked', newChecked);
         const checkedItem = newChecked.find(
-            (item) => item.id == props.participant.id,
+            (item) => item.user.id == props.participant.user.id,
         );
         console.log('checkedItem', checkedItem);
         if (!checkedItem) checked.value = false;
@@ -98,9 +99,12 @@ watch(
         height: 36px;
         justify-content: start;
         img {
+            width: 36px;
+            height: 36px;
             display: flex;
             position: relative;
             align-items: center;
+            border-radius: 100%;
         }
     }
     &-info {

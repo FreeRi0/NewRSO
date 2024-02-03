@@ -40,7 +40,7 @@
                     </ul>
                 </div>
 
-                <p class="footer__contacts-address">
+                <p class="footer__contacts-address footer__text-color">
                     105005, г. Москва, Лефортовский переулок, 8, строение&nbsp;1
                 </p>
 
@@ -49,7 +49,9 @@
                         <a href="tel:+74992613345">8&nbsp;499&nbsp;261 33 45</a>
                     </li>
                     <li class="footer__contacts-telephone">
-                        <p class="footer__text-p">Горячая линия РСО:</p>
+                        <p class="footer__text-p footer__text-color">
+                            Горячая линия РСО:
+                        </p>
                         <a href="tel:+78007700117"
                             >8&nbsp;800&nbsp;770 0&nbsp;117</a
                         >
@@ -62,7 +64,7 @@
                 <ul class="footer__privacy-policy-list">
                     <li class="footer__privacy-policy-item">
                         <router-link to="/privacy_policy"
-                            >Политика конфидициальности</router-link
+                            >Политика конфиденциальности</router-link
                         >
                     </li>
                     <li class="footer__user-agreement">
@@ -75,12 +77,14 @@
 
             <div class="footer__bottom-container">
                 <div class="footer__all-rights-reserved">
-                    <p>&copy; 1959-2023 РОССИЙСКИЕ СТУДЕНЧЕСКИЕ ОТРЯДЫ.</p>
-                    <p>Все права защищены.</p>
+                    <p class="footer__text-color">
+                        &copy; 1959-2024 РОССИЙСКИЕ СТУДЕНЧЕСКИЕ ОТРЯДЫ.
+                    </p>
+                    <p class="footer__text-color">Все права защищены.</p>
                 </div>
 
                 <div class="footer__developed">
-                    <p>Сделано в</p>
+                    <p class="footer__text-color">Сделано в</p>
                     <a
                         class="footer__logo-teamcode-link"
                         href="https://club.1t.ru/work"
@@ -126,6 +130,7 @@
         }
     }
 
+    &__text-color,
     a {
         color: #ffffff;
     }

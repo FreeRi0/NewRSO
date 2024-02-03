@@ -1,44 +1,48 @@
 <template>
     <section class="headquarters-management">
         <h3>{{ head }}</h3>
-        <div class="headquarters-management__container">
-            <div
-                class="manager-card"
-                v-for="(manager, index) in member"
-                :class="{
-                    'align-left': index % 2 === 0,
-                    'align-right': index % 2 !== 0,
-                }"
-            >
-                <div class="manager-card__avatar">
-                    <img
-                        :src="
-                            manager.user?.avatar?.photo ??
-                            '/assets/foto-leader-squad/foto-leader-squad-01.png'
-                        "
-                        alt="фото"
-                    />
+
+        <router-link :to="{ name: 'userpage', params: { id: props.commander.id } }" class="headquarters-management__container">
+        
+                <div
+                    class="manager-card"
+                    :key="manager"
+                    v-for="(manager, index) in joinMembers"
+                    :class="{
+                        'align-left': index % 2 === 0,
+                        'align-right': index % 2 !== 0,
+                    }"
+                >
+                    <div class="manager-card__avatar">
+                        <img
+                            :src="manager.user?.avatar?.photo"
+                            alt="фото"
+                            v-if="manager.user?.avatar?.photo"
+                        />
+                        <img
+                            src="@app/assets/user-avatar.png"
+                            alt="photo"
+                            v-else
+                        />
+                    </div>
+                    <div class="manager-card__box">
+                        <h5 id="name_length">
+                            {{ manager?.user?.first_name }}
+                            {{ manager?.user?.patronymic_name }}
+                            {{ manager?.user?.last_name }}
+                        </h5>
+                        <p>{{ manager.position }}</p>
+                    </div>
                 </div>
-                <div class="manager-card__box">
-                    <h5 id="name_length">
-                        {{ manager.user.first_name }}
-                        {{ manager.user.last_name }}
-                    </h5>
-                    <p>{{ position.name }}</p>
-                </div>
-            </div>
-        </div>
+
+
+        </router-link>
     </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
-const route = useRoute();
-let id = route.params.id;
+import { computed } from 'vue';
 
-const position = ref({});
 const props = defineProps({
     member: {
         type: Array,
@@ -46,30 +50,16 @@ const props = defineProps({
     position: {
         type: Object,
     },
+    commander: {
+        type: Object,
+    },
     head: {
         type: String,
     },
 });
 
-const aboutPosition = async () => {
-    let { id, ...rest } = props.member;
-    await HTTP.get(`/positions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            position.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-onMounted(() => {
-    aboutPosition();
+const joinMembers = computed(() => {
+    return [{ user: props.commander, position: 'Командир' }, ...props.member];
 });
 </script>
 
@@ -115,6 +105,8 @@ section.headquarters-management h3 {
     width: 120px;
     height: 120px;
     border-radius: 100%;
+    object-fit: cover;
+    overflow: hidden;
 }
 
 .manager-card__box {
@@ -177,7 +169,6 @@ section.headquarters-management h3 {
         row-gap: 16px;
     }
     .manager-card {
-        padding: 16px;
         width: 156px;
         height: 173px;
     }
@@ -193,6 +184,8 @@ section.headquarters-management h3 {
     }
     .manager-card__avatar img {
         width: 60px;
+        height: 60px;
+        margin-bottom: 0;
     }
 }
 </style>

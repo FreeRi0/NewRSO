@@ -1,27 +1,43 @@
 <template>
     <div class="container">
-        <div class="referencesMenu">
+        <div class="referencesMenu" v-if="regComId">
             <h2 class="referencesMenu-title">Оформление справок</h2>
             <div class="referencesMenu-wrapper">
                 <div class="referencesMenu-item">
-                <p>Справка о членстве в РСО (для работодателя)</p>
-                   <router-link :to="{ name: 'reference' }">
-                   <div class="round-btn">
-                    <img src="@app/assets/icon/arrow-right.svg" alt="arrow-right">
-                   </div></router-link>
+                    <p>Справка о членстве в РСО (для работодателя)</p>
+                    <router-link :to="{ name: 'reference' }">
+                        <div class="round-btn">
+                            <img
+                                src="@app/assets/icon/arrow-right.svg"
+                                alt="arrow-right"
+                            /></div
+                    ></router-link>
                 </div>
                 <div class="referencesMenu-item">
-                <p>Справка о членстве в РСО (для внутреннего пользования)</p>
-                   <router-link :to="{ name: 'referenceForYou' }">
-                   <div class="round-btn">
-                    <img src="@app/assets/icon/arrow-right.svg" alt="arrow-right">
-                   </div></router-link>
+                    <p>
+                        Справка о членстве в РСО (для внутреннего пользования)
+                    </p>
+                    <router-link :to="{ name: 'referenceForYou' }">
+                        <div class="round-btn">
+                            <img
+                                src="@app/assets/icon/arrow-right.svg"
+                                alt="arrow-right"
+                            /></div
+                    ></router-link>
                 </div>
             </div>
         </div>
+        <div v-else>Доступно только командирам региональных штабов</div>
     </div>
 </template>
-<script setup></script>
+<script setup>
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+let regComId = roles.roles.value.regionalheadquarter_commander;
+</script>
 <style lang="scss">
 .referencesMenu {
     padding: 0px 0px 350px 0px;
@@ -38,9 +54,9 @@
         justify-content: space-between;
         padding: 16px 0px;
         margin-top: 8px;
-     p {
-        font-size: 24px;
-     }
+        p {
+            font-size: 24px;
+        }
     }
 }
 
@@ -48,7 +64,7 @@
     width: 32px;
     height: 32px;
     border-radius: 100%;
-    background-color: #1c5c94;;
+    background-color: #1c5c94;
     padding: 4px;
 }
 </style>

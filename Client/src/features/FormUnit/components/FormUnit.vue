@@ -169,7 +169,7 @@
                                 >Выберите регион
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
+                            <!-- <Select
                                 clearable
                                 variant="outlined"
                                 name="select_region"
@@ -177,7 +177,17 @@
                                 placeholder="Например, Алтайский край"
                                 v-model="detachment.region"
                                 address="regions/"
-                            ></Select>
+                            ></Select> -->
+                            <regionsDropdown
+                                open-on-clear
+                                id="select-region"
+                                name="select_region"
+                                placeholder="Например, Алтайский край"
+                                v-model="detachment.region"
+                                @update:value="changeValue"
+                                address="/regions/"
+                            >
+                            </regionsDropdown>
                             <p class="form__error" v-if="isError.region">
                                 * Это поле не может быть пустым.
                             </p>
@@ -199,7 +209,7 @@
                                 >Выберите учебное заведение
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
+                            <!-- <Select
                                 variant="outlined"
                                 clearable
                                 name="select_institution"
@@ -207,7 +217,16 @@
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="detachment.educational_institution"
                                 address="eduicational_institutions/"
-                            ></Select>
+                            ></Select> -->
+                            <educInstitutionDropdown
+                                open-on-clear
+                                id="select-institution"
+                                name="select_institution"
+                                placeholder="Например, Алтайский государственный медицинский университет"
+                                v-model="detachment.educational_institution"
+                                @update:value="changeValue"
+                                address="eduicational_institutions/"
+                            ></educInstitutionDropdown>
                             <p
                                 class="form__error"
                                 v-if="isError.educational_institution"
@@ -1367,6 +1386,8 @@ import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 // import { photos } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
+import { regionsDropdown } from '@shared/components/selects';
+import { educInstitutionDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';

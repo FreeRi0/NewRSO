@@ -148,7 +148,7 @@
                             <Input
                                 class="form__input"
                                 id="city"
-                                placeholder="Например, Барнаул"
+                                placeholder="Например, Москва"
                                 name="edit_city"
                                 v-model:value="headquarter.city"
                             />
@@ -808,11 +808,11 @@ const showButtonPrev = computed(() => {
 const route = useRoute();
 let id = route.params.id;
 
-const members = ref(props.members);
+// const members = ref(props.members);
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
-    return members.value.filter((item) => {
+    return props.members.filter((item) => {
         return item.user.last_name
             .toUpperCase()
             .includes(searchMembers.value.toUpperCase());

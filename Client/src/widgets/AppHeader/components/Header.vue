@@ -7,7 +7,7 @@
                         <img
                             src="@app/assets/logo/logo-rso-tablet.svg"
                             width="60"
-                            height="58"
+                            height="56"
                             alt="Логотип сайта трудкрут.рф"
                         />
                     </a>
@@ -16,7 +16,7 @@
                 <li class="header__logo-labor-cool">
                     <a href="https://trudkrutshop.ru/" target="_blank">
                         <img
-                            src="@app/assets/logo/logo-shop-tablet.svg"
+                            src="@app/assets/logo/logo-shop-tablet.png"
                             width="56"
                             height="56"
                             alt="Логотип сайта trudkrutshop.ru"
@@ -34,34 +34,45 @@
                 <div ref="navMenu" class="header__nav-container no-visible">
                     <div class="header__overlay" @click="removeClass()"></div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item" v-if="user">
+                        <li
+                            class="header__nav-item"
+                            v-if="user.currentUser.value"
+                        >
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
                         </li>
-                        <li class="header__nav-item">
-                            <a class="header__nav-link" href="/actionSquads"
-                                >Мероприятия</a
+                        <li class="header__nav-item disable">
+                            <a
+                                class="header__nav-link"
+                                @click.prevent
+                                href="/actionSquads"
                             >
+                                Мероприятия
+                            </a>
                         </li>
                         <li class="header__nav-item competition__nav-item">
                             <a
                                 class="header__nav-link competition__link"
                                 href="/Competition"
-                                >Конкурс</a
                             >
+                                Конкурс
+                            </a>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="/FAQ"
-                                >Полезная информация</a
-                            >
+                            <a class="header__nav-link" href="/FAQ">
+                                Полезная информация
+                            </a>
                         </li>
                     </ul>
                 </div>
             </nav>
 
             <nav class="header__nav nav-user">
-                <div class="nav-user__application-count">
+                <div
+                    class="nav-user__application-count"
+                    v-if="user.currentUser.value"
+                >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <a href="#">
                         <img
@@ -80,7 +91,7 @@
                     </div>
                 </div>
 
-                <div class="nav-user__location" v-if="user">
+                <div class="nav-user__location">
                     <button class="nav-user__button" @click="show = !show">
                         <!-- <img
                             class="nav-user__button-mobile"
@@ -90,12 +101,18 @@
                             alt="Иконка геолокации"
                         /> -->
 
-                        <span v-if="user?.user_region?.reg_region"
+                        <span v-if="user.currentUser.value?.region"
                             >{{
-                                regionals[user?.user_region?.reg_region - 1]
-                                    ?.name
+                                regionals.find(
+                                    (reg) =>
+                                        reg.region ===
+                                        user.currentUser.value.region,
+                                )?.name
                             }}
                         </span>
+                        <!-- <p v-if="user.currentUser.value?.region">
+                            <div v-for="item in getByRegionals" :key="item.id">{{ item.name }}</div>
+                        </p> -->
 
                         <span v-else>Выберите региональное отделение</span>
                     </button>
@@ -121,7 +138,8 @@
                             name="select_education"
                             id="select-education"
                             placeholder="Ваш регион"
-                            v-model="user.region"
+                            @change="getByRegionals"
+                            v-model="region"
                             address="regions/"
                         ></Select>
 
@@ -138,12 +156,20 @@
                     </div>
                 </div>
 
-                <div class="nav-user__menu user-menu" v-if="user">
+                <div class="nav-user__menu user-menu">
+                    <img
+                        v-if="!user.currentUser.value"
+                        src="@app/assets/user-avatar.png"
+                        alt="Фото бойца (заглушка)"
+                    />
+
                     <Dropdown
+                        v-if="user.currentUser.value"
                         :items="userPages"
                         :image="true"
-                        :url="user?.media?.photo"
+                        :url="user.currentUser.value.media?.photo"
                         desc="Фотография пользователя"
+                        @updateUser="userUpdate"
                     />
                 </div>
             </nav>
@@ -154,14 +180,14 @@
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
-import { Select } from '@shared/components/selects';
+import { Select, sortByEducation } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
+import { useUserStore } from '@features/store/index';
 import { useRoleStore } from '@layouts/store/role';
+// import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
-const roleStore = useRoleStore();
-roleStore.getRoles();
 
 const props = defineProps({
     isActive: {
@@ -173,14 +199,49 @@ const props = defineProps({
     },
 });
 
+const regionals = ref([]);
+const roleStore = useRoleStore();
+const userStore = useUserStore();
+const roles = storeToRefs(roleStore);
+// const regionalsStore = useRegionalsStore();
+const getRegionals = async () => {
+    try {
+        const regionalsResp = await HTTP.get('/regionals/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        regionals.value = regionalsResp.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+// regionalsStore.getRegionals();
+
+// const regionals = storeToRefs(regionalsStore);
+// regionalsStore.getRegionals();
+
 const quantityIsActive = ref(props.quantityActive);
 
-const roles = storeToRefs(roleStore);
-
 const router = useRouter();
-const user = ref({});
-// const route = useRoute();
-// let id = route.params.id;
+const user = storeToRefs(userStore);
+console.log('user', user.currentUser.value);
+
+// const region = ref(null);
+// console.log('userreg', region);
+
+// const getByRegionals = computed(() => {
+//     return regionalsStore.getRegionals(region.value);
+//     console.log('reg', region.value);
+// });
+
+// console.log('regionalssss', getByRegionals);
+const userUpdate = (userData) => {
+    console.log('UserUpdate', userData);
+    user.currentUser.value = userData;
+};
 
 const pages = ref([
     { title: 'ЛСО', link: '/allSquads' },
@@ -194,51 +255,58 @@ const pages = ref([
 const userPages = computed(() => [
     {
         title: 'Моя страница',
-        name: 'userpage',
-        params: {
-            id: user.value.id,
-        },
+        name: 'mypage',
     },
     {
         title: 'Мой отряд',
         name: 'lso',
         params: {
-            id: user?.value?.detachment_id,
+            id: user.currentUser?.value?.detachment_id,
         },
     },
     {
         title: 'Штаб СО ОО',
         name: 'HQ',
+        path: 'regionals',
         params: {
-            id: user?.value?.educational_headquarter_id,
+            id: user.currentUser?.value?.educational_headquarter_id,
         },
     },
     {
         title: 'Местный штаб',
         name: 'LocalHQ',
+        path: 'locals',
         params: {
-            id: user?.value?.local_headquarter_id,
+            id:
+                user.currentUser?.value?.local_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
         },
     },
     {
         title: 'Региональный штаб',
         name: 'RegionalHQ',
+        path: 'regionals',
         params: {
-            id: user?.value?.regional_headquarter_id,
+            id:
+                user.currentUser?.value?.regional_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
         },
     },
     {
         title: 'Окружной штаб',
         name: 'DistrictHQ',
+        path: 'districts',
         params: {
-            id: user?.value?.district_headquarter_id,
+            id:
+                user.currentUser?.value?.district_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
         },
     },
     {
         title: 'Центральный штаб',
         name: 'CentralHQ',
         params: {
-            id: user.value.central_headquarter_id,
+            id: user.currentUser.value?.central_headquarter_id,
         },
     },
     { title: 'Активные заявки', name: 'active' },
@@ -260,80 +328,91 @@ const removeClass = () => {
     menu.classList.toggle('no-visible');
 };
 
-const regions = ref({});
+const headquartersIds = ref([]);
+const headquertersNames = ref([
+    {
+        path: 'educationals',
+        id: 'educational_headquarter_id',
+        parentPath: 'locals',
+        parentHqId: 'local_headquarter',
+    },
+    {
+        path: 'locals',
+        id: 'local_headquarter_id',
+        parentPath: 'regionals',
+        parentHqId: 'regional_headquarter',
+    },
+    {
+        path: 'regionals',
+        id: 'regional_headquarter_id',
+        parentPath: 'districts',
+        parentHqId: 'district_headquarter',
+    },
+    {
+        path: 'dirstricts',
+        id: 'district_headquarter_id',
+        parentPath: 'centrals',
+        parentHqId: 'central_headquarter',
+    },
+]);
 
-const regionals = ref([]);
+const getHeadquarters = async () => {
+    for (let i = 0; i < headquertersNames.value.length; i++) {
+        const item = headquertersNames.value[i];
 
-const getUser = async () => {
-    await HTTP.get('/rsousers/me/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+        if (!user.user.value[item.id]) continue;
+
+        const { data } = await HTTP.get(
+            `${item.path}/${user.user.value[item.id]}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        const { data: dataParent } = await HTTP.get(
+            `${item.parentPath}/${data[item.parentHqId]}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        headquartersIds.value.push({
+            path: item.parentPath,
+            id: dataParent.id,
         });
+    }
 };
-// console.log('dddddd', id);
 
 const updateRegion = async () => {
-    await HTTP.patch('/rsousers/me/region/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            show = !show;
-            console.log(user.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+    try {
+        const updateRegResponse = await HTTP.patch(
+            '/rsousers/me/',
+            {
+                region: region.value,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        // region.value = updateRegResponse.data;
+        show.value = !show.value;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-const getRegions = async () => {
-    await HTTP.get(`/regions/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regions.value = response.data;
-            console.log(regions.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getRegionals = async () => {
-    await HTTP.get(`/regionals/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            regionals.value = response.data;
-            console.log(regionals.value);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-onMounted(() => {
-    getUser();
-    getRegions();
-    getRegionals();
+onMounted(async () => {
+    await getRegionals();
+    await getHeadquarters();
 });
 </script>
 
@@ -341,8 +420,9 @@ onMounted(() => {
 //убрала тег scoped потому что стили к кнопке dropdown не применялись
 
 .header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 146px 1.3fr 1fr;
+    column-gap: 76px;
     align-items: center;
     padding: 13px 0;
     font-family: 'BertSans', sans-serif;
@@ -352,9 +432,10 @@ onMounted(() => {
     color: #35383f;
     position: relative;
     border-bottom: 1px solid #d9d9d9;
-    // margin-bottom: 60px;
 
     @media (max-width: 1024px) {
+        display: flex;
+        column-gap: 0;
         padding: 0;
         min-height: 88px;
     }
@@ -380,18 +461,32 @@ onMounted(() => {
     &__logo {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        align-items: center;
         column-gap: 30px;
-        max-width: 146px;
-        margin-right: 25px;
+
+        @media (max-width: 1440px) {
+            width: 146px;
+            column-gap: 30px;
+        }
 
         @media (max-width: 1024px) {
+            width: 140px;
             column-gap: 24px;
         }
 
         @media (max-width: 768px) {
             width: 88px;
+            // height: 36px;
             column-gap: 12px;
-            margin-right: 36px;
+        }
+    }
+
+    &__logo-labor-cool {
+        img {
+            @media (max-width: 768px) {
+                width: 36px;
+                height: 36px;
+            }
         }
     }
 
@@ -423,15 +518,12 @@ onMounted(() => {
         justify-content: space-between;
         flex-wrap: wrap;
         align-items: center;
-        column-gap: 12px;
+        column-gap: 14px;
         // font-family: 'BertSans', sans-serif;
         // font-size: 16px;
         // font-weight: 400;
         // line-height: 21px;
         max-width: 520px;
-
-        min-width: 415px;
-        // min-width: 411px; // для отображения без ссылки КОНКУРС
 
         @media (max-width: 1024px) {
             position: absolute;
@@ -445,6 +537,7 @@ onMounted(() => {
             row-gap: 8px;
             background-color: #1f7cc0;
             z-index: 2;
+            font-family: 'Akrobat';
             font-size: 20px;
             line-height: 24px;
             font-weight: 600;
@@ -459,10 +552,6 @@ onMounted(() => {
             max-width: 415px;
             width: 100%;
         }
-    }
-
-    &__nav-item {
-        margin-right: 5px;
     }
 
     &__button-mobile-menu {
@@ -504,12 +593,18 @@ onMounted(() => {
         }
     }
 
+    &__nav-item.disable {
+        & > a {
+            cursor: not-allowed;
+        }
+    }
+
     &__nav-link {
         display: block;
         padding: 5px 0;
 
         @media (max-width: 1024px) {
-            padding: 16px 0;
+            padding: 11px 0;
         }
     }
 }
@@ -551,13 +646,12 @@ onMounted(() => {
         display: grid;
         row-gap: 8px;
         padding: 28px 28px;
-        max-height: 820px; //---------------
+        max-height: 820px;
         width: 328px;
-        // font-family: 'Akrobat';
+        font-family: 'Akrobat';
         font-size: 20px;
         line-height: 24px;
         font-weight: 600;
-        // color
         overflow-y: auto;
         border-radius: 10px;
         background-color: #1f7cc0;
@@ -611,6 +705,9 @@ onMounted(() => {
 }
 
 .user-menu {
+    img {
+        width: 56px;
+    }
     .dropdown {
         &__box-image {
             margin-right: 12px;
@@ -677,18 +774,13 @@ onMounted(() => {
 //------------------------------------------------------------------------------------
 
 .nav-user {
-    // display: grid;
-    // grid-template-columns: min-content 1fr min-content;
-    column-gap: 18px;
-    // column-gap: 20px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
+    column-gap: 18px;
     min-width: 242px;
     max-width: 383px;
     flex-grow: 1;
-    margin-left: 25px;
 
     @media (max-width: 1024px) {
         margin-left: auto;
@@ -697,11 +789,10 @@ onMounted(() => {
 
     @media (max-width: 768px) {
         column-gap: 20px;
-
-        min-width: 148px;
-        max-width: 204px;
-        flex-grow: 1;
-        // margin-left: 54px;
+        width: 148px;
+        min-width: 0px;
+        max-width: 148px;
+        margin-left: auto;
     }
 
     &__application-count {
@@ -735,7 +826,6 @@ onMounted(() => {
 
         @media (max-width: 768px) {
             display: flex;
-            // min-width: auto;
         }
     }
 
@@ -746,7 +836,6 @@ onMounted(() => {
         @media (max-width: 768px) {
             width: 36px;
             height: 36px;
-            // margin-top: 5px;
             background-image: url('../../../app/assets/icon/location-mark.svg');
             background-position: center;
 
@@ -773,11 +862,6 @@ onMounted(() => {
         label {
             margin-bottom: 4px;
         }
-
-        // input {
-        //   margin-bottom: 32px;
-        //   font-weight: 600;
-        // }
 
         div {
             display: flex;

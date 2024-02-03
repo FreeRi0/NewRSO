@@ -111,7 +111,7 @@
                                 >Выберите учебное заведение
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
+                            <!-- <Select
                                 class="form__select form__select--select"
                                 variant="outlined"
                                 clearable
@@ -120,8 +120,16 @@
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="headquarter.educational_institution"
                                 address="eduicational_institutions/"
-                            ></Select>
-                            <!-- <pre>{{ headquarter.educational_institution }}</pre> -->
+                            ></Select> -->
+                            <educInstitutionDropdown
+                                open-on-clear
+                                id="select-institution"
+                                name="select_institution"
+                                placeholder="Например, Алтайский государственный медицинский университет"
+                                v-model="headquarter.educational_institution"
+                                @update:value="changeValue"
+                                address="eduicational_institutions/"
+                            ></educInstitutionDropdown>
                             <p
                                 class="form__error"
                                 v-if="isError.educational_institution"
@@ -165,7 +173,7 @@
                                 >Выберите региональное отделение
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
+                            <!-- <Select
                                 class="form__select form__select--select"
                                 variant="outlined"
                                 clearable
@@ -174,8 +182,16 @@
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
                                 v-model="headquarter.regional_headquarter"
                                 address="regionals/"
-                            ></Select>
-                            <!-- {{ headquarter.regional_headquarter }} -->
+                            ></Select> -->
+                            <educInstitutionDropdown
+                                open-on-clear
+                                id="select-regional-office"
+                                name="select_regional-office"
+                                placeholder="Например, Карачаево-Черкесское региональное отделение"
+                                v-model="headquarter.regional_headquarter"
+                                @update:value="changeValue"
+                                address="regionals/"
+                            ></educInstitutionDropdown>
                             <p
                                 class="form__error"
                                 v-if="isError.regional_headquarter"
@@ -190,7 +206,7 @@
                             <Input
                                 class="form__input"
                                 id="city"
-                                placeholder="Например, Барнаул"
+                                placeholder="Например, Москва"
                                 name="edit_city"
                                 v-model:value="headquarter.city"
                             />
@@ -378,9 +394,15 @@
                                 :items="sortedMembers"
                                 :submited="submited"
                                 :is-error-members="isErrorMembers"
-                                v-if="members"
+                                v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
                             ></MembersList>
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                             <!-- <pre>{{ sortedMembers }}</pre> -->
                         </div>
                     </div>
@@ -805,6 +827,8 @@ import { ref, computed, onMounted } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Select } from '@shared/components/selects';
+import { educInstitutionDropdown } from '@shared/components/selects';
+import { educationalsDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
@@ -865,6 +889,10 @@ const props = defineProps({
     members: {
         type: Array,
         default: () => [],
+    },
+    isMembersLoading: {
+        type: Boolean,
+        default: false,
     },
 });
 
@@ -992,12 +1020,12 @@ const showButtonPrev = computed(() => {
 //     getMembers();
 // });
 
-const members = ref(props.members);
+// const members = ref(props.members);
 
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
-    return members.value.filter((item) => {
+    return props.members.filter((item) => {
         // return item.title
         return item.user.last_name
             .toUpperCase()
@@ -1115,6 +1143,13 @@ onMounted(() => {
         border: 2px solid #35383f;
         background-color: #ffffff;
     }
+}
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
 }
 </style>
 @shared/components/selects/inputs@shared/components/selects/inputs

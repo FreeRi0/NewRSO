@@ -5,31 +5,27 @@
         <BannerHQ
             v-if="showHQ"
             :headquarter="headquarter"
-            :edict="educt"
+            :edict="edict"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showDistrictHQ"
             :districtHeadquarter="districtHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showLocalHQ"
             :localHeadquarter="localHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showRegionalHQ"
             :regionalHeadquarter="regionalHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else
             :centralHeadquarter="centralHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <section class="about-hq">
@@ -43,14 +39,17 @@
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
-            :member="member"
+            :commander="commander"
+            :member="filteredMembers"
             head="Руководство местного штаба"
+            :position="position"
         ></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды местного штаба</h3>
             <div class="headquarters_squads__container">
                 <div
                     class="card"
+                    :key="HQandSquad.link"
                     v-for="(HQandSquad, index) in HQandSquads"
                     :class="{
                         'align-left': index % 2 === 0,
@@ -68,10 +67,11 @@
 <script setup>
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage, useCrosspageFilter } from '@shared';
+import { useCrosspageFilter } from '@shared';
+import { usePage } from '@shared';
 
 const crosspageFilters = useCrosspageFilter();
 const showLocalHQ = ref(true);
@@ -79,6 +79,8 @@ const showHQ = ref(false);
 const showDistrictHQ = ref(false);
 const showRegionalHQ = ref(false);
 
+const commander = ref({});
+const position = ref({});
 const localHeadquarter = ref({});
 const member = ref([]);
 const educt = ref({});
@@ -88,51 +90,84 @@ let id = route.params.id;
 const { replaceTargetObjects } = usePage();
 
 const aboutlocalHQ = async () => {
-    await HTTP.get(`/locals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            localHeadquarter.value = response.data;
-            replaceTargetObjects([localHeadquarter.value]);
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/locals/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        localHeadquarter.value = response.data;
+        replaceTargetObjects([localHeadquarter.value]);
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const aboutMembers = async () => {
-    await HTTP.get(`/locals/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            member.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/locals/${id}/members/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        member.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
+const filteredMembers = computed(() => {
+    return member.value.filter((manager) => {
+        return (
+            manager.position &&
+            (manager.position === 'Командир' ||
+                manager.position === 'Мастер (методист)' ||
+                manager.position === 'Комиссар')
+        );
+    });
+});
+
+const fetchCommander = async () => {
+    try {
+        let id = localHeadquarter.value.commander.id;
+
+        const response = await HTTP.get(`/users/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        commander.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('An error occurred:', error);
+    }
+};
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutlocalHQ();
         aboutMembers();
+        fetchCommander();
     }
 });
 watch(
     () => route.params.id,
 
-    (newId, oldId) => {
+    async (newId) => {
         id = newId;
-        aboutlocalHQ();
-        aboutMembers();
+        await aboutlocalHQ();
+        await aboutMembers();
+        await fetchCommander();
+    },
+    {
+        immediate: true,
     },
 );
 

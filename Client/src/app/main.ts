@@ -6,7 +6,7 @@ import 'vuetify/styles';
 import '@mdi/font/css/materialdesignicons.css';
 import PrimeVue from 'primevue/config';
 import FileUpload from 'primevue/fileupload';
-import { createPinia } from "pinia";
+import { createPinia } from 'pinia';
 import InputMask from 'primevue/inputmask';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -23,8 +23,16 @@ const vuetify = createVuetify({
     icons,
 });
 
-createApp(App).use(vuetify).use(createPinia()).use(VueSweetalert2).use(PrimeVue, {
-    locale: {
-        emptyFilterMessage: 'Ничего не найдено',
-    },
-}).use(router).component('FileUpload', FileUpload).component('InputMask', InputMask).mount('#app');
+createApp(App)
+    .use(vuetify)
+    .use(createPinia())
+    .use(VueSweetalert2)
+    .use(PrimeVue, {
+        locale: {
+            emptyFilterMessage: 'Ничего не найдено',
+        },
+    })
+    .use(router)
+    .component('FileUpload', FileUpload)
+    .component('InputMask', InputMask)
+    .mount('#app');

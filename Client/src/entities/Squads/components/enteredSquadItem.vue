@@ -9,17 +9,20 @@
             />
         </div>
 
-        <div class="horizontallso-item__wrapper mr-3">
+        <router-link
+            :to="{
+                name: 'PersonalDataUser',
+                params: { id: detachment.user.id },
+            }"
+            class="horizontallso-item__wrapper mr-3"
+        >
             <div class="horizontallso-img">
                 <img
-                    :src="detachment?.user?.media?.photo"
+                    :src="detachment.user.media?.photo"
                     alt="logo"
-                    v-if="detachment?.user?.media?.photo"
+                    v-if="detachment.user.media?.photo"
                 />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                />
+                <img src="@app/assets/user-avatar.png" alt="photo" />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
@@ -43,19 +46,11 @@
                     <p>{{ detachment.user.date_of_birth }}</p>
                 </div>
             </div>
-        </div>
+        </router-link>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img
-                    :src="squad.emblem"
-                    alt="logo"
-                    v-if="squad.emblem"
-                />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                    v-else
-                />
+                <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
+                <img src="@app/assets/hq-emblem.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
@@ -81,7 +76,7 @@ const props = defineProps({
         required: true,
     },
     squad: {
-        type: Object
+        type: Object,
     },
     selectedSquads: {
         type: Array,
@@ -89,7 +84,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['change']);
+const emit = defineEmits(['change', 'approveMember', 'rejectMember']);
 const checked = ref(false);
 const updateCheckSquad = (e) => {
     console.log('ddddddSquad', checked.value);
@@ -110,7 +105,7 @@ const viewSquad = async () => {
         },
     })
         .then((response) => {
-           squad.value = response.data;
+            squad.value = response.data;
             console.log(response);
         })
         .catch(function (error) {
@@ -119,7 +114,7 @@ const viewSquad = async () => {
 };
 onMounted(() => {
     viewSquad();
-})
+});
 
 watch(
     () => props.selectedSquads,
@@ -199,7 +194,6 @@ watch(
 }
 
 .horizontallso-item__list-date {
-    // width: 95px;
     display: grid;
     grid-template-columns: auto 1fr 0fr;
 }
