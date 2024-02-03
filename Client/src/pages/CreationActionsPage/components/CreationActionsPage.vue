@@ -393,7 +393,7 @@
                                     <label class="form-label" for="action-start-hq">Начало мероприятия<sup class="valid-red">*</sup></label>
                                     <InputText
                                         id="action-start-hq"
-                                        v-model='timeData.timeStart'
+                                        v-model='time_data.start_date'
                                         class="form__input form-input-container"
                                         placeholder="Например 26.06.2024"
                                         name="action-start-hq"
@@ -404,7 +404,7 @@
                                     <label class="form-label" for="action-end-hq">Окончание мероприятия</label>
                                     <InputText
                                         id="action-end-hq"
-                                        v-model='timeData.timeEnd'
+                                        v-model='time_data.end_date'
                                         class="form__input form-input-container"
                                         placeholder="Например 27.06.2024"
                                         name="action-end-hq"
@@ -416,7 +416,7 @@
                                     <InputText
                                         id="end-registration-hq"
                                         class="form__input form-input-container"
-                                        v-model='timeData.timeregistrationEnd'
+                                        v-model='time_data.registration_end_date'
                                         placeholder="Например, 15.05.2023"
                                         name="end-registration-hq"
                                         type='date'
@@ -429,7 +429,7 @@
                                     <InputText
                                         id="action-hours-start-hq"
                                         class="form__input form-input-container"
-                                        v-model="timeData.timehourStart"
+                                        v-model="time_data.start_time"
                                         placeholder="Например 7:30"
                                         name="action-hours-start-hq"
                                         type="time"
@@ -441,7 +441,7 @@
                                     <InputText
                                         id="action-hours-end-hq"
                                         class="form__input form-input-container"
-                                        v-model="timeData.timehourEnd"
+                                        v-model="time_data.registration_end_time"
                                         placeholder="Например 18:30"
                                         name="action-hours-end-hq"
                                         type="time"
@@ -449,7 +449,7 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label class='flex align-items-center' style='display: flex'>
+                                    <!----<label class='flex align-items-center' style='display: flex'>
                                         <div class="flex align-items-center">
                                             <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
                                             <label for="hours1" class="ml-2">За час</label>
@@ -462,7 +462,7 @@
                                             <input v-model='timeData.hour' value="3" name="hours3" type='radio' class='form-radio'/>
                                             <label for="hours3" class="ml-2">За 3 часа</label>
                                         </div>
-                                    </label>
+                                    </label> -->
                                 </div>
                             </div>
                         </div>
@@ -538,32 +538,32 @@
                                 Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.</label>
                                 <v-container fluid>
                                     <v-checkbox
-                                        v-model="documents.passport"
+                                        v-model="maininfo.document_data.passport"
                                         :binary="true"
                                         label="Паспорт"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.snils"
+                                        v-model="maininfo.document_data.snils"
                                         :binary="true"
                                         label="СНИЛС"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.inn"
+                                        v-model="maininfo.document_data.inn"
                                         :binary="true"
                                         label="ИНН"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.work_book"
+                                        v-model="maininfo.document_data.work_book"
                                         :binary="true"
                                         label="Трудовая книжка"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.military_document"
+                                        v-model="maininfo.document_data.military_document"
                                         :binary="true"
                                         label="Военный билет или препистное свидетельство"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.consent_personal_data"
+                                        v-model="maininfo.document_data.consent_personal_data"
                                         :binary="true"
                                         label="Согласие на обработку персональных данных"
                                     ></v-checkbox>
@@ -587,7 +587,7 @@
                                 </div>
                                 <div class='form-col-100'>
                                     <label class="form-label">Расскажите, с какими документами необходимо просто ознакомиться, а какие скачать и заполнить</label>
-                                    <textarea class="form__textarea" />
+                                    <textarea v-model="maininfo.document_data.additional_info" class="form__textarea" />
                                 </div>
                             </div>
                         </div>
@@ -823,7 +823,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { ref, inject } from 'vue';
-import { createAction, createOrganizator } from '@services/ActionService';
+import { createAction, createOrganizator, putTimeData } from '@services/ActionService';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute, useRouter } from 'vue-router';
 import { uploadPhoto } from '@shared/components/imagescomp';
@@ -845,7 +845,16 @@ const maininfo = ref({
     description: '',
     participants_number: Number,
     application_type: '',
-    available_structural_units: ''
+    available_structural_units: '',
+    document_data: {
+      passport: false,
+      snils: false,
+      inn: false,
+      work_book: false,
+      military_document: false,
+      consent_personal_data: false,
+      additional_info: '',
+    }
 })
 
 const urlBanner = ref(null);
@@ -867,15 +876,14 @@ const scale_massive = ref([
     {name:"Городское"},
     {name:"Региональное"},
     {name:"Окружное"},
-    {name:"Городское"}])
+    {name:"Всероссийское"}])
 
 const direction_massive = ref([
     {name:"Добровольческое"},
     {name:"Образовательное"},
     {name:"Патриотическое"},
-    {name:"Региональное"},
-    {name:"Окружное"},
-    {name:"Всероссийское"}])
+    {name:"Спортивное"},
+    {name:"Творческое"}])
 
 const available_structural_units = ref([
     {name: "Отряды"},
@@ -892,15 +900,14 @@ const area_massive = ref([
     {name: "Окружной штаб"}
 ])
 
-//Переменные даты 
-
-const timeData = ref({
-    timeStart: '',
-    timehourStart: '',
-    timeEnd: '',
-    timehourEnd: '',
-    timeregistrationEnd: '',
-    hour: '',
+const time_data = ref({
+    event_duration_type: '',
+    start_date: '',
+    start_time: '',
+    end_date: '',
+    end_time: '',
+    registration_end_date: '',
+    registration_end_time: ''
 })
 
 //Переменные организаторов
@@ -913,17 +920,6 @@ const organizators = ref([{
     telegram: '',
     is_contact_person: false
 }])
-
-//Форма документов
-const documents = ref({
-    passport: false,
-    snils: false,
-    inn: false,
-    work_book: false,
-    military_document: false,
-    consent_personal_data: false,
-    additional_info: ''
-})
 
 //Ответы на вопросы
 const answers = ref([
@@ -955,29 +951,24 @@ function SubmitEvent(){
     fd.append('banner', maininfo.banner);*/
     createAction(maininfo.value)
     .then((resp)=>{
-        console.log("Форма передалась успешно", resp.value)
-        createOrganizator(resp.value.id)
+        console.log("Форма передалась успешно", resp.data)
+        createOrganizator(resp.data.id)
         .then((resp)=>{
-            router.push({name: "actionSquads"})
+            console.log("Организаторы добавлены", resp.data)
         })
         .catch((e)=>{
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'Не удалось добавить организаторов',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+            console.log(e)
         })
+        putTimeData(resp.data.id).then((resp)=>{
+            console.log("Время изменено", resp.data)
+        })
+        .catch((e)=>{
+
+        })
+        router.push({name: "Action", params: {id: props.action.id}});
     })
     .catch((e)=>{
-        console.swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'Не удалось создать мероприятие',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+
     })
 }
 
