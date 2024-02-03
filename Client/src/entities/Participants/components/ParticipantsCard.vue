@@ -1,4 +1,3 @@
-
 <template>
     <div class='postcard' @click='RouteToAction'>
         <img :src="action.banner" class='postcard-image' alt='Изображение'/>
@@ -16,11 +15,6 @@
 </template>
 
 <script setup>
-
-import { useRouter, useRoute } from 'vue-router';
-
-const router = useRouter();
-const route = useRoute();
 //Параметры модели
 const props = defineProps({
     action:{
@@ -46,13 +40,6 @@ const props = defineProps({
     }
 })
 
-//Функция обработки перехода
-function RouteToAction(){
-    router.push({name: "Action", params: {id: props.action.id}}); //Работает
-}
-
 </script>
 
-<style lang='scss' scoped>
-
-</style>
+<style></style>

@@ -5,33 +5,10 @@
             label="Создать мероприятие"
             name="createAction"
         ></bannerCreate>
-
-        <h2 class="action-title">Мероприятия</h2>
-        <div class="searcher">
-            <div class="squads-search">
-                <input
-                    type="text"
-                    id="search"
-                    class="squads-search__input"
-                    placeholder="Найти мероприятие"
-                    v-model="nameSearch"
-                />
-                <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 28 28"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z"
-                        stroke="#898989"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-                </svg>
-            </div>
+            label="Создать мероприятие" name='createAction'></bannerCreate>
+        <h2 class='action-title'>Мероприятия</h2>
+        <div class='searcher'>
+            <SearchInput @search="SearchByInput"></SearchInput>
         </div>
         <div class="row-cols-2 action-slides">
             <div class="col settings-container">
@@ -173,18 +150,11 @@
             <!--Привет) Страницы мероприятий писал и подключал Modestra -->
             <!--Я в поисках работы, если вам требуется Frontend разработчик, пишите сюда -->
             <!--https://t.me/Modestra -->
-
-            <div class="col" style="width: 100%">
-                <div class="sort-container">
-                    <div class="sort-layout sort-types">
-                        <Button
-                            v-if="vertical"
-                            type="button"
-                            class="dashboard sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
+            <div class='col' style='width: 100%'>
+                <div class='sort-container'>
+                    <div class='sort-layout sort-types'>
+                        <Button v-if='vertical' type='button' class='dashboard sort-button' icon='icon' color='white'
+                                @click='showVertical'>
                         </Button>
                         <Button
                             v-else="!vertical"
@@ -249,29 +219,45 @@
 
 <script setup>
 //Импорт файлов
-
-import Button from 'primevue/button';
-import BannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
+import SearchInput from "@features/ActionForm/components/SearchInput.vue";
+import Button from "primevue/button";
+import bannerCreate from "@shared/components/imagescomp/bannerCreate.vue";
 import { ref } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { getListActions } from '@services/ActionService';
-import { computed } from 'vue';
+import { computed } from "vue";
+import { onActivated } from "vue";
 
 let actionsList = ref([]);
 
-getListActions()
-    .then((responce) => {
-        actionsList.value = responce.data;
-        console.log('Список мероприятий:', actionsList.value);
+//Массив полученных значений
+const SortedList = ref([])
+
+const SearchResult = ref('')
+
+//Поиск нового значения
+function SearchByInput(){
+  actionsList.value.forEach((action)=>{
+    if(actionsList.value.name.includes(SearchByInput.value)){
+      SortedList.value.push(action)
+    }
+  })
+  console.log(SortedList.value)
+}
+onActivated(()=>{
+  getListActions()
+    .then((responce)=>{
+      actionsList.value = responce.data;
     })
-    .catch((e) => {});
+    .catch((e) =>{
 
-//Переменные компонента
-const nameSearch = ref('');
-
-const actionNewList = computed(() => {});
+    })
+})
+const actionNewList = computed(() => {
+  console.log(sortBy);
+})
 
 //Сортировка
 const vertical = ref(true);
@@ -420,39 +406,21 @@ const sortOptionss = ref([
     background-repeat: no-repeat;
     background-size: cover;
 }
-
-.menuu {
-    background-image: url('@app/assets/icon/Menu.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-.ascend {
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
-//Стиль карточки
-.postcard {
-    &-container {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+    .menuu {
+      background-image: url('@app/assets/icon/Menu.svg');
+      background-repeat: no-repeat;
+      background-size: cover;
     }
-    &-containerline {
-        display: flex;
-        width: 100%;
-        flex-direction: column;
+    .ascend {
+      background-image: url('@app/assets/icon/switch.svg');
+      background-repeat: no-repeat;
+      background-position: center;
     }
-}
-//Стиль поисковика
-.searcher {
-    width: 100%;
-    height: 50px;
-    margin-bottom: 40px;
-}
-.squads-search {
-    position: relative;
-    box-sizing: border-box;
+    //Стиль поисковика
+    .searcher {
+      width: 100%;
+      height: 50px;
+      margin-bottom: 40px;
 
     svg {
         position: absolute;
@@ -465,6 +433,39 @@ const sortOptionss = ref([
         padding: 13px 0px 10px 60px;
         border-radius: 10px;
         border: 1px solid black;
+    }
+    //Сброс стилей аккордиона
+    .v-expansion-panel {
+    &__shadow {
+        box-shadow: none;
+    }
+
+    &--active,
+    &--after-active {
+        margin: 0;
+    }
+
+    &--active:not(:first-child) {
+        margin: 0;
+    }
+
+    &--active + .v-expansion-panel {
+        margin: 0;
+    }
+
+    .v-expansion-panel-title {
+        max-height: 60px;
+        font-family: 'Akrobat';
+        font-size: 24px;
+        font-weight: 600;
+        background-color: transparent;
+        border-bottom: 1px solid #939393;
+        color: #35383f;
+        padding: 16px 0px;
+
+        &__overlay {
+            display: none;
+        }
     }
 }
 </style>
