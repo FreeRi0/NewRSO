@@ -6,31 +6,7 @@
 
         <h2 class='action-title'>Мероприятия</h2>
         <div class='searcher'>
-            <div class='squads-search'>
-                <input
-                    type='text'
-                    id='search'
-                    class='squads-search__input'
-                    placeholder='Найти мероприятие'
-                    v-model='nameSearch'
-                    @keyup.enter = "SearchOnChange"
-                />
-                <svg
-                    width='28'
-                    height='28'
-                    viewBox='0 0 28 28'
-                    fill='none'
-                    xmlns='http://www.w3.org/2000/svg'
-                >
-                    <path
-                        d='M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z'
-                        stroke='#898989'
-                        stroke-width='2'
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
-                    />
-                </svg>
-            </div>
+            <SearchInput @search="SearchByInput"></SearchInput>
         </div>
         <div class='row-cols-2 action-slides'>
             <div class='col settings-container'>
@@ -141,6 +117,7 @@
 <script setup>
 //Импорт файлов
 
+import SearchInput from "@features/ActionForm/components/SearchInput.vue";
 import Button from "primevue/button";
 import bannerCreate from "@shared/components/imagescomp/bannerCreate.vue";
 import { ref } from 'vue';
@@ -152,23 +129,30 @@ import { computed } from "vue";
 import { onActivated } from "vue";
 
 let actionsList = ref([]);
+
+//Массив полученных значений
+const SortedList = ref([])
+
+const SearchResult = ref('')
+
+//Поиск нового значения
+function SearchByInput(){
+  actionsList.value.forEach((action)=>{
+    if(actionsList.value.name.includes(SearchByInput.value)){
+      SortedList.value.push(action)
+    }
+  })
+  console.log(SortedList.value)
+}
 onActivated(()=>{
   getListActions()
     .then((responce)=>{
       actionsList.value = responce.data;
-      console.log(actionsList)
     })
     .catch((e) =>{
 
     })
 })
-
-//Переменные компонента
-const nameSearch = ref('');
-
-function SearchOnChange(){
-  SelectActionsByName();
-}
 const actionNewList = computed(() => {
   console.log(sortBy);
 })
@@ -361,4 +345,38 @@ const sortOptionss = ref([
         border: 1px solid black;
       }
     }
+    //Сброс стилей аккордиона
+    .v-expansion-panel {
+    &__shadow {
+        box-shadow: none;
+    }
+
+    &--active,
+    &--after-active {
+        margin: 0;
+    }
+
+    &--active:not(:first-child) {
+        margin: 0;
+    }
+
+    &--active + .v-expansion-panel {
+        margin: 0;
+    }
+
+    .v-expansion-panel-title {
+        max-height: 60px;
+        font-family: 'Akrobat';
+        font-size: 24px;
+        font-weight: 600;
+        background-color: transparent;
+        border-bottom: 1px solid #939393;
+        color: #35383f;
+        padding: 16px 0px;
+
+        &__overlay {
+            display: none;
+        }
+    }
+}
 </style>
