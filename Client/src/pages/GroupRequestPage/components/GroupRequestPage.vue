@@ -1,6 +1,9 @@
 <template>
     <div class="container">
+<<<<<<< Updated upstream
         <Breadcrumbs :items="pages"></Breadcrumbs>
+=======
+>>>>>>> Stashed changes
         <p class="main_title">Групповая заявка</p>
         <p class="subtitle">Подал:</p>
         <div class="horizontallso-item__wrapper">
@@ -64,6 +67,7 @@
 </template>
 
 <script setup>
+<<<<<<< Updated upstream
 import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { ref } from 'vue';
 const pages = ref([
@@ -71,6 +75,10 @@ const pages = ref([
     { pageTitle: 'Мистер и Мисс РСО | Санкт-пете...', href: '#' },
     { pageTitle: 'Заявка на участие', href: '#' },
 ]);
+=======
+import { ref } from 'vue';
+
+>>>>>>> Stashed changes
 const requestUser = ref({
     id: 1,
     user: [
