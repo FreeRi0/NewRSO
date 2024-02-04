@@ -54,26 +54,47 @@ import ActiveCompetitionItem from './ActiveCompetitionItem.vue';
 import ActiveCompetitionItemSelect from './ActiveCompetitionItemSelect.vue';
 
 const competitionsList = ref([]);
+const headquarterId = ref();
 const selectedCompetitionsList = ref([]);
 
 const loading = ref(false);
 const action = ref('Одобрить');
 const actionsList = ref(['Одобрить', 'Отклонить']);
 
-const getCompetitions = async () => {
+const getMeCommander = async () => {
     try {
-        loading.value = true;
-
-        const { data } = await HTTP.get('/competitions/1/applications/', {
+        const { data } = await HTTP.get('/rsousers/me_commander/', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+        headquarterId.value = data;
+        console.log(headquarterId.value.regionalheadquarter_commander);
+    } catch (e) {
+        console.log('error getMeCommander', e);
+    }
+};
+
+const getCompetitions = async () => {
+    try {
+        loading.value = true;
+        console.log(headquarterId.value.regionalheadquarter_commander);
+        const { data } = await HTTP.get(
+            `/competitions/${headquarterId?.value?.regionalheadquarter_commander}/applications/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
 
         competitionsList.value = data;
     } catch (e) {
-        console.log('error', e);
+        console.log(headquarterId);
+        console.log(headquarterId.value.regionalheadquarter_commander);
+        console.log('error getCompetitions', e);
     } finally {
         loading.value = false;
     }
@@ -134,10 +155,12 @@ const onAction = async () => {
 };
 
 onMounted(() => {
+    getMeCommander();
     getCompetitions();
 });
 
 onActivated(() => {
+    getMeCommander();
     getCompetitions();
 });
 </script>
