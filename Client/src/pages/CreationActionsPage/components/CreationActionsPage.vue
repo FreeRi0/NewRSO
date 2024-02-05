@@ -1034,9 +1034,6 @@ function AddQuestion(){
     flex-direction: row;
   }
   &-radio{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     margin-left: 10px;
   }
   &-radio input{

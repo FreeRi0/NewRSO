@@ -5,10 +5,33 @@
             label="Создать мероприятие"
             name="createAction"
         ></bannerCreate>
-            label="Создать мероприятие" name='createAction'></bannerCreate>
         <h2 class='action-title'>Мероприятия</h2>
         <div class='searcher'>
-            <SearchInput @search="SearchByInput"></SearchInput>
+          <div class='squads-search'>
+        <input
+            type='text'
+            id='search'
+            class='squads-search__input'
+            placeholder='Найти мероприятие'
+            v-model="text"
+            @input = "SearchByInput"
+        />
+        <svg
+            width='28'
+            height='28'
+            viewBox='0 0 28 28'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+        >
+            <path
+                d='M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z'
+                stroke='#898989'
+                stroke-width='2'
+                stroke-linecap='round'
+                stroke-linejoin='round'
+            />
+        </svg>
+    </div>
         </div>
         <div class='row-cols-2 action-slides'>
             <div class='col settings-container'>
@@ -16,11 +39,11 @@
                         <v-expansion-panel class='settings-body' title="Тип мероприятия">
                             <v-expansion-panel-text>
                               <div class="settings-checkbox">
-                                  <input v-model="actionFormSearch.format" value="Онлайн" type="checkbox" name="online" />
+                                  <input v-model="actionFormSearch.format.online" value="Онлайн" type="checkbox" name="online" />
                                   <label for="online">Онлайн</label>
                               </div>
                               <div class="settings-checkbox">
-                                  <input value="Оффлайн" type="checkbox" name="offline" />
+                                  <input v-model="actionFormSearch.format.offline" value="Оффлайн" type="checkbox" name="offline" />
                                   <label for="offline">Оффлайн</label>
                               </div>
                             </v-expansion-panel-text>
@@ -148,25 +171,29 @@ import { ref } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { getListActions } from '@services/ActionService';
+import { getListActions, getListActionsBySearch } from '@services/ActionService';
 import { computed } from "vue";
 import { onActivated } from "vue";
 
 let actionsList = ref([]);
 
 //Массив полученных значений
-const SortedList = ref([])
+const SortedList = ref([]);
 
-const SearchResult = ref('')
+const text = ref('');
 
 //Поиск нового значения
 function SearchByInput(){
-  actionsList.value.forEach((action)=>{
-    if(actionsList.value.name.includes(SearchByInput.value)){
-      SortedList.value.push(action)
-    }
-  })
-  console.log(SortedList.value)
+  if(text.value.length <= 4){
+    return;
+  }
+  else{
+    getListActionsBySearch(text.value)
+    .then((resp)=>{
+      actionsList.value = resp.data
+      console.log(actionsList.value)
+    })
+  }
 }
 onActivated(()=>{
   getListActions()
@@ -191,12 +218,15 @@ function ClearSearchForm() {
 }
 
 const actionFormSearch = ref({
-        format: '',
+        format: {
+          online: null,
+          offline: null,
+        },
         direction: '',
         status: '',
         roads: '',
-        search: ''
-    })
+        search: '',
+    });
 function SendSearchForm() {
     console.log(actionFormSearch);
 }
@@ -415,5 +445,6 @@ const sortOptionss = ref([
             display: none;
         }
     }
-}
+      }
+    }
 </style>

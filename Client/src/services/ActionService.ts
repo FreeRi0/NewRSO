@@ -9,6 +9,14 @@ export function getListActions(){
        }
    });
 }
+export function getListActionsBySearch(text: string){
+    return HTTP.get(`/events/?search=${text}`, {
+        headers:{
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        }
+    });
+}
 //Изменить дату мероприятия
 export function putTimeData(id: number, data: object){
     return HTTP.put(`/events/${id}/time_data/`, data, {

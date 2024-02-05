@@ -1,6 +1,4 @@
-import path from 'path';
 import { type RouteRecordRaw } from 'vue-router';
-import { components } from 'vuetify/dist/vuetify-labs.js';
 
 const routes: RouteRecordRaw[] = [
     {

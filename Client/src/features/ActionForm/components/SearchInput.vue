@@ -5,7 +5,7 @@
             id='search'
             class='squads-search__input'
             placeholder='Найти мероприятие'
-            v-model="text"
+            :value = 'value'
             @input = "SearchByInput"
         />
         <svg
@@ -29,16 +29,18 @@
 <script setup>
 import { ref } from 'vue';
 
-const emit = defineEmits(['search'])
+const emit = defineEmits(['search:value'])
 
 const text = ref('')
 
 const props = defineProps({
-
+    value:{
+        type: String
+    }
 })
 
-function SearchByInput(){
-    emit("search", text.value)
+const SearchByInput = (event) => {
+    emit("search:value", event.target.value)
 }
 
 </script>

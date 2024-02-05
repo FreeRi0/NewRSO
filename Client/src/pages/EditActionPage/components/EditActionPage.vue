@@ -124,7 +124,6 @@
                                         name="demo[]" 
                                         accept=".pdf, .jpeg, .png" 
                                         :maxFileSize="7000000"
-                                        v-model="maininfo.banner"
                                     >
                                         <template #header="{ chooseCallback }">
                                             <button @click="chooseCallback()" class="upload">
@@ -286,7 +285,7 @@
                                     <label class="form-label" for="action-start-hq">Начало мероприятия<sup class="valid-red">*</sup></label>
                                     <InputText
                                         id="action-start-hq"
-                                        v-model='timeData.start_date'
+                                        v-model='maininfo.time_data.start_date'
                                         class="form__input form-input-container"
                                         placeholder="Например 26.06.2024"
                                         name="action-start-hq"
@@ -297,7 +296,7 @@
                                     <label class="form-label" for="action-end-hq">Окончание мероприятия</label>
                                     <InputText
                                         id="action-end-hq"
-                                        v-model='timeData.end_date'
+                                        v-model='maininfo.time_data.end_date'
                                         class="form__input form-input-container"
                                         placeholder="Например 27.06.2024"
                                         name="action-end-hq"
@@ -309,7 +308,7 @@
                                     <InputText
                                         id="end-registration-hq"
                                         class="form__input form-input-container"
-                                        v-model='timeData.registration_end_date'
+                                        v-model='maininfo.time_data.registration_end_date'
                                         placeholder="Например, 15.05.2023"
                                         name="end-registration-hq"
                                         type='date'
@@ -322,7 +321,7 @@
                                     <InputText
                                         id="action-hours-start-hq"
                                         class="form__input form-input-container"
-                                        v-model="timeData.start_time"
+                                        v-model="maininfo.time_data.start_time"
                                         placeholder="Например 7:30"
                                         name="action-hours-start-hq"
                                         type="time"
@@ -334,7 +333,7 @@
                                     <InputText
                                         id="action-hours-end-hq"
                                         class="form__input form-input-container"
-                                        v-model="timeData.end_time"
+                                        v-model="maininfo.time_data.end_time"
                                         placeholder="Например 18:30"
                                         name="action-hours-end-hq"
                                         type="time"
@@ -342,7 +341,7 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label class='flex align-items-center' style='display: flex'>
+                                    <!--<label class='flex align-items-center' style='display: flex'>
                                         <div class="flex align-items-center">
                                             <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
                                             <label for="hours1" class="ml-2">За час</label>
@@ -355,7 +354,7 @@
                                             <input v-model='timeData.hour' value="3" name="hours3" type='radio' class='form-radio'/>
                                             <label for="hours3" class="ml-2">За 3 часа</label>
                                         </div>
-                                    </label>
+                                    </label> -->
                                 </div>
                             </div>
                         </div>
@@ -724,7 +723,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
-import { getAction, createAction, createOrganizator, getOrganizator, putAction, putOrganizator } from '@services/ActionService';
+import { getAction, createAction, createOrganizator, getOrganizator, putAction, putOrganizator, putTimeData } from '@services/ActionService';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { uploadPhoto } from '@shared/components/imagescomp';
@@ -732,11 +731,13 @@ import FileUpload from 'primevue/fileupload';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import textarea from '@shared/components/inputs/textarea.vue';
+import { onActivated } from 'vue';
 const router = useRoute();
 
 const id = router.params.id;
 
-getAction(id)
+onActivated(()=>{
+    getAction(id)
     .then((resp)=>{
         maininfo.value = resp.data
         getOrganizator(id)
@@ -750,6 +751,7 @@ getAction(id)
     .catch((e)=>{
         console.log(e)
     })
+})
 
 //Переменные для основной формы
 
@@ -774,13 +776,22 @@ const maininfo = ref({
     direction: '',
     name: '',
     scale: '',
-    banner: '',
+    //banner: null,
     conference_link: '',
     address: '',
     description: '',
     participants_number: Number,
     application_type: '',
     available_structural_units: '',
+    time_data: {
+        event_duration_type: '',
+        start_date: '',
+        start_time: '',
+        end_date: '',
+        end_time: '',
+        registration_end_date: '',
+        registration_end_time: ''
+    },
     document_data:{
         additional_info: '',
         consent_personal_data: false,
@@ -820,15 +831,6 @@ const organizators = ref([{
     is_contact_person: false
 }])
 
-const timeData = {
-        start_date: '',
-        start_time: '',
-        end_date: '',
-        end_time: '',
-        registration_end_date: '',
-        hour: '',
-    }
-
 //Ответы на вопросы
 const answers = ref([[
     {
@@ -855,9 +857,16 @@ function AddOrganizator(){
     });
 }
 function SubmitEvent(){
-    console.log(maininfo.value)
-    putAction(id, maininfo)
+    putAction(id, maininfo.value)
         .then((resp)=>{
+            console.log("Удалось изменить данные", resp.data)
+            putTimeData(resp.data.id, maininfo.time_data.value)
+                .then((resp)=>{
+                    console.log("Удалось изменить время", resp.data)
+                })
+                .catch((e)=>{
+                    console.log(e);
+                })
             putOrganizator(id, organizator)
             .then((resp)=>{
                 router.push("/")
