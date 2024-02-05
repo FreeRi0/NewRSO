@@ -409,36 +409,37 @@ const sortOptionss = ref([
     background-repeat: no-repeat;
     background-size: cover;
 }
-    .menuu {
-      background-image: url('@app/assets/icon/Menu.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-    .ascend {
-      background-image: url('@app/assets/icon/switch.svg');
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-    //Стиль поисковика
-    .searcher {
-      width: 100%;
-      height: 50px;
-      margin-bottom: 40px;
+.menuu {
+    background-image: url('@app/assets/icon/Menu.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.ascend {
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+//Стиль поисковика
+.searcher {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 40px;
+}
 
-    svg {
-        position: absolute;
-        top: 10px;
-        left: 16px;
-    }
+svg {
+    position: absolute;
+    top: 10px;
+    left: 16px;
+}
 
-    &__input {
-        width: 100%;
-        padding: 13px 0px 10px 60px;
-        border-radius: 10px;
-        border: 1px solid black;
-    }
-    //Сброс стилей аккордиона
-    .v-expansion-panel {
+input {
+    width: 100%;
+    padding: 13px 0px 10px 60px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+//Сброс стилей аккордиона
+.v-expansion-panel {
     &__shadow {
         box-shadow: none;
     }
