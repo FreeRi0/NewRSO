@@ -16,12 +16,16 @@
                 />
             </div>
             <div class="competitions__list">
-                <active-competition-item
+                <template  
                     v-for="competition in competitionsList"
                     :key="competition.id"
-                    :competition="competition"
-                    @select="onToggleSelectCompetition"
-                />
+                >
+                    <active-competition-item
+                        v-if="competition.is_confirmed_by_junior || (competition.junior_detachment.id == commanderIds.detachment_commander && !competition.is_confirmed_by_junior)"
+                        :competition="competition"
+                        @select="onToggleSelectCompetition"
+                    />
+                </template>
 
                 <p>Итого: {{ selectedCompetitionsList.length }}</p>
 
@@ -54,7 +58,7 @@ import ActiveCompetitionItem from './ActiveCompetitionItem.vue';
 import ActiveCompetitionItemSelect from './ActiveCompetitionItemSelect.vue';
 
 const competitionsList = ref([]);
-const headquarterId = ref();
+const commanderIds = ref();
 const selectedCompetitionsList = ref([]);
 
 const loading = ref(false);
@@ -69,8 +73,8 @@ const getMeCommander = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        headquarterId.value = data;
-        console.log(headquarterId.value.regionalheadquarter_commander);
+        commanderIds.value = data;
+        console.log(commanderIds.value.regionalheadquarter_commander);
     } catch (e) {
         console.log('error getMeCommander', e);
     }
@@ -79,9 +83,9 @@ const getMeCommander = async () => {
 const getCompetitions = async () => {
     try {
         loading.value = true;
-        console.log(headquarterId.value.regionalheadquarter_commander);
+        console.log(commanderIds.value.regionalheadquarter_commander);
         const { data } = await HTTP.get(
-            `/competitions/${headquarterId?.value?.regionalheadquarter_commander}/applications/`,
+            `/competitions/${commanderIds?.value?.regionalheadquarter_commander}/applications/`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -92,8 +96,8 @@ const getCompetitions = async () => {
 
         competitionsList.value = data;
     } catch (e) {
-        console.log(headquarterId);
-        console.log(headquarterId.value.regionalheadquarter_commander);
+        console.log(commanderIds);
+        console.log(commanderIds.value.regionalheadquarter_commander);
         console.log('error getCompetitions', e);
     } finally {
         loading.value = false;
@@ -112,9 +116,9 @@ const onToggleSelectCompetition = (competition, isChecked) => {
     }
 };
 
-const confirmApplication = async (id) => {
+const confirmApplication = async (id, competitionId) => {
     await HTTP.post(
-        `/competitions/${headquarterId?.value?.regionalheadquarter_commander}/applications/${id}/confirm/`,
+        `/competitions/${competitionId}/applications/${id}/confirm/`,
         {},
         {
             headers: {
@@ -125,15 +129,16 @@ const confirmApplication = async (id) => {
     );
 };
 
-const cancelApplication = async (id) => {
+const cancelApplication = async (id, competitionId) => {
     await HTTP.delete(
-        `/competitions/${headquarterId?.value?.regionalheadquarter_commander}/applications/${id}`,
-        {},
+        `/competitions/${competitionId}/applications/${id}`,
         {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
+        },
+        {
         },
     );
 };
@@ -142,9 +147,9 @@ const onAction = async () => {
     try {
         for (const application of selectedCompetitionsList.value) {
             if (action.value === 'Одобрить') {
-                await confirmApplication(application.id);
+                await confirmApplication(application.id, application.competition.id);
             } else {
-                await cancelApplication(application.id);
+                await cancelApplication(application.id, application.competition.id);
             }
         }
 
