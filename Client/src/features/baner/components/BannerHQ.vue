@@ -414,20 +414,23 @@
                                     />
                                 </a>
                             </div>
-                            <!-- <pre>{{ centralHeadquarter.commander.id }}</pre> -->
+                            <!-- <pre>{{ centralHeadquarter.commander.id }}</pre>
+                            <pre>{{  IsTrusted }}</pre> -->
                         </div>
                     </div>
                     <router-link
                         v-if="
-                            userId === centralHeadquarter?.commander?.id ||
-                            IsTrusted
+                            userId && (userId === centralHeadquarter?.commander?.id ||
+                            IsTrusted)
                         "
+
                         class="hq-data__link"
                         :to="{
                             name: 'FormCentral',
                         }"
                         >Редактировать штаб</router-link
                     >
+
                 </div>
             </div>
         </div>
@@ -491,9 +494,11 @@ const props = defineProps({
     },
 });
 
+
+
 const aboutEduc = async () => {
     try {
-        let id = props.headquarter.educational_institution.id;
+        let id = props.headquarter?.educational_institution.id;
         console.log('headquarter', props.headquarter);
         console.log('id', id);
         const response = await HTTP.get(`/eduicational_institutions/${id}/`, {
@@ -515,6 +520,7 @@ const IsTrusted = computed(() => {
         (item) => item.user.id === userId.value && item.is_trusted === true,
     );
 });
+
 watch(
     () => props.headquarter,
 

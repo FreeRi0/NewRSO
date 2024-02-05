@@ -98,6 +98,7 @@
                                     variant="outlined"
                                     name="select_education"
                                     id="select-education"
+                                    clearable
                                     v-model="education"
                                     address="/eduicational_institutions/"
                                     placeholder="Образовательная организация"

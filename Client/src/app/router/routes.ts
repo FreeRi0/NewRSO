@@ -431,7 +431,7 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             //----------------------Конец Структуры - ЛСО/Штабы/Создание/Редактирование---------------------------------------------------------96cb9a («.»)
-            
+
             //Мероприятия
             {
                 path: '/actionSquads',
@@ -454,7 +454,7 @@ const routes: RouteRecordRaw[] = [
                 path: "/actionSquads/:id/EditAction",
                 name: "editAction",
                 component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
-            }, 
+            },
             {
                 path: '/AllParticipants/:id',
                 name: 'allParticipants',
@@ -551,6 +551,7 @@ const routes: RouteRecordRaw[] = [
             import('@layouts/MainLayout/components/MainLayout.vue'),
         meta: {
             label: 'Личный кабинет',
+            redirectTo: 'mypage',
         },
         children: [
             {

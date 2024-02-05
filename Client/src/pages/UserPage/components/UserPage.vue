@@ -15,6 +15,7 @@
                 @delete="deleteAva"
             ></Wall>
 
+
             <div class="mt-14" v-if="user.user.value.is_verified">
                 {{ user.user.value.bio }}
             </div>
@@ -78,20 +79,7 @@ const route = useRoute();
 
 let id = route.params.id;
 
-// const getMembers = async () => {
-//     try {
-//         let id = user.user.value.detachment_id;
-//         const membersResponse = await HTTP.get(`/detachments/${id}/members/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-//         member.value = membersResponse.data;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
+
 const uploadAva = (imageAva) => {
     console.log('photo', imageAva);
     user.user.value.media.photo = imageAva;
@@ -139,7 +127,7 @@ watch(
 
 onMounted(() => {
     userStore.getUserId(id);
-    // getMembers();
+
 });
 </script>
 <style lang="scss" scoped>
