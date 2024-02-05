@@ -114,7 +114,7 @@ const onToggleSelectCompetition = (competition, isChecked) => {
 
 const confirmApplication = async (id) => {
     await HTTP.post(
-        `/competitions/1/applications/${id}/confirm/`,
+        `/competitions/${headquarterId?.value?.regionalheadquarter_commander}/applications/${id}/confirm/`,
         {},
         {
             headers: {
@@ -127,7 +127,7 @@ const confirmApplication = async (id) => {
 
 const cancelApplication = async (id) => {
     await HTTP.delete(
-        `/competitions/1/applications/${id}`,
+        `/competitions/${headquarterId?.value?.regionalheadquarter_commander}/applications/${id}`,
         {},
         {
             headers: {
@@ -154,14 +154,14 @@ const onAction = async () => {
     }
 };
 
-onMounted(() => {
-    getMeCommander();
-    getCompetitions();
+onMounted(async () => {
+    await getMeCommander();
+    await getCompetitions();
 });
 
-onActivated(() => {
-    getMeCommander();
-    getCompetitions();
+onActivated(async () => {
+    await getMeCommander();
+    await getCompetitions();
 });
 </script>
 
