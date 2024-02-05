@@ -537,44 +537,34 @@
                                 <label class="form-label">Какие личные данные участников вам нужны?
                                 Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.</label>
                                 <v-container fluid>
-                                    <v-checkbox
-                                        v-model="maininfo.document_data.passport"
-                                        :binary="true"
-                                        label="Паспорт"
-                                    ></v-checkbox>
-                                    <v-checkbox
-                                        v-model="maininfo.document_data.snils"
-                                        :binary="true"
-                                        label="СНИЛС"
-                                    ></v-checkbox>
-                                    <v-checkbox
-                                        v-model="maininfo.document_data.inn"
-                                        :binary="true"
-                                        label="ИНН"
-                                    ></v-checkbox>
-                                    <v-checkbox
-                                        v-model="maininfo.document_data.work_book"
-                                        :binary="true"
-                                        label="Трудовая книжка"
-                                    ></v-checkbox>
-                                    <v-checkbox
-                                        v-model="maininfo.document_data.military_document"
-                                        :binary="true"
-                                        label="Военный билет или препистное свидетельство"
-                                    ></v-checkbox>
-                                    <v-checkbox
-                                        v-model="maininfo.document_data.consent_personal_data"
-                                        :binary="true"
-                                        label="Согласие на обработку персональных данных"
-                                    ></v-checkbox>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.passport" type="checkbox" name="passport" />
+                                        <label for="passport">Паспорт</label>
+                                    </div>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.snils" type="checkbox" name="snils" />
+                                        <label for="snils">СНИЛС</label>
+                                    </div>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.inn" type="checkbox" name="inn" />
+                                        <label for="inn">ИНН</label>
+                                    </div>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.work_book" type="checkbox" name="workbook" />
+                                        <label for="workbook">Трудовая книжка</label>
+                                    </div>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.military_document" type="checkbox" name="military" />
+                                        <label for="military">Военный билет или приписное свидетельство</label>
+                                    </div>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.consent_personal_data" type="checkbox" name="consert" />
+                                        <label for="consert">Согласие на обработку персональных данных</label>
+                                    </div>
                                 </v-container>
                                 <label class='form-label'>Добавьте Документы</label>
                                 <div class='form-col'>
-                                    <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                    <div class="form-fileupload">
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -583,6 +573,10 @@
                                             :customUpload="true"
                                             chooseLabel="Выбрать файл"
                                         ></FileUpload>
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
+                                        />
                                     </div>
                                 </div>
                                 <div class='form-col-100'>
@@ -847,12 +841,12 @@ const maininfo = ref({
     application_type: '',
     available_structural_units: '',
     document_data: {
-      passport: false,
-      snils: false,
-      inn: false,
-      work_book: false,
-      military_document: false,
-      consent_personal_data: false,
+      passport: true,
+      snils: true,
+      inn: true,
+      work_book: true,
+      military_document: true,
+      consent_personal_data: true,
       additional_info: '',
     }
 })
@@ -963,9 +957,10 @@ function SubmitEvent(){
             console.log("Время изменено", resp.data)
         })
         .catch((e)=>{
-
+            
         })
-        router.push({name: "Action", params: {id: props.action.id}});
+        //Временное решение
+        router.go(-1);
     })
     .catch((e)=>{
 
@@ -1006,6 +1001,7 @@ function AddQuestion(){
         margin-bottom: 20px;
     }
 }
+//Пользовательские стили для формы
 .form{
   &-container{
     display: flex;
@@ -1022,8 +1018,30 @@ function AddQuestion(){
     width: 100%;
     height: 40px;
   }
+  &-checkbox{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  &-checkbox input{
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+  &-fileupload{
+    display:flex;
+    flex-direction: row;
+  }
   &-radio{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     margin-left: 10px;
+  }
+  &-radio input{
+    width: 20px;
+    height: 20px;
   }
   &-input-container{
     border: 1px solid black;

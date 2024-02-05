@@ -12,30 +12,41 @@
             <div class='col settings-container'>
                     <v-expansion-panels class='settings-header' variant="accordion">
                         <v-expansion-panel class='settings-body' title="Тип мероприятия">
-                            <v-expansion-panel-text v-model='actionFormSearch.format'>
-                                <v-checkbox v-model='actionFormSearch.format' label="Онлайн" value="Онлайн"></v-checkbox>
-                                <v-checkbox v-model='actionFormSearch.format' label="Офлайн" value="Офлайн"></v-checkbox>
+                            <v-expansion-panel-text>
+                              <div class="settings-checkbox">
+                                  <input v-model="actionFormSearch.format" value="Онлайн" type="checkbox" name="online" />
+                                  <label for="online">Онлайн</label>
+                              </div>
+                              <div class="settings-checkbox">
+                                  <input value="Оффлайн" type="checkbox" name="offline" />
+                                  <label for="offline">Оффлайн</label>
+                              </div>
                             </v-expansion-panel-text>
                         </v-expansion-panel>
                         <v-expansion-panel class='settings-body' title="Статус мероприятия">
                             <v-expansion-panel-text>
-                                <v-radio-group v-model='actionFormSearch.status'>
-                                    <v-checkbox v-model='actionFormSearch.status' label="Незавершенные" value='Незавершенные'></v-checkbox>
-                                    <v-checkbox v-model='actionFormSearch.status' label="Завершенные" value='Завершенные'></v-checkbox>
-                                </v-radio-group>
+                              <div class="settings-checkbox">
+                                  <input v-model="actionFormSearch.status" value="Незавершен" type="checkbox" name="open" />
+                                  <label for="open">Незавершен</label>
+                              </div>
+                              <div class="settings-checkbox">
+                                  <input v-model="actionFormSearch.status" value="Завершен" type="checkbox" name="close" />
+                                  <label for="close">Завершен</label>
+                              </div>
                             </v-expansion-panel-text>
                         </v-expansion-panel>
                         <v-expansion-panel class='settings-body' title="Маштаб">
                             <v-expansion-panel-text>
-                                <v-radio-group v-model='actionFormSearch.roads'>
-                                    <v-radio v-model='actionFormSearch.roads' label="Все" value="Все"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Всероссийское" value="Всероссийское"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Окружное" value="Окружное"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Региональное" value="Региональное"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Городское" value="Городское"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Мероприятие ОО" value="Мероприятие ОО"></v-radio>
-                                    <v-radio v-model='actionFormSearch.roads' label="Отрядное" value="Отрядное"></v-radio>
-                                </v-radio-group>
+                              <div class="flex align-items-center">
+                                <div class="settings-radio">
+                                    <input v-model='actionFormSearch.roads' type='radio' value='Все'/>
+                                    <label class="ml-2">Все</label>
+                                </div>
+                                <div class="settings-radio">
+                                    <input v-model='actionFormSearch.roads' type='radio' value='Всероссийское'/>
+                                    <label class="ml-2">Всероссийское</label>
+                                </div>
+                              </div>
                             </v-expansion-panel-text>
                         </v-expansion-panel>
                         <v-expansion-panel class='settings-body' title="Направление">
@@ -166,13 +177,13 @@ function ClearSearchForm() {
     console.log("Форма очищена")
 };
 
-const actionFormSearch = {
+const actionFormSearch = ref({
         format: '',
         direction: '',
         status: '',
         roads: '',
         search: ''
-    }
+    })
 function SendSearchForm() {
     console.log(actionFormSearch);
 };
@@ -214,20 +225,26 @@ const sortOptionss = ref([
     }
     //Стили аккордеонов
     .settings{
-        &-container{
-          width: 320px;
-          margin-right: 16px;
-          margin-bottom: 20px;
-        }
-        &-text{
-          align-items: baseline;
-        }
+      &-container{
+        width: 320px;
+        margin-right: 16px;
+        margin-bottom: 20px;
+      }
+      &-text{
+        align-items: baseline;
+      }
       &-buttoms{
         width: 100%;
         margin-top: 40px;
         height: 40px;
         display:flex;
         justify-content: space-around;
+      }
+      &-radio{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-left: 10px;
       }
       &-select{
         padding-right: 5px;
@@ -239,6 +256,26 @@ const sortOptionss = ref([
         display: flex;
         justify-content: center;
         align-items: center;
+      }
+      &-checkbox{
+        display: flex;
+        flex-direction: row;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      &-checkbox input{
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+      }
+      &-label{
+        font-family: Bert Sans;
+        font-size: 1.2vw;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 24px;
+        margin-top: 5px;
+        margin-bottom: 2px;
       }
       &-btminv{
         width: 114px;
