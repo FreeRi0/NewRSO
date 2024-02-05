@@ -1,41 +1,40 @@
 //Модель компонента поиска
-export const actionFormSearch = [{
-    actionType: String,
-    status: String,
-    rangeType: String,
-    roads: String
-}]
+export interface actionFormSearch {
+    actionType: string,
+    status: string,
+    rangeType: string,
+    roads: string
+}
 //Модель компонента
-
-export const actionForm = {
-    format: '',
-    direction: '',
-    status: '',
-    scale: '',
-    name: '',
-    conference_link: '',
-    address: '',
+export interface actionForm {
+    format: string,
+    direction: string,
+    status: string,
+    scale: string,
+    name: string,
+    conference_link: string,
+    address: string,
     participants_number: Number,
-    description: '',
-    application_type: '',
-    available_structural_units: '',
+    description: string,
+    application_type: string,
+    available_structural_units: string,
     time_data: {
-      event_duration_type: '',
-      start_date: '',
-      start_time: '',
-      end_date: '',
-      end_time: '',
-      registration_end_date: '',
-      registration_end_time: ''
+      event_duration_type: string,
+      start_date: string,
+      start_time: string,
+      end_date: string,
+      end_time: string,
+      registration_end_date: string,
+      registration_end_time: string
     },
     document_data: {
-      passport: false,
-      snils: false,
-      inn: false,
-      work_book: false,
-      military_document: false,
-      consent_personal_data: false,
-      additional_info: ''
+      passport: boolean,
+      snils: boolean,
+      inn: boolean,
+      work_book: boolean,
+      military_document: boolean,
+      consent_personal_data: boolean,
+      additional_info: string
     }
   }
 

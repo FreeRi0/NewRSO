@@ -9,11 +9,11 @@
                     open-on-clear
                     id="reg"
                     name="regdrop"
-                    placeholder="Поиск"
+                    placeholder="Выберите регион обучения"
                     v-model="form.region"
                     @update:value="changeValue"
                     address="/regions/"
-                    class="mb-2"
+                    class="mb-2 region-input"
                 ></regionsDropdown>
                 <Input
                     placeholder="Фамилия"
@@ -53,9 +53,11 @@
                 </p>
                 <Input
                     name="date"
-                    type="date"
+                    type="text"
                     placeholder="Дата рождения"
                     v-model:value="form.date_of_birth"
+                    onfocusin="(this.type='date')"
+                    onfocusout="(this.type='text')"
                 />
                 <p class="error" v-if="isError.date_of_birth">
                     Дата рождения в формате ДД.ММ.ГГГГ
@@ -145,6 +147,9 @@
 .v-field.v-field--appended {
     --v-field-padding-end: 10px;
 }
+.v-field--prepended {
+    padding-inline-start: 0px;
+}
 
 .v-input--density-compact .v-field--variant-outlined,
 .v-input--density-compact .v-field--single-line,
@@ -214,21 +219,24 @@
     text-align: center;
 }
 
-.password-input {
+.password-input,
+.region-input {
     border: 1px solid #a3a3a3;
     border-radius: 10px;
     font-size: 16px;
     color: #35383f;
     font-weight: normal;
-    font-family: 'Bert-Sans';
+    font-family: Akrobat;
     margin-bottom: 8px;
 }
 
-.password-input::placeholder {
+.password-input::placeholder,
+.region-input::placeholder {
     color: #898989;
     font-size: 16px;
-    font-weight: 500;
-    font-family: 'Bert-Sans';
+    font-weight: normal;
+    font-family: Akrobat;
+    margin-bottom: 8px;
 }
 .v-card {
     padding-left: 100px;
@@ -264,6 +272,42 @@
         text-decoration: underline;
         font-weight: bold;
         font-size: 18px;
+    }
+}
+.v-field__prepend-inner {
+    display: none;
+}
+#reg,
+#input-3,
+#input-5 {
+    letter-spacing: 0.9px;
+    font-size: 17px;
+    color: #35383f;
+}
+#reg {
+    padding-top: 5px;
+}
+.v-input__control {
+    min-height: 45px;
+}
+
+.AuthWrapper {
+    min-height: 100vh;
+    background-image: url(/assets/regBR.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    @media screen and (max-width: 1440px) {
+        background-image: url(/assets/regBR1440.jpg);
+    }
+    @media screen and (max-width: 1024px) {
+        background-image: url(/assets/regBR1024.jpg);
+    }
+    @media screen and (max-width: 768px) {
+        background-image: none;
+        background-color: #d1d5d8;
     }
 }
 </style>

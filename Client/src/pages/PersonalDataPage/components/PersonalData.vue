@@ -2,18 +2,17 @@
     <div class="container">
         <div class="mt-14">
             <h2 class="profile-title">Настройки профиля</h2>
-            <banner
+            <MyWall
                 :user="currentUser.currentUser.value"
                 :education="education"
                 class="mt-3"
-                :edited="true"
                 @upload-wall="uploadWall"
                 @update-wall="updateWall"
                 @upload="uploadAva"
                 @update="updateAva"
                 @updateUserData="updateUser"
                 @updateEducData="updateEduc"
-            ></banner>
+            ></MyWall>
             <!--Табы-->
             <div class="d-flex mt-9 mb-9 buttonWrap">
                 <button
@@ -26,21 +25,6 @@
                     {{ tab.name }}
                 </button>
             </div>
-            <!-- parent_last_name: props.user.parent.parent_last_name,
-                    parent_first_name: props.user.parent.parent_first_name,
-                    parent_patronymic_name:
-                        props.user.parent.parent_patronymic_name,
-                    parent_date_of_birth:
-                        props.user.parent.parent_date_of_birth,
-                    relationship: props.user.parent.relationship,
-                    parent_phone_number: props.user.parent.parent_phone_number,
-                    russian_passport: props.user.parent.russian_passport,
-                    passport_number: props.user.parent.passport_number,
-                    passport_date: props.user.parent.passport_date,
-                    passport_authority: props.user.parent.passport_authority,
-                    region: props.user.parent.region,
-                    city: props.user.parent.city,
-                    address: props.user.parent.address, -->
             <AccordionsPersonal
                 v-if="picked == 'Персональные данные'"
                 :button="true"
@@ -73,7 +57,7 @@ import { ref, onMounted, watch } from 'vue';
 import { AccordionsPersonal } from '@features/PersonalAccordions/components';
 import { privateProfile } from '@features/PrivateProfile/components';
 import { changePassword } from '@features/ChangePassword/components';
-import { banner } from '@features/baner/components';
+import { MyWall } from '@features/baner/components';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';

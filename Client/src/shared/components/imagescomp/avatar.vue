@@ -84,7 +84,12 @@
                 </v-card-text>
             </v-card>
         </v-menu>
-        <v-menu min-width="200px" rounded v-else-if="props.avatar && props.edited">
+
+        <v-menu
+            min-width="200px"
+            rounded
+            v-else-if="props.avatar && props.edited"
+        >
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -166,6 +171,7 @@
                 </v-card-text>
             </v-card>
         </v-menu>
+
     </div>
 </template>
 <script setup>
@@ -174,7 +180,10 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 const props = defineProps({
     avatar: String,
-    edited: Boolean,
+    edited: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const emit = defineEmits(['upload', 'update', 'delete']);
