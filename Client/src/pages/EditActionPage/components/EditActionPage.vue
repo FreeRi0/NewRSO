@@ -725,7 +725,6 @@
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
 import { getAction, createAction, createOrganizator, getOrganizator, putAction, putOrganizator } from '@services/ActionService';
-import { actionForm } from '@entities/Actions';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { uploadPhoto } from '@shared/components/imagescomp';
@@ -1008,4 +1007,41 @@ function AddQuestion(){
         border-radius: 50%;
     }
   }
+  .v-expansion-panel {
+    &__shadow {
+        box-shadow: none;
+    }
+
+    &--active,
+    &--after-active {
+        margin: 0;
+    }
+
+    &--active:not(:first-child) {
+        margin: 0;
+    }
+
+    &--active + .v-expansion-panel {
+        margin: 0;
+    }
+
+    .v-expansion-panel-title {
+        max-height: 60px;
+        font-family: 'Akrobat';
+        font-size: 24px;
+        font-weight: 600;
+        background-color: transparent;
+        border-bottom: 1px solid #939393;
+        color: #35383f;
+        padding: 16px 0px;
+
+        &__overlay {
+            display: none;
+        }
+    }
+}
+
+.v-expansion-panel:not(:first-child)::after {
+    display: none;
+}
 </style>

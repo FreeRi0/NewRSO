@@ -9,7 +9,7 @@
         item-title="name"
         item-value="id"
         v-bind="$attrs"
-        @keyup="searchRegion"
+        @keyup="searchEducInstitution"
         @update:value="changeValue"
         :address="address"
         :no-data-text="noDataText"
@@ -58,14 +58,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
+import { storeToRefs } from 'pinia';
 
 defineOptions({
     inheritAttrs: false,
 });
+const search = ref(null);
 const emit = defineEmits(['update:value']);
 
 const regionalsStore = useRegionalsStore();
@@ -82,6 +84,10 @@ const props = defineProps({
     noDataText: {
         type: String,
         default: 'Ничего не найдено...',
+    },
+    changeUser: {
+        type: Boolean,
+        default: false,
     },
 });
 const name = ref('');
@@ -112,11 +118,11 @@ const onChangeItem = async () => {
     }
 };
 
-const searchRegion = (val) => {
+const searchEducInstitution = (val) => {
     if (name.value.length < 3) {
         return;
     }
-    regionalsStore.searchRegions(name.value);
+    regionalsStore.searchInstitution(name.value);
     console.log('val', val);
 };
 

@@ -121,28 +121,134 @@
                                 </div>
                                 <div class="form__field">
                                     <label class="form-label">Добавить баннер</label>
-                                    <FileUpload 
-                                        name="demo[]" 
-                                        accept=".pdf, .jpeg, .png" 
-                                        :maxFileSize="7000000"
-                                        v-model="maininfo.banner"
-                                    >
-                                        <template #header="{ chooseCallback }">
-                                            <button @click="chooseCallback()" class="upload">
-                                                <div class="upload-load">
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="32"
-                                                        height="32"
-                                                        viewBox="0 0 32 32"
-                                                        fill="none"
-                                                    ></svg>
-                                                </div>
-                                            </button>
-                                            <div class="form__counter">Рекомендуемый размер файла 1024х768</div>
-                                        </template>
-                                    </FileUpload>
+                                    <div class="form__field photo-add">
+                            <p class="form__label">Добавьте баннер</p>
+                            <div class="photo-add__box photo-add__box--banner">
+                                <div
+                                    class="photo-add__img photo-add__img--banner"
+                                >
+                                    <img
+                                        v-if="maininfo.banner ?? urlBanner"
+                                        class="photo-add__image"
+                                        :src="maininfo.banner ?? urlBanner"
+                                    />
+                                    <img
+                                        v-else
+                                        src="@app/assets/banner-stub.png"
+                                        alt="Баннер отряда(пусто)"
+                                    />
                                 </div>
+
+                                <div class="photo-add__input">
+                                    <label
+                                        class="photo-add__label"
+                                        for="upload-banner"
+                                        v-if="!maininfo.banner && !urlBanner"
+                                    >
+                                        <svg
+                                            class=""
+                                            aria-hidden="true"
+                                            focusable="false"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="48"
+                                            height="48"
+                                            viewBox="0 0 48 48"
+                                            fill="none"
+                                        >
+                                            <g
+                                                filter="url(#filter0_b_2686_15482)"
+                                            >
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="24"
+                                                    fill="black"
+                                                    fill-opacity="0.4"
+                                                />
+                                                <circle
+                                                    cx="24"
+                                                    cy="24"
+                                                    r="23"
+                                                    stroke="white"
+                                                    stroke-width="2"
+                                                />
+                                            </g>
+                                            <path
+                                                d="M24.1328 15.1328L24.1328 33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <path
+                                                d="M15.1328 24.1328H33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <defs>
+                                                <filter
+                                                    id="filter0_b_2686_15482"
+                                                    x="-36.9643"
+                                                    y="-36.9643"
+                                                    width="121.929"
+                                                    height="121.929"
+                                                    filterUnits="userSpaceOnUse"
+                                                    color-interpolation-filters="sRGB"
+                                                >
+                                                    <feFlood
+                                                        flood-opacity="0"
+                                                        result="BackgroundImageFix"
+                                                    />
+                                                    <feGaussianBlur
+                                                        in="BackgroundImageFix"
+                                                        stdDeviation="18.4821"
+                                                    />
+                                                    <feComposite
+                                                        in2="SourceAlpha"
+                                                        operator="in"
+                                                        result="effect1_backgroundBlur_2686_15482"
+                                                    />
+                                                    <feBlend
+                                                        mode="normal"
+                                                        in="SourceGraphic"
+                                                        in2="effect1_backgroundBlur_2686_15482"
+                                                        result="shape"
+                                                    />
+                                                </filter>
+                                            </defs>
+                                        </svg>
+                                    </label>
+                                    <div class="photo-add__edit-group" v-else>
+                                        <label
+                                            class="photo-add__label-edit"
+                                            for="upload-banner"
+                                        >
+                                            <span class="photo-add__label-text"
+                                                >Изменить фото</span
+                                            >
+                                        </label>
+                                        <button
+                                            class="photo-add__button-clear"
+                                            type="reset"
+                                            @click="resetBanner"
+                                        >
+                                            Удалить фото
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="file"
+                                        id="upload-banner"
+                                        name="squad-banner"
+                                        hidden
+                                        @change="selectBanner"
+                                    />
+                                </div>
+                            </div>
+                            <span class="form__footnote"
+                                >Рекомендуемый размер 1920х768</span
+                            >
+                        </div>
+                        </div>
                             </div>
                             <div class='form-col'>
                                 <div class="form__field">
@@ -287,7 +393,7 @@
                                     <label class="form-label" for="action-start-hq">Начало мероприятия<sup class="valid-red">*</sup></label>
                                     <InputText
                                         id="action-start-hq"
-                                        v-model='timeData.timeStart'
+                                        v-model='time_data.start_date'
                                         class="form__input form-input-container"
                                         placeholder="Например 26.06.2024"
                                         name="action-start-hq"
@@ -298,7 +404,7 @@
                                     <label class="form-label" for="action-end-hq">Окончание мероприятия</label>
                                     <InputText
                                         id="action-end-hq"
-                                        v-model='timeData.timeEnd'
+                                        v-model='time_data.end_date'
                                         class="form__input form-input-container"
                                         placeholder="Например 27.06.2024"
                                         name="action-end-hq"
@@ -310,7 +416,7 @@
                                     <InputText
                                         id="end-registration-hq"
                                         class="form__input form-input-container"
-                                        v-model='timeData.timeregistrationEnd'
+                                        v-model='time_data.registration_end_date'
                                         placeholder="Например, 15.05.2023"
                                         name="end-registration-hq"
                                         type='date'
@@ -323,7 +429,7 @@
                                     <InputText
                                         id="action-hours-start-hq"
                                         class="form__input form-input-container"
-                                        v-model="timeData.timehourStart"
+                                        v-model="time_data.start_time"
                                         placeholder="Например 7:30"
                                         name="action-hours-start-hq"
                                         type="time"
@@ -335,7 +441,7 @@
                                     <InputText
                                         id="action-hours-end-hq"
                                         class="form__input form-input-container"
-                                        v-model="timeData.timehourEnd"
+                                        v-model="time_data.registration_end_time"
                                         placeholder="Например 18:30"
                                         name="action-hours-end-hq"
                                         type="time"
@@ -343,7 +449,7 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <label class='flex align-items-center' style='display: flex'>
+                                    <!----<label class='flex align-items-center' style='display: flex'>
                                         <div class="flex align-items-center">
                                             <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
                                             <label for="hours1" class="ml-2">За час</label>
@@ -356,7 +462,7 @@
                                             <input v-model='timeData.hour' value="3" name="hours3" type='radio' class='form-radio'/>
                                             <label for="hours3" class="ml-2">За 3 часа</label>
                                         </div>
-                                    </label>
+                                    </label> -->
                                 </div>
                             </div>
                         </div>
@@ -432,32 +538,32 @@
                                 Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.</label>
                                 <v-container fluid>
                                     <v-checkbox
-                                        v-model="documents.passport"
+                                        v-model="maininfo.document_data.passport"
                                         :binary="true"
                                         label="Паспорт"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.snils"
+                                        v-model="maininfo.document_data.snils"
                                         :binary="true"
                                         label="СНИЛС"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.inn"
+                                        v-model="maininfo.document_data.inn"
                                         :binary="true"
                                         label="ИНН"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.work_book"
+                                        v-model="maininfo.document_data.work_book"
                                         :binary="true"
                                         label="Трудовая книжка"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.military_document"
+                                        v-model="maininfo.document_data.military_document"
                                         :binary="true"
                                         label="Военный билет или препистное свидетельство"
                                     ></v-checkbox>
                                     <v-checkbox
-                                        v-model="documents.consent_personal_data"
+                                        v-model="maininfo.document_data.consent_personal_data"
                                         :binary="true"
                                         label="Согласие на обработку персональных данных"
                                     ></v-checkbox>
@@ -481,7 +587,7 @@
                                 </div>
                                 <div class='form-col-100'>
                                     <label class="form-label">Расскажите, с какими документами необходимо просто ознакомиться, а какие скачать и заполнить</label>
-                                    <textarea class="form__textarea" />
+                                    <textarea v-model="maininfo.document_data.additional_info" class="form__textarea" />
                                 </div>
                             </div>
                         </div>
@@ -717,17 +823,52 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { ref, inject } from 'vue';
-import { createAction, createOrganizator } from '@services/ActionService';
+import { createAction, createOrganizator, putTimeData } from '@services/ActionService';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { uploadPhoto } from '@shared/components/imagescomp';
 import FileUpload from 'primevue/fileupload';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import textarea from '@shared/components/inputs/textarea.vue'
-const router = useRoute();
+const router = useRouter();
 const swal = inject('$swal');
-//Переменные для основной формы
+
+const maininfo = ref({
+    format: '',
+    direction: '',
+    name: '',
+    scale: '',
+    banner: null,
+    conference_link: '',
+    address: '',
+    description: '',
+    participants_number: Number,
+    application_type: '',
+    available_structural_units: '',
+    document_data: {
+      passport: false,
+      snils: false,
+      inn: false,
+      work_book: false,
+      military_document: false,
+      consent_personal_data: false,
+      additional_info: '',
+    }
+})
+
+const urlBanner = ref(null);
+
+const selectBanner = (event) => {
+    maininfo.value.banner = event.target.files[0];
+    console.log('Файл есть', maininfo.value.banner);
+    urlBanner.value = URL.createObjectURL(maininfo.value.banner);
+};
+
+const resetBanner = () => {
+    maininfo.value.banner = null;
+    urlBanner.value = null;
+}
 
 const scale_massive = ref([
     {name: "Отрядное"},
@@ -735,29 +876,14 @@ const scale_massive = ref([
     {name:"Городское"},
     {name:"Региональное"},
     {name:"Окружное"},
-    {name:"Городское"}])
+    {name:"Всероссийское"}])
 
 const direction_massive = ref([
     {name:"Добровольческое"},
     {name:"Образовательное"},
     {name:"Патриотическое"},
-    {name:"Региональное"},
-    {name:"Окружное"},
-    {name:"Всероссийское"}])
-
-const maininfo = ref({
-    format: '',
-    direction: '',
-    name: '',
-    scale: '',
-    banner: 'http://example.com',
-    conference_link: '',
-    address: '',
-    description: '',
-    participants_number: Number,
-    application_type: '',
-    available_structural_units: ''
-})
+    {name:"Спортивное"},
+    {name:"Творческое"}])
 
 const available_structural_units = ref([
     {name: "Отряды"},
@@ -774,15 +900,14 @@ const area_massive = ref([
     {name: "Окружной штаб"}
 ])
 
-//Переменные даты 
-
-const timeData = ref({
-    timeStart: '',
-    timehourStart: '',
-    timeEnd: '',
-    timehourEnd: '',
-    timeregistrationEnd: '',
-    hour: '',
+const time_data = ref({
+    event_duration_type: '',
+    start_date: '',
+    start_time: '',
+    end_date: '',
+    end_time: '',
+    registration_end_date: '',
+    registration_end_time: ''
 })
 
 //Переменные организаторов
@@ -795,17 +920,6 @@ const organizators = ref([{
     telegram: '',
     is_contact_person: false
 }])
-
-//Форма документов
-const documents = ref({
-    passport: false,
-    snils: false,
-    inn: false,
-    work_book: false,
-    military_document: false,
-    consent_personal_data: false,
-    additional_info: ''
-})
 
 //Ответы на вопросы
 const answers = ref([
@@ -832,39 +946,29 @@ function AddOrganizator(){
     });
 }
 function SubmitEvent(){
-
+    /* //Внести все значения в FormData
+    let fd = new FormData();
+    fd.append('banner', maininfo.banner);*/
     createAction(maininfo.value)
     .then((resp)=>{
-        console.log("Форма передалась успешно", resp.value)
-        createOrganizator(resp.value.id)
+        console.log("Форма передалась успешно", resp.data)
+        createOrganizator(resp.data.id)
         .then((resp)=>{
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+            console.log("Организаторы добавлены", resp.data)
         })
         .catch((e)=>{
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'Не удалось добавить организаторов',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+            console.log(e)
         })
+        putTimeData(resp.data.id).then((resp)=>{
+            console.log("Время изменено", resp.data)
+        })
+        .catch((e)=>{
+
+        })
+        router.push({name: "Action", params: {id: props.action.id}});
     })
     .catch((e)=>{
-        console.
-        swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'Не удалось создать мероприятие',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+
     })
 }
 

@@ -5,7 +5,9 @@
             @upload-wall="uploadWall"
             @update-wall="updateWall"
             @delete-wall="deleteWall"
+            :edited="false"
         ></bannerPhoto>
+
         <Avatar
             :avatar="user?.media?.photo"
             @upload="uploadAva"
@@ -13,13 +15,7 @@
             @delete="deleteAva"
             :edited="false"
         ></Avatar>
-        <Avatar
-            :avatar="user?.media?.photo"
-            @upload="uploadAva"
-            @update="updateAva"
-            @delete="deleteAva"
-            :edited="true"
-        ></Avatar>
+
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
@@ -64,9 +60,7 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
-                    <div
-                        class="user-data__social-network"
-                    >
+                    <div class="user-data__social-network" v-if="props.user.privacy?.privacy_social === 'detachment_members' && props.user.detachment_id === currentUser.currentUser.value.detachment_id || props.user.privacy?.privacy_social === 'management_members' && (roles.roles.value.detachment_commander || roles.roles.value.regionalheadquarter_commander ||  roles.roles.value.localheadquarter_commander || roles.roles.value.educationalheadquarter_commander || roles.roles.value.districtheadquarter_commander || roles.roles.value.centralheadquarter_commander) || props.user.privacy?.privacy_social === 'all' && props.user">
                         <div class="user-data__link-vk mr-2">
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -90,14 +84,14 @@
                         </div>
                     </div>
                     <div class="user-data__contact-contact">
-                        <div class="user-data__contact-contact_item" >
+                        <div class="user-data__contact-contact_item" v-if="props.user.privacy?.privacy_telephone === 'detachment_members' && props.user.detachment_id === currentUser.currentUser.value.detachment_id || props.user.privacy?.privacy_telephone === 'management_members' && (roles.roles.value.detachment_commander || roles.roles.value.regionalheadquarter_commander ||  roles.roles.value.localheadquarter_commander || roles.roles.value.educationalheadquarter_commander || roles.roles.value.districtheadquarter_commander || roles.roles.value.centralheadquarter_commander) || props.user.privacy?.privacy_telephone === 'all' && props.user" >
                             <img
                                 src="@/app/assets/icon/phone.svg"
                                 alt="phone"
                             />
                             <p class="ml-2">{{ user.phone_number }}</p>
                         </div>
-                        <div class="user-data__contact-contact_item mail">
+                        <div class="user-data__contact-contact_item mail" v-if="props.user.privacy?.privacy_email === 'detachment_members' && props.user.detachment_id === currentUser.currentUser.value.detachment_id || props.user.privacy?.privacy_email === 'management_members' && (roles.roles.value.detachment_commander || roles.roles.value.regionalheadquarter_commander ||  roles.roles.value.localheadquarter_commander || roles.roles.value.educationalheadquarter_commander || roles.roles.value.districtheadquarter_commander || roles.roles.value.centralheadquarter_commander) || props.user.privacy?.privacy_email === 'all' && props.user">
                             <img src="@/app/assets/icon/mail.svg" alt="mail" />
                             <p class="ml-2">{{ user.email }}</p>
                         </div>
@@ -112,6 +106,9 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
+import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({
@@ -121,9 +118,6 @@ const props = defineProps({
     avatar: {
         type: String,
     },
-    edited: {
-        type: Boolean,
-    },
     user: {
         type: Object,
     },
@@ -131,6 +125,11 @@ const props = defineProps({
         type: Object,
     },
 });
+
+const userStore = useUserStore();
+const roleStore = useRoleStore();
+const currentUser = storeToRefs(userStore);
+const roles = storeToRefs(roleStore);
 
 const emit = defineEmits(['upload', 'update', 'delete']);
 
@@ -209,10 +208,6 @@ const getUserData = async () => {
         console.log('an error occured ' + error);
     }
 };
-
-// const isMemberView = computed(() => {
-//     return props.user.privacy?.privacy_email == ;
-// });
 
 watch(
     () => props.user,
