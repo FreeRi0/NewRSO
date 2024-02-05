@@ -13,7 +13,6 @@
                 src="@/app/assets/user-banner.jpg"
                 alt="Баннер личной страницы(пусто)"
             /></div>
-
         </div>
 
         <Avatar
@@ -30,7 +29,6 @@
                 src="@app/assets/user-avatar.png"
                 alt="Аватарка(пусто)"
             /></div>
-
         </div>
 
         <div class="user-metric__bottom">
@@ -153,8 +151,6 @@ const currentUser = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
 const squad = storeToRefs(squadsStore);
 let id = props.user.detachment_id;
-// let id = SquadId;
-
 
 const emit = defineEmits(['upload', 'update', 'delete']);
 
@@ -247,7 +243,7 @@ watch(
 
 onMounted(() => {
     getUserData();
-    squadsStore.getSquadId(id)
+    squadsStore.getSquadId(id);
 });
 </script>
 <style lang="scss" scoped>
@@ -289,36 +285,6 @@ onMounted(() => {
     flex-direction: column;
     flex-wrap: wrap;
 }
-
-// .user-metric__avatar {
-//     /*    display: grid;*/
-//     grid-column-start: 1;
-//     grid-column-end: 3;
-//     grid-row-start: 1;
-//     grid-row-end: 3;
-//     width: 80%;
-//     height: 100%;
-//     border-radius: 50%;
-//     &-wrapper {
-//         display: grid;
-//         grid-template-columns: 160px 90px;
-//         grid-template-rows: 130px 80px;
-//         align-content: center;
-//         justify-content: center;
-//         grid-column-start: 2;
-//         grid-column-end: 4;
-//         grid-row-start: 2;
-//         grid-row-end: 4;
-//     }
-// }
-
-// .user-metric__avatar img {
-//     width: 90%;
-//     height: 90%;
-//     clip-path: circle(50%);
-//     object-fit: cover;
-//     border-radius: 50%;
-// }
 .user-data__name {
     display: flex;
     margin-bottom: 32px;
@@ -344,7 +310,6 @@ onMounted(() => {
         margin-right: 0;
     }
 }
-
 .user-data__contact {
     display: flex;
     p {
@@ -373,7 +338,6 @@ onMounted(() => {
         align-items: center;
     }
 }
-
 .user-data__name p {
     color: #35383f;
     /* Desktop/H-3 */
