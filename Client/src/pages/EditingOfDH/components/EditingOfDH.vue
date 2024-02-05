@@ -99,9 +99,9 @@ const getMembers = async () => {
 };
 
 onMounted(() => {
-    getHeadquarter();
-    getMembers();
     getPositions();
+    getMembers();
+    getHeadquarter();
 });
 
 const onUpdateMember = (event, id) => {

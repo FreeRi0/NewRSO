@@ -71,7 +71,7 @@
 
                     <router-link
                         v-if="
-                            userId === headquarter?.commander?.id || IsTrusted
+                        userId && (userId === headquarter?.commander?.id || IsTrusted)
                         "
                         class="hq-data__link"
                         :to="{

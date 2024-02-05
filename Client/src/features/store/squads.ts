@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
 
 export const useSquadsStore = defineStore('squads', {
     state: () => ({
@@ -18,9 +17,7 @@ export const useSquadsStore = defineStore('squads', {
             });
             this.squads = responseSquads.data;
         },
-        async getSquadId() {
-            const route = useRoute();
-            let id = route.params.id;
+        async getSquadId(id: String) {
             const responseSquad = await HTTP.get(`/detachments/${id}`, {
                 headers: {
                     'Content-Type': 'application/json',

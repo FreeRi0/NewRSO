@@ -98,9 +98,9 @@ const getMembers = async () => {
 };
 
 onMounted(() => {
-    getHeadquarter();
-    getMembers();
     getPositions();
+    getMembers();
+    getHeadquarter();
 });
 
 const onUpdateMember = (event, id) => {
@@ -196,7 +196,7 @@ const changeHeadquarter = async () => {
         router.push({
             name: 'LocalHQ',
             params: { id: headquarter.value.id },
-        })
+        });
     } catch (err) {
         isError.value = err.response.data;
         isErrorMembers.value = err.response.data;
@@ -208,10 +208,9 @@ const changeHeadquarter = async () => {
                 showConfirmButton: false,
                 timer: 2500,
             });
-        } 
+        }
     }
 };
-
 </script>
 
 <style lang="scss"></style>

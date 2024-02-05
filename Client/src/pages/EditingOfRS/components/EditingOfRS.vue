@@ -125,8 +125,8 @@ const getMembers = async () => {
 
 onMounted(() => {
     getRegions();
-    getMembers();
     getPositions();
+    getMembers();
     getHeadquarter();
 });
 

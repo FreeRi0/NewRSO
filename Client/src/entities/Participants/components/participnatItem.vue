@@ -1,6 +1,6 @@
 <template>
     <div class="participants-wrapper__item list">
-        <router-link :to="{ name: 'userpage', params: { id: participant.user.id } }">
+        <router-link :to="{ name: 'userpage', params: { id: participant.user?.id } }">
             <div class="round-img">
                 <img
                     :src="participant.user?.avatar?.photo"
