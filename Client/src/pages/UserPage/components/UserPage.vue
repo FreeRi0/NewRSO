@@ -16,10 +16,10 @@
             ></Wall>
 
 
-            <div class="mt-14" v-if="user.user.value.is_verified">
+            <div class="mt-14" v-if="user.user.value.is_verified || (user.user.value.privacy?.privacy_about === 'detachment_members' && user.user.value.detachment_id === currentUser.currentUser.value.detachment_id || user.user.value.privacy?.privacy_about === 'management_members' && (roles.roles.value.detachment_commander || roles.roles.value.regionalheadquarter_commander ||  roles.roles.value.localheadquarter_commander || roles.roles.value.educationalheadquarter_commander || roles.roles.value.districtheadquarter_commander || roles.roles.value.centralheadquarter_commander) || user.user.value.privacy?.privacy_about === 'all' && user.user.value )">
                 {{ user.user.value.bio }}
             </div>
-            <div class="mt-8 photoWrapper">
+            <div class="mt-8 photoWrapper"  v-if="user.user.value.privacy?.privacy_photo === 'detachment_members' && user.user.value.detachment_id === currentUser.currentUser.value.detachment_id || user.user.value.privacy?.privacy_photo === 'management_members' && (roles.roles.value.detachment_commander || roles.roles.value.regionalheadquarter_commander ||  roles.roles.value.localheadquarter_commander || roles.roles.value.educationalheadquarter_commander || roles.roles.value.districtheadquarter_commander || roles.roles.value.centralheadquarter_commander) || user.user.value.privacy?.privacy_photo === 'all' && user.user.value">
                 <userPhoto
                     class="photo-item"
                     :photo="user.user.value.media?.photo1"
@@ -43,6 +43,31 @@
                     :add="false"
                 ></userPhoto4>
             </div>
+            <div class="mt-8 photoWrapper" v-else>    <div class="avatar-preview my_photo__plug photo-item">
+            <img
+                src="@/app/assets/user-banner.jpg"
+                alt="Фото пользователя(пусто)"
+            />
+        </div>
+        <div class="avatar-preview my_photo__plug photo-item">
+            <img
+                src="@/app/assets/user-banner.jpg"
+                alt="Фото пользователя(пусто)"
+            />
+        </div>
+        <div class="avatar-preview my_photo__plug photo-item">
+            <img
+                src="@/app/assets/user-banner.jpg"
+                alt="Фото пользователя(пусто)"
+            />
+        </div>
+        <div class="avatar-preview my_photo__plug photo-item">
+            <img
+                src="@/app/assets/user-banner.jpg"
+                alt="Фото пользователя(пусто)"
+            />
+        </div></div>
+
         </div>
         <v-progress-circular
             class="circleLoader"
@@ -67,9 +92,13 @@ import { ref, watch, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
 const user = storeToRefs(userStore);
+const currentUser = storeToRefs(userStore);
 const isLoading = storeToRefs(userStore);
 console.log('userTop', user.user.value);
 const education = ref({});
@@ -110,16 +139,11 @@ const deleteWall = (imageWall) => {
     user.user.value.media.banner = imageWall;
 };
 
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        userStore.getUserId(id);
-    }
-});
-
 watch(
     () => route.params.id,
 
     (newId) => {
+        if (!newId || route.name !== 'userpage') return;
         id = newId;
         userStore.getUserId(id);
     },

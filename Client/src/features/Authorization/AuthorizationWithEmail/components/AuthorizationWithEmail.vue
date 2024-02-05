@@ -92,12 +92,12 @@ const LoginUser = async () => {
         });
         data.value = response.data;
         localStorage.setItem('Token', response.data.auth_token);
-        userStore.getUser();
         console.log(response.data);
         isLoading.value = false;
         router.push({
             name: 'mypage',
         });
+        userStore.getUser();
         swal.fire({
             position: 'top-center',
             icon: 'success',
