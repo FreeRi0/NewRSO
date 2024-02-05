@@ -5,6 +5,7 @@ import Dropdown from './Dropdown.vue';
 import regionsDropdown from './regionsDropdown.vue';
 import educationalsDropdown from './educationalsDropdown.vue';
 import educInstitutionDropdown from './educInstitutionDropdown.vue';
+import userDropdown from './userDropdown.vue';
 
 export {
     sortByEducation,
@@ -14,4 +15,5 @@ export {
     regionsDropdown,
     educationalsDropdown,
     educInstitutionDropdown,
+    userDropdown,
 };

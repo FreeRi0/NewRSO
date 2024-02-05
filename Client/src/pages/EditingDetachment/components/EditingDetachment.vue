@@ -7,6 +7,8 @@
             :detachment="detachment"
             :members="members"
             :submited="submited"
+            :is-commander-loading="isCommanderLoading"
+            :is-members-loading="isMembersLoading"
             :is-error="isError"
             :is-error-members="isErrorMembers"
             v-if="detachment && isError && isErrorMembers && !loading"
@@ -37,57 +39,21 @@ import { usePage } from '@shared';
 
 const router = useRouter();
 const route = useRoute();
-console.log(route);
+// console.log(route);
 let id = route.params.id;
 
 const detachment = ref(null);
 const members = ref([]);
-const positions = ref([]);
-const areas = ref([]);
-const regions = ref([]);
-
-const getPositions = async () => {
-    HTTP.get('positions/')
-
-        .then((res) => {
-            positions.value = res.data;
-            console.log('должности - ', res.data);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getAreas = async () => {
-    await HTTP.get('areas/')
-
-        .then((res) => {
-            areas.value = res.data;
-            console.log('направления - ', res.data);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getRegions = async () => {
-    await HTTP.get('regions/')
-
-        .then((res) => {
-            regions.value = res.data;
-            console.log('регионы - ', res.data);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
 const { replaceTargetObjects } = usePage();
 
 const loading = ref(false);
 
+const isCommanderLoading = ref(false);
+
 const getDetachment = async () => {
     loading.value = true;
+    isCommanderLoading.value = true;
     console.log('id отряда для редактирования - ', id);
     HTTP.get(`/detachments/${id}/`, {
         headers: {
@@ -97,24 +63,11 @@ const getDetachment = async () => {
     })
         .then((response) => {
             detachment.value = response.data;
-            // console.log('ggggggggggggggggggg', areas.value);
-
-            if (areas.value.length) {
-                const area = areas.value.find((item) => {
-                    return item.name === detachment.value.area;
-                });
-                // console.log(
-                //     'fffffffffffffffffffffff',
-                //     detachment.value.area,
-                //     area,
-                // );
-                detachment.value.area = area.id;
+            if (detachment.value.area) {
+                detachment.value.area = detachment.value.area.id;
             }
-            if (regions.value.length) {
-                const region = regions.value.find((item) => {
-                    return item.name === detachment.value.region;
-                });
-                detachment.value.region = region.id;
+            if (detachment.value.region) {
+                detachment.value.region = detachment.value.region.id;
             }
             if (detachment.value.educational_institution) {
                 detachment.value.educational_institution =
@@ -126,6 +79,7 @@ const getDetachment = async () => {
             replaceTargetObjects([detachment.value]);
             console.log(response);
             loading.value = false;
+            isCommanderLoading.value = false;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -138,37 +92,38 @@ onBeforeRouteUpdate(async (to, from) => {
     }
 });
 
+const isMembersLoading = ref(false);
+
 const getMembers = async () => {
-    HTTP.get(`detachments/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            members.value = response.data;
-            // console.log('участники штаба - ', response);
-            members.value.forEach((member) => {
-                if (positions.value) {
-                    const position = positions.value.find((item) => {
-                        return item.name === member.position;
-                    });
-                    // console.log('объект должности - ', position);
-                    member.position = position.id;
-                }
-            });
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-    // console.log(id);
+    try {
+        isMembersLoading.value = true;
+        setTimeout(async () => {
+            const membersResponse = await HTTP.get(
+                `detachments/${id}/members/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+
+            members.value = membersResponse.data;
+            if (members.value.length) {
+                members.value.forEach((member) => {
+                    member.position = member.position.id;
+                });
+            }
+            console.log('участ', members.value);
+            isMembersLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 onMounted(() => {
     getMembers();
-    getPositions();
-    getAreas();
-    getRegions();
     getDetachment();
 });
 
@@ -255,10 +210,12 @@ const changeDetachment = async () => {
     formData.append('founding_date', detachment.value.founding_date);
     formData.append('region', detachment.value.region);
     formData.append('city', detachment.value.city);
-    formData.append(
-        'educational_institution',
-        detachment.value.educational_institution,
-    );
+    if (detachment.value.educational_institution) {
+        formData.append(
+            'educational_institution',
+            detachment.value.educational_institution,
+        );
+    } else formData.append('educational_institution', '');
     formData.append('commander', detachment.value.commander);
     formData.append('social_vk', detachment.value.social_vk);
     formData.append('social_tg', detachment.value.social_tg);
