@@ -5,9 +5,8 @@
             label="Создать мероприятие"
             name="createAction"
         ></bannerCreate>
-            label="Создать мероприятие" name='createAction'></bannerCreate>
-        <h2 class='action-title'>Мероприятия</h2>
-        <div class='searcher'>
+        <h2 class="action-title">Мероприятия</h2>
+        <div class="searcher">
             <SearchInput @search="SearchByInput"></SearchInput>
         </div>
         <div class="row-cols-2 action-slides">
@@ -150,11 +149,17 @@
             <!--Привет) Страницы мероприятий писал и подключал Modestra -->
             <!--Я в поисках работы, если вам требуется Frontend разработчик, пишите сюда -->
             <!--https://t.me/Modestra -->
-            <div class='col' style='width: 100%'>
-                <div class='sort-container'>
-                    <div class='sort-layout sort-types'>
-                        <Button v-if='vertical' type='button' class='dashboard sort-button' icon='icon' color='white'
-                                @click='showVertical'>
+            <div class="col" style="width: 100%">
+                <div class="sort-container">
+                    <div class="sort-layout sort-types">
+                        <Button
+                            v-if="vertical"
+                            type="button"
+                            class="dashboard sort-button"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        >
                         </Button>
                         <Button
                             v-else="!vertical"
@@ -219,45 +224,43 @@
 
 <script setup>
 //Импорт файлов
-import SearchInput from "@features/ActionForm/components/SearchInput.vue";
-import Button from "primevue/button";
-import bannerCreate from "@shared/components/imagescomp/bannerCreate.vue";
+import SearchInput from '@features/ActionForm/components/SearchInput.vue';
+import Button from 'primevue/button';
+import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
 import { ref } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { getListActions } from '@services/ActionService';
-import { computed } from "vue";
-import { onActivated } from "vue";
+import { computed } from 'vue';
+import { onActivated } from 'vue';
 
 let actionsList = ref([]);
 
 //Массив полученных значений
-const SortedList = ref([])
+const SortedList = ref([]);
 
-const SearchResult = ref('')
+const SearchResult = ref('');
 
 //Поиск нового значения
-function SearchByInput(){
-  actionsList.value.forEach((action)=>{
-    if(actionsList.value.name.includes(SearchByInput.value)){
-      SortedList.value.push(action)
-    }
-  })
-  console.log(SortedList.value)
+function SearchByInput() {
+    actionsList.value.forEach((action) => {
+        if (actionsList.value.name.includes(SearchByInput.value)) {
+            SortedList.value.push(action);
+        }
+    });
+    console.log(SortedList.value);
 }
-onActivated(()=>{
-  getListActions()
-    .then((responce)=>{
-      actionsList.value = responce.data;
-    })
-    .catch((e) =>{
-
-    })
-})
+onActivated(() => {
+    getListActions()
+        .then((responce) => {
+            actionsList.value = responce.data;
+        })
+        .catch((e) => {});
+});
 const actionNewList = computed(() => {
-  console.log(sortBy);
-})
+    console.log(sortBy);
+});
 
 //Сортировка
 const vertical = ref(true);
