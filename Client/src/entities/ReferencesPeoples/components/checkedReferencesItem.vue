@@ -1,28 +1,30 @@
 <template>
     <div class="checked">
-        <div class="checked-item__wrapper">
+        <router-link
+            class="checked-item__wrapper"
+            :to="{
+                name: 'PersonalDataUser',
+                params: { id: participant.user.id },
+            }"
+        >
             <div class="checked-img">
                 <img
-                    :src="participant?.user?.avatar?.photo"
+                    :src="participant.user.avatar?.photo"
                     alt="logo"
-                    v-if="participant?.user?.avatar?.photo"
+                    v-if="participant.user.avatar?.photo"
                 />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                    v-else
-                />
+                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
-                        {{participant?.user?.last_name }}
+                        {{ participant.user.last_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ participant?.user?.first_name }}
+                        {{ participant.user.first_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ participant?.user?.patronymic_name }}
+                        {{ participant.user.patronymic_name }}
                     </p>
                 </div>
                 <div class="checked-item__list-date">
@@ -32,10 +34,10 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{participant?.user?.date_of_birth }}</p>
+                    <p>{{ participant.user.date_of_birth }}</p>
                 </div>
             </div>
-        </div>
+        </router-link>
         <div class="sort-select ml-3">
             <sortByEducation
                 placeholder="Выберете действие"
@@ -49,7 +51,7 @@
             <input
                 type="checkbox"
                 v-model="checked"
-                :value="participant"
+                :value="participant.user"
                 @change="updateMembership"
             />
         </div>
@@ -69,10 +71,8 @@ import { useRoute } from 'vue-router';
 import { ref, watch, inject } from 'vue';
 import { HTTP } from '@app/http';
 
-
-
 const props = defineProps({
-   participant: {
+    participant: {
         type: Object,
         require: true,
     },
@@ -86,10 +86,10 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['change']);
+const emit = defineEmits(['change', 'approve', 'reject']);
 const updateMembership = (e) => {
     console.log('checkeed', checked.value);
-    emit('change', checked.value, props.participant.id );
+    emit('change', checked.value, props.participant.user.id);
 };
 
 const checked = ref(true);
@@ -107,7 +107,7 @@ const filteredPayed = ref([
         value: 'Одобрен',
         name: 'Одобрен',
     },
-    { value: 'Неодобрен', name: 'Неодобрен' },
+    { value: 'Не одобрен', name: 'Не одобрен' },
 ]);
 
 watch(
@@ -115,74 +115,79 @@ watch(
     (newChecked) => {
         if (!newChecked) return;
         selectedPeoples.value = newChecked;
+        const checkedItem = newChecked.find(
+            (item) => item.user.id == props.participant.user.id,
+        );
+    },
+    () => props.selectedParticipants,
+    (newApprove) => {
+        if (!newApprove) return;
+        selectedPeoples.value = newApproved;
     },
 );
 
 const ChangeStatus = async () => {
-    let { id, ...rest } = props.participant.user;
-    if (user.value.is_verified === 'Одобрен') {
-        HTTP.post(`rsousers/${id}/verify/`, user.value, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-            .then((response) => {
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                // participant.value = response.data; //emit
-                console.log(response.data);
-            })
-
-            .catch(({ response }) => {
-                isError.value = response.data;
-                console.error('There was an error!', response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            });
-    } else {
-        HTTP.delete(
-            `rsousers/${id}/verify/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+    try {
+        let { id, ...rest } = props.participant.user;
+        const approveReq = ref(null);
+        const rejectReq = ref(null);
+        if (user.value.is_verified === 'Одобрен') {
+            const approveReq = await HTTP.post(
+                `rsousers/${id}/verify/`,
+                user.value,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        )
-            .then((response) => {
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'success',
-                    title: 'успешно',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                // participant.value = response.data; //emit
-                console.log(response.data);
-            })
-
-            .catch(({ response }) => {
-                isError.value = response.data;
-                console.error('There was an error!', response.data);
-                swal.fire({
-                    position: 'top-center',
-                    icon: 'error',
-                    title: 'ошибка',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+            );
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
             });
+            console.log('response', approveReq.data);
+            console.log('responseee', props.participant.user);
+            emit('approve', props.participant.user.id);
+            console.log(approveReq.data);
+        } else {
+            const rejectReq = await HTTP.delete(
+                `rsousers/${id}/verify/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            console.log('resp', rejectReq.data);
+            emit('reject', props.participant.user.id);
+            console.log(rejectReq.data);
+        }
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
 </script>
@@ -199,6 +204,9 @@ const ChangeStatus = async () => {
             display: flex;
             position: relative;
             align-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 100%;
         }
     }
 }
@@ -221,6 +229,7 @@ const ChangeStatus = async () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-left: 10px;
 }
 
 .checked-item img {
@@ -279,7 +288,9 @@ const ChangeStatus = async () => {
         height: 24px;
     }
 }
-
+.horizontallso-item__list-full {
+    margin-right: 10px;
+}
 .save {
     // background-color: white;
     // color: #35383f;

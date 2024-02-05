@@ -5,6 +5,7 @@
                 desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
                 label="Создать отряд"
                 name="CreateLSO"
+                :button="true"
             ></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
             <div class="squads-tabs">
@@ -16,10 +17,10 @@
                 </v-btn>
                 <v-btn
                     class="squads-tabs__item"
-                    :class="{ active: picked === area.id }"
+                    :class="{ active: picked === area.name }"
                     v-for="area in categories"
                     :key="area"
-                    @click="picked = area.id"
+                    @click="picked = area.name"
                     >{{ area.name }}
                 </v-btn>
             </div>
@@ -28,7 +29,7 @@
                     type="text"
                     id="search"
                     class="squads-search__input"
-                    v-model="searchSquads"
+                    v-model="name"
                     placeholder="Поищем отряд?"
                 />
                 <svg
@@ -93,15 +94,14 @@
                     <div class="squads-sort">
                         <div class="sort-filters">
                             <div class="sort-select">
-                                <Select
+                                <filterSelect
                                     variant="outlined"
-                                    clearable
                                     name="select_education"
                                     id="select-education"
-                                    v-model="selectedSort"
+                                    v-model="education"
                                     address="/eduicational_institutions/"
                                     placeholder="Образовательная организация"
-                                ></Select>
+                                ></filterSelect>
                             </div>
                             <div class="sort-select">
                                 <sortByEducation
@@ -125,11 +125,29 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
+                <squadsList
+                    :squads="sortedSquads"
+                    v-if="!isSquadsLoading"
+                ></squadsList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
+                <horizontalList
+                    :squads="sortedSquads"
+                    v-if="!isSquadsLoading"
+                ></horizontalList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -148,72 +166,84 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
-import { sortByEducation, Select } from '@shared/components/selects';
+import {
+    sortByEducation,
+    Select,
+    filterSelect,
+} from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
+import { useSquadsStore } from '@features/store/squads';
+import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
-// import { usePage } from '@shared';
-
-// usePage();
 // import squads from '@entities/Squads/squads';
+// const squadsStore = useSquadsStore();
 
+// const squads = storeToRefs(useSquadsStore);
 const squads = ref([]);
+
 const categories = ref([]);
-const educations = ref([]);
-
-const getCategories = async () => {
-    await HTTP.get('/areas/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            categories.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getEducations = async () => {
-    await HTTP.get('/eduicational_institutions/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educations.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+const isSquadsLoading = ref(false);
+const name = ref('');
+const education = ref('');
 
 const getSquads = async () => {
-    await HTTP.get('/detachments/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squads.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+    try {
+        isSquadsLoading.value = true;
+        setTimeout(async () => {
+            const categoryResponse = await HTTP.get('/areas/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            const squadsResponse = await HTTP.get(`/detachments/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+
+            categories.value = categoryResponse.data;
+            squads.value = squadsResponse.data;
+            isSquadsLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-onMounted(() => {
-    getSquads();
-    getCategories();
-});
-const squadsVisible = ref(20);
+const searchSquad = async (name) => {
+    try {
+        const filteredSquads = await HTTP.get(`/detachments/?search=${name}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        squads.value = filteredSquads.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
 
+const filteredSquad = async (education) => {
+    try {
+        const filteredSquadsEduc = await HTTP.get(
+            `/detachments/?educational_institution__name=${education}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        squads.value = filteredSquadsEduc.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const squadsVisible = ref(20);
 const step = ref(20);
 
 const ascending = ref(true);
@@ -223,13 +253,9 @@ const picked = ref('');
 
 const vertical = ref(true);
 
-const searchSquads = ref('');
-
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
-
-const selectedSort = ref(null);
 
 const sortOptionss = ref([
     {
@@ -240,24 +266,20 @@ const sortOptionss = ref([
     { value: 'members_count', name: 'Количеству участников' },
 ]);
 
+const searchSquads = computed(() => {
+    return searchSquad(name.value);
+});
+const filteredSquadsByEducation = computed(() => {
+    return filteredSquad(education.value);
+});
+
 const sortedSquads = computed(() => {
     let tempSquads = squads.value;
 
     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-    tempSquads = tempSquads.filter((item) => {
-        // console.log(educational_institution.id);
-        return (
-            selectedSort.value == null ||
-            item.educational_institution == selectedSort.value
-        );
-    });
-
-    tempSquads = tempSquads.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchSquads.value.toUpperCase());
-    });
+    searchSquads.value;
+    filteredSquadsByEducation.value;
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -299,9 +321,12 @@ const sortedSquads = computed(() => {
 
     return tempSquads;
 });
+
+onMounted(() => {
+    getSquads();
+});
 </script>
 <style lang="scss" scoped>
-
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
@@ -375,7 +400,7 @@ const sortedSquads = computed(() => {
         flex-wrap: wrap;
 
         &__item {
-            padding: 6px 24px;
+            padding: 3px 24px;
             border: 1px solid black;
             border-radius: 30px;
             text-align: center;
@@ -406,6 +431,19 @@ const sortedSquads = computed(() => {
     background-color: #1c5c94;
     color: white;
     border: 1px solid #1c5c94;
+}
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
+}
+
+.sort-filters {
+    flex-wrap: wrap;
+    margin-top: 30px;
+    align-items: end;
 }
 
 .squads-search {

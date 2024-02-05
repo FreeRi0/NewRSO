@@ -4,6 +4,7 @@
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 :button="false"
+                :loc-com="true"
             ></bannerCreate>
             <h2 class="headquarters-title">Местные штабы</h2>
             <div class="headquarters-search">
@@ -11,7 +12,7 @@
                     type="text"
                     id="search"
                     class="headquarters-search__input"
-                    v-model="searchLocalHeadquarters"
+                    v-model="name"
                     placeholder="Начните вводить название штаба."
                 />
                 <svg
@@ -146,15 +147,29 @@
                     ></Button>
                 </div>
             </div>
-            <div v-show="vertical">
+            <div v-show="vertical" class="mt-10">
                 <LocalHQList
                     :localHeadquarters="sortedLocalHeadquarters"
+                    v-if="!isLocalLoading"
                 ></LocalHQList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
             <div class="horizontal" v-show="!vertical">
                 <HorizontalLocalHQs
                     :localHeadquarters="sortedLocalHeadquarters"
+                    v-if="!isLocalLoading"
                 ></HorizontalLocalHQs>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -189,6 +204,7 @@ const crosspageFilters = useCrosspageFilter();
 const localHeadquarters = ref([]);
 
 const headquartersVisible = ref(20);
+const isLocalLoading = ref(false);
 
 const step = ref(20);
 
@@ -197,7 +213,7 @@ const sortBy = ref('alphabetically');
 
 const vertical = ref(true);
 
-const searchLocalHeadquarters = ref('');
+const name = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -213,20 +229,40 @@ const districts = ref([]);
 const regionals = ref([]);
 
 const getLocalHeadquarters = async () => {
-    await HTTP.get('/locals/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            localHeadquarters.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+    try {
+        isLocalLoading.value = true;
+        setTimeout(async () => {
+            const localsResponse = await HTTP.get(`/locals/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            localHeadquarters.value = localsResponse.data;
+            isLocalLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
+
+const searchLocal = async (name) => {
+    try {
+        const filteredLocals = await HTTP.get(`/locals/?search=${name}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        localHeadquarters.value = filteredLocals.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const searchLocals = computed(() => {
+    return searchLocal(name.value);
+});
 
 const filtersDistricts = computed(() =>
     selectedSortDistrict.value
@@ -300,11 +336,7 @@ const sortedLocalHeadquarters = computed(() => {
         );
     });
 
-    tempHeadquartes = tempHeadquartes.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchLocalHeadquarters.value.toUpperCase());
-    });
+    searchLocals.value;
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -432,6 +464,19 @@ onActivated(() => {
         font-family: 'Akrobat';
         color: #1e1e1e;
     }
+}
+
+pre {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
 }
 
 .horizontal {

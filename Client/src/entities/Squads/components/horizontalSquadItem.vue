@@ -6,7 +6,10 @@
         >
             <div class="horizontal-img">
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
-                <img src="@app/assets/user-avatar.png" alt="logo" v-else />
+                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
+            </div>
+            <div class="containerHorizontal">
+                <p class="horizontal-item-title">"{{ squad.name }}"</p>
             </div>
         </router-link>
     </div>
@@ -16,11 +19,28 @@
             :to="{ name: 'lso', params: { id: squad.detachment.id } }"
         >
             <div class="horizontal-img">
-                <img :src="squad.detachment.banner" alt="logo" v-if="squad.detachment.banner" />
-                <img src="@app/assets/user-avatar.png" alt="logo" v-else />
+                <img :src="squad.detachment?.banner" alt="logo" v-if="squad.detachment?.banner" />
+                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontal-item-title">"{{ squad.detachment.name }}"</p>
+                <div class="rating" v-if="rating">
+                    <p>Место в рейтинге: 102</p>
+                </div>
+            </div>
+        </router-link>
+    </div>
+    <div v-if="competition">
+        <router-link
+            class="horizontal-item"
+            :to="{ name: 'lso', params: { id: squad.junior_detachment.id } }"
+        >
+            <div class="horizontal-img">
+                <img :src="squad.junior_detachment?.banner" alt="logo" v-if="squad.junior_detachment?.banner" />
+                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
+            </div>
+            <div class="containerHorizontal">
+                <p class="horizontal-item-title">"{{ squad.junior_detachment.name }}"</p>
                 <div class="rating" v-if="rating">
                     <p>Место в рейтинге: 102</p>
                 </div>

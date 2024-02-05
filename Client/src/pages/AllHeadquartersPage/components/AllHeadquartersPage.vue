@@ -5,6 +5,7 @@
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
                 name="createhq"
+                :button="true"
             ></bannerCreate>
             <h2 class="headquarters-title">Штабы СО ОО</h2>
             <div class="headquarters-search">
@@ -12,7 +13,7 @@
                     type="text"
                     id="search"
                     class="headquarters-search__input"
-                    v-model="searchHeadquartes"
+                    v-model="name"
                     placeholder="Начните вводить название штаба образовательной организации."
                 />
                 <svg
@@ -172,16 +173,30 @@
                 </div>
             </div>
 
-            <div v-show="vertical">
+            <div v-show="vertical" class="mt-10">
                 <HeadquartersList
                     :headquarters="sortedHeadquarters"
+                    v-if="!isHeadquartersLoading"
                 ></HeadquartersList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalHeadquarters
                     :headquarters="sortedHeadquarters"
+                    v-if="!isHeadquartersLoading"
                 ></horizontalHeadquarters>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -200,18 +215,23 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { HeadquartersList, horizontalHeadquarters } from '@features/Headquarters/components';
+import {
+    HeadquartersList,
+    horizontalHeadquarters,
+} from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-import { onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
+import { onActivated } from 'vue';
 
 const crosspageFilters = useCrosspageFilter();
 
 const headquarters = ref([]);
 
 const headquartersVisible = ref(20);
+const isHeadquartersLoading = ref(false);
 
 const step = ref(20);
 
@@ -220,7 +240,7 @@ const sortBy = ref('alphabetically');
 
 const vertical = ref(true);
 
-const searchHeadquartes = ref('');
+const name = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -240,19 +260,38 @@ const districts = ref([]);
 const regionals = ref([]);
 
 const getHeadquarters = async () => {
-    await HTTP.get('/educationals/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            headquarters.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+    try {
+        isHeadquartersLoading.value = true;
+        setTimeout(async () => {
+            const educationalsResponse = await HTTP.get(`/educationals/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            headquarters.value = educationalsResponse.data;
+            isHeadquartersLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const searchEducational = async (name) => {
+    try {
+        const filteredEducationals = await HTTP.get(
+            `/educationals/?search=${name}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        headquarters.value = filteredEducationals.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const filtersDistricts = computed(() =>
@@ -275,6 +314,10 @@ const filtersLocals = computed(() =>
               ?.AllHeadquarters ?? []
         : headquarters.value,
 );
+
+const searchEducationals = computed(() => {
+    return searchEducational(name.value);
+});
 
 const getDistrictsHeadquartersForFilters = async () => {
     try {
@@ -341,6 +384,7 @@ const sortedHeadquarters = computed(() => {
         tempHeadquartes = [...headquarters.value];
     }
 
+    searchEducationals.value;
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     tempHeadquartes = tempHeadquartes.filter((item) => {
         // console.log(educational_institution.id);
@@ -351,11 +395,11 @@ const sortedHeadquarters = computed(() => {
                 item.local_headquarter == selectedSortLocal.value)
         );
     });
-    tempHeadquartes = tempHeadquartes.filter((item) => {
-        return item.name
-            .toUpperCase()
-            .includes(searchHeadquartes.value.toUpperCase());
-    });
+    // tempHeadquartes = tempHeadquartes.filter((item) => {
+    //     return item.name
+    //         .toUpperCase()
+    //         .includes(searchHeadquartes.value.toUpperCase());
+    // });
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -392,15 +436,27 @@ const sortedHeadquarters = computed(() => {
     return tempHeadquartes;
 });
 
-onBeforeRouteUpdate(async (to, from) => {
+onBeforeRouteLeave(async (to, from) => {
     const pageName = 'AllHeadquarters';
     const filtersPropertiesToRemove = [
-        'disrictName',
+        'districtName',
         'regionalName',
         'localName',
     ];
 
     crosspageFilters.removeFilters(pageName, filtersPropertiesToRemove);
+});
+onActivated(() => {
+    SelectedSortDistrict.value = JSON.parse(
+        localStorage.getItem('AllHeadquarters_filters'),
+    )?.districtName;
+
+    SelectedSortRegional.value = JSON.parse(
+        localStorage.getItem('AllHeadquarters_filters'),
+    )?.regionalName;
+    SelectedSortLocal.value = JSON.parse(
+        localStorage.getItem('AllHeadquarters_filters'),
+    )?.localName;
 });
 </script>
 <style lang="scss">
@@ -437,6 +493,7 @@ onBeforeRouteUpdate(async (to, from) => {
             border: 1px solid black;
         }
     }
+
     &-wrapper {
         padding: 60px 0px;
         display: grid;
@@ -450,6 +507,19 @@ onBeforeRouteUpdate(async (to, from) => {
             grid-template-columns: 1fr 1fr;
         }
     }
+}
+
+pre {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
 }
 .headquarters-wrapper__item {
     margin: 0px auto;

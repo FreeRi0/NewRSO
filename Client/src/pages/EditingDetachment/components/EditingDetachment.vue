@@ -9,7 +9,7 @@
             :submited="submited"
             :is-error="isError"
             :is-error-members="isErrorMembers"
-            v-if="detachment && isError && isErrorMembers"
+            v-if="detachment && isError && isErrorMembers && !loading"
             @submit.prevent="changeDetachment"
             @select-file="onSelectFile"
             @reset-emblem="onResetEmblem"
@@ -59,7 +59,7 @@ const getPositions = async () => {
 };
 
 const getAreas = async () => {
-    HTTP.get('areas/')
+    await HTTP.get('areas/')
 
         .then((res) => {
             areas.value = res.data;
@@ -71,7 +71,7 @@ const getAreas = async () => {
 };
 
 const getRegions = async () => {
-    HTTP.get('regions/')
+    await HTTP.get('regions/')
 
         .then((res) => {
             regions.value = res.data;
@@ -84,7 +84,10 @@ const getRegions = async () => {
 
 const { replaceTargetObjects } = usePage();
 
+const loading = ref(false);
+
 const getDetachment = async () => {
+    loading.value = true;
     console.log('id отряда для редактирования - ', id);
     HTTP.get(`/detachments/${id}/`, {
         headers: {
@@ -94,14 +97,20 @@ const getDetachment = async () => {
     })
         .then((response) => {
             detachment.value = response.data;
+            // console.log('ggggggggggggggggggg', areas.value);
 
-            if (areas.value) {
+            if (areas.value.length) {
                 const area = areas.value.find((item) => {
                     return item.name === detachment.value.area;
                 });
+                // console.log(
+                //     'fffffffffffffffffffffff',
+                //     detachment.value.area,
+                //     area,
+                // );
                 detachment.value.area = area.id;
             }
-            if (regions.value) {
+            if (regions.value.length) {
                 const region = regions.value.find((item) => {
                     return item.name === detachment.value.region;
                 });
@@ -116,6 +125,7 @@ const getDetachment = async () => {
             }
             replaceTargetObjects([detachment.value]);
             console.log(response);
+            loading.value = false;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -154,21 +164,12 @@ const getMembers = async () => {
     // console.log(id);
 };
 
-// watch(
-//     () => route.params.id,
-
-//     (newId, oldId) => {
-//         id = newId;
-//         getDetachment();
-//     },
-// );
-
 onMounted(() => {
-    getDetachment();
     getMembers();
     getPositions();
     getAreas();
     getRegions();
+    getDetachment();
 });
 
 const onUpdateMember = (event, id) => {

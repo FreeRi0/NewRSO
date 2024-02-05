@@ -2,22 +2,44 @@
     <section class="headquarters-detachments">
         <h3>Отряды штаба</h3>
         <div class="headquarters-detachments__container">
-            <div class="squad-card" v-for="detachment in area">
+            <div class="squad-card">
                 <div class="squad-card__ava">
                     <img
-                        :src="detachment.avatar.photo"
+                        v-if="area.id === 1"
+                        src="@app/assets/headquarters/squad-ava6.png"
                         alt="photo"
-                        v-if="detachment.avatar"
                     />
                     <img
+                        v-else-if="area.id === 2"
+                        src="@app/assets/headquarters/squad-ava3.png"
+                        alt="photo"
+                    />
+                    <img
+                        v-else-if="area.id === 3"
                         src="@app/assets/headquarters/squad-ava.png"
                         alt="photo"
-                        v-else
                     />
+                    <img
+                        v-else-if="area.id === 4"
+                        src="@app/assets/headquarters/squad-ava4.png"
+                        alt="photo"
+                    />
+                    <img
+                        v-else-if="area.id === 5"
+                        src="@app/assets/headquarters/squad-ava2.png"
+                        alt="photo"
+                    />
+                    <img
+                        v-else-if="area.id === 6"
+                        src="@app/assets/headquarters/squad-ava5.png"
+                        alt="photo"
+                    />
+
+                    <img v-else src="#" alt="" />
                 </div>
-                <a href="/AllSquads"
-                    ><h5>{{ area.name }}</h5></a
-                >
+                <a href="/AllSquads">
+                    <h5>{{ area.name }}</h5>
+                </a>
             </div>
         </div>
     </section>
@@ -31,12 +53,6 @@ const route = useRoute();
 let id = route.params.id;
 
 const area = ref({});
-
-const props = defineProps({
-    area: {
-        type: Array,
-    },
-});
 
 const aboutArea = async () => {
     await HTTP.get(`/areas/${id}/`, {
@@ -56,33 +72,6 @@ const aboutArea = async () => {
 onMounted(() => {
     aboutArea();
 });
-
-// const detachments = ref([
-//     {
-//         name: 'Сервисные',
-//         image: 'squad-ava.png',
-//     },
-//     {
-//         name: 'Проводников',
-//         image: 'squad-ava2.png',
-//     },
-//     {
-//         name: 'Медицинские',
-//         image: 'squad-ava3.png',
-//     },
-//     {
-//         name: 'Сельскохозяйственные',
-//         image: 'squad-ava5.png',
-//     },
-//     {
-//         name: 'Строительные',
-//         image: 'squad-ava4.png',
-//     },
-//     {
-//         name: 'Педагогические',
-//         image: 'squad-ava6.png',
-//     },
-// ]);
 </script>
 
 <style scoped lang="scss">

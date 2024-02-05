@@ -1,9 +1,11 @@
 <template>
-    <div class='container'>
-        <bannerCreate desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
-
-                      label="Создать мероприятие" name='createAction'></bannerCreate>
-
+    <div class="container">
+        <bannerCreate
+            desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
+            label="Создать мероприятие"
+            name="createAction"
+        ></bannerCreate>
+            label="Создать мероприятие" name='createAction'></bannerCreate>
         <h2 class='action-title'>Мероприятия</h2>
         <div class='searcher'>
             <SearchInput @search="SearchByInput"></SearchInput>
@@ -76,48 +78,60 @@
                         <Button v-if='vertical' type='button' class='dashboard sort-button' icon='icon' color='white'
                                 @click='showVertical'>
                         </Button>
-                        <Button v-else='!vertical' type='button' class='dashboardD sort-button' icon='icon' color='white'
-                                @click='showVertical'>
+                        <Button
+                            v-else="!vertical"
+                            type="button"
+                            class="dashboardD sort-button"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
+                        >
                         </Button>
                         <Button
-                            v-if='!vertical'
-                            type='button'
-                            class='menuuA sort-button'
-                            icon='icon'
-                            color='white'
-                            @click='showVertical'
+                            v-if="!vertical"
+                            type="button"
+                            class="menuuA sort-button"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
                         ></Button>
                         <Button
-                            v-else='vertical'
-                            type='button'
-                            class='menuu sort-button'
-                            icon='icon'
-                            color='white'
-                            @click='showVertical'
+                            v-else="vertical"
+                            type="button"
+                            class="menuu sort-button"
+                            icon="icon"
+                            color="white"
+                            @click="showVertical"
                         ></Button>
                     </div>
-                    <div class='sort-alphabet'>
+                    <div class="sort-alphabet">
                         <sortByEducation
-                              variant="outlined"
-                              v-model="sortBy"
-                              :options="sortOptionss"
-                              class="sort-select select"
-                          ></sortByEducation>
+                            variant="outlined"
+                            v-model="sortBy"
+                            :options="sortOptionss"
+                            class="sort-select select"
+                        ></sortByEducation>
                         <Button
-                            type='button'
-                            class='ascend sort-button'
-                            icon='switch'
-                            @click='ascending = !ascending'
-                            color='white'
+                            type="button"
+                            class="ascend sort-button"
+                            icon="switch"
+                            @click="ascending = !ascending"
+                            color="white"
                         ></Button>
                     </div>
                 </div>
-                <div class='postcard-container'>
-                    <div v-if='vertical' v-for='action in actionsList'>
-                        <Actionitem :action='action'></Actionitem>
+                <div class="postcard-container">
+                    <div v-if="vertical" v-for="action in actionsList">
+                        <Actionitem :action="action"></Actionitem>
                     </div>
-                    <div v-if='!vertical' v-for='action in actionsList' class='postcard-containerline'>
-                        <ActionitemVertical :action='action'></ActionitemVertical>
+                    <div
+                        v-if="!vertical"
+                        v-for="action in actionsList"
+                        class="postcard-containerline"
+                    >
+                        <ActionitemVertical
+                            :action="action"
+                        ></ActionitemVertical>
                     </div>
                 </div>
             </div>
@@ -127,7 +141,6 @@
 
 <script setup>
 //Импорт файлов
-
 import SearchInput from "@features/ActionForm/components/SearchInput.vue";
 import Button from "primevue/button";
 import bannerCreate from "@shared/components/imagescomp/bannerCreate.vue";
@@ -174,8 +187,8 @@ const ascending = ref(true);
 
 //События нажатия
 function ClearSearchForm() {
-    console.log("Форма очищена")
-};
+    console.log('Форма очищена');
+}
 
 const actionFormSearch = ref({
         format: '',
@@ -186,7 +199,7 @@ const actionFormSearch = ref({
     })
 function SendSearchForm() {
     console.log(actionFormSearch);
-};
+}
 //Изменение расположения блоков
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -204,16 +217,15 @@ const sortOptionss = ref([
 ]);
 
 //Получить полный список мероприятий
-
 </script>
 
-<style lang='scss' scoped>
-    //Общий стиль компонента
-    .action{
-        &-title{
-          height: 116px;
-          font-size: 52px;
-          @media screen and (max-width: 575px) {
+<style lang="scss" scoped>
+//Общий стиль компонента
+.action {
+    &-title {
+        height: 116px;
+        font-size: 52px;
+        @media screen and (max-width: 575px) {
             font-size: 32px;
           }
         }
@@ -237,7 +249,7 @@ const sortOptionss = ref([
         width: 100%;
         margin-top: 40px;
         height: 40px;
-        display:flex;
+        display: flex;
         justify-content: space-around;
       }
       &-radio{
@@ -248,11 +260,11 @@ const sortOptionss = ref([
       }
       &-select{
         padding-right: 5px;
-      }
-      &-btm{
+    }
+    &-btm {
         width: 114px;
         border-radius: 10px;
-        background-color: #39BFBF;
+        background-color: #39bfbf;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -280,69 +292,68 @@ const sortOptionss = ref([
       &-btminv{
         width: 114px;
         border-radius: 10px;
-        border: 2px solid #35383F;
+        border: 2px solid #35383f;
         display: flex;
         justify-content: center;
         align-items: center;
-      }
     }
-    //Стиль сортировки
-    .sort{
-      &-container{
+}
+//Стиль сортировки
+.sort {
+    &-container {
         width: 100%;
         height: 50px;
         display: flex;
         justify-content: space-between;
-      }
-      &-select{
+    }
+    &-select {
         margin-right: 8px;
-      }
-      &-types{
+    }
+    &-types {
         height: 50px;
-      }
-      &-button{
+    }
+    &-button {
         margin-right: 5px;
         border: 1px solid black;
         border-radius: 5px;
         width: 25px;
         height: 25px;
-      }
-      &-alphabet {
+    }
+    &-alphabet {
         width: 320px;
         display: flex;
         justify-content: flex-end;
-      }
-      &-select {
+    }
+    &-select {
         height: 50px;
         position: relative;
         display: flex;
         flex-direction: column;
-      }
-      .education {
+    }
+    .education {
         width: 305px;
         @media screen and (max-width: 768px) {
-          width: 100%;
+            width: 100%;
         }
-      }
     }
-    .dashboard {
-      background-image: url('@app/assets/icon/darhboard-active.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
+}
+.dashboard {
+    background-image: url('@app/assets/icon/darhboard-active.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 
-    .dashboardD {
-      background-image: url('@app/assets/icon/darhboard-disable.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
+.dashboardD {
+    background-image: url('@app/assets/icon/darhboard-disable.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 
-    .menuuA {
-      background-image: url('@app/assets/icon/MenuA.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-
+.menuuA {
+    background-image: url('@app/assets/icon/MenuA.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
     .menuu {
       background-image: url('@app/assets/icon/Menu.svg');
       background-repeat: no-repeat;
@@ -359,23 +370,17 @@ const sortOptionss = ref([
       height: 50px;
       margin-bottom: 40px;
 
-    }
-    .squads-search {
-      position: relative;
-      box-sizing: border-box;
-
-      svg {
+    svg {
         position: absolute;
         top: 10px;
         left: 16px;
-      }
+    }
 
-      &__input {
+    &__input {
         width: 100%;
         padding: 13px 0px 10px 60px;
         border-radius: 10px;
         border: 1px solid black;
-      }
     }
     //Сброс стилей аккордиона
     .v-expansion-panel {

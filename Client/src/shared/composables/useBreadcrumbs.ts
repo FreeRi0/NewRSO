@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any*/
+
+
 import { reactive } from 'vue';
 import {
     RouteLocationNormalizedLoaded,
@@ -21,7 +24,7 @@ interface Params {
     targetObjects?: object[];
 }
 
-function bypassObject(stringProperties: string, obj: object | null) {
+function bypassObject(stringProperties: string, obj: any | null) {
     if (!obj) return '';
 
     const arrayProperties = stringProperties.split('.');
@@ -70,7 +73,7 @@ function getElementParams(element: RouteLocationMatched, params: RouteParams) {
 
     if (!keys?.length) return undefined;
 
-    return keys.reduce((acc, key) => {
+    return keys.reduce((acc: any, key) => {
         acc[key] = params[key];
 
         return acc;

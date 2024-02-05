@@ -33,34 +33,23 @@
                         :key="member.id"
                         class="participants-wrapper__item list"
                     >
-                        <div v-if="member.detachment">
-                            <div class="member__image">
+                        <router-link
+                            :to="{ name: 'lso', params: { id: member.id } }"
+                            class="member__link"
+                        >
+                            <div class="member__image-box">
                                 <img
-                                    :src="
-                                        member.detachment?.banner ??
-                                        '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                                    "
+                                    v-if="member?.banner"
+                                    :src="member?.banner"
+                                    class="member__image"
                                     alt="Логотип отряда"
                                 />
                             </div>
-                            <p>{{ member.detachment?.area }}</p>
-                            <p>{{ member.detachment?.name }}</p>
+
+                            <p>{{ member?.area }}</p>
+                            <p class="member__name">{{ member?.name }}</p>
                             <!-- <p>Место в рейтинге {{ member.detachment.какое-то поле }}</p> -->
-                        </div>
-                        <div>
-                            <div class="member__image">
-                                <img
-                                    :src="
-                                        member.junior_detachment.banner ??
-                                        '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                                    "
-                                    alt="Логотип отряда"
-                                />
-                            </div>
-                            <p>{{ member.junior_detachment?.area }}</p>
-                            <p>{{ member.junior_detachment?.name }}</p>
-                            <!-- <p>Место в рейтинге {{ member.junior_detachment.какое-то поле }}</p> -->
-                        </div>
+                        </router-link>
                     </div>
                 </template>
                 <div v-else>Участники не найдены...</div>
@@ -69,36 +58,27 @@
             <div v-else :members="verified" class="squad__wrapper-container">
                 <template v-if="verified?.length > 0">
                     <div
-                        v-for="participant in verified"
-                        :key="participant.id"
+                        v-for="member in verified"
+                        :key="member.id"
                         class="participants-wrapper__item list"
                     >
-                        <div v-if="participant.detachment">
-                            <div class="member__image">
+                        <router-link
+                            :to="{ name: 'lso', params: { id: member.id } }"
+                            class="member__link"
+                        >
+                            <div class="member__image-box">
                                 <img
-                                    :src="
-                                        participant.detachment?.banner ??
-                                        '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                                    "
+                                    v-if="member?.banner"
+                                    :src="member?.banner"
+                                    class="member__image"
                                     alt="Логотип отряда"
                                 />
                             </div>
-                            <p>{{ participant.detachment?.area }}</p>
-                            <p>{{ participant.detachment?.name }}</p>
-                        </div>
-                        <div>
-                            <div class="member__image">
-                                <img
-                                    :src="
-                                        participant.junior_detachment?.banner ??
-                                        '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                                    "
-                                    alt="Логотип отряда"
-                                />
-                            </div>
-                            <p>{{ participant.junior_detachment?.area }}</p>
-                            <p>{{ participant.junior_detachment?.name }}</p>
-                        </div>
+
+                            <p>{{ member?.area }}</p>
+                            <p class="member__name">{{ member?.name }}</p>
+                            <!-- <p>Место в рейтинге {{ member.detachment.какое-то поле }}</p> -->
+                        </router-link>
                     </div>
                 </template>
                 <div v-else>Участники не найдены...</div>
@@ -139,7 +119,16 @@ const getMembers = async () => {
         },
     })
         .then((response) => {
-            members.value = response.data;
+            // members.value = response.data;
+
+            members.value = response.data.reduce((acc, member) => {
+                if (member.detachment) acc.push(member.detachment);
+                acc.push(member.junior_detachment);
+
+                console.log('acc', acc);
+
+                return acc;
+            }, []);
 
             console.log('Участвуют в конкурсе -', response);
         })
@@ -157,7 +146,16 @@ const getVerified = async () => {
         },
     })
         .then((response) => {
-            verified.value = response.data;
+            // verified.value = response.data;
+
+            verified.value = response.data.reduce((acc, member) => {
+                if (member.detachment) acc.push(member.detachment);
+                acc.push(member.junior_detachment);
+
+                console.log('acc', acc);
+
+                return acc;
+            }, []);
             console.log('Ожидают одобрения - ', response);
         })
         .catch(function (error) {
@@ -170,7 +168,7 @@ onMounted(() => {
     getVerified();
 });
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .active {
     background-color: #1c5c94;
     color: white;
@@ -178,6 +176,42 @@ onMounted(() => {
 }
 .squad-tabs {
     margin-bottom: 60px;
+}
+
+.member__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.member__image-box {
+    width: 128px;
+    height: 128px;
+    margin-bottom: 10px;
+    background-color: #c7e3fa;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.member__image {
+    // min-width: 128px;
+    // min-height: 128px;
+    // border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 10px;
+}
+
+.member__name {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.participants-wrapper__item {
+    display: grid;
+    justify-content: center;
+    text-align: center;
 }
 
 .squad__navigation {
@@ -211,17 +245,18 @@ onMounted(() => {
 
     &-container {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-gap: 8px;
+        grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
         grid-row-gap: 40px;
-        @media screen and (max-width: 1024px) {
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-        }
-        @media screen and (max-width: 768px) {
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-        @media screen and (max-width: 575px) {
-            grid-template-columns: 1fr 1fr;
-        }
+        // @media screen and (max-width: 1024px) {
+        //     grid-template-columns: 1fr 1fr 1fr 1fr;
+        // }
+        // @media screen and (max-width: 768px) {
+        //     grid-template-columns: 1fr 1fr 1fr;
+        // }
+        // @media screen and (max-width: 575px) {
+        //     grid-template-columns: 1fr 1fr;
+        // }
     }
 }
 
@@ -245,9 +280,11 @@ onMounted(() => {
     color: #1c5c94;
     border: 1px solid #1c5c94;
     margin: 0px;
-    padding: 7px 12px;
-    margin: 7px;
-    height: 38px;
+    padding: 10px 24px;
+    height: min-content;
+    // padding: 7px 12px;
+    // margin: 7px;
+    // height: 38px;
 }
 
 .active {

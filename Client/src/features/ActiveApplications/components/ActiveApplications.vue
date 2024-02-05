@@ -5,10 +5,10 @@
             :participant="participant"
             @change="changePeoples"
             :selectedParticipants="selectedPeoples"
-            :key="participant.id"
+            :key="participant.user.id"
         />
     </div>
-    <h2 v-else>Заявок нет...</h2>
+    <p v-else>Заявок нет...</p>
 </template>
 <script setup>
 import { ref } from 'vue';
@@ -25,6 +25,8 @@ const props = defineProps({
 });
 
 const changePeoples = (CheckedUser, UserId) => {
+
     emit('change', CheckedUser, UserId);
+    console.log('UserId', UserId)
 };
 </script>

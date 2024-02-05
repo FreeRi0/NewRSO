@@ -51,16 +51,30 @@
                 <div class="sort-filters"></div>
             </div>
 
-            <div v-show="vertical">
+            <div v-show="vertical" class="mt-10">
                 <DistrictHQList
                     :districtHeadquarters="districtHeadquarters"
+                    v-if="!isDistrictLoading"
                 ></DistrictHQList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <HorizontalDistrictHQs
                     :districtHeadquarters="districtHeadquarters"
+                    v-if="!isDistrictLoading"
                 ></HorizontalDistrictHQs>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
         </div>
     </div>
@@ -84,21 +98,24 @@ const vertical = ref(true);
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
+const isDistrictLoading = ref(false);
 
 const getDistrictHeadquarters = async () => {
-    await HTTP.get('/districts/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            districtHeadquarters.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+    try {
+        isDistrictLoading.value = true;
+        setTimeout(async () => {
+            const DistrictResponse = await HTTP.get('/districts/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            districtHeadquarters.value = DistrictResponse.data;
+            isDistrictLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 onMounted(() => {
@@ -239,6 +256,14 @@ onMounted(() => {
     &-district {
         width: 193px;
     }
+}
+
+
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
 }
 
 @media (max-width: 575px) {

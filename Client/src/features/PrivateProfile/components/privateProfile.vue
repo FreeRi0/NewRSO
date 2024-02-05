@@ -108,7 +108,6 @@ import { HTTP } from '@app/http';
 
 const swal = inject('$swal');
 const isError = ref([]);
-const isSave = ref(true);
 const privacies = ref([
     {
         value: 'all',
@@ -130,55 +129,59 @@ const privateData = ref({
 });
 
 const getPrivate = async () => {
-    await HTTP.get('/rsousers/me/privacy/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            privateData.value = response.data;
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log('failed ' + error);
+    try {
+        const response = await HTTP.get('/rsousers/me/privacy/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        privateData.value = response.data;
+    } catch (error) {
+        console.log('failed ' + error);
+    }
+};
+
+
+const ChangePrivate = async () => {
+    try {
+        const response = await HTTP.patch(
+            '/rsousers/me/privacy/',
+            privateData.value,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        // emit('changeBio', response.data.bio);
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
+    }
 };
 
 onMounted(() => {
     getPrivate();
 });
-
-const ChangePrivate = async () => {
-    await HTTP.patch('/rsousers/me/privacy/', privateData.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            console.log(response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        })
-
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
-};
 </script>
 <style lang="scss">
 .privateProfile-select {

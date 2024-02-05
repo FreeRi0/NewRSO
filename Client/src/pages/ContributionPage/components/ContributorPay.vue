@@ -36,7 +36,12 @@
                 Уважаемый пользователь, ваш членский взнос оплачен.
             </div>
 
-            <div v-else="picked === false">
+            <div
+                v-else-if="
+                    picked === false &&
+                    roles.roles.value.regionalheadquarter_commander
+                "
+            >
                 <div class="contributor-search">
                     <input
                         type="text"
@@ -490,7 +495,14 @@
                                 :participants="sortedParticipants"
                                 :selected-peoples="selectedPeoples"
                                 @change="changePeoples"
+                                v-if="!isLoading"
                             ></contributorsList>
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                         </div>
                         <Button
                             @click="participantsVisible += step"
@@ -513,6 +525,9 @@
                     ></checkedContributors>
                 </div>
             </div>
+            <div v-else class="mt-12">
+                Доступно только для командиров рег штабов
+            </div>
         </div>
     </div>
 </template>
@@ -527,10 +542,16 @@ import {
 } from '@features/Contributor/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
 
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+// let regComId = roles.roles.value.regionalheadquarter_commander;
 const participants = ref([]);
 const participantsVisible = ref(12);
+
 const user = ref({});
 
 const pages = ref([
@@ -547,6 +568,7 @@ const searchHeadquarter = ref(null);
 const searchHeadquarterLocal = ref(null);
 const searchHeadquarterRegion = ref(null);
 const searchLSO = ref(null);
+const isLoading = ref(false);
 const searchEducation = ref(null);
 const minAge = ref('');
 const maxAge = ref('');
@@ -559,43 +581,31 @@ const selectedPeoples = ref([]);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
+const viewContributorsData = async () => {
+    try {
+        isLoading.value = true;
+        setTimeout(async () => {
+            const viewParticipantsResponse = await HTTP.get('/users/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            const viewMembershipResponse = await HTTP.get('/rsousers/me/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
 
-const viewParticipants = async () => {
-    await HTTP.get('/users/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            participants.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+            participants.value = viewParticipantsResponse.data;
+            user.value = viewMembershipResponse.data;
+            isLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
-
-const isMembership = async () => {
-    await HTTP.get('/rsousers/me/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-onMounted(() => {
-    viewParticipants();
-    isMembership();
-});
 
 const select = (event) => {
     selectedPeoples.value = [];
@@ -744,6 +754,10 @@ const sortedParticipants = computed(() => {
 
     return tempParticipants;
 });
+
+onMounted(() => {
+    viewContributorsData();
+});
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
@@ -777,6 +791,13 @@ p {
     color: white;
 }
 
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
+}
+
 .contributor {
     padding: 0px 0px 60px 0px;
     &-title {
@@ -787,10 +808,10 @@ p {
         justify-content: space-between;
         align-items: flex-end;
         @media (max-width: 1024px) {
-         flex-direction: column;
-         align-items: flex-start;
-         margin-top: 60px;
-    }
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 60px;
+        }
     }
     &-container {
         display: grid;
@@ -896,8 +917,8 @@ p {
     &-filters {
         align-items: flex-start;
         @media (max-width: 1024px) {
-        margin-top: 20px;
-    }
+            margin-top: 20px;
+        }
     }
 }
 
@@ -937,6 +958,6 @@ p {
 }
 
 .v-expansion-panel-title {
-    padding: 7px 0px
+    padding: 7px 0px;
 }
 </style>

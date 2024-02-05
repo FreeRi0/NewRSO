@@ -54,10 +54,20 @@
                                     />
                                 </a>
                             </div>
+                            <!-- <pre>dddddssss   {{ userId }}</pre> -->
                         </div>
                     </div>
+                    <!-- <pre>dddddddd{{ props.member }}</pre> -->
+                    <!-- <pre>{{ IsTrusted }}</pre> -->
+                    <!-- <pre>{{ regional?.commander?.id }}</pre>
+                    <pre>{{ squad?.commander?.id }}</pre> -->
+
                     <router-link
-                        v-if="comId === squad?.commander"
+                        v-if="
+                            userId == squad.commander?.id ||
+                            userId == regional.commander?.id ||
+                            IsTrusted
+                        "
                         :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -69,11 +79,9 @@
                     <Button
                         v-else-if="!IsMember && !UserApplication"
                         @click="AddApplication()"
-                        label="Подать заяку"
+                        label="Подать заявку"
                         class="AddApplication"
                     ></Button>
-
-
 
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="user-data__link mr-2">
@@ -85,14 +93,10 @@
                             class="AddApplication"
                         ></Button>
                     </div>
-                     <!-- <pre>dddddddddddddddd{{ UserApplication }}</pre>
-                     <pre>id{{ userId }}</pre> -->
+
                     <!--find искать id в computed-->
 
-                    <div
-                        v-else-if="IsMember"
-                        class="user-data__link"
-                    >
+                    <div v-else-if="IsMember" class="user-data__link">
                         Вы участник
                     </div>
                 </div>
@@ -113,18 +117,6 @@ import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { Button } from '@shared/components/buttons';
-const roleStore = useRoleStore();
-roleStore.getRoles();
-const userStore = useUserStore();
-userStore.getUser();
-const route = useRoute();
-const user = storeToRefs(userStore);
-const roles = storeToRefs(roleStore);
-let comId = roles.roles.value.detachment_commander;
-let userId = computed(() => {
-    return user.user.value.id;
-})
-console.log('comId', comId);
 const props = defineProps({
     banner: {
         type: String,
@@ -142,16 +134,32 @@ const props = defineProps({
     member: {
         type: Array,
     },
+    applications: {
+        type: Array,
+    },
 });
 
-console.log('memberAA', props.member)
+const roleStore = useRoleStore();
+const userStore = useUserStore();
+const route = useRoute();
+const user = storeToRefs(userStore);
+const roles = storeToRefs(roleStore);
+let comId = roles.roles.value.detachment_commander;
+let userId = computed(() => {
+    return user.currentUser.value.id;
+});
+console.log('comId', comId);
+
+console.log('memberAA', props.member);
 
 const edict = ref({});
+const regional = ref({});
 const data = ref({});
 const isError = ref([]);
 const applications = ref([]);
 const swal = inject('$swal');
-console.log('user', user.user.value.id)
+console.log('user', userId.value);
+console.log('member', props.member);
 
 const aboutEduc = async () => {
     let id = props.squad.educational_institution.id;
@@ -190,22 +198,39 @@ const viewDetachments = async () => {
         });
 };
 
-onMounted(() => {
-    aboutEduc();
-    viewDetachments();
-});
+const viewRegionals = async () => {
+    let id = props.squad.regional_headquarter;
+    console.log('idRouteReg', id);
+    await HTTP.get(`/regionals/${id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            regional.value = response.data;
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
 //member сравнивать так же
 const UserApplication = computed(() => {
-    return applications.value.find((item) => item.user.id === userId.value  );
+    return applications.value.find((item) => item.user.id === userId.value);
 });
 
 const IsMember = computed(() => {
     return props.member.find((item) => item.user.id === userId.value);
 });
+const IsTrusted = computed(() => {
+    return props.member.find(
+        (item) => item.user.id === userId.value && item.is_trusted === true,
+    );
+});
 
-console.log('member', IsMember)
-
+console.log('member', IsMember);
 
 watch(
     () => props.squad,
@@ -215,71 +240,86 @@ watch(
             return;
         }
         aboutEduc();
+        viewRegionals();
     },
 );
 
-
 const AddApplication = async () => {
-    let id = props.squad.id;
-    await HTTP.post(`/detachments/${id}/apply/`, data.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            console.log(response);
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        })
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+    try {
+        let id = props.squad.id;
+        const sendResponse = await HTTP.post(
+            `/detachments/${id}/apply/`,
+            data.value,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
         });
+        viewDetachments();
+        console.log('responseee', sendResponse.data);
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
+    }
 };
 
 const DeleteApplication = async () => {
-    let id = props.squad.id;
-    await HTTP.delete(`/detachments/${id}/apply/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            console.log(response);
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        })
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+    try {
+        let id = props.squad.id;
+        const delApplyResp = await HTTP.delete(`/detachments/${id}/apply/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        viewDetachments();
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
+    }
 };
+
+onMounted(() => {
+    aboutEduc();
+    viewDetachments();
+    viewRegionals();
+});
 </script>
 <style lang="scss" scoped>
 .squad-metric {

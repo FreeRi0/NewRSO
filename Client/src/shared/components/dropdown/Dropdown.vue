@@ -59,14 +59,24 @@
                     :key="i"
                     class="dropdown__item dropdown__item_not"
                 >
+                    <button
+                        class="dropdown__button-item"
+                        v-if="item.button"
+                        @click="LogOut"
+                    >
+                        {{ item.title }}
+                    </button>
                     <a
-                        v-if="item.link"
+                        v-else-if="item.link"
                         class="dropdown__link"
                         :href="item.link"
                         >{{ item.title }}</a
                     >
+
                     <router-link
-                        v-if="item.hasOwnProperty('params') && item.params.id"
+                        v-else-if="
+                            item.hasOwnProperty('params') && item.params.id
+                        "
                         class="dropdown__link"
                         :to="{ name: item.name, params: item.params }"
                         >{{ item.title }}</router-link
@@ -78,13 +88,12 @@
                         :to="{ name: item.name }"
                         >{{ item.title }}</router-link
                     >
-                    <button
-                        class="dropdown__button-item"
-                        v-if="item.button"
-                        @click="LogOut"
-                    >
-                        {{ item.title }}
-                    </button>
+                    <!-- <router-link
+                        v-else-if="!item.hasOwnProperty('params') && props.isPrivate"
+                        class="dropdown__link"
+                        :to="{ name: item.name }"
+                        >{{ item.title }}</router-link
+                    > -->
                 </li>
             </ul>
         </transition>
@@ -93,6 +102,7 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
+const emit = defineEmits(['updateUser'])
 const router = useRouter();
 const props = defineProps({
     title: {
@@ -131,6 +141,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    button: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 // const route = useRoute();
@@ -138,6 +152,7 @@ const props = defineProps({
 
 const LogOut = () => {
     localStorage.removeItem('Token');
+    emit('updateUser', {})
     router.push('/');
 };
 </script>

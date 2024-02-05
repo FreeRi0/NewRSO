@@ -8,7 +8,7 @@
         :value="value"
         :checked="checked"
         :disabled="disabled"
-        @input="handleClick($event)"
+        @change="handleClick($event)"
     />
     <label :for="id">{{ label }}</label>
 </template>

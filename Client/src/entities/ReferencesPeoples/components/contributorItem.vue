@@ -11,12 +11,12 @@
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img
-                    :src="participant.media.photo"
+                    :src="participant.media?.photo"
                     alt="logo"
-                    v-if="participant.media"
+                    v-if="participant.media?.photo"
                 />
                 <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    src="@app/assets/user-avatar.png"
                     alt="photo"
                     v-else
                 />
@@ -108,9 +108,12 @@ watch(
         height: 36px;
         justify-content: start;
         img {
+            width: 36px;
+            height: 36px;
             display: flex;
             position: relative;
             align-items: center;
+            border-radius: 100%;
         }
     }
     &-info {

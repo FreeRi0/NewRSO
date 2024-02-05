@@ -4,31 +4,27 @@
         <BannerHQ
             v-if="showHQ"
             :headquarter="headquarter"
-            :edict="educt"
+            :edict="edict"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showDistrictHQ"
             :districtHeadquarter="districtHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showLocalHQ"
             :localHeadquarter="localHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showRegionalHQ"
             :regionalHeadquarter="regionalHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <BannerHQ
             v-else
             :centralHeadquarter="centralHeadquarter"
-            :edict="educt"
             :member="member"
         ></BannerHQ>
         <section class="about-hq">
@@ -42,22 +38,22 @@
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
-            :member="member"
+            :commander="commander"
+            :member="filteredMembers"
             head="Руководство штаба"
             :position="position"
         ></ManagementHQ>
         <DetachmentsHQ></DetachmentsHQ>
     </div>
 </template>
-
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from './components/ManagementHQ.vue';
 import DetachmentsHQ from './components/DetachmentsHQ.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { usePage } from '@shared';
 
 // banner condition
 const showHQ = ref(true);
@@ -65,116 +61,121 @@ const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
 const showRegionalHQ = ref(false);
 
-const headquarter = ref({});
+const commander = ref({});
 const position = ref({});
+const headquarter = ref({});
 const member = ref([]);
-const educt = ref({});
+const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
-// hhhh
+
+const { replaceTargetObjects } = usePage();
 
 const aboutHQ = async () => {
-    await HTTP.get(`/educationals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            headquarter.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const response = await HTTP.get(`/educationals/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+
+        headquarter.value = response.data;
+        replaceTargetObjects([headquarter.value]);
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-const aboutEduc = async () => {
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educt.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const aboutMembers = async () => {
-    await HTTP.get(`/educationals/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            member.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-// let allMembers;
-
-// const aboutMembers = async () => {
+// const aboutEduc = async () => {
 //     try {
-//         const response = await HTTP.get(`/educationals/${id}/members/`, {
+//         const response = await HTTP.get(`/eduicational_institutions/${id}/`, {
 //             headers: {
 //                 'Content-Type': 'application/json',
 //                 Authorization: 'Token ' + localStorage.getItem('Token'),
 //             },
 //         });
 
-//         member.value = response.data;
+//         educt.value = response.data;
 //         console.log(response);
-//         allMembers = response.data;
-
-//         const filteredMembers = allMembers.filter(
-//             (sort) =>
-//                 sort.position === 'Командир' ||
-//                 sort.position === 'Комиссар' ||
-//                 sort.position === 'Мастер (методист)',
-//         );
-
-//         member.value = filteredMembers;
 //     } catch (error) {
 //         console.log('an error occured ' + error);
 //     }
 // };
 
-aboutMembers();
+const aboutMembers = async () => {
+    try {
+        const response = await HTTP.get(`/educationals/${id}/members/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        member.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const fetchCommander = async () => {
+    try {
+        let id = headquarter.value.commander.id;
+        const response = await HTTP.get(`/users/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        commander.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+// aboutMembers();
+
+const filteredMembers = computed(() => {
+    return member.value.filter((manager) => {
+        return (
+            manager.position &&
+            (manager.position === 'Командир' ||
+                manager.position === 'Мастер (методист)' ||
+                manager.position === 'Комиссар')
+        );
+    });
+});
+// const management = computed(() => {
+//     return [{ user: commander.value }, ...filteredMembers.value];
+// });
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutHQ();
         aboutMembers();
-        aboutEduc();
+        // aboutEduc();
+        fetchCommander();
     }
 });
 
 watch(
     () => route.params.id,
 
-    (newId, oldId) => {
+    async (newId) => {
         id = newId;
-        aboutHQ();
-        aboutMembers();
-        aboutEduc();
+        await aboutHQ();
+        await aboutMembers();
+        // await aboutEduc();
+        await fetchCommander();
+    },
+    {
+        immediate: true,
     },
 );
-
-onMounted(() => {
-    aboutHQ();
-    aboutMembers();
-    aboutEduc();
-});
 </script>
 <style scoped lang="scss">
 .title {

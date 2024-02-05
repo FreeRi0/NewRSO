@@ -1,64 +1,59 @@
 <template>
     <div class="container">
-        <div class="user-wrapper">
-            <h2 class="page-title" v-if="currentUser">Моя страница</h2>
-            <h2 class="page-title" v-else>
-                Пользователь: {{ user.first_name }}
-            </h2>
-            <BannerComp
-                :user="user"
+        <div class="user-wrapper" v-if="!isLoading.isLoading.value">
+            <h2 class="page-title">Страница пользователя</h2>
+            <Wall
+                :user="user.user.value"
                 :education="education"
                 :user_region="region"
-                :edited="false"
                 class="mt-3"
-            ></BannerComp>
-            <div class="user-verify" v-if="!user.is_verified">
-                <p class="user-verify__title">Верификация данных</p>
-                <div class="user-verify__desc">
-                    Уважаемый пользователь, для того, чтобы использовать полный
-                    функционал личного кабинета, пройдите, пожалуйста,
-                    верификацию. Верификация — это документальное подтверждение
-                    ваших личных данных. Она займет всего несколько минут.
-                </div>
-                <router-link to="/PersonalData">
-                    <Button
-                        class="user-verify__btn"
-                        name="verify-btn"
-                        label="Пройти верификацию"
-                        color="primary"
-                    ></Button
-                ></router-link>
-            </div>
+                @upload-wall="uploadWall"
+                @update-wall="updateWall"
+                @delete-wall="deleteWall"
+                @upload="uploadAva"
+                @update="updateAva"
+                @delete="deleteAva"
+            ></Wall>
 
-            <div class="mt-14" v-if="user.is_verified">{{ user.bio }}</div>
+            <div class="mt-14" v-if="user.user.value.is_verified">
+                {{ user.user.value.bio }}
+            </div>
             <div class="mt-8 photoWrapper">
                 <userPhoto
                     class="photo-item"
-                    :photo="user?.media?.photo1"
+                    :photo="user.user.value.media?.photo1"
                     :add="false"
+                    @uploadUserPic="uploadUserPic"
+                    @updateUserPic="updateUserPic"
                 ></userPhoto>
                 <userPhoto2
                     class="photo-item"
-                    :photo="user?.media?.photo2"
+                    :photo="user.user.value.media?.photo2"
                     :add="false"
                 ></userPhoto2>
                 <userPhoto3
                     class="photo-item"
-                    :photo="user?.media?.photo3"
+                    :photo="user.user.value.media?.photo3"
                     :add="false"
                 ></userPhoto3>
                 <userPhoto4
                     class="photo-item"
-                    :photo="user?.media?.photo4"
+                    :photo="user.user.value.media?.photo4"
                     :add="false"
                 ></userPhoto4>
             </div>
         </div>
+        <v-progress-circular
+            class="circleLoader"
+            v-else
+            indeterminate
+            color="blue"
+        ></v-progress-circular>
     </div>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { BannerComp } from '@features/baner/components';
+import { Wall } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
 import {
     userPhoto,
@@ -67,70 +62,84 @@ import {
     userPhoto4,
 } from '@shared/components/imagescomp';
 
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-const pages = ref([
-    { pageTitle: 'Личный кабинет', href: '#' },
-    { pageTitle: 'Моя страница', href: '#' },
-]);
-
-const user = ref({});
-const currentUser = ref({});
+import { useUserStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
+const userStore = useUserStore();
+const user = storeToRefs(userStore);
+const isLoading = storeToRefs(userStore);
+console.log('userTop', user.user.value);
 const education = ref({});
+const member = ref([]);
 const region = ref({});
 const route = useRoute();
+
 let id = route.params.id;
 
-const getUser = async () => {
-    await HTTP.get(`/users/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            user.value = response.data;
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log('failed ' + error);
-        });
+// const getMembers = async () => {
+//     try {
+//         let id = user.user.value.detachment_id;
+//         const membersResponse = await HTTP.get(`/detachments/${id}/members/`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+//         member.value = membersResponse.data;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
+const uploadAva = (imageAva) => {
+    console.log('photo', imageAva);
+    user.user.value.media.photo = imageAva;
 };
 
-const getMedia = async () => {
-    await HTTP.get(`/users/me/media/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            media.value = response.data;
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log('failed ' + error);
-        });
+const updateAva = (imageAva) => {
+    console.log('photoUpdate', imageAva);
+    user.user.value.media.photo = imageAva;
+};
+
+const deleteAva = (imageAva) => {
+    console.log('photoDelete', imageAva);
+    user.user.value.media.photo = imageAva;
+};
+
+const uploadWall = (imageWall) => {
+    console.log('ban', imageWall);
+    user.user.value.media.banner = imageWall;
+};
+
+const updateWall = (imageWall) => {
+    console.log('banUpdate', imageWall);
+    user.user.value.media.banner = imageWall;
+};
+
+const deleteWall = (imageWall) => {
+    console.log('banDelete', imageWall);
+    user.user.value.media.banner = imageWall;
 };
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
-        getUser();
+        userStore.getUserId(id);
     }
 });
 
 watch(
     () => route.params.id,
 
-    (newId, oldId) => {
+    (newId) => {
         id = newId;
-        getUser();
+        userStore.getUserId(id);
     },
 );
 
 onMounted(() => {
-    getUser();
+    userStore.getUserId(id);
+    // getMembers();
 });
 </script>
 <style lang="scss" scoped>
@@ -141,7 +150,6 @@ onMounted(() => {
 .photoWrapper {
     display: flex;
     @media screen and (max-width: 768px) {
-        // flex-wrap: wrap;
         display: grid;
         grid-template-columns: 0.28fr 0.28fr;
         grid-column-gap: 20px;
@@ -149,17 +157,16 @@ onMounted(() => {
         justify-content: center;
     }
     @media screen and (max-width: 575px) {
-        grid-template-columns: 0.28fr
+        grid-template-columns: 0.28fr;
     }
 }
+.circleLoader {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 30px auto;
+}
 
-// .photoWrapper {
-//     display: flex;
-//     @media screen and (max-width: 768px) {
-//         flex-wrap: wrap;
-//         justify-content: center;
-//     }
-// }
 .user-verify {
     margin-top: 60px;
     margin-bottom: 40px;
@@ -197,18 +204,6 @@ onMounted(() => {
     }
 }
 
-// .photo-item {
-//     width: 260px;
-//     margin-right: 20px;
-//     @media screen and (max-width: 768px) {
-//         margin-bottom: 16px;
-//     }
-//     @media screen and (max-width: 575px) {
-//         height: 206px;
-//         width: 156px;
-//         margin-right: 16px;
-//     }
-// }
 .btn {
     margin: 0px;
     padding: 12px 62px;

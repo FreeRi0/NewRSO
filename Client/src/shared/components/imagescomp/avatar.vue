@@ -12,8 +12,8 @@
             />
         </div>
 
-            <!-- Иконка добавления аватара -->
-            <v-menu min-width="200px" rounded v-if="!props.avatar" >
+        <!-- Иконка добавления аватара -->
+        <v-menu min-width="200px" rounded v-if="!props.avatar && props.edited">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -74,102 +74,103 @@
                                     >
                                         Загрузить
                                     </v-btn>
-
                                 </v-card-actions>
-                                <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
+                                <p class="error" v-if="isError.detail">
+                                    {{ isError.detail }}
+                                </p>
                             </v-card>
                         </v-dialog>
                     </v-row>
                 </v-card-text>
             </v-card>
         </v-menu>
-      <v-menu min-width="200px" rounded v-else>
-                <template v-slot:activator="{ props }">
-                    <v-btn class="user-metric__avatar-add" icon v-bind="props">
-                        <v-avatar size="large">
-                            <v-icon icon="mdi-pencil"></v-icon>
-                        </v-avatar>
-                    </v-btn>
-                </template>
-                <v-card>
-                    <v-card-text>
-                        <div class="mx-auto text-center">
-                            <v-row justify="center">
-                                <v-dialog v-model="dialog" width="1024">
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn
-                                            rounded
-                                            variant="text"
-                                            v-bind="props"
+
+        <v-menu
+            min-width="200px"
+            rounded
+            v-else-if="props.avatar && props.edited"
+        >
+            <template v-slot:activator="{ props }">
+                <v-btn class="user-metric__avatar-add" icon v-bind="props">
+                    <v-avatar size="large">
+                        <v-icon icon="mdi-pencil"></v-icon>
+                    </v-avatar>
+                </v-btn>
+            </template>
+            <v-card>
+                <v-card-text>
+                    <div class="mx-auto text-center">
+                        <v-row justify="center">
+                            <v-dialog v-model="dialog" width="1024">
+                                <template v-slot:activator="{ props }">
+                                    <v-btn
+                                        rounded
+                                        variant="text"
+                                        v-bind="props"
+                                    >
+                                        Редактировать аватар
+                                    </v-btn>
+                                </template>
+                                <v-card>
+                                    <v-card-title>
+                                        <span class="text-h5"
+                                            >Загрузите ваше фото</span
                                         >
-                                            Редактировать аватар
+                                    </v-card-title>
+                                    <v-card-text>
+                                        <v-container>
+                                            <v-row>
+                                                <v-file-input
+                                                    @change="selectFile"
+                                                    show-size
+                                                    prepend-icon="mdi-camera"
+                                                    counter
+                                                ></v-file-input>
+                                            </v-row>
+                                            <v-row>
+                                                <v-card class="mt-5 mx-auto">
+                                                    <img
+                                                        v-if="preview"
+                                                        :src="preview"
+                                                    />
+                                                </v-card>
+                                            </v-row>
+                                        </v-container>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                            color="blue-darken-1"
+                                            variant="text"
+                                            @click="dialog = false"
+                                        >
+                                            Закрыть
                                         </v-btn>
-                                    </template>
-                                    <v-card>
-                                        <v-card-title>
-                                            <span class="text-h5"
-                                                >Загрузите ваше фото</span
-                                            >
-                                        </v-card-title>
-                                        <v-card-text>
-                                            <v-container>
-                                                <v-row>
-                                                    <v-file-input
-                                                        @change="selectFile"
-                                                        show-size
-                                                        prepend-icon="mdi-camera"
-                                                        counter
-                                                    ></v-file-input>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-card
-                                                        class="mt-5 mx-auto"
-                                                    >
-                                                        <img
-                                                            v-if="preview"
-                                                            :src="preview"
-                                                        />
-                                                    </v-card>
-                                                </v-row>
-                                            </v-container>
-                                        </v-card-text>
-                                        <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn
-                                                color="blue-darken-1"
-                                                variant="text"
-                                                @click="dialog = false"
-                                            >
-                                                Закрыть
-                                            </v-btn>
-                                            <v-btn
-                                                :disabled="!media"
-                                                color="blue-darken-1"
-                                                variant="text"
-                                                type="submit"
-                                                @click="updateAvatar()"
-                                            >
-                                                Загрузить
-                                            </v-btn>
-                                        </v-card-actions>
-                                        <p class="error" v-if="isError.detail">{{ isError.detail }}</p>
-                                    </v-card>
-                                </v-dialog>
-                            </v-row>
-                            <v-divider class="my-3"></v-divider>
+                                        <v-btn
+                                            :disabled="!media"
+                                            color="blue-darken-1"
+                                            variant="text"
+                                            type="submit"
+                                            @click="updateAvatar()"
+                                        >
+                                            Загрузить
+                                        </v-btn>
+                                    </v-card-actions>
+                                    <p class="error" v-if="isError.detail">
+                                        {{ isError.detail }}
+                                    </p>
+                                </v-card>
+                            </v-dialog>
+                        </v-row>
+                        <v-divider class="my-3"></v-divider>
 
-                            <v-btn
-                                rounded
-                                variant="text"
-                                @click="deleteAvatar()"
-                            >
-                                Удалить фото
-                            </v-btn>
-                        </div>
-                    </v-card-text>
-                </v-card>
-            </v-menu>
-
+                        <v-btn rounded variant="text" @click="deleteAvatar()">
+                            Удалить фото
+                        </v-btn>
+                    </div>
+                </v-card-text>
+            </v-card>
+        </v-menu>
 
     </div>
 </template>
@@ -179,8 +180,13 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 const props = defineProps({
     avatar: String,
-    edited: Boolean,
+    edited: {
+        type: Boolean,
+        default: false,
+    },
 });
+
+const emit = defineEmits(['upload', 'update', 'delete']);
 const media = ref({
     photo: null,
 });
@@ -199,6 +205,8 @@ const selectFile = (event) => {
 const uploadAvatar = async () => {
     dialog.value = true;
     const formData = new FormData();
+    console.log('upload');
+
     formData.append('photo', media.value);
     await HTTP.patch('/rsousers/me/media/', formData, {
         headers: {
@@ -215,10 +223,12 @@ const uploadAvatar = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-
+            console.log('resp', response.data);
+            emit('upload', response.data.photo);
             console.log(response, 'avatar uploaded');
         })
         .catch(({ response }) => {
+            console.log('err', response);
             isError.value = response.data;
             console.error('There was an error!', response.data);
             swal.fire({
@@ -249,7 +259,7 @@ const updateAvatar = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-
+            emit('update', response.data.photo);
             console.log(response, 'updated');
         })
         .catch(({ response }) => {
@@ -266,12 +276,17 @@ const updateAvatar = async () => {
 };
 
 const deleteAvatar = async () => {
-    await HTTP.put('/rsousers/me/media/', media.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+    await HTTP.patch(
+        '/rsousers/me/media/',
+        { photo: null },
+
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         },
-    })
+    )
         .then((response) => {
             swal.fire({
                 position: 'top-center',
@@ -280,6 +295,8 @@ const deleteAvatar = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
+
+            emit('delete', response.data.photo);
             console.log(response, 'deleted');
         })
         .catch(({ response }) => {
@@ -294,7 +311,6 @@ const deleteAvatar = async () => {
             });
         });
 };
-
 </script>
 
 <style lang="scss">
@@ -334,5 +350,4 @@ const deleteAvatar = async () => {
     object-fit: cover;
     border-radius: 50%;
 }
-
 </style>
