@@ -25,7 +25,27 @@
 import { ref, inject } from 'vue';
 import { FormUnit } from '@features/FormUnit';
 import { HTTP } from '@app/http';
-import { onBeforeRouteUpdate, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+
+const userStore = useUserStore();
+const user = storeToRefs(userStore);
+const meId = user.currentUser.value.id;
+console.log(meId);
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+const meRoles = roles.roles.value;
+console.log(meRoles);
+
+const educComId = roles.roles.value.educationalheadquarter_commander;
+const regionComId = roles.roles.value.regionalheadquarter_commander;
+const districtComId = roles.roles.value.districtheadquarter_commander;
+const centralComId = roles.roles.value.centralheadquarter_commander;
+const localComId = roles.roles.value.localheadquarter_commander;
+const detComId = roles.roles.value.detachment_commander;
 
 const router = useRouter();
 
@@ -37,6 +57,7 @@ const detachment = ref({
     city: '',
     educational_institution: null,
     commander: null,
+    meId: meId,
     social_vk: '',
     social_tg: '',
     slogan: '',
@@ -124,11 +145,23 @@ const changeDetachment = async () => {
     formData.append('founding_date', detachment.value.founding_date);
     formData.append('region', detachment.value.region);
     formData.append('city', detachment.value.city);
-    formData.append(
-        'educational_institution',
-        detachment.value.educational_institution,
-    );
-    formData.append('commander', detachment.value.commander);
+    if (detachment.value.educational_institution) {
+        formData.append(
+            'educational_institution',
+            detachment.value.educational_institution,
+        );
+    } else formData.append('educational_institution', '');
+
+    if (
+        !educComId ||
+        !regionComId ||
+        !districtComId ||
+        !centralComId ||
+        !localComId ||
+        !detComId
+    ) {
+        formData.append('commander', detachment.value.meId);
+    } else formData.append('commander', detachment.value.commander);
     formData.append('social_vk', detachment.value.social_vk);
     formData.append('social_tg', detachment.value.social_tg);
     formData.append('slogan', detachment.value.slogan);
