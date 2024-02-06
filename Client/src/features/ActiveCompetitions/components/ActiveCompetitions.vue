@@ -281,7 +281,6 @@ onActivated(async () => {
     width: 1180px;
     height: 26px;
     margin: 40px 0;
-
     font-family: Bert Sans;
     font-size: 20px;
     font-weight: 600;
