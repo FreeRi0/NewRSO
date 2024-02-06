@@ -16,12 +16,21 @@
                 />
             </div>
             <div class="competitions__list">
-                <active-competition-item
+                <template
                     v-for="competition in competitionsList"
                     :key="competition.id"
-                    :competition="competition"
-                    @select="onToggleSelectCompetition"
-                />
+                >
+                    <active-competition-item
+                        v-if="
+                            competition.is_confirmed_by_junior ||
+                            (competition.junior_detachment.id ==
+                                commanderIds.detachment_commander &&
+                                !competition.is_confirmed_by_junior)
+                        "
+                        :competition="competition"
+                        @select="onToggleSelectCompetition"
+                    />
+                </template>
 
                 <p>Итого: {{ selectedCompetitionsList.length }}</p>
 
@@ -54,28 +63,89 @@ import ActiveCompetitionItem from './ActiveCompetitionItem.vue';
 import ActiveCompetitionItemSelect from './ActiveCompetitionItemSelect.vue';
 
 const competitionsList = ref([]);
+const commanderIds = ref();
 const selectedCompetitionsList = ref([]);
+const allCompetition = ref([]);
 
 const loading = ref(false);
 const action = ref('Одобрить');
 const actionsList = ref(['Одобрить', 'Отклонить']);
 
-const getCompetitions = async () => {
+const getMeCommander = async () => {
     try {
-        loading.value = true;
-
-        const { data } = await HTTP.get('/competitions/1/applications/', {
+        const { data } = await HTTP.get('/rsousers/me_commander/', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-
-        competitionsList.value = data;
+        commanderIds.value = data;
     } catch (e) {
-        console.log('error', e);
-    } finally {
-        loading.value = false;
+        console.log('error getMeCommander', e);
+    }
+};
+
+const getAllCompetition = async () => {
+    try {
+        const { data } = await HTTP.get(
+            `https://rso.sprint.1t.ru/api/v1/competitions/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        allCompetition.value = data;
+    } catch (e) {
+        console.log('error getAllCompetition', e);
+    }
+};
+
+const getCompetitionsJunior = async () => {
+    for (const competitionId of allCompetition.value) {
+        try {
+            loading.value = true;
+            console.log(commanderIds.value.detachment_commander);
+            const { data } = await HTTP.get(
+                `/competitions/${competitionId.id}/applications/me`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            if (!data.is_confirmed_by_junior)
+                competitionsList.value = [...competitionsList.value, data];
+        } catch (e) {
+            console.log('error getCompetitionsJunior', e);
+        } finally {
+            loading.value = false;
+        }
+    }
+};
+
+const getCompetitions = async () => {
+    for (const competitionId of allCompetition.value) {
+        try {
+            loading.value = true;
+            const { data } = await HTTP.get(
+                `/competitions/${competitionId.id}/applications/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+
+            competitionsList.value = data;
+        } catch (e) {
+            console.log('error getCompetitions', e);
+        } finally {
+            loading.value = false;
+        }
     }
 };
 
@@ -91,29 +161,44 @@ const onToggleSelectCompetition = (competition, isChecked) => {
     }
 };
 
-const confirmApplication = async (id) => {
-    await HTTP.post(
-        `/competitions/1/applications/${id}/confirm/`,
-        {},
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+const confirmApplication = async (id, competitionId) => {
+    if (commanderIds.value.regionalheadquarter_commander == null) {
+        await HTTP.put(
+            `/competitions/${competitionId}/applications/${id}/`,
+            {
+                is_confirmed_by_junior: true,
             },
-        },
-    );
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+    } else {
+        await HTTP.post(
+            `/competitions/${competitionId}/applications/${id}/confirm/`,
+            {},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+    }
 };
 
-const cancelApplication = async (id) => {
+const cancelApplication = async (id, competitionId) => {
     await HTTP.delete(
-        `/competitions/1/applications/${id}`,
-        {},
+        `/competitions/${competitionId}/applications/${id}`,
         {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         },
+        {},
     );
 };
 
@@ -121,24 +206,49 @@ const onAction = async () => {
     try {
         for (const application of selectedCompetitionsList.value) {
             if (action.value === 'Одобрить') {
-                await confirmApplication(application.id);
+                console.log(application.id);
+                await confirmApplication(
+                    application.id,
+                    application.competition.id,
+                );
             } else {
-                await cancelApplication(application.id);
+                await cancelApplication(
+                    application.id,
+                    application.competition.id,
+                );
             }
+            competitionsList.value = competitionsList.value.filter(
+                (competition) => competition.id != application.id,
+            );
+            selectedCompetitionsList.value =
+                selectedCompetitionsList.value.filter(
+                    (competition) => competition.id != application.id,
+                );
         }
 
-        getCompetitions();
+        if (commanderIds.value.regionalheadquarter_commander == null)
+            await getCompetitionsJunior();
+        else await getCompetitions();
     } catch (e) {
         console.log('error action', e);
     }
 };
 
-onMounted(() => {
-    getCompetitions();
+onMounted(async () => {
+    await getAllCompetition();
+    await getMeCommander();
+    console.log();
+    if (commanderIds.value.regionalheadquarter_commander == null)
+        await getCompetitionsJunior();
+    else await getCompetitions();
 });
 
-onActivated(() => {
-    getCompetitions();
+onActivated(async () => {
+    await getAllCompetition();
+    await getMeCommander();
+    if (commanderIds.value.regionalheadquarter_commander == null)
+        await getCompetitionsJunior();
+    else await getCompetitions();
 });
 </script>
 

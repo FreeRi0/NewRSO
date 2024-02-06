@@ -201,7 +201,9 @@
             </div>
             <Button
                 @click="headquartersVisible += step"
-                v-if="headquartersVisible < headquarters.educationals.value.length"
+                v-if="
+                    headquartersVisible < headquarters.educationals.value.length
+                "
                 label="Показать еще"
             ></Button>
             <Button
@@ -234,7 +236,6 @@ const educationalsStore = useEducationalsStore();
 const crosspageFilters = useCrosspageFilter();
 
 const headquarters = storeToRefs(educationalsStore);
-
 
 const headquartersVisible = ref(20);
 const isHeadquartersLoading = ref(false);
@@ -351,7 +352,7 @@ const getLocalsHeadquartersForFilters = async () => {
 };
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-     educationalsStore.getEducationals();
+    educationalsStore.getEducationals();
     getRegionalsHeadquartersForFilters();
     getLocalsHeadquartersForFilters();
 });
@@ -628,4 +629,4 @@ pre {
     }
 }
 </style>
-@shared/components/selects/inputs
+@shared/components/selects/inputs @shared/components/inputs/imagescomp

@@ -71,7 +71,8 @@
 
                     <router-link
                         v-if="
-                        userId && (userId === headquarter?.commander?.id || IsTrusted)
+                            userId &&
+                            (userId === headquarter?.commander?.id || IsTrusted)
                         "
                         class="hq-data__link"
                         :to="{
@@ -420,17 +421,16 @@
                     </div>
                     <router-link
                         v-if="
-                            userId && (userId === centralHeadquarter?.commander?.id ||
-                            IsTrusted)
+                            userId &&
+                            (userId === centralHeadquarter?.commander?.id ||
+                                IsTrusted)
                         "
-
                         class="hq-data__link"
                         :to="{
                             name: 'FormCentral',
                         }"
                         >Редактировать штаб</router-link
                     >
-
                 </div>
             </div>
         </div>
@@ -493,8 +493,6 @@ const props = defineProps({
         type: Object,
     },
 });
-
-
 
 const aboutEduc = async () => {
     try {
@@ -787,3 +785,4 @@ onMounted(() => {
     }
 }
 </style>
+@shared/components/inputs/imagescomp@shared/components/inputs/imagescomp

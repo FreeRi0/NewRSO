@@ -6,7 +6,6 @@ const routes: RouteRecordRaw[] = [
         component: () =>
             import('@layouts/MainLayout/components/MainLayout.vue'),
         meta: {
-            //
             redirectTo: 'Login',
         },
         children: [
@@ -69,7 +68,6 @@ const routes: RouteRecordRaw[] = [
                     label: 'Структура',
                 },
                 children: [
-                    // ЛСО
                     {
                         path: '/AllSquads',
                         meta: {
@@ -415,25 +413,44 @@ const routes: RouteRecordRaw[] = [
             //Мероприятия
             {
                 path: '/actionSquads',
-                name: 'actionSquads',
-                component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
+                meta: {
+                    requiresAuth: true,
+                    redirectTo: 'actionSquads',
+                    label: 'Мероприятия'
+                },
                 //component: () => import('@entities/Actions/components/SeeYouLater.vue')
-            },
+                children:[
+                    {
+                        path: '',
+                        name: 'actionSquads',
+                        component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
+                    },
+                    {
+                        path: ':id',
+                        meta: {
+                            requiresAuth: true,
+                            redirectTo: 'Action',
+                            label: 'Мероприятие'
+                        },
+                        children:[
+                            {
+                                path: '',
+                                name: 'Action',
+                                component: () => import('@pages/Event/components/Event.vue')
+                            },
+                            {
+                                path: "EditAction",
+                                name: "editAction",
+                                component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
+                            },
+                        ]
+                    },
+                ]
+            }, 
             {
-                path: '/actionSquads/:id',
-                name: 'Action',
-                component: () => import('@pages/Event/components/Event.vue'),
-            },
-            {
-                path: "/createAction",
+                path: "createAction",
                 name: "createAction",
                 component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
-            },
-
-            {
-                path: "/actionSquads/:id/EditAction",
-                name: "editAction",
-                component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
             },
             {
                 path: '/AllParticipants/:id',

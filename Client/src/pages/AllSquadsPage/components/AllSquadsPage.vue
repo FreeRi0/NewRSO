@@ -263,6 +263,7 @@ const sortOptionss = ref([
 const searchSquads = computed(() => {
     return searchSquad(name.value);
 });
+
 const filteredSquadsByEducation = computed(() => {
     return filteredSquad(education.value);
 });
@@ -270,21 +271,6 @@ const filteredSquadsByEducation = computed(() => {
 const sortedSquads = computed(() => {
     let tempSquads = squads.squads.value;
 
-    // tempSquads = tempSquads.slice(0, squadsVisible.value);
-    // const activeFilters = [
-    //     searchSquads.value,
-    //     filteredSquadsByEducation.value,
-    // ]
-
-    // if (activeFilters.length > 0) {
-    //     tempSquads = Array.from(new Set(activeFilters.flat()));
-    // } else if (searchSquads.value) {
-    //     tempSquads = searchSquads.value;
-    // } else if (filteredSquadsByEducation.value) {
-    //     tempSquads = filteredSquadsByEducation.value;
-    // } else {
-    //     tempSquads = squads.squads.value;
-    // }
 
     searchSquads.value;
     filteredSquadsByEducation.value;
@@ -326,6 +312,7 @@ const sortedSquads = computed(() => {
     }
 
     tempSquads = tempSquads.filter((item) => item.area === picked.value);
+    console.log('picked', picked.value)
 
     return tempSquads;
 });
@@ -333,6 +320,8 @@ const sortedSquads = computed(() => {
 onMounted(() => {
     squadsStore.getSquads();
     getSquads();
+    squadsStore.getSquads();
+
 });
 </script>
 <style lang="scss" scoped>
@@ -503,4 +492,4 @@ onMounted(() => {
     }
 }
 </style>
-@shared/components/selects/inputs
+@shared/components/selects/inputs @shared/components/inputs/imagescomp
