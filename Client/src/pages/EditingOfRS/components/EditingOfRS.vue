@@ -8,7 +8,7 @@
             :submited="submited"
             :is-error="isError"
             :is-error-members="isErrorMembers"
-            v-if="headquarter && isError && isErrorMembers"
+            v-if="headquarter && isError && isErrorMembers && !loading"
             @submit.prevent="changeHeadquarter"
             @select-emblem="onSelectEmblem"
             @select-banner="onSelectBanner"
@@ -53,7 +53,7 @@ const getPositions = async () => {
 };
 
 const getRegions = async () => {
-    HTTP.get('regions/')
+    await HTTP.get('regions/')
 
         .then((res) => {
             regions.value = res.data;
@@ -63,7 +63,10 @@ const getRegions = async () => {
         });
 };
 
+const loading = ref(false);
+
 const getHeadquarter = async () => {
+    loading.value = true;
     await HTTP.get(`regionals/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -72,16 +75,19 @@ const getHeadquarter = async () => {
     })
         .then((response) => {
             headquarter.value = response.data;
-            if (headquarter.value.commander) {
-                headquarter.value.commander = headquarter.value.commander.id;
-            }
-            if (regions.value) {
+            console.log(response.data);
+            if (regions.value.length) {
                 const region = regions.value.find((item) => {
                     return item.name === headquarter.value.region;
                 });
                 headquarter.value.region = region.id;
+                console.log(region.id);
+            }
+            if (headquarter.value.commander) {
+                headquarter.value.commander = headquarter.value.commander.id;
             }
             replaceTargetObjects([headquarter.value]);
+            loading.value = false;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -118,10 +124,10 @@ const getMembers = async () => {
 };
 
 onMounted(() => {
-    getHeadquarter();
-    getMembers();
-    getPositions();
     getRegions();
+    getPositions();
+    getMembers();
+    getHeadquarter();
 });
 
 const onUpdateMember = (event, id) => {

@@ -7,6 +7,7 @@
             :headquarter="headquarter"
             :members="members"
             :submited="submited"
+            :is-commander-loading="isCommanderLoading"
             :is-members-loading="isMembersLoading"
             :is-error="isError"
             :is-error-members="isErrorMembers"
@@ -24,7 +25,6 @@
 <script setup>
 import { ref, onMounted, inject } from 'vue';
 import { FormHQ } from '@features/FormHQ';
-// import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 
@@ -36,21 +36,11 @@ const submited = ref(false);
 
 const headquarter = ref(null);
 const members = ref([]);
-const positions = ref([]);
 
-const getPositions = async () => {
-    HTTP.get('positions/')
-
-        .then((res) => {
-            positions.value = res.data;
-            console.log('должности - ', res.data);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+const isCommanderLoading = ref(false);
 
 const getHeadquarter = async () => {
+    isCommanderLoading.value = true;
     HTTP.get(`educationals/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -67,6 +57,7 @@ const getHeadquarter = async () => {
                 headquarter.value.commander = headquarter.value.commander.id;
             }
             console.log(response);
+            isCommanderLoading.value = false;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -96,15 +87,11 @@ const getMembers = async () => {
             );
 
             members.value = membersResponse.data;
-            // members.value.forEach((member) => {
-            //     if (positions.value.length) {
-            //         const position = positions.value.find((item) => {
-            //             return item.name === member.position;
-            //         });
-            //         console.log('объект должности - ', position);
-            //         member.position = position.id;
-            //     }
-            // });
+            if (members.value.length) {
+                members.value.forEach((member) => {
+                    member.position = member.position.id;
+                });
+            }
             isMembersLoading.value = false;
         }, 1000);
     } catch (error) {
@@ -112,35 +99,9 @@ const getMembers = async () => {
     }
 };
 
-// const getMembers = async () => {
-//     HTTP.get(`educationals/${id}/members/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             members.value = response.data;
-//             console.log('участники штаба - ', response);
-//             members.value.forEach((member) => {
-//                 if (positions.value) {
-//                     const position = positions.value.find((item) => {
-//                         return item.name === member.position;
-//                     });
-//                     console.log('объект должности - ', positions.value);
-//                     member.position = position.id;
-//                 }
-//             });
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
 onMounted(() => {
-    getHeadquarter();
     getMembers();
-    getPositions();
+    getHeadquarter();
 });
 
 const onUpdateMember = (event, id) => {

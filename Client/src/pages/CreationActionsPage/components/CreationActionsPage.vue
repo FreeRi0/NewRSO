@@ -319,7 +319,7 @@
                                     :options='area_massive'
                                     placeholder='Например, ЛСО'
                                 ></sortByEducation>
-                            </div> 
+                            </div>
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -823,7 +823,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { ref, inject } from 'vue';
-import { createAction, createOrganizator, putTimeData } from '@services/ActionService';
+import { createAction, createOrganizator } from '@services/ActionService';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute, useRouter } from 'vue-router';
 import { uploadPhoto } from '@shared/components/imagescomp';

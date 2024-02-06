@@ -19,7 +19,6 @@
                                     isError.area ||
                                     isError.founding_date ||
                                     isError.region ||
-                                    isError.educational_institution ||
                                     isError.commander
                                 "
                             >
@@ -100,7 +99,6 @@
                                 class="form__error form__error--name"
                                 v-if="isError.name"
                             >
-                                <!-- * обязательно для заполнения -->
                                 * {{ isError.name[0] }}
                             </p>
                             <div class="form__counter">
@@ -133,15 +131,6 @@
                                 >Дата основания
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- <input
-                                id="create-date"
-                                label="Дата основания"
-                                name="create_date"
-                                type="date"
-                                placeholder=""
-                                :value="v.date.$model"
-                                :error="v.date.$errors"
-                            /> -->
                             <Input
                                 class="form__input"
                                 id="create-date"
@@ -152,16 +141,6 @@
                             <p class="form__error" v-if="isError.founding_date">
                                 * Это поле не может быть пустым.
                             </p>
-                            <!-- <Input
-                                class="form__input"
-                                id="create-date"
-                                name="create_date"
-                                placeholder="00.00.0000"
-                                type="text"
-                                onfocus="(this.type = 'date')"
-                                v-model:value="v.date.$model"
-                                :error="v.date.$errors"
-                            /> -->
                         </div>
 
                         <div class="form__field">
@@ -207,7 +186,7 @@
                         <div class="form__field">
                             <label class="form__label" for="select-institution"
                                 >Выберите учебное заведение
-                                <sup class="valid-red">*</sup>
+                                <!-- <sup class="valid-red">*</sup> -->
                             </label>
                             <!-- <Select
                                 variant="outlined"
@@ -227,12 +206,12 @@
                                 @update:value="changeValue"
                                 address="eduicational_institutions/"
                             ></educInstitutionDropdown>
-                            <p
+                            <!-- <p
                                 class="form__error"
                                 v-if="isError.educational_institution"
                             >
                                 * Это поле не может быть пустым.
-                            </p>
+                            </p> -->
                         </div>
 
                         <div class="form__field form__field--commander">
@@ -241,6 +220,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
+                                v-if="!isCommanderLoading"
                                 open-on-clear
                                 id="beast"
                                 name="edit_beast"
@@ -249,6 +229,21 @@
                                 @update:value="changeValue"
                                 address="users/"
                             ></Dropdown>
+                            <!-- <userDropdown
+                                v-if="!isCommanderLoading"
+                                open-on-clear
+                                id="beast"
+                                name="edit_beast"
+                                placeholder="Поиск по ФИО"
+                                v-model="detachment.commander"
+                                @update:value="changeValue"
+                            ></userDropdown> -->
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                             <p
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
@@ -344,7 +339,6 @@
                         <div class="form__field">
                             <label class="form__label" for="social-media-vk"
                                 >Группа отряда ВКонтакте
-                                <!-- <sup class="valid-red">*</sup> -->
                             </label>
                             <TextareaAbout
                                 maxlength="50"
@@ -354,18 +348,11 @@
                                 name="social_media_vk"
                                 v-model:value="detachment.social_vk"
                             ></TextareaAbout>
-                            <!-- <p
-                                class="form__error"
-                                v-if="isError.social_vk"
-                            >
-                                * обязательно для заполнения
-                            </p> -->
                         </div>
 
                         <div class="form__field">
                             <label class="form__label" for="social-media-te"
                                 >Группа отряда в Телеграмме
-                                <!-- <sup class="valid-red">*</sup> -->
                             </label>
                             <TextareaAbout
                                 maxlength="50"
@@ -375,12 +362,6 @@
                                 name="social_media_te"
                                 v-model:value="detachment.social_tg"
                             ></TextareaAbout>
-                            <!-- <p
-                                class="form__error"
-                                v-if="isError.social_tg"
-                            >
-                                * обязательно для заполнения
-                            </p> -->
                         </div>
 
                         <div class="form__field" v-if="participants">
@@ -416,10 +397,15 @@
                                 :submited="submited"
                                 :unit="'отряд'"
                                 :is-error-members="isErrorMembers"
-                                v-if="members"
+                                v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
                             ></MembersList>
-                            <!-- <pre>{{ sortedMembers }}</pre> -->
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                         </div>
                     </div>
 
@@ -516,7 +502,6 @@
                         <div class="form__field">
                             <label class="form__label" for="squad-slogan"
                                 >Девиз отряда
-                                <!-- <sup class="valid-red">*</sup> -->
                             </label>
                             <TextareaAbout
                                 maxlength="100"
@@ -526,12 +511,6 @@
                                 name="squad_slogan"
                                 v-model:value="detachment.slogan"
                             ></TextareaAbout>
-                            <!-- <p
-                                class="form__error form__error--name"
-                                v-if="isError.slogan"
-                            >
-                                * обязательно для заполнения
-                            </p> -->
                             <div class="form__counter">
                                 {{ counterSlogan }} / 100
                             </div>
@@ -540,7 +519,6 @@
                         <div class="form__field">
                             <label class="form__label" for="about-squad"
                                 >Об отряде
-                                <!-- <sup class="valid-red">*</sup> -->
                             </label>
                             <TextareaAbout
                                 :rows="6"
@@ -551,12 +529,6 @@
                                 name="about_squad"
                                 v-model:value="detachment.about"
                             ></TextareaAbout>
-                            <!-- <p
-                                class="form__error form__error--name"
-                                v-if="isError.about"
-                            >
-                                * обязательно для заполнения
-                            </p> -->
                             <div class="form__counter">
                                 {{ counterAbout }} / 500
                             </div>
@@ -573,7 +545,6 @@
                                         :src="detachment.emblem ?? urlEmblem"
                                     />
                                 </div>
-                                <!-- <div></div> -->
 
                                 <div class="photo-add__input">
                                     <label
@@ -1381,20 +1352,18 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-// import { photos } from '@shared/components/imagescomp';
 import { Select } from '@shared/components/selects';
 import { regionsDropdown } from '@shared/components/selects';
 import { educInstitutionDropdown } from '@shared/components/selects';
+import { userDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
-// import { UnitImage } from "@shared/components/imagescomp";
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
 
 // import { useVuelidate } from '@vuelidate/core';
 // import {
@@ -1473,6 +1442,14 @@ const props = defineProps({
     members: {
         type: Array,
         default: () => [],
+    },
+    isCommanderLoading: {
+        type: Boolean,
+        default: false,
+    },
+    isMembersLoading: {
+        type: Boolean,
+        default: false,
     },
 });
 
@@ -1616,50 +1593,16 @@ const showButtonPrev = computed(() => {
     return panel.value === 'panelThree';
 });
 
-// const members = ref([]);
-
-// const route = useRoute();
-// let id = route.params.id;
-
-// const getMembers = async () => {
-//     await HTTP.get(`detachments/${id}/members/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             members.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// onMounted(() => {
-//     getMembers();
-// });
-
-const members = ref(props.members);
-
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
-    return members.value.filter((item) => {
+    return props.members.filter((item) => {
         // return item.title
         return item.user.last_name
             .toUpperCase()
             .includes(searchMembers.value.toUpperCase());
     });
 });
-
-// const onUpdateMember = (event, id) => {
-//     const targetMember = members.value.find((member) => member.id === id);
-
-//     const firstkey = Object.keys(event)[0];
-//     targetMember[firstkey] = event[firstkey];
-// };
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);

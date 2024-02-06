@@ -5,11 +5,12 @@ export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
         regionals: [],
+        regional: {},
         institutions: []
     }),
     actions: {
         async searchRegionals(region: String) {
-            const responseRegionals = await HTTP.get(
+            const responseSearchRegionals = await HTTP.get(
                 `/regionals/?search=${region}`,
                 {
                     headers: {
@@ -18,7 +19,25 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 },
             );
+            this.regionals = responseSearchRegionals.data;
+        },
+        async getRegionals() {
+            const responseRegionals = await HTTP.get(`/regionals/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
             this.regionals = responseRegionals.data;
+        },
+        async getRegionalId(id: String) {
+            const responseRegional = await HTTP.get(`/regionals/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.regional = responseRegional.data;
         },
         async searchRegions(name: String) {
             const responseRegions = await HTTP.get(`/regions/?search=${name}`, {
