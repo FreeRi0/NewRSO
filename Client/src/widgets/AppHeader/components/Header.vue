@@ -103,7 +103,7 @@
 
                         <span v-if="user.currentUser.value?.region"
                             >{{
-                                regionals.find(
+                                regionals.regionals.value.find(
                                     (reg) =>
                                         reg.region ===
                                         user.currentUser.value.region,
@@ -195,8 +195,8 @@ import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+import { useRegionalsStore  } from '@features/store/regionals';
 import { useRoleStore } from '@layouts/store/role';
-// import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 
 const props = defineProps({
@@ -209,24 +209,27 @@ const props = defineProps({
     },
 });
 
-const regionals = ref([]);
+
 const roleStore = useRoleStore();
+const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
 const roles = storeToRefs(roleStore);
+
+const regionals = storeToRefs(regionalsStore);
 // const regionalsStore = useRegionalsStore();
-const getRegionals = async () => {
-    try {
-        const regionalsResp = await HTTP.get('/regionals/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        regionals.value = regionalsResp.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+// const getRegionals = async () => {
+//     try {
+//         const regionalsResp = await HTTP.get('/regionals/', {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+//         regionals.value = regionalsResp.data;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 // regionalsStore.getRegionals();
 
@@ -422,8 +425,8 @@ const updateRegion = async () => {
 };
 
 onMounted(async () => {
-    await getRegionals();
-    await getHeadquarters();
+    await regionalsStore.getRegionals();
+    // await getHeadquarters();
 });
 </script>
 
