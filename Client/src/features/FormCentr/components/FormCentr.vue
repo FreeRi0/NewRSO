@@ -173,6 +173,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
+                                v-if="!isCommanderLoading"
                                 open-on-clear
                                 id="beast"
                                 name="edit_beast"
@@ -181,6 +182,12 @@
                                 @update:value="changeValue"
                                 address="users/"
                             ></Dropdown>
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                             <p
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
@@ -329,9 +336,15 @@
                                 :items="sortedMembers"
                                 :submited="submited"
                                 :is-error-members="isErrorMembers"
-                                v-if="members"
+                                v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
                             ></MembersList>
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                         </div>
                     </div>
 
@@ -731,14 +744,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
 
 const emit = defineEmits([
     'update:value',
@@ -783,6 +795,14 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    isCommanderLoading: {
+        type: Boolean,
+        default: false,
+    },
+    isMembersLoading: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const headquarter = ref(props.headquarter);
@@ -818,29 +838,21 @@ const showButtonPrev = computed(() => {
 });
 
 //-----------------------------------------------------------------------
-const route = useRoute();
-let id = route.params.id;
-
-// const members = ref(props.members);
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
-    // console.log(props.members, 'УЧАСТНИКИ');
-    // console.log(members);
     return props.members.filter((item) => {
         return item.user.last_name
             .toUpperCase()
             .includes(searchMembers.value.toUpperCase());
     });
 });
-// порядок выполнения
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
 };
 
 const changeValue = (event) => {
-    console.log(event);
     emit('update:value', event);
 };
 
