@@ -5,6 +5,7 @@
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 :button="false"
                 :loc-com="true"
+                label="Создать штаб"
             ></bannerCreate>
             <h2 class="headquarters-title">Местные штабы</h2>
             <div class="headquarters-search">
