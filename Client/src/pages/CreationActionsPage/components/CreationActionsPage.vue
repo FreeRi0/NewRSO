@@ -615,164 +615,125 @@
                                     </div>
                                 </div>
                             </div>
-                        </v-expansion-panel-text>
-                    </v-expansion-panel>
-                    <v-expansion-panel>
-                        <v-expansion-panel-title>
-                            <template v-slot="{ expanded }">
-                                <v-row no-gutters>
-                                    <v-col
-                                        cols="4"
-                                        class="d-flex justify-start"
-                                    >
-                                        Документы
-                                    </v-col>
-                                </v-row>
-                            </template>
-                            <template v-slot:actions="{ expanded }">
-                                <v-icon v-if="!expanded">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="32"
-                                        height="32"
-                                        viewBox="0 0 32 32"
-                                        fill="none"
-                                    >
-                                        <circle
-                                            cx="16"
-                                            cy="16"
-                                            r="15.5"
-                                            fill="#1F7CC0"
-                                            stroke="#1F7CC0"
-                                        />
-                                        <path
-                                            d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                            stroke="white"
-                                            stroke-width="1.5"
-                                            stroke-miterlimit="10"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-                                </v-icon>
-                                <v-icon v-else>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="32"
-                                        height="32"
-                                        viewBox="0 0 32 32"
-                                        fill="none"
-                                    >
-                                        <circle
-                                            cx="16"
-                                            cy="16"
-                                            r="15.5"
-                                            transform="rotate(-180 16 16)"
-                                            fill="#1F7CC0"
-                                            stroke="#1F7CC0"
-                                        />
-                                        <path
-                                            d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                            stroke="white"
-                                            stroke-width="1.5"
-                                            stroke-miterlimit="10"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-                                </v-icon>
-                            </template>
-                        </v-expansion-panel-title>
-                        <v-expansion-panel-text>
-                            <div class="form-container">
-                                <div class="form-col-100">
-                                    <label class="form-label"
-                                        >Какие личные данные участников вам
-                                        нужны? Отметьте их галочкой, и в
-                                        дальнейшем у вас будет возможность
-                                        скачать все документы участников.</label
-                                    >
-                                    <v-container fluid>
-                                        <v-checkbox
-                                            v-model="
-                                                maininfo.document_data.passport
-                                            "
-                                            :binary="true"
-                                            label="Паспорт"
-                                        ></v-checkbox>
-                                        <v-checkbox
-                                            v-model="
-                                                maininfo.document_data.snils
-                                            "
-                                            :binary="true"
-                                            label="СНИЛС"
-                                        ></v-checkbox>
-                                        <v-checkbox
-                                            v-model="maininfo.document_data.inn"
-                                            :binary="true"
-                                            label="ИНН"
-                                        ></v-checkbox>
-                                        <v-checkbox
-                                            v-model="
-                                                maininfo.document_data.work_book
-                                            "
-                                            :binary="true"
-                                            label="Трудовая книжка"
-                                        ></v-checkbox>
-                                        <v-checkbox
-                                            v-model="
-                                                maininfo.document_data
-                                                    .military_document
-                                            "
-                                            :binary="true"
-                                            label="Военный билет или препистное свидетельство"
-                                        ></v-checkbox>
-                                        <v-checkbox
-                                            v-model="
-                                                maininfo.document_data
-                                                    .consent_personal_data
-                                            "
-                                            :binary="true"
-                                            label="Согласие на обработку персональных данных"
-                                        ></v-checkbox>
-                                    </v-container>
-                                    <label class="form-label"
-                                        >Добавьте Документы</label
-                                    >
-                                    <div class="form-col">
-                                        <div class="statement-item">
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
-                                            <FileUpload
-                                                mode="basic"
-                                                name="demo[]"
-                                                accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
-                                                :customUpload="true"
-                                                chooseLabel="Выбрать файл"
-                                            ></FileUpload>
-                                        </div>
+
+
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+                <v-expansion-panel>
+                    <v-expansion-panel-title>
+                        <template v-slot="{ expanded }">
+                            <v-row no-gutters>
+                                <v-col cols="4" class="d-flex justify-start">
+                                    Документы
+                                </v-col>
+                            </v-row>
+                        </template>
+                        <template v-slot:actions="{ expanded }">
+                            <v-icon v-if="!expanded">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="32"
+                                    height="32"
+                                    viewBox="0 0 32 32"
+                                    fill="none"
+                                >
+                                    <circle
+                                        cx="16"
+                                        cy="16"
+                                        r="15.5"
+                                        fill="#1F7CC0"
+                                        stroke="#1F7CC0"
+                                    />
+                                    <path
+                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                        stroke="white"
+                                        stroke-width="1.5"
+                                        stroke-miterlimit="10"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </v-icon>
+                            <v-icon v-else>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="32"
+                                    height="32"
+                                    viewBox="0 0 32 32"
+                                    fill="none"
+                                >
+                                    <circle
+                                        cx="16"
+                                        cy="16"
+                                        r="15.5"
+                                        transform="rotate(-180 16 16)"
+                                        fill="#1F7CC0"
+                                        stroke="#1F7CC0"
+                                    />
+                                    <path
+                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                        stroke="white"
+                                        stroke-width="1.5"
+                                        stroke-miterlimit="10"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </v-icon>
+                        </template>
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                        <div class='form-container'>
+                            <div class='form-col-100'>
+                                <label class="form-label">Какие личные данные участников вам нужны?
+                                Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.</label>
+                                <v-container fluid>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.passport" type="checkbox" name="passport" />
+                                        <label for="passport">Паспорт</label>
                                     </div>
-                                    <div class="form-col-100">
-                                        <label class="form-label"
-                                            >Расскажите, с какими документами
-                                            необходимо просто ознакомиться, а
-                                            какие скачать и заполнить</label
-                                        >
-                                        <textarea
-                                            v-model="
-                                                maininfo.document_data
-                                                    .additional_info
-                                            "
-                                            class="form__textarea"
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.snils" type="checkbox" name="snils" />
+                                        <label for="snils">СНИЛС</label>
+                                    </div>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.inn" type="checkbox" name="inn" />
+                                        <label for="inn">ИНН</label>
+                                    </div>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.work_book" type="checkbox" name="workbook" />
+                                        <label for="workbook">Трудовая книжка</label>
+                                    </div>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.military_document" type="checkbox" name="military" />
+                                        <label for="military">Военный билет или приписное свидетельство</label>
+                                    </div>
+                                    <div class="form-checkbox">
+                                        <input v-model="maininfo.document_data.consent_personal_data" type="checkbox" name="consert" />
+                                        <label for="consert">Согласие на обработку персональных данных</label>
+                                    </div>
+                                </v-container>
+                                <label class='form-label'>Добавьте Документы</label>
+                                <div class='form-col'>
+                                    <div class="form-fileupload">
+                                        <FileUpload
+                                            mode="basic"
+                                            name="demo[]"
+                                            accept=".pdf, .jpeg, .png"
+                                            :maxFileSize="7000000"
+                                            :customUpload="true"
+                                            chooseLabel="Выбрать файл"
+                                        ></FileUpload>
+                                        <img
+                                            src="@app/assets/icon/addFile.svg"
+                                            alt="addFile"
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div class="form-container">
                                 <div class="form-border"></div>
+                            </div>
                             </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -933,6 +894,12 @@
                                             :maxlength="100"
                                         />
                                         <div class="form__counter"></div>
+                                    </div>
+                                </div>
+                                <div class="form__field">
+                                    <div class="form-checkbox">
+                                        <input v-model="organizators.is_contact_person" type="checkbox" name="person" />
+                                        <label for="person">Сделать контактным лицом</label>
                                     </div>
                                 </div>
                             </div>
@@ -1195,9 +1162,15 @@ function SubmitEvent() {
                 .catch((e) => {});
             router.push({ name: 'Action', params: { id: props.action.id } });
         })
-        .catch((e) => {});
-}
+        putTimeData(resp.data.id).then((resp)=>{
+            console.log("Время изменено", resp.data)
+        })
+        .catch((e)=>{
 
+        })
+        //Временное решение
+        router.go(-1);
+};
 function AddQuestion() {
     answers.value.push({
         question: '',
@@ -1231,90 +1204,110 @@ function AddQuestion() {
         margin-bottom: 20px;
     }
 }
-.form {
-    &-container {
-        display: flex;
-        margin-right: 16px;
-        margin-bottom: 20px;
-        margin-top: 20px;
-    }
-    &-col {
-        width: 50%;
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-    &-input {
-        width: 100%;
-        height: 40px;
-    }
-    &-radio {
-        margin-left: 10px;
-    }
-    &-input-container {
-        border: 1px solid black;
-        border-radius: 15px;
-        padding-left: 15px;
-    }
-    &-title {
-        font-family: Bert Sans;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 24px;
-    }
-    &-row {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-    &-border {
-        width: 100%;
-        margin-top: 10px;
-        margin-left: 10px;
-        border-bottom: 1px solid black;
-    }
-    &-col-100 {
-        width: 100%;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 600;
-        margin-top: 3px;
-        margin-bottom: 3px;
-    }
-    &-label {
-        font-family: Bert Sans;
-        font-size: 1.2vw;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 24px;
-        margin-top: 5px;
-        margin-bottom: 2px;
-    }
-    &-add-block:hover {
-        cursor: pointer;
-    }
-    &-btm {
-        width: 114px;
-        border-radius: 10px;
-        background-color: #39bfbf;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    &-btminv {
-        width: 114px;
-        border-radius: 10px;
-        border: 2px solid #35383f;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    &-add {
-        margin-top: 10px;
-        text-decoration: underline;
-    }
-    &-add:hover {
-        cursor: pointer;
-    }
+//Пользовательские стили для формы
+.form{
+  &-container{
+    display: flex;
+    margin-right: 16px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  &-col{
+    width:50%;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  &-input{
+    width: 100%;
+    height: 40px;
+  }
+  &-checkbox{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  &-checkbox input{
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+  &-fileupload{
+    display:flex;
+    flex-direction: row;
+  }
+  &-radio{
+    margin-left: 10px;
+  }
+  &-radio input{
+    width: 20px;
+    height: 20px;
+  }
+  &-input-container{
+    border: 1px solid black;
+    border-radius: 15px;
+    padding-left: 15px;
+  }
+  &-title{
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+  }
+  &-row{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  &-border{
+    width: 100%;
+    margin-top: 10px;
+    margin-left: 10px;
+    border-bottom: 1px solid black;
+  }
+  &-col-100{
+    width: 100%;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+  &-label{
+    font-family: Bert Sans;
+    font-size: 1.2vw;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    margin-top: 5px;
+    margin-bottom: 2px;
+  }
+  &-add-block:hover{
+    cursor: pointer;
+  }
+  &-btm{
+    width: 114px;
+    border-radius: 10px;
+    background-color: #39BFBF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &-btminv{
+    width: 114px;
+    border-radius: 10px;
+    border: 2px solid #35383F;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &-add{
+    margin-top: 10px;
+    text-decoration: underline;
+  }
+  &-add:hover{
+    cursor: pointer;
+  }
 }
 .upload {
     width: 100%;
@@ -1331,6 +1324,38 @@ function AddQuestion() {
         background-color: #5153b9;
         border-radius: 50%;
     }
+  }
+  .v-expansion-panel {
+    &__shadow {
+        box-shadow: none;
+    }
+
+    &--active,
+    &--after-active {
+        margin: 0;
+    }
+
+    &--active:not(:first-child) {
+        margin: 0;
+    }
+
+    &--active + .v-expansion-panel {
+        margin: 0;
+    }
+
+    .v-expansion-panel-title {
+        max-height: 60px;
+        font-family: 'Akrobat';
+        font-size: 24px;
+        font-weight: 600;
+        background-color: transparent;
+        border-bottom: 1px solid #939393;
+        color: #35383f;
+        padding: 16px 0px;
+
+        &__overlay {
+            display: none;
+        }
+    }
 }
 </style>
-@shared/components/inputs/imagescomp
