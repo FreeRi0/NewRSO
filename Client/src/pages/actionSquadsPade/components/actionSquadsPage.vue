@@ -199,17 +199,7 @@ function SearchByInput(){
       actionsList.value = resp.data;
     })
   }
-}
-onActivated(() => {
-    getListActions()
-        .then((responce) => {
-            actionsList.value = responce.data;
-        })
-        .catch((e) => {});
-});
-const actionNewList = computed(() => {
-    console.log(sortBy);
-});
+};
 
 //Сортировка
 const vertical = ref(true);
@@ -454,6 +444,5 @@ input {
 
 .v-expansion-panel:not(:first-child)::after {
     display: none;
-}
 }
 </style>
