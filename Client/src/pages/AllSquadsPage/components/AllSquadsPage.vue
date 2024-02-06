@@ -373,8 +373,6 @@ onMounted(() => {
     }
 }
 
-
-
 .squads {
     padding: 0px 0px 60px 0px;
 
@@ -503,4 +501,4 @@ onMounted(() => {
     }
 }
 </style>
-@shared/components/selects/inputs
+@shared/components/selects/inputs @shared/components/inputs/imagescomp

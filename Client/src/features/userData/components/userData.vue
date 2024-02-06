@@ -112,7 +112,6 @@ const getMedia = async () => {
     }
 };
 
-
 const AddAbout = async () => {
     try {
         isLoading.value = false;
@@ -193,3 +192,4 @@ onMounted(() => {
     }
 }
 </style>
+@shared/components/inputs/imagescomp

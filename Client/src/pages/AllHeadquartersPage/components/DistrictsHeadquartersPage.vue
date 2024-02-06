@@ -258,7 +258,6 @@ onMounted(() => {
     }
 }
 
-
 .circleLoader {
     width: 60px;
     height: 60px;
@@ -281,4 +280,4 @@ onMounted(() => {
     }
 }
 </style>
-@shared/components/selects/inputs
+@shared/components/selects/inputs @shared/components/inputs/imagescomp
