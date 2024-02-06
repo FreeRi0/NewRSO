@@ -3,10 +3,13 @@
         <div class="member__content">
             <div class="member__image">
                 <img
-                    :src="
-                        item.user?.avatar?.photo ??
-                        '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                    "
+                    v-if="item.user?.avatar?.photo"
+                    :src="item.user?.avatar?.photo"
+                    alt="Фото бойца"
+                />
+                <img
+                    v-else
+                    src="@app/assets/foto-leader-squad-stub.png"
                     alt="Фото бойца"
                 />
             </div>

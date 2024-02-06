@@ -94,15 +94,15 @@
                     <div class="squads-sort">
                         <div class="sort-filters">
                             <div class="sort-select">
-                                <filterSelect
-                                    variant="outlined"
+                                <educInstitutionDropdown
+                                    class="sortedEducation"
                                     name="select_education"
                                     id="select-education"
-                                    clearable
                                     v-model="education"
                                     address="/eduicational_institutions/"
                                     placeholder="Образовательная организация"
-                                ></filterSelect>
+                                    :SortDropdown="true"
+                                ></educInstitutionDropdown>
                             </div>
                             <div class="sort-select">
                                 <sortByEducation
@@ -152,7 +152,7 @@
             </div>
             <Button
                 @click="squadsVisible += step"
-                v-if="squadsVisible < squads.length"
+                v-if="squadsVisible < squads.squads.value.length"
                 label="Показать еще"
             ></Button>
             <Button
@@ -171,16 +171,16 @@ import {
     sortByEducation,
     Select,
     filterSelect,
+    educInstitutionDropdown,
 } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
-// import squads from '@entities/Squads/squads';
-// const squadsStore = useSquadsStore();
-
-// const squads = storeToRefs(useSquadsStore);
-const squads = ref([]);
+const squadsStore = useSquadsStore();
+const squads = storeToRefs(squadsStore);
+console.log('squad', squads.squads.value);
+// const squads = ref([]);
 
 const categories = ref([]);
 const isSquadsLoading = ref(false);
@@ -197,17 +197,10 @@ const getSquads = async () => {
                     Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
             });
-            const squadsResponse = await HTTP.get(`/detachments/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
 
             categories.value = categoryResponse.data;
-            squads.value = squadsResponse.data;
             isSquadsLoading.value = false;
-        }, 1000);
+        }, 100);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -215,13 +208,13 @@ const getSquads = async () => {
 
 const searchSquad = async (name) => {
     try {
-        const filteredSquads = await HTTP.get(`/detachments/?search=${name}`, {
+        const { data } = await HTTP.get(`/detachments/?search=${name}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        squads.value = filteredSquads.data;
+        squads.squads.value = data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -229,7 +222,7 @@ const searchSquad = async (name) => {
 
 const filteredSquad = async (education) => {
     try {
-        const filteredSquadsEduc = await HTTP.get(
+        const { data } = await HTTP.get(
             `/detachments/?educational_institution__name=${education}`,
             {
                 headers: {
@@ -238,7 +231,7 @@ const filteredSquad = async (education) => {
                 },
             },
         );
-        squads.value = filteredSquadsEduc.data;
+        squads.squads.value = data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -275,9 +268,23 @@ const filteredSquadsByEducation = computed(() => {
 });
 
 const sortedSquads = computed(() => {
-    let tempSquads = squads.value;
+    let tempSquads = squads.squads.value;
 
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
+    // tempSquads = tempSquads.slice(0, squadsVisible.value);
+    // const activeFilters = [
+    //     searchSquads.value,
+    //     filteredSquadsByEducation.value,
+    // ]
+
+    // if (activeFilters.length > 0) {
+    //     tempSquads = Array.from(new Set(activeFilters.flat()));
+    // } else if (searchSquads.value) {
+    //     tempSquads = searchSquads.value;
+    // } else if (filteredSquadsByEducation.value) {
+    //     tempSquads = filteredSquadsByEducation.value;
+    // } else {
+    //     tempSquads = squads.squads.value;
+    // }
 
     searchSquads.value;
     filteredSquadsByEducation.value;
@@ -324,6 +331,7 @@ const sortedSquads = computed(() => {
 });
 
 onMounted(() => {
+    squadsStore.getSquads();
     getSquads();
 });
 </script>
@@ -364,6 +372,8 @@ onMounted(() => {
         text-overflow: ellipsis;
     }
 }
+
+
 
 .squads {
     padding: 0px 0px 60px 0px;

@@ -1,45 +1,45 @@
 <template>
     <div class="container">
-        <div class="squad-page" v-if="!isLsoLoading">
+        <div class="squad-page" v-if="!isLoading.isLoading.value">
             <h1 class="title title--lso">ЛСО</h1>
             <BannerSquad
-                :squad="squad"
-                :member="member"
+                :squad="squad.squad.value"
+                :member="member.members.value"
                 :edict="edict"
             ></BannerSquad>
             <section class="about-squad">
                 <h3>Об отряде</h3>
                 <p>
-                    {{ squad.about }}
+                    {{ squad.squad.value.about }}
                 </p>
             </section>
             <div class="mt-8 d-flex">
                 <squadPhotos
                     class="photo-item"
-                    :squad-photos="squad.photo1"
+                    :squad-photos="squad.squad.value.photo1"
                 ></squadPhotos>
                 <squadPhotos
                     class="photo-item"
-                    :squad-photos="squad.photo2"
+                    :squad-photos="squad.squad.value.photo2"
                 ></squadPhotos>
                 <squadPhotos
                     class="photo-item"
-                    :squad-photos="squad.photo3"
+                    :squad-photos="squad.squad.value.photo3"
                 ></squadPhotos>
                 <squadPhotos
                     class="photo-item"
-                    :squad-photos="squad.photo4"
+                    :squad-photos="squad.squad.value.photo4"
                 ></squadPhotos>
             </div>
 
             <CompetitionPromo
-                v-if="squad.nomination"
-                :squad="squad"
+                v-if="squad.squad.value.nomination"
+                :squad="squad.squad.value"
             ></CompetitionPromo>
 
             <SquadParticipants
-                :squad="squad"
-                :member="member"
+                :squad="squad.squad.value"
+                :member="member.members.value"
             ></SquadParticipants>
         </div>
         <v-progress-circular
@@ -53,50 +53,22 @@
 <script setup>
 import { BannerSquad } from '@features/baner/components';
 import { squadPhotos } from '@shared/components/imagescomp';
+import { useSquadsStore } from '@features/store/squads';
 import SquadParticipants from './components/SquadParticipants.vue';
 import { CompetitionPromo } from '@/features/Competition';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-import { usePage } from '@shared';
+import { storeToRefs } from 'pinia';
 
-const squad = ref({});
-const member = ref([]);
+const squadsStore = useSquadsStore();
+const squad = storeToRefs(squadsStore);
+const member = storeToRefs(squadsStore);
 const applications = ref([]);
+const isLoading = storeToRefs(squadsStore);
 const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
-const isLsoLoading = ref(false);
-const { replaceTargetObjects } = usePage();
-const getLsoData = async () => {
-    try {
-        isLsoLoading.value = true;
-        setTimeout(async () => {
-            const squadResponse = await HTTP.get(`/detachments/${id}/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-
-            const membersResponse = await HTTP.get(
-                `/detachments/${id}/members/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            squad.value = squadResponse.data;
-            replaceTargetObjects([squad.value]);
-            member.value = membersResponse.data;
-            isLsoLoading.value = false;
-        }, 500);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
 
 watch(
     () => route.params.id,
@@ -104,17 +76,16 @@ watch(
     (newId) => {
         if (!newId || route.name !== 'lso') return;
         id = newId;
-        getLsoData();
+        // getLsoData();
+        squadsStore.getSquadId(id);
+        squadsStore.getSquadMembers(id);
     },
 );
 
-// const sendApply = (apply) => {
-//     console.log('apply', apply);
-//     applications.value = apply;
-// };
-
 onMounted(() => {
-    getLsoData();
+    // getLsoData();
+    squadsStore.getSquadId(id);
+    squadsStore.getSquadMembers(id);
 });
 </script>
 <style scoped lang="scss">
