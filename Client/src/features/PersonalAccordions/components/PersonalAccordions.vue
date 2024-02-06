@@ -1309,15 +1309,7 @@
                                     >*</span
                                 ></label
                             >
-                            <!-- <Select
-                                variant="outlined"
-                                clearable
-                                placeholder="Выберете образовательную организацию"
-                                class="input-full"
-                                v-model="props.user.education.study_institution"
-                                address="/eduicational_institutions/"
-                            >
-                            </Select> -->
+
                             <educInstitutionDropdown
                                 open-on-clear
                                 id="reg"
@@ -3539,7 +3531,7 @@ const downloadAll = async () => {
 
 const updateData = async () => {
     try {
-        isLoading.value = false;
+        isLoading.value = true;
         let fd = new FormData();
         fd.append('rso_info_from', props.user.statement.rso_info_from);
         if (isStatementChange.value)
@@ -3758,7 +3750,6 @@ const updateData = async () => {
         console.log(axiosrequest4.data);
         console.log(axiosrequest5.data);
         console.log(axiosrequest6?.data);
-        isLoading.value = false;
         swal.fire({
             position: 'top-center',
             icon: 'success',

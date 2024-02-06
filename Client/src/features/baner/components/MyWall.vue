@@ -39,7 +39,7 @@
                       <li class="user-data__regional-office">
                           <p v-if="user.region">
                               {{
-                                  regionals.find(
+                                  regionals.regionals.value.find(
                                       (reg) => reg.region === user.region,
                                   )?.name
                               }}
@@ -105,7 +105,9 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
+import { useRegionalsStore  } from '@features/store/regionals';
 import { useRoute } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 const props = defineProps({
   banner: {
@@ -162,19 +164,14 @@ const deleteWall = (imageWall) => {
   console.log('delete');
 };
 
-const regionals = ref([]);
+const regionalsStore = useRegionalsStore();
+const regionals = storeToRefs(regionalsStore);
 const detachment = ref({});
 const educationalHeadquarter = ref({});
 const participant = ref({});
 
 const getUserData = async () => {
   try {
-      const responseRegionals = await HTTP.get(`/regionals/`, {
-          headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Token ' + localStorage.getItem('Token'),
-          },
-      });
       const responseSquad = ref(null);
       if (props.user.detachment_id) {
           let id = props.user.detachment_id;
@@ -203,14 +200,10 @@ const getUserData = async () => {
   }
 };
 
-// const isMemberView = computed(() => {
-//     return props.user.privacy?.privacy_email == ;
-// });
-
 watch(
   () => props.user,
 
-  (newUser, oldUser) => {
+  (newUser) => {
       if (Object.keys(props.user).length === 0) {
           return;
       }
