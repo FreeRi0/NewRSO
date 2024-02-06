@@ -566,3 +566,4 @@ pre {
     }
 }
 </style>
+@shared/components/inputs/imagescomp

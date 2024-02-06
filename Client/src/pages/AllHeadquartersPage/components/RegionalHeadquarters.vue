@@ -140,7 +140,10 @@
             </div>
             <Button
                 @click="headquartersVisible += step"
-                v-if="headquartersVisible < regionalHeadquarters.regionals.value.length"
+                v-if="
+                    headquartersVisible <
+                    regionalHeadquarters.regionals.value.length
+                "
                 label="Показать еще"
             ></Button>
             <Button
@@ -162,7 +165,7 @@ import {
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted, onActivated } from 'vue';
 import { HTTP } from '@app/http';
-import { useRegionalsStore  } from '@features/store/regionals';
+import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
@@ -170,7 +173,7 @@ import { useCrosspageFilter } from '@shared';
 const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
 
-const regionalHeadquarters = storeToRefs(regionalsStore)
+const regionalHeadquarters = storeToRefs(regionalsStore);
 
 const headquartersVisible = ref(20);
 
@@ -192,7 +195,6 @@ const selectedSortDistrict = ref(
 );
 
 const districts = ref([]);
-
 
 const searchRegional = async (name) => {
     try {
@@ -467,3 +469,4 @@ pre {
     }
 }
 </style>
+@shared/components/inputs/imagescomp

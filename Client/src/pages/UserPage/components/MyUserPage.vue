@@ -198,3 +198,4 @@ const deleteWall = (imageWall) => {
     }
 }
 </style>
+@shared/components/inputs/imagescomp

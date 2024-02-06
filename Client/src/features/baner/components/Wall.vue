@@ -1,7 +1,21 @@
 <template>
     <div class="user-metric">
         <bannerPhoto
-        v-if="props.user.privacy?.privacy_photo === 'detachment_members' && props.user.detachment_id === currentUser.currentUser.value.detachment_id || props.user.privacy?.privacy_photo === 'management_members' && (roles.roles.value.detachment_commander === squad.squad.value.id || roles.roles.value.regionalheadquarter_commander === regionalHeadquarter.regional.value.id ||  roles.roles.value.localheadquarter_commander || roles.roles.value.educationalheadquarter_commander || roles.roles.value.districtheadquarter_commander || roles.roles.value.centralheadquarter_commander) || props.user.privacy?.privacy_photo === 'all' && props.user"
+            v-if="
+                (props.user.privacy?.privacy_photo === 'detachment_members' &&
+                    props.user.detachment_id ===
+                        currentUser.currentUser.value.detachment_id) ||
+                (props.user.privacy?.privacy_photo === 'management_members' &&
+                    (roles.roles.value.detachment_commander ===
+                        squad.squad.value.id ||
+                        roles.roles.value.regionalheadquarter_commander ===
+                            regionalHeadquarter.regional.value.id ||
+                        roles.roles.value.localheadquarter_commander ||
+                        roles.roles.value.educationalheadquarter_commander ||
+                        roles.roles.value.districtheadquarter_commander ||
+                        roles.roles.value.centralheadquarter_commander)) ||
+                (props.user.privacy?.privacy_photo === 'all' && props.user)
+            "
             :banner="user?.media?.banner"
             @upload-wall="uploadWall"
             @update-wall="updateWall"
@@ -9,14 +23,30 @@
             :edited="false"
         ></bannerPhoto>
         <div class="user-metric__top" v-else>
-        <div   class="user-metric__top-img-wrapper"><img
-                src="@/app/assets/user-banner.jpg"
-                alt="Баннер личной страницы(пусто)"
-            /></div>
+            <div class="user-metric__top-img-wrapper">
+                <img
+                    src="@/app/assets/user-banner.jpg"
+                    alt="Баннер личной страницы(пусто)"
+                />
+            </div>
         </div>
 
         <Avatar
-        v-if="props.user.privacy?.privacy_photo === 'detachment_members' && props.user.detachment_id === currentUser.currentUser.value.detachment_id || props.user.privacy?.privacy_photo === 'management_members' && (roles.roles.value.detachment_commander === squad.squad.value.id || roles.roles.value.regionalheadquarter_commander === regionalHeadquarter.regional.value.id ||  roles.roles.value.localheadquarter_commander || roles.roles.value.educationalheadquarter_commander || roles.roles.value.districtheadquarter_commander || roles.roles.value.centralheadquarter_commander) || props.user.privacy?.privacy_photo === 'all' && props.user"
+            v-if="
+                (props.user.privacy?.privacy_photo === 'detachment_members' &&
+                    props.user.detachment_id ===
+                        currentUser.currentUser.value.detachment_id) ||
+                (props.user.privacy?.privacy_photo === 'management_members' &&
+                    (roles.roles.value.detachment_commander ===
+                        squad.squad.value.id ||
+                        roles.roles.value.regionalheadquarter_commander ===
+                            regionalHeadquarter.regional.value.id ||
+                        roles.roles.value.localheadquarter_commander ||
+                        roles.roles.value.educationalheadquarter_commander ||
+                        roles.roles.value.districtheadquarter_commander ||
+                        roles.roles.value.centralheadquarter_commander)) ||
+                (props.user.privacy?.privacy_photo === 'all' && props.user)
+            "
             :avatar="user?.media?.photo"
             @upload="uploadAva"
             @update="updateAva"
@@ -24,11 +54,13 @@
             :edited="false"
         ></Avatar>
         <div class="user-metric__avatar-wrapper" v-else>
-        <div   class="user-metric__avatar"><img
-                id="profile-pic"
-                src="@app/assets/user-avatar.png"
-                alt="Аватарка(пусто)"
-            /></div>
+            <div class="user-metric__avatar">
+                <img
+                    id="profile-pic"
+                    src="@app/assets/user-avatar.png"
+                    alt="Аватарка(пусто)"
+                />
+            </div>
         </div>
 
         <div class="user-metric__bottom">
@@ -76,7 +108,33 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
-                    <div class="user-data__social-network" v-if="props.user.privacy?.privacy_social === 'detachment_members' && props.user.detachment_id === currentUser.currentUser.value.detachment_id || props.user.privacy?.privacy_social === 'management_members' && (roles.roles.value.detachment_commander === squad.squad.value.id || roles.roles.value.regionalheadquarter_commander === regionalHeadquarter.regional.value.id ||  roles.roles.value.localheadquarter_commander || roles.roles.value.educationalheadquarter_commander || roles.roles.value.districtheadquarter_commander || roles.roles.value.centralheadquarter_commander) || props.user.privacy?.privacy_social === 'all' && props.user">
+                    <div
+                        class="user-data__social-network"
+                        v-if="
+                            (props.user.privacy?.privacy_social ===
+                                'detachment_members' &&
+                                props.user.detachment_id ===
+                                    currentUser.currentUser.value
+                                        .detachment_id) ||
+                            (props.user.privacy?.privacy_social ===
+                                'management_members' &&
+                                (roles.roles.value.detachment_commander ===
+                                    squad.squad.value.id ||
+                                    roles.roles.value
+                                        .regionalheadquarter_commander ===
+                                        regionalHeadquarter.regional.value.id ||
+                                    roles.roles.value
+                                        .localheadquarter_commander ||
+                                    roles.roles.value
+                                        .educationalheadquarter_commander ||
+                                    roles.roles.value
+                                        .districtheadquarter_commander ||
+                                    roles.roles.value
+                                        .centralheadquarter_commander)) ||
+                            (props.user.privacy?.privacy_social === 'all' &&
+                                props.user)
+                        "
+                    >
                         <div class="user-data__link-vk mr-2">
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -100,15 +158,69 @@
                         </div>
                     </div>
                     <div class="user-data__contact-contact">
-                        <div class="user-data__contact-contact_item" v-if="props.user.privacy?.privacy_telephone === 'detachment_members' && props.user.detachment_id === currentUser.currentUser.value.detachment_id || props.user.privacy?.privacy_telephone === 'management_members' && (roles.roles.value.detachment_commander === squad.squad.value.id || roles.roles.value.regionalheadquarter_commander === regionalHeadquarter.regional.value.id ||  roles.roles.value.localheadquarter_commander || roles.roles.value.educationalheadquarter_commander || roles.roles.value.districtheadquarter_commander || roles.roles.value.centralheadquarter_commander) || props.user.privacy?.privacy_telephone === 'all' && props.user" >
+                        <div
+                            class="user-data__contact-contact_item"
+                            v-if="
+                                (props.user.privacy?.privacy_telephone ===
+                                    'detachment_members' &&
+                                    props.user.detachment_id ===
+                                        currentUser.currentUser.value
+                                            .detachment_id) ||
+                                (props.user.privacy?.privacy_telephone ===
+                                    'management_members' &&
+                                    (roles.roles.value.detachment_commander ===
+                                        squad.squad.value.id ||
+                                        roles.roles.value
+                                            .regionalheadquarter_commander ===
+                                            regionalHeadquarter.regional.value
+                                                .id ||
+                                        roles.roles.value
+                                            .localheadquarter_commander ||
+                                        roles.roles.value
+                                            .educationalheadquarter_commander ||
+                                        roles.roles.value
+                                            .districtheadquarter_commander ||
+                                        roles.roles.value
+                                            .centralheadquarter_commander)) ||
+                                (props.user.privacy?.privacy_telephone ===
+                                    'all' &&
+                                    props.user)
+                            "
+                        >
                             <img
                                 src="@/app/assets/icon/phone.svg"
                                 alt="phone"
                             />
                             <p class="ml-2">{{ user.phone_number }}</p>
-
                         </div>
-                        <div class="user-data__contact-contact_item mail" v-if="props.user.privacy?.privacy_email === 'detachment_members' && props.user.detachment_id === currentUser.currentUser.value.detachment_id || props.user.privacy?.privacy_email === 'management_members' && (roles.roles.value.detachment_commander === squad.squad.value.id || roles.roles.value.regionalheadquarter_commander === regionalHeadquarter.regional.value.id ||  roles.roles.value.localheadquarter_commander || roles.roles.value.educationalheadquarter_commander || roles.roles.value.districtheadquarter_commander || roles.roles.value.centralheadquarter_commander) || props.user.privacy?.privacy_email === 'all' && props.user">
+                        <div
+                            class="user-data__contact-contact_item mail"
+                            v-if="
+                                (props.user.privacy?.privacy_email ===
+                                    'detachment_members' &&
+                                    props.user.detachment_id ===
+                                        currentUser.currentUser.value
+                                            .detachment_id) ||
+                                (props.user.privacy?.privacy_email ===
+                                    'management_members' &&
+                                    (roles.roles.value.detachment_commander ===
+                                        squad.squad.value.id ||
+                                        roles.roles.value
+                                            .regionalheadquarter_commander ===
+                                            regionalHeadquarter.regional.value
+                                                .id ||
+                                        roles.roles.value
+                                            .localheadquarter_commander ||
+                                        roles.roles.value
+                                            .educationalheadquarter_commander ||
+                                        roles.roles.value
+                                            .districtheadquarter_commander ||
+                                        roles.roles.value
+                                            .centralheadquarter_commander)) ||
+                                (props.user.privacy?.privacy_email === 'all' &&
+                                    props.user)
+                            "
+                        >
                             <img src="@/app/assets/icon/mail.svg" alt="mail" />
                             <p class="ml-2">{{ user.email }}</p>
                         </div>
@@ -124,9 +236,9 @@ import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
-import { useRegionalsStore  } from '@features/store/regionals';
+import { useRegionalsStore } from '@features/store/regionals';
 import { useRoleStore } from '@layouts/store/role';
-import { useSquadsStore  } from '@features/store/squads';
+import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 
@@ -151,7 +263,6 @@ const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
 const squad = storeToRefs(squadsStore);
-
 
 const emit = defineEmits(['upload', 'update', 'delete']);
 
@@ -398,3 +509,4 @@ onMounted(() => {
     margin-right: 5px;
 }
 </style>
+@shared/components/inputs/imagescomp@shared/components/inputs/imagescomp

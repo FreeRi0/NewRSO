@@ -268,3 +268,4 @@ section.about-squad {
     }
 }
 </style>
+@shared/components/inputs/imagescomp

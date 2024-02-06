@@ -1,5 +1,6 @@
 <template>
     <button
+        v-if="!loaded"
         :class="[
             'btn',
             `btn_${color}`,
@@ -12,9 +13,27 @@
         :loaded="loaded"
         @click="clickOnButton"
     >
-        <span v-if="icon"> </span>
+        <span v-if="icon"></span>
         <span v-else>{{ label }}</span>
-        <v-progress-circular indeterminate v-if="loaded"></v-progress-circular>
+    </button>
+    <button
+        v-else
+        :class="[
+            'btn',
+            `btn_${color}`,
+            { btn_rounded: rounded },
+            { btn_outlined: outlined },
+            { btn_icon: icon },
+            { btn_large: size === 'large' },
+        ]"
+        :disabled="disabled"
+        :loaded="loaded"
+        @click="clickOnButton"
+    >
+        <v-progress-circular
+            class="circleLoader"
+            indeterminate
+        ></v-progress-circular>
     </button>
 </template>
 <script setup>
@@ -126,6 +145,12 @@ const clickOnButton = () => {
     &_large {
         height: 52px;
         padding: 16px 32px;
+    }
+
+    .circleLoader {
+        width: 20px;
+        height: 20px;
+        display: block;
     }
 }
 </style>
