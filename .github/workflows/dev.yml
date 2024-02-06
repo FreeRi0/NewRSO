@@ -41,7 +41,7 @@ jobs:
           script: |
             cd rso_dev
             sudo docker compose down
-            sudo docker volume rm rso_frontend_dist_dev
+            sudo docker volume rm rso_dev_frontend_dist_dev
             sudo docker volume prune
             sudo docker system prune
             sudo docker image prune
