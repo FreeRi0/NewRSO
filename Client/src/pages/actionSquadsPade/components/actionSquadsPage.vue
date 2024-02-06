@@ -4,6 +4,7 @@
             desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
             label="Создать мероприятие"
             name="createAction"
+            :button="true"
         ></bannerCreate>
         <h2 class='action-title'>Мероприятия</h2>
         <div class='searcher'>
@@ -190,8 +191,7 @@ function SearchByInput(){
   else{
     getListActionsBySearch(text.value)
     .then((resp)=>{
-      actionsList.value = resp.data
-      console.log(actionsList.value)
+      actionsList.value = resp.data;
     })
   }
 }
@@ -217,6 +217,7 @@ function ClearSearchForm() {
     console.log('Форма очищена');
 }
 
+//До лучших времен...
 const actionFormSearch = ref({
         format: {
           online: null,
@@ -445,6 +446,10 @@ const sortOptionss = ref([
             display: none;
         }
     }
-      }
-    }
+}
+
+.v-expansion-panel:not(:first-child)::after {
+    display: none;
+}
+}
 </style>

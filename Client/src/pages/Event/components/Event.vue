@@ -37,12 +37,7 @@
         </div>
         <h2 class="title title--subtitle">О мероприятии</h2>
         <div class="event_type_wrap">
-            <span
-                class="event_type"
-                v-for="category in eventCategory"
-                :key="category"
-                >{{ category }}</span
-            >
+
         </div>
         <p class="text event_type_wrap">
             {{ event.description }}
@@ -66,7 +61,6 @@
         </div>
         <!-- Организаторы -->
         <h2 class="title title--subtitle">Организаторы</h2>
-        <div v-if="organizators.length == 0" class="event event-empty">Странно, но у мероприятия нет организаторов</div>
         <div v-if="organizators.length != 0" class="card_wrap">
             <v-card v-for="organizator in organizators" class="event_card_wrap">
                 <v-img width="120"></v-img>
@@ -80,7 +74,6 @@
         </div>
         <!-- Контактные лица -->
         <h2 class="title title--subtitle">Контактные лица</h2>
-        <div v-if="cards.length == 0" class="event event-empty">Контактные лица не указаны</div>
         <div class="card_wrap">
             <v-card v-for="card in cards" :key="card" class="event_card_wrap">
                 <v-img width="120" :src="card.avatar"></v-img>
@@ -98,7 +91,6 @@
             <button class="event_btn event_go">Уже идут</button>
             <button class="event_btn event_ok">Ожидают одобрения</button>
         </div>
-        <div v-if="participants.length == 0" class="event event-empty">Никто не хочет участвовать :(</div>
         <section v-if="participants.length != 0" class="section_wrap">
             <ul class="list_wrap">
                 <li
@@ -153,7 +145,6 @@
         </section>
         <!-- Другие мероприятия -->
         <h2 class="title title--subtitle event_border">Другие мероприятия</h2>
-        <div class="event event-empty">На данный момент мероприятий нет</div>
         <div class="other_events_wrap">
         </div>
         <Button
@@ -210,6 +201,14 @@ const otherevents = ref({});
 
 const organizators = ref([])
 onActivated(() => {
+    getAction(route.params.id)
+    .then((resp)=>{
+        event.value = resp.data;
+        getOrganizator(route.params.id)
+        .then((resp)=>{
+            organizators.value = resp.data;
+        })
+    })
     getParticipants(route.params.id)
         .then((resp)=>{
             participants.value = resp.data
@@ -221,14 +220,6 @@ onActivated(() => {
         .then((resp)=>{
             otherevents.value = resp.data;
         })
-    getAction(route.params.id)
-    .then((resp)=>{
-        event.value = resp.data;
-        getOrganizator(route.params.id)
-        .then((resp)=>{
-            organizators.value = resp.data;
-        })
-    })
     .catch((e)=>{
         console.log(e)
     })

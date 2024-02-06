@@ -718,6 +718,12 @@
                                     />
                                     <div class="form__counter"></div>
                                 </div>
+                                <div class="form__field">
+                                    <div class="form-checkbox">
+                                        <input v-model="organizators.is_contact_person" type="checkbox" name="person" />
+                                        <label for="person">Сделать контактным лицом</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class='form-add' @click="AddOrganizator">+ Добавить организатора</div>
@@ -841,12 +847,12 @@ const maininfo = ref({
     application_type: '',
     available_structural_units: '',
     document_data: {
-      passport: true,
-      snils: true,
-      inn: true,
-      work_book: true,
-      military_document: true,
-      consent_personal_data: true,
+      passport: false,
+      snils: false,
+      inn: false,
+      work_book: false,
+      military_document: false,
+      consent_personal_data: false,
       additional_info: '',
     }
 })
@@ -1122,4 +1128,37 @@ function AddQuestion(){
         border-radius: 50%;
     }
   }
+  .v-expansion-panel {
+    &__shadow {
+        box-shadow: none;
+    }
+
+    &--active,
+    &--after-active {
+        margin: 0;
+    }
+
+    &--active:not(:first-child) {
+        margin: 0;
+    }
+
+    &--active + .v-expansion-panel {
+        margin: 0;
+    }
+
+    .v-expansion-panel-title {
+        max-height: 60px;
+        font-family: 'Akrobat';
+        font-size: 24px;
+        font-weight: 600;
+        background-color: transparent;
+        border-bottom: 1px solid #939393;
+        color: #35383f;
+        padding: 16px 0px;
+
+        &__overlay {
+            display: none;
+        }
+    }
+}
 </style>

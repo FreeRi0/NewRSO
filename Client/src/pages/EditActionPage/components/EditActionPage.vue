@@ -616,12 +616,12 @@
                                     />
                                     <div class="form__counter"></div>
                                 </div>
-                                <v-checkbox
-                                        v-model="organizator.is_contact_person"
-                                        :binary="true"
-                                        label="Сделать контактным лицом"
-                                    ></v-checkbox>
-                                <div class="form__field"></div>
+                                <div class="form__field">
+                                    <div class="form-checkbox">
+                                        <input v-model="organizators.is_contact_person" type="checkbox" name="person" />
+                                        <label for="person">Сделать контактным лицом</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class='form-add' @click="AddOrganizator">+ Добавить организатора</div>
@@ -722,7 +722,7 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref } from 'vue';
+import { ref, onActivated } from 'vue';
 import { getAction, createAction, createOrganizator, getOrganizator, putAction, putOrganizator, putTimeData } from '@services/ActionService';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
@@ -731,26 +731,26 @@ import FileUpload from 'primevue/fileupload';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import textarea from '@shared/components/inputs/textarea.vue';
-import { onActivated } from 'vue';
 const router = useRoute();
 
 const id = router.params.id;
+console.log(id)
 
 onActivated(()=>{
     getAction(id)
-    .then((resp)=>{
-        maininfo.value = resp.data
-        getOrganizator(id)
-            .then((resp)=>{
-                organizators.value = resp.data;
-            })
-            .catch((e)=>{
-                console.log(e)
-            })
-    })
-    .catch((e)=>{
-        console.log(e)
-    })
+        .then((resp)=>{
+            maininfo.value = resp.data
+            getOrganizator(id)
+                .then((resp)=>{
+                    organizators.value = resp.data;
+                })
+                .catch((e)=>{
+                    console.log(e)
+                })
+        })
+        .catch((e)=>{
+            console.log(e)
+        })
 })
 
 //Переменные для основной формы
@@ -869,15 +869,16 @@ function SubmitEvent(){
                 })
             putOrganizator(id, organizator)
             .then((resp)=>{
-                router.push("/")
+                
             })
             .catch((e) =>{
                 console.log(e)
             })
+            router.go(-1)
         })
         .catch((e)=>{
             console.log(e)
-        })
+    })
 
 }
 
