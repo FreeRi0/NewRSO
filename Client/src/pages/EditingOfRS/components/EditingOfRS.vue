@@ -1,11 +1,14 @@
 <template>
     <div class="container">
         <h1 class="title title--lso">Редактирование регионального штаба</h1>
+        <!-- здесь поменяла -->
         <FormRS
             :participants="true"
             :headquarter="headquarter"
             :members="members"
             :submited="submited"
+            :is-commander-loading="isCommanderLoading"
+            :is-members-loading="isMembersLoading"
             :is-error="isError"
             :is-error-members="isErrorMembers"
             v-if="headquarter && isError && isErrorMembers && !loading"
@@ -20,9 +23,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject, watch } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { FormRS } from '@features/FormRS';
-import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { usePage } from '@shared';
@@ -31,42 +33,42 @@ const router = useRouter();
 const route = useRoute();
 let id = route.params.id;
 
-const { replaceTargetObjects } = usePage();
-
-const submited = ref(false);
-
 const headquarter = ref(null);
 const members = ref([]);
-const positions = ref([]);
-const regions = ref([]);
 
-const getPositions = async () => {
-    HTTP.get('positions/')
+// const positions = ref([]);
+// const regions = ref([]);
 
-        .then((res) => {
-            positions.value = res.data;
-            console.log('должности - ', res.data);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const getPositions = async () => {
+//     HTTP.get('positions/')
 
-const getRegions = async () => {
-    await HTTP.get('regions/')
+//         .then((res) => {
+//             positions.value = res.data;
+//             console.log('должности - ', res.data);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 
-        .then((res) => {
-            regions.value = res.data;
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+// const getRegions = async () => {
+//     await HTTP.get('regions/')
+
+//         .then((res) => {
+//             regions.value = res.data;
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+const { replaceTargetObjects } = usePage();
 
 const loading = ref(false);
+const isCommanderLoading = ref(false);
 
 const getHeadquarter = async () => {
     loading.value = true;
+    isCommanderLoading.value = true;
     await HTTP.get(`regionals/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -75,19 +77,22 @@ const getHeadquarter = async () => {
     })
         .then((response) => {
             headquarter.value = response.data;
-            console.log(response.data);
-            if (regions.value.length) {
-                const region = regions.value.find((item) => {
-                    return item.name === headquarter.value.region;
-                });
-                headquarter.value.region = region.id;
-                console.log(region.id);
+            if (headquarter.value.region) {
+                headquarter.value.region = headquarter.value.region.id;
             }
+            // if (regions.value.length) {
+            //     const region = regions.value.find((item) => {
+            //         return item.name === headquarter.value.region;
+            //     });
+            //     headquarter.value.region = region.id;
+            //     console.log(region.id);
+            // }
             if (headquarter.value.commander) {
                 headquarter.value.commander = headquarter.value.commander.id;
             }
             replaceTargetObjects([headquarter.value]);
             loading.value = false;
+            isCommanderLoading.value = false;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -100,32 +105,58 @@ onBeforeRouteUpdate(async (to, from) => {
     }
 });
 
+const isMembersLoading = ref(false);
+
 const getMembers = async () => {
-    HTTP.get(`regionals/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            members.value = response.data;
-            members.value.forEach((member) => {
-                if (positions.value) {
-                    const position = positions.value.find((item) => {
-                        return item.name === member.position;
-                    });
-                    member.position = position.id;
-                }
+    try {
+        isMembersLoading.value = true;
+        setTimeout(async () => {
+            const membersResponse = await HTTP.get(`regionals/${id}/members/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             });
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+
+            members.value = membersResponse.data;
+            if (members.value.length) {
+                members.value.forEach((member) => {
+                    member.position = member.position.id;
+                });
+            }
+            isMembersLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
+// const getMembers = async () => {
+//     HTTP.get(`regionals/${id}/members/`, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//         },
+//     })
+//         .then((response) => {
+//             members.value = response.data;
+//             members.value.forEach((member) => {
+//                 if (positions.value) {
+//                     const position = positions.value.find((item) => {
+//                         return item.name === member.position;
+//                     });
+//                     member.position = position.id;
+//                 }
+//             });
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
+
 onMounted(() => {
-    getRegions();
-    getPositions();
+    // getRegions();
+    // getPositions();
     getMembers();
     getHeadquarter();
 });
@@ -134,8 +165,9 @@ const onUpdateMember = (event, id) => {
     const targetMember = members.value.find((member) => member.id === id);
     const firstkey = Object.keys(event)[0];
     targetMember[firstkey] = event[firstkey];
-    console.log(event);
 };
+
+const submited = ref(false);
 
 const isEmblemChange = ref(false);
 const isBannerChange = ref(false);
