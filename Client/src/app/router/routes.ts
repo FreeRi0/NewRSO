@@ -162,18 +162,6 @@ const routes: RouteRecordRaw[] = [
                                     },
                                 ],
                             },
-                            // {
-                            //     path: '/CreateLSO',
-                            //     name: 'CreateLSO',
-                            //     component: () =>
-                            //         import(
-                            //             '@pages/CreationOfDetachment/components/CreationOfDetachment.vue'
-                            //         ),
-                            //     meta: {
-                            //         requiresAuth: true,
-                            //         label: 'Создание ЛСО',
-                            //     },
-                            // },
                         ],
                     },
                     // Штабы СО ОО

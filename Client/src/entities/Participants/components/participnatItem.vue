@@ -18,7 +18,7 @@
                     {{ participant.user.first_name }}
                 </p>
                 <p class="participants-wrapper__item-position">
-                    {{ participant.position }}
+                    {{ participant.position.name }}
                 </p>
             </div>
         </router-link>
@@ -36,9 +36,6 @@ const props = defineProps({
         type: Object,
     },
 });
-
-
-
 </script>
 <style lang="scss" scoped>
 .round-img {

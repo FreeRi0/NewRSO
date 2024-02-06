@@ -54,6 +54,7 @@
                 <Input
                     name="date"
                     type="text"
+                    class="dateInput"
                     placeholder="Дата рождения"
                     v-model:value="form.date_of_birth"
                     onfocusin="(this.type='date')"
@@ -179,6 +180,10 @@
     @media screen and (max-width: 575px) {
         max-width: 328px;
     }
+}
+
+.dateInput {
+    height: 48px;
 }
 
 .regCheck {
@@ -350,7 +355,7 @@ const handleTermsState = () => {
 };
 const RegisterUser = async () => {
     try {
-        isLoading.value = false;
+        isLoading.value = true;
         validated.value = true;
         const response = await HTTP.post('/register/', form.value, {
             headers: {

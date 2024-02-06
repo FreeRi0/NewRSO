@@ -1,19 +1,18 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
 import usePage  from '@shared/composables/usePage';
-export const useRegionalsStore = defineStore('regionals', {
+
+export const useEducationalsStore = defineStore('educationals', {
     state: () => ({
-        regions: [],
-        regionals: [],
+        educationals: [],
         members: [],
-        regional: {},
-        institutions: [],
+        educational: {},
         isLoading: false,
     }),
     actions: {
-        async searchRegionals(region: String) {
-            const responseSearchRegionals = await HTTP.get(
-                `/regionals/?search=${region}`,
+        async searchEducationals(name: String) {
+            const responseSearchEducationals = await HTTP.get(
+                `/educationals/?search=${name}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -21,19 +20,19 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 },
             );
-            this.regionals = responseSearchRegionals.data;
+            this.educationals = responseSearchEducationals.data;
         },
-        async getRegionals() {
+        async getEducationals() {
             try {
 
                 this.isLoading = true;
-                const responseRegionals = await HTTP.get(`/regionals/`, {
+                const responseEducationals = await HTTP.get(`/educationals/`, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.regionals = responseRegionals.data;
+                this.educationals = responseEducationals.data;
 
                 this.isLoading = false;
             } catch (error) {
@@ -42,18 +41,18 @@ export const useRegionalsStore = defineStore('regionals', {
             }
 
         },
-        async getRegionalId(id: String) {
+        async getEducationalsId(id: String) {
             try {
                 const { replaceTargetObjects } = usePage();
                 this.isLoading = true;
-                const responseRegional = await HTTP.get(`/regionals/${id}`, {
+                const responseEducational = await HTTP.get(`/educationals/${id}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.regional = responseRegional.data;
-                replaceTargetObjects([this.regional]);
+                this.educational = responseEducational.data;
+                replaceTargetObjects([this.educational]);
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -61,11 +60,11 @@ export const useRegionalsStore = defineStore('regionals', {
             }
 
         },
-        async getRegionalsMembers(id: String) {
+        async getEducationalsMembers(id: String) {
             try {
                 this.isLoading = true;
                 const responseMembers = await HTTP.get(
-                    `/regionals/${id}/members/`,
+                    `/educationals/${id}/members/`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -80,23 +79,6 @@ export const useRegionalsStore = defineStore('regionals', {
                 console.log('an error occured ' + error);
             }
 
-        },
-        async searchRegions(name: String) {
-            const responseRegions = await HTTP.get(`/regions/?search=${name}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            this.regions = responseRegions.data;
-        },
-        async searchInstitution(name: String) {
-            const responseInstitution = await HTTP.get(`/eduicational_institutions/?search=${name}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-            this.institutions = responseInstitution.data;
         },
     },
 });
