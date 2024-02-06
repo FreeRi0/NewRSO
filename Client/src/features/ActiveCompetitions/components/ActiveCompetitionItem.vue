@@ -9,8 +9,22 @@
             <v-checkbox v-model="isChecked" @change="onCheckbox" />
 
             <div class="competition__detachments">
-                <div v-if="competition.detachment">
-                    {{ competition.detachment }}
+                <div v-if="competition.detachment" class="horizontallso-item__wrapper">
+                    <img
+                        v-if="competition.detachment.banner"
+                        class="competition__avatar_circle"
+                        :src="competition.detachment.banner"
+                        alt="Banner"
+                    />
+
+                    <div
+                        v-else
+                        class="competition__avatar_circle blue-bg"
+                    ></div>
+
+                    <div class="containerHorizontal">
+                        <p>{{ competition.detachment.name }}</p>
+                    </div>
                 </div>
 
                 <div class="horizontallso-item__wrapper">
