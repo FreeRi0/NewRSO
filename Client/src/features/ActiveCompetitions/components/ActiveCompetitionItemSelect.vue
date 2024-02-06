@@ -2,8 +2,19 @@
     <div class="competition__item">
         <div class="competition__content">
             <div class="competition__detachments">
-                <div v-if="competition.detachment">
-                    {{ competition.detachment }}
+                <div
+                    v-if="competition.detachment"
+                    class="horizontallso-item__wrapper"
+                >
+                    <img
+                        class="competition__avatar_circle"
+                        :src="competition.detachment.banner"
+                        alt="Banner"
+                    />
+
+                    <div class="containerHorizontal">
+                        <p>{{ competition.detachment.name }}</p>
+                    </div>
                 </div>
 
                 <div class="horizontallso-item__wrapper">

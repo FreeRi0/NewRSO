@@ -47,7 +47,6 @@ export const useUserStore = defineStore('user', {
             } catch (error) {
                 this.isLoading = false;
                 console.log('an error occured ' + error);
-
             }
         },
         async getPrivateUserId(id: String) {

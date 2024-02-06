@@ -103,7 +103,7 @@
 
                         <span v-if="user.currentUser.value?.region"
                             >{{
-                                regionals.find(
+                                regionals.regionals.value.find(
                                     (reg) =>
                                         reg.region ===
                                         user.currentUser.value.region,
@@ -132,7 +132,7 @@
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <Select
+                        <!-- <Select
                             variant="outlined"
                             clearable
                             name="select_education"
@@ -141,7 +141,17 @@
                             @change="getByRegionals"
                             v-model="region"
                             address="regions/"
-                        ></Select>
+                        ></Select> -->
+                        <regionsDropdown
+                            open-on-clear
+                            id="reg"
+                            name="regdrop"
+                            placeholder="Выберите регион обучения"
+                            v-model="region"
+                            @update:value="changeValue"
+                            address="/regions/"
+                            class="mb-2 region-input"
+                        ></regionsDropdown>
 
                         <div>
                             <Button
@@ -180,13 +190,13 @@
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
-import { Select, sortByEducation } from '@shared/components/selects';
+import { Select, sortByEducation, regionsDropdown } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+import { useRegionalsStore  } from '@features/store/regionals';
 import { useRoleStore } from '@layouts/store/role';
-// import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 
 const props = defineProps({
@@ -199,24 +209,27 @@ const props = defineProps({
     },
 });
 
-const regionals = ref([]);
+
 const roleStore = useRoleStore();
+const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
 const roles = storeToRefs(roleStore);
+
+const regionals = storeToRefs(regionalsStore);
 // const regionalsStore = useRegionalsStore();
-const getRegionals = async () => {
-    try {
-        const regionalsResp = await HTTP.get('/regionals/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        regionals.value = regionalsResp.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+// const getRegionals = async () => {
+//     try {
+//         const regionalsResp = await HTTP.get('/regionals/', {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+//         regionals.value = regionalsResp.data;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 // regionalsStore.getRegionals();
 
@@ -229,7 +242,7 @@ const router = useRouter();
 const user = storeToRefs(userStore);
 console.log('user', user.currentUser.value);
 
-// const region = ref(null);
+const region = ref(null);
 // console.log('userreg', region);
 
 // const getByRegionals = computed(() => {
@@ -405,14 +418,15 @@ const updateRegion = async () => {
         );
         // region.value = updateRegResponse.data;
         show.value = !show.value;
+        userStore.getUser();
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
 onMounted(async () => {
-    await getRegionals();
-    await getHeadquarters();
+    await regionalsStore.getRegionals();
+    // await getHeadquarters();
 });
 </script>
 

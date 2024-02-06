@@ -99,9 +99,9 @@ const getMembers = async () => {
 };
 
 onMounted(() => {
-    getHeadquarter();
-    getMembers();
     getPositions();
+    getMembers();
+    getHeadquarter();
 });
 
 const onUpdateMember = (event, id) => {
@@ -147,21 +147,21 @@ const changeHeadquarter = async () => {
         const formData = new FormData();
 
         formData.append('name', headquarter.value.name);
-    formData.append(
-        'detachments_appearance_year',
-        headquarter.value.detachments_appearance_year,
-    );
-    formData.append('founding_date', headquarter.value.founding_date);
-    formData.append(
-        'rso_founding_congress_date',
-        headquarter.value.rso_founding_congress_date,
-    );
-    formData.append('city', headquarter.value.city);
-    formData.append('commander', headquarter.value.commander);
-    formData.append('social_vk', headquarter.value.social_vk);
-    formData.append('social_tg', headquarter.value.social_tg);
-    formData.append('slogan', headquarter.value.slogan);
-    formData.append('about', headquarter.value.about);
+        formData.append(
+            'detachments_appearance_year',
+            headquarter.value.detachments_appearance_year,
+        );
+        formData.append('founding_date', headquarter.value.founding_date);
+        formData.append(
+            'rso_founding_congress_date',
+            headquarter.value.rso_founding_congress_date,
+        );
+        formData.append('city', headquarter.value.city);
+        formData.append('commander', headquarter.value.commander);
+        formData.append('social_vk', headquarter.value.social_vk);
+        formData.append('social_tg', headquarter.value.social_tg);
+        formData.append('slogan', headquarter.value.slogan);
+        formData.append('about', headquarter.value.about);
 
         for (let member of members.value) {
             await HTTP.patch(
@@ -204,7 +204,7 @@ const changeHeadquarter = async () => {
         router.push({
             name: 'CentralHQ',
             params: { id: headquarter.value.id },
-        })
+        });
     } catch (err) {
         isError.value = err.response.data;
         isErrorMembers.value = err.response.data;
@@ -216,7 +216,7 @@ const changeHeadquarter = async () => {
                 showConfirmButton: false,
                 timer: 2500,
             });
-        } 
+        }
     }
 };
 </script>

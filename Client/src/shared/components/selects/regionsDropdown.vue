@@ -83,6 +83,10 @@ const props = defineProps({
         type: String,
         default: 'Ничего не найдено...',
     },
+    changeUser: {
+        type: Boolean,
+        default: false,
+    },
 });
 const name = ref('');
 

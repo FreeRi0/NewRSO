@@ -516,3 +516,4 @@ onMounted(() => {
     margin-top: 17px;
 }
 </style>
+@shared/components/inputs/imagescomp@shared/components/inputs/imagescomp

@@ -127,20 +127,23 @@ const routes: RouteRecordRaw[] = [
                                     },
                                     {
                                         path: 'AllParticipants',
-                                        name: 'allparticipants',
-                                        component: () =>
-                                            import(
-                                                '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
-                                            ),
                                         meta: {
                                             label: 'Участники отряда',
                                         },
                                         children: [
                                             {
+                                                path: '',
+                                                name: 'allparticipants',
+                                                component: () =>
+                                            import(
+                                                '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                                            ),
+                                            },
+                                            {
                                                 path: ':id',
                                                 meta: {
                                                     redirectTo: 'userpage',
-                                                    label: 'Страница пользователя',
+                                                    label: 'Страница участника',
                                                 },
                                                 children: [
                                                     {
@@ -157,29 +160,6 @@ const routes: RouteRecordRaw[] = [
                                     },
                                 ],
                             },
-                            {
-                                path: '/CreateLSO',
-                                name: 'CreateLSO',
-                                component: () =>
-                                    import(
-                                        '@pages/CreationOfDetachment/components/CreationOfDetachment.vue'
-                                    ),
-                                meta: {
-                                    requiresAuth: true,
-                                    label: 'Создание ЛСО',
-                                },
-                            },
-                            // {
-                            //     path: 'AllParticipants/:id',
-                            //     name: 'allparticipants',
-                            //     component: () =>
-                            //         import(
-                            //             '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
-                            //         ),
-                            //     meta: {
-                            //         label: 'Участники отряда',
-                            //     },
-                            // },
                         ],
                     },
                     // Штабы СО ОО
@@ -568,6 +548,7 @@ const routes: RouteRecordRaw[] = [
             import('@layouts/MainLayout/components/MainLayout.vue'),
         meta: {
             label: 'Личный кабинет',
+            redirectTo: 'mypage',
         },
         children: [
             {
