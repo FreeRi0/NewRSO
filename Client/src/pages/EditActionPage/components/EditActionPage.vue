@@ -1,5 +1,5 @@
 <template>
-    <div class="container action">
+    <!-- <div class="container action">
         <div class="action-title">Редактирование мероприятия</div>
         <form @submit.prevent="SubmitEvent">
             <div class="col-auto form-container">
@@ -122,6 +122,7 @@
                                     </div>
                                 </div>
                             </div>
+                            </v-expansion-panel-text>
                         </div>
                         <div class='form-container'>
                             <div class='form-col'>
@@ -150,9 +151,9 @@
                                 </div>
                                 <div class="form__field">
                                     <label class="form-label">Добавить баннер</label>
-                                    <FileUpload 
-                                        name="demo[]" 
-                                        accept=".pdf, .jpeg, .png" 
+                                    <FileUpload
+                                        name="demo[]"
+                                        accept=".pdf, .jpeg, .png"
                                         :maxFileSize="7000000"
                                     >
                                         <template #header="{ chooseCallback }">
@@ -166,6 +167,7 @@
                                                         fill="none"
                                                     ></svg>
                                                 </div>
+                                             </button>
                                             </template>
                                         </FileUpload>
                                     </div>
@@ -216,7 +218,7 @@
                                             v-model="maininfo.description"
                                         />
                                     </div>
-                                </label>
+
                             </div>
                             <div class='form-col'>
                                 <label class="form-label">Какие объекты могут формировать групповые заявки</label>
@@ -225,9 +227,10 @@
                                     :options='area_massive'
                                     placeholder='Например, ЛСО'
                                 ></sortByEducation>
-                            </div> 
+                            </div>
                         </div>
                     </v-expansion-panel-text>
+
                 </v-expansion-panel>
                 <v-expansion-panel>
                     <v-expansion-panel-title>
@@ -355,7 +358,7 @@
                                     <div class="form__counter"></div>
                                 </div>
                                 <div class="form__field">
-                                    <!--<label class='flex align-items-center' style='display: flex'>
+                                    <label class='flex align-items-center' style='display: flex'>
                                         <div class="flex align-items-center">
                                             <input
                                                 v-model="
@@ -396,7 +399,7 @@
                                             >
                                         </div>
                                     </label> -->
-                                </div>
+                                <!-- </div>
                                 <div class="form-col">
                                     <label class="form-label"
                                         >Какие объекты могут формировать
@@ -408,6 +411,7 @@
                                         placeholder="Например, ЛСО"
                                     ></sortByEducation>
                                 </div>
+                            </div>
                             </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -913,180 +917,181 @@
             </div>
         </form>
     </div>
+    </div> -->
 </template>
 
 <script setup>
-import { Button } from '@shared/components/buttons';
-import { ref, onActivated } from 'vue';
-import { getAction, createAction, createOrganizator, getOrganizator, putAction, putOrganizator, putTimeData } from '@services/ActionService';
-import { sortByEducation, Select } from '@shared/components/selects';
-import { useRoute } from 'vue-router';
-import { uploadPhoto } from '@shared/components/imagescomp';
-import FileUpload from 'primevue/fileupload';
-import Dropdown from 'primevue/dropdown';
-import InputText from 'primevue/inputtext';
-import textarea from '@shared/components/inputs/textarea.vue';
-const router = useRoute();
+// import { Button } from '@shared/components/buttons';
+// import { ref, onActivated } from 'vue';
+// import { getAction, createAction, createOrganizator, getOrganizator, putAction, putOrganizator, putTimeData } from '@services/ActionService';
+// import { sortByEducation, Select } from '@shared/components/selects';
+// import { useRoute } from 'vue-router';
+// import { uploadPhoto } from '@shared/components/imagescomp';
+// import FileUpload from 'primevue/fileupload';
+// import Dropdown from 'primevue/dropdown';
+// import InputText from 'primevue/inputtext';
+// import textarea from '@shared/components/inputs/textarea.vue';
+// const router = useRoute();
 
-const id = router.params.id;
-console.log(id)
+// const id = router.params.id;
+// console.log(id)
 
-onActivated(()=>{
-    getAction(id)
-        .then((resp)=>{
-            maininfo.value = resp.data
-            getOrganizator(id)
-                .then((resp)=>{
-                    organizators.value = resp.data;
-                })
-                .catch((e)=>{
-                    console.log(e)
-                })
-        })
-        .catch((e)=>{
-            console.log(e)
-        })
-})
+// onActivated(()=>{
+//     getAction(id)
+//         .then((resp)=>{
+//             maininfo.value = resp.data
+//             getOrganizator(id)
+//                 .then((resp)=>{
+//                     organizators.value = resp.data;
+//                 })
+//                 .catch((e)=>{
+//                     console.log(e)
+//                 })
+//         })
+//         .catch((e)=>{
+//             console.log(e)
+//         })
+// })
 
-//Переменные для основной формы
+// //Переменные для основной формы
 
-const scale_massive = ref([
-    { name: 'Отрядное' },
-    { name: 'Образовательное' },
-    { name: 'Городское' },
-    { name: 'Региональное' },
-    { name: 'Окружное' },
-    { name: 'Городское' },
-]);
+// const scale_massive = ref([
+//     { name: 'Отрядное' },
+//     { name: 'Образовательное' },
+//     { name: 'Городское' },
+//     { name: 'Региональное' },
+//     { name: 'Окружное' },
+//     { name: 'Городское' },
+// ]);
 
-const direction_massive = ref([
-    { name: 'Добровольческое' },
-    { name: 'Образовательное' },
-    { name: 'Патриотическое' },
-    { name: 'Региональное' },
-    { name: 'Окружное' },
-    { name: 'Всероссийское' },
-]);
+// const direction_massive = ref([
+//     { name: 'Добровольческое' },
+//     { name: 'Образовательное' },
+//     { name: 'Патриотическое' },
+//     { name: 'Региональное' },
+//     { name: 'Окружное' },
+//     { name: 'Всероссийское' },
+// ]);
 
-const maininfo = ref({
-    format: '',
-    direction: '',
-    name: '',
-    scale: '',
-    //banner: null,
-    conference_link: '',
-    address: '',
-    description: '',
-    participants_number: Number,
-    application_type: '',
-    available_structural_units: '',
-    time_data: {
-        event_duration_type: '',
-        start_date: '',
-        start_time: '',
-        end_date: '',
-        end_time: '',
-        registration_end_date: '',
-        registration_end_time: ''
-    },
-    document_data:{
-        additional_info: '',
-        consent_personal_data: false,
-        inn: false,
-        military_document: false,
-        passport: false,
-        snils: false,
-        work_book: false,
-    },
-});
+// const maininfo = ref({
+//     format: '',
+//     direction: '',
+//     name: '',
+//     scale: '',
+//     //banner: null,
+//     conference_link: '',
+//     address: '',
+//     description: '',
+//     participants_number: Number,
+//     application_type: '',
+//     available_structural_units: '',
+//     time_data: {
+//         event_duration_type: '',
+//         start_date: '',
+//         start_time: '',
+//         end_date: '',
+//         end_time: '',
+//         registration_end_date: '',
+//         registration_end_time: ''
+//     },
+//     document_data:{
+//         additional_info: '',
+//         consent_personal_data: false,
+//         inn: false,
+//         military_document: false,
+//         passport: false,
+//         snils: false,
+//         work_book: false,
+//     },
+// });
 
-const available_structural_units = ref([
-    { name: 'Отряды' },
-    { name: 'Образовательные Отряды' },
-    { name: 'Местные штабы' },
-    { name: 'Региональные штабы' },
-    { name: 'Окружные штабы' },
-    { name: 'Центральные штабы' },
-]);
-const area = ref('');
-const area_massive = ref([
-    { name: 'ЛСО' },
-    { name: 'Региональный штаб' },
-    { name: 'Окружной штаб' },
-]);
+// const available_structural_units = ref([
+//     { name: 'Отряды' },
+//     { name: 'Образовательные Отряды' },
+//     { name: 'Местные штабы' },
+//     { name: 'Региональные штабы' },
+//     { name: 'Окружные штабы' },
+//     { name: 'Центральные штабы' },
+// ]);
+// const area = ref('');
+// const area_massive = ref([
+//     { name: 'ЛСО' },
+//     { name: 'Региональный штаб' },
+//     { name: 'Окружной штаб' },
+// ]);
 
-//Переменные организаторов
+// //Переменные организаторов
 
-const organizators = ref([
-    {
-        id: Number,
-        organizer: '',
-        organizer_phone_number: '',
-        organizer_email: '',
-        organization: '',
-        telegram: '',
-        is_contact_person: false,
-    },
-]);
+// const organizators = ref([
+//     {
+//         id: Number,
+//         organizer: '',
+//         organizer_phone_number: '',
+//         organizer_email: '',
+//         organization: '',
+//         telegram: '',
+//         is_contact_person: false,
+//     },
+// ]);
 
-//Ответы на вопросы
-const answers = ref([
-    [
-        {
-            question: '',
-            answer: '',
-        },
-    ],
-]);
-//Формы самой страницы
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '#' },
-    { pageTitle: 'Создание штаба СО ОО', href: '#' },
-]);
+// //Ответы на вопросы
+// const answers = ref([
+//     [
+//         {
+//             question: '',
+//             answer: '',
+//         },
+//     ],
+// ]);
+// //Формы самой страницы
+// const pages = ref([
+//     { pageTitle: 'Структура', href: '#' },
+//     { pageTitle: 'Штабы СО ОО', href: '#' },
+//     { pageTitle: 'Создание штаба СО ОО', href: '#' },
+// ]);
 
-function AddOrganizator() {
-    organizators.value.push({
-        id: Number,
-        organizer: '',
-        organizer_phone_number: '',
-        organizer_email: '',
-        organization: '',
-        telegram: '',
-        is_contact_person: false,
-    });
-}
-function SubmitEvent(){
-    putAction(id, maininfo.value)
-        .then((resp)=>{
-            console.log("Удалось изменить данные", resp.data)
-            putTimeData(resp.data.id, maininfo.time_data.value)
-                .then((resp)=>{
-                    console.log("Удалось изменить время", resp.data)
-                })
-                .catch((e)=>{
-                    console.log(e);
-                })
-            putOrganizator(id, organizator)
-            .then((resp)=>{
-                
-            })
-            .catch((e) =>{
-                console.log(e)
-            })
-            router.go(-1)
-        })
-        .catch((e)=>{
-            console.log(e)
-    })
-}
+// function AddOrganizator() {
+//     organizators.value.push({
+//         id: Number,
+//         organizer: '',
+//         organizer_phone_number: '',
+//         organizer_email: '',
+//         organization: '',
+//         telegram: '',
+//         is_contact_person: false,
+//     });
+// }
+// function SubmitEvent(){
+//     putAction(id, maininfo.value)
+//         .then((resp)=>{
+//             console.log("Удалось изменить данные", resp.data)
+//             putTimeData(resp.data.id, maininfo.time_data.value)
+//                 .then((resp)=>{
+//                     console.log("Удалось изменить время", resp.data)
+//                 })
+//                 .catch((e)=>{
+//                     console.log(e);
+//                 })
+//             putOrganizator(id, organizator)
+//             .then((resp)=>{
 
-function AddQuestion() {
-    answers.value.push({
-        question: '',
-        answer: '',
-    });
-}
+//             })
+//             .catch((e) =>{
+//                 console.log(e)
+//             })
+//             router.go(-1)
+//         })
+//         .catch((e)=>{
+//             console.log(e)
+//     })
+// }
+
+// function AddQuestion() {
+//     answers.value.push({
+//         question: '',
+//         answer: '',
+//     });
+// }
 </script>
 
 <style lang="scss" scoped>

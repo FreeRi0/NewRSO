@@ -615,7 +615,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
@@ -732,6 +733,7 @@
                             </div>
                             <div class="form-container">
                                 <div class="form-border"></div>
+                            </div>
                             </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -1164,16 +1166,11 @@ function SubmitEvent() {
             console.log("Время изменено", resp.data)
         })
         .catch((e)=>{
-            
+
         })
         //Временное решение
         router.go(-1);
-    })
-    .catch((e)=>{
-
-    })
-}
-
+};
 function AddQuestion() {
     answers.value.push({
         question: '',

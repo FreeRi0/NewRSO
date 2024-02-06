@@ -455,5 +455,4 @@ input {
 .v-expansion-panel:not(:first-child)::after {
     display: none;
 }
-}
 </style>
