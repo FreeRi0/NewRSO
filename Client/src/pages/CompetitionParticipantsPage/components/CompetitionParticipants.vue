@@ -120,11 +120,13 @@
             </div>
 
             <div v-show="vertical">
-                <competitionList :squads="sortedSquads"></competitionList>
+                <competitionList :squads="sortedSquads "></competitionList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalCompetitionList :squads="sortedSquads"></horizontalCompetitionList>
+                <horizontalCompetitionList
+                    :squads="sortedSquads "
+                ></horizontalCompetitionList>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -186,7 +188,7 @@ const getEducations = async () => {
 };
 
 const getSquads = async () => {
-    await HTTP.get('/competitions/1/participants/', {
+    await HTTP.get('/competitions/1/participants', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -250,15 +252,22 @@ const sortedSquads = computed(() => {
     });
 
     tempSquads = tempSquads.filter((item) => {
-        return item.detachment.name
-            .toUpperCase()
-            .includes(searchSquads.value.toUpperCase());
+        return (
+            item.detachment?.name.toUpperCase() ??
+            item.junior_detachment?.name
+                .toUpperCase()
+                .includes(searchSquads.value.toUpperCase())
+        );
     });
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.detachment.name.toLowerCase(),
-                fb = b.detachment.name.toLowerCase();
+            let fa =
+                a.detachment.name.toLowerCase() ??
+                a.junior_detachment.name.toLowerCase();
+            fb =
+                b.detachment.name.toLowerCase() ??
+                b.junior_detachment.name.toLowerCase();
 
             if (fa < fb) {
                 return -1;

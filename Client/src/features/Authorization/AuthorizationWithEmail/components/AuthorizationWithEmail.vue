@@ -84,7 +84,7 @@ const router = useRouter();
 
 const LoginUser = async () => {
     try {
-        isLoading.value = false;
+        isLoading.value = true;
         const response = await HTTP.post('/token/login/', data.value, {
             headers: {
                 'Content-Type': 'application/json',

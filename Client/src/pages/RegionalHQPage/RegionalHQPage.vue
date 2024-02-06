@@ -19,8 +19,8 @@
         ></BannerHQ>
         <BannerHQ
             v-else-if="showRegionalHQ"
-            :regionalHeadquarter="regionalHeadquarter"
-            :member="member"
+            :regionalHeadquarter="regionalHeadquarter.regional.value"
+            :member="member.members.value"
         ></BannerHQ>
         <BannerHQ
             v-else
@@ -34,7 +34,7 @@
             </p>
             <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
             <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
+            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.regional.value.about }}</p>
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
@@ -72,8 +72,11 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
-import { usePage } from '@shared';
+import { useRegionalsStore } from '@features/store/regionals';
+import { storeToRefs } from 'pinia';
+// import { usePage } from '@shared';
 
+const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
 const showRegionalHQ = ref(true);
 const showDistrictHQ = ref(false);
@@ -82,49 +85,49 @@ const showHQ = ref(false);
 
 const commander = ref({});
 const position = ref({});
-const regionalHeadquarter = ref({});
-const member = ref([]);
+const regionalHeadquarter = storeToRefs(regionalsStore);
+const member = storeToRefs(regionalsStore);
 const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
-const { replaceTargetObjects } = usePage();
+// const { replaceTargetObjects } = usePage();
 
-const aboutRegionalHQ = async () => {
-    try {
-        const response = await HTTP.get(`/regionals/${id}/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+// const aboutRegionalHQ = async () => {
+//     try {
+//         const response = await HTTP.get(`/regionals/${id}/`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
 
-        regionalHeadquarter.value = response.data;
-        replaceTargetObjects([regionalHeadquarter.value]);
-        console.log(response);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+//         regionalHeadquarter.value = response.data;
+//         replaceTargetObjects([regionalHeadquarter.value]);
+//         console.log(response);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
-const aboutMembers = async () => {
-    try {
-        const response = await HTTP.get(`/regionals/${id}/members/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+// const aboutMembers = async () => {
+//     try {
+//         const response = await HTTP.get(`/regionals/${id}/members/`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
 
-        member.value = response.data;
-        console.log(response);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+//         member.value = response.data;
+//         console.log(response);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 const filteredMembers = computed(() => {
-    return member.value.filter((manager) => {
+    return member.members.value.filter((manager) => {
         return (
             manager.position &&
             (manager.position === 'Командир' ||
@@ -136,7 +139,7 @@ const filteredMembers = computed(() => {
 
 const fetchCommander = async () => {
     try {
-        let id = regionalHeadquarter.value.commander.id;
+        let id = regionalHeadquarter.regional.value.commander.id;
 
         const response = await HTTP.get(`/users/${id}/`, {
             headers: {
@@ -151,20 +154,21 @@ const fetchCommander = async () => {
         console.log('An error occurred:', error);
     }
 };
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        aboutRegionalHQ();
-        aboutMembers();
-        fetchCommander();
-    }
-});
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         aboutRegionalHQ();
+//         aboutMembers();
+//         fetchCommander();
+//     }
+// });
 watch(
     () => route.params.id,
 
     async (newId) => {
+        if (!newId || route.name !== 'RegionalHQ') return;
         id = newId;
-        await aboutRegionalHQ();
-        await aboutMembers();
+        await regionalsStore.getRegionalId(id);
+        await regionalsStore.getRegionalsMembers(id);
         await fetchCommander();
     },
     {
@@ -173,8 +177,8 @@ watch(
 );
 
 onMounted(() => {
-    aboutRegionalHQ();
-    aboutMembers();
+    regionalsStore.getRegionalId(id);
+    regionalsStore.getRegionalsMembers(id);
 });
 
 const HQandSquads = ref([
@@ -185,7 +189,7 @@ const HQandSquads = ref([
             crosspageFilters.addFilter({
                 pageName: 'LocalHeadquarters',
                 filters: {
-                    regionalName: regionalHeadquarter.value.name,
+                    regionalName: regionalHeadquarter.regional.value.name,
                 },
             });
         },
@@ -197,7 +201,7 @@ const HQandSquads = ref([
             crosspageFilters.addFilter({
                 pageName: 'AllHeadquarters',
                 filters: {
-                    regionalName: regionalHeadquarter.value.name,
+                    regionalName: regionalHeadquarter.regional.value.name,
                 },
             });
         },

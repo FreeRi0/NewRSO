@@ -214,21 +214,51 @@
                             </p> -->
                         </div>
 
-                        <div class="form__field form__field--commander">
+                        <div
+                            v-show="
+                                educComId ||
+                                regionComId ||
+                                districtComId ||
+                                centralComId ||
+                                localComId ||
+                                detComId
+                            "
+                            class="form__field form__field--commander"
+                        >
                             <label class="form__label" for="beast"
                                 >Командир отряда:
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Dropdown
-                                v-if="!isCommanderLoading"
-                                open-on-clear
-                                id="beast"
-                                name="edit_beast"
-                                placeholder="Поиск по ФИО"
-                                v-model="detachment.commander"
-                                @update:value="changeValue"
-                                address="users/"
-                            ></Dropdown>
+                            <div v-if="!isCommanderLoading">
+                                <Dropdown
+                                    v-if="
+                                        educComId ||
+                                        regionComId ||
+                                        districtComId ||
+                                        centralComId ||
+                                        localComId ||
+                                        detComId
+                                    "
+                                    open-on-clear
+                                    id="beast"
+                                    name="edit_beast"
+                                    placeholder="Поиск по ФИО"
+                                    v-model="detachment.commander"
+                                    @update:value="changeValue"
+                                    address="users/"
+                                ></Dropdown>
+                                <!-- Скрытое поле командира -->
+                                <Dropdown
+                                    v-else
+                                    open-on-clear
+                                    id="beast"
+                                    name="edit_beast"
+                                    placeholder="Поиск по ФИО"
+                                    v-model="detachment.meId"
+                                    @update:value="changeValue"
+                                    address="users/"
+                                ></Dropdown>
+                            </div>
                             <!-- <userDropdown
                                 v-if="!isCommanderLoading"
                                 open-on-clear
@@ -250,7 +280,6 @@
                             >
                                 * Это поле не может быть пустым.
                             </p>
-                            <!-- <p>{{ detachment.commander }}</p> -->
                         </div>
                     </div>
 
@@ -1364,6 +1393,8 @@ import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
 
 // import { useVuelidate } from '@vuelidate/core';
 // import {
@@ -1375,6 +1406,17 @@ import { HTTP } from '@app/http';
 //     email,
 //     sameAs,
 // } from '@vuelidate/validators';
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+// console.log(roles.roles.value);
+
+const educComId = roles.roles.value.educationalheadquarter_commander;
+const regionComId = roles.roles.value.regionalheadquarter_commander;
+const districtComId = roles.roles.value.districtheadquarter_commander;
+const centralComId = roles.roles.value.centralheadquarter_commander;
+const localComId = roles.roles.value.localheadquarter_commander;
+const detComId = roles.roles.value.detachment_commander;
 
 const emit = defineEmits([
     'update:value',
