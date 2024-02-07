@@ -11,6 +11,7 @@
         v-bind="$attrs"
         @keyup="searchRegion"
         @update:value="changeValue"
+        :address="address"
         :no-data-text="noDataText"
         class="option-select"
     >
@@ -77,10 +78,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    // address: {
-    //     type: String,
-    //     default: '',
-    // },
+    address: {
+        type: String,
+        default: '',
+    },
     noDataText: {
         type: String,
         default: 'Ничего не найдено...',
@@ -100,16 +101,35 @@ const changeValue = (event) => {
 };
 
 const items = ref(props.items);
- items.value = regions.regions.value;
+//  items.value = regions.regions.value;
+
+// const onChangeItem = async () => {
+//     try {
+//         regionalsStore.getRegions();
+//         items.value = regions.regions.value;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 const onChangeItem = async () => {
     try {
-        regionalsStore.getRegions();
-        items.value = regions.regions.value;
+        isLoading.value = true;
+        setTimeout(async () => {
+            const ItemResponse = await HTTP.get(props.address, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            items.value = ItemResponse.data;
+            isLoading.value = false;
+        }, 500);
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
+
+
 
 const searchRegion = (val) => {
     if (name.value.length < 3) {
@@ -120,8 +140,8 @@ const searchRegion = (val) => {
 };
 
 onMounted(() => {
-    // onChangeItem();
-    regionalsStore.getRegions();
+    onChangeItem();
+    // regionalsStore.getRegions();
 });
 </script>
 

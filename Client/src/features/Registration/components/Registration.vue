@@ -13,6 +13,7 @@
                     v-model="form.region"
                     @update:value="changeValue"
                     class="mb-2 region-input"
+                    address="/regions/"
                 ></regionsDropdown>
                 <Input
                     placeholder="Фамилия"
