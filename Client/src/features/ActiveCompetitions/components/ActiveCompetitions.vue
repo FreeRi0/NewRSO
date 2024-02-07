@@ -25,7 +25,8 @@
                             competition.is_confirmed_by_junior ||
                             (competition.junior_detachment.id ==
                                 commanderIds.detachment_commander &&
-                                !competition.is_confirmed_by_junior)
+                                !competition.is_confirmed_by_junior) ||
+                            !competition.detachment
                         "
                         :competition="competition"
                         :commander-ids="commanderIds"
@@ -145,8 +146,9 @@ const getCompetitions = async () => {
             );
 
             competitionsList.value = data.filter(
-                (c) => c.is_confirmed_by_junior,
+                (c) => c.is_confirmed_by_junior || !c.detachment,
             );
+            console.log(competitionsList.value);
         } catch (e) {
             console.log('error getCompetitions', e);
         } finally {
