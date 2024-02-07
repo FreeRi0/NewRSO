@@ -58,7 +58,7 @@ import SquadParticipants from './components/SquadParticipants.vue';
 import { CompetitionPromo } from '@/features/Competition';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute,  onBeforeRouteUpdate } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
 const squadsStore = useSquadsStore();
@@ -70,35 +70,37 @@ const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 
-console.log('idOld', id);
+console.log('params', route.params);
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
-       await squadsStore.getSquadId(id);
-    await squadsStore.getSquadMembers(id);
+        await squadsStore.getSquadId(id);
+        await squadsStore.getSquadMembers(id);
     }
 });
-
-
 
 watch(
     () => route.params.id,
 
-async(newId) => {
+    async (newId, oldId) => {
+        console.log('newId', newId, 'oldId', oldId);
         if (!newId || route.name !== 'lso') return;
         id = newId;
+
         // getLsoData();
-         await squadsStore.getSquadId(id);
-         await squadsStore.getSquadMembers(id);
+        await squadsStore.getSquadId(id);
+        await squadsStore.getSquadMembers(id);
     },
 );
 
-console.log('id', id);
+
 
 onMounted(() => {
     // getLsoData();
+    console.log('idSquad', id);
     squadsStore.getSquadId(id);
     squadsStore.getSquadMembers(id);
+
 });
 </script>
 <style scoped lang="scss">
