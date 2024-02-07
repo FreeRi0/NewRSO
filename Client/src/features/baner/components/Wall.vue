@@ -88,7 +88,7 @@
                             <p v-if="user.region">
                                 {{
                                     regionals.regionals.value.find(
-                                        (reg) => reg.region === user.region,
+                                        (reg) => reg.region?.name === user.region,
                                     )?.name
                                 }}
                             </p>

@@ -27,10 +27,20 @@
         <template v-slot:chip="{ props, item }">
             <div class="option__content">
                 <div class="option__image">
+                    <!-- <img
+                        v-if="item.raw?.media?.photo"
+                        :src="item.raw?.media?.photo"
+                        alt="Фото бойца"
+                    />
+                    <img
+                        v-else
+                        src="@app/assets/foto-leader-squad/foto-leader-squad-stub.png'"
+                        alt="Фото бойца"
+                    /> -->
                     <img
                         :src="
                             item.raw?.media?.photo ??
-                            '/assets/foto-leader-squad/foto-leader-squad-stub.png'
+                            '@app/assets/foto-leader-squad/foto-leader-squad-stub.png'
                         "
                         alt="Фото бойца"
                     />
@@ -57,10 +67,20 @@
             <v-container v-bind="props">
                 <div class="option__content option__content--option">
                     <div class="option__image">
+                        <!-- <img
+                            v-if="item.raw?.media?.photo"
+                            :src="item.raw?.media?.photo"
+                            alt="Фото бойца"
+                        />
+                        <img
+                            v-else
+                            src="@app/assets/foto-leader-squad/foto-leader-squad-stub.png"
+                            alt="Фото бойца"
+                        /> -->
                         <img
                             :src="
                                 item.raw?.media?.photo ??
-                                '/assets/foto-leader-squad/foto-leader-squad-stub.png'
+                                '@app/assets/foto-leader-squad/foto-leader-squad-stub.png'
                             "
                             alt="Фото бойца"
                         />
@@ -132,7 +152,7 @@ const changeValue = (event) => {
     emit('update:value', event);
 };
 
-const items = ref(props.items);
+// const items = ref(props.items);
 
 const onChangeItem = async () => {
     await HTTP.get(
@@ -146,7 +166,7 @@ const onChangeItem = async () => {
     )
 
         .then((res) => {
-            items.value = res.data;
+            props.items = res.data;
             console.log(res.data);
         })
         .catch(function (error) {

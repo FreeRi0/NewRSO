@@ -128,7 +128,7 @@
             <div v-show="vertical">
                 <squadsList
                     :squads="sortedSquads"
-                    v-if="!isSquadsLoading"
+                    v-if="!isLoading.isLoading.value"
                 ></squadsList>
                 <v-progress-circular
                     class="circleLoader"
@@ -141,14 +141,7 @@
             <div class="horizontal" v-show="!vertical">
                 <horizontalList
                     :squads="sortedSquads"
-                    v-if="!isSquadsLoading"
                 ></horizontalList>
-                <v-progress-circular
-                    class="circleLoader"
-                    v-else
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -179,28 +172,24 @@ import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
 const squadsStore = useSquadsStore();
 const squads = storeToRefs(squadsStore);
+const isLoading = storeToRefs(squadsStore);
 console.log('squad', squads.squads.value);
+console.log('loading', isLoading.isLoading.value);
 // const squads = ref([]);
 
 const categories = ref([]);
-const isSquadsLoading = ref(false);
 const name = ref('');
 const education = ref('');
 
-const getSquads = async () => {
+const getCategories = async () => {
     try {
-        isSquadsLoading.value = true;
-        setTimeout(async () => {
-            const categoryResponse = await HTTP.get('/areas/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-
-            categories.value = categoryResponse.data;
-            isSquadsLoading.value = false;
-        }, 100);
+        const categoryResponse = await HTTP.get('/areas/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        categories.value = categoryResponse.data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -311,17 +300,15 @@ const sortedSquads = computed(() => {
         return tempSquads;
     }
 
-    tempSquads = tempSquads.filter((item) => item.area === picked.value);
-    console.log('picked', picked.value)
+    tempSquads = tempSquads.filter((item) => item.area.name === picked.value);
+    console.log('picked', picked.value);
 
     return tempSquads;
 });
 
 onMounted(() => {
+    getCategories();
     squadsStore.getSquads();
-    getSquads();
-    squadsStore.getSquads();
-
 });
 </script>
 <style lang="scss" scoped>

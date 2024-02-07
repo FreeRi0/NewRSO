@@ -38,14 +38,16 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <p v-if="user.region">
+                            <p v-if="user.region && !isLoading.isLoading.value">
                                 {{
                                     regionals.regionals.value.find(
-                                        (reg) => reg.region === user.region,
+                                        (reg) => reg.region?.name === user.region,
                                     )?.name
                                 }}
                             </p>
+                            <p v-else>Загрузка региона...</p>
                         </li>
+
                         <li v-if="user?.education?.study_faculty">
                             <p>{{ user?.education?.study_faculty }}</p>
                         </li>
@@ -167,6 +169,7 @@ const deleteWall = (imageWall) => {
 
 const regionalsStore = useRegionalsStore();
 const regionals = storeToRefs(regionalsStore);
+const isLoading = storeToRefs(regionalsStore);
 const detachment = ref({});
 const educationalHeadquarter = ref({});
 const participant = ref({});
@@ -193,7 +196,6 @@ const getUserData = async () => {
                 },
             });
         }
-        regionals.value = responseRegionals.data;
         detachment.value = responseSquad.data;
         educationalHeadquarter.value = responseEducHead.data;
     } catch (error) {

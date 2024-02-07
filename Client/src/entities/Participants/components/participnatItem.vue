@@ -18,7 +18,7 @@
                     {{ participant.user.first_name }}
                 </p>
                 <p class="participants-wrapper__item-position">
-                    {{ participant.position.name }}
+                    {{ participant.position?.name }}
                 </p>
             </div>
         </router-link>
