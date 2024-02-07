@@ -127,6 +127,7 @@
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="headquarter.educational_institution"
                                 @update:value="changeValue"
+                                :SortDropdown="false"
                                 address="eduicational_institutions/"
                             ></educInstitutionDropdown>
                             <p
@@ -171,7 +172,8 @@
                                 v-model="headquarter.regional_headquarter"
                                 address="regionals/"
                             ></Select> -->
-                            <educInstitutionDropdown
+                            <educationalsDropdown
+                                :change-user="false"
                                 open-on-clear
                                 id="select-regional-office"
                                 name="select_regional-office"
@@ -179,7 +181,7 @@
                                 v-model="headquarter.regional_headquarter"
                                 @update:value="changeValue"
                                 address="regionals/"
-                            ></educInstitutionDropdown>
+                            ></educationalsDropdown>
                             <p
                                 class="form__error"
                                 v-if="isError.regional_headquarter"
