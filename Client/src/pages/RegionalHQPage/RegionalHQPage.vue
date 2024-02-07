@@ -154,21 +154,21 @@ const fetchCommander = async () => {
         console.log('An error occurred:', error);
     }
 };
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        regionalsStore.getRegionalId(id);
-        regionalsStore.getRegionalsMembers(id);
-        fetchCommander();
-    }
-});
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         regionalsStore.getRegionalId(id);
+//         regionalsStore.getRegionalsMembers(id);
+//         fetchCommander();
+//     }
+// });
 watch(
     () => route.params.id,
 
     async (newId) => {
         if (!newId || route.name !== 'RegionalHQ') return;
-        id = newId;
-        await regionalsStore.getRegionalId(id);
-        await regionalsStore.getRegionalsMembers(id);
+        // id = newId;
+        await regionalsStore.getRegionalId(newId);
+        await regionalsStore.getRegionalsMembers(newId);
         await fetchCommander();
     },
     {

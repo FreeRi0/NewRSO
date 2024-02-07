@@ -42,7 +42,6 @@ export const useRegionalsStore = defineStore('regionals', {
         },
         async getRegionalId(id: String) {
             try {
-                const { replaceTargetObjects } = usePage();
                 this.isLoading = true;
                 const responseRegional = await HTTP.get(`/regionals/${id}`, {
                     headers: {
@@ -51,6 +50,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regional = responseRegional.data;
+                const { replaceTargetObjects } = usePage();
                 replaceTargetObjects([this.regional]);
                 this.isLoading = false;
             } catch (error) {

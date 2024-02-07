@@ -85,7 +85,7 @@ export const useSquadsStore = defineStore('squads', {
                 });
                 this.squad = responseSquad.data;
                 const {replaceTargetObjects} = usePage();
-                replaceTargetObjects(this.squad);
+                replaceTargetObjects([this.squad]);
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;

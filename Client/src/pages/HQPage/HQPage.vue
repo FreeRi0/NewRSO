@@ -104,24 +104,24 @@ const filteredMembers = computed(() => {
 //     return [{ user: commander.value }, ...filteredMembers.value];
 // });
 
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        educationalsStore.getEducationalsId(id)
-         educationalsStore.getEducationalsMembers(id);
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         educationalsStore.getEducationalsId(id)
+//          educationalsStore.getEducationalsMembers(id);
 
-        // aboutEduc();
-        fetchCommander();
-    }
-});
+//         // aboutEduc();
+//         fetchCommander();
+//     }
+// });
 
 watch(
     () => route.params.id,
 
-    async (newId) => {
+    async (newId, oldId) => {
         if (!newId || route.name !== 'HQ') return;
-        id = newId;
-        await educationalsStore.getEducationalsId(id);
-        await educationalsStore.getEducationalsMembers(id);
+        // id = newId;
+        await educationalsStore.getEducationalsId(mewId);
+        await educationalsStore.getEducationalsMembers(newId);
         // await aboutEduc();
         await fetchCommander();
     },
