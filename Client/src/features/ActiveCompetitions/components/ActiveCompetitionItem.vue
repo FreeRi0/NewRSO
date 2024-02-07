@@ -134,6 +134,9 @@ watch(
     display: grid;
     width: 100%;
     grid-template-columns: auto 1fr;
+    width: Fixed (1, 180px);
+    height: Hug (48px);
+    gap: 12px;
 }
 
 .blue-bg {
