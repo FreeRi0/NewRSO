@@ -84,8 +84,8 @@ watch(
 
     async (newId, oldId) => {
         // console.log('newId', newId, 'oldId', oldId, 'route', route.name);
-        if (!newId || route.name !== 'lso') return console.log('успешно');
-
+        if (!newId || route.name !== 'lso') return;
+        console.log('успешно', !newId, route.name, route.name !== 'lso')
         // id = newId;
 
         // getLsoData();
