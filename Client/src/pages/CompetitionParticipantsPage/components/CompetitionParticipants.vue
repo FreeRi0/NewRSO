@@ -121,7 +121,7 @@
 
             <div v-show="vertical">
                 <competitionList
-                    :squads="squads.squads.value"
+                    :members="squads.competitionSquads.value"
                     v-if="!isLoading.isLoading.value"
                 ></competitionList>
                 <v-progress-circular
@@ -134,7 +134,7 @@
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalCompetitionList
-                    :squads="squads.squads.value"
+                    :members="squads.competitionSquads.value"
                 ></horizontalCompetitionList>
             </div>
             <Button

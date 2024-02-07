@@ -70,12 +70,16 @@ const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+console.log('idOld', id);
+
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
        await squadsStore.getSquadId(id);
     await squadsStore.getSquadMembers(id);
     }
 });
+
+
 
 watch(
     () => route.params.id,
@@ -88,6 +92,8 @@ async(newId) => {
          await squadsStore.getSquadMembers(id);
     },
 );
+
+console.log('id', id);
 
 onMounted(() => {
     // getLsoData();
