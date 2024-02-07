@@ -76,7 +76,6 @@ export const useSquadsStore = defineStore('squads', {
         },
         async getSquadId(id: String) {
             try {
-                const { replaceTargetObjects } = usePage();
                 this.isLoading = true;
                 const responseSquad = await HTTP.get(`/detachments/${id}`, {
                     headers: {
@@ -85,6 +84,7 @@ export const useSquadsStore = defineStore('squads', {
                     },
                 });
                 this.squad = responseSquad.data;
+                const { replaceTargetObjects } = usePage();
                 replaceTargetObjects([this.squad]);
                 this.isLoading = false;
             } catch (error) {
