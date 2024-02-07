@@ -2,9 +2,9 @@ import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
 import usePage from '@shared/composables/usePage';
 
-const { replaceTargetObjects } = usePage();
 
 export const useSquadsStore = defineStore('squads', {
+//    const { replaceTargetObjects } = usePage();
     state: () => ({
         members: [],
         squads: [],
@@ -14,8 +14,6 @@ export const useSquadsStore = defineStore('squads', {
         isLoading: false,
     }),
     actions: {
-
-
         async getSquads() {
             try {
                 this.isLoading = true;
@@ -88,7 +86,7 @@ export const useSquadsStore = defineStore('squads', {
                     },
                 });
                 this.squad = responseSquad.data;
-                replaceTargetObjects([this.squad]);
+                // replaceTargetObjects([this.squad]);
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -128,6 +126,9 @@ export const useSquadsStore = defineStore('squads', {
             }
         },
     },
+    // return {
+    //     replaceTargetObjects
+    // }
 });
 // function replaceTargetObjects(arg0: {}[]) {
 //     throw new Error('Function not implemented.');

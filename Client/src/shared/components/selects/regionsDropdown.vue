@@ -92,6 +92,7 @@ const props = defineProps({
     },
 });
 const name = ref('');
+const region = ref(null);
 
 const selected = ref(null);
 const isLoading = ref(false);
@@ -138,6 +139,9 @@ const searchRegion = (val) => {
     regionalsStore.searchRegions(name.value);
     console.log('val', val);
 };
+
+
+
 
 onMounted(() => {
     onChangeItem();

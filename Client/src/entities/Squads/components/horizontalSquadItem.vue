@@ -16,7 +16,7 @@
             </div>
         </router-link>
     </div>
-    <div v-if="props.competition === true && member">
+    <div v-else-if="props.competition === true && member">
         <router-link :to="{ name: 'lso', params: { id: member.id } }"
             class="horizontal-item"
 
@@ -34,7 +34,7 @@
         </router-link>
     </div>
 
-    <div v-else>
+    <div v-else-if="props.competition === false">
         <router-link
             class="horizontal-item"
             :to="{ name: 'lso', params: { id: squad.id } }"
