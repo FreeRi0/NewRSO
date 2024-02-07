@@ -52,7 +52,7 @@
                 <Button
                     class="save"
                     type="button"
-                    :label="action"
+                    label="Сохранить"
                     @click="onAction"
                 ></Button>
             </div>
@@ -92,15 +92,12 @@ const getMeCommander = async () => {
 
 const getAllCompetition = async () => {
     try {
-        const { data } = await HTTP.get(
-            `https://rso.sprint.1t.ru/api/v1/competitions/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
+        const { data } = await HTTP.get(`/competitions/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
             },
-        );
+        });
         allCompetition.value = data;
     } catch (e) {
         console.log('error getAllCompetition', e);
@@ -266,6 +263,12 @@ onActivated(async () => {
     width: 100%;
     justify-content: flex-end;
     margin-bottom: 40px;
+    //width: 224px;
+    height: 48px;
+    padding: 4px, 16px, 4px, 16px;
+    border-radius: 10px;
+    border: 1px;
+    gap: 10px;
 }
 
 .competitions__actions-select {
@@ -274,10 +277,16 @@ onActivated(async () => {
 }
 
 .competitions__btns {
-    display: flex;
+    display: grid;
     width: 100%;
     justify-content: center;
     margin-top: 60px;
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 .text_total {
     width: 1180px;
