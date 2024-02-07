@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-import usePage from '@shared/composables/usePage';
-
 
 export const useSquadsStore = defineStore('squads', {
 //    const { replaceTargetObjects } = usePage();
@@ -126,11 +124,4 @@ export const useSquadsStore = defineStore('squads', {
             }
         },
     },
-    // return {
-    //     replaceTargetObjects
-    // }
 });
-// function replaceTargetObjects(arg0: {}[]) {
-//     throw new Error('Function not implemented.');
-// }
-
