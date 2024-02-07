@@ -84,7 +84,8 @@ watch(
 
     async (newId, oldId) => {
         // console.log('newId', newId, 'oldId', oldId, 'route', route.name);
-        if (!newId || route.name !== 'lso') return;
+        if (!newId || route.name !== 'lso') return console.log('успешно');
+
         // id = newId;
 
         // getLsoData();
@@ -93,13 +94,10 @@ watch(
     },
 );
 
-
-
 onMounted(() => {
     // getLsoData();
     squadsStore.getSquadId(id);
     squadsStore.getSquadMembers(id);
-
 });
 </script>
 <style scoped lang="scss">
