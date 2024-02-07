@@ -9,6 +9,23 @@ export function getListActions(){
        }
    });
 }
+export function getListActionsBySearch(text: string){
+    return HTTP.get(`/events/?search=${text}`, {
+        headers:{
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        }
+    });
+}
+//Изменить дату мероприятия
+export function putTimeData(id: number, data: object){
+    return HTTP.put(`/events/${id}/time_data/`, data, {
+        headers:{
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        }
+    })
+}
 //Отправка формы мероприятия
 export function createAction(data: object){
     return HTTP.post("/events/", data, {
@@ -26,6 +43,14 @@ export function getAction(id: number){
         }
     })
 }
+export function putAction(id: number, data: object){
+    return HTTP.put(`/events/${id}/`, data, {
+        headers:{
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        }
+    })
+}
 //Отправка и изменение запросов
 export function createQuestion(id: number, data: object){
     return HTTP.post(`/events/${id}/answers`, data, {
@@ -37,14 +62,6 @@ export function createQuestion(id: number, data: object){
 }
 export function getQuestion(id: number){
     return HTTP.get(`/events/${id}/answers`, {
-        headers:{
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        }
-    })
-}
-export function putAction(id: number, data: object){
-    return HTTP.put(`/events/${id}/`, data, {
         headers:{
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

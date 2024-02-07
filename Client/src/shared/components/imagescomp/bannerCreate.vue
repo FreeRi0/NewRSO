@@ -3,19 +3,28 @@
         <div class="squads-banner__text">
             {{ desc }}
         </div>
-
+        <router-link
+            v-if="
+                !roles.roles.value.detachment_commander && (currentUser.currentUser.value || roles.roles.value.educationalheadquarter_commander || roles.roles.value.regionalheadquarter_commander ||
+                roles.roles.value.localheadquarter_commander || roles.roles.value.districtheadquarter_commander ||
+                roles.roles.value.centralComId && !roles.roles.value.detachment_commander)
+            "
+            :to="{ name: name }"
+            ><p v-if="button"  class="create">{{ label }}</p></router-link
+        >
         <router-link
             v-if="
                 roles.roles.value.regionalheadquarter_commander ||
                 roles.roles.value.localheadquarter_commander ||
+                roles.roles.value.districtheadquarter_commander ||
                 roles.roles.value.centralComId
             "
             :to="{ name: name }"
-            ><p v-if="button" class="create">{{ label }}</p></router-link
+            ><p v-if="educCom" class="create">{{ label }}</p></router-link
         >
         <router-link
             v-if="
-                roles.roles.value.localheadquarter_commander ||
+                roles.roles.value.districtheadquarter_commander ||
                 roles.roles.value.centralComId
             "
             :to="{ name: name }"
@@ -23,17 +32,23 @@
         >
         <router-link
             v-if="
+                roles.roles.value.regionalheadquarter_commander ||
+                roles.roles.value.districtheadquarter_commander ||
                 roles.roles.value.centralComId
             "
             :to="{ name: name }"
             ><p v-if="locCom" class="create">{{ label }}</p></router-link
         >
+
     </div>
 </template>
 <script setup>
 import { ref, watch } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
+import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
+const userStore = useUserStore();
+const currentUser = storeToRefs(userStore);
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 // roleStore.getRoles();
@@ -59,6 +74,10 @@ const props = defineProps({
         default: false,
     },
     regCom: {
+        type: Boolean,
+        default: false,
+    },
+    educCom: {
         type: Boolean,
         default: false,
     },

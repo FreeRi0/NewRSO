@@ -1,6 +1,6 @@
 <template>
     <div class="participants-wrapper__item list">
-        <router-link :to="{ name: 'userpage', params: { id: participant.user.id } }">
+        <router-link :to="{ name: 'userpage', params: { id: participant.user?.id } }">
             <div class="round-img">
                 <img
                     :src="participant.user?.avatar?.photo"
@@ -18,7 +18,7 @@
                     {{ participant.user.first_name }}
                 </p>
                 <p class="participants-wrapper__item-position">
-                    {{ participant.position }}
+                    {{ participant.position?.name }}
                 </p>
             </div>
         </router-link>
@@ -36,9 +36,6 @@ const props = defineProps({
         type: Object,
     },
 });
-
-
-
 </script>
 <style lang="scss" scoped>
 .round-img {

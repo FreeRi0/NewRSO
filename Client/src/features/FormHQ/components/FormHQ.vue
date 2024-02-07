@@ -99,7 +99,6 @@
                                 class="form__error form__error--name"
                                 v-if="isError.name"
                             >
-                                <!-- * обязательно для заполнения -->
                                 * {{ isError.name[0] }}
                             </p>
                             <div class="form__counter">
@@ -128,6 +127,7 @@
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="headquarter.educational_institution"
                                 @update:value="changeValue"
+                                :SortDropdown="false"
                                 address="eduicational_institutions/"
                             ></educInstitutionDropdown>
                             <p
@@ -135,7 +135,6 @@
                                 v-if="isError.educational_institution"
                             >
                                 * Это поле не может быть пустым.
-                                <!-- {{ isError.educational_institution[0] }} -->
                             </p>
                         </div>
 
@@ -144,15 +143,6 @@
                                 >Дата основания
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- <input
-                                id="create-date"
-                                label="Дата основания"
-                                name="create_date"
-                                type="date"
-                                placeholder=""
-                                ::value="v.date.$model"
-                                :error="v.date.$errors"
-                            /> -->
                             <Input
                                 class="form__input"
                                 id="create-date"
@@ -162,7 +152,6 @@
                             />
                             <p class="form__error" v-if="isError.founding_date">
                                 * Это поле не может быть пустым.
-                                <!-- {{ isError.founding_date[0] }} -->
                             </p>
                         </div>
 
@@ -183,7 +172,8 @@
                                 v-model="headquarter.regional_headquarter"
                                 address="regionals/"
                             ></Select> -->
-                            <educInstitutionDropdown
+                            <educationalsDropdown
+                                :change-user="false"
                                 open-on-clear
                                 id="select-regional-office"
                                 name="select_regional-office"
@@ -191,13 +181,12 @@
                                 v-model="headquarter.regional_headquarter"
                                 @update:value="changeValue"
                                 address="regionals/"
-                            ></educInstitutionDropdown>
+                            ></educationalsDropdown>
                             <p
                                 class="form__error"
                                 v-if="isError.regional_headquarter"
                             >
                                 * Это поле не может быть пустым.
-                                <!-- {{ isError.regional_headquarter[0] }} -->
                             </p>
                         </div>
 
@@ -218,6 +207,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <Dropdown
+                                v-if="!isCommanderLoading"
                                 open-on-clear
                                 id="beast"
                                 name="edit_beast"
@@ -226,29 +216,19 @@
                                 @update:value="changeValue"
                                 address="users/"
                             ></Dropdown>
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                             <!-- {{ headquarter.commander }} -->
                             <p
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
                             >
                                 * Это поле не может быть пустым.
-                                <!-- {{ isError.commander[0] }} -->
                             </p>
-                            <!-- <p
-                                class="form__error form__error--commander"
-                                v-if="
-                                    isError.commander ||
-                                    isError.non_field_errors
-                                "
-                            >
-                                <span v-if="isError.commander"
-                                    >* обязательно для заполнения</span
-                                >
-                                <span v-if="isError.non_field_errors"
-                                    >Пользователь уже является командиром
-                                    другого штаба</span
-                                >
-                            </p> -->
                         </div>
                     </div>
 
@@ -403,7 +383,6 @@
                                 indeterminate
                                 color="blue"
                             ></v-progress-circular>
-                            <!-- <pre>{{ sortedMembers }}</pre> -->
                         </div>
                     </div>
 
@@ -495,15 +474,6 @@
                             <label class="form__label" for="hq-slogan"
                                 >Девиз штаба</label
                             >
-                            <!-- <Input
-                                class="form__input"
-                                type="text"
-                                id="hq-slogan"
-                                placeholder="Например, через тернии к звездам"
-                                name="hq_slogan"
-                                v-model:value="headquarter.slogan"
-                                :maxlength="100"
-                            /> -->
                             <TextareaAbout
                                 maxlength="100"
                                 class="form__textarea form__textarea--mobile"
@@ -834,7 +804,6 @@ import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
 
 // import { useVuelidate } from '@vuelidate/core';
 // import {
@@ -889,6 +858,10 @@ const props = defineProps({
     members: {
         type: Array,
         default: () => [],
+    },
+    isCommanderLoading: {
+        type: Boolean,
+        default: false,
     },
     isMembersLoading: {
         type: Boolean,
@@ -993,35 +966,6 @@ const showButtonPrev = computed(() => {
     return panel.value === 'panelThree';
 });
 
-//-----------------------------------------------------------------------
-// const members = ref([]);
-
-// const route = useRoute();
-// let id = route.params.id;
-
-// const getMembers = async () => {
-//     HTTP.get(`educationals/${id}/members/`, {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
-//         },
-//     })
-//         .then((response) => {
-//             members.value = response.data;
-//             console.log(response);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-//     // console.log(id);
-// };
-
-// onMounted(() => {
-//     getMembers();
-// });
-
-// const members = ref(props.members);
-
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
@@ -1032,13 +976,6 @@ const sortedMembers = computed(() => {
             .includes(searchMembers.value.toUpperCase());
     });
 });
-
-// const onUpdateMember = (event, id) => {
-//     const targetMember = members.value.find((member) => member.id === id);
-//     const firstkey = Object.keys(event)[0];
-//     targetMember[firstkey] = event[firstkey];
-//     console.log(event);
-// };
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
@@ -1094,30 +1031,6 @@ const resetBanner = () => {
     fileBanner.value = null;
     emit('resetBanner', fileBanner.value);
 };
-
-const educationalsInstitution = ref([]);
-
-const getRegInst = async () => {
-    HTTP.get(`eduicational_institutions/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-
-        .then((res) => {
-            // console.log(props.address);
-            educationalsInstitution.value = res.data;
-            console.log(res.data);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-onMounted(() => {
-    getRegInst();
-});
 </script>
 
 <style lang="scss" scoped>

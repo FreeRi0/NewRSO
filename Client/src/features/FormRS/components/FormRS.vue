@@ -126,18 +126,20 @@
                             </p>
                         </div>
                         <div class="form__field">
-                            <label for="region" class="form__label"
+                            <label for="select-region" class="form__label"
                                 >Выберите регион
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
-                                clearable
-                                variant="outlined"
-                                name="region"
-                                id="region"
+                            <regionsDropdown
+                                open-on-clear
+                                id="select-region"
+                                name="select_region"
+                                placeholder="Например, Алтайский край"
                                 v-model="headquarter.region"
-                                address="regions/"
-                            ></Select>
+                                @update:value="changeValue"
+                                address="/regions/"
+                            >
+                            </regionsDropdown>
                             <p class="form__error" v-if="isError.region">
                                 * Это поле не может быть пустым.
                             </p>
@@ -158,7 +160,9 @@
                                 >Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
+                            <!-- здась поменяла -->
                             <Dropdown
+                                v-if="!isCommanderLoading"
                                 open-on-clear
                                 id="beast"
                                 name="edit_beast"
@@ -167,6 +171,13 @@
                                 @update:value="changeValue"
                                 address="users/"
                             ></Dropdown>
+                            <!-- здась поменяла -->
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                             <p
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
@@ -312,13 +323,21 @@
                                     </Icon>
                                 </template>
                             </v-text-field>
+                            <!-- здесь поменяла -->
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
                                 :is-error-members="isErrorMembers"
-                                v-if="members"
+                                v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
                             ></MembersList>
+                            <!-- здесь поменяла -->
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                         </div>
                     </div>
                     <v-card-actions class="form__button-group">
@@ -890,14 +909,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Select, Dropdown } from '@shared/components/selects';
+import { Select, Dropdown, regionsDropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+// import { useRoute } from 'vue-router';
 
 // import {
 //     helpers,
@@ -952,6 +971,15 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    // здесь поменяла
+    isCommanderLoading: {
+        type: Boolean,
+        default: false,
+    },
+    isMembersLoading: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const headquarter = ref(props.headquarter);
@@ -999,8 +1027,8 @@ const showButtonPrev = computed(() => {
 
 //--------------------------------------------------------------
 
-const route = useRoute();
-let id = route.params.id;
+// const route = useRoute();
+// let id = route.params.id;
 
 // const members = ref(props.members);
 const searchMembers = ref('');

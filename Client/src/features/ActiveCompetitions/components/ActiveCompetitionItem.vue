@@ -1,19 +1,47 @@
 <template>
     <div class="competition__item">
         <div class="competition__content">
-            <span></span>
-            <span>Отряд</span>
-            <span>Конкурс</span>
-            <span>Номинация</span>
+            <template v-if="!position">
+                <span></span>
+                <span>Отряд</span>
+                <span>Конкурс</span>
+                <span>Номинация</span>
+            </template>
 
-            <v-checkbox v-model="isChecked" @change="onCheckbox" />
+            <div class="horizontallso__confidant">
+                <input
+                    type="checkbox"
+                    v-model="isChecked"
+                    @change="onCheckbox"
+                />
+            </div>
 
             <div class="competition__detachments">
-                <div v-if="competition.detachment">
-                    {{ competition.detachment }}
+                <div
+                    v-if="competition.detachment"
+                    class="horizontallso-item__wrapper"
+                >
+                    <img
+                        v-if="competition.detachment.banner"
+                        class="competition__avatar_circle"
+                        :src="competition.detachment.banner"
+                        alt="Banner"
+                    />
+
+                    <div
+                        v-else
+                        class="competition__avatar_circle blue-bg"
+                    ></div>
+
+                    <div class="containerHorizontal">
+                        <p>{{ competition.detachment.name }}</p>
+                    </div>
                 </div>
 
-                <div class="horizontallso-item__wrapper">
+                <div
+                    class="horizontallso-item__wrapper"
+                    v-if="commanderIds.regionalheadquarter_commander != null"
+                >
                     <img
                         v-if="competition.junior_detachment.banner"
                         class="competition__avatar_circle"
@@ -62,6 +90,14 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    commanderIds: {
+        type: Object,
+        default: () => ({}),
+    },
+    position: {
+        type: Number,
+        default: 0,
+    },
 });
 
 const emit = defineEmits({
@@ -83,6 +119,17 @@ watch(
 </script>
 
 <style scoped lang="scss">
+.horizontallso__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    height: 48px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
+}
 .competition__item {
     display: grid;
     width: 100%;
@@ -98,11 +145,19 @@ watch(
     width: 100%;
     grid-gap: 12px;
     grid-template-columns: 48px minmax(200px, 436px) 1fr auto;
+
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 
 .competition__detachments {
-    display: grid;
+    display: flex;
     grid-gap: 12px;
+    grid-template-columns: 1fr 1fr;
 }
 .competition__avatar_circle {
     border-radius: 50%;

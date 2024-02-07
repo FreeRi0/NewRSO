@@ -3,9 +3,9 @@
         <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
         <BannerHQ
             v-if="showHQ"
-            :headquarter="headquarter"
+            :headquarter="headquarter.educational.value"
             :edict="edict"
-            :member="member"
+            :member="member.members.value"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showDistrictHQ"
@@ -30,7 +30,7 @@
         <section class="about-hq">
             <h3>Описание штаба</h3>
             <p v-if="showHQ">
-                {{ headquarter.about }}
+                {{ headquarter.educational.value.about }}
             </p>
             <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
             <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
@@ -50,12 +50,14 @@
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from './components/ManagementHQ.vue';
 import DetachmentsHQ from './components/DetachmentsHQ.vue';
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
+import { useEducationalsStore } from '@features/store/educationals';
+import { storeToRefs } from 'pinia';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { usePage } from '@shared';
 
 // banner condition
+const educationalsStore = useEducationalsStore();
 const showHQ = ref(true);
 const showDistrictHQ = ref(false);
 const showLocalHQ = ref(false);
@@ -63,66 +65,15 @@ const showRegionalHQ = ref(false);
 
 const commander = ref({});
 const position = ref({});
-const headquarter = ref({});
-const member = ref([]);
+const headquarter = storeToRefs(educationalsStore);
+const member = storeToRefs(educationalsStore);
 const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 
-const { replaceTargetObjects } = usePage();
-
-const aboutHQ = async () => {
-    try {
-        const response = await HTTP.get(`/educationals/${id}/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-
-        headquarter.value = response.data;
-        replaceTargetObjects([headquarter.value]);
-        console.log(response);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-// const aboutEduc = async () => {
-//     try {
-//         const response = await HTTP.get(`/eduicational_institutions/${id}/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         educt.value = response.data;
-//         console.log(response);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
-const aboutMembers = async () => {
-    try {
-        const response = await HTTP.get(`/educationals/${id}/members/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-
-        member.value = response.data;
-        console.log(response);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
 const fetchCommander = async () => {
     try {
-        let id = headquarter.value.commander.id;
+        let id = headquarter.educational.value.commander.id;
         const response = await HTTP.get(`/users/${id}/`, {
             headers: {
                 'Content-Type': 'application/json',
@@ -140,7 +91,7 @@ const fetchCommander = async () => {
 // aboutMembers();
 
 const filteredMembers = computed(() => {
-    return member.value.filter((manager) => {
+    return member.members.value.filter((manager) => {
         return (
             manager.position &&
             (manager.position === 'Командир' ||
@@ -153,22 +104,24 @@ const filteredMembers = computed(() => {
 //     return [{ user: commander.value }, ...filteredMembers.value];
 // });
 
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        aboutHQ();
-        aboutMembers();
-        // aboutEduc();
-        fetchCommander();
-    }
-});
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         educationalsStore.getEducationalsId(id)
+//          educationalsStore.getEducationalsMembers(id);
+
+//         // aboutEduc();
+//         fetchCommander();
+//     }
+// });
 
 watch(
     () => route.params.id,
 
-    async (newId) => {
-        id = newId;
-        await aboutHQ();
-        await aboutMembers();
+    async (newId, oldId) => {
+        if (!newId || route.name !== 'HQ') return;
+        // id = newId;
+        await educationalsStore.getEducationalsId(mewId);
+        await educationalsStore.getEducationalsMembers(newId);
         // await aboutEduc();
         await fetchCommander();
     },
@@ -176,6 +129,13 @@ watch(
         immediate: true,
     },
 );
+
+onMounted(() => {
+    educationalsStore.getEducationalsId(id);
+    educationalsStore.getEducationalsMembers(id);
+    // await aboutEduc();
+    fetchCommander();
+});
 </script>
 <style scoped lang="scss">
 .title {

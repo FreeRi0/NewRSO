@@ -2,7 +2,7 @@
     <div class="container">
         <div class="user-wrapper" v-if="!isLoading.isLoading.value">
             <h2 class="page-title">Моя страница</h2>
-            <banner
+            <MyWall
                 :user="currentUser.currentUser.value"
                 :education="education"
                 :user_region="region"
@@ -14,7 +14,7 @@
                 @upload="uploadAva"
                 @update="updateAva"
                 @delete="deleteAva"
-            ></banner>
+            ></MyWall>
             <div
                 class="user-verify"
                 v-if="!currentUser.currentUser.value.is_verified"
@@ -75,7 +75,7 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { banner } from '@features/baner/components';
+import { MyWall } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
 import {
     userPhoto,
@@ -198,3 +198,4 @@ const deleteWall = (imageWall) => {
     }
 }
 </style>
+@shared/components/inputs/imagescomp

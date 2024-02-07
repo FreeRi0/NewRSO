@@ -2,11 +2,25 @@
     <div class="competition__item">
         <div class="competition__content">
             <div class="competition__detachments">
-                <div v-if="competition.detachment">
-                    {{ competition.detachment }}
+                <div
+                    v-if="competition.detachment"
+                    class="horizontallso-item__wrapper"
+                >
+                    <img
+                        class="competition__avatar_circle"
+                        :src="competition.detachment.banner"
+                        alt="Banner"
+                    />
+
+                    <div class="containerHorizontal">
+                        <p>{{ competition.detachment.name }}</p>
+                    </div>
                 </div>
 
-                <div class="horizontallso-item__wrapper">
+                <div
+                    class="horizontallso-item__wrapper"
+                    v-if="commanderIds.regionalheadquarter_commander != null"
+                >
                     <img
                         class="competition__avatar_circle"
                         :src="competition.junior_detachment.banner"
@@ -37,7 +51,13 @@
 
             <div class="horizontallso-item__wrapper">{{ action }}</div>
 
-            <v-checkbox v-model="isChecked" @change="onCheckbox" />
+            <div class="horizontallso__confidant">
+                <input
+                    type="checkbox"
+                    v-model="isChecked"
+                    @change="onCheckbox"
+                />
+            </div>
         </div>
     </div>
 </template>
@@ -54,6 +74,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    commanderIds: {
+        type: Object,
+        default: () => ({}),
+    },
 });
 
 const emit = defineEmits({
@@ -68,6 +92,17 @@ const onCheckbox = (e) => {
 </script>
 
 <style scoped lang="scss">
+.horizontallso__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    height: 48px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
+}
 .competition__content {
     display: grid;
     grid-gap: 12px;
@@ -75,8 +110,16 @@ const onCheckbox = (e) => {
 }
 
 .competition__detachments {
-    display: grid;
+    display: flex;
     grid-gap: 12px;
+    grid-template-columns: 1fr 1fr;
+
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 .competition__avatar_circle {
     border-radius: 50%;

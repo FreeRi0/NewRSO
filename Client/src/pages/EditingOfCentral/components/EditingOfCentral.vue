@@ -6,9 +6,11 @@
             :headquarter="headquarter"
             :members="members"
             :submited="submited"
+            :is-commander-loading="isCommanderLoading"
+            :is-members-loading="isMembersLoading"
             :is-error="isError"
             :is-error-members="isErrorMembers"
-            v-if="headquarter && isError && isErrorMembers"
+            v-if="headquarter && isError && isErrorMembers && !loading"
             @submit.prevent="changeHeadquarter"
             @select-emblem="onSelectEmblem"
             @select-banner="onSelectBanner"
@@ -31,26 +33,17 @@ const router = useRouter();
 const route = useRoute();
 let id = route.params.id;
 
-const { replaceTargetObjects } = usePage();
-
-const submited = ref(false);
-
 const headquarter = ref(null);
 const members = ref([]);
-const positions = ref([]);
 
-const getPositions = async () => {
-    HTTP.get('positions/')
+const { replaceTargetObjects } = usePage();
 
-        .then((res) => {
-            positions.value = res.data;
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+const loading = ref(false);
+const isCommanderLoading = ref(false);
 
 const getHeadquarter = async () => {
+    loading.value = true;
+    isCommanderLoading.value = true;
     await HTTP.get(`centrals/1/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -63,6 +56,8 @@ const getHeadquarter = async () => {
                 headquarter.value.commander = headquarter.value.commander.id;
             }
             replaceTargetObjects([headquarter.value]);
+            loading.value = false;
+            isCommanderLoading.value = false;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -75,6 +70,32 @@ onBeforeRouteUpdate(async (to, from) => {
     }
 });
 
+const isMembersLoading = ref(false);
+
+// const getMembers = async () => {
+//     try {
+//         isMembersLoading.value = true;
+//         setTimeout(async () => {
+//             const membersResponse = await HTTP.get(`centrals/${id}/members/`, {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             });
+
+//             members.value = membersResponse.data;
+//             if (members.value.length) {
+//                 members.value.forEach((member) => {
+//                     member.position = member.position.id;
+//                 });
+//             }
+//             isMembersLoading.value = false;
+//         }, 1000);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
+
 const getMembers = async () => {
     HTTP.get(`centrals/${id}/members/`, {
         headers: {
@@ -86,7 +107,7 @@ const getMembers = async () => {
             members.value = response.data;
             members.value.forEach((member) => {
                 if (positions.value) {
-                    const position = positions.value.find((item) => {
+                    const position = position.value.find((item) => {
                         return item.name === member.position;
                     });
                     member.position = position.id;
@@ -99,9 +120,8 @@ const getMembers = async () => {
 };
 
 onMounted(() => {
-    getHeadquarter();
     getMembers();
-    getPositions();
+    getHeadquarter();
 });
 
 const onUpdateMember = (event, id) => {
@@ -114,6 +134,8 @@ const onUpdateMember = (event, id) => {
 /**
  * переменные на удаление фото из БД
  */
+const submited = ref(false);
+
 const isEmblemChange = ref(false);
 const isBannerChange = ref(false);
 
@@ -147,21 +169,21 @@ const changeHeadquarter = async () => {
         const formData = new FormData();
 
         formData.append('name', headquarter.value.name);
-    formData.append(
-        'detachments_appearance_year',
-        headquarter.value.detachments_appearance_year,
-    );
-    formData.append('founding_date', headquarter.value.founding_date);
-    formData.append(
-        'rso_founding_congress_date',
-        headquarter.value.rso_founding_congress_date,
-    );
-    formData.append('city', headquarter.value.city);
-    formData.append('commander', headquarter.value.commander);
-    formData.append('social_vk', headquarter.value.social_vk);
-    formData.append('social_tg', headquarter.value.social_tg);
-    formData.append('slogan', headquarter.value.slogan);
-    formData.append('about', headquarter.value.about);
+        formData.append(
+            'detachments_appearance_year',
+            headquarter.value.detachments_appearance_year,
+        );
+        formData.append('founding_date', headquarter.value.founding_date);
+        formData.append(
+            'rso_founding_congress_date',
+            headquarter.value.rso_founding_congress_date,
+        );
+        formData.append('city', headquarter.value.city);
+        formData.append('commander', headquarter.value.commander);
+        formData.append('social_vk', headquarter.value.social_vk);
+        formData.append('social_tg', headquarter.value.social_tg);
+        formData.append('slogan', headquarter.value.slogan);
+        formData.append('about', headquarter.value.about);
 
         for (let member of members.value) {
             await HTTP.patch(
@@ -204,7 +226,7 @@ const changeHeadquarter = async () => {
         router.push({
             name: 'CentralHQ',
             params: { id: headquarter.value.id },
-        })
+        });
     } catch (err) {
         isError.value = err.response.data;
         isErrorMembers.value = err.response.data;
@@ -216,7 +238,7 @@ const changeHeadquarter = async () => {
                 showConfirmButton: false,
                 timer: 2500,
             });
-        } 
+        }
     }
 };
 </script>

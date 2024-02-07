@@ -26,13 +26,19 @@
             </Icon>
         </template>
         <template v-slot:chip="{ props, item }">
-            <div class="option-select__content">
+            <div class="option-select__content" v-if="!isLoading">
                 <div class="option-select__wrapper">
                     <p class="option-select__title">
                         {{ item.raw.name }}
                     </p>
                 </div>
             </div>
+            <v-progress-circular
+                class="circleLoader"
+                v-else
+                indeterminate
+                color="blue"
+            ></v-progress-circular>
         </template>
 
         <template v-slot:item="{ props, item }">
@@ -56,6 +62,7 @@ import { ref, onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
+import { storeToRefs } from 'pinia';
 
 defineOptions({
     inheritAttrs: false,
@@ -63,6 +70,8 @@ defineOptions({
 const emit = defineEmits(['update:value']);
 
 const regionalsStore = useRegionalsStore();
+const regions = storeToRefs(regionalsStore);
+
 
 const props = defineProps({
     items: {
@@ -77,32 +86,51 @@ const props = defineProps({
         type: String,
         default: 'Ничего не найдено...',
     },
+    changeUser: {
+        type: Boolean,
+        default: false,
+    },
 });
 const name = ref('');
+const region = ref(null);
 
 const selected = ref(null);
-
+const isLoading = ref(false);
 const changeValue = (event) => {
     console.log(event);
     emit('update:value', event);
 };
 
 const items = ref(props.items);
+//  items.value = regions.regions.value;
+
+// const onChangeItem = async () => {
+//     try {
+//         regionalsStore.getRegions();
+//         items.value = regions.regions.value;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 const onChangeItem = async () => {
-    await HTTP.get(props.address, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((res) => {
-            items.value = res.data;
-            console.log(res.data);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+    try {
+        isLoading.value = true;
+        setTimeout(async () => {
+            const ItemResponse = await HTTP.get(props.address, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            items.value = ItemResponse.data;
+            isLoading.value = false;
+        }, 500);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
+
+
 
 const searchRegion = (val) => {
     if (name.value.length < 3) {
@@ -112,8 +140,12 @@ const searchRegion = (val) => {
     console.log('val', val);
 };
 
+
+
+
 onMounted(() => {
     onChangeItem();
+    // regionalsStore.getRegions();
 });
 </script>
 

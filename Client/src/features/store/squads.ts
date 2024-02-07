@@ -1,33 +1,95 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
 
 export const useSquadsStore = defineStore('squads', {
+//    const { replaceTargetObjects } = usePage();
     state: () => ({
-        filteredSquads: [],
+        members: [],
         squads: [],
         squad: {},
+        areas: [],
+        competitionSquads: [],
+        isLoading: false,
     }),
     actions: {
         async getSquads() {
-            const responseSquads = await HTTP.get(`/detachments/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-            this.squads = responseSquads.data;
+            try {
+                this.isLoading = true;
+                const responseSquads = await HTTP.get('detachments/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                });
+                this.squads = responseSquads.data;
+                this.isLoading = false;
+            } catch (error) {
+                console.log('an error occured ' + error);
+                this.isLoading = false;
+            }
         },
-        async getSquadId() {
-            const route = useRoute();
-            let id = route.params.id;
-            const responseSquad = await HTTP.get(`/detachments/${id}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-            this.squad = responseSquad.data;
+        async getAreas() {
+            try {
+                this.isLoading = true;
+                const responseAreas = await HTTP.get('/areas/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                });
+                this.areas = responseAreas.data;
+                this.isLoading = false;
+            } catch (error) {
+                console.log('an error occured ' + error);
+                this.isLoading = false;
+            }
+        },
+        async getCompetitionSquads() {
+            try {
+                this.isLoading = true;
+                const responseCompetitionSquads = await HTTP.get(
+                    '/competitions/1/participants',
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.competitionSquads = responseCompetitionSquads.data.reduce(
+                    (acc: any, member: any) => {
+                        if (member.detachment) acc.push(member.detachment);
+                        acc.push(member.junior_detachment);
+
+                        console.log('acc', acc);
+
+                        return acc;
+                    },
+                    [],
+                );
+                this.isLoading = false;
+            } catch (error) {
+                this.isLoading = false;
+                console.log('an error occured ' + error);
+            }
+        },
+        async getSquadId(id: String) {
+            try {
+                this.isLoading = true;
+                const responseSquad = await HTTP.get(`/detachments/${id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                });
+                this.squad = responseSquad.data;
+                // replaceTargetObjects([this.squad]);
+                this.isLoading = false;
+            } catch (error) {
+                this.isLoading = false;
+                console.log('an error occured ' + error);
+            }
         },
         async getFilteredSquads(name: String) {
             const responseFilteredSquads = await HTTP.get(
@@ -39,7 +101,27 @@ export const useSquadsStore = defineStore('squads', {
                     },
                 },
             );
-            this.filteredSquads = responseFilteredSquads.data;
+            this.squads = responseFilteredSquads.data;
+        },
+        async getSquadMembers(id: String) {
+            try {
+                this.isLoading = true;
+                const responseMembers = await HTTP.get(
+                    `/detachments/${id}/members/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.members = responseMembers.data;
+                this.isLoading = false;
+            } catch (error) {
+                this.isLoading = false;
+                console.log('an error occured ' + error);
+            }
         },
     },
 });

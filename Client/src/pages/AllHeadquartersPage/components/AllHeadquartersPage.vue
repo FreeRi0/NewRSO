@@ -5,7 +5,8 @@
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
                 name="createhq"
-                :button="true"
+                :button="false"
+                :educ-com="true"
             ></bannerCreate>
             <h2 class="headquarters-title">Штабы СО ОО</h2>
             <div class="headquarters-search">
@@ -176,7 +177,7 @@
             <div v-show="vertical" class="mt-10">
                 <HeadquartersList
                     :headquarters="sortedHeadquarters"
-                    v-if="!isHeadquartersLoading"
+                    v-if="!isLoading.isLoading.value"
                 ></HeadquartersList>
                 <v-progress-circular
                     class="circleLoader"
@@ -189,18 +190,13 @@
             <div class="horizontal" v-show="!vertical">
                 <horizontalHeadquarters
                     :headquarters="sortedHeadquarters"
-                    v-if="!isHeadquartersLoading"
                 ></horizontalHeadquarters>
-                <v-progress-circular
-                    class="circleLoader"
-                    v-else
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
-                v-if="headquartersVisible < headquarters.length"
+                v-if="
+                    headquartersVisible < headquarters.educationals.value.length
+                "
                 label="Показать еще"
             ></Button>
             <Button
@@ -224,14 +220,18 @@ import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
+import { useEducationalsStore } from '@features/store/educationals';
+import { storeToRefs } from 'pinia';
 import { onActivated } from 'vue';
+
+const educationalsStore = useEducationalsStore();
 
 const crosspageFilters = useCrosspageFilter();
 
-const headquarters = ref([]);
+const headquarters = storeToRefs(educationalsStore);
 
 const headquartersVisible = ref(20);
-const isHeadquartersLoading = ref(false);
+const isLoading =  storeToRefs(educationalsStore);
 
 const step = ref(20);
 
@@ -259,23 +259,23 @@ const locals = ref([]);
 const districts = ref([]);
 const regionals = ref([]);
 
-const getHeadquarters = async () => {
-    try {
-        isHeadquartersLoading.value = true;
-        setTimeout(async () => {
-            const educationalsResponse = await HTTP.get(`/educationals/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-            headquarters.value = educationalsResponse.data;
-            isHeadquartersLoading.value = false;
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+// const getHeadquarters = async () => {
+//     try {
+//         isHeadquartersLoading.value = true;
+//         setTimeout(async () => {
+//             const educationalsResponse = await HTTP.get(`/educationals/`, {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             });
+//             headquarters.value = educationalsResponse.data;
+//             isHeadquartersLoading.value = false;
+//         }, 1000);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 const searchEducational = async (name) => {
     try {
@@ -288,7 +288,7 @@ const searchEducational = async (name) => {
                 },
             },
         );
-        headquarters.value = filteredEducationals.data;
+        headquarters.educationals.value = filteredEducationals.data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -299,20 +299,20 @@ const filtersDistricts = computed(() =>
         ? districts.value.find(
               (district) => district.name === SelectedSortDistrict.value,
           )?.AllHeadquarters ?? []
-        : headquarters.value,
+        : headquarters.educationals.value,
 );
 const filtersRegionals = computed(() =>
     SelectedSortRegional.value
         ? regionals.value.find(
               (regional) => regional.name === SelectedSortRegional.value,
           )?.AllHeadquarters ?? []
-        : headquarters.value,
+        : headquarters.educationals.value,
 );
 const filtersLocals = computed(() =>
     SelectedSortLocal.value
         ? locals.value.find((local) => local.name === SelectedSortLocal.value)
               ?.AllHeadquarters ?? []
-        : headquarters.value,
+        : headquarters.educationals.value,
 );
 
 const searchEducationals = computed(() => {
@@ -345,7 +345,7 @@ const getLocalsHeadquartersForFilters = async () => {
 };
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-    getHeadquarters();
+    educationalsStore.getEducationals();
     getRegionalsHeadquartersForFilters();
     getLocalsHeadquartersForFilters();
 });
@@ -381,7 +381,7 @@ const sortedHeadquarters = computed(() => {
     } else if (selectedSortLocal.value) {
         tempHeadquartes = [...filtersLocals.value];
     } else {
-        tempHeadquartes = [...headquarters.value];
+        tempHeadquartes = [...headquarters.educationals.value];
     }
 
     searchEducationals.value;
@@ -395,11 +395,6 @@ const sortedHeadquarters = computed(() => {
                 item.local_headquarter == selectedSortLocal.value)
         );
     });
-    // tempHeadquartes = tempHeadquartes.filter((item) => {
-    //     return item.name
-    //         .toUpperCase()
-    //         .includes(searchHeadquartes.value.toUpperCase());
-    // });
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -627,4 +622,4 @@ pre {
     }
 }
 </style>
-@shared/components/selects/inputs
+@shared/components/selects/inputs @shared/components/inputs/imagescomp

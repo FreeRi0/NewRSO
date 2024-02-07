@@ -101,18 +101,24 @@
                             alt="Иконка геолокации"
                         /> -->
 
-                        <span v-if="user.currentUser.value?.region"
-                            >{{
-                                regionals.find(
+                        <span
+                            v-if="
+                                user.currentUser.value?.region &&
+                                !isLoading.isLoading.value
+                            "
+                        >
+                            {{
+                                regionals.regionals.value.find(
                                     (reg) =>
-                                        reg.region ===
-                                        user.currentUser.value.region,
+                                        reg.region?.name ===
+                                        user.currentUser.value?.region,
                                 )?.name
                             }}
                         </span>
-                        <!-- <p v-if="user.currentUser.value?.region">
-                            <div v-for="item in getByRegionals" :key="item.id">{{ item.name }}</div>
-                        </p> -->
+
+                        <p v-else-if="isLoading.isLoading.value">
+                            Загрузка региона...
+                        </p>
 
                         <span v-else>Выберите региональное отделение</span>
                     </button>
@@ -132,16 +138,17 @@
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <Select
-                            variant="outlined"
-                            clearable
-                            name="select_education"
-                            id="select-education"
-                            placeholder="Ваш регион"
-                            @change="getByRegionals"
+                        <regionsDropdown
+                            open-on-clear
+                            id="reg"
+                            name="regdrop"
+                            placeholder="Выберите регион обучения"
                             v-model="region"
-                            address="regions/"
-                        ></Select>
+                            @update:value="changeValue"
+                            @change="changeRegionals"
+                            address="/regions/"
+                            class="mb-2 region-input"
+                        ></regionsDropdown>
 
                         <div>
                             <Button
@@ -180,13 +187,17 @@
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
-import { Select, sortByEducation } from '@shared/components/selects';
+import {
+    Select,
+    sortByEducation,
+    regionsDropdown,
+} from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+import { useRegionalsStore } from '@features/store/regionals';
 import { useRoleStore } from '@layouts/store/role';
-// import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 
 const props = defineProps({
@@ -199,28 +210,14 @@ const props = defineProps({
     },
 });
 
-const regionals = ref([]);
 const roleStore = useRoleStore();
+const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
 const roles = storeToRefs(roleStore);
-// const regionalsStore = useRegionalsStore();
-const getRegionals = async () => {
-    try {
-        const regionalsResp = await HTTP.get('/regionals/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        regionals.value = regionalsResp.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
 
-// regionalsStore.getRegionals();
+const isLoading = storeToRefs(regionalsStore);
 
-// const regionals = storeToRefs(regionalsStore);
+const regionals = storeToRefs(regionalsStore);
 // regionalsStore.getRegionals();
 
 const quantityIsActive = ref(props.quantityActive);
@@ -229,13 +226,17 @@ const router = useRouter();
 const user = storeToRefs(userStore);
 console.log('user', user.currentUser.value);
 
-// const region = ref(null);
+const region = ref(null);
 // console.log('userreg', region);
 
-// const getByRegionals = computed(() => {
-//     return regionalsStore.getRegionals(region.value);
-//     console.log('reg', region.value);
-// });
+const getByRegionals = computed(() => {
+    return regionalsStore.getRegionals(region.value);
+});
+
+const changeRegionals = (val) => {
+    getByRegionals.value;
+    console.log('val', val)
+};
 
 // console.log('regionalssss', getByRegionals);
 const userUpdate = (userData) => {
@@ -405,14 +406,15 @@ const updateRegion = async () => {
         );
         // region.value = updateRegResponse.data;
         show.value = !show.value;
+        userStore.getUser();
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
 onMounted(async () => {
-    await getRegionals();
-    await getHeadquarters();
+    await regionalsStore.getRegionals();
+    // await getHeadquarters();
 });
 </script>
 

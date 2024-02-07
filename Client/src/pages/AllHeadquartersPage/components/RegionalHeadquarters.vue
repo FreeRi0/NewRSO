@@ -116,7 +116,7 @@
             <div class="mt-10" v-show="vertical">
                 <RegionalHQList
                     :regionalHeadquarters="sortedRegionalHeadquarters"
-                    v-if="!isRegionalLoading"
+                    v-if="!isLoading.isLoading.value"
                 ></RegionalHQList>
                 <v-progress-circular
                     class="circleLoader"
@@ -129,18 +129,14 @@
             <div class="horizontal" v-show="!vertical">
                 <HorizontalRegionalHQs
                     :regionalHeadquarters="sortedRegionalHeadquarters"
-                    v-if="!isRegionalLoading"
                 ></HorizontalRegionalHQs>
-                <v-progress-circular
-                    class="circleLoader"
-                    v-else
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
-                v-if="headquartersVisible < regionalHeadquarters.length"
+                v-if="
+                    headquartersVisible <
+                    regionalHeadquarters.regionals.value.length
+                "
                 label="Показать еще"
             ></Button>
             <Button
@@ -162,15 +158,17 @@ import {
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted, onActivated } from 'vue';
 import { HTTP } from '@app/http';
+import { useRegionalsStore } from '@features/store/regionals';
+import { storeToRefs } from 'pinia';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 
+const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
 
-const regionalHeadquarters = ref([]);
-
+const regionalHeadquarters = storeToRefs(regionalsStore);
+const isLoading = storeToRefs(regionalsStore);
 const headquartersVisible = ref(20);
-const isRegionalLoading = ref(false);
 
 const step = ref(20);
 
@@ -191,24 +189,6 @@ const selectedSortDistrict = ref(
 
 const districts = ref([]);
 
-const getRegionalHeadquarters = async () => {
-    try {
-        isRegionalLoading.value = true;
-        setTimeout(async () => {
-            const regResponse = await HTTP.get('/regionals/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-            regionalHeadquarters.value = regResponse.data;
-            isRegionalLoading.value = false;
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
 const searchRegional = async (name) => {
     try {
         const filteredRegional = await HTTP.get(`/regionals/?search=${name}`, {
@@ -217,7 +197,7 @@ const searchRegional = async (name) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        regionalHeadquarters.value = filteredRegional.data;
+        regionalHeadquarters.regionals.value = filteredRegional.data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -228,7 +208,7 @@ const filtersDistricts = computed(() =>
         ? districts.value.find(
               (district) => district.name === selectedSortDistrict.value,
           )?.regional_headquarters ?? []
-        : regionalHeadquarters.value,
+        : regionalHeadquarters.regionals.value,
 );
 
 const searchReg = computed(() => {
@@ -306,7 +286,7 @@ onActivated(() => {
 
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-    getRegionalHeadquarters();
+    regionalsStore.getRegionals();
 });
 </script>
 <style lang="scss">
@@ -482,4 +462,4 @@ pre {
     }
 }
 </style>
-@shared/components/selects/inputs
+@shared/components/inputs/imagescomp

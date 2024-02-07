@@ -1309,16 +1309,8 @@
                                     >*</span
                                 ></label
                             >
-                            <!-- <Select
-                                variant="outlined"
-                                clearable
-                                placeholder="Выберете образовательную организацию"
-                                class="input-full"
-                                v-model="props.user.education.study_institution"
-                                address="/eduicational_institutions/"
-                            >
-                            </Select> -->
-                            <educationalsDropdown
+
+                            <educInstitutionDropdown
                                 open-on-clear
                                 id="reg"
                                 name="regdrop"
@@ -1327,7 +1319,8 @@
                                 @update:value="changeValue"
                                 address="/eduicational_institutions/"
                                 class="mb-2"
-                            ></educationalsDropdown>
+                                :SortDropdown="false"
+                            ></educInstitutionDropdown>
                         </div>
                         <div class="form-field">
                             <label for="facultet">Факультет</label>
@@ -3271,7 +3264,7 @@ import {
     Select,
     sortByEducation,
     regionsDropdown,
-    educationalsDropdown,
+    educInstitutionDropdown
 } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
@@ -3539,7 +3532,7 @@ const downloadAll = async () => {
 
 const updateData = async () => {
     try {
-        isLoading.value = false;
+        isLoading.value = true;
         let fd = new FormData();
         fd.append('rso_info_from', props.user.statement.rso_info_from);
         if (isStatementChange.value)
@@ -3758,7 +3751,6 @@ const updateData = async () => {
         console.log(axiosrequest4.data);
         console.log(axiosrequest5.data);
         console.log(axiosrequest6?.data);
-        isLoading.value = false;
         swal.fire({
             position: 'top-center',
             icon: 'success',

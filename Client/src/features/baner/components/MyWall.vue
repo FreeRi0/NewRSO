@@ -5,14 +5,8 @@
             @upload-wall="uploadWall"
             @update-wall="updateWall"
             @delete-wall="deleteWall"
+            :edited="true"
         ></bannerPhoto>
-        <Avatar
-            :avatar="user?.media?.photo"
-            @upload="uploadAva"
-            @update="updateAva"
-            @delete="deleteAva"
-            :edited="false"
-        ></Avatar>
         <Avatar
             :avatar="user?.media?.photo"
             @upload="uploadAva"
@@ -20,6 +14,7 @@
             @delete="deleteAva"
             :edited="true"
         ></Avatar>
+
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
@@ -42,14 +37,16 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <p v-if="user.region">
+                            <p v-if="user.region && !isLoading.isLoading.value">
                                 {{
-                                    regionals.find(
-                                        (reg) => reg.region === user.region,
+                                    regionals.regionals.value.find(
+                                        (reg) => reg.region?.name === user.region,
                                     )?.name
                                 }}
                             </p>
+                            <p v-else>Загрузка региона...</p>
                         </li>
+
                         <li v-if="user?.education?.study_faculty">
                             <p>{{ user?.education?.study_faculty }}</p>
                         </li>
@@ -64,9 +61,7 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
-                    <div
-                        class="user-data__social-network"
-                    >
+                    <div class="user-data__social-network">
                         <div class="user-data__link-vk mr-2">
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -90,7 +85,7 @@
                         </div>
                     </div>
                     <div class="user-data__contact-contact">
-                        <div class="user-data__contact-contact_item" >
+                        <div class="user-data__contact-contact_item">
                             <img
                                 src="@/app/assets/icon/phone.svg"
                                 alt="phone"
@@ -112,7 +107,9 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { testUpload, Avatar } from '@shared/components/imagescomp';
 import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
+import { useRegionalsStore } from '@features/store/regionals';
 import { useRoute } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 const props = defineProps({
     banner: {
@@ -121,17 +118,17 @@ const props = defineProps({
     avatar: {
         type: String,
     },
-    edited: {
-        type: Boolean,
-    },
     user: {
         type: Object,
     },
     education: {
         type: Object,
     },
+    // member: {
+    //     type: Array,
+    // },
 });
-
+// v-if="props.user.privacy?.privacy_telephone === 'detachment_members' && props.member "
 const emit = defineEmits(['upload', 'update', 'delete']);
 
 const uploadAva = (imageAva) => {
@@ -169,19 +166,15 @@ const deleteWall = (imageWall) => {
     console.log('delete');
 };
 
-const regionals = ref([]);
+const regionalsStore = useRegionalsStore();
+const regionals = storeToRefs(regionalsStore);
+const isLoading = storeToRefs(regionalsStore);
 const detachment = ref({});
 const educationalHeadquarter = ref({});
 const participant = ref({});
 
 const getUserData = async () => {
     try {
-        const responseRegionals = await HTTP.get(`/regionals/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
         const responseSquad = ref(null);
         if (props.user.detachment_id) {
             let id = props.user.detachment_id;
@@ -202,7 +195,6 @@ const getUserData = async () => {
                 },
             });
         }
-        regionals.value = responseRegionals.data;
         detachment.value = responseSquad.data;
         educationalHeadquarter.value = responseEducHead.data;
     } catch (error) {
@@ -210,14 +202,10 @@ const getUserData = async () => {
     }
 };
 
-// const isMemberView = computed(() => {
-//     return props.user.privacy?.privacy_email == ;
-// });
-
 watch(
     () => props.user,
 
-    (newUser, oldUser) => {
+    (newUser) => {
         if (Object.keys(props.user).length === 0) {
             return;
         }
@@ -390,3 +378,4 @@ onMounted(() => {
     margin-right: 5px;
 }
 </style>
+@shared/components/inputs/imagescomp@shared/components/inputs/imagescomp
