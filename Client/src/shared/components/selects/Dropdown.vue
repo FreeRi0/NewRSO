@@ -28,10 +28,13 @@
             <div class="option__content">
                 <div class="option__image">
                     <img
-                        :src="
-                            item.raw?.media?.photo ??
-                            '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                        "
+                        v-if="item.raw?.media?.photo"
+                        :src="item.raw?.media?.photo"
+                        alt="Фото бойца"
+                    />
+                    <img
+                        v-else
+                        src="/assets/foto-leader-squad/foto-leader-squad-stub.png'"
                         alt="Фото бойца"
                     />
                 </div>
@@ -58,10 +61,13 @@
                 <div class="option__content option__content--option">
                     <div class="option__image">
                         <img
-                            :src="
-                                item.raw?.media?.photo ??
-                                '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                            "
+                            v-if="item.raw?.media?.photo"
+                            :src="item.raw?.media?.photo"
+                            alt="Фото бойца"
+                        />
+                        <img
+                            v-else
+                            src="/assets/foto-leader-squad/foto-leader-squad-stub.png"
                             alt="Фото бойца"
                         />
                     </div>
