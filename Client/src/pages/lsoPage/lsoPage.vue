@@ -58,7 +58,7 @@ import SquadParticipants from './components/SquadParticipants.vue';
 import { CompetitionPromo } from '@/features/Competition';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
 const squadsStore = useSquadsStore();
@@ -70,15 +70,27 @@ const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+// console.log('params', route.params);
+
+// onBeforeRouteUpdate(async (to, from) => {
+//     if (to.params.id !== from.params.id) {
+//         await squadsStore.getSquadId(to.params.id);
+//         await squadsStore.getSquadMembers(to.params.id);
+//     }
+// });
+
 watch(
     () => route.params.id,
 
-    (newId) => {
+    async (newId, oldId) => {
+        // console.log('newId', newId, 'oldId', oldId, 'route', route.name);
         if (!newId || route.name !== 'lso') return;
-        id = newId;
+        console.log('успешно', !newId, route.name, route.name !== 'lso')
+        // id = newId;
+
         // getLsoData();
-        squadsStore.getSquadId(id);
-        squadsStore.getSquadMembers(id);
+        await squadsStore.getSquadId(newId);
+        await squadsStore.getSquadMembers(newId);
     },
 );
 

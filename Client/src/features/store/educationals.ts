@@ -24,7 +24,6 @@ export const useEducationalsStore = defineStore('educationals', {
         },
         async getEducationals() {
             try {
-
                 this.isLoading = true;
                 const responseEducationals = await HTTP.get(`/educationals/`, {
                     headers: {
@@ -33,17 +32,16 @@ export const useEducationalsStore = defineStore('educationals', {
                     },
                 });
                 this.educationals = responseEducationals.data;
-
                 this.isLoading = false;
             } catch (error) {
-                this.isLoading = false;
                 console.log('an error occured ' + error);
+                this.isLoading = false;
             }
 
         },
         async getEducationalsId(id: String) {
             try {
-                const { replaceTargetObjects } = usePage();
+
                 this.isLoading = true;
                 const responseEducational = await HTTP.get(`/educationals/${id}`, {
                     headers: {
@@ -52,11 +50,12 @@ export const useEducationalsStore = defineStore('educationals', {
                     },
                 });
                 this.educational = responseEducational.data;
+                const { replaceTargetObjects } = usePage();
                 replaceTargetObjects([this.educational]);
                 this.isLoading = false;
             } catch (error) {
-                this.isLoading = false;
                 console.log('an error occured ' + error);
+                this.isLoading = false;
             }
 
         },

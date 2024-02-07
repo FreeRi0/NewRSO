@@ -25,8 +25,8 @@ export const useUserStore = defineStore('user', {
                     this.isLoading = false;
                 }, 500);
             } catch (error) {
-                this.isLoading = false;
                 console.log('an error occured ' + error);
+                this.isLoading = false;
             }
         },
 

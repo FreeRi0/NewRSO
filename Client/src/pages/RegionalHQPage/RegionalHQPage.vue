@@ -156,8 +156,8 @@ const fetchCommander = async () => {
 };
 // onBeforeRouteUpdate(async (to, from) => {
 //     if (to.params.id !== from.params.id) {
-//         aboutRegionalHQ();
-//         aboutMembers();
+//         regionalsStore.getRegionalId(id);
+//         regionalsStore.getRegionalsMembers(id);
 //         fetchCommander();
 //     }
 // });
@@ -166,9 +166,9 @@ watch(
 
     async (newId) => {
         if (!newId || route.name !== 'RegionalHQ') return;
-        id = newId;
-        await regionalsStore.getRegionalId(id);
-        await regionalsStore.getRegionalsMembers(id);
+        // id = newId;
+        await regionalsStore.getRegionalId(newId);
+        await regionalsStore.getRegionalsMembers(newId);
         await fetchCommander();
     },
     {

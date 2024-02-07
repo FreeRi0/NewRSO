@@ -1,10 +1,10 @@
 <template>
-    <div v-if="squads.length > 0">
+    <div v-if="members.length > 0">
         <horizontalSquadItem
-            v-for="squad in squads"
-            :squad="squad"
-            :rating="true"
-            :key="squad.id"
+            v-for="member in members"
+            :member="member"
+            :rating="false"
+            :key="member.id"
             :competition="true"
         />
     </div>
@@ -15,10 +15,10 @@
 import { ref } from 'vue';
 import {horizontalSquadItem } from '@entities/Squads';
 const props = defineProps({
-    squads: {
-        type: Array,
-        required: true,
-    },
+    members: {
+      type: Array,
+      required: true,
+  },
 });
 </script>
 <style lang="scss"></style>

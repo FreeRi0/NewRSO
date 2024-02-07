@@ -88,7 +88,7 @@
                     <div class="squads-sort">
                         <div class="sort-filters">
                             <div class="sort-select">
-                                <Select
+                                <!-- <Select
                                     variant="outlined"
                                     clearable
                                     name="select_education"
@@ -96,7 +96,7 @@
                                     v-model="selectedSort"
                                     address="/eduicational_institutions/"
                                     placeholder="Образовательная организация"
-                                ></Select>
+                                ></Select> -->
                             </div>
                             <div class="sort-select">
                                 <sortByEducation
@@ -120,17 +120,26 @@
             </div>
 
             <div v-show="vertical">
-                <competitionList :squads="sortedSquads "></competitionList>
+                <competitionList
+                    :members="squads.competitionSquads.value"
+                    v-if="!isLoading.isLoading.value"
+                ></competitionList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalCompetitionList
-                    :squads="sortedSquads "
+                    :members="squads.competitionSquads.value"
                 ></horizontalCompetitionList>
             </div>
             <Button
                 @click="squadsVisible += step"
-                v-if="squadsVisible < squads.length"
+                v-if="squadsVisible < squads.competitionSquads.value.length"
                 label="Показать еще"
             ></Button>
             <Button
@@ -149,64 +158,33 @@ import {
 } from '@features/Squads/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
+import { useSquadsStore } from '@features/store/squads';
+import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
 
-const squads = ref([]);
+const squadsStore = useSquadsStore();
+const squads = storeToRefs(squadsStore);
+const isLoading = storeToRefs(squadsStore);
 const categories = ref([]);
-const educations = ref([]);
 
 const getCategories = async () => {
-    await HTTP.get('/areas/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            categories.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const categoryResponse = await HTTP.get('/areas/', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        categories.value = categoryResponse.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-const getEducations = async () => {
-    await HTTP.get('/eduicational_institutions/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            educations.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
-const getSquads = async () => {
-    await HTTP.get('/competitions/1/participants', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squads.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
 onMounted(() => {
-    getSquads();
     getCategories();
-    getEducations();
+    squadsStore.getCompetitionSquads();
 });
 
 const squadsVisible = ref(20);
@@ -239,17 +217,17 @@ const sortOptionss = ref([
 ]);
 
 const sortedSquads = computed(() => {
-    let tempSquads = squads.value;
+    let tempSquads = squads.competitionSquads.value;
 
     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
-    tempSquads = tempSquads.filter((item) => {
-        // console.log(educational_institution.id);
-        return (
-            selectedSort.value == null ||
-            item.educational_institution == selectedSort.value
-        );
-    });
+    // tempSquads = tempSquads.filter((item) => {
+    //     // console.log(educational_institution.id);
+    //     return (
+    //         selectedSort.value == null ||
+    //         item.educational_institution == selectedSort.value
+    //     );
+    // });
 
     tempSquads = tempSquads.filter((item) => {
         return (
@@ -265,8 +243,8 @@ const sortedSquads = computed(() => {
             let fa =
                 a.detachment.name.toLowerCase() ??
                 a.junior_detachment.name.toLowerCase();
-            fb =
-                b.detachment.name.toLowerCase() ??
+                fb =
+                b.detachment?.name.toLowerCase() ??
                 b.junior_detachment.name.toLowerCase();
 
             if (fa < fb) {
@@ -300,7 +278,7 @@ const sortedSquads = computed(() => {
         return tempSquads;
     }
 
-    tempSquads = tempSquads.filter((item) => item.area === picked.value);
+    tempSquads = tempSquads.filter((item) => item.detachment?.area === picked.value ?? item.junior_detachment?.area === picked.value );
 
     return tempSquads;
 });

@@ -204,6 +204,7 @@
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="detachment.educational_institution"
                                 @update:value="changeValue"
+                                :SortDropdown="false"
                                 address="eduicational_institutions/"
                             ></educInstitutionDropdown>
                             <!-- <p
@@ -259,15 +260,7 @@
                                     address="users/"
                                 ></Dropdown>
                             </div>
-                            <!-- <userDropdown
-                                v-if="!isCommanderLoading"
-                                open-on-clear
-                                id="beast"
-                                name="edit_beast"
-                                placeholder="Поиск по ФИО"
-                                v-model="detachment.commander"
-                                @update:value="changeValue"
-                            ></userDropdown> -->
+
                             <v-progress-circular
                                 class="circleLoader"
                                 v-else
@@ -1387,7 +1380,6 @@ import { Button } from '@shared/components/buttons';
 import { Select } from '@shared/components/selects';
 import { regionsDropdown } from '@shared/components/selects';
 import { educInstitutionDropdown } from '@shared/components/selects';
-// import { userDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';

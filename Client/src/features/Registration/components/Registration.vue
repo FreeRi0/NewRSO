@@ -12,8 +12,8 @@
                     placeholder="Выберите регион обучения"
                     v-model="form.region"
                     @update:value="changeValue"
-                    address="/regions/"
                     class="mb-2 region-input"
+                    address="/regions/"
                 ></regionsDropdown>
                 <Input
                     placeholder="Фамилия"
@@ -53,12 +53,10 @@
                 </p>
                 <Input
                     name="date"
-                    type="text"
+                    type="date"
                     class="dateInput"
                     placeholder="Дата рождения"
                     v-model:value="form.date_of_birth"
-                    onfocusin="(this.type='date')"
-                    onfocusout="(this.type='text')"
                 />
                 <p class="error" v-if="isError.date_of_birth">
                     Дата рождения в формате ДД.ММ.ГГГГ
@@ -139,6 +137,7 @@
         </v-card>
     </div>
 </template>
+// onfocusin="(this.type='date')" // onfocusout="(this.type='text')"
 
 <style lang="scss">
 .v-field {
@@ -184,6 +183,16 @@
 
 .dateInput {
     height: 48px;
+}
+
+.dateInput:before {
+    content: attr(placeholder) !important;
+    color: #aaa;
+    margin-right: 0.5em;
+}
+.dateInput:focus:before,
+.dateInput:valid:before {
+    content: '';
 }
 
 .regCheck {

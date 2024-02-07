@@ -177,7 +177,7 @@
             <div v-show="vertical" class="mt-10">
                 <HeadquartersList
                     :headquarters="sortedHeadquarters"
-                    v-if="!isHeadquartersLoading"
+                    v-if="!isLoading.isLoading.value"
                 ></HeadquartersList>
                 <v-progress-circular
                     class="circleLoader"
@@ -190,14 +190,7 @@
             <div class="horizontal" v-show="!vertical">
                 <horizontalHeadquarters
                     :headquarters="sortedHeadquarters"
-                    v-if="!isHeadquartersLoading"
                 ></horizontalHeadquarters>
-                <v-progress-circular
-                    class="circleLoader"
-                    v-else
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -238,7 +231,7 @@ const crosspageFilters = useCrosspageFilter();
 const headquarters = storeToRefs(educationalsStore);
 
 const headquartersVisible = ref(20);
-const isHeadquartersLoading = ref(false);
+const isLoading =  storeToRefs(educationalsStore);
 
 const step = ref(20);
 
