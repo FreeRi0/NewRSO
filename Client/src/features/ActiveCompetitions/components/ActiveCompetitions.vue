@@ -17,7 +17,7 @@
             </div>
             <div class="competitions__list">
                 <template
-                    v-for="competition in competitionsList"
+                    v-for="(competition, index) in competitionsList"
                     :key="competition.id"
                 >
                     <active-competition-item
@@ -28,17 +28,21 @@
                                 !competition.is_confirmed_by_junior)
                         "
                         :competition="competition"
+                        :commander-ids="commanderIds"
+                        :position="index"
                         @select="onToggleSelectCompetition"
                     />
                 </template>
-
-                <p>Итого: {{ selectedCompetitionsList.length }}</p>
+                <p class="text_total">
+                    Итого: {{ selectedCompetitionsList.length }}
+                </p>
 
                 <active-competition-item-select
                     v-for="competition in selectedCompetitionsList"
                     :key="competition.id"
                     :competition="competition"
                     :action="action"
+                    :commander-ids="commanderIds"
                     @select="onToggleSelectCompetition"
                 />
             </div>
@@ -140,7 +144,9 @@ const getCompetitions = async () => {
                 },
             );
 
-            competitionsList.value = data;
+            competitionsList.value = data.filter(
+                (c) => c.is_confirmed_by_junior,
+            );
         } catch (e) {
             console.log('error getCompetitions', e);
         } finally {
@@ -269,5 +275,18 @@ onActivated(async () => {
     display: flex;
     width: 100%;
     justify-content: center;
+    margin-top: 60px;
+}
+.text_total {
+    width: 1180px;
+    height: 26px;
+    margin: 40px 0;
+    font-family: Bert Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
 }
 </style>
