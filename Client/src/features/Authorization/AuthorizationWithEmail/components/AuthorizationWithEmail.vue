@@ -21,7 +21,7 @@
                 />
 
                 <p class="error" v-if="isError.username">
-                    {{'' + isError.username }}
+                    {{ '' + isError.username }}
                 </p>
                 <v-text-field
                     class="password-input"
@@ -35,11 +35,11 @@
                 ></v-text-field>
 
                 <p class="error" v-if="isError.password">
-                    {{'' + isError.password }}
+                    {{ '' + isError.password }}
                 </p>
 
                 <p class="error" v-if="isError.non_field_errors">
-                    {{'' + isError.non_field_errors }}
+                    {{ '' + isError.non_field_errors }}
                 </p>
 
                 <Button
@@ -123,7 +123,7 @@ const LoginUser = async () => {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-field {
     border-radius: 10px;
 }
@@ -182,7 +182,7 @@ const LoginUser = async () => {
     font-size: 16px;
     color: #35383f;
     font-weight: normal;
-    font-family: 'Bert-Sans';
+    font-family: 'Bert Sans';
 }
 
 .password-input::placeholder {
@@ -206,5 +206,12 @@ const LoginUser = async () => {
     text-decoration: underline;
     font-weight: bold;
     font-size: 18px;
+}
+:global(.v-input__control) {
+    min-height: 45px;
+    font-weight: 500;
+}
+:global(.v-text-field input.v-field__input) {
+    padding: 12px 6px 9px 16px;
 }
 </style>
