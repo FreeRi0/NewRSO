@@ -12,7 +12,6 @@
                     placeholder="Выберите регион обучения"
                     v-model="form.region"
                     @update:value="changeValue"
-                    address="/regions/"
                     class="mb-2 region-input"
                 ></regionsDropdown>
                 <Input

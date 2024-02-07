@@ -70,12 +70,12 @@ const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         squadsStore.getSquadId(id);
-//         squadsStore.getSquadMembers(id);
-//     }
-// });
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) {
+        squadsStore.getSquadId(id);
+        squadsStore.getSquadMembers(id);
+    }
+});
 
 watch(
     () => route.params.id,

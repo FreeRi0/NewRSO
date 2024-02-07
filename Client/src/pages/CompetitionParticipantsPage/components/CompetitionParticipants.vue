@@ -121,7 +121,7 @@
 
             <div v-show="vertical">
                 <competitionList
-                    :squads="sortedSquads"
+                    :squads="squads.squads.value"
                     v-if="!isLoading.isLoading.value"
                 ></competitionList>
                 <v-progress-circular
@@ -134,7 +134,7 @@
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalCompetitionList
-                    :squads="sortedSquads"
+                    :squads="squads.squads.value"
                 ></horizontalCompetitionList>
             </div>
             <Button
@@ -243,8 +243,8 @@ const sortedSquads = computed(() => {
             let fa =
                 a.detachment.name.toLowerCase() ??
                 a.junior_detachment.name.toLowerCase();
-            fb =
-                b.detachment.name.toLowerCase() ??
+                fb =
+                b.detachment?.name.toLowerCase() ??
                 b.junior_detachment.name.toLowerCase();
 
             if (fa < fb) {

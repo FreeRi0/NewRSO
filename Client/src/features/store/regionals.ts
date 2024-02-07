@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-import usePage  from '@shared/composables/usePage';
+import usePage from '@shared/composables/usePage';
 export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
@@ -25,7 +25,6 @@ export const useRegionalsStore = defineStore('regionals', {
         },
         async getRegionals() {
             try {
-
                 this.isLoading = true;
                 const responseRegionals = await HTTP.get(`/regionals/`, {
                     headers: {
@@ -40,7 +39,6 @@ export const useRegionalsStore = defineStore('regionals', {
                 this.isLoading = false;
                 console.log('an error occured ' + error);
             }
-
         },
         async getRegionalId(id: String) {
             try {
@@ -59,7 +57,6 @@ export const useRegionalsStore = defineStore('regionals', {
                 this.isLoading = false;
                 console.log('an error occured ' + error);
             }
-
         },
         async getRegionalsMembers(id: String) {
             try {
@@ -69,7 +66,8 @@ export const useRegionalsStore = defineStore('regionals', {
                     {
                         headers: {
                             'Content-Type': 'application/json',
-                            Authorization: 'Token ' + localStorage.getItem('Token'),
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
                         },
                     },
                 );
@@ -79,23 +77,39 @@ export const useRegionalsStore = defineStore('regionals', {
                 this.isLoading = false;
                 console.log('an error occured ' + error);
             }
-
         },
         async searchRegions(name: String) {
-            const responseRegions = await HTTP.get(`/regions/?search=${name}`, {
+            const responseSearchRegions = await HTTP.get(`/regions/?search=${name}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-            this.regions = responseRegions.data;
+            this.regions = responseSearchRegions.data;
+        },
+        async getRegions() {
+            try {
+                this.isLoading = true;
+                const responseRegions = await HTTP.get(`/regions/`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                this.regions = responseRegions.data;
+            } catch (error) {
+                console.log('an error occured ' + error);
+                this.isLoading = false;
+            }
         },
         async searchInstitution(name: String) {
-            const responseInstitution = await HTTP.get(`/eduicational_institutions/?search=${name}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+            const responseInstitution = await HTTP.get(
+                `/eduicational_institutions/?search=${name}`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            });
+            );
             this.institutions = responseInstitution.data;
         },
     },

@@ -7,6 +7,7 @@ export const useSquadsStore = defineStore('squads', {
         members: [],
         squads: [],
         squad: {},
+        areas: [],
         competitionSquads: [],
         isLoading: false,
     }),
@@ -14,15 +15,30 @@ export const useSquadsStore = defineStore('squads', {
         async getSquads() {
             try {
                 this.isLoading = true;
-                    const responseSquads = await HTTP.get('detachments/', {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    });
-                    this.squads = responseSquads.data;
-                    this.isLoading = false;
+                const responseSquads = await HTTP.get('detachments/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                });
+                this.squads = responseSquads.data;
+                this.isLoading = false;
+            } catch (error) {
+                console.log('an error occured ' + error);
+                this.isLoading = false;
+            }
+        },
+        async getAreas() {
+            try {
+                this.isLoading = true;
+                const responseAreas = await HTTP.get('/areas/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                });
+                this.areas = responseAreas.data;
+                this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
                 this.isLoading = false;
@@ -31,14 +47,27 @@ export const useSquadsStore = defineStore('squads', {
         async getCompetitionSquads() {
             try {
                 this.isLoading = true;
-                const responseCompetitionSquads = await HTTP.get('/competitions/1/participants', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization:
-                            'Token ' + localStorage.getItem('Token'),
+                const responseCompetitionSquads = await HTTP.get(
+                    '/competitions/1/participants',
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
                     },
-                });
-                this.competitionSquads = responseCompetitionSquads.data;
+                );
+                this.competitionSquads = responseCompetitionSquads.data.reduce(
+                    (acc: any, member: any) => {
+                        if (member.detachment) acc.push(member.detachment);
+                        acc.push(member.junior_detachment);
+
+                        console.log('acc', acc);
+
+                        return acc;
+                    },
+                    [],
+                );
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;

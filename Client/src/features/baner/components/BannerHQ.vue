@@ -115,7 +115,7 @@
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{
-                                    districtHeadquarter.members_count
+                                    districtHeadquarter?.members_count
                                 }}
                                 действующих членов</span
                             >

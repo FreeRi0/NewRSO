@@ -154,13 +154,13 @@ const fetchCommander = async () => {
         console.log('An error occurred:', error);
     }
 };
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         aboutRegionalHQ();
-//         aboutMembers();
-//         fetchCommander();
-//     }
-// });
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) {
+        regionalsStore.getRegionalId(id);
+        regionalsStore.getRegionalsMembers(id);
+        fetchCommander();
+    }
+});
 watch(
     () => route.params.id,
 

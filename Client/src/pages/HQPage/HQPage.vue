@@ -104,15 +104,15 @@ const filteredMembers = computed(() => {
 //     return [{ user: commander.value }, ...filteredMembers.value];
 // });
 
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         await educationalsStore.getEducationalsId(id)
-//         await educationalsStore.getEducationalsMembers(id);
+onBeforeRouteUpdate(async (to, from) => {
+    if (to.params.id !== from.params.id) {
+        educationalsStore.getEducationalsId(id)
+         educationalsStore.getEducationalsMembers(id);
 
-//         // aboutEduc();
-//         fetchCommander();
-//     }
-// });
+        // aboutEduc();
+        fetchCommander();
+    }
+});
 
 watch(
     () => route.params.id,
