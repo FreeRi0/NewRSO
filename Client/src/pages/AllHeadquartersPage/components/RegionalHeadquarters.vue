@@ -116,7 +116,7 @@
             <div class="mt-10" v-show="vertical">
                 <RegionalHQList
                     :regionalHeadquarters="sortedRegionalHeadquarters"
-                    v-if="!isRegionalLoading"
+                    v-if="!isLoading.isLoading.value"
                 ></RegionalHQList>
                 <v-progress-circular
                     class="circleLoader"
@@ -129,14 +129,7 @@
             <div class="horizontal" v-show="!vertical">
                 <HorizontalRegionalHQs
                     :regionalHeadquarters="sortedRegionalHeadquarters"
-                    v-if="!isRegionalLoading"
                 ></HorizontalRegionalHQs>
-                <v-progress-circular
-                    class="circleLoader"
-                    v-else
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -174,7 +167,7 @@ const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
 
 const regionalHeadquarters = storeToRefs(regionalsStore);
-
+const isLoading = storeToRefs(regionalsStore);
 const headquartersVisible = ref(20);
 
 const step = ref(20);

@@ -1,7 +1,7 @@
 <template>
 
-    <div v-if="props.competition === true">
-        <div
+    <div v-if="props.competition === true && squad.detachment">
+        <router-link :to="{ name: 'lso', params: { id: squad.detachment.id } }"
             class="horizontal-item"
         >
             <div class="horizontal-img">
@@ -14,10 +14,10 @@
                     <p>Место в рейтинге: 102</p>
                 </div>
             </div>
-        </div>
+        </router-link>
     </div>
-    <div v-if="props.competition === true">
-        <div
+    <div v-if="props.competition === true && squad.junior_detachment">
+        <router-link :to="{ name: 'lso', params: { id: squad.junior_detachment.id } }"
             class="horizontal-item"
 
         >
@@ -31,7 +31,7 @@
                     <p>Место в рейтинге: 102</p>
                 </div>
             </div>
-        </div>
+        </router-link>
     </div>
 
     <div v-else>

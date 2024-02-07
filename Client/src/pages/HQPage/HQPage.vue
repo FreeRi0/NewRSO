@@ -50,7 +50,7 @@
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from './components/ManagementHQ.vue';
 import DetachmentsHQ from './components/DetachmentsHQ.vue';
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useEducationalsStore } from '@features/store/educationals';
 import { storeToRefs } from 'pinia';
@@ -65,61 +65,11 @@ const showRegionalHQ = ref(false);
 
 const commander = ref({});
 const position = ref({});
-const headquarter = storeToRefs( educationalsStore);
-const member = storeToRefs( educationalsStore);
+const headquarter = storeToRefs(educationalsStore);
+const member = storeToRefs(educationalsStore);
 const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
-
-
-// const aboutHQ = async () => {
-//     try {
-//         const response = await HTTP.get(`/educationals/${id}/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         headquarter.value = response.data;
-//         replaceTargetObjects([headquarter.value]);
-//         console.log(response);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
-// const aboutEduc = async () => {
-//     try {
-//         const response = await HTTP.get(`/eduicational_institutions/${id}/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         educt.value = response.data;
-//         console.log(response);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
-// const aboutMembers = async () => {
-//     try {
-//         const response = await HTTP.get(`/educationals/${id}/members/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         member.value = response.data;
-//         console.log(response);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
 
 const fetchCommander = async () => {
     try {
@@ -156,8 +106,8 @@ const filteredMembers = computed(() => {
 
 // onBeforeRouteUpdate(async (to, from) => {
 //     if (to.params.id !== from.params.id) {
-//         // aboutHQ();
-//         // aboutMembers();
+//         await educationalsStore.getEducationalsId(id)
+//         await educationalsStore.getEducationalsMembers(id);
 
 //         // aboutEduc();
 //         fetchCommander();
@@ -170,7 +120,7 @@ watch(
     async (newId) => {
         if (!newId || route.name !== 'HQ') return;
         id = newId;
-        await educationalsStore.getEducationalsId(id)
+        await educationalsStore.getEducationalsId(id);
         await educationalsStore.getEducationalsMembers(id);
         // await aboutEduc();
         await fetchCommander();
@@ -179,6 +129,13 @@ watch(
         immediate: true,
     },
 );
+
+onMounted(() => {
+    educationalsStore.getEducationalsId(id);
+    educationalsStore.getEducationalsMembers(id);
+    // await aboutEduc();
+    fetchCommander();
+});
 </script>
 <style scoped lang="scss">
 .title {

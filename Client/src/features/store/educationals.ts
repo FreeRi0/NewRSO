@@ -24,7 +24,6 @@ export const useEducationalsStore = defineStore('educationals', {
         },
         async getEducationals() {
             try {
-
                 this.isLoading = true;
                 const responseEducationals = await HTTP.get(`/educationals/`, {
                     headers: {
@@ -33,11 +32,10 @@ export const useEducationalsStore = defineStore('educationals', {
                     },
                 });
                 this.educationals = responseEducationals.data;
-
                 this.isLoading = false;
             } catch (error) {
-                this.isLoading = false;
                 console.log('an error occured ' + error);
+                this.isLoading = false;
             }
 
         },
@@ -55,8 +53,8 @@ export const useEducationalsStore = defineStore('educationals', {
                 replaceTargetObjects([this.educational]);
                 this.isLoading = false;
             } catch (error) {
-                this.isLoading = false;
                 console.log('an error occured ' + error);
+                this.isLoading = false;
             }
 
         },
