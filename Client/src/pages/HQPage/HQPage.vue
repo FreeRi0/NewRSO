@@ -106,8 +106,8 @@ const filteredMembers = computed(() => {
 
 // onBeforeRouteUpdate(async (to, from) => {
 //     if (to.params.id !== from.params.id) {
-//         await educationalsStore.getEducationalsId(id)
-//         await educationalsStore.getEducationalsMembers(id);
+//         educationalsStore.getEducationalsId(id)
+//          educationalsStore.getEducationalsMembers(id);
 
 //         // aboutEduc();
 //         fetchCommander();
@@ -117,11 +117,11 @@ const filteredMembers = computed(() => {
 watch(
     () => route.params.id,
 
-    async (newId) => {
+    async (newId, oldId) => {
         if (!newId || route.name !== 'HQ') return;
-        id = newId;
-        await educationalsStore.getEducationalsId(id);
-        await educationalsStore.getEducationalsMembers(id);
+        // id = newId;
+        await educationalsStore.getEducationalsId(mewId);
+        await educationalsStore.getEducationalsMembers(newId);
         // await aboutEduc();
         await fetchCommander();
     },

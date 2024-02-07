@@ -62,6 +62,7 @@ import { ref, onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
+import { storeToRefs } from 'pinia';
 
 defineOptions({
     inheritAttrs: false,
@@ -69,6 +70,8 @@ defineOptions({
 const emit = defineEmits(['update:value']);
 
 const regionalsStore = useRegionalsStore();
+const regions = storeToRefs(regionalsStore);
+
 
 const props = defineProps({
     items: {
@@ -89,6 +92,7 @@ const props = defineProps({
     },
 });
 const name = ref('');
+const region = ref(null);
 
 const selected = ref(null);
 const isLoading = ref(false);
@@ -98,6 +102,16 @@ const changeValue = (event) => {
 };
 
 const items = ref(props.items);
+//  items.value = regions.regions.value;
+
+// const onChangeItem = async () => {
+//     try {
+//         regionalsStore.getRegions();
+//         items.value = regions.regions.value;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 const onChangeItem = async () => {
     try {
@@ -116,6 +130,8 @@ const onChangeItem = async () => {
     }
 };
 
+
+
 const searchRegion = (val) => {
     if (name.value.length < 3) {
         return;
@@ -124,8 +140,12 @@ const searchRegion = (val) => {
     console.log('val', val);
 };
 
+
+
+
 onMounted(() => {
     onChangeItem();
+    // regionalsStore.getRegions();
 });
 </script>
 

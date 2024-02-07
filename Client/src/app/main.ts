@@ -1,10 +1,10 @@
 import { createApp } from 'vue';
 import './css/app.scss';
 import App from './App.vue';
-
 import 'vuetify/styles';
 import '@mdi/font/css/materialdesignicons.css';
 import PrimeVue from 'primevue/config';
+// import { VueMaskDirective } from 'v-mask';
 import FileUpload from 'primevue/fileupload';
 import { createPinia } from 'pinia';
 import InputMask from 'primevue/inputmask';
@@ -32,6 +32,7 @@ createApp(App)
             emptyFilterMessage: 'Ничего не найдено',
         },
     })
+    // .directive('mask', VueMaskDirective)
     .use(router)
     .component('FileUpload', FileUpload)
     .component('InputMask', InputMask)

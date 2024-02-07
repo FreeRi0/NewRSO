@@ -1,52 +1,68 @@
 .AuthWrapper {
-  min-height: 100vh;
-   background-image: url(../assets/log-bg.jpg);
-   background-size: cover;
-   background-repeat: no-repeat;
-   background-position: center bottom;
-   padding-top: 60px;
-   padding-bottom: 60px;
-   @media screen and (max-width: 768px) {
-      background-image: url(../assets/authBG.jpg);
-  }
+    min-height: 100vh;
+    background-image: url(../assets/log-bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    @media screen and (max-width: 768px) {
+        background-image: url(../assets/authBG.jpg);
+    }
+}
+
+.RegisterWrapper {
+    min-height: 100vh;
+    background-image: url(../assets/regBR.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    @media screen and (max-width: 1440px) {
+        background-image: url(/assets/regBR1440.jpg);
+    }
+    @media screen and (max-width: 1024px) {
+        background-image: url(/assets/regBR1024.jpg);
+    }
+    @media screen and (max-width: 768px) {
+        background-image: none;
+        background-color: #d1d5d8;
+    }
 }
 
 // .LoginForm {
 //    width: 384px;
 // }
 
-
-
 .v-card--variant-elevated {
-   box-shadow: none;
+    box-shadow: none;
 }
 
 .text-field {
-   border-radius: 10px;
+    border-radius: 10px;
 }
 .v-input__details {
- display: none !important;
+    display: none !important;
 }
 
 .v-alert--density-compact {
-   margin-bottom: 10px;
-   padding-top: 5px;
-   padding-bottom: 5px;
+    margin-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
-
 .v-form {
- margin-top: 40px;
+    margin-top: 40px;
 }
 
 .v-card {
-   border-radius: 10px;
+    border-radius: 10px;
 }
 
 .v-label {
-   font-size: 14px;
-   display: flex;
-   align-items: flex-end;
-   margin-bottom: 28px;
+    font-size: 14px;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 28px;
 }
-

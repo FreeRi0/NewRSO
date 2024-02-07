@@ -41,7 +41,7 @@ export const useEducationalsStore = defineStore('educationals', {
         },
         async getEducationalsId(id: String) {
             try {
-                const { replaceTargetObjects } = usePage();
+
                 this.isLoading = true;
                 const responseEducational = await HTTP.get(`/educationals/${id}`, {
                     headers: {
@@ -50,6 +50,7 @@ export const useEducationalsStore = defineStore('educationals', {
                     },
                 });
                 this.educational = responseEducational.data;
+                const { replaceTargetObjects } = usePage();
                 replaceTargetObjects([this.educational]);
                 this.isLoading = false;
             } catch (error) {

@@ -1,32 +1,32 @@
 <template>
 
-    <div v-if="props.competition === true && squad.detachment">
-        <router-link :to="{ name: 'lso', params: { id: squad.detachment.id } }"
+    <div v-if="props.competition === true && member">
+        <router-link :to="{ name: 'lso', params: { id: member.id } }"
             class="horizontal-item"
         >
             <div class="horizontal-img">
-                <img :src="squad.detachment?.banner" alt="logo" v-if="squad.detachment?.banner" />
+                <img :src="member?.banner" alt="logo" v-if="member?.banner" />
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontal-item-title">"{{ squad.detachment?.name }}"</p>
+                <p class="horizontal-item-title">"{{ member?.name }}"</p>
                 <div class="rating" v-if="rating">
                     <p>Место в рейтинге: 102</p>
                 </div>
             </div>
         </router-link>
     </div>
-    <div v-if="props.competition === true && squad.junior_detachment">
-        <router-link :to="{ name: 'lso', params: { id: squad.junior_detachment.id } }"
+    <div v-else-if="props.competition === true && member">
+        <router-link :to="{ name: 'lso', params: { id: member.id } }"
             class="horizontal-item"
 
         >
             <div class="horizontal-img">
-                <img :src="squad.junior_detachment?.banner" alt="logo" v-if="squad.junior_detachment?.banner" />
+                <img :src="member?.banner" alt="logo" v-if="member?.banner" />
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontal-item-title">"{{ squad.junior_detachment?.name }}"</p>
+                <p class="horizontal-item-title">"{{ member?.name }}"</p>
                 <div class="rating" v-if="rating">
                     <p>Место в рейтинге: 102</p>
                 </div>
@@ -34,7 +34,7 @@
         </router-link>
     </div>
 
-    <div v-else>
+    <div v-else-if="props.competition === false">
         <router-link
             class="horizontal-item"
             :to="{ name: 'lso', params: { id: squad.id } }"
@@ -62,6 +62,9 @@ const props = defineProps({
     competition: {
         type: Boolean,
         default: false,
+    },
+    member: {
+        type: Object,
     }
 });
 </script>

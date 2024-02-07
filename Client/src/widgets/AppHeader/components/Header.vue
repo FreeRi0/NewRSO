@@ -101,18 +101,24 @@
                             alt="Иконка геолокации"
                         /> -->
 
-                        <span v-if="user.currentUser.value?.region && !isLoading.isLoading.value"
-                            > {{
+                        <span
+                            v-if="
+                                user.currentUser.value?.region &&
+                                !isLoading.isLoading.value
+                            "
+                        >
+                            {{
                                 regionals.regionals.value.find(
                                     (reg) =>
                                         reg.region?.name ===
                                         user.currentUser.value?.region,
                                 )?.name
                             }}
-
                         </span>
 
-                        <p v-else-if="isLoading.isLoading.value">Загрузка региона...</p>
+                        <p v-else-if="isLoading.isLoading.value">
+                            Загрузка региона...
+                        </p>
 
                         <span v-else>Выберите региональное отделение</span>
                     </button>
@@ -139,6 +145,7 @@
                             placeholder="Выберите регион обучения"
                             v-model="region"
                             @update:value="changeValue"
+                            @change="changeRegionals"
                             address="/regions/"
                             class="mb-2 region-input"
                         ></regionsDropdown>
@@ -211,22 +218,7 @@ const roles = storeToRefs(roleStore);
 const isLoading = storeToRefs(regionalsStore);
 
 const regionals = storeToRefs(regionalsStore);
-// const getRegionals = async () => {
-//     try {
-//         const regionalsResp = await HTTP.get('/regionals/', {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-//         regionals.value = regionalsResp.data;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
 // regionalsStore.getRegionals();
-
 
 const quantityIsActive = ref(props.quantityActive);
 
@@ -234,13 +226,17 @@ const router = useRouter();
 const user = storeToRefs(userStore);
 console.log('user', user.currentUser.value);
 
-const region = ref(user.currentUser.value?.region);
+const region = ref(null);
 // console.log('userreg', region);
 
-// const getByRegionals = computed(() => {
-//     return regionalsStore.getRegionals(region.value);
-//     console.log('reg', region.value);
-// });
+const getByRegionals = computed(() => {
+    return regionalsStore.getRegionals(region.value);
+});
+
+const changeRegionals = (val) => {
+    getByRegionals.value;
+    console.log('val', val)
+};
 
 // console.log('regionalssss', getByRegionals);
 const userUpdate = (userData) => {
