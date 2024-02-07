@@ -70,12 +70,12 @@ const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
 
-console.log('params', route.params);
+// console.log('params', route.params);
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
-        await squadsStore.getSquadId(id);
-        await squadsStore.getSquadMembers(id);
+        await squadsStore.getSquadId(to.params.id);
+        await squadsStore.getSquadMembers(to.params.id);
     }
 });
 
@@ -83,13 +83,13 @@ watch(
     () => route.params.id,
 
     async (newId, oldId) => {
-        console.log('newId', newId, 'oldId', oldId);
+        // console.log('newId', newId, 'oldId', oldId, 'route', route.name);
         if (!newId || route.name !== 'lso') return;
-        id = newId;
+        // id = newId;
 
         // getLsoData();
-        await squadsStore.getSquadId(id);
-        await squadsStore.getSquadMembers(id);
+        await squadsStore.getSquadId(newId);
+        await squadsStore.getSquadMembers(newId);
     },
 );
 
@@ -97,7 +97,6 @@ watch(
 
 onMounted(() => {
     // getLsoData();
-    console.log('idSquad', id);
     squadsStore.getSquadId(id);
     squadsStore.getSquadMembers(id);
 
