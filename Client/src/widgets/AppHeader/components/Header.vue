@@ -101,15 +101,32 @@
                             alt="Иконка геолокации"
                         /> -->
 
+                        <!-- <span
+                            v-if="
+                                user.currentUser.value?.region &&
+                                !isLoading.isLoading.value
+                            "
+                        >
+                            <p v-for="item in regionals.filteredRegional.value">
+                             <p> {{ item.name }}</p>
+                         </p>
+
+
+                        </span> -->
+
                         <span
                             v-if="
                                 user.currentUser.value?.region &&
                                 !isLoading.isLoading.value
                             "
                         >
+
+
                             {{
                                 regionals.regionals.value.find(
-                                    (reg) => reg.region?.name === user.currentUser.value.region,
+                                    (reg) =>
+                                        reg.region?.name ===
+                                        user.currentUser.value.region,
                                 )?.name
                             }}
                         </span>
@@ -136,7 +153,7 @@
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <regionalsDropdown
+                        <regionsDropdown
                             open-on-clear
                             id="reg"
                             name="regdrop"
@@ -145,7 +162,7 @@
                             @update:value="changeValue"
                             address="/regions/"
                             class="mb-2 region-input"
-                        ></regionalsDropdown>
+                        ></regionsDropdown>
 
                         <div>
                             <Button
@@ -183,13 +200,14 @@
     </div>
 </template>
 
+
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
 import {
     Select,
     sortByEducation,
-    regionalsDropdown,
+    regionsDropdown,
 } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
@@ -217,29 +235,20 @@ const roles = storeToRefs(roleStore);
 const isLoading = storeToRefs(regionalsStore);
 
 const regionals = storeToRefs(regionalsStore);
-// regionalsStore.getRegionals();
 
 const quantityIsActive = ref(props.quantityActive);
 
 const router = useRouter();
 const user = storeToRefs(userStore);
-// console.log('user', user.currentUser.value);
 
-const region = ref(null);
-// console.log('userreg', region);
+const region = ref(user.currentUser.value.region);
 
-// const getByRegionals = computed(() => {
-//     return regionalsStore.getRegionals(region.value);
-// });
+console.log('region', region.value);
+console.log('USEREEE', user.currentUser.value.region);
+console.log('userrr', user.currentUser.value);
 
-// const changeRegionals = (val) => {
-//     getByRegionals.value;
-//     console.log('val', val)
-// };
-
-// console.log('regionalssss', getByRegionals);
 const userUpdate = (userData) => {
-    // console.log('UserUpdate', userData);
+    // console.log('UserUpdate', userData );
     user.currentUser.value = userData;
 };
 
@@ -404,19 +413,28 @@ const updateRegion = async () => {
             },
         );
         region.value = updateRegResponse.data.region;
-        console.log('data', updateRegResponse.data.region)
+        console.log('data', updateRegResponse.data.region);
         show.value = !show.value;
+        // regionalsStore.searchRegionals(region.value);
         userStore.getUser();
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
-console.log('reg', regionals.filteredRegionals);
+// watch(
+//     () => user.currentUser.value,
+//     (newUser, oldUser) => {
+//         if (Object.keys(user.currentUser.value).length === 0) {
+//             return;
+//         }
+//         regionalsStore.searchRegionals(region.value);
+//     },
+// );
 
-onMounted(async () => {
+onMounted(() => {
     // await regionalsStore.getRegionals();
-    // await getHeadquarters();
+    // regionalsStore.searchRegionals(region.value);
 });
 </script>
 

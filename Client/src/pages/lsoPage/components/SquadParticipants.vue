@@ -54,7 +54,7 @@
 import { Button } from '@shared/components/buttons';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute} from 'vue-router';
+import { useRoute } from 'vue-router';
 import {
     ParticipantsList,
     VerifiedList,
@@ -78,33 +78,22 @@ const props = defineProps({
     },
 });
 
-
-
 const getVerified = async () => {
     try {
-        const verified = ref(null);
-        if (isVerified.value.length > 0) {
-            const verified = await HTTP.get(
-                `/detachments/${id}/applications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            isVerified.value = verified.data;
-        }
+        const verified = await HTTP.get(`/detachments/${id}/applications/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        isVerified.value = verified.data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         getVerified();
-//     }
-// });
+
+console.log('length', isVerified.value.length);
 
 watch(
     () => route.params.id,

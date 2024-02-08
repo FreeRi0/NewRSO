@@ -5,30 +5,32 @@ export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
         regionals: [],
-        filteredRegional: {},
+        filteredRegional: [],
         members: [],
         regional: {},
         institutions: [],
         isLoading: false,
     }),
     actions: {
-        async searchRegionals(region: String) {
-            const responseSearchRegionals = await HTTP.get(
-                `/regionals/?search=${region}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            this.filteredRegional = responseSearchRegionals.data;
+        async searchRegionals(region: any) {
+            try {
+                setTimeout(async () => {
+                    const responseSearchRegionals = await HTTP.get(
+                        `/regionals/?search=${region}`,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization:
+                                    'Token ' + localStorage.getItem('Token'),
+                            },
+                        },
+                    );
+                    this.filteredRegional = responseSearchRegionals.data.name;
+                }, 1000);
+            } catch (err) {
+                console.log('an error occured ' + err);
+            }
         },
-        // async getUserRegional(id: string) {
-        //     // this.regionals.find(
-        //     //     (reg) => reg.region?.name === ,
-        //     // )?.name
-        // },
         async getRegionals() {
             try {
                 this.isLoading = true;
