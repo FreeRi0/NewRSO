@@ -286,7 +286,7 @@ onActivated(() => {
 
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-    regionalsStore.getRegionals();
+    
 });
 </script>
 <style lang="scss">

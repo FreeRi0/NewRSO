@@ -11,6 +11,7 @@
         v-bind="$attrs"
         @keyup="searchRegion"
         @update:value="changeValue"
+        @keydown.down="onArrowDown"
         :address="address"
         :no-data-text="noDataText"
         class="option-select"
