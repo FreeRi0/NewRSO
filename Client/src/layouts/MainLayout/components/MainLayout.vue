@@ -15,7 +15,10 @@
                 >.
             </p>
             <div
-                v-if="!currentUser.currentUser.value.is_verified && isAuth"
+                v-if="
+                    currentUser.currentUser.value.is_verified === false &&
+                    isAuth
+                "
                 class="required_verification"
             >
                 <p>Необходимо верифицироваться до 25 февраля 2024 года</p>
