@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
 import usePage from '@shared/composables/usePage';
-const { replaceTargetObjects } = usePage();
 
+
+const { replaceTargetObjects } = usePage();
 export const useEducationalsStore = defineStore('educationals', {
     state: () => ({
         educationals: [],
@@ -53,7 +54,6 @@ export const useEducationalsStore = defineStore('educationals', {
                     },
                 );
                 this.educational = responseEducational.data;
-
                 replaceTargetObjects([this.educational]);
                 this.isLoading = false;
             } catch (error) {

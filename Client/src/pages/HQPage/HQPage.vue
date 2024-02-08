@@ -120,7 +120,8 @@ watch(
     async (newId, oldId) => {
         if (!newId || route.name !== 'HQ') return;
         // id = newId;
-        await educationalsStore.getEducationalsId(mewId);
+        console.log('успешно', !newId, route.name, route.name !== 'HQ')
+        await educationalsStore.getEducationalsId(newId);
         await educationalsStore.getEducationalsMembers(newId);
         // await aboutEduc();
         await fetchCommander();
