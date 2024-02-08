@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-import usePage from '@shared/composables/usePage';
 
 // const { replaceTargetObjects } = usePage();
 export const useRegionalsStore = defineStore('regionals', {
