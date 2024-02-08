@@ -34,7 +34,9 @@
             </p>
             <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
             <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.regional.value.about }}</p>
+            <p v-else-if="showRegionalHQ">
+                {{ regionalHeadquarter.regional.value.about }}
+            </p>
             <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
@@ -70,11 +72,11 @@ import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
-// import { usePage } from '@shared';
+import { usePage } from '@shared';
 
 const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
@@ -91,40 +93,7 @@ const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
-// const { replaceTargetObjects } = usePage();
-
-// const aboutRegionalHQ = async () => {
-//     try {
-//         const response = await HTTP.get(`/regionals/${id}/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         regionalHeadquarter.value = response.data;
-//         replaceTargetObjects([regionalHeadquarter.value]);
-//         console.log(response);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
-// const aboutMembers = async () => {
-//     try {
-//         const response = await HTTP.get(`/regionals/${id}/members/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         member.value = response.data;
-//         console.log(response);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
+const { replaceTargetObjects } = usePage();
 
 const filteredMembers = computed(() => {
     return member.members.value.filter((manager) => {
@@ -154,13 +123,6 @@ const fetchCommander = async () => {
         console.log('An error occurred:', error);
     }
 };
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         regionalsStore.getRegionalId(id);
-//         regionalsStore.getRegionalsMembers(id);
-//         fetchCommander();
-//     }
-// });
 watch(
     () => route.params.id,
 
@@ -169,6 +131,7 @@ watch(
         // id = newId;
         await regionalsStore.getRegionalId(newId);
         await regionalsStore.getRegionalsMembers(newId);
+        await replaceTargetObjects([regionalHeadquarter.regional.value]);
         await fetchCommander();
     },
     {
@@ -179,6 +142,7 @@ watch(
 onMounted(() => {
     regionalsStore.getRegionalId(id);
     regionalsStore.getRegionalsMembers(id);
+    replaceTargetObjects([regionalHeadquarter.regional.value]);
 });
 
 const HQandSquads = ref([

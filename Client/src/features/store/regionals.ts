@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-import usePage from '@shared/composables/usePage';
+
 export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
         regionals: [],
+        filteredRegional: {},
         members: [],
         regional: {},
         institutions: [],
@@ -21,8 +22,13 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 },
             );
-            this.regionals = responseSearchRegionals.data;
+            this.filteredRegional = responseSearchRegionals.data;
         },
+        // async getUserRegional(id: string) {
+        //     // this.regionals.find(
+        //     //     (reg) => reg.region?.name === ,
+        //     // )?.name
+        // },
         async getRegionals() {
             try {
                 this.isLoading = true;
@@ -33,7 +39,6 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regionals = responseRegionals.data;
-
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -50,8 +55,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regional = responseRegional.data;
-                const { replaceTargetObjects } = usePage();
-                replaceTargetObjects([this.regional]);
+
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -79,11 +83,14 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
         async searchRegions(name: String) {
-            const responseSearchRegions = await HTTP.get(`/regions/?search=${name}`, {
-                headers: {
-                    'Content-Type': 'application/json',
+            const responseSearchRegions = await HTTP.get(
+                `/regions/?search=${name}`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 },
-            });
+            );
             this.regions = responseSearchRegions.data;
         },
         async getRegions() {

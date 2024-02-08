@@ -54,7 +54,8 @@ import { ref, watch, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useEducationalsStore } from '@features/store/educationals';
 import { storeToRefs } from 'pinia';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute } from 'vue-router';
+import { usePage } from '@shared';
 
 // banner condition
 const educationalsStore = useEducationalsStore();
@@ -69,7 +70,11 @@ const headquarter = storeToRefs(educationalsStore);
 const member = storeToRefs(educationalsStore);
 const edict = ref({});
 const route = useRoute();
+
 let id = route.params.id;
+
+const { replaceTargetObjects } = usePage();
+
 
 const fetchCommander = async () => {
     try {
@@ -88,7 +93,6 @@ const fetchCommander = async () => {
     }
 };
 
-// aboutMembers();
 
 const filteredMembers = computed(() => {
     return member.members.value.filter((manager) => {
@@ -100,19 +104,7 @@ const filteredMembers = computed(() => {
         );
     });
 });
-// const management = computed(() => {
-//     return [{ user: commander.value }, ...filteredMembers.value];
-// });
 
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         educationalsStore.getEducationalsId(id)
-//          educationalsStore.getEducationalsMembers(id);
-
-//         // aboutEduc();
-//         fetchCommander();
-//     }
-// });
 
 watch(
     () => route.params.id,
@@ -120,9 +112,10 @@ watch(
     async (newId, oldId) => {
         if (!newId || route.name !== 'HQ') return;
         // id = newId;
-        await educationalsStore.getEducationalsId(mewId);
+        console.log('успешно', !newId, route.name, route.name !== 'HQ')
+        await educationalsStore.getEducationalsId(newId);
         await educationalsStore.getEducationalsMembers(newId);
-        // await aboutEduc();
+        await replaceTargetObjects([headquarter.educational.value]);
         await fetchCommander();
     },
     {
@@ -134,6 +127,7 @@ onMounted(() => {
     educationalsStore.getEducationalsId(id);
     educationalsStore.getEducationalsMembers(id);
     // await aboutEduc();
+    replaceTargetObjects([headquarter.educational.value]);
     fetchCommander();
 });
 </script>

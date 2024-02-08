@@ -34,28 +34,34 @@
                         @select="onToggleSelectCompetition"
                     />
                 </template>
-                <p class="text_total">
-                    Итого: {{ selectedCompetitionsList.length }}
-                </p>
+                <template v-if="selectedCompetitionsList.length">
+                    <p class="text_total">
+                        Итого: {{ selectedCompetitionsList.length }}
+                    </p>
 
-                <active-competition-item-select
-                    v-for="competition in selectedCompetitionsList"
-                    :key="competition.id"
-                    :competition="competition"
-                    :action="action"
-                    :commander-ids="commanderIds"
-                    @select="onToggleSelectCompetition"
-                />
+                    <active-competition-item-select
+                        v-for="competition in selectedCompetitionsList"
+                        :key="competition.id"
+                        :competition="competition"
+                        :action="action"
+                        :commander-ids="commanderIds"
+                        @select="onToggleSelectCompetition"
+                    />
+                </template>
             </div>
 
-            <div class="competitions__btns">
+            <div
+                class="competitions__btns"
+                v-if="selectedCompetitionsList.length"
+            >
                 <Button
                     class="save"
                     type="button"
-                    :label="action"
+                    label="Сохранить"
                     @click="onAction"
                 ></Button>
             </div>
+            <div class="clear_select" v-else></div>
         </template>
     </div>
 </template>
@@ -92,15 +98,12 @@ const getMeCommander = async () => {
 
 const getAllCompetition = async () => {
     try {
-        const { data } = await HTTP.get(
-            `https://rso.sprint.1t.ru/api/v1/competitions/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
+        const { data } = await HTTP.get(`/competitions/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
             },
-        );
+        });
         allCompetition.value = data;
     } catch (e) {
         console.log('error getAllCompetition', e);
@@ -261,23 +264,41 @@ onActivated(async () => {
 </script>
 
 <style scoped lang="scss">
+.clear_select {
+    margin-bottom: 100px;
+}
 .competitions__actions {
     display: grid;
     width: 100%;
     justify-content: flex-end;
     margin-bottom: 40px;
+    //width: 224px;
+    height: 48px;
+    padding: 4px, 16px, 4px, 16px;
+    border-radius: 10px;
+    border: 1px;
+    gap: 10px;
 }
 
 .competitions__actions-select {
     background-color: inherit;
     min-width: 224px;
+    border-radius: 10px;
 }
-
+:deep(.v-field) {
+    border-radius: 10px;
+}
 .competitions__btns {
-    display: flex;
+    display: grid;
     width: 100%;
     justify-content: center;
     margin-top: 60px;
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 .text_total {
     width: 1180px;

@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
 
 export const useSquadsStore = defineStore('squads', {
-//    const { replaceTargetObjects } = usePage();
     state: () => ({
         members: [],
         squads: [],
@@ -84,7 +83,6 @@ export const useSquadsStore = defineStore('squads', {
                     },
                 });
                 this.squad = responseSquad.data;
-                // replaceTargetObjects([this.squad]);
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
