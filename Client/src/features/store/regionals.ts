@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
 import usePage from '@shared/composables/usePage';
 
-const { replaceTargetObjects } = usePage();
+// const { replaceTargetObjects } = usePage();
 export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
@@ -52,7 +52,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regional = responseRegional.data;
-                replaceTargetObjects([this.regional]);
+                // replaceTargetObjects([this.regional]);
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
