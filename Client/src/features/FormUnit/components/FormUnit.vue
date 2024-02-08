@@ -111,15 +111,15 @@
                                 >Выберите направление
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
-                                variant="outlined"
-                                clearable
-                                name="select_direction"
+                            <SearchSelect
+                                :items="area.area.value"
+                                open-on-clear
                                 id="select-direction"
+                                name="select_direction"
                                 placeholder="Например, ССО"
                                 v-model="detachment.area"
-                                address="areas/"
-                            ></Select>
+                                @update:value="changeValue"
+                            ></SearchSelect>
                             <p class="form__error" v-if="isError.area">
                                 * Это поле не может быть пустым.
                             </p>
@@ -148,25 +148,15 @@
                                 >Выберите регион
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- <Select
-                                clearable
-                                variant="outlined"
-                                name="select_region"
-                                id="select-region"
-                                placeholder="Например, Алтайский край"
-                                v-model="detachment.region"
-                                address="regions/"
-                            ></Select> -->
-                            <regionsDropdown
+                            <SearchSelect
+                                :items="regions.regions.value"
                                 open-on-clear
                                 id="select-region"
                                 name="select_region"
                                 placeholder="Например, Алтайский край"
                                 v-model="detachment.region"
                                 @update:value="changeValue"
-                                address="/regions/"
-                            >
-                            </regionsDropdown>
+                            ></SearchSelect>
                             <p class="form__error" v-if="isError.region">
                                 * Это поле не может быть пустым.
                             </p>
@@ -1374,30 +1364,30 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Select } from '@shared/components/selects';
-import { regionsDropdown } from '@shared/components/selects';
+// import { Select } from '@shared/components/selects';
+import { SearchSelect } from '@shared/components/selects';
 import { educInstitutionDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
-import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
+
+import { useSquadsStore } from '@features/store/squads';
+// import { storeToRefs } from 'pinia';
+import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 
-// import { useVuelidate } from '@vuelidate/core';
-// import {
-//     helpers,
-//     minLength,
-//     required,
-//     maxLength,
-//     numeric,
-//     email,
-//     sameAs,
-// } from '@vuelidate/validators';
+const areasStore = useSquadsStore();
+const areas = storeToRefs(areasStore);
+console.log('НАПРАВЛЕНИЯ', areas.areas.value);
+
+const regionalsStore = useRegionalsStore();
+const regions = storeToRefs(regionalsStore);
+console.log('РЕГИОНЫ', regions.regions.value);
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
@@ -1649,10 +1639,7 @@ const changeValue = (event) => {
 //--Добавление логотипа-----------------------------------------------------------------------------
 
 const fileEmblem = ref(props.fileEmblem);
-// console.log(fileEmblem);
-
 const urlEmblem = ref(null);
-// console.log("значение emblem до изм - ", urlEmblem);
 
 const selectFile = (event) => {
     fileEmblem.value = event.target.files[0];
@@ -1755,6 +1742,15 @@ const resetPhotoFour = () => {
     filePhotoFour.value = null;
     emit('resetPhotoFour', filePhotoFour.value);
 };
+
+onBeforeMount(async () => {
+    areasStore.getAreas();
+    regionalsStore.getRegions();
+    // const areas = storeToRefs(areasStore);
+    // console.log('НАПРАВЛЕНИЯ', areas.areas.value);
+    // const regions = storeToRefs(regionalsStore);
+    // console.log('РЕГИОНЫ', regions.regions.value);
+});
 </script>
 
 <style lang="scss" scoped>
