@@ -96,17 +96,16 @@ const onCheckbox = (e) => {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
-    height: 48px;
-    width: 48px;
+    margin-bottom: 12px;
     input {
-        width: 24px;
-        height: 24px;
+        width: 100%;
+        height: 100%;
     }
 }
 .competition__content {
     display: grid;
     grid-gap: 12px;
-    grid-template-columns: minmax(200px, 436px) minmax(142px, 276px) 96px 118px auto;
+    grid-template-columns: 1fr minmax(142px, 276px) 96px 118px 50px;
 }
 
 .competition__detachments {
@@ -153,78 +152,5 @@ const onCheckbox = (e) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.horizontallso-item img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    overflow: cover;
-}
-
-.horizontallso-item p {
-    margin-left: 10px;
-}
-
-.horizontallso-item__list-date {
-    // width: 95px;
-    display: grid;
-    grid-template-columns: auto 1fr 0fr;
-}
-
-.horizontallso-item__list-img-status {
-    position: absolute;
-    width: 18px;
-    max-height: 18px;
-    top: -17px;
-    right: -15px;
-}
-
-.horizontallso-itemo__list-img {
-    margin-right: 13px;
-}
-
-.horizontallso-item__list-full {
-    color: #35383f;
-    font-family: 'BertSans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    margin-left: 10px;
-}
-
-.horizontallso-item__list-date p {
-    color: #1c5c94;
-    font-family: 'BertSans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.horizontallso__confidant {
-    padding: 10px 10px;
-    border: 1px solid #b6b6b6;
-    border-radius: 10px;
-    height: 48px;
-    width: 48px;
-    input {
-        width: 24px;
-        height: 24px;
-    }
-}
-
-.sort-select {
-    height: 46px;
-}
-
-.checked__confidant {
-    padding: 10px 10px;
-    border: 1px solid #b6b6b6;
-    border-radius: 10px;
-    height: 48px;
-    margin: 0px 12px;
-    width: 48px;
-    input {
-        width: 24px;
-        height: 24px;
-    }
 }
 </style>

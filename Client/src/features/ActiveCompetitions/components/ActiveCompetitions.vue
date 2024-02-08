@@ -34,21 +34,26 @@
                         @select="onToggleSelectCompetition"
                     />
                 </template>
-                <p class="text_total">
-                    Итого: {{ selectedCompetitionsList.length }}
-                </p>
+                <template v-if="selectedCompetitionsList.length">
+                    <p class="text_total">
+                        Итого: {{ selectedCompetitionsList.length }}
+                    </p>
 
-                <active-competition-item-select
-                    v-for="competition in selectedCompetitionsList"
-                    :key="competition.id"
-                    :competition="competition"
-                    :action="action"
-                    :commander-ids="commanderIds"
-                    @select="onToggleSelectCompetition"
-                />
+                    <active-competition-item-select
+                        v-for="competition in selectedCompetitionsList"
+                        :key="competition.id"
+                        :competition="competition"
+                        :action="action"
+                        :commander-ids="commanderIds"
+                        @select="onToggleSelectCompetition"
+                    />
+                </template>
             </div>
 
-            <div class="competitions__btns">
+            <div
+                class="competitions__btns"
+                v-if="selectedCompetitionsList.length"
+            >
                 <Button
                     class="save"
                     type="button"
@@ -56,6 +61,7 @@
                     @click="onAction"
                 ></Button>
             </div>
+            <div class="clear_select" v-else></div>
         </template>
     </div>
 </template>
@@ -258,6 +264,9 @@ onActivated(async () => {
 </script>
 
 <style scoped lang="scss">
+.clear_select {
+    margin-bottom: 100px;
+}
 .competitions__actions {
     display: grid;
     width: 100%;
@@ -274,8 +283,11 @@ onActivated(async () => {
 .competitions__actions-select {
     background-color: inherit;
     min-width: 224px;
+    border-radius: 10px;
 }
-
+:deep(.v-field) {
+    border-radius: 10px;
+}
 .competitions__btns {
     display: grid;
     width: 100%;
