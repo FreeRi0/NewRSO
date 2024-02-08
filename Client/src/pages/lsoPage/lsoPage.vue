@@ -72,12 +72,6 @@ let id = route.params.id;
 
 // console.log('params', route.params);
 
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         await squadsStore.getSquadId(to.params.id);
-//         await squadsStore.getSquadMembers(to.params.id);
-//     }
-// });
 
 watch(
     () => route.params.id,

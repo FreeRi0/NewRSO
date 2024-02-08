@@ -148,9 +148,9 @@ let comId = roles.roles.value.detachment_commander;
 let userId = computed(() => {
     return user.currentUser.value.id;
 });
-console.log('comId', comId);
+// console.log('comId', comId);
 
-console.log('memberAA', props.member);
+// console.log('memberAA', props.member);
 
 const edict = ref({});
 const regional = ref({});
@@ -158,8 +158,8 @@ const data = ref({});
 const isError = ref([]);
 const applications = ref([]);
 const swal = inject('$swal');
-console.log('user', userId.value);
-console.log('member', props.member);
+// console.log('user', userId.value);
+// console.log('member', props.member);
 
 const aboutEduc = async () => {
     let id = props.squad.educational_institution.id;
