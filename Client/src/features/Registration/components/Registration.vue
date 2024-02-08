@@ -41,7 +41,7 @@
                     placeholder="+7 (999) 999-99-99"
                     name="phone"
                     v-model:value.trim="form.phone_number"
-                    v-mask="'+7(###) ###-####'"
+                    v-mask="'+7(###) ###-##-##'"
                 />
                 <Input
                     placeholder="Электронная почта"
@@ -336,7 +336,6 @@ import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
-// import { IMaskDirective } from 'vue-imask';
 import { Select, regionsDropdown } from '@shared/components/selects';
 
 const visible = ref(false);
