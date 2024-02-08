@@ -135,6 +135,7 @@ import { ref, watch, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+
 import { useRegionalsStore } from '@features/store/regionals';
 import { useSquadsStore } from '@features/store/squads';
 import { useRoleStore } from '@layouts/store/role';
