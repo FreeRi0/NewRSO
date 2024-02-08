@@ -60,6 +60,7 @@ import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import { usePage } from '@shared';
 
 const squadsStore = useSquadsStore();
 const squad = storeToRefs(squadsStore);
@@ -69,6 +70,8 @@ const isLoading = storeToRefs(squadsStore);
 const edict = ref({});
 const route = useRoute();
 let id = route.params.id;
+
+const { replaceTargetObjects } = usePage();
 
 // console.log('params', route.params);
 
@@ -84,12 +87,14 @@ watch(
 
         // getLsoData();
         await squadsStore.getSquadId(newId);
+        replaceTargetObjects([squad.squad.value]);
         await squadsStore.getSquadMembers(newId);
     },
 );
 
 onMounted(() => {
     // getLsoData();
+
     squadsStore.getSquadId(id);
     squadsStore.getSquadMembers(id);
 });
