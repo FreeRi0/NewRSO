@@ -36,13 +36,16 @@
                     name="patronomyc"
                     v-model:value.trim="form.patronymic_name"
                 />
-                <Input
-                    type="tel"
-                    placeholder="+7 (999) 999-99-99"
-                    name="phone"
-                    v-model:value.trim="form.phone_number"
-                    v-mask="'+7(###) ###-##-##'"
-                />
+                <div class="form-input">
+                    <MaskInput
+                        type="tel"
+                        placeholder="+7 (999) 999-99-99"
+                        name="phone"
+                        class="mb-2"
+                        v-model="form.phone_number"
+                        mask="+7(###) ###-##-##"
+                    />
+                </div>
                 <Input
                     placeholder="Электронная почта"
                     name="email"
@@ -327,6 +330,42 @@
 }
 .option-select__title {
     font-family: 'Bert sans';
+}
+
+input {
+    font: normal;
+}
+
+.form-input input {
+    box-sizing: border-box;
+    border: 2px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 16px 10px 16px;
+    margin-bottom: 20px;
+    font-family: 'Bert Sans';
+    width: 100%;
+    color: #35383f;
+}
+
+.form-input input::placeholder {
+    color: #a3a3a3;
+    font-size: 16px;
+    color: #a3a3a3;
+    font-weight: 500;
+    font-family: 'Bert Sans';
+}
+
+.form-input-requisites input {
+    border: 2px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 12px;
+    padding: 10px 110px 10px 16px;
+    margin-bottom: 20px;
+    width: 100%;
 }
 </style>
 
