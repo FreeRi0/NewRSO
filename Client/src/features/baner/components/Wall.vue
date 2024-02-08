@@ -108,6 +108,7 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
+
                     <div
                         class="user-data__social-network"
                         v-if="
@@ -135,6 +136,7 @@
                                 props.user)
                         "
                     >
+
                         <div class="user-data__link-vk mr-2">
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -158,6 +160,7 @@
                         </div>
                     </div>
                     <div class="user-data__contact-contact">
+
                         <div
                             class="user-data__contact-contact_item"
                             v-if="

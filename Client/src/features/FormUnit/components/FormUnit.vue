@@ -111,15 +111,15 @@
                                 >Выберите направление
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
-                                variant="outlined"
-                                clearable
-                                name="select_direction"
+                            <SearchSelect
+                                :items="areas.areas.value"
+                                open-on-clear
                                 id="select-direction"
+                                name="select_direction"
                                 placeholder="Например, ССО"
                                 v-model="detachment.area"
-                                address="areas/"
-                            ></Select>
+                                @update:value="changeValue"
+                            ></SearchSelect>
                             <p class="form__error" v-if="isError.area">
                                 * Это поле не может быть пустым.
                             </p>
@@ -148,25 +148,15 @@
                                 >Выберите регион
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- <Select
-                                clearable
-                                variant="outlined"
-                                name="select_region"
-                                id="select-region"
-                                placeholder="Например, Алтайский край"
-                                v-model="detachment.region"
-                                address="regions/"
-                            ></Select> -->
-                            <regionsDropdown
+                            <SearchSelect
+                                :items="regions.regions.value"
                                 open-on-clear
                                 id="select-region"
                                 name="select_region"
                                 placeholder="Например, Алтайский край"
                                 v-model="detachment.region"
                                 @update:value="changeValue"
-                                address="/regions/"
-                            >
-                            </regionsDropdown>
+                            ></SearchSelect>
                             <p class="form__error" v-if="isError.region">
                                 * Это поле не может быть пустым.
                             </p>
@@ -216,13 +206,17 @@
                         </div>
 
                         <div
-                            v-show="
-                                educComId ||
-                                regionComId ||
-                                districtComId ||
-                                centralComId ||
-                                localComId ||
-                                detComId
+                            v-if="
+                                roles.roles.value
+                                    .educationalheadquarter_commander ||
+                                roles.roles.value
+                                    .regionalheadquarter_commander ||
+                                roles.roles.value
+                                    .districtheadquarter_commander ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                roles.roles.value.localheadquarter_commander ||
+                                roles.roles.value.detachment_commander
                             "
                             class="form__field form__field--commander"
                         >
@@ -232,14 +226,6 @@
                             </label>
                             <div v-if="!isCommanderLoading">
                                 <Dropdown
-                                    v-if="
-                                        educComId ||
-                                        regionComId ||
-                                        districtComId ||
-                                        centralComId ||
-                                        localComId ||
-                                        detComId
-                                    "
                                     open-on-clear
                                     id="beast"
                                     name="edit_beast"
@@ -248,19 +234,7 @@
                                     @update:value="changeValue"
                                     address="users/"
                                 ></Dropdown>
-                                <!-- Скрытое поле командира -->
-                                <Dropdown
-                                    v-else
-                                    open-on-clear
-                                    id="beast"
-                                    name="edit_beast"
-                                    placeholder="Поиск по ФИО"
-                                    v-model="detachment.meId"
-                                    @update:value="changeValue"
-                                    address="users/"
-                                ></Dropdown>
                             </div>
-
                             <v-progress-circular
                                 class="circleLoader"
                                 v-else
@@ -418,6 +392,7 @@
                                 :items="sortedMembers"
                                 :submited="submited"
                                 :unit="'отряд'"
+                                :functions="positions.positions.value"
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
@@ -1374,41 +1349,33 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Select } from '@shared/components/selects';
-import { regionsDropdown } from '@shared/components/selects';
+// import { Select } from '@shared/components/selects';
+import { SearchSelect } from '@shared/components/selects';
 import { educInstitutionDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
-import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
+import { useSquadsStore } from '@features/store/squads';
+import { useRegionalsStore } from '@features/store/regionals';
+import { usePositionsStore } from '@features/store/positions';
 import { storeToRefs } from 'pinia';
 
-// import { useVuelidate } from '@vuelidate/core';
-// import {
-//     helpers,
-//     minLength,
-//     required,
-//     maxLength,
-//     numeric,
-//     email,
-//     sameAs,
-// } from '@vuelidate/validators';
+const areasStore = useSquadsStore();
+const areas = storeToRefs(areasStore);
+
+const regionalsStore = useRegionalsStore();
+const regions = storeToRefs(regionalsStore);
+
+const positionsStore = usePositionsStore();
+const positions = storeToRefs(positionsStore);
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
-// console.log(roles.roles.value);
-
-const educComId = roles.roles.value.educationalheadquarter_commander;
-const regionComId = roles.roles.value.regionalheadquarter_commander;
-const districtComId = roles.roles.value.districtheadquarter_commander;
-const centralComId = roles.roles.value.centralheadquarter_commander;
-const localComId = roles.roles.value.localheadquarter_commander;
-const detComId = roles.roles.value.detachment_commander;
 
 const emit = defineEmits([
     'update:value',
@@ -1649,10 +1616,7 @@ const changeValue = (event) => {
 //--Добавление логотипа-----------------------------------------------------------------------------
 
 const fileEmblem = ref(props.fileEmblem);
-// console.log(fileEmblem);
-
 const urlEmblem = ref(null);
-// console.log("значение emblem до изм - ", urlEmblem);
 
 const selectFile = (event) => {
     fileEmblem.value = event.target.files[0];
@@ -1755,6 +1719,13 @@ const resetPhotoFour = () => {
     filePhotoFour.value = null;
     emit('resetPhotoFour', filePhotoFour.value);
 };
+
+onBeforeMount(async () => {
+    areasStore.getAreas();
+    regionalsStore.getRegions();
+    roleStore.getRoles();
+    positionsStore.getPositions();
+});
 </script>
 
 <style lang="scss" scoped>

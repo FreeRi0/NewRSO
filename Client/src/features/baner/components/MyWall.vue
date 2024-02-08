@@ -24,6 +24,7 @@
                     <p>{{ user.patronymic_name }}</p>
                 </div>
 
+
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
                         <!-- <li class="user-data__title" ><p> Кандитат</p></li> -->
@@ -200,10 +201,11 @@ const getUserData = async () => {
     } catch (error) {
         console.log('an error occured ' + error);
     }
-};
+}
 
 watch(
     () => props.user,
+
 
     (newUser) => {
         if (Object.keys(props.user).length === 0) {

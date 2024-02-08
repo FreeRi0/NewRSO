@@ -260,6 +260,7 @@ const filteredSquadsByEducation = computed(() => {
 const sortedSquads = computed(() => {
     let tempSquads = squads.squads.value;
 
+
     searchSquads.value;
     filteredSquadsByEducation.value;
 
@@ -347,6 +348,8 @@ onMounted(() => {
         text-overflow: ellipsis;
     }
 }
+
+
 
 .squads {
     padding: 0px 0px 60px 0px;
