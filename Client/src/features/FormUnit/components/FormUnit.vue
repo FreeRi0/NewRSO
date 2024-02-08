@@ -112,7 +112,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <SearchSelect
-                                :items="area.area.value"
+                                :items="areas.areas.value"
                                 open-on-clear
                                 id="select-direction"
                                 name="select_direction"
@@ -206,13 +206,17 @@
                         </div>
 
                         <div
-                            v-show="
-                                educComId ||
-                                regionComId ||
-                                districtComId ||
-                                centralComId ||
-                                localComId ||
-                                detComId
+                            v-if="
+                                roles.roles.value
+                                    .educationalheadquarter_commander ||
+                                roles.roles.value
+                                    .regionalheadquarter_commander ||
+                                roles.roles.value
+                                    .districtheadquarter_commander ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                roles.roles.value.localheadquarter_commander ||
+                                roles.roles.value.detachment_commander
                             "
                             class="form__field form__field--commander"
                         >
@@ -222,14 +226,6 @@
                             </label>
                             <div v-if="!isCommanderLoading">
                                 <Dropdown
-                                    v-if="
-                                        educComId ||
-                                        regionComId ||
-                                        districtComId ||
-                                        centralComId ||
-                                        localComId ||
-                                        detComId
-                                    "
                                     open-on-clear
                                     id="beast"
                                     name="edit_beast"
@@ -238,19 +234,7 @@
                                     @update:value="changeValue"
                                     address="users/"
                                 ></Dropdown>
-                                <!-- Скрытое поле командира -->
-                                <Dropdown
-                                    v-else
-                                    open-on-clear
-                                    id="beast"
-                                    name="edit_beast"
-                                    placeholder="Поиск по ФИО"
-                                    v-model="detachment.meId"
-                                    @update:value="changeValue"
-                                    address="users/"
-                                ></Dropdown>
                             </div>
-
                             <v-progress-circular
                                 class="circleLoader"
                                 v-else
@@ -408,6 +392,7 @@
                                 :items="sortedMembers"
                                 :submited="submited"
                                 :unit="'отряд'"
+                                :functions="positions.positions.value"
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
@@ -1375,30 +1360,22 @@ import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
 import { useRoleStore } from '@layouts/store/role';
-
 import { useSquadsStore } from '@features/store/squads';
-// import { storeToRefs } from 'pinia';
 import { useRegionalsStore } from '@features/store/regionals';
+import { usePositionsStore } from '@features/store/positions';
 import { storeToRefs } from 'pinia';
 
 const areasStore = useSquadsStore();
 const areas = storeToRefs(areasStore);
-console.log('НАПРАВЛЕНИЯ', areas.areas.value);
 
 const regionalsStore = useRegionalsStore();
 const regions = storeToRefs(regionalsStore);
-console.log('РЕГИОНЫ', regions.regions.value);
+
+const positionsStore = usePositionsStore();
+const positions = storeToRefs(positionsStore);
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
-// console.log(roles.roles.value);
-
-const educComId = roles.roles.value.educationalheadquarter_commander;
-const regionComId = roles.roles.value.regionalheadquarter_commander;
-const districtComId = roles.roles.value.districtheadquarter_commander;
-const centralComId = roles.roles.value.centralheadquarter_commander;
-const localComId = roles.roles.value.localheadquarter_commander;
-const detComId = roles.roles.value.detachment_commander;
 
 const emit = defineEmits([
     'update:value',
@@ -1746,10 +1723,8 @@ const resetPhotoFour = () => {
 onBeforeMount(async () => {
     areasStore.getAreas();
     regionalsStore.getRegions();
-    // const areas = storeToRefs(areasStore);
-    // console.log('НАПРАВЛЕНИЯ', areas.areas.value);
-    // const regions = storeToRefs(regionalsStore);
-    // console.log('РЕГИОНЫ', regions.regions.value);
+    roleStore.getRoles();
+    positionsStore.getPositions();
 });
 </script>
 

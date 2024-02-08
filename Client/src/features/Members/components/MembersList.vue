@@ -19,15 +19,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+// import { ref, onMounted } from 'vue';
 import { ItemMember } from '@features/ItemMember';
-import { HTTP } from '@app/http';
-import { usePositionsStore } from '@features/store/positions';
-import { storeToRefs } from 'pinia';
+// import { HTTP } from '@app/http';
+// import { usePositionsStore } from '@features/store/positions';
+// import { storeToRefs } from 'pinia';
 
-const positionsStore = usePositionsStore();
-const positions = storeToRefs(positionsStore);
-console.log('ДОЛЖНОСТИ', positions.positions.value);
+// const positionsStore = usePositionsStore();
+// const positions = storeToRefs(positionsStore);
+// console.log('ДОЛЖНОСТИ', positions.positions.value);
 
 const props = defineProps({
     items: {
@@ -73,10 +73,10 @@ const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
 };
 
-onMounted(() => {
-    // getPositions();
-    positionsStore.getPositions();
-});
+// onMounted(() => {
+//     // getPositions();
+//     // positionsStore.getPositions();
+// });
 </script>
 
 <style lang="scss">
