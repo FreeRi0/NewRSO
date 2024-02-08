@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
 import usePage from '@shared/composables/usePage';
+
+const { replaceTargetObjects } = usePage();
 export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
@@ -50,7 +52,6 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regional = responseRegional.data;
-                const { replaceTargetObjects } = usePage();
                 replaceTargetObjects([this.regional]);
                 this.isLoading = false;
             } catch (error) {
@@ -79,11 +80,14 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
         async searchRegions(name: String) {
-            const responseSearchRegions = await HTTP.get(`/regions/?search=${name}`, {
-                headers: {
-                    'Content-Type': 'application/json',
+            const responseSearchRegions = await HTTP.get(
+                `/regions/?search=${name}`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 },
-            });
+            );
             this.regions = responseSearchRegions.data;
         },
         async getRegions() {
