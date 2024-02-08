@@ -108,11 +108,7 @@
                             "
                         >
                             {{
-                                regionals.regionals.value.find(
-                                    (reg) =>
-                                        reg.region?.name ===
-                                        user.currentUser.value?.region,
-                                )?.name
+                               regionals.filteredRegional.value?.name
                             }}
                         </span>
 
@@ -138,17 +134,16 @@
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <regionsDropdown
+                        <regionalsDropdown
                             open-on-clear
                             id="reg"
                             name="regdrop"
                             placeholder="Выберите регион обучения"
                             v-model="region"
                             @update:value="changeValue"
-                            @change="changeRegionals"
                             address="/regions/"
                             class="mb-2 region-input"
-                        ></regionsDropdown>
+                        ></regionalsDropdown>
 
                         <div>
                             <Button
@@ -179,6 +174,8 @@
                         @updateUser="userUpdate"
                     />
                 </div>
+
+                <!-- <p>{{ regionals.filteredRegional.value.name }}</p> -->
             </nav>
         </header>
     </div>
@@ -190,7 +187,7 @@ import { Button } from '@shared/components/buttons';
 import {
     Select,
     sortByEducation,
-    regionsDropdown,
+    regionalsDropdown,
 } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
@@ -226,17 +223,17 @@ const router = useRouter();
 const user = storeToRefs(userStore);
 console.log('user', user.currentUser.value);
 
-const region = ref(null);
+const region = ref(user.currentUser.value.region);
 // console.log('userreg', region);
 
-const getByRegionals = computed(() => {
-    return regionalsStore.getRegionals(region.value);
-});
+// const getByRegionals = computed(() => {
+//     return regionalsStore.getRegionals(region.value);
+// });
 
-const changeRegionals = (val) => {
-    getByRegionals.value;
-    console.log('val', val)
-};
+// const changeRegionals = (val) => {
+//     getByRegionals.value;
+//     console.log('val', val)
+// };
 
 // console.log('regionalssss', getByRegionals);
 const userUpdate = (userData) => {
@@ -395,7 +392,7 @@ const updateRegion = async () => {
         const updateRegResponse = await HTTP.patch(
             '/rsousers/me/',
             {
-                region: region.value,
+                region: regionals.filteredRegional.value,
             },
             {
                 headers: {
@@ -404,7 +401,7 @@ const updateRegion = async () => {
                 },
             },
         );
-        // region.value = updateRegResponse.data;
+        regionals.filteredRegional.value = updateRegResponse.data;
         show.value = !show.value;
         userStore.getUser();
     } catch (error) {
@@ -412,8 +409,10 @@ const updateRegion = async () => {
     }
 };
 
+console.log('reg', regionals.filteredRegional)
+
 onMounted(async () => {
-    await regionalsStore.getRegionals();
+    // await regionalsStore.getRegionals();
     // await getHeadquarters();
 });
 </script>

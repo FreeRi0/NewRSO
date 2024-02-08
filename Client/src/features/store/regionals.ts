@@ -6,6 +6,7 @@ export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
         regionals: [],
+        filteredRegional: {},
         members: [],
         regional: {},
         institutions: [],
@@ -22,7 +23,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 },
             );
-            this.regionals = responseSearchRegionals.data;
+            this.filteredRegional = responseSearchRegionals.data;
         },
         async getRegionals() {
             try {
