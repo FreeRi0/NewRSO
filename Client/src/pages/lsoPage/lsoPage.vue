@@ -58,7 +58,7 @@ import SquadParticipants from './components/SquadParticipants.vue';
 import { CompetitionPromo } from '@/features/Competition';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { usePage } from '@shared';
 
@@ -73,30 +73,29 @@ let id = route.params.id;
 
 const { replaceTargetObjects } = usePage();
 
-// console.log('params', route.params);
-
-
 watch(
     () => route.params.id,
 
     async (newId, oldId) => {
-        // console.log('newId', newId, 'oldId', oldId, 'route', route.name);
         if (!newId || route.name !== 'lso') return;
-        console.log('успешно', !newId, route.name, route.name !== 'lso')
-        // id = newId;
-
-        // getLsoData();
         await squadsStore.getSquadId(newId);
-        replaceTargetObjects([squad.squad.value]);
+
         await squadsStore.getSquadMembers(newId);
+
+        await replaceTargetObjects([squad.squad.value]);
+    },
+    {
+        immediate: true,
     },
 );
 
 onMounted(() => {
     // getLsoData();
-
     squadsStore.getSquadId(id);
-    squadsStore.getSquadMembers(id);
+    if (member.members.value.length > 0) {
+        squadsStore.getSquadMembers(id);
+    }
+    replaceTargetObjects([squad.squad.value]);
 });
 </script>
 <style scoped lang="scss">

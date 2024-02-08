@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
 
-// const { replaceTargetObjects } = usePage();
 export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
@@ -25,6 +24,11 @@ export const useRegionalsStore = defineStore('regionals', {
             );
             this.filteredRegional = responseSearchRegionals.data;
         },
+        // async getUserRegional(id: string) {
+        //     // this.regionals.find(
+        //     //     (reg) => reg.region?.name === ,
+        //     // )?.name
+        // },
         async getRegionals() {
             try {
                 this.isLoading = true;
@@ -35,7 +39,6 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regionals = responseRegionals.data;
-
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -52,7 +55,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regional = responseRegional.data;
-                // replaceTargetObjects([this.regional]);
+
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;

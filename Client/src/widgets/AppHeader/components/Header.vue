@@ -108,7 +108,9 @@
                             "
                         >
                             {{
-                               regionals.filteredRegional.value?.name
+                                regionals.regionals.value.find(
+                                    (reg) => reg.region?.name === user.currentUser.value.region,
+                                )?.name
                             }}
                         </span>
 
@@ -221,9 +223,9 @@ const quantityIsActive = ref(props.quantityActive);
 
 const router = useRouter();
 const user = storeToRefs(userStore);
-console.log('user', user.currentUser.value);
+// console.log('user', user.currentUser.value);
 
-const region = ref(user.currentUser.value.region);
+const region = ref(null);
 // console.log('userreg', region);
 
 // const getByRegionals = computed(() => {
@@ -237,7 +239,7 @@ const region = ref(user.currentUser.value.region);
 
 // console.log('regionalssss', getByRegionals);
 const userUpdate = (userData) => {
-    console.log('UserUpdate', userData);
+    // console.log('UserUpdate', userData);
     user.currentUser.value = userData;
 };
 
@@ -392,7 +394,7 @@ const updateRegion = async () => {
         const updateRegResponse = await HTTP.patch(
             '/rsousers/me/',
             {
-                region: regionals.filteredRegional.value,
+                region: region.value,
             },
             {
                 headers: {
@@ -401,7 +403,8 @@ const updateRegion = async () => {
                 },
             },
         );
-        regionals.filteredRegional.value = updateRegResponse.data;
+        region.value = updateRegResponse.data.region;
+        console.log('data', updateRegResponse.data.region)
         show.value = !show.value;
         userStore.getUser();
     } catch (error) {
@@ -409,7 +412,7 @@ const updateRegion = async () => {
     }
 };
 
-console.log('reg', regionals.filteredRegional)
+console.log('reg', regionals.filteredRegionals);
 
 onMounted(async () => {
     // await regionalsStore.getRegionals();
