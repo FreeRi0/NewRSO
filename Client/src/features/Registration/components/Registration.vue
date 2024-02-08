@@ -41,6 +41,7 @@
                     placeholder="+7 (999) 999-99-99"
                     name="phone"
                     v-model:value.trim="form.phone_number"
+                    v-mask="'+7(###) ###-####'"
                 />
                 <Input
                     placeholder="Электронная почта"
@@ -88,7 +89,7 @@
                     :type="visibleRe ? 'text' : 'password'"
                     density="compact"
                     v-model="form.re_password"
-                    placeholder="Пароль"
+                    placeholder="Повторите пароль"
                     variant="outlined"
                     @click:append-inner="visibleRe = !visibleRe"
                 ></v-text-field>
@@ -239,8 +240,7 @@
     border-radius: 10px;
     font-size: 16px;
     color: #35383f;
-    font-weight: normal;
-    font-family: Akrobat;
+    font-family: 'Bert Sans';
     margin-bottom: 8px;
 }
 
@@ -248,8 +248,8 @@
 .region-input::placeholder {
     color: #898989;
     font-size: 16px;
-    font-weight: normal;
-    font-family: Akrobat;
+    font-weight: 600;
+    font-family: 'Bert Sans';
     margin-bottom: 8px;
 }
 .v-card {
@@ -294,18 +294,15 @@
 #reg,
 #input-3,
 #input-5 {
-    letter-spacing: 0.9px;
-    font-size: 17px;
-    color: #35383f;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
 }
 #reg {
     padding-top: 5px;
 }
-.v-input__control {
-    min-height: 45px;
-}
 
-.AuthWrapper {
+.RegisterWrapper {
     min-height: 100vh;
     background-image: url(/assets/regBR.jpg);
     background-size: cover;
@@ -324,6 +321,13 @@
         background-color: #d1d5d8;
     }
 }
+.v-input__control {
+    min-height: 45px;
+    font-weight: 500;
+}
+.option-select__title {
+    font-family: 'Bert sans';
+}
 </style>
 
 <script setup>
@@ -332,8 +336,9 @@ import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
-import { IMaskDirective } from 'vue-imask';
+// import { IMaskDirective } from 'vue-imask';
 import { Select, regionsDropdown } from '@shared/components/selects';
+
 const visible = ref(false);
 const visibleRe = ref(false);
 const validated = ref(false);

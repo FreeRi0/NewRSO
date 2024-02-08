@@ -23,6 +23,7 @@
         "maska": "^2.1.10",
         "pinia": "^2.1.7",
         "primevue": "^3.43.0",
+        "v-mask": "^2.3.0",
         "vee-validate": "^4.11.8",
         "vite-plugin-require": "^1.1.11",
         "vue": "^3.3.4",

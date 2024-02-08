@@ -133,6 +133,7 @@
             </div>
             <Button
                 @click="headquartersVisible += step"
+
                 v-if="
                     headquartersVisible <
                     regionalHeadquarters.regionals.value.length
@@ -166,6 +167,7 @@ import { useCrosspageFilter } from '@shared';
 const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
 
+
 const regionalHeadquarters = storeToRefs(regionalsStore);
 const isLoading = storeToRefs(regionalsStore);
 const headquartersVisible = ref(20);
@@ -188,7 +190,6 @@ const selectedSortDistrict = ref(
 );
 
 const districts = ref([]);
-
 const searchRegional = async (name) => {
     try {
         const filteredRegional = await HTTP.get(`/regionals/?search=${name}`, {
@@ -462,4 +463,4 @@ pre {
     }
 }
 </style>
-@shared/components/inputs/imagescomp
+
