@@ -1,27 +1,36 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-import usePage from '@shared/composables/usePage';
+
 export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
         regionals: [],
+        filteredRegional: [],
         members: [],
         regional: {},
+        allRegions: [],
         institutions: [],
         isLoading: false,
     }),
     actions: {
-        async searchRegionals(region: String) {
-            const responseSearchRegionals = await HTTP.get(
-                `/regionals/?search=${region}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            this.regionals = responseSearchRegionals.data;
+        async searchRegionals(region: any) {
+            try {
+                setTimeout(async () => {
+                    const responseSearchRegionals = await HTTP.get(
+                        `/regionals/?search=${region}`,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization:
+                                    'Token ' + localStorage.getItem('Token'),
+                            },
+                        },
+                    );
+                    this.filteredRegional = responseSearchRegionals.data;
+                }, 100);
+            } catch (err) {
+                console.log('an error occured ' + err);
+            }
         },
         async getRegionals() {
             try {
@@ -33,7 +42,6 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regionals = responseRegionals.data;
-
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -50,8 +58,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regional = responseRegional.data;
-                const { replaceTargetObjects } = usePage();
-                replaceTargetObjects([this.regional]);
+
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -79,12 +86,15 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
         async searchRegions(name: String) {
-            const responseSearchRegions = await HTTP.get(`/regions/?search=${name}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            this.regions = responseSearchRegions.data;
+            // const responseSearchRegions = await HTTP.get(
+            //     `/regions/?search=${name}`,
+            //     {
+            //         headers: {
+            //             'Content-Type': 'application/json',
+            //         },
+            //     },
+            // );
+            this.regions = this.allRegions.find((reg) => reg.name.indexOf(name) !== false);
         },
         async getRegions() {
             try {
@@ -94,6 +104,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         'Content-Type': 'application/json',
                     },
                 });
+                this.allRegions = responseRegions.data;
                 this.regions = responseRegions.data;
             } catch (error) {
                 console.log('an error occured ' + error);

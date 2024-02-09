@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-import usePage  from '@shared/composables/usePage';
+// import usePage from '@shared/composables/usePage';
 
+
+// const { replaceTargetObjects } = usePage();
 export const useEducationalsStore = defineStore('educationals', {
     state: () => ({
         educationals: [],
@@ -37,27 +39,27 @@ export const useEducationalsStore = defineStore('educationals', {
                 console.log('an error occured ' + error);
                 this.isLoading = false;
             }
-
         },
         async getEducationalsId(id: String) {
             try {
-
                 this.isLoading = true;
-                const responseEducational = await HTTP.get(`/educationals/${id}`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                const responseEducational = await HTTP.get(
+                    `/educationals/${id}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
                     },
-                });
+                );
                 this.educational = responseEducational.data;
-                const { replaceTargetObjects } = usePage();
-                replaceTargetObjects([this.educational]);
+                // replaceTargetObjects([this.educational]);
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
                 this.isLoading = false;
             }
-
         },
         async getEducationalsMembers(id: String) {
             try {
@@ -67,7 +69,8 @@ export const useEducationalsStore = defineStore('educationals', {
                     {
                         headers: {
                             'Content-Type': 'application/json',
-                            Authorization: 'Token ' + localStorage.getItem('Token'),
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
                         },
                     },
                 );
@@ -77,7 +80,6 @@ export const useEducationalsStore = defineStore('educationals', {
                 this.isLoading = false;
                 console.log('an error occured ' + error);
             }
-
         },
     },
 });

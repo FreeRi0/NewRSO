@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', {
                     });
                     this.currentUser = responseUser.data;
                     this.isLoading = false;
-                }, 500);
+                }, 10);
             } catch (error) {
                 console.log('an error occured ' + error);
                 this.isLoading = false;
@@ -34,7 +34,7 @@ export const useUserStore = defineStore('user', {
             try {
                 this.isLoading = true;
                 setTimeout(async () => {
-                    const responseUserId = await HTTP.get(`users/${id}/`, {
+                    const responseUserId = await HTTP.get(`rsousers/${id}/`, {
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization:
@@ -43,7 +43,7 @@ export const useUserStore = defineStore('user', {
                     });
                     this.user = responseUserId.data;
                     this.isLoading = false;
-                }, 500);
+                }, 10);
             } catch (error) {
                 this.isLoading = false;
                 console.log('an error occured ' + error);

@@ -37,13 +37,22 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <p v-if="user.region && !isLoading.isLoading.value">
-                                {{
+                            <div
+                                v-if="user.region && !isLoading.isLoading.value"
+                            >
+                                <!-- {{
                                     regionals.regionals.value.find(
                                         (reg) => reg.region?.name === user.region,
                                     )?.name
-                                }}
-                            </p>
+                                }} -->
+                                <p
+                                    v-for="item in regionals.filteredRegional
+                                        .value"
+
+                                >  <p>{{ item.name }}</p></p>
+
+                            </div>
+
                             <p v-else>Загрузка региона...</p>
                         </li>
 
@@ -128,7 +137,6 @@ const props = defineProps({
     //     type: Array,
     // },
 });
-// v-if="props.user.privacy?.privacy_telephone === 'detachment_members' && props.member "
 const emit = defineEmits(['upload', 'update', 'delete']);
 
 const uploadAva = (imageAva) => {
@@ -210,6 +218,7 @@ watch(
             return;
         }
         getUserData();
+        regionalsStore.searchRegionals(props.user.region);
     },
 );
 

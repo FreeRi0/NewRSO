@@ -15,7 +15,10 @@
                 >.
             </p>
             <div
-                v-if="!currentUser.currentUser.value.is_verified && isAuth"
+                v-if="
+                    currentUser.currentUser.value.is_verified === false &&
+                    isAuth
+                "
                 class="required_verification"
             >
                 <p>Необходимо верифицироваться до 25 февраля 2024 года</p>
@@ -37,9 +40,12 @@ import { onMounted, ref } from 'vue';
 import { AppBreadcrumbs, useBreadcrumbsStore } from '@shared/index';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@features/store/index';
+// import { useRegionalsStore } from '@features/store/regionals';
 const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 
 import { useRoleStore } from '@layouts/store/role';
+// const regionalsStore = useRegionalsStore();
+// const regionalHeadquarters = storeToRefs(regionalsStore);
 const roleStore = useRoleStore();
 const userStore = useUserStore();
 const currentUser = storeToRefs(userStore);
@@ -50,6 +56,7 @@ const isAuth = ref(!!localStorage.getItem('Token'));
 onMounted(() => {
     userStore.getUser();
     roleStore.getRoles();
+
 });
 
 //запрос на коммандира

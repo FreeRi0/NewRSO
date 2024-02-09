@@ -4,17 +4,17 @@
             <input
                 type="checkbox"
                 v-model="checked"
-                :value="competition"
-                @change="updateCheckCompetition"
+                :value="event"
+                @change="updateCheckEvents"
             />
         </div>
 
         <div class="horizontallso-item__wrapper mr-3">
             <div class="horizontallso-img">
                 <img
-                    :src="competition?.user?.avatar?.photo"
+                    :src="event?.user?.avatar?.photo"
                     alt="logo"
-                    v-if="competition?.user?.avatar?.photo"
+                    v-if="event?.user?.avatar?.photo"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -24,13 +24,13 @@
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
-                        {{ competition.user.last_name }}
+                        {{ event.user.last_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ competition.user.first_name }}
+                        {{ event.user.first_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ competition.user.patronymic_name }}
+                        {{ event.user.patronymic_name }}
                     </p>
                 </div>
                 <div class="horizontallso-item__list-date">
@@ -40,16 +40,16 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ competition.user.date_of_birth }}</p>
+                    <p>{{ event.user.date_of_birth }}</p>
                 </div>
             </div>
         </div>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img
-                    :src="competition.event.banner"
+                    :src="event.event.banner"
                     alt="logo"
-                    v-if="competition.event.banner"
+                    v-if="event.event.banner"
                 />
                 <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
@@ -59,7 +59,7 @@
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ competition.event.name }}
+                    {{ event.event.name }}
                 </p>
             </div>
         </div>
@@ -69,13 +69,12 @@
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 
-
 const props = defineProps({
-    competition: {
+    event: {
         type: Object,
         required: true,
     },
-    selectedCompetitions: {
+    selectedEvents: {
         type: Array,
         default: () => [],
     },
@@ -83,41 +82,24 @@ const props = defineProps({
 
 const emit = defineEmits(['change']);
 const checked = ref(false);
-const updateCheckCompetition = (e) => {
+
+const updateCheckEvents = (e) => {
     console.log('ddddddSquad', checked.value);
-    emit('change', checked.value, props.competition.id);
+    emit('change', checked.value, props.event.id);
 };
 
-// const squad = ref({});
-
 const selectedEvent = ref(props.selectedCompetitions);
-// const viewSquad = async () => {
-//   let id = roles?.roles?.value?.detachment_commander;
-//   console.log('roles', roles.roles.value);
-//   console.log('id', id);
-//   await HTTP.get(`/detachments/${id}/`, {
-//       headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: 'Token ' + localStorage.getItem('Token'),
-//       },
-//   })
-//       .then((response) => {
-//          squad.value = response.data;
-//           console.log(response);
-//       })
-//       .catch(function (error) {
-//           console.log('an error occured ' + error);
-//       });
-// };
-// onMounted(() => {
-//   viewSquad();
-// })
 
 watch(
     () => props.selectedCompetitions,
     (newChecked) => {
         if (!newChecked) return;
         selectedEvent.value = newChecked;
+        const checkedItem = newChecked.find(
+            (item) => item.id == props.event.id,
+        );
+        if (!checkedItem) checked.value = false;
+        else checked.value = true;
     },
 );
 </script>

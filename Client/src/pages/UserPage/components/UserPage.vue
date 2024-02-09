@@ -34,7 +34,7 @@
                                 .educationalheadquarter_commander ||
                             roles.roles.value.districtheadquarter_commander ||
                             roles.roles.value.centralheadquarter_commander)) ||
-                    (user.user.value.privacy?.privacy_about === 'all' &&
+                    (user.user.value.privacy?.privacy_about === 'Все' &&
                         user.user.value)
                 "
             >
@@ -58,7 +58,7 @@
                                 .educationalheadquarter_commander ||
                             roles.roles.value.districtheadquarter_commander ||
                             roles.roles.value.centralheadquarter_commander)) ||
-                    (user.user.value.privacy?.privacy_photo === 'all' &&
+                    (user.user.value.privacy?.privacy_photo === 'Все' &&
                         user.user.value)
                 "
             >
@@ -135,6 +135,7 @@ import { ref, watch, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+
 import { useRegionalsStore } from '@features/store/regionals';
 import { useSquadsStore } from '@features/store/squads';
 import { useRoleStore } from '@layouts/store/role';
