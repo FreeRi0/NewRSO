@@ -44,10 +44,14 @@ import { useUserStore } from '@features/store/index';
 const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 
 import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { usePositionsStore } from '@features/store/positions';
 // const regionalsStore = useRegionalsStore();
 // const regionalHeadquarters = storeToRefs(regionalsStore);
 const roleStore = useRoleStore();
 const userStore = useUserStore();
+const regionsStore = useRegionalsStore();
+const positionsStore = usePositionsStore();
 const currentUser = storeToRefs(userStore);
 console.log('user', currentUser.currentUser.value);
 
@@ -56,7 +60,8 @@ const isAuth = ref(!!localStorage.getItem('Token'));
 onMounted(() => {
     userStore.getUser();
     roleStore.getRoles();
-
+    regionsStore.getRegions();
+    positionsStore.getPositions();
 });
 
 //запрос на коммандира

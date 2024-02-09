@@ -11,7 +11,6 @@
         v-bind="$attrs"
         @keyup="searchRegion"
         @update:value="changeValue"
-        @keydown.down="onArrowDown"
         :address="address"
         :no-data-text="noDataText"
         class="option-select"
@@ -59,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, toRef } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
@@ -79,6 +78,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    modelValue: {
+        type: String,
+        default: ""
+    },
     address: {
         type: String,
         default: '',
@@ -93,12 +96,10 @@ const props = defineProps({
     },
 });
 const name = ref('');
-const region = ref(null);
 
-const selected = ref(null);
+const selected = toRef(props, 'modelValue');
 const isLoading = ref(false);
 const changeValue = (event) => {
-    console.log(event);
     emit('update:value', event);
 };
 
@@ -131,14 +132,11 @@ const onChangeItem = async () => {
     }
 };
 
-
-
 const searchRegion = (val) => {
     if (name.value.length < 3) {
         return;
     }
-    regionalsStore.searchRegions(name.value);
-    console.log('val', val);
+    items.value = regionalsStore.regions.find((reg) => reg.name.indexOf(name.value) !== false);
 };
 
 

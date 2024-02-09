@@ -159,7 +159,7 @@
                             id="reg"
                             name="regdrop"
                             placeholder="Выберите регион обучения"
-                            v-model="user.currentUser.value.region"
+                            v-model="region"
                             @update:value="changeValue"
                             address="/regions/"
                             class="mb-2 region-input"
@@ -242,11 +242,7 @@ const quantityIsActive = ref(props.quantityActive);
 const router = useRouter();
 const user = storeToRefs(userStore);
 
-// const region = ref(user.currentUser.value.region);
-
-// console.log('region', region.value);
-console.log('USEREEE', user.currentUser.value.region);
-console.log('userrr', user.currentUser.value);
+const region = ref('');
 
 const userUpdate = (userData) => {
     // console.log('UserUpdate', userData );
@@ -404,7 +400,7 @@ const updateRegion = async () => {
         const updateRegResponse = await HTTP.patch(
             '/rsousers/me/',
             {
-                region: user.currentUser.value.region,
+                region: region.value,
             },
             {
                 headers: {
@@ -414,7 +410,6 @@ const updateRegion = async () => {
             },
         );
         user.currentUser.value.region = updateRegResponse.data.region;
-        console.log('data', updateRegResponse.data.region);
         show.value = !show.value;
         // regionalsStore.searchRegionals(region.value);
         userStore.getUser();
@@ -429,6 +424,9 @@ watch(
         if (Object.keys(user.currentUser.value).length === 0) {
             return;
         }
+
+
+        region.value = regionalsStore.regions.find((region) => region.name === user.currentUser.value.region)?.id;
         regionalsStore.searchRegionals(user.currentUser.value.region);
     },
 );

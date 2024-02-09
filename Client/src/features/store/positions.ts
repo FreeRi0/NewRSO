@@ -9,6 +9,7 @@ export const usePositionsStore = defineStore('positions', {
     }),
     actions: {
         async getPositions() {
+            if (this.positions.length) return;
             try {
                 this.isLoading = true;
                 const responsePositions = await HTTP.get('positions/', {
