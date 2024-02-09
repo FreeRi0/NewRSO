@@ -78,6 +78,7 @@ const changeOption = (event) => {
 const names = ref(props.names);
 
 const onChangeItem = async () => {
+    if(!props.address) return;
     HTTP.get(props.address)
 
         .then((res) => {
