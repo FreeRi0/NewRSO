@@ -2,10 +2,10 @@
     <div class="user-metric">
         <bannerPhoto
             v-if="
-                (props.user.privacy?.privacy_photo === 'detachment_members' &&
+                (props.user.privacy?.privacy_photo === 'Члены отряда' &&
                     props.user.detachment_id ===
                         currentUser.currentUser.value.detachment_id) ||
-                (props.user.privacy?.privacy_photo === 'management_members' &&
+                (props.user.privacy?.privacy_photo === 'Руководство' &&
                     (roles.roles.value.detachment_commander ===
                         squad.squad.value.id ||
                         roles.roles.value.regionalheadquarter_commander ===
@@ -14,7 +14,7 @@
                         roles.roles.value.educationalheadquarter_commander ||
                         roles.roles.value.districtheadquarter_commander ||
                         roles.roles.value.centralheadquarter_commander)) ||
-                (props.user.privacy?.privacy_photo === 'Все')
+                props.user.privacy?.privacy_photo === 'Все'
             "
             :banner="user?.media?.banner"
             @upload-wall="uploadWall"
@@ -33,10 +33,10 @@
 
         <Avatar
             v-if="
-                (props.user.privacy?.privacy_photo === 'detachment_members' &&
+                (props.user.privacy?.privacy_photo === 'Члены отряда' &&
                     props.user.detachment_id ===
                         currentUser.currentUser.value.detachment_id) ||
-                (props.user.privacy?.privacy_photo === 'management_members' &&
+                (props.user.privacy?.privacy_photo === 'Руководство' &&
                     (roles.roles.value.detachment_commander ===
                         squad.squad.value.id ||
                         roles.roles.value.regionalheadquarter_commander ===
@@ -45,7 +45,7 @@
                         roles.roles.value.educationalheadquarter_commander ||
                         roles.roles.value.districtheadquarter_commander ||
                         roles.roles.value.centralheadquarter_commander)) ||
-                (props.user.privacy?.privacy_photo === 'Все')
+                props.user.privacy?.privacy_photo === 'Все'
             "
             :avatar="user?.media?.photo"
             @upload="uploadAva"
@@ -85,13 +85,16 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <p v-if="user.region">
-                                {{
-                                    regionals.regionals.value.find(
-                                        (reg) => reg.region?.name === user.region,
-                                    )?.name
-                                }}
-                            </p>
+                            <div
+                                v-if="user.region"
+                            >
+                                <div
+                                    v-for="item in regionals.filteredRegional
+                                        .value"
+                                >
+                                    <p>{{ item.name }}</p>
+                                </div>
+                            </div>
                         </li>
                         <li v-if="user?.education?.study_faculty">
                             <p>{{ user?.education?.study_faculty }}</p>
@@ -108,17 +111,16 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
-
                     <div
                         class="user-data__social-network"
                         v-if="
                             (props.user.privacy?.privacy_social ===
-                                'detachment_members' &&
+                                'Члены отряда' &&
                                 props.user.detachment_id ===
                                     currentUser.currentUser.value
                                         .detachment_id) ||
                             (props.user.privacy?.privacy_social ===
-                                'management_members' &&
+                                'Руководство' &&
                                 (roles.roles.value.detachment_commander ===
                                     squad.squad.value.id ||
                                     roles.roles.value
@@ -132,11 +134,9 @@
                                         .districtheadquarter_commander ||
                                     roles.roles.value
                                         .centralheadquarter_commander)) ||
-                            (props.user.privacy?.privacy_social === 'Все'
-                               )
+                            props.user.privacy?.privacy_social === 'Все'
                         "
                     >
-
                         <div class="user-data__link-vk mr-2">
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -160,17 +160,16 @@
                         </div>
                     </div>
                     <div class="user-data__contact-contact">
-
                         <div
                             class="user-data__contact-contact_item"
                             v-if="
                                 (props.user.privacy?.privacy_telephone ===
-                                    'detachment_members' &&
+                                    'Члены отряда' &&
                                     props.user.detachment_id ===
                                         currentUser.currentUser.value
                                             .detachment_id) ||
                                 (props.user.privacy?.privacy_telephone ===
-                                    'management_members' &&
+                                    'Руководство' &&
                                     (roles.roles.value.detachment_commander ===
                                         squad.squad.value.id ||
                                         roles.roles.value
@@ -185,8 +184,7 @@
                                             .districtheadquarter_commander ||
                                         roles.roles.value
                                             .centralheadquarter_commander)) ||
-                                (props.user.privacy?.privacy_telephone ===
-                                    'Все')
+                                props.user.privacy?.privacy_telephone === 'Все'
                             "
                         >
                             <img
@@ -199,12 +197,12 @@
                             class="user-data__contact-contact_item mail"
                             v-if="
                                 (props.user.privacy?.privacy_email ===
-                                    'detachment_members' &&
+                                    'Члены отряда' &&
                                     props.user.detachment_id ===
                                         currentUser.currentUser.value
                                             .detachment_id) ||
                                 (props.user.privacy?.privacy_email ===
-                                    'management_members' &&
+                                    'Руководство' &&
                                     (roles.roles.value.detachment_commander ===
                                         squad.squad.value.id ||
                                         roles.roles.value
@@ -219,7 +217,7 @@
                                             .districtheadquarter_commander ||
                                         roles.roles.value
                                             .centralheadquarter_commander)) ||
-                                (props.user.privacy?.privacy_email === 'Все')
+                                props.user.privacy?.privacy_email === 'Все'
                             "
                         >
                             <img src="@/app/assets/icon/mail.svg" alt="mail" />
@@ -310,28 +308,32 @@ const educationalHeadquarter = ref({});
 
 const getUserData = async () => {
     try {
-        const responseSquad = ref(null);
         if (props.user.detachment_id) {
-            let id = props.user.detachment_id;
-            const responseSquad = await HTTP.get(`/detachments/${id}/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+            const responseSquad = await HTTP.get(
+                `/detachments/${props.user.detachment_id}/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            });
+            );
+            detachment.value = responseSquad.data;
         }
-        const responseEducHead = ref(null);
+
         if (props.user.educational_headquarter_id) {
-            let id = props.user.educational_headquarter_id;
-            const responseEducHead = await HTTP.get(`/educationals/${id}/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+            const responseEducHead = await HTTP.get(
+                `/educationals/${props.user.educational_headquarter_id}/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            });
+            );
+
+            educationalHeadquarter.value = responseEducHead.data;
         }
-        detachment.value = responseSquad.data;
-        educationalHeadquarter.value = responseEducHead.data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -344,11 +346,13 @@ watch(
         if (Object.keys(props.user).length === 0) {
             return;
         }
-        getUserData();
+        // getUserData();
+        regionalsStore.searchRegionals(props.user.region);
     },
 );
 
 onMounted(() => {
+    regionalsStore.searchRegionals(props.user.region);
     getUserData();
 });
 </script>
