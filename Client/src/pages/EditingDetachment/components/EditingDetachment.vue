@@ -55,7 +55,7 @@ const regionComId = roles.roles.value.regionalheadquarter_commander;
 const districtComId = roles.roles.value.districtheadquarter_commander;
 const centralComId = roles.roles.value.centralheadquarter_commander;
 const localComId = roles.roles.value.localheadquarter_commander;
-const detComId = roles.roles.value.detachment_commander;
+const detComId = roles.roles.value.detachment_commander.id;
 
 const router = useRouter();
 const route = useRoute();

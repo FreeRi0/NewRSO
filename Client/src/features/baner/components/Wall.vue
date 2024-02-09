@@ -6,7 +6,7 @@
                     props.user.detachment_id ===
                         currentUser.currentUser.value.detachment_id) ||
                 (props.user.privacy?.privacy_photo === 'Руководство' &&
-                    (roles.roles.value.detachment_commander ===
+                    (roles.roles.value.detachment_commander.id ===
                         squad.squad.value.id ||
                         roles.roles.value.regionalheadquarter_commander ===
                             regionalHeadquarter.regional.value.id ||
@@ -37,7 +37,7 @@
                     props.user.detachment_id ===
                         currentUser.currentUser.value.detachment_id) ||
                 (props.user.privacy?.privacy_photo === 'Руководство' &&
-                    (roles.roles.value.detachment_commander ===
+                    (roles.roles.value.detachment_commander.id ===
                         squad.squad.value.id ||
                         roles.roles.value.regionalheadquarter_commander ===
                             regionalHeadquarter.regional.value.id ||
@@ -85,9 +85,7 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <div
-                                v-if="user.region"
-                            >
+                            <div v-if="user.region">
                                 <div
                                     v-for="item in regionals.filteredRegional
                                         .value"
@@ -121,7 +119,7 @@
                                         .detachment_id) ||
                             (props.user.privacy?.privacy_social ===
                                 'Руководство' &&
-                                (roles.roles.value.detachment_commander ===
+                                (roles.roles.value.detachment_commander.id ===
                                     squad.squad.value.id ||
                                     roles.roles.value
                                         .regionalheadquarter_commander ===
@@ -170,8 +168,8 @@
                                             .detachment_id) ||
                                 (props.user.privacy?.privacy_telephone ===
                                     'Руководство' &&
-                                    (roles.roles.value.detachment_commander ===
-                                        squad.squad.value.id ||
+                                    (roles.roles.value.detachment_commander
+                                        .id === squad.squad.value.id ||
                                         roles.roles.value
                                             .regionalheadquarter_commander ===
                                             regionalHeadquarter.regional.value
@@ -203,8 +201,8 @@
                                             .detachment_id) ||
                                 (props.user.privacy?.privacy_email ===
                                     'Руководство' &&
-                                    (roles.roles.value.detachment_commander ===
-                                        squad.squad.value.id ||
+                                    (roles.roles.value.detachment_commander
+                                        .id === squad.squad.value.id ||
                                         roles.roles.value
                                             .regionalheadquarter_commander ===
                                             regionalHeadquarter.regional.value
