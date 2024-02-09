@@ -101,7 +101,7 @@ export const useRegionalsStore = defineStore('regionals', {
                 console.log('an error occured ' + error);
             }
         },
-        searchRegions(name: String) {
+        searchRegions() {
             // const responseSearchRegions = await HTTP.get(
             //     `/regions/?search=${name}`,
             //     {
