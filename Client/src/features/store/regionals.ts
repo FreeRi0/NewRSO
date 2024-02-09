@@ -15,8 +15,11 @@ export const useRegionalsStore = defineStore('regionals', {
     actions: {
         async searchRegionals(region: any) {
             try {
+                const regionName = Object.keys(region).length
+                    ? region.name
+                    : region;
                 const responseSearchRegionals = await HTTP.get(
-                    `/regionals/?search=${region}`,
+                    `/regionals/?search=${regionName}`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
