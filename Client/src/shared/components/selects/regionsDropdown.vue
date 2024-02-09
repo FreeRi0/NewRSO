@@ -73,7 +73,6 @@ const emit = defineEmits(['update:value']);
 const regionalsStore = useRegionalsStore();
 const regions = storeToRefs(regionalsStore);
 
-
 const props = defineProps({
     items: {
         type: Array,
@@ -131,8 +130,6 @@ const onChangeItem = async () => {
     }
 };
 
-
-
 const searchRegion = (val) => {
     if (name.value.length < 3) {
         return;
@@ -140,9 +137,6 @@ const searchRegion = (val) => {
     regionalsStore.searchRegions(name.value);
     console.log('val', val);
 };
-
-
-
 
 onMounted(() => {
     onChangeItem();

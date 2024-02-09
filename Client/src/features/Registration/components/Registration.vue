@@ -61,7 +61,15 @@
                     class="dateInput"
                     placeholder="Дата рождения"
                     v-model:value="form.date_of_birth"
+                    max="9999-12-31"
                 />
+                <!-- <date-picker
+                    v-model:value="form.date_of_birth"
+                    placeholder="Дата рождения"
+                    name="date"
+                    type="date"
+                    class="dateInput"
+                ></date-picker> -->
                 <p class="error" v-if="isError.date_of_birth">
                     Дата рождения в формате ДД.ММ.ГГГГ
                 </p>
@@ -82,6 +90,7 @@
                     placeholder="Придумайте пароль"
                     variant="outlined"
                     @click:append-inner="visible = !visible"
+                    id="pass"
                 ></v-text-field>
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
@@ -141,7 +150,6 @@
         </v-card>
     </div>
 </template>
-// onfocusin="(this.type='date')" // onfocusout="(this.type='text')"
 
 <style lang="scss">
 .v-field {
@@ -304,7 +312,9 @@
 #reg {
     padding-top: 5px;
 }
-
+.v-autocomplete .v-field--dirty .v-autocomplete__selection {
+    color: #000;
+}
 .RegisterWrapper {
     min-height: 100vh;
     background-image: url(/assets/regBR.jpg);
@@ -344,7 +354,6 @@ input {
     font-size: 16px;
     font-weight: 500;
     padding: 10px 16px 10px 16px;
-    margin-bottom: 20px;
     font-family: 'Bert Sans';
     width: 100%;
     color: #35383f;
@@ -353,7 +362,6 @@ input {
 .form-input input::placeholder {
     color: #a3a3a3;
     font-size: 16px;
-    color: #a3a3a3;
     font-weight: 500;
     font-family: 'Bert Sans';
 }
@@ -367,6 +375,23 @@ input {
     margin-bottom: 20px;
     width: 100%;
 }
+// .dateInput .mx-input:hover,
+// .dateInput .mx-input:focus {
+//     border-color: #a3a3a3;
+// }
+
+// .dateInput.mx-datepicker {
+//     width: 100%;
+// }
+// #login {
+//     margin-top: 6px;
+// }
+// .dateInput .mx-input {
+//     height: 47px;
+// }
+// .dateInput.mx-datepicker svg {
+//     margin-right: 6px;
+// }
 </style>
 
 <script setup>
