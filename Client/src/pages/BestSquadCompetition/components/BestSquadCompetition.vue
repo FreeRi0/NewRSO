@@ -256,7 +256,7 @@ const squad = ref({});
 const getMeSquad = async () => {
     try {
         const response = await HTTP.get(
-            `detachments/${userCommander.value.detachment_commander}/`,
+            `detachments/${userCommander.value.detachment_commander.id}/`,
             {
                 headers: {
                     'Content-Type': 'application/json',
