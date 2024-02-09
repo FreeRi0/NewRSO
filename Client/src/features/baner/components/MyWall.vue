@@ -227,7 +227,7 @@ watch(
 
 onMounted(() => {
     // getUserData();
-    // roleStore.getMyPositions();
+    roleStore.getMyPositions();
     getUserData();
     // getEducData();
 });
