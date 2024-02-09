@@ -133,7 +133,6 @@
             </div>
             <Button
                 @click="headquartersVisible += step"
-
                 v-if="
                     headquartersVisible <
                     regionalHeadquarters.regionals.value.length
@@ -166,7 +165,6 @@ import { useCrosspageFilter } from '@shared';
 
 const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
-
 
 const regionalHeadquarters = storeToRefs(regionalsStore);
 const isLoading = storeToRefs(regionalsStore);
@@ -239,8 +237,6 @@ const sortOptionss = ref([
 const sortedRegionalHeadquarters = computed(() => {
     let tempHeadquarters = filtersDistricts.value;
 
-    tempHeadquarters = tempHeadquarters.slice(0, headquartersVisible.value);
-
     // поиск
     searchReg.value;
     // сортировка
@@ -267,6 +263,9 @@ const sortedRegionalHeadquarters = computed(() => {
         tempHeadquarters.reverse();
     }
 
+
+
+    tempHeadquarters = tempHeadquarters.slice(0, headquartersVisible.value);
     return tempHeadquarters;
 });
 
@@ -288,7 +287,6 @@ onActivated(() => {
 onMounted(() => {
     regionalsStore.getRegionals();
     getDistrictsHeadquartersForFilters();
-
 });
 </script>
 <style lang="scss">
@@ -464,4 +462,3 @@ pre {
     }
 }
 </style>
-

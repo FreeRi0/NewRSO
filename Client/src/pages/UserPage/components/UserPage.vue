@@ -20,11 +20,11 @@
                 v-if="
                     user.user.value.is_verified ||
                     (user.user.value.privacy?.privacy_about ===
-                        'detachment_members' &&
+                        'Члены отряда' &&
                         user.user.value.detachment_id ===
                             currentUser.currentUser.value.detachment_id) ||
                     (user.user.value.privacy?.privacy_about ===
-                        'management_members' &&
+                        'Руководство' &&
                         (roles.roles.value.detachment_commander ===
                             squad.squad.value.id ||
                             roles.roles.value.regionalheadquarter_commander ===
@@ -34,8 +34,7 @@
                                 .educationalheadquarter_commander ||
                             roles.roles.value.districtheadquarter_commander ||
                             roles.roles.value.centralheadquarter_commander)) ||
-                    (user.user.value.privacy?.privacy_about === 'all' &&
-                        user.user.value)
+                    (user.user.value.privacy?.privacy_about === 'Все')
                 "
             >
                 {{ user.user.value.bio }}
@@ -44,11 +43,11 @@
                 class="mt-8 photoWrapper"
                 v-if="
                     (user.user.value.privacy?.privacy_photo ===
-                        'detachment_members' &&
+                        'Члены отряда' &&
                         user.user.value.detachment_id ===
                             currentUser.currentUser.value.detachment_id) ||
                     (user.user.value.privacy?.privacy_photo ===
-                        'management_members' &&
+                        'Руководство' &&
                         (roles.roles.value.detachment_commander ===
                             squad.squad.value.id ||
                             roles.roles.value.regionalheadquarter_commander ===
@@ -58,8 +57,7 @@
                                 .educationalheadquarter_commander ||
                             roles.roles.value.districtheadquarter_commander ||
                             roles.roles.value.centralheadquarter_commander)) ||
-                    (user.user.value.privacy?.privacy_photo === 'all' &&
-                        user.user.value)
+                    (user.user.value.privacy?.privacy_photo === 'Все')
                 "
             >
                 <userPhoto
