@@ -24,7 +24,7 @@
                         v-if="
                             competition.is_confirmed_by_junior ||
                             (competition.junior_detachment.id ==
-                                commanderIds.detachment_commander &&
+                                commanderIds.detachment_commander.id &&
                                 !competition.is_confirmed_by_junior) ||
                             !competition.detachment
                         "
