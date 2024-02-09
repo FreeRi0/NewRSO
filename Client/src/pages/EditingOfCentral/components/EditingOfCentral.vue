@@ -44,7 +44,7 @@ const isCommanderLoading = ref(false);
 const getHeadquarter = async () => {
     loading.value = true;
     isCommanderLoading.value = true;
-    await HTTP.get(`centrals/1/`, {
+    await HTTP.get(`/centrals/1/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -97,7 +97,7 @@ const isMembersLoading = ref(false);
 // };
 
 const getMembers = async () => {
-    HTTP.get(`centrals/${id}/members/`, {
+    HTTP.get(`/centrals/${id}/members/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

@@ -14,7 +14,7 @@
                         roles.roles.value.educationalheadquarter_commander ||
                         roles.roles.value.districtheadquarter_commander ||
                         roles.roles.value.centralheadquarter_commander)) ||
-                (props.user.privacy?.privacy_photo === 'all' && props.user)
+                (props.user.privacy?.privacy_photo === 'Все')
             "
             :banner="user?.media?.banner"
             @upload-wall="uploadWall"
@@ -45,7 +45,7 @@
                         roles.roles.value.educationalheadquarter_commander ||
                         roles.roles.value.districtheadquarter_commander ||
                         roles.roles.value.centralheadquarter_commander)) ||
-                (props.user.privacy?.privacy_photo === 'all' && props.user)
+                (props.user.privacy?.privacy_photo === 'Все')
             "
             :avatar="user?.media?.photo"
             @upload="uploadAva"
@@ -100,7 +100,7 @@
                         <li v-if="user?.education?.study_specialty">
                             <p>{{ user?.education?.study_specialty }}</p>
                         </li>
-                        <pre>ss{{ id }}</pre>
+                        <!-- <pre>ss{{ id }}</pre> -->
 
                         <li v-if="user?.education?.study_year">
                             <p>Курс {{ user?.education?.study_year }}</p>
@@ -132,8 +132,8 @@
                                         .districtheadquarter_commander ||
                                     roles.roles.value
                                         .centralheadquarter_commander)) ||
-                            (props.user.privacy?.privacy_social === 'all' &&
-                                props.user)
+                            (props.user.privacy?.privacy_social === 'Все'
+                               )
                         "
                     >
 
@@ -186,8 +186,7 @@
                                         roles.roles.value
                                             .centralheadquarter_commander)) ||
                                 (props.user.privacy?.privacy_telephone ===
-                                    'all' &&
-                                    props.user)
+                                    'Все')
                             "
                         >
                             <img
@@ -220,8 +219,7 @@
                                             .districtheadquarter_commander ||
                                         roles.roles.value
                                             .centralheadquarter_commander)) ||
-                                (props.user.privacy?.privacy_email === 'all' &&
-                                    props.user)
+                                (props.user.privacy?.privacy_email === 'Все')
                             "
                         >
                             <img src="@/app/assets/icon/mail.svg" alt="mail" />

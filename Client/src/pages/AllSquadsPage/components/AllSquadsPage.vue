@@ -176,7 +176,6 @@ const isLoading = storeToRefs(squadsStore);
 console.log('squad', squads.squads.value);
 console.log('loading', isLoading.isLoading.value);
 // const squads = ref([]);
-
 const categories = ref([]);
 const name = ref('');
 const education = ref('');
@@ -302,7 +301,7 @@ const sortedSquads = computed(() => {
 
     tempSquads = tempSquads.filter((item) => item.area.name === picked.value);
     console.log('picked', picked.value);
-
+    tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
 
