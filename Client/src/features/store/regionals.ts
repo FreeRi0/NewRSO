@@ -128,6 +128,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regions = responseRegions.data;
+                this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
                 this.isLoading = false;
