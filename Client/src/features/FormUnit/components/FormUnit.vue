@@ -121,7 +121,7 @@
                                 @update:value="changeValue"
                             ></SearchSelect>
                             <p class="form__error" v-if="isError.area">
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('area') }}
                             </p>
                             <!-- <p>{{ detachment.area }}</p> -->
                         </div>
@@ -139,7 +139,7 @@
                                 v-model:value="detachment.founding_date"
                             />
                             <p class="form__error" v-if="isError.founding_date">
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('founding_date') }}
                             </p>
                         </div>
 
@@ -158,7 +158,7 @@
                                 @update:value="changeValue"
                             ></SearchSelect>
                             <p class="form__error" v-if="isError.region">
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('region') }}
                             </p>
                         </div>
 
@@ -245,7 +245,7 @@
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
                             >
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('commander') }}
                             </p>
                         </div>
                     </div>
@@ -1453,6 +1453,15 @@ const props = defineProps({
         default: false,
     },
 });
+
+const getErrorField = (field) => {
+    if (
+        props.isError[field][0] ===
+        'Некорректный тип. Ожидалось значение первичного ключа, получен str.'
+    )
+        return 'Это поле не может быть пустым.';
+    else return props.isError[field][0];
+};
 
 const detachment = ref(props.detachment);
 

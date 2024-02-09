@@ -114,7 +114,7 @@ const isError = ref([]);
 const swal = inject('$swal');
 const selectedDetch = ref(props.selectedSquads);
 const viewSquad = async () => {
-    let id = roles?.roles?.value?.detachment_commander;
+    let id = roles?.roles?.value?.detachment_commander.id;
     console.log('roles', roles.roles.value);
     console.log('id', id);
     await HTTP.get(`/detachments/${id}/`, {
@@ -188,7 +188,7 @@ const ChangeStatus = async () => {
                 timer: 1500,
             });
             console.log('response', approveReq.data);
-            emit('approveMember',  props.detachment.id);
+            emit('approveMember', props.detachment.id);
             console.log(approveReq.data);
         } else {
             const rejectReq = await HTTP.delete(
