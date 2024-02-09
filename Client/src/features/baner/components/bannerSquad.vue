@@ -30,7 +30,7 @@
                 <div class="squad-data__contacts-wrapper">
                     <div class="squad-data__contacts">
                         <div class="squad-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
+                            <span>{{ squad.participants_count }} участников</span>
                         </div>
                         <div class="squad-data__social-network">
                             <div class="squad-data__link-vk">

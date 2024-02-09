@@ -107,30 +107,12 @@
                                 !isLoading.isLoading.value
                             "
                         >
-                        <!-- {{regionals.filteredRegional.value  }} -->
-                            <p v-for="item in regionals.filteredRegional.value">
+                            <p v-for="item in regionals.filteredMyRegional.value">
                              <p> {{ item.name }}</p>
                             </p>
 
 
                         </span>
-
-                        <!-- <span
-                            v-if="
-                                user.currentUser.value?.region &&
-                                !isLoading.isLoading.value
-                            "
-                        >
-
-
-                            {{
-                                regionals.regionals.value.find(
-                                    (reg) =>
-                                        reg.region?.name ===
-                                        user.currentUser.value.region,
-                                )?.name
-                            }}
-                        </span> -->
 
                         <p v-else-if="isLoading.isLoading.value">
                             Загрузка региона...
@@ -428,6 +410,7 @@ watch(
 
         region.value = regionalsStore.regions.find((region) => region.name === user.currentUser.value.region)?.id;
         regionalsStore.searchRegionals(user.currentUser.value.region);
+
     },
 );
 

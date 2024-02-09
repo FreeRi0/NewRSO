@@ -35,7 +35,12 @@
                 v-if="squad.squad.value.nomination"
                 :squad="squad.squad.value"
             ></CompetitionPromo>
-
+            <ManagementSquad class="mt-12"
+                :commander="commander"
+                :member="filteredMembers"
+                head="Командир отряда"
+                :position="position"
+            ></ManagementSquad>
             <SquadParticipants
                 :squad="squad.squad.value"
                 :member="member.members.value"
@@ -54,8 +59,9 @@ import { BannerSquad } from '@features/baner/components';
 import { squadPhotos } from '@shared/components/imagescomp';
 import { useSquadsStore } from '@features/store/squads';
 import SquadParticipants from './components/SquadParticipants.vue';
+import ManagementSquad from './components/ManagementSquad.vue';
 import { CompetitionPromo } from '@/features/Competition';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
@@ -66,11 +72,39 @@ const squad = storeToRefs(squadsStore);
 const member = storeToRefs(squadsStore);
 const applications = ref([]);
 const isLoading = storeToRefs(squadsStore);
+const commander = ref({});
 
 const route = useRoute();
 let id = route.params.id;
 
 const { replaceTargetObjects } = usePage();
+
+const fetchCommander = async () => {
+    try {
+        let id = squad.squad.value.commander.id;
+        const response = await HTTP.get(`/users/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+
+        commander.value = response.data;
+        console.log(response);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const filteredMembers = computed(() => {
+    return member.members.value.filter((manager) => {
+        return (
+            manager.position &&
+            (manager.position === 'Командир')
+        );
+    });
+});
+
 
 watch(
     () => route.params.id,
@@ -78,10 +112,9 @@ watch(
     async (newId, oldId) => {
         if (!newId || route.name !== 'lso') return;
         await squadsStore.getSquadId(newId);
-
         await squadsStore.getSquadMembers(newId);
-
         await replaceTargetObjects([squad.squad.value]);
+        await fetchCommander();
     },
     {
         immediate: true,
@@ -92,8 +125,8 @@ onMounted(() => {
     // getLsoData();
     squadsStore.getSquadId(id);
     squadsStore.getSquadMembers(id);
-
     replaceTargetObjects([squad.squad.value]);
+    fetchCommander();
 });
 </script>
 <style scoped lang="scss">

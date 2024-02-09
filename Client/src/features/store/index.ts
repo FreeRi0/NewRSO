@@ -34,7 +34,7 @@ export const useUserStore = defineStore('user', {
             try {
                 this.isLoading = true;
                 setTimeout(async () => {
-                    const responseUserId = await HTTP.get(`rsousers/${id}/`, {
+                    const responseUserId = await HTTP.get(`users/${id}/`, {
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization:
