@@ -259,23 +259,6 @@ const locals = ref([]);
 const districts = ref([]);
 const regionals = ref([]);
 
-// const getHeadquarters = async () => {
-//     try {
-//         isHeadquartersLoading.value = true;
-//         setTimeout(async () => {
-//             const educationalsResponse = await HTTP.get(`/educationals/`, {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             });
-//             headquarters.value = educationalsResponse.data;
-//             isHeadquartersLoading.value = false;
-//         }, 1000);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
 
 const searchEducational = async (name) => {
     try {
@@ -385,7 +368,7 @@ const sortedHeadquarters = computed(() => {
     }
 
     searchEducationals.value;
-    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
+
     tempHeadquartes = tempHeadquartes.filter((item) => {
         // console.log(educational_institution.id);
         return (
@@ -427,7 +410,8 @@ const sortedHeadquarters = computed(() => {
     if (!ascending.value) {
         tempHeadquartes.reverse();
     }
-
+    
+    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     return tempHeadquartes;
 });
 

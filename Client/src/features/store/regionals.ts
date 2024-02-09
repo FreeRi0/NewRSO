@@ -5,30 +5,54 @@ export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
         regionals: [],
-        filteredRegional: {},
+        filteredRegional: [],
+        filteredMyRegional: [],
         members: [],
         regional: {},
         institutions: [],
         isLoading: false,
     }),
     actions: {
-        async searchRegionals(region: String) {
-            const responseSearchRegionals = await HTTP.get(
-                `/regionals/?search=${region}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
+        async searchRegionals(region: any) {
+            try {
+                const regionName = Object.keys(region).length
+                    ? region.name
+                    : region;
+                const responseSearchRegionals = await HTTP.get(
+                    `/regionals/?search=${regionName}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
                     },
-                },
-            );
-            this.filteredRegional = responseSearchRegionals.data;
+                );
+                this.filteredRegional = responseSearchRegionals.data;
+            } catch (err) {
+                console.log('an error occured ' + err);
+            }
         },
-        // async getUserRegional(id: string) {
-        //     // this.regionals.find(
-        //     //     (reg) => reg.region?.name === ,
-        //     // )?.name
-        // },
+        async searchMyRegionals(region: any) {
+            try {
+                const regionName = Object.keys(region).length
+                    ? region.name
+                    : region;
+                const responseSearchMyRegionals = await HTTP.get(
+                    `/regionals/?search=${regionName}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.filteredMyRegional = responseSearchMyRegionals.data;
+            } catch (err) {
+                console.log('an error occured ' + err);
+            }
+        },
         async getRegionals() {
             try {
                 this.isLoading = true;
@@ -82,6 +106,7 @@ export const useRegionalsStore = defineStore('regionals', {
                 console.log('an error occured ' + error);
             }
         },
+
         async searchRegions(name: String) {
             const responseSearchRegions = await HTTP.get(
                 `/regions/?search=${name}`,
@@ -94,6 +119,7 @@ export const useRegionalsStore = defineStore('regionals', {
             this.regions = responseSearchRegions.data;
         },
         async getRegions() {
+            if (this.regions.length) return;
             try {
                 this.isLoading = true;
                 const responseRegions = await HTTP.get(`/regions/`, {
@@ -102,6 +128,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 });
                 this.regions = responseRegions.data;
+                this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
                 this.isLoading = false;

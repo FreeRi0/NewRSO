@@ -188,7 +188,6 @@ const selectedSortDistrict = ref(
 );
 
 const districts = ref([]);
-
 const searchRegional = async (name) => {
     try {
         const filteredRegional = await HTTP.get(`/regionals/?search=${name}`, {
@@ -238,8 +237,6 @@ const sortOptionss = ref([
 const sortedRegionalHeadquarters = computed(() => {
     let tempHeadquarters = filtersDistricts.value;
 
-    tempHeadquarters = tempHeadquarters.slice(0, headquartersVisible.value);
-
     // поиск
     searchReg.value;
     // сортировка
@@ -266,6 +263,9 @@ const sortedRegionalHeadquarters = computed(() => {
         tempHeadquarters.reverse();
     }
 
+
+
+    tempHeadquarters = tempHeadquarters.slice(0, headquartersVisible.value);
     return tempHeadquarters;
 });
 
@@ -285,8 +285,8 @@ onActivated(() => {
 });
 
 onMounted(() => {
+    regionalsStore.getRegionals();
     getDistrictsHeadquartersForFilters();
-    
 });
 </script>
 <style lang="scss">
@@ -462,4 +462,3 @@ pre {
     }
 }
 </style>
-@shared/components/inputs/imagescomp

@@ -74,21 +74,21 @@
                     v-if="user.currentUser.value"
                 >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
-                    <a href="#">
+                    <!-- <a href="#">
                         <img
                             src="@app/assets/icon/bell-light.svg"
                             width="36"
                             height="36"
                             alt="Иконка уведомления"
                         />
-                    </a>
+                    </a> -->
                     <!--Если есть активные заявки (isActive = true), ниже отображается их количество:-->
-                    <div v-if="isActive" class="nav-user__quantity-box">
+                    <!-- <div v-if="isActive" class="nav-user__quantity-box">
                         <span v-if="quantityIsActive < 100">{{
                             quantityIsActive
                         }}</span>
                         <span v-else>99+</span>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="nav-user__location">
@@ -107,11 +107,11 @@
                                 !isLoading.isLoading.value
                             "
                         >
-                            {{
-                                regionals.regionals.value.find(
-                                    (reg) => reg.region?.name === user.currentUser.value.region,
-                                )?.name
-                            }}
+                            <p v-for="item in regionals.filteredMyRegional.value">
+                             <p> {{ item.name }}</p>
+                            </p>
+
+
                         </span>
 
                         <p v-else-if="isLoading.isLoading.value">
@@ -136,7 +136,7 @@
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <regionalsDropdown
+                        <regionsDropdown
                             open-on-clear
                             id="reg"
                             name="regdrop"
@@ -145,7 +145,7 @@
                             @update:value="changeValue"
                             address="/regions/"
                             class="mb-2 region-input"
-                        ></regionalsDropdown>
+                        ></regionsDropdown>
 
                         <div>
                             <Button
@@ -183,13 +183,14 @@
     </div>
 </template>
 
+
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
 import {
     Select,
     sortByEducation,
-    regionalsDropdown,
+    regionsDropdown,
 } from '@shared/components/selects';
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
@@ -217,29 +218,16 @@ const roles = storeToRefs(roleStore);
 const isLoading = storeToRefs(regionalsStore);
 
 const regionals = storeToRefs(regionalsStore);
-// regionalsStore.getRegionals();
 
 const quantityIsActive = ref(props.quantityActive);
 
 const router = useRouter();
 const user = storeToRefs(userStore);
-// console.log('user', user.currentUser.value);
 
-const region = ref(null);
-// console.log('userreg', region);
+const region = ref('');
 
-// const getByRegionals = computed(() => {
-//     return regionalsStore.getRegionals(region.value);
-// });
-
-// const changeRegionals = (val) => {
-//     getByRegionals.value;
-//     console.log('val', val)
-// };
-
-// console.log('regionalssss', getByRegionals);
 const userUpdate = (userData) => {
-    // console.log('UserUpdate', userData);
+    // console.log('UserUpdate', userData );
     user.currentUser.value = userData;
 };
 
@@ -403,20 +391,32 @@ const updateRegion = async () => {
                 },
             },
         );
-        region.value = updateRegResponse.data.region;
-        console.log('data', updateRegResponse.data.region)
+        user.currentUser.value.region = updateRegResponse.data.region;
         show.value = !show.value;
+        // regionalsStore.searchRegionals(region.value);
         userStore.getUser();
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
-console.log('reg', regionals.filteredRegionals);
+watch(
+    () => user.currentUser.value,
+    (newUser, oldUser) => {
+        if (Object.keys(user.currentUser.value).length === 0) {
+            return;
+        }
 
-onMounted(async () => {
+
+        region.value = regionalsStore.regions.find((region) => region.name === user.currentUser.value.region)?.id;
+        regionalsStore.searchRegionals(user.currentUser.value.region);
+
+    },
+);
+
+onMounted(() => {
     // await regionalsStore.getRegionals();
-    // await getHeadquarters();
+    // regionalsStore.searchRegionals(user.currentUser.value.region);
 });
 </script>
 

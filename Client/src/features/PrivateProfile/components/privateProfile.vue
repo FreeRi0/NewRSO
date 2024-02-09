@@ -110,14 +110,14 @@ const swal = inject('$swal');
 const isError = ref([]);
 const privacies = ref([
     {
-        value: 'all',
+        value: 'Все',
         name: 'Все',
     },
     {
-        value: 'detachment_members',
+        value: 'Члены отряда',
         name: 'Члены отряда',
     },
-    { value: 'management_members', name: 'Руководство' },
+    { value: 'Руководство', name: 'Руководство' },
 ]);
 
 const privateData = ref({

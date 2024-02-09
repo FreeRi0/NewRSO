@@ -40,14 +40,18 @@ import { onMounted, ref } from 'vue';
 import { AppBreadcrumbs, useBreadcrumbsStore } from '@shared/index';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@features/store/index';
-import { useRegionalsStore } from '@features/store/regionals';
+// import { useRegionalsStore } from '@features/store/regionals';
 const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 
 import { useRoleStore } from '@layouts/store/role';
-const regionalsStore = useRegionalsStore();
-const regionalHeadquarters = storeToRefs(regionalsStore);
+import { useRegionalsStore } from '@features/store/regionals';
+import { usePositionsStore } from '@features/store/positions';
+// const regionalsStore = useRegionalsStore();
+// const regionalHeadquarters = storeToRefs(regionalsStore);
 const roleStore = useRoleStore();
 const userStore = useUserStore();
+const regionsStore = useRegionalsStore();
+const positionsStore = usePositionsStore();
 const currentUser = storeToRefs(userStore);
 console.log('user', currentUser.currentUser.value);
 
@@ -56,7 +60,8 @@ const isAuth = ref(!!localStorage.getItem('Token'));
 onMounted(() => {
     userStore.getUser();
     roleStore.getRoles();
-    regionalsStore.getRegionals();
+    regionsStore.getRegions();
+    positionsStore.getPositions();
 });
 
 //запрос на коммандира

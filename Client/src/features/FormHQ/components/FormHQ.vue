@@ -134,7 +134,7 @@
                                 class="form__error"
                                 v-if="isError.educational_institution"
                             >
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('educational_institution') }}
                             </p>
                         </div>
 
@@ -151,7 +151,7 @@
                                 v-model:value="headquarter.founding_date"
                             />
                             <p class="form__error" v-if="isError.founding_date">
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('founding_date') }}
                             </p>
                         </div>
 
@@ -162,31 +162,20 @@
                                 >Выберите региональное отделение
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- <Select
-                                class="form__select form__select--select"
-                                variant="outlined"
-                                clearable
-                                name="select_regional-office"
-                                id="select-regional-office"
-                                placeholder="Например, Карачаево-Черкесское региональное отделение"
-                                v-model="headquarter.regional_headquarter"
-                                address="regionals/"
-                            ></Select> -->
-                            <educationalsDropdown
-                                :change-user="false"
+                            <SearchSelect
+                                :items="regionals.regionals.value"
                                 open-on-clear
                                 id="select-regional-office"
                                 name="select_regional-office"
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
                                 v-model="headquarter.regional_headquarter"
                                 @update:value="changeValue"
-                                address="regionals/"
-                            ></educationalsDropdown>
+                            ></SearchSelect>
                             <p
                                 class="form__error"
                                 v-if="isError.regional_headquarter"
                             >
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('regional_headquarter') }}
                             </p>
                         </div>
 
@@ -227,7 +216,7 @@
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
                             >
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('commander') }}
                             </p>
                         </div>
                     </div>
@@ -373,6 +362,7 @@
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                :functions="positions.positions.value"
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
@@ -793,28 +783,26 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Select } from '@shared/components/selects';
+// import { Select } from '@shared/components/selects';
+import { SearchSelect } from '@shared/components/selects';
 import { educInstitutionDropdown } from '@shared/components/selects';
-import { educationalsDropdown } from '@shared/components/selects';
+// import { educationalsDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
-import { HTTP } from '@app/http';
+import { useRegionalsStore } from '@features/store/regionals';
+import { usePositionsStore } from '@features/store/positions';
+import { storeToRefs } from 'pinia';
 
-// import { useVuelidate } from '@vuelidate/core';
-// import {
-//     helpers,
-//     minLength,
-//     required,
-//     maxLength,
-//     numeric,
-//     email,
-//     sameAs,
-// } from '@vuelidate/validators';
+const regionalsStore = useRegionalsStore();
+const regionals = storeToRefs(regionalsStore);
+
+const positionsStore = usePositionsStore();
+const positions = storeToRefs(positionsStore);
 
 const emit = defineEmits([
     'update:value',
@@ -868,6 +856,15 @@ const props = defineProps({
         default: false,
     },
 });
+
+const getErrorField = (field) => {
+    if (
+        props.isError[field][0] ===
+        'Некорректный тип. Ожидалось значение первичного ключа, получен str.'
+    )
+        return 'Это поле не может быть пустым.';
+    else return props.isError[field][0];
+};
 
 const headquarter = ref(props.headquarter);
 
@@ -1031,6 +1028,11 @@ const resetBanner = () => {
     fileBanner.value = null;
     emit('resetBanner', fileBanner.value);
 };
+
+onBeforeMount(async () => {
+    regionalsStore.getRegionals();
+    positionsStore.getPositions();
+});
 </script>
 
 <style lang="scss" scoped>

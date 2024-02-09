@@ -329,7 +329,7 @@ const sortedLocalHeadquarters = computed(() => {
         tempHeadquartes = [...localHeadquarters.value];
     }
 
-    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
+
     tempHeadquartes = tempHeadquartes.filter((item) => {
         return (
             selectedSortRegion.value == null ||
@@ -371,6 +371,7 @@ const sortedLocalHeadquarters = computed(() => {
         tempHeadquartes.reverse();
     }
 
+    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     return tempHeadquartes;
 });
 
