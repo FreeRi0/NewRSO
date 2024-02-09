@@ -74,21 +74,21 @@
                     v-if="user.currentUser.value"
                 >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
-                    <a href="#">
+                    <!-- <a href="#">
                         <img
                             src="@app/assets/icon/bell-light.svg"
                             width="36"
                             height="36"
                             alt="Иконка уведомления"
                         />
-                    </a>
+                    </a> -->
                     <!--Если есть активные заявки (isActive = true), ниже отображается их количество:-->
-                    <div v-if="isActive" class="nav-user__quantity-box">
+                    <!-- <div v-if="isActive" class="nav-user__quantity-box">
                         <span v-if="quantityIsActive < 100">{{
                             quantityIsActive
                         }}</span>
                         <span v-else>99+</span>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="nav-user__location">
@@ -101,20 +101,21 @@
                             alt="Иконка геолокации"
                         /> -->
 
-                        <!-- <span
+                        <span
                             v-if="
                                 user.currentUser.value?.region &&
                                 !isLoading.isLoading.value
                             "
                         >
+                        <!-- {{regionals.filteredRegional.value  }} -->
                             <p v-for="item in regionals.filteredRegional.value">
                              <p> {{ item.name }}</p>
-                         </p>
+                            </p>
 
 
-                        </span> -->
+                        </span>
 
-                        <span
+                        <!-- <span
                             v-if="
                                 user.currentUser.value?.region &&
                                 !isLoading.isLoading.value
@@ -129,7 +130,7 @@
                                         user.currentUser.value.region,
                                 )?.name
                             }}
-                        </span>
+                        </span> -->
 
                         <p v-else-if="isLoading.isLoading.value">
                             Загрузка региона...
@@ -158,7 +159,7 @@
                             id="reg"
                             name="regdrop"
                             placeholder="Выберите регион обучения"
-                            v-model="region"
+                            v-model="user.currentUser.value.region"
                             @update:value="changeValue"
                             address="/regions/"
                             class="mb-2 region-input"
@@ -241,9 +242,9 @@ const quantityIsActive = ref(props.quantityActive);
 const router = useRouter();
 const user = storeToRefs(userStore);
 
-const region = ref(user.currentUser.value.region);
+// const region = ref(user.currentUser.value.region);
 
-console.log('region', region.value);
+// console.log('region', region.value);
 console.log('USEREEE', user.currentUser.value.region);
 console.log('userrr', user.currentUser.value);
 
@@ -403,7 +404,7 @@ const updateRegion = async () => {
         const updateRegResponse = await HTTP.patch(
             '/rsousers/me/',
             {
-                region: region.value,
+                region: user.currentUser.value.region,
             },
             {
                 headers: {
@@ -412,7 +413,7 @@ const updateRegion = async () => {
                 },
             },
         );
-        region.value = updateRegResponse.data.region;
+        user.currentUser.value.region = updateRegResponse.data.region;
         console.log('data', updateRegResponse.data.region);
         show.value = !show.value;
         // regionalsStore.searchRegionals(region.value);
@@ -422,19 +423,19 @@ const updateRegion = async () => {
     }
 };
 
-// watch(
-//     () => user.currentUser.value,
-//     (newUser, oldUser) => {
-//         if (Object.keys(user.currentUser.value).length === 0) {
-//             return;
-//         }
-//         regionalsStore.searchRegionals(region.value);
-//     },
-// );
+watch(
+    () => user.currentUser.value,
+    (newUser, oldUser) => {
+        if (Object.keys(user.currentUser.value).length === 0) {
+            return;
+        }
+        regionalsStore.searchRegionals(user.currentUser.value.region);
+    },
+);
 
 onMounted(() => {
     // await regionalsStore.getRegionals();
-    // regionalsStore.searchRegionals(region.value);
+    // regionalsStore.searchRegionals(user.currentUser.value.region);
 });
 </script>
 

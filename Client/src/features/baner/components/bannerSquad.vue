@@ -13,7 +13,7 @@
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
                         <li class="Squad-HQ__university">
-                            <p>{{ edict.name }}</p>
+                            <p>{{ squad.educational_institution?.short_name }}</p>
                         </li>
                         <li class="Squad-HQ__date">
                             <p>Дата создания ЛСО</p>
@@ -128,9 +128,6 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    edict: {
-        type: Object,
-    },
     member: {
         type: Array,
     },
@@ -152,7 +149,7 @@ let userId = computed(() => {
 
 // console.log('memberAA', props.member);
 
-const edict = ref({});
+// const edict = ref({});
 const regional = ref({});
 const data = ref({});
 const isError = ref([]);
@@ -161,24 +158,6 @@ const swal = inject('$swal');
 // console.log('user', userId.value);
 // console.log('member', props.member);
 
-const aboutEduc = async () => {
-    let id = props.squad.educational_institution.id;
-    console.log('squad', props.squad);
-    console.log('id', id);
-    await HTTP.get(`/eduicational_institutions/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            edict.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
 
 const viewDetachments = async () => {
     let id = route.params.id;
@@ -239,7 +218,6 @@ watch(
         if (Object.keys(props.squad).length === 0) {
             return;
         }
-        aboutEduc();
         viewRegionals();
     },
 );
@@ -316,7 +294,6 @@ const DeleteApplication = async () => {
 };
 
 onMounted(() => {
-    aboutEduc();
     viewDetachments();
     viewRegionals();
 });

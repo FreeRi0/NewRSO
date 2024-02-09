@@ -5,7 +5,6 @@
             <BannerSquad
                 :squad="squad.squad.value"
                 :member="member.members.value"
-                :edict="edict"
             ></BannerSquad>
             <section class="about-squad">
                 <h3>Об отряде</h3>
@@ -67,7 +66,7 @@ const squad = storeToRefs(squadsStore);
 const member = storeToRefs(squadsStore);
 const applications = ref([]);
 const isLoading = storeToRefs(squadsStore);
-const edict = ref({});
+
 const route = useRoute();
 let id = route.params.id;
 
@@ -92,9 +91,8 @@ watch(
 onMounted(() => {
     // getLsoData();
     squadsStore.getSquadId(id);
-    if (member.members.value.length > 0) {
-        squadsStore.getSquadMembers(id);
-    }
+    squadsStore.getSquadMembers(id);
+
     replaceTargetObjects([squad.squad.value]);
 });
 </script>

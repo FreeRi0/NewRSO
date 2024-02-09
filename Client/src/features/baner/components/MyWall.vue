@@ -24,7 +24,6 @@
                     <p>{{ user.patronymic_name }}</p>
                 </div>
 
-
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
                         <!-- <li class="user-data__title" ><p> Кандитат</p></li> -->
@@ -38,13 +37,22 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <p v-if="user.region && !isLoading.isLoading.value">
-                                {{
+                            <div
+                                v-if="user.region && !isLoading.isLoading.value"
+                            >
+                                <!-- {{
                                     regionals.regionals.value.find(
                                         (reg) => reg.region?.name === user.region,
                                     )?.name
-                                }}
-                            </p>
+                                }} -->
+                                <p
+                                    v-for="item in regionals.filteredRegional
+                                        .value"
+
+                                >  <p>{{ item.name }}</p></p>
+
+                            </div>
+
                             <p v-else>Загрузка региона...</p>
                         </li>
 
@@ -129,7 +137,6 @@ const props = defineProps({
     //     type: Array,
     // },
 });
-// v-if="props.user.privacy?.privacy_telephone === 'detachment_members' && props.member "
 const emit = defineEmits(['upload', 'update', 'delete']);
 
 const uploadAva = (imageAva) => {
@@ -201,17 +208,17 @@ const getUserData = async () => {
     } catch (error) {
         console.log('an error occured ' + error);
     }
-}
+};
 
 watch(
     () => props.user,
-
 
     (newUser) => {
         if (Object.keys(props.user).length === 0) {
             return;
         }
         getUserData();
+        regionalsStore.searchRegionals(props.user.region);
     },
 );
 

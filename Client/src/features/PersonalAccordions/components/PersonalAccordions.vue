@@ -1511,6 +1511,7 @@
                                                 :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="statementUp"
+                                              
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>

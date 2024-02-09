@@ -8,6 +8,7 @@ export const useRegionalsStore = defineStore('regionals', {
         filteredRegional: [],
         members: [],
         regional: {},
+        allRegions: [],
         institutions: [],
         isLoading: false,
     }),
@@ -25,8 +26,8 @@ export const useRegionalsStore = defineStore('regionals', {
                             },
                         },
                     );
-                    this.filteredRegional = responseSearchRegionals.data.name;
-                }, 1000);
+                    this.filteredRegional = responseSearchRegionals.data;
+                }, 100);
             } catch (err) {
                 console.log('an error occured ' + err);
             }
@@ -85,15 +86,15 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
         async searchRegions(name: String) {
-            const responseSearchRegions = await HTTP.get(
-                `/regions/?search=${name}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                },
-            );
-            this.regions = responseSearchRegions.data;
+            // const responseSearchRegions = await HTTP.get(
+            //     `/regions/?search=${name}`,
+            //     {
+            //         headers: {
+            //             'Content-Type': 'application/json',
+            //         },
+            //     },
+            // );
+            this.regions = this.allRegions.find((reg) => reg.name.indexOf(name) !== false);
         },
         async getRegions() {
             try {
@@ -103,6 +104,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         'Content-Type': 'application/json',
                     },
                 });
+                this.allRegions = responseRegions.data;
                 this.regions = responseRegions.data;
             } catch (error) {
                 console.log('an error occured ' + error);
