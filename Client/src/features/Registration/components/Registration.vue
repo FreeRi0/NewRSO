@@ -55,21 +55,24 @@
                 <p class="error" v-if="isError.email">
                     {{ isError.email }}
                 </p>
-                <Input
+                <!-- <Input
                     name="date"
                     type="date"
                     class="dateInput"
                     placeholder="Дата рождения"
                     v-model:value="form.date_of_birth"
                     max="9999-12-31"
-                />
-                <!-- <date-picker
+                /> -->
+                <date-picker
                     v-model:value="form.date_of_birth"
                     placeholder="Дата рождения"
                     name="date"
                     type="date"
                     class="dateInput"
-                ></date-picker> -->
+                    value-type="format"
+                    :lang="langObject"
+                    format="YYYY-MM-DD"
+                ></date-picker>
                 <p class="error" v-if="isError.date_of_birth">
                     Дата рождения в формате ДД.ММ.ГГГГ
                 </p>
@@ -191,20 +194,6 @@
     @media screen and (max-width: 575px) {
         max-width: 328px;
     }
-}
-
-.dateInput {
-    height: 48px;
-}
-
-.dateInput:before {
-    content: attr(placeholder) !important;
-    color: #aaa;
-    margin-right: 0.5em;
-}
-.dateInput:focus:before,
-.dateInput:valid:before {
-    content: '';
 }
 
 .regCheck {
@@ -346,7 +335,8 @@ input {
     font: normal;
 }
 
-.form-input input {
+.form-input input,
+.dateInput input {
     box-sizing: border-box;
     border: 2px solid #a3a3a3;
     border-radius: 10px;
@@ -359,7 +349,8 @@ input {
     color: #35383f;
 }
 
-.form-input input::placeholder {
+.form-input input::placeholder,
+.dateInput input::placeholder {
     color: #a3a3a3;
     font-size: 16px;
     font-weight: 500;
@@ -375,23 +366,23 @@ input {
     margin-bottom: 20px;
     width: 100%;
 }
-// .dateInput .mx-input:hover,
-// .dateInput .mx-input:focus {
-//     border-color: #a3a3a3;
-// }
+.dateInput .mx-input:hover,
+.dateInput .mx-input:focus {
+    border-color: #a3a3a3;
+}
 
-// .dateInput.mx-datepicker {
-//     width: 100%;
-// }
-// #login {
-//     margin-top: 6px;
-// }
-// .dateInput .mx-input {
-//     height: 47px;
-// }
-// .dateInput.mx-datepicker svg {
-//     margin-right: 6px;
-// }
+.dateInput.mx-datepicker {
+    width: 100%;
+}
+#login {
+    margin-top: 6px;
+}
+.dateInput .mx-input {
+    height: 47px;
+}
+.dateInput.mx-datepicker svg {
+    margin-right: 6px;
+}
 </style>
 
 <script setup>

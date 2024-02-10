@@ -7,8 +7,9 @@ import PrimeVue from 'primevue/config';
 import FileUpload from 'primevue/fileupload';
 import { createPinia } from 'pinia';
 import { MaskInput } from 'vue-3-mask';
-// import DatePicker from 'vue-datepicker-next';  // npm install vue-datepicker-next --save
-// import 'vue-datepicker-next/index.css';
+import DatePicker from 'vue-datepicker-next'; // npm install vue-datepicker-next --save
+import 'vue-datepicker-next/index.css';
+import 'vue-datepicker-next/locale/ru.es';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { createVuetify } from 'vuetify';
@@ -37,5 +38,5 @@ createApp(App)
     .use(router)
     .component('FileUpload', FileUpload)
     .component('MaskInput', MaskInput)
-    // .component('DatePicker', DatePicker)
+    .component('DatePicker', DatePicker)
     .mount('#app');
