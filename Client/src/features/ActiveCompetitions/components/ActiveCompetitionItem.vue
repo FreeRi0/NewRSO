@@ -40,7 +40,9 @@
 
                 <div
                     class="horizontallso-item__wrapper"
-                    v-if="commanderIds.regionalheadquarter_commander != null"
+                    v-if="
+                        commanderIds.regionalheadquarter_commander?.id != null
+                    "
                 >
                     <img
                         v-if="competition.junior_detachment.banner"

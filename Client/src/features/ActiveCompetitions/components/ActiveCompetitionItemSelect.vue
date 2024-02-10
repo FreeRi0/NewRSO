@@ -19,7 +19,9 @@
 
                 <div
                     class="horizontallso-item__wrapper"
-                    v-if="commanderIds.regionalheadquarter_commander != null"
+                    v-if="
+                        commanderIds.regionalheadquarter_commander?.id != null
+                    "
                 >
                     <img
                         class="competition__avatar_circle"
