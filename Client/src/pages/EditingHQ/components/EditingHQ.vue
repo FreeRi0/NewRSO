@@ -89,7 +89,7 @@ const getMembers = async () => {
             members.value = membersResponse.data;
             if (members.value.length) {
                 members.value.forEach((member) => {
-                    member.position = member.position.id;
+                    member.position = member.position?.id;
                 });
             }
             isMembersLoading.value = false;
