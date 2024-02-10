@@ -72,7 +72,6 @@ const emit = defineEmits(['update:value']);
 const regionalsStore = useRegionalsStore();
 const regions = storeToRefs(regionalsStore);
 
-
 const props = defineProps({
     items: {
         type: Array,
@@ -138,9 +137,6 @@ const searchRegion = (val) => {
     }
     items.value = regionalsStore.regions.find((reg) => reg.name.indexOf(name.value) !== false);
 };
-
-
-
 
 onMounted(() => {
     onChangeItem();

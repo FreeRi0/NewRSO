@@ -198,14 +198,14 @@ const viewParticipants = async () => {
     try {
         isLoading.value = true;
         let id =
-            roles.roles.value.regionalheadquarter_commander ??
+            roles.roles.value.regionalheadquarter_commander.id ??
             roles.roles.value.detachment_commander.id;
         console.log('roles', roles.roles.value);
         console.log('id', id);
         const regComReq = ref(null);
         const detComReq = ref(null);
         setTimeout(async () => {
-            if (roles.roles.value.regionalheadquarter_commander) {
+            if (roles.roles.value.regionalheadquarter_commander.id) {
                 const regComReq = await HTTP.get(
                     `/regionals/${id}/verifications/`,
                     {
@@ -218,7 +218,7 @@ const viewParticipants = async () => {
                 );
                 participants.value = regComReq.data;
                 isLoading.value = false;
-            } else if (roles.roles.value.detachment_commander) {
+            } else if (roles.roles.value.detachment_commander.id) {
                 const detComReq = await HTTP.get(
                     `/detachments/${id}/verifications/`,
                     {

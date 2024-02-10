@@ -1,17 +1,15 @@
 <template>
     <div class="participants-wrapper__item list">
-        <router-link :to="{ name: 'userpage', params: { id: participant.user?.id } }">
+        <router-link
+            :to="{ name: 'userpage', params: { id: participant.user?.id } }"
+        >
             <div class="round-img">
                 <img
                     :src="participant.user?.avatar?.photo"
                     alt="photo"
                     v-if="participant.user?.avatar?.photo"
                 />
-                <img
-                    src="@app/assets/user-avatar.png"
-                    alt="photo"
-                    v-else
-                />
+                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
             <div class="container-participants">
                 <p class="participants-wrapper__item-name">
@@ -45,6 +43,8 @@ const props = defineProps({
         display: block;
         margin: 0px auto;
         border-radius: 100%;
+        object-fit: cover;
+        overflow: hidden;
         @media screen and (max-width: 575px) {
             width: 60px;
             height: 60px;

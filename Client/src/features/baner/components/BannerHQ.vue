@@ -13,7 +13,7 @@
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list">
                         <li class="Squad-HQ__university">
-                            <p>{{ edict.name }}</p>
+                            <p>{{ edict.short_name }}</p>
                         </li>
                         <li class="Squad-HQ__date">
                             <p>Дата создания штаба</p>
@@ -72,7 +72,15 @@
                     <router-link
                         v-if="
                             userId &&
-                            (userId === headquarter?.commander?.id || IsTrusted)
+                            (userId === headquarter?.commander?.id ||
+                                roles.roles.value.regionalheadquarter_commander
+                                    ?.id ===
+                                    headquarter?.regional_headquarter ||
+                                roles.roles.value.localheadquarter_commander
+                                    ?.id === headquarter?.local_headquarter ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                IsTrusted)
                         "
                         class="hq-data__link"
                         :to="{
@@ -157,6 +165,7 @@
                     <router-link
                         v-if="
                             userId === localHeadquarter?.commander?.id ||
+                            roles.roles.value.centralheadquarter_commander ||
                             IsTrusted
                         "
                         class="hq-data__link"
@@ -242,6 +251,7 @@
                     <router-link
                         v-if="
                             userId === districtHeadquarter?.commander?.id ||
+                            roles.roles.value.centralheadquarter_commander ||
                             IsTrusted
                         "
                         class="hq-data__link"
@@ -327,6 +337,7 @@
                     <router-link
                         v-if="
                             userId === regionalHeadquarter?.commander?.id ||
+                            roles.roles.value.centralheadquarter_commander ||
                             IsTrusted
                         "
                         class="hq-data__link"

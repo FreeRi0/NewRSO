@@ -58,6 +58,7 @@
                     v-for="(item, i) in items"
                     :key="i"
                     class="dropdown__item dropdown__item_not"
+                    v-show="item.button || item.link || !item.hasOwnProperty('params') || (item.hasOwnProperty('params') && item.params.id)"
                 >
                     <button
                         class="dropdown__button-item"
