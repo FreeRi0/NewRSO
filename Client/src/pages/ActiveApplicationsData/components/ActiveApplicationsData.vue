@@ -200,6 +200,9 @@ const viewParticipants = async () => {
         let id =
             roles.roles.value.regionalheadquarter_commander?.id ??
             roles.roles.value.detachment_commander?.id;
+
+        console.log('roles', roles.roles.value);
+        console.log('id', id);
         const regComReq = ref(null);
         const detComReq = ref(null);
         setTimeout(async () => {
@@ -241,6 +244,9 @@ const viewDetachments = async () => {
         if (!roles.roles.value.detachment_commander) return;
         isLoading.value = true;
         let id = roles.roles.value.detachment_commander?.id;
+
+        console.log('roles', roles.roles.value);
+        console.log('detid', id);
         setTimeout(async () => {
             const detComRequest = await HTTP.get(
                 `/detachments/${id}/applications/`,
