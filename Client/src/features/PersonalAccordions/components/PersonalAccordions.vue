@@ -1511,7 +1511,7 @@
                                                 :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="statementUp"
-                                              
+
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
@@ -3352,7 +3352,7 @@ const isMilitaryChange = ref(false);
 const isForeignChange = ref(false);
 
 const statementUp = (event) => {
-    statement.value = event.files[0];
+    statement.value = event.files[0]
     console.log('файл есть', statement.value);
     isStatementChange.value = true;
 };
