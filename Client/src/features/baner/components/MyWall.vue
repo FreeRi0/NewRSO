@@ -26,9 +26,49 @@
 
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
-                        <!-- <li class="user-data__title" ><p></p></li>
-                        <li class="user-data__title" v-if="role.myPositions.value" ><p>Командир</p></li>
-                        <li class="user-data__title" ><p>Кандидат</p></li> -->
+                        <li
+                            class="user-data__title"
+                            v-if="
+                                role.roles.value.detachment_commander ||
+                                role.roles.value
+                                    .educationalheadquarter_commander ||
+                                role.roles.value.localheadquarter_commander ||
+                                role.roles.value
+                                    .regionalheadquarter_commander ||
+                                role.roles.value
+                                    .districtheadquarter_commander ||
+                                role.roles.value.centralheadquarter_commander
+                            "
+                        >
+                            <p>Командир</p>
+                        </li>
+                        <li
+                            class="user-data__title"
+                            v-else-if="role.myPositions.value?.userdetachmentposition || role.myPositions.value.userregionalheadquarterposition || role.myPositions.value.usereducationalheadquarterposition || role.myPositions.value.userlocalheadquarterposition || role.myPositions.value.userdistrictheadquarterposition || role.myPositions.value.usercentralheadquarterposition"
+                        >
+                            <p>
+                                {{
+                                    role.myPositions.value
+                                        .userdetachmentposition?.position ??
+                                    role.myPositions.value
+                                        .usereducationalheadquarterposition
+                                        ?.position ??
+                                    role.myPositions.value
+                                        .userregionalheadquarterposition
+                                        ?.position ??
+                                    role.myPositions.value
+                                        .userlocalheadquarterposition
+                                        ?.position ??
+                                    role.myPositions.value
+                                        .userdistrictheadquarterposition
+                                        ?.position ??
+                                    role.myPositions.value
+                                        .usercentralheadquarterposition
+                                        ?.position
+                                }}
+                            </p>
+                        </li>
+                        <li class="user-data__title" v-else><p>Кандидат</p></li>
                         <li class="user-data__title" v-if="detachment?.name">
                             <p>ССО "{{ detachment?.name }}"</p>
                         </li>
@@ -43,7 +83,7 @@
                                 v-if="user.region && !isLoading.isLoading.value"
                             >
                                 <div
-                                    v-for="item in regionals.filteredMyRegional
+                                    v-for="item in regionals.filteredRegional
                                         .value"
                                 >
                                     <p>{{ item.name }}</p>
@@ -51,6 +91,19 @@
                             </div>
 
                             <p v-else>Загрузка региона...</p>
+                        </li>
+
+                        <li
+                            v-if="
+                                user?.education?.study_institution?.short_name
+                            "
+                        >
+                            <p>
+                                {{
+                                    user?.education?.study_institution
+                                        ?.short_name
+                                }}
+                            </p>
                         </li>
 
                         <li v-if="user?.education?.study_faculty">
@@ -215,13 +268,13 @@ const getUserData = async () => {
 watch(
     () => props.user,
 
-    (newUser) => {
+    (newUser, oldUser) => {
         if (Object.keys(props.user).length === 0) {
             return;
         }
         // getUserData();
         // getEducData();
-        regionalsStore.searchMyRegionals(props.user.region);
+        regionalsStore.searchRegionals(props.user.region);
     },
 );
 

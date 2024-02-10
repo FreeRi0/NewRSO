@@ -6,6 +6,7 @@
                 :user="user.user.value"
                 :education="education"
                 :user_region="region"
+                :position="roles.positions.value"
                 class="mt-3"
                 @upload-wall="uploadWall"
                 @update-wall="updateWall"
@@ -192,11 +193,13 @@ watch(
         if (!newId || route.name !== 'userpage') return;
         id = newId;
         userStore.getUserId(id);
+        roleStore.getPositions(id);
     },
 );
 
 onMounted(() => {
     userStore.getUserId(id);
+    roleStore.getPositions(id);
 });
 </script>
 <style lang="scss" scoped>

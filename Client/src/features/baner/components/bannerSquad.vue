@@ -438,11 +438,8 @@ onMounted(() => {
 }
 .Squad-HQ__list li {
     border-right: none;
-    height: 20px;
+    height: auto;
     margin: 0;
-    @media screen and (max-width: 1024px) {
-        height: auto;
-    }
 }
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
