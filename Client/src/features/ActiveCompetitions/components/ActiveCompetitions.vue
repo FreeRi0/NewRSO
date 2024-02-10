@@ -114,7 +114,6 @@ const getCompetitionsJunior = async () => {
     for (const competitionId of allCompetition.value) {
         try {
             loading.value = true;
-            console.log(commanderIds.value.detachment_commander);
             const { data } = await HTTP.get(
                 `/competitions/${competitionId.id}/applications/me`,
                 {
@@ -135,6 +134,7 @@ const getCompetitionsJunior = async () => {
 };
 
 const getCompetitions = async () => {
+    console.log(commanderIds.value.regionalheadquarter_commander?.id);
     for (const competitionId of allCompetition.value) {
         try {
             loading.value = true;
@@ -151,7 +151,6 @@ const getCompetitions = async () => {
             competitionsList.value = data.filter(
                 (c) => c.is_confirmed_by_junior || !c.detachment,
             );
-            console.log(competitionsList.value);
         } catch (e) {
             console.log('error getCompetitions', e);
         } finally {
@@ -173,7 +172,7 @@ const onToggleSelectCompetition = (competition, isChecked) => {
 };
 
 const confirmApplication = async (id, competitionId) => {
-    if (commanderIds.value.regionalheadquarter_commander == null) {
+    if (commanderIds.value.regionalheadquarter_commander?.id == null) {
         await HTTP.put(
             `/competitions/${competitionId}/applications/${id}/`,
             {
@@ -237,7 +236,7 @@ const onAction = async () => {
                 );
         }
 
-        if (commanderIds.value.regionalheadquarter_commander == null)
+        if (commanderIds.value.regionalheadquarter_commander?.id == null)
             await getCompetitionsJunior();
         else await getCompetitions();
     } catch (e) {
@@ -249,7 +248,7 @@ onMounted(async () => {
     await getAllCompetition();
     await getMeCommander();
     console.log();
-    if (commanderIds.value.regionalheadquarter_commander == null)
+    if (commanderIds.value.regionalheadquarter_commander?.id == null)
         await getCompetitionsJunior();
     else await getCompetitions();
 });
@@ -257,7 +256,7 @@ onMounted(async () => {
 onActivated(async () => {
     await getAllCompetition();
     await getMeCommander();
-    if (commanderIds.value.regionalheadquarter_commander == null)
+    if (commanderIds.value.regionalheadquarter_commander?.id == null)
         await getCompetitionsJunior();
     else await getCompetitions();
 });

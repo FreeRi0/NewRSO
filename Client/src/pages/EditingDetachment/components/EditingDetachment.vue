@@ -50,11 +50,11 @@ const roles = storeToRefs(roleStore);
 const meRoles = roles.roles.value;
 console.log(meRoles);
 
-const educComId = roles.roles.value.educationalheadquarter_commander;
-const regionComId = roles.roles.value.regionalheadquarter_commander;
-const districtComId = roles.roles.value.districtheadquarter_commander;
+const educComId = roles.roles.value.educationalheadquarter_commander?.id;
+const regionComId = roles.roles.value.regionalheadquarter_commander?.id;
+const districtComId = roles.roles.value.districtheadquarter_commander?.id;
 const centralComId = roles.roles.value.centralheadquarter_commander;
-const localComId = roles.roles.value.localheadquarter_commander;
+const localComId = roles.roles.value.localheadquarter_commander?.id;
 const detComId = roles.roles.value.detachment_commander?.id;
 
 const router = useRouter();
@@ -131,7 +131,7 @@ const getMembers = async () => {
             members.value = membersResponse.data;
             if (members.value.length) {
                 members.value.forEach((member) => {
-                    member.position = member.position.id;
+                    member.position = member.position?.id;
                 });
             }
             console.log('участ', members.value);
