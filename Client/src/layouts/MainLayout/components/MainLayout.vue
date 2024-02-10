@@ -51,7 +51,7 @@ import { usePositionsStore } from '@features/store/positions';
 const roleStore = useRoleStore();
 const userStore = useUserStore();
 const regionsStore = useRegionalsStore();
-const positionsStore = usePositionsStore();
+// const positionsStore = usePositionsStore();
 const currentUser = storeToRefs(userStore);
 console.log('user', currentUser.currentUser.value);
 
@@ -61,7 +61,7 @@ onMounted(() => {
     userStore.getUser();
     roleStore.getRoles();
     regionsStore.getRegions();
-    positionsStore.getPositions();
+    // positionsStore.getPositions();
 });
 
 //запрос на коммандира

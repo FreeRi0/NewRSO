@@ -107,11 +107,12 @@
                                 !isLoading.isLoading.value
                             "
                         >
-                            <p v-for="item in regionals.filteredMyRegional.value">
-                             <p> {{ item.name }}</p>
-                            </p>
-
-
+                            <div
+                                v-for="item in regionals.filteredRegional
+                                    .value"
+                            >
+                                <p>{{ item.name }}</p>
+                            </div>
                         </span>
 
                         <p v-else-if="isLoading.isLoading.value">
@@ -182,7 +183,6 @@
         </header>
     </div>
 </template>
-
 
 <script setup>
 import { Dropdown } from '@shared/components/dropdown';
@@ -391,7 +391,7 @@ const updateRegion = async () => {
                 },
             },
         );
-        user.currentUser.value.region = updateRegResponse.data.region;
+        region.value = updateRegResponse.data.region;
         show.value = !show.value;
         // regionalsStore.searchRegionals(region.value);
         userStore.getUser();
@@ -407,10 +407,10 @@ watch(
             return;
         }
 
-
-        region.value = regionalsStore.regions.find((region) => region.name === user.currentUser.value.region)?.id;
+        region.value = regionalsStore.regions.find(
+            (region) => region.name === user.currentUser.value.region,
+        )?.id;
         regionalsStore.searchRegionals(user.currentUser.value.region);
-
     },
 );
 

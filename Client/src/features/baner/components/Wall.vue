@@ -74,7 +74,50 @@
 
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
-                        <!-- <li class="user-data__title" ><p> Кандитат</p></li> -->
+                        <!-- <li
+                            class="user-data__title"
+                            v-if="
+                                role.roles.value.detachment_commander ||
+                                role.roles.value
+                                    .educationalheadquarter_commander ||
+                                role.roles.value.localheadquarter_commander ||
+                                role.roles.value
+                                    .regionalheadquarter_commander ||
+                                role.roles.value
+                                    .districtheadquarter_commander ||
+                                role.roles.value.centralheadquarter_commander
+                            "
+                        >
+                            <p>Командир</p>
+                        </li> -->
+                        <li
+                            class="user-data__title"
+                            v-if="
+                                position?.userdetachmentposition ||
+                                position.userregionalheadquarterposition ||
+                                position.userlocalheadquarterposition ||
+                                position.userdistrictheadquarterposition ||
+                                position?.usercentralheadquarterposition
+                            "
+                        >
+                            <p>
+                                {{
+                                    position.userdetachmentposition?.position ??
+                                    position.usereducationalheadquarterposition
+                                        ?.position ??
+                                    position.userregionalheadquarterposition
+                                        ?.position ??
+                                    position.userlocalheadquarterposition
+                                        ?.position ??
+                                    position.userdistrictheadquarterposition
+                                        ?.position ??
+                                    position.usercentralheadquarterposition
+                                        ?.position
+                                }}
+                            </p>
+                        </li>
+                        <li class="user-data__title" v-else><p>Кандитат</p></li>
+
                         <li class="user-data__title" v-if="detachment?.name">
                             <p>ССО "{{ detachment?.name }}"</p>
                         </li>
@@ -84,7 +127,7 @@
                         >
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
-                        <li class="user-data__regional-office">
+                        <!-- <li class="user-data__regional-office">
                             <div v-if="user.region">
                                 <div
                                     v-for="item in regionals.filteredRegional
@@ -93,7 +136,7 @@
                                     <p>{{ item.name }}</p>
                                 </div>
                             </div>
-                        </li>
+                        </li> -->
                         <li v-if="user?.education?.study_faculty">
                             <p>{{ user?.education?.study_faculty }}</p>
                         </li>
@@ -252,6 +295,9 @@ const props = defineProps({
     education: {
         type: Object,
     },
+    position: {
+        type: Object,
+    },
 });
 
 const userStore = useUserStore();
@@ -340,17 +386,17 @@ const getUserData = async () => {
 watch(
     () => props.user,
 
-    (newUser) => {
+    (newUser, oldUser) => {
         if (Object.keys(props.user).length === 0) {
             return;
         }
         // getUserData();
-        regionalsStore.searchRegionals(props.user.region);
+        // regionalsStore.searchRegionals(props.user.region);
     },
 );
 
 onMounted(() => {
-    regionalsStore.searchRegionals(props.user.region);
+    // regionalsStore.searchRegionals(props.user.region);
     getUserData();
 });
 </script>
