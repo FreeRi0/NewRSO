@@ -13,7 +13,9 @@
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
                         <li class="Squad-HQ__university">
-                            <p>{{ squad.educational_institution?.short_name }}</p>
+                            <p>
+                                {{ squad.educational_institution?.short_name }}
+                            </p>
                         </li>
                         <li class="Squad-HQ__date">
                             <p>Дата создания ЛСО</p>
@@ -30,7 +32,9 @@
                 <div class="squad-data__contacts-wrapper">
                     <div class="squad-data__contacts">
                         <div class="squad-data__participant-counter">
-                            <span>{{ member.length }} участников</span>
+                            <span
+                                >{{ squad.participants_count }} участников</span
+                            >
                         </div>
                         <div class="squad-data__social-network">
                             <div class="squad-data__link-vk">
@@ -141,7 +145,7 @@ const userStore = useUserStore();
 const route = useRoute();
 const user = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
-let comId = roles.roles.value.detachment_commander;
+// let comId = roles.roles.value.detachment_commander.id;
 let userId = computed(() => {
     return user.currentUser.value.id;
 });
@@ -157,7 +161,6 @@ const applications = ref([]);
 const swal = inject('$swal');
 // console.log('user', userId.value);
 // console.log('member', props.member);
-
 
 const viewDetachments = async () => {
     let id = route.params.id;
@@ -435,11 +438,8 @@ onMounted(() => {
 }
 .Squad-HQ__list li {
     border-right: none;
-    height: 20px;
+    height: auto;
     margin: 0;
-    @media screen and (max-width: 1024px) {
-        height: auto;
-    }
 }
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;

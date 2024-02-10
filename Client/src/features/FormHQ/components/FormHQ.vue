@@ -134,7 +134,7 @@
                                 class="form__error"
                                 v-if="isError.educational_institution"
                             >
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('educational_institution') }}
                             </p>
                         </div>
 
@@ -151,7 +151,7 @@
                                 v-model:value="headquarter.founding_date"
                             />
                             <p class="form__error" v-if="isError.founding_date">
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('founding_date') }}
                             </p>
                         </div>
 
@@ -175,7 +175,7 @@
                                 class="form__error"
                                 v-if="isError.regional_headquarter"
                             >
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('regional_headquarter') }}
                             </p>
                         </div>
 
@@ -216,7 +216,7 @@
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
                             >
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('commander') }}
                             </p>
                         </div>
                     </div>
@@ -856,6 +856,15 @@ const props = defineProps({
         default: false,
     },
 });
+
+const getErrorField = (field) => {
+    if (
+        props.isError[field][0] ===
+        'Некорректный тип. Ожидалось значение первичного ключа, получен str.'
+    )
+        return 'Это поле не может быть пустым.';
+    else return props.isError[field][0];
+};
 
 const headquarter = ref(props.headquarter);
 

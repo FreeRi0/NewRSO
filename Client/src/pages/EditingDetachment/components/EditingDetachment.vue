@@ -55,7 +55,7 @@ const regionComId = roles.roles.value.regionalheadquarter_commander;
 const districtComId = roles.roles.value.districtheadquarter_commander;
 const centralComId = roles.roles.value.centralheadquarter_commander;
 const localComId = roles.roles.value.localheadquarter_commander;
-const detComId = roles.roles.value.detachment_commander;
+const detComId = roles.roles.value.detachment_commander?.id;
 
 const router = useRouter();
 const route = useRoute();
@@ -223,6 +223,12 @@ const onResetPhotoFour = (file) => {
 const isError = ref({});
 const isErrorMembers = ref({});
 
+const getErrors = () => {
+    if (isError.value.non_field_errors) return isError.value.non_field_errors;
+    if (isError.value.detail) return isError.value.detail;
+    else return 'Заполните обязательные поля';
+};
+
 const changeDetachment = async () => {
     const formData = new FormData();
     formData.append('name', detachment.value.name);
@@ -342,7 +348,7 @@ const changeDetachment = async () => {
             swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: `ошибка - ${isError.value.non_field_errors}`,
+                title: `Ошибка - ${getErrors()}`,
                 showConfirmButton: false,
                 timer: 2500,
             });

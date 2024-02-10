@@ -138,6 +138,12 @@ const isError = ref({});
 const isErrorMembers = ref({});
 const swal = inject('$swal');
 
+const getErrors = () => {
+    if (isError.value.non_field_errors) return isError.value.non_field_errors;
+    if (isError.value.detail) return isError.value.detail;
+    else return 'Заполните обязательные поля';
+};
+
 const changeHeadquarter = async () => {
     const formData = new FormData();
     formData.append('name', headquarter.value.name);
@@ -229,7 +235,7 @@ const changeHeadquarter = async () => {
             swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: `ошибка - ${isError.value.non_field_errors}`,
+                title: `Ошибка - ${getErrors()}`,
                 showConfirmButton: false,
                 timer: 2500,
             });

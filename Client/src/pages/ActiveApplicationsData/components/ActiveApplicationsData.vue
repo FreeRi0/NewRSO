@@ -144,7 +144,7 @@ import { activeApplications } from '@features/ActiveApplications/components';
 import { checkedAppList } from '@features/ActiveApplications/components';
 import { CheckedSquadsList } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
-import { ActiveEventsApp} from '@features/ActiveApplications/components';
+import { ActiveEventsApp } from '@features/ActiveApplications/components';
 import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { useRoleStore } from '@layouts/store/role';
 
@@ -198,14 +198,14 @@ const viewParticipants = async () => {
     try {
         isLoading.value = true;
         let id =
-            roles.roles.value.regionalheadquarter_commander ??
-            roles.roles.value.detachment_commander;
+            roles.roles.value.regionalheadquarter_commander.id ??
+            roles.roles.value.detachment_commander.id;
         console.log('roles', roles.roles.value);
         console.log('id', id);
         const regComReq = ref(null);
         const detComReq = ref(null);
         setTimeout(async () => {
-            if (roles.roles.value.regionalheadquarter_commander) {
+            if (roles.roles.value.regionalheadquarter_commander.id) {
                 const regComReq = await HTTP.get(
                     `/regionals/${id}/verifications/`,
                     {
@@ -218,7 +218,7 @@ const viewParticipants = async () => {
                 );
                 participants.value = regComReq.data;
                 isLoading.value = false;
-            } else if (roles.roles.value.detachment_commander) {
+            } else if (roles.roles.value.detachment_commander.id) {
                 const detComReq = await HTTP.get(
                     `/detachments/${id}/verifications/`,
                     {
@@ -241,7 +241,7 @@ const viewParticipants = async () => {
 const viewDetachments = async () => {
     try {
         isLoading.value = true;
-        let id = roles.roles.value.detachment_commander;
+        let id = roles.roles.value.detachment_commander.id;
         console.log('roles', roles.roles.value);
         console.log('detid', id);
         setTimeout(async () => {
@@ -307,8 +307,6 @@ const selectSquads = (event) => {
         }
     }
 };
-
-
 
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
@@ -386,7 +384,6 @@ const changeEvents = (CheckedEvent, EventId) => {
         );
     }
 };
-
 
 watch(
     () => roles.roles.value,

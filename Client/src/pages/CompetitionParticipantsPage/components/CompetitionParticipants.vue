@@ -219,16 +219,6 @@ const sortOptionss = ref([
 const sortedSquads = computed(() => {
     let tempSquads = squads.competitionSquads.value;
 
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
-
-    // tempSquads = tempSquads.filter((item) => {
-    //     // console.log(educational_institution.id);
-    //     return (
-    //         selectedSort.value == null ||
-    //         item.educational_institution == selectedSort.value
-    //     );
-    // });
-
     tempSquads = tempSquads.filter((item) => {
         return (
             item.detachment?.name.toUpperCase() ??
@@ -277,7 +267,7 @@ const sortedSquads = computed(() => {
     if (!picked.value) {
         return tempSquads;
     }
-
+    tempSquads = tempSquads.slice(0, squadsVisible.value);
     tempSquads = tempSquads.filter((item) => item.detachment?.area === picked.value ?? item.junior_detachment?.area === picked.value );
 
     return tempSquads;
