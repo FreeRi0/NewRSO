@@ -3704,7 +3704,7 @@ const updateData = async () => {
         const axiosrequest4 = await HTTP.patch(
             '/rsousers/me/education/',
             {
-                study_institution: props.user.education.study_institution,
+                study_institution: props.user.education.study_institution?.id,
                 study_faculty: props.user.education.study_faculty,
                 study_year: props.user.education.study_year,
                 study_specialty: props.user.education.study_specialty,
