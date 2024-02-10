@@ -19,7 +19,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     ? region.name
                     : region;
                 const responseSearchRegionals = await HTTP.get(
-                    `/regionals/?search=${regionName}`,
+                    `/regionals/?region=${regionName}`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     ? region.name
                     : region;
                 const responseSearchMyRegionals = await HTTP.get(
-                    `/regionals/?search=${regionName}`,
+                    `/regionals/?region=${regionName}`,
                     {
                         headers: {
                             'Content-Type': 'application/json',

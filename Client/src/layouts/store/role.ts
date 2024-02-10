@@ -29,7 +29,7 @@ export const useRoleStore = defineStore('role', {
         },
 
         async getPositions(id: String) {
-            const dataPositions = await HTTP.get(`/rsousers/${id}positions/`, {
+            const dataPositions = await HTTP.get(`/rsousers/${id}/positions/`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'Token ' + localStorage.getItem('Token'),
