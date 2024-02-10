@@ -30,7 +30,7 @@
                         <li class="user-data__title" v-if="role.myPositions.value" ><p>Командир</p></li>
                         <li class="user-data__title" ><p>Кандидат</p></li> -->
                         <li class="user-data__title" v-if="detachment?.name">
-                            <p>ССО "{{ detachment?.name }}"</p>
+                            <p>{{ detachment?.name }}</p>
                         </li>
                         <li
                             class="user-data__title"

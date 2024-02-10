@@ -76,7 +76,7 @@
                     <ul class="user-data__list">
                         <!-- <li class="user-data__title" ><p> Кандитат</p></li> -->
                         <li class="user-data__title" v-if="detachment?.name">
-                            <p>ССО "{{ detachment?.name }}"</p>
+                            <p>{{ detachment?.name }}</p>
                         </li>
                         <li
                             class="user-data__title"
