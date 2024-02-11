@@ -47,7 +47,7 @@
                         roles.roles.value.centralheadquarter_commander)) ||
                 props.user.privacy?.privacy_photo === 'Все'
             "
-            :avatar="user?.media?.photo"
+            :avatar="user?.avatar?.photo"
             @upload="uploadAva"
             @update="updateAva"
             @delete="deleteAva"
