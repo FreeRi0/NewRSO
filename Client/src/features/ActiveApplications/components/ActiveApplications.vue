@@ -1,8 +1,6 @@
 <template>
     <p v-if="loading">Загрузка...</p>
-    <p v-else-if="!loading && !competitionsList.length">
-        Список заявок на конкурсы пуст
-    </p>
+    <p v-else-if="!loading && !participantList.length">Список заявок пуст</p>
 
     <template v-else>
         <div class="competitions__actions">
@@ -16,10 +14,10 @@
         </div>
         <div class="competitions__list">
             <template
-                v-for="(competition, index) in competitionsList"
-                :key="competition.id"
+                v-for="(participant, index) in participantList"
+                :key="participant.user.id"
             >
-                <active-competition-item
+                <!-- <active-competition-item
                     v-if="
                         competition.is_confirmed_by_junior ||
                         (competition.junior_detachment?.id ==
@@ -31,25 +29,40 @@
                     :commander-ids="commanderIds"
                     :position="index"
                     @select="onToggleSelectCompetition"
+                /> -->
+
+                <referenceItem
+                    :participant="participant"
+                    :commander-ids="commanderIds"
+                    :position="index"
+                    @select="onToggleSelectCompetition"
                 />
             </template>
-            <template v-if="selectedCompetitionsList.length">
+            <template v-if="selectedParticipantList.length">
                 <p class="text_total">
-                    Итого: {{ selectedCompetitionsList.length }}
+                    Итого: {{ selectedParticipantList.length }}
                 </p>
 
-                <active-competition-item-select
+                <!-- <active-competition-item-select
                     v-for="competition in selectedCompetitionsList"
                     :key="competition.id"
                     :competition="competition"
                     :action="action"
                     :commander-ids="commanderIds"
                     @select="onToggleSelectCompetition"
+                /> -->
+                <checkedReferencesItem
+                    v-for="participant in selectedParticipantList"
+                    :action="action"
+                    :participant="participant"
+                    :commander-ids="commanderIds"
+                    :key="participant.user.id"
+                    @select="onToggleSelectCompetition"
                 />
             </template>
         </div>
 
-        <div class="competitions__btns" v-if="selectedCompetitionsList.length">
+        <div class="competitions__btns" v-if="selectedParticipantList.length">
             <Button
                 class="save"
                 type="button"
@@ -110,13 +123,12 @@ import { ref } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import { ref, onMounted, onActivated } from 'vue';
-import ActiveCompetitionItem from './ActiveCompetitionItem.vue';
-import ActiveCompetitionItemSelect from './ActiveCompetitionItemSelect.vue';
+import { referenceItem } from '@entities/ReferencesPeoples';
+import { checkedReferencesItem } from '@entities/ReferencesPeoples';
 
-const competitionsList = ref([]);
+const participantList = ref([]);
 const commanderIds = ref();
-const selectedCompetitionsList = ref([]);
-const allCompetition = ref([]);
+const selectedParticipantList = ref([]);
 
 const loading = ref(false);
 const action = ref('Одобрить');
@@ -200,7 +212,7 @@ const actionsList = ref(['Одобрить', 'Отклонить']);
 
 const viewParticipants = async () => {
     try {
-        isLoading.value = true;
+        // isLoading.value = true;
         let id =
             roles.roles.value.regionalheadquarter_commander?.id ??
             roles.roles.value.detachment_commander?.id;
@@ -240,80 +252,80 @@ const viewParticipants = async () => {
     }
 };
 
-const onToggleSelectCompetition = (competition, isChecked) => {
-    if (isChecked) {
-        competition.selected = isChecked;
-        selectedCompetitionsList.value.push(competition);
+const onToggleSelectCompetition = (participant, checked) => {
+    if (checked) {
+        participant.selected = checked;
+        selectedParticipantList.value.push(participant);
     } else {
-        competition.selected = isChecked;
-        selectedCompetitionsList.value = selectedCompetitionsList.value.filter(
-            (c) => c.id !== competition.id,
+        participant.selected = checked;
+        selectedParticipantList.value = selectedParticipantList.value.filter(
+            (c) => c.id !== participant.id,
         );
     }
 };
 
-const confirmApplication = async (id, competitionId) => {
-    if (commanderIds.value.regionalheadquarter_commander?.id == null) {
-        await HTTP.put(
-            `/competitions/${competitionId}/applications/${id}/`,
-            {
-                is_confirmed_by_junior: true,
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-    } else {
-        await HTTP.post(
-            `/competitions/${competitionId}/applications/${id}/confirm/`,
-            {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-    }
-};
+// const confirmApplication = async (id, participantId) => {
+//     if (commanderIds.value.regionalheadquarter_commander?.id == null) {
+//         await HTTP.put(
+//             `/competitions/${competitionId}/applications/${id}/`,
+//             {
+//                 is_confirmed_by_junior: true,
+//             },
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             },
+//         );
+//     } else {
+//         await HTTP.post(
+//             `/competitions/${competitionId}/applications/${id}/confirm/`,
+//             {},
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             },
+//         );
+//     }
+// };
 
-const cancelApplication = async (id, competitionId) => {
-    await HTTP.delete(
-        `/competitions/${competitionId}/applications/${id}`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
-        {},
-    );
-};
+// const cancelApplication = async (id, competitionId) => {
+//     await HTTP.delete(
+//         `/competitions/${competitionId}/applications/${id}`,
+//         {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         },
+//         {},
+//     );
+// };
 
 const onAction = async () => {
     try {
-        for (const application of selectedCompetitionsList.value) {
+        for (const application of selectedParticipantList.value) {
             if (action.value === 'Одобрить') {
                 console.log(application.id);
                 await confirmApplication(
                     application.id,
-                    application.competition.id,
+                    application.participant.id,
                 );
             } else {
                 await cancelApplication(
                     application.id,
-                    application.competition.id,
+                    application.participant.id,
                 );
             }
-            competitionsList.value = competitionsList.value.filter(
-                (competition) => competition.id != application.id,
+            participantList.value = participantList.value.filter(
+                (participant) => participant.id != application.id,
             );
-            selectedCompetitionsList.value =
-                selectedCompetitionsList.value.filter(
-                    (competition) => competition.id != application.id,
+            selectedParticipantList.value =
+                selectedParticipantList.value.filter(
+                    (participant) => participant.id != application.id,
                 );
         }
 
