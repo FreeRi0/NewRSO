@@ -78,8 +78,8 @@
                                     headquarter?.regional_headquarter ||
                                 roles.roles.value.localheadquarter_commander
                                     ?.id === headquarter?.local_headquarter ||
-                                roles.roles.value
-                                    .centralheadquarter_commander ||
+                                roles.roles.value.centralheadquarter_commander
+                                    ?.id ||
                                 IsTrusted)
                         "
                         class="hq-data__link"
@@ -165,7 +165,11 @@
                     <router-link
                         v-if="
                             userId === localHeadquarter?.commander?.id ||
-                            roles.roles.value.centralheadquarter_commander ||
+                            roles.roles.value.regionalheadquarter_commander
+                                ?.id ===
+                                localHeadquarter.regional_headquarter ||
+                            roles.roles.value.centralheadquarter_commander
+                                ?.id ||
                             IsTrusted
                         "
                         class="hq-data__link"
@@ -251,7 +255,8 @@
                     <router-link
                         v-if="
                             userId === districtHeadquarter?.commander?.id ||
-                            roles.roles.value.centralheadquarter_commander ||
+                            roles.roles.value.centralheadquarter_commander
+                                ?.id ||
                             IsTrusted
                         "
                         class="hq-data__link"
@@ -337,7 +342,11 @@
                     <router-link
                         v-if="
                             userId === regionalHeadquarter?.commander?.id ||
-                            roles.roles.value.centralheadquarter_commander ||
+                            roles.roles.value.districtheadquarter_commander
+                                ?.id ===
+                                regionalHeadquarter.district_headquarter ||
+                            roles.roles.value.centralheadquarter_commander
+                                ?.id ||
                             IsTrusted
                         "
                         class="hq-data__link"
