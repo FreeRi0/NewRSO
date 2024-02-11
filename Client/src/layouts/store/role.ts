@@ -4,6 +4,7 @@ import { HTTP } from '@app/http';
 export const useRoleStore = defineStore('role', {
     state: () => ({
         roles: {},
+        userRoles: {},
         myPositions: {},
         positions: {},
     }),
@@ -16,6 +17,16 @@ export const useRoleStore = defineStore('role', {
                 },
             });
             this.roles = data.data;
+        },
+
+        async getUserRoles(id: String) {
+            const dataUserRoles = await HTTP.get(`/rsousers/${id}/commander/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.userRoles = dataUserRoles.data;
         },
 
         async getMyPositions() {
