@@ -184,6 +184,13 @@ import { onActivated } from "vue";
 
 let actionsList = ref([]);
 
+onActivated(()=>{
+    getListActionsBySearch(text.value)
+    .then((resp)=>{
+      actionsList.value = resp.data;
+    })
+});
+
 //Массив полученных значений
 const SortedList = ref([]);
 const text = ref('');
