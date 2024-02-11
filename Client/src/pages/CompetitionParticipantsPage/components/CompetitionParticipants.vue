@@ -244,8 +244,8 @@ const sortedSquads = computed(() => {
             //     b.detachment?.name.toLowerCase() ??
             //     b.junior_detachment?.name.toLowerCase();
 
-            let fa = a.detachment?.name.toLowerCase(),
-                fb = b.detachment?.name.toLowerCase();
+            let fa = a.name.toLowerCase(),
+                fb = b.name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -281,7 +281,7 @@ const sortedSquads = computed(() => {
     }
 
     tempSquads = tempSquads.filter(
-        (item) => item.detachment?.area === picked.value ?? item.junior_detachment?.area === picked.value,
+        (item) => item.area === picked.value
     );
     tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
