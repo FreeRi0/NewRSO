@@ -122,7 +122,9 @@
                                 class="form__error"
                                 v-if="isError.district_headquarter"
                             >
-                                * Это поле не может быть пустым.
+                                <!-- здесь поменяла -->
+                                <!-- * Это поле не может быть пустым. -->
+                                * {{ getErrorField('district_headquarter') }}
                             </p>
                         </div>
                         <div class="form__field">
@@ -130,6 +132,15 @@
                                 >Выберите регион
                                 <sup class="valid-red">*</sup>
                             </label>
+                            <!-- <SearchSelect
+                                :items="regions.regions.value"
+                                open-on-clear
+                                id="select-region"
+                                name="select_region"
+                                placeholder="Например, Алтайский край"
+                                v-model="headquarter.region"
+                                @update:value="changeValue"
+                            ></SearchSelect> -->
                             <regionsDropdown
                                 open-on-clear
                                 id="select-region"
@@ -141,7 +152,9 @@
                             >
                             </regionsDropdown>
                             <p class="form__error" v-if="isError.region">
-                                * Это поле не может быть пустым.
+                                <!-- здесь поменяла -->
+                                <!-- * Это поле не может быть пустым. -->
+                                * {{ getErrorField('region') }}
                             </p>
                         </div>
 
@@ -155,23 +168,39 @@
                                 v-model:value="headquarter.city"
                             />
                         </div>
-                        <div class="form__field form__field--commander">
+                        <!-- здесь поменяла -->
+                        <div
+                            v-if="
+                                roles.roles.value
+                                    .educationalheadquarter_commander ||
+                                roles.roles.value
+                                    .regionalheadquarter_commander ||
+                                roles.roles.value
+                                    .districtheadquarter_commander ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                roles.roles.value.localheadquarter_commander ||
+                                roles.roles.value.detachment_commander
+                            "
+                            class="form__field form__field--commander"
+                        >
                             <label class="form__label" for="beast"
                                 >Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <!-- здась поменяла -->
-                            <Dropdown
-                                v-if="!isCommanderLoading"
-                                open-on-clear
-                                id="beast"
-                                name="edit_beast"
-                                placeholder="Поиск по ФИО"
-                                v-model="headquarter.commander"
-                                @update:value="changeValue"
-                                address="users/"
-                            ></Dropdown>
-                            <!-- здась поменяла -->
+                            <!-- здесь поменяла, добавила div -->
+                            <div v-if="!isCommanderLoading">
+                                <Dropdown
+                                    open-on-clear
+                                    id="beast"
+                                    name="edit_beast"
+                                    placeholder="Поиск по ФИО"
+                                    v-model="headquarter.commander"
+                                    @update:value="changeValue"
+                                    address="users/"
+                                ></Dropdown>
+                            </div>
+                            <!-- здесь поменяла -->
                             <v-progress-circular
                                 class="circleLoader"
                                 v-else
@@ -182,7 +211,8 @@
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
                             >
-                                * Это поле не может быть пустым.
+                                <!-- * Это поле не может быть пустым. -->
+                                * {{ getErrorField('commander') }}
                             </p>
                         </div>
                     </div>
@@ -326,7 +356,7 @@
                             <!-- здесь поменяла -->
                             <MembersList
                                 :items="sortedMembers"
-                                :functions="positionsStore.positions"
+                                :functions="positions.positions.value"
                                 :submited="submited"
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
@@ -468,7 +498,8 @@
                                     class="form__error form__error--date"
                                     v-if="isError.founding_date"
                                 >
-                                    * Это поле не может быть пустым.
+                                    <!-- * Это поле не может быть пустым. -->
+                                    * {{ getErrorField('founding_date') }}
                                 </p>
                             </div>
 
@@ -910,26 +941,28 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+// здесь поменяла
+import { ref, computed, onBeforeMount } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Select, Dropdown, regionsDropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-import { HTTP } from '@app/http';
+// здесь поменяла
+import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
 import { usePositionsStore } from '@features/store/positions';
-const positionsStore = usePositionsStore();
-// import { useRoute } from 'vue-router';
+import { storeToRefs } from 'pinia';
+// import { HTTP } from '@app/http';
 
-// import {
-//     helpers,
-//     minLength,
-//     required,
-//     maxLength,
-//     numeric,
-//     email,
-//     sameAs,
-// } from '@vuelidate/validators';
+const regionalsStore = useRegionalsStore();
+const regions = storeToRefs(regionalsStore);
+
+const positionsStore = usePositionsStore();
+const positions = storeToRefs(positionsStore);
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
 
 const emit = defineEmits([
     'update:value',
@@ -984,6 +1017,16 @@ const props = defineProps({
         default: false,
     },
 });
+
+// здесь поменяла , переменная для ошибок
+const getErrorField = (field) => {
+    if (
+        props.isError[field][0] ===
+        'Некорректный тип. Ожидалось значение первичного ключа, получен str.'
+    )
+        return 'Это поле не может быть пустым.';
+    else return props.isError[field][0];
+};
 
 const headquarter = ref(props.headquarter);
 
@@ -1089,13 +1132,22 @@ const deleteBanner = () => {
     fileBanner.value = null;
     emit('deleteBanner', fileBanner.value);
 };
+
+onBeforeMount(async () => {
+    regionalsStore.getRegions();
+    roleStore.getRoles();
+    positionsStore.getPositions();
+});
 </script>
 
 <style lang="scss" scoped>
 .form-button {
     width: 132px;
     min-height: 52px;
-    margin: 0;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 16px 32px;
     font-family: 'Bert Sans';
     font-size: 16px;

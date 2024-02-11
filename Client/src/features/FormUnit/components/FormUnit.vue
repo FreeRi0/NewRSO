@@ -1359,6 +1359,7 @@ import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
+
 import { useRoleStore } from '@layouts/store/role';
 import { useSquadsStore } from '@features/store/squads';
 import { useRegionalsStore } from '@features/store/regionals';
