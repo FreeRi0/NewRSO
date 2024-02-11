@@ -326,6 +326,7 @@
                             <!-- здесь поменяла -->
                             <MembersList
                                 :items="sortedMembers"
+                                :functions="positionsStore.positions"
                                 :submited="submited"
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
@@ -916,6 +917,8 @@ import { Select, Dropdown, regionsDropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
+import { usePositionsStore } from '@features/store/positions';
+const positionsStore = usePositionsStore();
 // import { useRoute } from 'vue-router';
 
 // import {
