@@ -17,7 +17,12 @@
                     </div>
                 </div>
 
-                <div class="horizontallso-item__wrapper">
+                <div
+                    class="horizontallso-item__wrapper"
+                    v-if="
+                        commanderIds.regionalheadquarter_commander?.id != null
+                    "
+                >
                     <img
                         class="competition__avatar_circle"
                         :src="competition.junior_detachment.banner"
@@ -48,7 +53,13 @@
 
             <div class="horizontallso-item__wrapper">{{ action }}</div>
 
-            <v-checkbox v-model="isChecked" @change="onCheckbox" />
+            <div class="horizontallso__confidant">
+                <input
+                    type="checkbox"
+                    v-model="isChecked"
+                    @change="onCheckbox"
+                />
+            </div>
         </div>
     </div>
 </template>
@@ -65,6 +76,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    commanderIds: {
+        type: Object,
+        default: () => ({}),
+    },
 });
 
 const emit = defineEmits({
@@ -79,15 +94,33 @@ const onCheckbox = (e) => {
 </script>
 
 <style scoped lang="scss">
+.horizontallso__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    input {
+        width: 100%;
+        height: 100%;
+    }
+}
 .competition__content {
     display: grid;
     grid-gap: 12px;
-    grid-template-columns: minmax(200px, 436px) minmax(142px, 276px) 96px 118px auto;
+    grid-template-columns: 1fr minmax(142px, 276px) 96px 118px 50px;
 }
 
 .competition__detachments {
-    display: grid;
+    display: flex;
     grid-gap: 12px;
+    grid-template-columns: 1fr 1fr;
+
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 .competition__avatar_circle {
     border-radius: 50%;
@@ -121,78 +154,5 @@ const onCheckbox = (e) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.horizontallso-item img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    overflow: cover;
-}
-
-.horizontallso-item p {
-    margin-left: 10px;
-}
-
-.horizontallso-item__list-date {
-    // width: 95px;
-    display: grid;
-    grid-template-columns: auto 1fr 0fr;
-}
-
-.horizontallso-item__list-img-status {
-    position: absolute;
-    width: 18px;
-    max-height: 18px;
-    top: -17px;
-    right: -15px;
-}
-
-.horizontallso-itemo__list-img {
-    margin-right: 13px;
-}
-
-.horizontallso-item__list-full {
-    color: #35383f;
-    font-family: 'BertSans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    margin-left: 10px;
-}
-
-.horizontallso-item__list-date p {
-    color: #1c5c94;
-    font-family: 'BertSans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.horizontallso__confidant {
-    padding: 10px 10px;
-    border: 1px solid #b6b6b6;
-    border-radius: 10px;
-    height: 48px;
-    width: 48px;
-    input {
-        width: 24px;
-        height: 24px;
-    }
-}
-
-.sort-select {
-    height: 46px;
-}
-
-.checked__confidant {
-    padding: 10px 10px;
-    border: 1px solid #b6b6b6;
-    border-radius: 10px;
-    height: 48px;
-    margin: 0px 12px;
-    width: 48px;
-    input {
-        width: 24px;
-        height: 24px;
-    }
 }
 </style>

@@ -14,6 +14,15 @@
                     >напишите нам в&nbsp;Телеграм</a
                 >.
             </p>
+            <div
+                v-if="
+                    currentUser.currentUser.value.is_verified === false &&
+                    isAuth
+                "
+                class="required_verification"
+            >
+                <p>Необходимо верифицироваться до 25 февраля 2024 года</p>
+            </div>
         </div>
 
         <app-breadcrumbs v-if="!hidden" :breadcrumbs="breadcrumbs" />
@@ -27,19 +36,32 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { AppBreadcrumbs, useBreadcrumbsStore } from '@shared/index';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@features/store/index';
+// import { useRegionalsStore } from '@features/store/regionals';
 const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 
 import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { usePositionsStore } from '@features/store/positions';
+// const regionalsStore = useRegionalsStore();
+// const regionalHeadquarters = storeToRefs(regionalsStore);
 const roleStore = useRoleStore();
 const userStore = useUserStore();
+const regionsStore = useRegionalsStore();
+const positionsStore = usePositionsStore();
+const currentUser = storeToRefs(userStore);
+console.log('user', currentUser.currentUser.value);
+
+const isAuth = ref(!!localStorage.getItem('Token'));
 
 onMounted(() => {
     userStore.getUser();
     roleStore.getRoles();
+    regionsStore.getRegions();
+    positionsStore.getPositions();
 });
 
 //запрос на коммандира
@@ -48,7 +70,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .notify__text {
     max-width: 980px;
-    margin: 20px auto;
+    margin: 28px auto;
     text-align: center;
     font-family: 'Bert Sans';
     font-size: 14px;
@@ -63,5 +85,20 @@ onMounted(() => {
         color: #1f7cc0;
         text-decoration: none;
     }
+}
+.required_verification {
+    border: 1px solid #a3a3a3;
+    border-radius: 7px;
+    text-align: center;
+    padding-top: 37.6px;
+    padding-bottom: 37.6px;
+    margin-bottom: 30px;
+}
+.required_verification p {
+    font-size: 36px;
+    line-height: 43.2px;
+    font-family: 'Akrobat';
+    font-weight: 500;
+    color: #35383f;
 }
 </style>

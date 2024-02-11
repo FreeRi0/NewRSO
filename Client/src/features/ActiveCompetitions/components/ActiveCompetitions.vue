@@ -17,40 +17,51 @@
             </div>
             <div class="competitions__list">
                 <template
-                    v-for="competition in competitionsList"
+                    v-for="(competition, index) in competitionsList"
                     :key="competition.id"
                 >
                     <active-competition-item
                         v-if="
                             competition.is_confirmed_by_junior ||
-                            (competition.junior_detachment.id ==
-                                commanderIds.detachment_commander &&
-                                !competition.is_confirmed_by_junior)
+                            (competition.junior_detachment?.id ==
+                                commanderIds.detachment_commander?.id &&
+                                !competition.is_confirmed_by_junior) ||
+                            !competition.detachment
                         "
                         :competition="competition"
+                        :commander-ids="commanderIds"
+                        :position="index"
                         @select="onToggleSelectCompetition"
                     />
                 </template>
+                <template v-if="selectedCompetitionsList.length">
+                    <p class="text_total">
+                        Итого: {{ selectedCompetitionsList.length }}
+                    </p>
 
-                <p>Итого: {{ selectedCompetitionsList.length }}</p>
-
-                <active-competition-item-select
-                    v-for="competition in selectedCompetitionsList"
-                    :key="competition.id"
-                    :competition="competition"
-                    :action="action"
-                    @select="onToggleSelectCompetition"
-                />
+                    <active-competition-item-select
+                        v-for="competition in selectedCompetitionsList"
+                        :key="competition.id"
+                        :competition="competition"
+                        :action="action"
+                        :commander-ids="commanderIds"
+                        @select="onToggleSelectCompetition"
+                    />
+                </template>
             </div>
 
-            <div class="competitions__btns">
+            <div
+                class="competitions__btns"
+                v-if="selectedCompetitionsList.length"
+            >
                 <Button
                     class="save"
                     type="button"
-                    :label="action"
+                    label="Сохранить"
                     @click="onAction"
                 ></Button>
             </div>
+            <div class="clear_select" v-else></div>
         </template>
     </div>
 </template>
@@ -87,15 +98,12 @@ const getMeCommander = async () => {
 
 const getAllCompetition = async () => {
     try {
-        const { data } = await HTTP.get(
-            `https://rso.sprint.1t.ru/api/v1/competitions/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
+        const { data } = await HTTP.get(`/competitions/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
             },
-        );
+        });
         allCompetition.value = data;
     } catch (e) {
         console.log('error getAllCompetition', e);
@@ -106,7 +114,6 @@ const getCompetitionsJunior = async () => {
     for (const competitionId of allCompetition.value) {
         try {
             loading.value = true;
-            console.log(commanderIds.value.detachment_commander);
             const { data } = await HTTP.get(
                 `/competitions/${competitionId.id}/applications/me`,
                 {
@@ -140,7 +147,9 @@ const getCompetitions = async () => {
                 },
             );
 
-            competitionsList.value = data;
+            competitionsList.value = data.filter(
+                (c) => c.is_confirmed_by_junior || !c.detachment,
+            );
         } catch (e) {
             console.log('error getCompetitions', e);
         } finally {
@@ -162,7 +171,7 @@ const onToggleSelectCompetition = (competition, isChecked) => {
 };
 
 const confirmApplication = async (id, competitionId) => {
-    if (commanderIds.value.regionalheadquarter_commander == null) {
+    if (commanderIds.value.regionalheadquarter_commander?.id == null) {
         await HTTP.put(
             `/competitions/${competitionId}/applications/${id}/`,
             {
@@ -226,7 +235,7 @@ const onAction = async () => {
                 );
         }
 
-        if (commanderIds.value.regionalheadquarter_commander == null)
+        if (commanderIds.value.regionalheadquarter_commander?.id == null)
             await getCompetitionsJunior();
         else await getCompetitions();
     } catch (e) {
@@ -237,8 +246,7 @@ const onAction = async () => {
 onMounted(async () => {
     await getAllCompetition();
     await getMeCommander();
-    console.log();
-    if (commanderIds.value.regionalheadquarter_commander == null)
+    if (commanderIds.value.regionalheadquarter_commander?.id == null)
         await getCompetitionsJunior();
     else await getCompetitions();
 });
@@ -246,28 +254,59 @@ onMounted(async () => {
 onActivated(async () => {
     await getAllCompetition();
     await getMeCommander();
-    if (commanderIds.value.regionalheadquarter_commander == null)
+    if (commanderIds.value.regionalheadquarter_commander?.id == null)
         await getCompetitionsJunior();
     else await getCompetitions();
 });
 </script>
 
 <style scoped lang="scss">
+.clear_select {
+    margin-bottom: 100px;
+}
 .competitions__actions {
     display: grid;
     width: 100%;
     justify-content: flex-end;
     margin-bottom: 40px;
+    //width: 224px;
+    height: 48px;
+    padding: 4px, 16px, 4px, 16px;
+    border-radius: 10px;
+    border: 1px;
+    gap: 10px;
 }
 
 .competitions__actions-select {
     background-color: inherit;
     min-width: 224px;
+    border-radius: 10px;
 }
-
+:deep(.v-field) {
+    border-radius: 10px;
+}
 .competitions__btns {
-    display: flex;
+    display: grid;
     width: 100%;
     justify-content: center;
+    margin-top: 60px;
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+.text_total {
+    width: 1180px;
+    height: 26px;
+    margin: 40px 0;
+    font-family: Bert Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
 }
 </style>

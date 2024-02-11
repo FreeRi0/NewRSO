@@ -3,9 +3,11 @@ import filterSelect from './filterSelect.vue';
 import Select from './Select.vue';
 import Dropdown from './Dropdown.vue';
 import regionsDropdown from './regionsDropdown.vue';
-import  educationalsDropdown from './educationalsDropdown.vue';
+import educationalsDropdown from './educationalsDropdown.vue';
 import educInstitutionDropdown from './educInstitutionDropdown.vue';
 import userDropdown from './userDropdown.vue';
+import SearchSelect from './SearchSelect.vue';
+import regionalsDropdown from './regionalsDropdown.vue';
 
 export {
     sortByEducation,
@@ -15,5 +17,7 @@ export {
     regionsDropdown,
     educInstitutionDropdown,
     educationalsDropdown,
+    regionalsDropdown,
     userDropdown,
+    SearchSelect,
 };

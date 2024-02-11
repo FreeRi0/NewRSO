@@ -6,9 +6,11 @@
             :headquarter="headquarter"
             :members="members"
             :submited="submited"
+            :is-commander-loading="isCommanderLoading"
+            :is-members-loading="isMembersLoading"
             :is-error="isError"
             :is-error-members="isErrorMembers"
-            v-if="headquarter && isError && isErrorMembers"
+            v-if="headquarter && isError && isErrorMembers && !loading"
             @submit.prevent="changeHeadquarter"
             @select-emblem="onSelectEmblem"
             @select-banner="onSelectBanner"
@@ -25,31 +27,40 @@ import { FormLocal } from '@features/FormLocal';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { usePage } from '@shared';
+import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+
+const userStore = useUserStore();
+const user = storeToRefs(userStore);
+const meId = user.currentUser.value.id;
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+const meRoles = roles.roles.value;
+
+const educComId = roles.roles.value.educationalheadquarter_commander?.id;
+const regionComId = roles.roles.value.regionalheadquarter_commander?.id;
+const districtComId = roles.roles.value.districtheadquarter_commander?.id;
+const centralComId = roles.roles.value.centralheadquarter_commander;
+const localComId = roles.roles.value.localheadquarter_commander?.id;
+const detComId = roles.roles.value.detachment_commander?.id;
 
 const router = useRouter();
 const route = useRoute();
 let id = route.params.id;
 
-const { replaceTargetObjects } = usePage();
-
-const submited = ref(false);
-
 const headquarter = ref(null);
 const members = ref([]);
-const positions = ref([]);
 
-const getPositions = async () => {
-    HTTP.get('positions/')
+const { replaceTargetObjects } = usePage();
 
-        .then((res) => {
-            positions.value = res.data;
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+const loading = ref(false);
+const isCommanderLoading = ref(false);
 
 const getHeadquarter = async () => {
+    loading.value = true;
+    isCommanderLoading.value = true;
     await HTTP.get(`locals/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
@@ -62,6 +73,8 @@ const getHeadquarter = async () => {
                 headquarter.value.commander = headquarter.value.commander.id;
             }
             replaceTargetObjects([headquarter.value]);
+            loading.value = false;
+            isCommanderLoading.value = false;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -74,31 +87,33 @@ onBeforeRouteUpdate(async (to, from) => {
     }
 });
 
+const isMembersLoading = ref(false);
+
 const getMembers = async () => {
-    HTTP.get(`locals/${id}/members/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            members.value = response.data;
-            members.value.forEach((member) => {
-                if (positions.value) {
-                    const position = positions.value.find((item) => {
-                        return item.name === member.position;
-                    });
-                    member.position = position.id;
-                }
+    try {
+        isMembersLoading.value = true;
+        setTimeout(async () => {
+            const membersResponse = await HTTP.get(`locals/${id}/members/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             });
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+
+            members.value = membersResponse.data;
+            if (members.value.length) {
+                members.value.forEach((member) => {
+                    member.position = member.position.id;
+                });
+            }
+            isMembersLoading.value = false;
+        }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 onMounted(() => {
-    getPositions();
     getMembers();
     getHeadquarter();
 });
@@ -107,8 +122,9 @@ const onUpdateMember = (event, id) => {
     const targetMember = members.value.find((member) => member.id === id);
     const firstkey = Object.keys(event)[0];
     targetMember[firstkey] = event[firstkey];
-    console.log(event);
 };
+
+const submited = ref(false);
 
 const isEmblemChange = ref(false);
 const isBannerChange = ref(false);
@@ -138,6 +154,12 @@ const isError = ref({});
 const isErrorMembers = ref({});
 const swal = inject('$swal');
 
+const getErrors = () => {
+    if (isError.value.non_field_errors) return isError.value.non_field_errors;
+    if (isError.value.detail) return isError.value.detail;
+    else return 'Заполните обязательные поля';
+};
+
 const changeHeadquarter = async () => {
     try {
         const formData = new FormData();
@@ -149,6 +171,18 @@ const changeHeadquarter = async () => {
             headquarter.value.regional_headquarter,
         );
         formData.append('city', headquarter.value.city);
+
+        if (
+            !educComId ||
+            !regionComId ||
+            !districtComId ||
+            !centralComId ||
+            !localComId ||
+            !detComId
+        ) {
+            formData.append('commander', headquarter.value.meId);
+        } else formData.append('commander', headquarter.value.commander);
+
         formData.append('commander', headquarter.value.commander);
         formData.append('social_vk', headquarter.value.social_vk);
         formData.append('social_tg', headquarter.value.social_tg);

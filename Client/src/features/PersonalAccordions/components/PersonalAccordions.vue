@@ -1319,6 +1319,7 @@
                                 @update:value="changeValue"
                                 address="/eduicational_institutions/"
                                 class="mb-2"
+                                :SortDropdown="false"
                             ></educInstitutionDropdown>
                         </div>
                         <div class="form-field">
@@ -1510,6 +1511,7 @@
                                                 :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="statementUp"
+
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
@@ -3350,7 +3352,7 @@ const isMilitaryChange = ref(false);
 const isForeignChange = ref(false);
 
 const statementUp = (event) => {
-    statement.value = event.files[0];
+    statement.value = event.files[0]
     console.log('файл есть', statement.value);
     isStatementChange.value = true;
 };
@@ -3702,7 +3704,7 @@ const updateData = async () => {
         const axiosrequest4 = await HTTP.patch(
             '/rsousers/me/education/',
             {
-                study_institution: props.user.education.study_institution,
+                study_institution: props.user.education.study_institution?.id,
                 study_faculty: props.user.education.study_faculty,
                 study_year: props.user.education.study_year,
                 study_specialty: props.user.education.study_specialty,

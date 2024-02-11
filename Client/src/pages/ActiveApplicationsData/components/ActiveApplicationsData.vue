@@ -102,7 +102,28 @@
             </div>
 
             <div v-else-if="picked == 'Заявка на участие в мероприятии'">
-                <p>Блок в разработке...</p>
+                <div
+                    class="contributor-sort__all mb-8"
+                    v-if="events?.length > 0"
+                >
+                    <input
+                        type="checkbox"
+                        @click="selectEvents"
+                        v-model="checkboxAllEvents"
+                    />
+                </div>
+                <ActiveEventsApp
+                    @change="changeEvents"
+                    :events="events"
+                    :selected-events="selectedEvents"
+                    v-if="!isLoading"
+                />
+                <v-progress-circular
+                    class="circleLoader"
+                    v-else
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
             </div>
 
             <div v-else-if="picked == 'Конкурсы'">
@@ -123,6 +144,7 @@ import { activeApplications } from '@features/ActiveApplications/components';
 import { checkedAppList } from '@features/ActiveApplications/components';
 import { CheckedSquadsList } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
+import { ActiveEventsApp } from '@features/ActiveApplications/components';
 import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { useRoleStore } from '@layouts/store/role';
 
@@ -159,11 +181,13 @@ const pages = ref([
 
 const participants = ref([]);
 const detachments = ref([]);
+const events = ref([]);
 const checkboxAll = ref(false);
 const checkboxAllSquads = ref(false);
 const participantsVisible = ref(12);
 const selectedPeoples = ref([]);
 const selectedDetch = ref([]);
+const selectedEvents = ref([]);
 const step = ref(12);
 
 // let tempParticipants = participants.value;
@@ -174,10 +198,8 @@ const viewParticipants = async () => {
     try {
         isLoading.value = true;
         let id =
-            roles.roles.value.regionalheadquarter_commander ??
-            roles.roles.value.detachment_commander;
-        console.log('roles', roles.roles.value);
-        console.log('id', id);
+            roles.roles.value.regionalheadquarter_commander?.id ??
+            roles.roles.value.detachment_commander?.id;
         const regComReq = ref(null);
         const detComReq = ref(null);
         setTimeout(async () => {
@@ -216,10 +238,9 @@ const viewParticipants = async () => {
 
 const viewDetachments = async () => {
     try {
+        if (!roles.roles.value.detachment_commander) return;
         isLoading.value = true;
-        let id = roles?.roles?.value?.detachment_commander;
-        console.log('roles', roles.roles.value);
-        console.log('id', id);
+        let id = roles.roles.value.detachment_commander?.id;
         setTimeout(async () => {
             const detComRequest = await HTTP.get(
                 `/detachments/${id}/applications/`,
@@ -233,6 +254,28 @@ const viewDetachments = async () => {
             detachments.value = detComRequest.data;
             isLoading.value = false;
         }, 1000);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const viewEvents = async () => {
+    try {
+        isLoading.value = true;
+        let event_pk = 4;
+        setTimeout(async () => {
+            const eventsRequest = await HTTP.get(
+                `/events/${event_pk}/applications/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            events.value = eventsRequest.data;
+            isLoading.value = false;
+        }, 500);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -327,6 +370,18 @@ const changeSquads = (CheckedSquad, SquadId) => {
     }
 };
 
+const changeEvents = (CheckedEvent, EventId) => {
+    let event = {};
+    if (CheckedEvent) {
+        event = events.value.find((item) => item.id == EventId);
+        selectedEvents.value.push(event);
+    } else {
+        selectedEvents.value = selectedEvents.value.filter(
+            (item) => item.id !== EventId,
+        );
+    }
+};
+
 watch(
     () => roles.roles.value,
 
@@ -336,14 +391,9 @@ watch(
         }
         viewParticipants();
         viewDetachments();
+        viewEvents();
     },
 );
-
-onMounted(() => {
-    roleStore.getRoles();
-    viewParticipants();
-    viewDetachments();
-});
 </script>
 
 <style lang="scss" scoped>

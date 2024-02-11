@@ -1,15 +1,26 @@
 <template>
     <div class="competition__item">
         <div class="competition__content">
-            <span></span>
-            <span>Отряд</span>
-            <span>Конкурс</span>
-            <span>Номинация</span>
+            <template v-if="!position">
+                <span></span>
+                <span>Отряд</span>
+                <span>Конкурс</span>
+                <span>Номинация</span>
+            </template>
 
-            <v-checkbox v-model="isChecked" @change="onCheckbox" />
+            <div class="horizontallso__confidant">
+                <input
+                    type="checkbox"
+                    v-model="isChecked"
+                    @change="onCheckbox"
+                />
+            </div>
 
             <div class="competition__detachments">
-                <div v-if="competition.detachment" class="horizontallso-item__wrapper">
+                <div
+                    v-if="competition.detachment"
+                    class="horizontallso-item__wrapper"
+                >
                     <img
                         v-if="competition.detachment.banner"
                         class="competition__avatar_circle"
@@ -27,7 +38,12 @@
                     </div>
                 </div>
 
-                <div class="horizontallso-item__wrapper">
+                <div
+                    class="horizontallso-item__wrapper"
+                    v-if="
+                        commanderIds.regionalheadquarter_commander?.id != null
+                    "
+                >
                     <img
                         v-if="competition.junior_detachment.banner"
                         class="competition__avatar_circle"
@@ -76,6 +92,14 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    commanderIds: {
+        type: Object,
+        default: () => ({}),
+    },
+    position: {
+        type: Number,
+        default: 0,
+    },
 });
 
 const emit = defineEmits({
@@ -97,10 +121,20 @@ watch(
 </script>
 
 <style scoped lang="scss">
+.horizontallso__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    input {
+        width: 100%;
+        height: 100%;
+    }
+}
 .competition__item {
     display: grid;
     width: 100%;
-    grid-template-columns: auto 1fr;
+    gap: 12px;
 }
 
 .blue-bg {
@@ -111,12 +145,20 @@ watch(
     display: grid;
     width: 100%;
     grid-gap: 12px;
-    grid-template-columns: 48px minmax(200px, 436px) 1fr auto;
+    grid-template-columns: 48px minmax(200px, 436px) 1fr 100px;
+
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 
 .competition__detachments {
-    display: grid;
+    display: flex;
     grid-gap: 12px;
+    grid-template-columns: 1fr 1fr;
 }
 .competition__avatar_circle {
     border-radius: 50%;
@@ -150,78 +192,5 @@ watch(
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.horizontallso-item img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    overflow: cover;
-}
-
-.horizontallso-item p {
-    margin-left: 10px;
-}
-
-.horizontallso-item__list-date {
-    // width: 95px;
-    display: grid;
-    grid-template-columns: auto 1fr 0fr;
-}
-
-.horizontallso-item__list-img-status {
-    position: absolute;
-    width: 18px;
-    max-height: 18px;
-    top: -17px;
-    right: -15px;
-}
-
-.horizontallso-itemo__list-img {
-    margin-right: 13px;
-}
-
-.horizontallso-item__list-full {
-    color: #35383f;
-    font-family: 'BertSans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    margin-left: 10px;
-}
-
-.horizontallso-item__list-date p {
-    color: #1c5c94;
-    font-family: 'BertSans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.horizontallso__confidant {
-    padding: 10px 10px;
-    border: 1px solid #b6b6b6;
-    border-radius: 10px;
-    height: 48px;
-    width: 48px;
-    input {
-        width: 24px;
-        height: 24px;
-    }
-}
-
-.sort-select {
-    height: 46px;
-}
-
-.checked__confidant {
-    padding: 10px 10px;
-    border: 1px solid #b6b6b6;
-    border-radius: 10px;
-    height: 48px;
-    margin: 0px 12px;
-    width: 48px;
-    input {
-        width: 24px;
-        height: 24px;
-    }
 }
 </style>

@@ -50,11 +50,12 @@
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from './components/ManagementHQ.vue';
 import DetachmentsHQ from './components/DetachmentsHQ.vue';
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useEducationalsStore } from '@features/store/educationals';
 import { storeToRefs } from 'pinia';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute } from 'vue-router';
+import { usePage } from '@shared';
 
 // banner condition
 const educationalsStore = useEducationalsStore();
@@ -65,61 +66,15 @@ const showRegionalHQ = ref(false);
 
 const commander = ref({});
 const position = ref({});
-const headquarter = storeToRefs( educationalsStore);
-const member = storeToRefs( educationalsStore);
+const headquarter = storeToRefs(educationalsStore);
+const member = storeToRefs(educationalsStore);
 const edict = ref({});
 const route = useRoute();
+
 let id = route.params.id;
 
+const { replaceTargetObjects } = usePage();
 
-// const aboutHQ = async () => {
-//     try {
-//         const response = await HTTP.get(`/educationals/${id}/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         headquarter.value = response.data;
-//         replaceTargetObjects([headquarter.value]);
-//         console.log(response);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
-// const aboutEduc = async () => {
-//     try {
-//         const response = await HTTP.get(`/eduicational_institutions/${id}/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         educt.value = response.data;
-//         console.log(response);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
-// const aboutMembers = async () => {
-//     try {
-//         const response = await HTTP.get(`/educationals/${id}/members/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-
-//         member.value = response.data;
-//         console.log(response);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
 
 const fetchCommander = async () => {
     try {
@@ -138,7 +93,6 @@ const fetchCommander = async () => {
     }
 };
 
-// aboutMembers();
 
 const filteredMembers = computed(() => {
     return member.members.value.filter((manager) => {
@@ -150,35 +104,32 @@ const filteredMembers = computed(() => {
         );
     });
 });
-// const management = computed(() => {
-//     return [{ user: commander.value }, ...filteredMembers.value];
-// });
 
-// onBeforeRouteUpdate(async (to, from) => {
-//     if (to.params.id !== from.params.id) {
-//         // aboutHQ();
-//         // aboutMembers();
-
-//         // aboutEduc();
-//         fetchCommander();
-//     }
-// });
 
 watch(
     () => route.params.id,
 
-    async (newId) => {
+    async (newId, oldId) => {
         if (!newId || route.name !== 'HQ') return;
-        id = newId;
-        await educationalsStore.getEducationalsId(id)
-        await educationalsStore.getEducationalsMembers(id);
-        // await aboutEduc();
+        // id = newId;
+        console.log('успешно', !newId, route.name, route.name !== 'HQ')
+        await educationalsStore.getEducationalsId(newId);
+        await educationalsStore.getEducationalsMembers(newId);
+        await replaceTargetObjects([headquarter.educational.value]);
         await fetchCommander();
     },
     {
         immediate: true,
     },
 );
+
+onMounted(() => {
+    educationalsStore.getEducationalsId(id);
+    educationalsStore.getEducationalsMembers(id);
+    // await aboutEduc();
+    replaceTargetObjects([headquarter.educational.value]);
+    fetchCommander();
+});
 </script>
 <style scoped lang="scss">
 .title {

@@ -12,8 +12,8 @@
                     placeholder="Выберите регион обучения"
                     v-model="form.region"
                     @update:value="changeValue"
-                    address="/regions/"
                     class="mb-2 region-input"
+                    address="/regions/"
                 ></regionsDropdown>
                 <Input
                     placeholder="Фамилия"
@@ -36,12 +36,16 @@
                     name="patronomyc"
                     v-model:value.trim="form.patronymic_name"
                 />
-                <Input
-                    type="tel"
-                    placeholder="+7 (999) 999-99-99"
-                    name="phone"
-                    v-model:value.trim="form.phone_number"
-                />
+                <div class="form-input">
+                    <MaskInput
+                        type="tel"
+                        placeholder="+7 (999) 999-99-99"
+                        name="phone"
+                        class="mb-2"
+                        v-model="form.phone_number"
+                        mask="+7(###) ###-##-##"
+                    />
+                </div>
                 <Input
                     placeholder="Электронная почта"
                     name="email"
@@ -51,15 +55,24 @@
                 <p class="error" v-if="isError.email">
                     {{ isError.email }}
                 </p>
-                <Input
+                <!-- <Input
                     name="date"
-                    type="text"
+                    type="date"
                     class="dateInput"
                     placeholder="Дата рождения"
                     v-model:value="form.date_of_birth"
-                    onfocusin="(this.type='date')"
-                    onfocusout="(this.type='text')"
-                />
+                    max="9999-12-31"
+                /> -->
+                <date-picker
+                    v-model:value="form.date_of_birth"
+                    placeholder="Дата рождения"
+                    name="date"
+                    type="date"
+                    class="dateInput"
+                    value-type="format"
+                    :lang="langObject"
+                    format="YYYY-MM-DD"
+                ></date-picker>
                 <p class="error" v-if="isError.date_of_birth">
                     Дата рождения в формате ДД.ММ.ГГГГ
                 </p>
@@ -80,6 +93,7 @@
                     placeholder="Придумайте пароль"
                     variant="outlined"
                     @click:append-inner="visible = !visible"
+                    id="pass"
                 ></v-text-field>
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
@@ -90,7 +104,7 @@
                     :type="visibleRe ? 'text' : 'password'"
                     density="compact"
                     v-model="form.re_password"
-                    placeholder="Пароль"
+                    placeholder="Повторите пароль"
                     variant="outlined"
                     @click:append-inner="visibleRe = !visibleRe"
                 ></v-text-field>
@@ -182,10 +196,6 @@
     }
 }
 
-.dateInput {
-    height: 48px;
-}
-
 .regCheck {
     margin-top: 20px;
     display: flex;
@@ -230,8 +240,7 @@
     border-radius: 10px;
     font-size: 16px;
     color: #35383f;
-    font-weight: normal;
-    font-family: Akrobat;
+    font-family: 'Bert Sans';
     margin-bottom: 8px;
 }
 
@@ -239,8 +248,8 @@
 .region-input::placeholder {
     color: #898989;
     font-size: 16px;
-    font-weight: normal;
-    font-family: Akrobat;
+    font-weight: 600;
+    font-family: 'Bert Sans';
     margin-bottom: 8px;
 }
 .v-card {
@@ -285,18 +294,17 @@
 #reg,
 #input-3,
 #input-5 {
-    letter-spacing: 0.9px;
-    font-size: 17px;
-    color: #35383f;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
 }
 #reg {
     padding-top: 5px;
 }
-.v-input__control {
-    min-height: 45px;
+.v-autocomplete .v-field--dirty .v-autocomplete__selection {
+    color: #000;
 }
-
-.AuthWrapper {
+.RegisterWrapper {
     min-height: 100vh;
     background-image: url(/assets/regBR.jpg);
     background-size: cover;
@@ -315,6 +323,66 @@
         background-color: #d1d5d8;
     }
 }
+.v-input__control {
+    min-height: 45px;
+    font-weight: 500;
+}
+.option-select__title {
+    font-family: 'Bert sans';
+}
+
+input {
+    font: normal;
+}
+
+.form-input input,
+.dateInput input {
+    box-sizing: border-box;
+    border: 2px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 16px 10px 16px;
+    font-family: 'Bert Sans';
+    width: 100%;
+    color: #35383f;
+}
+
+.form-input input::placeholder,
+.dateInput input::placeholder {
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Bert Sans';
+}
+
+.form-input-requisites input {
+    border: 2px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 12px;
+    padding: 10px 110px 10px 16px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+.dateInput .mx-input:hover,
+.dateInput .mx-input:focus {
+    border-color: #a3a3a3;
+}
+
+.dateInput.mx-datepicker {
+    width: 100%;
+}
+#login {
+    margin-top: 6px;
+}
+.dateInput .mx-input {
+    height: 47px;
+}
+.dateInput.mx-datepicker svg {
+    margin-right: 6px;
+}
 </style>
 
 <script setup>
@@ -323,8 +391,8 @@ import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
-import { IMaskDirective } from 'vue-imask';
 import { Select, regionsDropdown } from '@shared/components/selects';
+
 const visible = ref(false);
 const visibleRe = ref(false);
 const validated = ref(false);

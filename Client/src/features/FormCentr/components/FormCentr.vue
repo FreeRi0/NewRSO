@@ -129,7 +129,12 @@
                                     class="form__error"
                                     v-if="isError.detachments_appearance_year"
                                 >
-                                    * Это поле не может быть пустым.
+                                    *
+                                    {{
+                                        getErrorField(
+                                            'detachments_appearance_year',
+                                        )
+                                    }}
                                 </p>
                             </div>
                             <div class="form__field form_width">
@@ -152,7 +157,12 @@
                                     class="form__error"
                                     v-if="isError.rso_founding_congress_date"
                                 >
-                                    * Это поле не может быть пустым.
+                                    *
+                                    {{
+                                        getErrorField(
+                                            'rso_founding_congress_date',
+                                        )
+                                    }}
                                 </p>
                             </div>
                         </div>
@@ -167,25 +177,47 @@
                                 v-model:value="headquarter.city"
                             />
                         </div>
-                        <div class="form__field form__field--commander">
+                        <div
+                            v-if="
+                                roles.roles.value
+                                    .educationalheadquarter_commander ||
+                                roles.roles.value
+                                    .regionalheadquarter_commander ||
+                                roles.roles.value
+                                    .districtheadquarter_commander ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                roles.roles.value.localheadquarter_commander ||
+                                roles.roles.value.detachment_commander
+                            "
+                            class="form__field form__field--commander"
+                        >
                             <label class="form__label" for="beast"
                                 >Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Dropdown
-                                open-on-clear
-                                id="beast"
-                                name="edit_beast"
-                                placeholder="Поиск по ФИО"
-                                v-model="headquarter.commander"
-                                @update:value="changeValue"
-                                address="users/"
-                            ></Dropdown>
+                            <div v-if="!isCommanderLoading">
+                                <Dropdown
+                                    open-on-clear
+                                    id="beast"
+                                    name="edit_beast"
+                                    placeholder="Поиск по ФИО"
+                                    v-model="headquarter.commander"
+                                    @update:value="changeValue"
+                                    address="users/"
+                                ></Dropdown>
+                            </div>
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                             <p
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
                             >
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('commander') }}
                             </p>
                         </div>
                     </div>
@@ -328,10 +360,17 @@
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                :functions="positionsStore.positions"
                                 :is-error-members="isErrorMembers"
-                                v-if="members"
+                                v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
                             ></MembersList>
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-else
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
                         </div>
                     </div>
 
@@ -731,14 +770,21 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { useRoleStore } from '@layouts/store/role';
+import { usePositionsStore } from '@features/store/positions';
+import { storeToRefs } from 'pinia';
+
+const positionsStore = usePositionsStore();
+const positions = storeToRefs(positionsStore);
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
 
 const emit = defineEmits([
     'update:value',
@@ -783,7 +829,24 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    isCommanderLoading: {
+        type: Boolean,
+        default: false,
+    },
+    isMembersLoading: {
+        type: Boolean,
+        default: false,
+    },
 });
+
+const getErrorField = (field) => {
+    if (
+        props.isError[field][0] ===
+        'Некорректный тип. Ожидалось значение первичного ключа, получен str.'
+    )
+        return 'Это поле не может быть пустым.';
+    else return props.isError[field][0];
+};
 
 const headquarter = ref(props.headquarter);
 //----------------------------------------------------------------------------------------------------------
@@ -818,29 +881,21 @@ const showButtonPrev = computed(() => {
 });
 
 //-----------------------------------------------------------------------
-const route = useRoute();
-let id = route.params.id;
-
-// const members = ref(props.members);
 const searchMembers = ref('');
 
 const sortedMembers = computed(() => {
-    // console.log(props.members, 'УЧАСТНИКИ');
-    // console.log(members);
     return props.members.filter((item) => {
         return item.user.last_name
             .toUpperCase()
             .includes(searchMembers.value.toUpperCase());
     });
 });
-// порядок выполнения
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
 };
 
 const changeValue = (event) => {
-    console.log(event);
     emit('update:value', event);
 };
 
@@ -880,13 +935,21 @@ const deleteBanner = () => {
     fileBanner.value = null;
     emit('deleteBanner', fileBanner.value);
 };
+
+onBeforeMount(async () => {
+    roleStore.getRoles();
+    positionsStore.getPositions();
+});
 </script>
 
 <style lang="scss" scoped>
 .form-button {
     width: 132px;
     min-height: 52px;
-    margin: 0;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 16px 32px;
     font-family: 'Bert Sans';
     font-size: 16px;

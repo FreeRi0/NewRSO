@@ -177,7 +177,7 @@
             <div v-show="vertical" class="mt-10">
                 <HeadquartersList
                     :headquarters="sortedHeadquarters"
-                    v-if="!isHeadquartersLoading"
+                    v-if="!isLoading.isLoading.value"
                 ></HeadquartersList>
                 <v-progress-circular
                     class="circleLoader"
@@ -190,14 +190,7 @@
             <div class="horizontal" v-show="!vertical">
                 <horizontalHeadquarters
                     :headquarters="sortedHeadquarters"
-                    v-if="!isHeadquartersLoading"
                 ></horizontalHeadquarters>
-                <v-progress-circular
-                    class="circleLoader"
-                    v-else
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -238,7 +231,7 @@ const crosspageFilters = useCrosspageFilter();
 const headquarters = storeToRefs(educationalsStore);
 
 const headquartersVisible = ref(20);
-const isHeadquartersLoading = ref(false);
+const isLoading =  storeToRefs(educationalsStore);
 
 const step = ref(20);
 
@@ -266,23 +259,6 @@ const locals = ref([]);
 const districts = ref([]);
 const regionals = ref([]);
 
-// const getHeadquarters = async () => {
-//     try {
-//         isHeadquartersLoading.value = true;
-//         setTimeout(async () => {
-//             const educationalsResponse = await HTTP.get(`/educationals/`, {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             });
-//             headquarters.value = educationalsResponse.data;
-//             isHeadquartersLoading.value = false;
-//         }, 1000);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
 
 const searchEducational = async (name) => {
     try {
@@ -392,7 +368,7 @@ const sortedHeadquarters = computed(() => {
     }
 
     searchEducationals.value;
-    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
+
     tempHeadquartes = tempHeadquartes.filter((item) => {
         // console.log(educational_institution.id);
         return (
@@ -434,7 +410,8 @@ const sortedHeadquarters = computed(() => {
     if (!ascending.value) {
         tempHeadquartes.reverse();
     }
-
+    
+    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     return tempHeadquartes;
 });
 

@@ -33,7 +33,7 @@
                         :verified="isVerified"
                     ></VerifiedList>
                 </div>
-                <div>
+                <div v-if="props.member.length && isVerified.length > 6">
                     <router-link
                         :to="{
                             name: 'allparticipants',
@@ -54,7 +54,7 @@
 import { Button } from '@shared/components/buttons';
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute } from 'vue-router';
 import {
     ParticipantsList,
     VerifiedList,
@@ -77,36 +77,31 @@ const props = defineProps({
         required: true,
     },
 });
+
 const getVerified = async () => {
-    await HTTP.get(`/detachments/${id}/applications/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            isVerified.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        const verified = await HTTP.get(`/detachments/${id}/applications/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
+        isVerified.value = verified.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        getVerified();
-    }
-});
+console.log('length', isVerified.value.length);
 
 watch(
     () => route.params.id,
 
-    (newId, oldId) => {
+    async (newId, oldId) => {
+        if (!newId || route.name !== 'lso') return;
         id = newId;
-        getVerified();
-
+        await getVerified();
     },
 );
 
@@ -132,13 +127,13 @@ onMounted(() => {
     box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.05);
     margin-bottom: 80px;
     @media screen and (max-width: 1024px) {
-        padding: 24px 34px 24px 34px
+        padding: 24px 34px 24px 34px;
     }
     @media screen and (max-width: 768px) {
-        padding: 24px 24px 24px 24px
+        padding: 24px 24px 24px 24px;
     }
     @media screen and (max-width: 575px) {
-        padding: 24px 7px 24px 7px
+        padding: 24px 7px 24px 7px;
     }
     &-route {
         margin-top: 40px;

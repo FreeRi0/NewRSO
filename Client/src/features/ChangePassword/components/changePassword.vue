@@ -24,17 +24,18 @@
     <div class="change_Password" @submit.prevent="changePasswordForm">
         <p class="pass-title">Изменить пароль</p>
         <Input
-            placeholder="   Введите старый пароль"
+            placeholder="Введите старый пароль"
             name="password"
             v-model:value="current_password"
+            class="pass"
         ></Input>
         <Input
-            placeholder="   Придумайте новый пароль"
+            placeholder="Придумайте новый пароль"
             name="newPass"
             v-model:value="new_password"
         ></Input>
         <Input
-            placeholder="   Повторите пароль"
+            placeholder="Повторите пароль"
             name="confirm"
             v-model:value="re_password"
         ></Input>

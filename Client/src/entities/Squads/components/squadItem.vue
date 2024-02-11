@@ -1,5 +1,58 @@
 <template>
-    <div class="squads-wrapper__item rating_wrapper">
+    <div
+        v-if="props.competition === true && member"
+        class="squads-wrapper__item rating_wrapper"
+    >
+        <router-link :to="{ name: 'lso', params: { id: member.id } }">
+            <div class="round-img">
+                <img
+                    :src="member?.banner"
+                    alt="logo"
+                    v-if="member?.banner"
+                />
+                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
+            </div>
+            <div class="container-squad">
+                <p class="squads-wrapper__item-title normal-title">
+                    {{ member?.name }}
+                </p>
+            </div>
+            <div class="container-squad" v-if="rating">
+                <p class="squads-wrapper__item-title normal-title">
+                    Место в рейтинге: 102
+                </p>
+            </div>
+        </router-link>
+    </div>
+    <div
+        v-else-if="props.competition === true && member"
+        class="squads-wrapper__item rating_wrapper"
+    >
+        <router-link :to="{ name: 'lso', params: { id: member.id } }">
+            <div class="round-img">
+                <img
+                    :src="member?.banner"
+                    alt="logo"
+                    v-if="member?.banner"
+                />
+                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
+            </div>
+            <div class="container-squad">
+                <p class="squads-wrapper__item-title normal-title">
+                    {{ member?.name }}
+                </p>
+            </div>
+            <div class="container-squad" v-if="rating">
+                <p class="squads-wrapper__item-title normal-title">
+                    Место в рейтинге: 102
+                </p>
+            </div>
+        </router-link>
+    </div>
+    <div
+        v-else-if="props.competition === false"
+        class="squads-wrapper__item rating_wrapper"
+    >
         <router-link :to="{ name: 'lso', params: { id: squad.id } }">
             <div class="round-img">
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
@@ -8,42 +61,6 @@
             <div class="container-squad">
                 <p class="squads-wrapper__item-title normal-title">
                     {{ squad.name }}
-                </p>
-            </div>
-        </router-link>
-    </div>
-    <div v-if="competition" class="squads-wrapper__item rating_wrapper">
-        <router-link :to="{ name: 'lso', params: { id: squad.detachment.id } }">
-            <div class="round-img">
-                <img :src="squad.detachment?.banner" alt="logo" v-if="squad.detachment?.banner" />
-                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
-            </div>
-            <div class="container-squad">
-                <p class="squads-wrapper__item-title normal-title">
-                    {{ squad.detachment.name }}
-                </p>
-            </div>
-            <div class="container-squad" v-if="rating">
-                <p class="squads-wrapper__item-title normal-title">
-                   Место в рейтинге: 102
-                </p>
-            </div>
-        </router-link>
-    </div>
-    <div v-if="competition" class="squads-wrapper__item rating_wrapper">
-        <router-link :to="{ name: 'lso', params: { id: squad.junior_detachment.id } }">
-            <div class="round-img">
-                <img :src="squad.junior_detachment?.banner" alt="logo" v-if="squad.junior_detachment?.banner" />
-                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
-            </div>
-            <div class="container-squad">
-                <p class="squads-wrapper__item-title normal-title">
-                    {{ squad.junior_detachment.name }}
-                </p>
-            </div>
-            <div class="container-squad" v-if="rating">
-                <p class="squads-wrapper__item-title normal-title">
-                   Место в рейтинге: 102
                 </p>
             </div>
         </router-link>
@@ -57,11 +74,14 @@ const props = defineProps({
     },
     rating: {
         type: Boolean,
-        default: false
+        default: false,
     },
     competition: {
         type: Boolean,
-        default: false
+        default: false,
+    },
+    member: {
+        type: Object,
     }
 });
 </script>

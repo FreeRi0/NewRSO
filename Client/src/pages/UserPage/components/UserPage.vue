@@ -6,6 +6,8 @@
                 :user="user.user.value"
                 :education="education"
                 :user_region="region"
+                :position="roles.positions.value"
+                :commander="roles.userRoles.value"
                 class="mt-3"
                 @upload-wall="uploadWall"
                 @update-wall="updateWall"
@@ -20,12 +22,11 @@
                 v-if="
                     user.user.value.is_verified ||
                     (user.user.value.privacy?.privacy_about ===
-                        'detachment_members' &&
+                        'Члены отряда' &&
                         user.user.value.detachment_id ===
                             currentUser.currentUser.value.detachment_id) ||
-                    (user.user.value.privacy?.privacy_about ===
-                        'management_members' &&
-                        (roles.roles.value.detachment_commander ===
+                    (user.user.value.privacy?.privacy_about === 'Руководство' &&
+                        (roles.roles.value.detachment_commander.id ===
                             squad.squad.value.id ||
                             roles.roles.value.regionalheadquarter_commander ===
                                 regionalHeadquarter.regional.value.id ||
@@ -34,8 +35,7 @@
                                 .educationalheadquarter_commander ||
                             roles.roles.value.districtheadquarter_commander ||
                             roles.roles.value.centralheadquarter_commander)) ||
-                    (user.user.value.privacy?.privacy_about === 'all' &&
-                        user.user.value)
+                    user.user.value.privacy?.privacy_about === 'Все'
                 "
             >
                 {{ user.user.value.bio }}
@@ -44,12 +44,11 @@
                 class="mt-8 photoWrapper"
                 v-if="
                     (user.user.value.privacy?.privacy_photo ===
-                        'detachment_members' &&
+                        'Члены отряда' &&
                         user.user.value.detachment_id ===
                             currentUser.currentUser.value.detachment_id) ||
-                    (user.user.value.privacy?.privacy_photo ===
-                        'management_members' &&
-                        (roles.roles.value.detachment_commander ===
+                    (user.user.value.privacy?.privacy_photo === 'Руководство' &&
+                        (roles.roles.value.detachment_commander.id ===
                             squad.squad.value.id ||
                             roles.roles.value.regionalheadquarter_commander ===
                                 regionalHeadquarter.regional.value.id ||
@@ -58,8 +57,7 @@
                                 .educationalheadquarter_commander ||
                             roles.roles.value.districtheadquarter_commander ||
                             roles.roles.value.centralheadquarter_commander)) ||
-                    (user.user.value.privacy?.privacy_photo === 'all' &&
-                        user.user.value)
+                    user.user.value.privacy?.privacy_photo === 'Все'
                 "
             >
                 <userPhoto
@@ -135,6 +133,7 @@ import { ref, watch, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+
 import { useRegionalsStore } from '@features/store/regionals';
 import { useSquadsStore } from '@features/store/squads';
 import { useRoleStore } from '@layouts/store/role';
@@ -195,11 +194,15 @@ watch(
         if (!newId || route.name !== 'userpage') return;
         id = newId;
         userStore.getUserId(id);
+        roleStore.getPositions(id);
+        roleStore.getUserRoles(id);
     },
 );
 
 onMounted(() => {
     userStore.getUserId(id);
+    roleStore.getPositions(id);
+    roleStore.getUserRoles(id);
 });
 </script>
 <style lang="scss" scoped>

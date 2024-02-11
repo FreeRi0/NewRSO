@@ -1,5 +1,5 @@
 <template>
-    <div class="container action">
+    <!-- <div class="container action">
         <div class="action-title">Редактирование мероприятия</div>
         <form @submit.prevent="SubmitEvent">
             <div class="col-auto form-container">
@@ -436,6 +436,7 @@
                                         placeholder="Например, ЛСО"
                                     ></sortByEducation>
                                 </div>
+                            </div>
                             </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -1005,23 +1006,24 @@
             </div>
         </form>
     </div>
+    </div> -->
 </template>
 
 <script setup>
-import { Button } from '@shared/components/buttons';
-import { ref, onActivated } from 'vue';
-import { getAction, createAction, createOrganizator, getOrganizator, putAction, putOrganizator, putTimeData } from '@services/ActionService';
-import { sortByEducation, Select } from '@shared/components/selects';
-import { useRoute } from 'vue-router';
-import { uploadPhoto } from '@shared/components/imagescomp';
-import FileUpload from 'primevue/fileupload';
-import Dropdown from 'primevue/dropdown';
-import InputText from 'primevue/inputtext';
-import textarea from '@shared/components/inputs/textarea.vue';
-const router = useRoute();
+  import { Button } from '@shared/components/buttons';
+  import { ref, onActivated } from 'vue';
+ import { getAction, createAction, createOrganizator, getOrganizator, putAction, putOrganizator, putTimeData } from '@services/ActionService';
+ import { sortByEducation, Select } from '@shared/components/selects';
+ import { useRoute } from 'vue-router';
+ import { uploadPhoto } from '@shared/components/imagescomp';
+ import FileUpload from 'primevue/fileupload';
+ import Dropdown from 'primevue/dropdown';
+ import InputText from 'primevue/inputtext';
+ import textarea from '@shared/components/inputs/textarea.vue';
+ const router = useRoute();
 
-const id = router.params.id;
-console.log(id)
+ const id = router.params.id;
+ console.log(id)
 
 onActivated(()=>{
     getAction(id)
@@ -1042,26 +1044,25 @@ onActivated(()=>{
         })
 })
 
-//Переменные для основной формы
+// //Переменные для основной формы
 
-const scale_massive = ref([
-    { name: 'Отрядное' },
-    { name: 'Образовательное' },
-    { name: 'Городское' },
-    { name: 'Региональное' },
-    { name: 'Окружное' },
-    { name: 'Городское' },
-]);
+ const scale_massive = ref([
+     { name: 'Отрядное' },
+     { name: 'Образовательное' },
+     { name: 'Городское' },
+     { name: 'Региональное' },
+     { name: 'Окружное' },
+     { name: 'Городское' },
+ ]);
 
-const direction_massive = ref([
-    { name: 'Добровольческое' },
-    { name: 'Образовательное' },
-    { name: 'Патриотическое' },
-    { name: 'Региональное' },
-    { name: 'Окружное' },
-    { name: 'Всероссийское' },
-]);
-
+ const direction_massive = ref([
+     { name: 'Добровольческое' },
+     { name: 'Образовательное' },
+     { name: 'Патриотическое' },
+     { name: 'Региональное' },
+     { name: 'Окружное' },
+     { name: 'Всероссийское' },
+ ]);
 const maininfo = ref({
     format: '',
     direction: '',
@@ -1094,50 +1095,50 @@ const maininfo = ref({
     },
 });
 
-const available_structural_units = ref([
-    { name: 'Отряды' },
-    { name: 'Образовательные Отряды' },
-    { name: 'Местные штабы' },
-    { name: 'Региональные штабы' },
-    { name: 'Окружные штабы' },
-    { name: 'Центральные штабы' },
-]);
-const area = ref('');
-const area_massive = ref([
-    { name: 'ЛСО' },
-    { name: 'Региональный штаб' },
-    { name: 'Окружной штаб' },
-]);
+ const available_structural_units = ref([
+     { name: 'Отряды' },
+     { name: 'Образовательные Отряды' },
+     { name: 'Местные штабы' },
+     { name: 'Региональные штабы' },
+     { name: 'Окружные штабы' },
+     { name: 'Центральные штабы' },
+ ]);
+ const area = ref('');
+ const area_massive = ref([
+     { name: 'ЛСО' },
+     { name: 'Региональный штаб' },
+     { name: 'Окружной штаб' },
+ ]);
 
-//Переменные организаторов
+ //Переменные организаторов
 
-const organizators = ref([
-    {
-        id: Number,
-        organizer: '',
-        organizer_phone_number: '',
-        organizer_email: '',
-        organization: '',
-        telegram: '',
-        is_contact_person: false,
-    },
-]);
+ const organizators = ref([
+     {
+         id: Number,
+         organizer: '',
+         organizer_phone_number: '',
+         organizer_email: '',
+         organization: '',
+         telegram: '',
+         is_contact_person: false,
+     },
+ ]);
 
-//Ответы на вопросы
-const answers = ref([
-    [
-        {
-            question: '',
-            answer: '',
-        },
-    ],
-]);
-//Формы самой страницы
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '#' },
-    { pageTitle: 'Создание штаба СО ОО', href: '#' },
-]);
+ //Ответы на вопросы
+ const answers = ref([
+     [
+         {
+             question: '',
+             answer: '',
+         },
+     ],
+ ]);
+ //Формы самой страницы
+ const pages = ref([
+     { pageTitle: 'Структура', href: '#' },
+     { pageTitle: 'Штабы СО ОО', href: '#' },
+     { pageTitle: 'Создание штаба СО ОО', href: '#' },
+ ]);
 
 function AddOrganizator() {
     organizators.value.push({
@@ -1178,12 +1179,12 @@ function SubmitEvent(){
     })
 }
 
-function AddQuestion() {
-    answers.value.push({
-        question: '',
-        answer: '',
-    });
-}
+ function AddQuestion() {
+     answers.value.push({
+         question: '',
+         answer: '',
+     });
+ }
 </script>
 
 <style lang="scss" scoped>

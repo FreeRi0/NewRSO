@@ -26,9 +26,51 @@
 
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
-                        <!-- <li class="user-data__title" ><p> Кандитат</p></li> -->
+                        <li
+                            class="user-data__title"
+                            v-if="
+                                role.roles.value.detachment_commander ||
+                                role.roles.value
+                                    .educationalheadquarter_commander ||
+                                role.roles.value.localheadquarter_commander ||
+                                role.roles.value
+                                    .regionalheadquarter_commander ||
+                                role.roles.value
+                                    .districtheadquarter_commander ||
+                                role.roles.value.centralheadquarter_commander
+                            "
+                        >
+                            <p>Командир</p>
+                        </li>
+                        <li
+                            class="user-data__title"
+                            v-else-if="role.myPositions.value?.userdetachmentposition || role.myPositions.value.userregionalheadquarterposition || role.myPositions.value.usereducationalheadquarterposition || role.myPositions.value.userlocalheadquarterposition || role.myPositions.value.userdistrictheadquarterposition || role.myPositions.value.usercentralheadquarterposition"
+                        >
+                            <p>
+                                {{
+                                    role.myPositions.value
+                                        .userdetachmentposition?.position ??
+                                    role.myPositions.value
+                                        .usereducationalheadquarterposition
+                                        ?.position ??
+                                    role.myPositions.value
+                                        .userregionalheadquarterposition
+                                        ?.position ??
+                                    role.myPositions.value
+                                        .userlocalheadquarterposition
+                                        ?.position ??
+                                    role.myPositions.value
+                                        .userdistrictheadquarterposition
+                                        ?.position ??
+                                    role.myPositions.value
+                                        .usercentralheadquarterposition
+                                        ?.position
+                                }}
+                            </p>
+                        </li>
+                        <li class="user-data__title" v-else><p>Кандидат</p></li>
                         <li class="user-data__title" v-if="detachment?.name">
-                            <p>ССО "{{ detachment?.name }}"</p>
+                            <p>{{ detachment?.name }}</p>
                         </li>
                         <li
                             class="user-data__title"
@@ -37,14 +79,33 @@
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <p v-if="user.region">
+                            <div
+                                v-if="user.region && !isLoading.isLoading.value"
+                            >
+                                <div
+                                    v-for="item in regionals.filteredRegional
+                                        .value"
+                                >
+                                    <p>{{ item.name }}</p>
+                                </div>
+                            </div>
+
+                            <p v-else>Загрузка региона...</p>
+                        </li>
+
+                        <li
+                            v-if="
+                                user?.education?.study_institution?.short_name
+                            "
+                        >
+                            <p>
                                 {{
-                                    regionals.regionals.value.find(
-                                        (reg) => reg.region === user.region,
-                                    )?.name
+                                    user?.education?.study_institution
+                                        ?.short_name
                                 }}
                             </p>
                         </li>
+
                         <li v-if="user?.education?.study_faculty">
                             <p>{{ user?.education?.study_faculty }}</p>
                         </li>
@@ -107,6 +168,7 @@ import { bannerPhoto } from '@shared/components/imagescomp';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
 import { useRoute } from 'vue-router';
+import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 
 const props = defineProps({
@@ -122,11 +184,7 @@ const props = defineProps({
     education: {
         type: Object,
     },
-    // member: {
-    //     type: Array,
-    // },
 });
-// v-if="props.user.privacy?.privacy_telephone === 'detachment_members' && props.member "
 const emit = defineEmits(['upload', 'update', 'delete']);
 
 const uploadAva = (imageAva) => {
@@ -165,36 +223,43 @@ const deleteWall = (imageWall) => {
 };
 
 const regionalsStore = useRegionalsStore();
+const roleStore = useRoleStore();
+const role = storeToRefs(roleStore);
 const regionals = storeToRefs(regionalsStore);
+const isLoading = storeToRefs(regionalsStore);
 const detachment = ref({});
 const educationalHeadquarter = ref({});
+
 const participant = ref({});
 
 const getUserData = async () => {
     try {
-        const responseSquad = ref(null);
         if (props.user.detachment_id) {
-            let id = props.user.detachment_id;
-            const responseSquad = await HTTP.get(`/detachments/${id}/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+            const responseSquad = await HTTP.get(
+                `/detachments/${props.user.detachment_id}/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            });
+            );
+            detachment.value = responseSquad.data;
         }
-        const responseEducHead = ref(null);
+
         if (props.user.educational_headquarter_id) {
-            let id = props.user.educational_headquarter_id;
-            const responseEducHead = await HTTP.get(`/educationals/${id}/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+            const responseEducHead = await HTTP.get(
+                `/educationals/${props.user.educational_headquarter_id}/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            });
+            );
+
+            educationalHeadquarter.value = responseEducHead.data;
         }
-        regionals.value = responseRegionals.data;
-        detachment.value = responseSquad.data;
-        educationalHeadquarter.value = responseEducHead.data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -203,16 +268,21 @@ const getUserData = async () => {
 watch(
     () => props.user,
 
-    (newUser) => {
+    (newUser, oldUser) => {
         if (Object.keys(props.user).length === 0) {
             return;
         }
-        getUserData();
+        // getUserData();
+        // getEducData();
+        regionalsStore.searchRegionals(props.user.region);
     },
 );
 
 onMounted(() => {
+    // getUserData();
+    roleStore.getMyPositions();
     getUserData();
+    // getEducData();
 });
 </script>
 <style lang="scss" scoped>

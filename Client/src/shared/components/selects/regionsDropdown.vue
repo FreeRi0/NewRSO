@@ -58,10 +58,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, toRef } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
+import { storeToRefs } from 'pinia';
 
 defineOptions({
     inheritAttrs: false,
@@ -69,11 +70,16 @@ defineOptions({
 const emit = defineEmits(['update:value']);
 
 const regionalsStore = useRegionalsStore();
+const regions = storeToRefs(regionalsStore);
 
 const props = defineProps({
     items: {
         type: Array,
         default: () => [],
+    },
+    modelValue: {
+        type: String,
+        default: ""
     },
     address: {
         type: String,
@@ -90,14 +96,23 @@ const props = defineProps({
 });
 const name = ref('');
 
-const selected = ref(null);
+const selected = toRef(props, 'modelValue');
 const isLoading = ref(false);
 const changeValue = (event) => {
-    console.log(event);
     emit('update:value', event);
 };
 
 const items = ref(props.items);
+//  items.value = regions.regions.value;
+
+// const onChangeItem = async () => {
+//     try {
+//         regionalsStore.getRegions();
+//         items.value = regions.regions.value;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 const onChangeItem = async () => {
     try {
@@ -120,12 +135,12 @@ const searchRegion = (val) => {
     if (name.value.length < 3) {
         return;
     }
-    regionalsStore.searchRegions(name.value);
-    console.log('val', val);
+    items.value = regionalsStore.regions.find((reg) => reg.name.indexOf(name.value) !== false);
 };
 
 onMounted(() => {
     onChangeItem();
+    // regionalsStore.getRegions();
 });
 </script>
 

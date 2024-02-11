@@ -1158,7 +1158,7 @@ function SubmitEvent() {
             console.log("Время изменено", resp.data)
         })
         .catch((e)=>{
-            
+
         })
         //Временное решение
         router.go(-1);

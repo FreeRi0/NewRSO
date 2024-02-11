@@ -6,6 +6,7 @@
             name="createAction"
             :button="true"
         ></bannerCreate>
+
         <h2 class='action-title'>Мероприятия</h2>
         <div class='searcher'>
           <div class='squads-search'>
@@ -33,6 +34,7 @@
             />
         </svg>
     </div>
+
         </div>
         <div class='row-cols-2 action-slides'>
             <div class='col settings-container'>
@@ -178,6 +180,7 @@ import { ref } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { sortByEducation, Select } from '@shared/components/selects';
+
 import { getListActions, getListActionsBySearch } from '@services/ActionService';
 import { computed } from "vue";
 import { onActivated } from "vue";
@@ -448,7 +451,6 @@ input {
         }
     }
 }
-
 .v-expansion-panel:not(:first-child)::after {
     display: none;
 }

@@ -5,9 +5,9 @@
         </div>
         <router-link
             v-if="
-                currentUser.currentUser.value || roles.roles.value.educationalheadquarter_commander || roles.roles.value.regionalheadquarter_commander ||
+            !roles.roles.value.detachment_commander && currentUser.currentUser.value || roles.roles.value.educationalheadquarter_commander || roles.roles.value.regionalheadquarter_commander ||
                 roles.roles.value.localheadquarter_commander || roles.roles.value.districtheadquarter_commander ||
-                roles.roles.value.centralComId && !roles.roles.value.detachment_commander
+                roles.roles.value.centralComId 
             "
             :to="{ name: name }"
             ><p v-if="button"  class="create">{{ label }}</p></router-link
