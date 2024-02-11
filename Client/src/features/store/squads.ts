@@ -57,7 +57,7 @@ export const useSquadsStore = defineStore('squads', {
                     },
                 );
                 this.competitionSquads = responseCompetitionSquads.data.reduce(
-                    (acc: any, member: any) => {
+                    (acc: any, member: Object) => {
                         if (member.detachment) acc.push(member.detachment);
                         acc.push(member.junior_detachment);
 

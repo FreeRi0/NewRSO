@@ -200,8 +200,6 @@ const viewParticipants = async () => {
         let id =
             roles.roles.value.regionalheadquarter_commander?.id ??
             roles.roles.value.detachment_commander?.id;
-        console.log('roles', roles.roles.value);
-        console.log('id', id);
         const regComReq = ref(null);
         const detComReq = ref(null);
         setTimeout(async () => {
@@ -240,10 +238,9 @@ const viewParticipants = async () => {
 
 const viewDetachments = async () => {
     try {
+        if (!roles.roles.value.detachment_commander) return;
         isLoading.value = true;
         let id = roles.roles.value.detachment_commander?.id;
-        console.log('roles', roles.roles.value);
-        console.log('detid', id);
         setTimeout(async () => {
             const detComRequest = await HTTP.get(
                 `/detachments/${id}/applications/`,
@@ -397,13 +394,6 @@ watch(
         viewEvents();
     },
 );
-
-onMounted(() => {
-    roleStore.getRoles();
-    viewParticipants();
-    viewDetachments();
-    viewEvents();
-});
 </script>
 
 <style lang="scss" scoped>
