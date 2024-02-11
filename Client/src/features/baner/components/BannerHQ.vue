@@ -438,7 +438,7 @@
                     <router-link
                         v-if="
                             userId &&
-                            (userId === centralHeadquarter?.commander ||
+                            (userId === centralHeadquarter?.commander?.id ||
                                 IsTrusted)
                         "
                         class="hq-data__link"
