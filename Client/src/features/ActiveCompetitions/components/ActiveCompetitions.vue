@@ -23,8 +23,8 @@
                     <active-competition-item
                         v-if="
                             competition.is_confirmed_by_junior ||
-                            (competition.junior_detachment.id ==
-                                commanderIds.detachment_commander.id &&
+                            (competition.junior_detachment?.id ==
+                                commanderIds.detachment_commander?.id &&
                                 !competition.is_confirmed_by_junior) ||
                             !competition.detachment
                         "
@@ -134,7 +134,6 @@ const getCompetitionsJunior = async () => {
 };
 
 const getCompetitions = async () => {
-    console.log(commanderIds.value.regionalheadquarter_commander?.id);
     for (const competitionId of allCompetition.value) {
         try {
             loading.value = true;
@@ -247,7 +246,6 @@ const onAction = async () => {
 onMounted(async () => {
     await getAllCompetition();
     await getMeCommander();
-    console.log();
     if (commanderIds.value.regionalheadquarter_commander?.id == null)
         await getCompetitionsJunior();
     else await getCompetitions();
