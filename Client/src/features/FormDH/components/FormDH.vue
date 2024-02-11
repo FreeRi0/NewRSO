@@ -299,6 +299,7 @@
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
+                                :functions="positionsStore.positions"
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
@@ -715,6 +716,8 @@ import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
+import { usePositionsStore } from '@features/store/positions';
+const positionsStore = usePositionsStore();
 
 const emit = defineEmits([
     'update:value',

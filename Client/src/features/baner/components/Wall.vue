@@ -74,25 +74,22 @@
 
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
-                        <!-- <li
-                            class="user-data__title"
-                            v-if="
-                                role.roles.value.detachment_commander ||
-                                role.roles.value
-                                    .educationalheadquarter_commander ||
-                                role.roles.value.localheadquarter_commander ||
-                                role.roles.value
-                                    .regionalheadquarter_commander ||
-                                role.roles.value
-                                    .districtheadquarter_commander ||
-                                role.roles.value.centralheadquarter_commander
-                            "
-                        >
-                            <p>Командир</p>
-                        </li> -->
                         <li
                             class="user-data__title"
                             v-if="
+                                commander.detachment_commander ||
+                                commander.educationalheadquarter_commander ||
+                                commander.localheadquarter_commander ||
+                                commander.regionalheadquarter_commander ||
+                                commander.districtheadquarter_commander ||
+                                commander.centralheadquarter_commander
+                            "
+                        >
+                            <p>Командир</p>
+                        </li>
+                        <li
+                            class="user-data__title"
+                            v-else-if="
                                 position?.userdetachmentposition ||
                                 position.userregionalheadquarterposition ||
                                 position.userlocalheadquarterposition ||
@@ -118,8 +115,23 @@
                         </li>
                         <li class="user-data__title" v-else><p>Кандитат</p></li>
 
-                        <li class="user-data__title" v-if="detachment?.name">
-                            <p>{{ detachment?.name }}</p>
+                        <li
+                            class="user-data__title"
+                            v-if="
+                                position?.userdetachmentposition ||
+                                position.userregionalheadquarterposition ||
+                                position.userlocalheadquarterposition ||
+                                position.userdistrictheadquarterposition ||
+                                position?.usercentralheadquarterposition
+                            "
+                        >
+                            <p>
+                                {{
+                                    position.userdetachmentposition?.headquarter?.name ??
+                                    position.usereducationalheadquarterposition
+                                        ?.headquarter?.name
+                                }}
+                            </p>
                         </li>
                         <li
                             class="user-data__title"
@@ -296,6 +308,9 @@ const props = defineProps({
         type: Object,
     },
     position: {
+        type: Object,
+    },
+    commander: {
         type: Object,
     },
 });

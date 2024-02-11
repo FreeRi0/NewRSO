@@ -356,6 +356,7 @@
                             <!-- здесь поменяла -->
                             <MembersList
                                 :items="sortedMembers"
+                                :functions="positionsStore.positions"
                                 :submited="submited"
                                 :functions="positions.positions.value"
                                 :is-error-members="isErrorMembers"
