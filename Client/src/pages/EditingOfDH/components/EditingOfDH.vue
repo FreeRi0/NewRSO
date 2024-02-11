@@ -28,6 +28,24 @@ import { FormDH } from '@features/FormDH';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { usePage } from '@shared';
+import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+
+const userStore = useUserStore();
+const user = storeToRefs(userStore);
+const meId = user.currentUser.value.id;
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+const meRoles = roles.roles.value;
+
+const educComId = roles.roles.value.educationalheadquarter_commander?.id;
+const regionComId = roles.roles.value.regionalheadquarter_commander?.id;
+const districtComId = roles.roles.value.districtheadquarter_commander?.id;
+const centralComId = roles.roles.value.centralheadquarter_commander;
+const localComId = roles.roles.value.localheadquarter_commander?.id;
+const detComId = roles.roles.value.detachment_commander?.id;
 
 const router = useRouter();
 const route = useRoute();
@@ -138,6 +156,12 @@ const isError = ref({});
 const isErrorMembers = ref({});
 const swal = inject('$swal');
 
+const getErrors = () => {
+    if (isError.value.non_field_errors) return isError.value.non_field_errors;
+    if (isError.value.detail) return isError.value.detail;
+    else return 'Заполните обязательные поля';
+};
+
 const changeHeadquarter = async () => {
     try {
         const formData = new FormData();
@@ -145,6 +169,18 @@ const changeHeadquarter = async () => {
         formData.append('name', headquarter.value.name);
         formData.append('founding_date', headquarter.value.founding_date);
         formData.append('city', headquarter.value.city);
+
+        if (
+            !educComId ||
+            !regionComId ||
+            !districtComId ||
+            !centralComId ||
+            !localComId ||
+            !detComId
+        ) {
+            formData.append('commander', headquarter.value.meId);
+        } else formData.append('commander', headquarter.value.commander);
+
         formData.append('commander', headquarter.value.commander);
         formData.append('social_vk', headquarter.value.social_vk);
         formData.append('social_tg', headquarter.value.social_tg);

@@ -356,9 +356,8 @@
                             <!-- здесь поменяла -->
                             <MembersList
                                 :items="sortedMembers"
-                                :functions="positionsStore.positions"
-                                :submited="submited"
                                 :functions="positions.positions.value"
+                                :submited="submited"
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
@@ -499,7 +498,8 @@
                                     class="form__error form__error--date"
                                     v-if="isError.founding_date"
                                 >
-                                    * Это поле не может быть пустым.
+                                    <!-- * Это поле не может быть пустым. -->
+                                    * {{ getErrorField('founding_date') }}
                                 </p>
                             </div>
 
@@ -950,7 +950,6 @@ import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 // здесь поменяла
 import { useRoleStore } from '@layouts/store/role';
-import { useSquadsStore } from '@features/store/squads';
 import { useRegionalsStore } from '@features/store/regionals';
 import { usePositionsStore } from '@features/store/positions';
 import { storeToRefs } from 'pinia';
@@ -1145,7 +1144,10 @@ onBeforeMount(async () => {
 .form-button {
     width: 132px;
     min-height: 52px;
-    margin: 0;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 16px 32px;
     font-family: 'Bert Sans';
     font-size: 16px;

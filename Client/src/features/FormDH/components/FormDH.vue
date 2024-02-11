@@ -115,7 +115,7 @@
                                 v-model:value="headquarter.founding_date"
                             />
                             <p class="form__error" v-if="isError.founding_date">
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('founding_date') }}
                             </p>
                         </div>
 
@@ -129,22 +129,36 @@
                                 v-model:value="headquarter.city"
                             />
                         </div>
-
-                        <div class="form__field form__field--commander">
+                        <div
+                            v-if="
+                                roles.roles.value
+                                    .educationalheadquarter_commander ||
+                                roles.roles.value
+                                    .regionalheadquarter_commander ||
+                                roles.roles.value
+                                    .districtheadquarter_commander ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                roles.roles.value.localheadquarter_commander ||
+                                roles.roles.value.detachment_commander
+                            "
+                            class="form__field form__field--commander"
+                        >
                             <label class="form__label" for="beast"
                                 >Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Dropdown
-                                v-if="!isCommanderLoading"
-                                open-on-clear
-                                id="beast"
-                                name="edit_beast"
-                                placeholder="Поиск по ФИО"
-                                v-model="headquarter.commander"
-                                @update:value="changeValue"
-                                address="users/"
-                            ></Dropdown>
+                            <div v-if="!isCommanderLoading">
+                                <Dropdown
+                                    open-on-clear
+                                    id="beast"
+                                    name="edit_beast"
+                                    placeholder="Поиск по ФИО"
+                                    v-model="headquarter.commander"
+                                    @update:value="changeValue"
+                                    address="users/"
+                                ></Dropdown>
+                            </div>
                             <v-progress-circular
                                 class="circleLoader"
                                 v-else
@@ -155,7 +169,7 @@
                                 class="form__error form__error--commander"
                                 v-if="isError.commander"
                             >
-                                * Это поле не может быть пустым.
+                                * {{ getErrorField('commander') }}
                             </p>
                         </div>
                     </div>
@@ -299,7 +313,7 @@
                             <MembersList
                                 :items="sortedMembers"
                                 :submited="submited"
-                                :functions="positionsStore.positions"
+                                :functions="positions.positions.value"
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
@@ -312,7 +326,6 @@
                             ></v-progress-circular>
                         </div>
                     </div>
-
                     <v-card-actions class="form__button-group">
                         <Button
                             type="button"
@@ -709,15 +722,21 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
-import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
 import { usePositionsStore } from '@features/store/positions';
+import { storeToRefs } from 'pinia';
+
 const positionsStore = usePositionsStore();
+const positions = storeToRefs(positionsStore);
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
 
 const emit = defineEmits([
     'update:value',
@@ -771,6 +790,15 @@ const props = defineProps({
         default: false,
     },
 });
+
+const getErrorField = (field) => {
+    if (
+        props.isError[field][0] ===
+        'Некорректный тип. Ожидалось значение первичного ключа, получен str.'
+    )
+        return 'Это поле не может быть пустым.';
+    else return props.isError[field][0];
+};
 
 const headquarter = ref(props.headquarter);
 
@@ -861,13 +889,21 @@ const deleteBanner = () => {
     fileBanner.value = null;
     emit('deleteBanner', fileBanner.value);
 };
+
+onBeforeMount(async () => {
+    roleStore.getRoles();
+    positionsStore.getPositions();
+});
 </script>
 
 <style lang="scss" scoped>
 .form-button {
     width: 132px;
     min-height: 52px;
-    margin: 0;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 16px 32px;
     font-family: 'Bert Sans';
     font-size: 16px;
