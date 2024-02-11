@@ -139,9 +139,7 @@
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList
-                    :squads="sortedSquads"
-                ></horizontalList>
+                <horizontalList :squads="sortedSquads"></horizontalList>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -259,7 +257,6 @@ const filteredSquadsByEducation = computed(() => {
 const sortedSquads = computed(() => {
     let tempSquads = squads.squads.value;
 
-
     searchSquads.value;
     filteredSquadsByEducation.value;
 
@@ -294,6 +291,10 @@ const sortedSquads = computed(() => {
     if (!ascending.value) {
         tempSquads.reverse();
     }
+
+    // if(!searchSquads.value && !filteredSquadsByEducation.value) {
+    //     return tempSquads;
+    // }
 
     if (!picked.value) {
         return tempSquads;
@@ -347,8 +348,6 @@ onMounted(() => {
         text-overflow: ellipsis;
     }
 }
-
-
 
 .squads {
     padding: 0px 0px 60px 0px;
