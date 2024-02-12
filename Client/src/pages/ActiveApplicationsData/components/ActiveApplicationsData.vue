@@ -21,7 +21,7 @@
                 </button>
             </div>
             <div v-if="picked == 'Верификация аккаунтов' || picked == ''">
-                <div
+                <!-- <div
                     class="contributor-sort__all mb-8"
                     v-if="participants?.length > 0"
                 >
@@ -45,16 +45,7 @@
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
-                <!-- <Button
-                    @click="participantsVisible += step"
-                    v-if="participantsVisible < participants.length && participants.length > 0"
-                    label="Показать еще"
-                ></Button>
-                <Button
-                    @click="participantsVisible -= step"
-                    v-else
-                    label="Свернуть все"
-                ></Button> -->
+
                 <div class="selectedItems" v-if="selectedPeoples.length > 0">
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
 
@@ -64,7 +55,9 @@
                         @reject="rejectParticipant"
                         :participants="selectedPeoples"
                     ></checkedAppList>
-                </div>
+                </div> -->
+                <activeApplications
+                />
             </div>
             <div v-else-if="picked == 'Заявка на вступление в отряд'">
                 <div
@@ -179,8 +172,7 @@ const pages = ref([
     { pageTitle: 'Активные заявки', href: '#' },
 ]);
 
-const participants = ref([]);
-const detachments = ref([]);
+
 const events = ref([]);
 const checkboxAll = ref(false);
 const checkboxAllSquads = ref(false);
@@ -194,76 +186,74 @@ const step = ref(12);
 
 // tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
-const viewParticipants = async () => {
-    try {
-        isLoading.value = true;
-        let id =
-            roles.roles.value.regionalheadquarter_commander?.id ??
-            roles.roles.value.detachment_commander?.id;
+// const viewParticipants = async () => {
+//     try {
+//         isLoading.value = true;
+//         let id =
+//             roles.roles.value.regionalheadquarter_commander?.id ??
+//             roles.roles.value.detachment_commander?.id;
+//         const regComReq = ref(null);
+//         const detComReq = ref(null);
+//         setTimeout(async () => {
+//             if (roles.roles.value.regionalheadquarter_commander) {
+//                 const regComReq = await HTTP.get(
+//                     `/regionals/${id}/verifications/`,
+//                     {
+//                         headers: {
+//                             'Content-Type': 'application/json',
+//                             Authorization:
+//                                 'Token ' + localStorage.getItem('Token'),
+//                         },
+//                     },
+//                 );
+//                 participants.value = regComReq.data;
+//                 isLoading.value = false;
+//             } else if (roles.roles.value.detachment_commander) {
+//                 const detComReq = await HTTP.get(
+//                     `/detachments/${id}/verifications/`,
+//                     {
+//                         headers: {
+//                             'Content-Type': 'application/json',
+//                             Authorization:
+//                                 'Token ' + localStorage.getItem('Token'),
+//                         },
+//                     },
+//                 );
+//                 participants.value = detComReq.data;
+//                 isLoading.value = false;
+//             }
+//         }, 1000);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
-        console.log('roles', roles.roles.value);
-        console.log('id', id);
-        const regComReq = ref(null);
-        const detComReq = ref(null);
-        setTimeout(async () => {
-            if (roles.roles.value.regionalheadquarter_commander) {
-                const regComReq = await HTTP.get(
-                    `/regionals/${id}/verifications/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
-                participants.value = regComReq.data;
-                isLoading.value = false;
-            } else if (roles.roles.value.detachment_commander) {
-                const detComReq = await HTTP.get(
-                    `/detachments/${id}/verifications/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
-                participants.value = detComReq.data;
-                isLoading.value = false;
-            }
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
 
-const viewDetachments = async () => {
-    try {
-        if (!roles.roles.value.detachment_commander) return;
-        isLoading.value = true;
-        let id = roles.roles.value.detachment_commander?.id;
+// const viewDetachments = async () => {
+//     try {
+//         if (!roles.roles.value.detachment_commander) return;
+//         isLoading.value = true;
+//         let id = roles.roles.value.detachment_commander?.id;
 
-        console.log('roles', roles.roles.value);
-        console.log('detid', id);
-        setTimeout(async () => {
-            const detComRequest = await HTTP.get(
-                `/detachments/${id}/applications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            detachments.value = detComRequest.data;
-            isLoading.value = false;
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+//         console.log('roles', roles.roles.value);
+//         console.log('detid', id);
+//         setTimeout(async () => {
+//             const detComRequest = await HTTP.get(
+//                 `/detachments/${id}/applications/`,
+//                 {
+//                     headers: {
+//                         'Content-Type': 'application/json',
+//                         Authorization: 'Token ' + localStorage.getItem('Token'),
+//                     },
+//                 },
+//             );
+//             detachments.value = detComRequest.data;
+//             isLoading.value = false;
+//         }, 1000);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 const viewEvents = async () => {
     try {
@@ -287,94 +277,54 @@ const viewEvents = async () => {
     }
 };
 
-const select = (event) => {
-    selectedPeoples.value = [];
-    console.log('fffss', checkboxAll.value, event);
-    if (event.target.checked) {
-        console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.value) {
-            console.log('arr', selectedPeoples.value);
-            selectedPeoples.value.push(participants.value[index]);
-        }
-    }
-};
+// const select = (event) => {
+//     selectedPeoples.value = [];
+//     console.log('fffss', checkboxAll.value, event);
+//     if (event.target.checked) {
+//         console.log('fffss', checkboxAll.value, event);
+//         for (let index in participants.value) {
+//             console.log('arr', selectedPeoples.value);
+//             selectedPeoples.value.push(participants.value[index]);
+//         }
+//     }
+// };
 
-const selectSquads = (event) => {
-    selectedDetch.value = [];
-    console.log('fffss', checkboxAll.value, event);
-    if (event.target.checked) {
-        console.log('fffss', checkboxAll.value, event);
-        for (let index in detachments.value) {
-            console.log('arr', selectedDetch.value);
-            selectedDetch.value.push(detachments.value[index]);
-        }
-    }
-};
 
-const changePeoples = (CheckedUser, UserId) => {
-    let participant = {};
-    console.log('fffUser', CheckedUser, UserId);
-    if (CheckedUser) {
-        participant = participants.value.find((item) => item.user.id == UserId);
-        selectedPeoples.value.push(participant);
-    } else {
-        selectedPeoples.value = selectedPeoples.value.filter(
-            (item) => item.user.id !== UserId,
-        );
-    }
-};
-const approveParticipant = (approved) => {
-    console.log('approved', approved);
-    selectedPeoples.value = selectedPeoples.value.filter(
-        (item) => item.user.id !== approved,
-    );
-    participants.value = participants.value.filter(
-        (item) => item.user.id !== approved,
-    );
-};
+// const changePeoples = (CheckedUser, UserId) => {
+//     let participant = {};
+//     console.log('fffUser', CheckedUser, UserId);
+//     if (CheckedUser) {
+//         participant = participants.value.find((item) => item.user.id == UserId);
+//         selectedPeoples.value.push(participant);
+//     } else {
+//         selectedPeoples.value = selectedPeoples.value.filter(
+//             (item) => item.user.id !== UserId,
+//         );
+//     }
+// };
+// const approveParticipant = (approved) => {
+//     console.log('approved', approved);
+//     selectedPeoples.value = selectedPeoples.value.filter(
+//         (item) => item.user.id !== approved,
+//     );
+//     participants.value = participants.value.filter(
+//         (item) => item.user.id !== approved,
+//     );
+// };
 
-const rejectParticipant = (rejected) => {
-    console.log('rejected', rejected);
-    selectedPeoples.value = selectedPeoples.value.filter(
-        (item) => item.user.id !== rejected,
-    );
-    participants.value = participants.value.filter(
-        (item) => item.user.id !== rejected,
-    );
-};
+// const rejectParticipant = (rejected) => {
+//     console.log('rejected', rejected);
+//     selectedPeoples.value = selectedPeoples.value.filter(
+//         (item) => item.user.id !== rejected,
+//     );
+//     participants.value = participants.value.filter(
+//         (item) => item.user.id !== rejected,
+//     );
+// };
 
-const approveMember = (approved) => {
-    console.log('approved', approved);
-    selectedDetch.value = selectedDetch.value.filter(
-        (item) => item.id !== approved,
-    );
-    detachments.value = detachments.value.filter(
-        (item) => item.id !== approved,
-    );
-};
 
-const rejectMember = (rejected) => {
-    console.log('rejected', rejected);
-    selectedDetch.value = selectedDetch.value.filter(
-        (item) => item.id !== rejected,
-    );
-    detachments.value = detachments.value.filter(
-        (item) => item.id !== rejected,
-    );
-};
 
-const changeSquads = (CheckedSquad, SquadId) => {
-    let detachment = {};
-    console.log('fffSquad', CheckedSquad, SquadId);
-    if (CheckedSquad) {
-        detachment = detachments.value.find((item) => item.id == SquadId);
-        selectedDetch.value.push(detachment);
-    } else {
-        selectedDetch.value = selectedDetch.value.filter(
-            (item) => item.id !== SquadId,
-        );
-    }
-};
+
 
 const changeEvents = (CheckedEvent, EventId) => {
     let event = {};
@@ -395,8 +345,6 @@ watch(
         if (Object.keys(roles.roles.value).length === 0) {
             return;
         }
-        viewParticipants();
-        viewDetachments();
         viewEvents();
     },
 );
