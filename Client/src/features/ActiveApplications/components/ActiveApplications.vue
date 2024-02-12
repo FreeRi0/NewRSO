@@ -14,27 +14,11 @@
         </div>
         <div class="competitions__list">
             <template
-                v-for="(participant, index) in participantList"
-                :key="participant.user.id"
+                v-for="participant in participantList"
+                :key="participant.id"
             >
-                <!-- <active-competition-item
-                    v-if="
-                        competition.is_confirmed_by_junior ||
-                        (competition.junior_detachment?.id ==
-                            commanderIds.detachment_commander?.id &&
-                            !competition.is_confirmed_by_junior) ||
-                        !competition.detachment
-                    "
-                    :competition="competition"
-                    :commander-ids="commanderIds"
-                    :position="index"
-                    @select="onToggleSelectCompetition"
-                /> -->
-
                 <referenceItem
                     :participant="participant"
-                    :commander-ids="commanderIds"
-                    :position="index"
                     @select="onToggleSelectCompetition"
                 />
             </template>
@@ -43,20 +27,11 @@
                     Итого: {{ selectedParticipantList.length }}
                 </p>
 
-                <!-- <active-competition-item-select
-                    v-for="competition in selectedCompetitionsList"
-                    :key="competition.id"
-                    :competition="competition"
-                    :action="action"
-                    :commander-ids="commanderIds"
-                    @select="onToggleSelectCompetition"
-                /> -->
                 <checkedReferencesItem
                     v-for="participant in selectedParticipantList"
                     :action="action"
                     :participant="participant"
-                    :commander-ids="commanderIds"
-                    :key="participant.user.id"
+                    :key="participant.id"
                     @select="onToggleSelectCompetition"
                 />
             </template>
@@ -119,15 +94,18 @@
                 </div> -->
 </template>
 <script setup>
-import { ref } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import { ref, onMounted, onActivated } from 'vue';
 import { referenceItem } from '@entities/ReferencesPeoples';
 import { checkedReferencesItem } from '@entities/ReferencesPeoples';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
 
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
 const participantList = ref([]);
-const commanderIds = ref();
+// const commanderIds = ref();
 const selectedParticipantList = ref([]);
 
 const loading = ref(false);
@@ -230,8 +208,8 @@ const viewParticipants = async () => {
                         },
                     },
                 );
-                participants.value = regComReq.data;
-                isLoading.value = false;
+                participantList.value = regComReq.data;
+                // isLoading.value = false;
             } else if (roles.roles.value.detachment_commander) {
                 const detComReq = await HTTP.get(
                     `/detachments/${id}/verifications/`,
@@ -243,16 +221,18 @@ const viewParticipants = async () => {
                         },
                     },
                 );
-                participants.value = detComReq.data;
-                isLoading.value = false;
+                participantList.value = detComReq.data;
+                // isLoading.value = false;
             }
-        }, 1000);
+        }, 100);
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
 const onToggleSelectCompetition = (participant, checked) => {
+    console.log('participant', participant.selected);
+    console.log('checked', checked);
     if (checked) {
         participant.selected = checked;
         selectedParticipantList.value.push(participant);
@@ -264,33 +244,41 @@ const onToggleSelectCompetition = (participant, checked) => {
     }
 };
 
-// const confirmApplication = async (id, participantId) => {
-//     if (commanderIds.value.regionalheadquarter_commander?.id == null) {
-//         await HTTP.put(
-//             `/competitions/${competitionId}/applications/${id}/`,
-//             {
-//                 is_confirmed_by_junior: true,
-//             },
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//         );
-//     } else {
-//         await HTTP.post(
-//             `/competitions/${competitionId}/applications/${id}/confirm/`,
-//             {},
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//         );
-//     }
-// };
+const confirmApplication = async (id) => {
+    try {
+        // let { id, ...rest } = participant;
+        const approveReq = await HTTP.post(
+            `rsousers/${id}/verify/`,
+            {},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+    } catch (error) {
+        console.log('errr', error);
+    }
+};
+
+const cancelApplication = async () => {
+    try {
+        let { id, ...rest } = participant;
+        const rejectReq = await HTTP.delete(
+            `/rsousers/${id}/verify/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+            {},
+        );
+    } catch (error) {
+        console.log('errr', error);
+    }
+};
 
 // const cancelApplication = async (id, competitionId) => {
 //     await HTTP.delete(
@@ -309,48 +297,33 @@ const onAction = async () => {
     try {
         for (const application of selectedParticipantList.value) {
             if (action.value === 'Одобрить') {
-                console.log(application.id);
-                await confirmApplication(
-                    application.id,
-                    application.participant.id,
-                );
+                // console.log('app', application.id);
+                await confirmApplication();
             } else {
-                await cancelApplication(
-                    application.id,
-                    application.participant.id,
-                );
+                await cancelApplication();
             }
             participantList.value = participantList.value.filter(
-                (participant) => participant.id != application.id,
+                (participant) =>
+                    participant.id != application.id,
             );
             selectedParticipantList.value =
                 selectedParticipantList.value.filter(
-                    (participant) => participant.id != application.id,
+                    (participant) =>
+                        participant.id != application.id,
                 );
         }
-
-        if (commanderIds.value.regionalheadquarter_commander?.id == null)
-            await getCompetitionsJunior();
-        else await getCompetitions();
+        await viewParticipants();
     } catch (e) {
         console.log('error action', e);
     }
 };
 
 onMounted(async () => {
-    await getAllCompetition();
-    await getMeCommander();
-    if (commanderIds.value.regionalheadquarter_commander?.id == null)
-        await getCompetitionsJunior();
-    else await getCompetitions();
+    await viewParticipants();
 });
 
 onActivated(async () => {
-    await getAllCompetition();
-    await getMeCommander();
-    if (commanderIds.value.regionalheadquarter_commander?.id == null)
-        await getCompetitionsJunior();
-    else await getCompetitions();
+    await viewParticipants();
 });
 // import { referenceItem } from '@entities/ReferencesPeoples/components';
 // const emit = defineEmits(['change']);

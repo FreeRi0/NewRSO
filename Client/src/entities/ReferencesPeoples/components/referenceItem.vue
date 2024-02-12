@@ -56,11 +56,6 @@ import { HTTP } from '@app/http';
 const props = defineProps({
     participant: {
         type: Object,
-        default: () => ({}),
-    },
-    commanderIds: {
-        type: Object,
-        default: () => ({}),
     },
     // selectedParticipants: {
     //     type: Array,
@@ -77,10 +72,10 @@ const checked = ref(false);
 const updateCheck = (e) => {
     // console.log('ddddddUser', checked.value, props.participant.user.id);
     // emit('change', checked.value, props.participant.user.id);
-    emit('select', props.participant.user.id, e.target.checked);
+    emit('select', props.participant, e.target.checked);
 };
 
-const selectedPeoples = ref(props.selectedParticipants);
+// const selectedPeoples = ref(props.selectedParticipants);
 
 // watch(
 //     () => props.selectedParticipants,
@@ -98,7 +93,7 @@ const selectedPeoples = ref(props.selectedParticipants);
 // );
 
 watch(
-    () => props.participant.user.selected,
+    () => props.participant.selected,
     (newSelected) => {
         checked.value = newSelected;
     },

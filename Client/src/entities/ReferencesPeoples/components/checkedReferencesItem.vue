@@ -38,22 +38,18 @@
                 </div>
             </div>
         </router-link>
+
         <div class="sort-select ml-3">
-            <sortByEducation
+            <!-- <sortByEducation
                 placeholder="Выберете действие"
                 variant="outlined"
                 clearable
                 v-model="user.is_verified"
                 :options="filteredPayed"
-            ></sortByEducation>
+            ></sortByEducation> -->
+            <div class="horizontallso-item__wrapper">{{ action }}</div>
         </div>
         <div class="checked__confidant ml-3">
-            <!-- <input
-                type="checkbox"
-                v-model="checked"
-                :value="participant.user"
-                @change="updateMembership"
-            /> -->
             <input
                 type="checkbox"
                 v-model="checked"
@@ -67,28 +63,27 @@
             @click="ChangeStatus(participant.id)"
         ></Button> -->
     </div>
-    <p v-if="isError" class="error">{{ isError.detail }}</p>
+    <!-- <p v-if="isError" class="error">{{ isError.detail }}</p> -->
 </template>
 <script setup>
 // import { Button } from '@shared/components/buttons';
-import { sortByEducation } from '@shared/components/selects';
+// import { sortByEducation } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { ref, watch, inject } from 'vue';
-import { HTTP } from '@app/http';
+// import { HTTP } from '@app/http';
 
 const props = defineProps({
     participant: {
         type: Object,
-        default: () => ({}),
     },
     // participants: {
     //     type: Array,
     //     require: true,
     // },
-    commanderIds: {
-        type: Object,
-        default: () => ({}),
-    },
+    // commanderIds: {
+    //     type: Object,
+    //     default: () => ({}),
+    // },
     action: {
         type: String,
         default: '',
@@ -103,14 +98,17 @@ const props = defineProps({
 const emit = defineEmits({
     select: null,
 });
-const updateMembership = (e) => {
-    console.log('checkeed', checked.value);
-    // emit('change', checked.value, props.participant.user.id);
-    emit('select', props.competition, e.target.checked);
-};
 
 const checked = ref(true);
-const isError = ref([]);
+
+const updateMembership = (e) => {
+    // console.log('checkeed', checked.value);
+    // emit('change', checked.value, props.participant.user.id);
+    emit('select', props.participant, e.target.checked);
+};
+
+
+// const isError = ref([]);
 
 // const selectedPeoples = ref(props.selectedParticipants);
 // const swal = inject('$swal');
