@@ -61,12 +61,13 @@ export const useSquadsStore = defineStore('squads', {
                         if (member.detachment) acc.push(member.detachment);
                         acc.push(member.junior_detachment);
 
-                        console.log('acc', acc);
+                        // console.log('acc', acc);
 
                         return acc;
                     },
                     [],
                 );
+                // console.log('soirt', this.competitionSquads)
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
