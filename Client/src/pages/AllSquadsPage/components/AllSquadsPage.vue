@@ -251,7 +251,7 @@ const searchSquads = computed(() => {
 });
 
 const filteredSquadsByEducation = computed(() => {
-    return filteredSquad(education.value);
+    return filteredSquad(education.value?education.value:'');
 });
 
 const sortedSquads = computed(() => {

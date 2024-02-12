@@ -191,8 +191,8 @@ const sortOptionss = ref([
         name: 'Алфавиту от А - Я',
     },
     { value: 'founding_date', name: 'Дате создания отряда' },
-    { value: 'members_count', name: 'Количеству участников' },
-    { value: 'rating', name: 'Место в рейтинге' },
+    // { value: 'members_count', name: 'Количеству участников' },
+    // { value: 'rating', name: 'Место в рейтинге' },
 ]);
 
 const getCategories = async () => {
@@ -211,7 +211,7 @@ const getCategories = async () => {
 
 const searchCompetitionParticipants = async (name) => {
     try {
-        const { data } = await HTTP.get(
+        const responseSearchCompetitionSquads = await HTTP.get(
             `/competitions/1/participants/?search=${name}`,
             {
                 headers: {
@@ -220,7 +220,13 @@ const searchCompetitionParticipants = async (name) => {
                 },
             },
         );
-        squads.competitionSquads.value = data;
+        squads.competitionSquads.value = responseSearchCompetitionSquads.data.reduce((acc, member) => {
+            if (member.detachment) acc.push(member.detachment);
+            acc.push(member.junior_detachment);
+            // console.log('acc', acc);
+            return acc;
+        }, []);
+        // this.competitionSquads = responseCompetitionSquads
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -274,16 +280,12 @@ const sortedSquads = computed(() => {
         tempSquads.reverse();
     }
 
-
-
     if (!picked.value) {
-        return tempSquads;
+        return tempSquads.slice(0, squadsVisible.value);
     }
-
-    tempSquads = tempSquads.filter(
-        (item) => item.area === picked.value
-    );
+    tempSquads = tempSquads.filter((item) => item.area === picked.value.name);
     tempSquads = tempSquads.slice(0, squadsVisible.value);
+
     return tempSquads;
 });
 

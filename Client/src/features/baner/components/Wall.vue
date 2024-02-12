@@ -77,11 +77,11 @@
                         <li
                             class="user-data__title"
                             v-if="
-                                commander.detachment_commander ||
-                                commander.educationalheadquarter_commander ||
-                                commander.localheadquarter_commander ||
-                                commander.regionalheadquarter_commander ||
-                                commander.districtheadquarter_commander ||
+                                commander.detachment_commander?.id ||
+                                commander.educationalheadquarter_commander?.id ||
+                                commander.localheadquarter_commander?.id ||
+                                commander.regionalheadquarter_commander?.id ||
+                                commander.districtheadquarter_commander?.id ||
                                 commander.centralheadquarter_commander
                             "
                         >
