@@ -21,43 +21,7 @@
                 </button>
             </div>
             <div v-if="picked == 'Верификация аккаунтов' || picked == ''">
-                <!-- <div
-                    class="contributor-sort__all mb-8"
-                    v-if="participants?.length > 0"
-                >
-                    <input
-                        type="checkbox"
-                        @click="select"
-                        v-model="checkboxAll"
-                    />
-                </div>
-                <activeApplications
-                    @change="changePeoples"
-                    :participants="participants"
-                    :selected-peoples="selectedPeoples"
-                    @approve="approveParticipant"
-                    @reject="rejectParticipant"
-                    v-if="!isLoading"
-                />
-                <v-progress-circular
-                    class="circleLoader"
-                    v-else
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
-
-                <div class="selectedItems" v-if="selectedPeoples.length > 0">
-                    <h3>Итого: {{ selectedPeoples.length }}</h3>
-
-                    <checkedAppList
-                        @change="changePeoples"
-                        @approve="approveParticipant"
-                        @reject="rejectParticipant"
-                        :participants="selectedPeoples"
-                    ></checkedAppList>
-                </div> -->
-                <activeApplications
-                />
+                <activeApplications />
             </div>
             <div v-else-if="picked == 'Заявка на вступление в отряд'">
                 <div
@@ -229,31 +193,7 @@ const step = ref(12);
 // };
 
 
-// const viewDetachments = async () => {
-//     try {
-//         if (!roles.roles.value.detachment_commander) return;
-//         isLoading.value = true;
-//         let id = roles.roles.value.detachment_commander?.id;
 
-//         console.log('roles', roles.roles.value);
-//         console.log('detid', id);
-//         setTimeout(async () => {
-//             const detComRequest = await HTTP.get(
-//                 `/detachments/${id}/applications/`,
-//                 {
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                         Authorization: 'Token ' + localStorage.getItem('Token'),
-//                     },
-//                 },
-//             );
-//             detachments.value = detComRequest.data;
-//             isLoading.value = false;
-//         }, 1000);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
 
 const viewEvents = async () => {
     try {
@@ -277,50 +217,7 @@ const viewEvents = async () => {
     }
 };
 
-// const select = (event) => {
-//     selectedPeoples.value = [];
-//     console.log('fffss', checkboxAll.value, event);
-//     if (event.target.checked) {
-//         console.log('fffss', checkboxAll.value, event);
-//         for (let index in participants.value) {
-//             console.log('arr', selectedPeoples.value);
-//             selectedPeoples.value.push(participants.value[index]);
-//         }
-//     }
-// };
 
-
-// const changePeoples = (CheckedUser, UserId) => {
-//     let participant = {};
-//     console.log('fffUser', CheckedUser, UserId);
-//     if (CheckedUser) {
-//         participant = participants.value.find((item) => item.user.id == UserId);
-//         selectedPeoples.value.push(participant);
-//     } else {
-//         selectedPeoples.value = selectedPeoples.value.filter(
-//             (item) => item.user.id !== UserId,
-//         );
-//     }
-// };
-// const approveParticipant = (approved) => {
-//     console.log('approved', approved);
-//     selectedPeoples.value = selectedPeoples.value.filter(
-//         (item) => item.user.id !== approved,
-//     );
-//     participants.value = participants.value.filter(
-//         (item) => item.user.id !== approved,
-//     );
-// };
-
-// const rejectParticipant = (rejected) => {
-//     console.log('rejected', rejected);
-//     selectedPeoples.value = selectedPeoples.value.filter(
-//         (item) => item.user.id !== rejected,
-//     );
-//     participants.value = participants.value.filter(
-//         (item) => item.user.id !== rejected,
-//     );
-// };
 
 
 
