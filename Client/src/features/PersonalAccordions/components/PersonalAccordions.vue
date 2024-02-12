@@ -1511,7 +1511,6 @@
                                                 :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="statementUp"
-
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
@@ -3265,7 +3264,7 @@ import {
     Select,
     sortByEducation,
     regionsDropdown,
-    educInstitutionDropdown
+    educInstitutionDropdown,
 } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
@@ -3352,7 +3351,7 @@ const isMilitaryChange = ref(false);
 const isForeignChange = ref(false);
 
 const statementUp = (event) => {
-    statement.value = event.files[0]
+    statement.value = event.files[0];
     console.log('файл есть', statement.value);
     isStatementChange.value = true;
 };
@@ -3930,6 +3929,9 @@ onMounted(() => {
 }
 .input-big {
     width: 465px !important;
+    @media (max-width: 1024px) {
+        width: 100% !important;
+    }
 }
 
 .nav-btn__wrapper {
@@ -4085,6 +4087,9 @@ onMounted(() => {
 .blanks-wrapper {
     display: grid;
     grid-template-columns: 4fr 1fr;
+    @media (max-width: 768px) {
+        grid-template-columns: 5fr;
+    }
 }
 
 .pass-details__wrapper {
@@ -4122,14 +4127,6 @@ onMounted(() => {
         margin-bottom: 40px;
     }
 }
-
-// .no-RSO-foreign {
-
-// }
-
-// .yes-RSO-foreign {
-//     display: none;
-// }
 
 .v-expansion-panel {
     &__shadow {
@@ -4180,6 +4177,10 @@ onMounted(() => {
 .statement-title {
     font-size: 16px;
     font-weight: bold;
+    @media (max-width: 768px) {
+        font-size: 14px;
+        max-width: 500px;
+    }
 }
 
 .statement-item {
@@ -4194,6 +4195,10 @@ onMounted(() => {
     font-size: 16px;
     display: block;
     margin-left: 8px;
+    @media (max-width: 768px) {
+        font-size: 14px;
+        max-width: 290px;
+    }
 }
 
 .statement-item a {
@@ -4212,5 +4217,350 @@ onMounted(() => {
 .p-button-label {
     color: #1f7cc0;
     margin-left: 5px;
+}
+@media (max-width: 1439px) {
+    a:not([href]):not([class]),
+    a:not([href]):not([class]):hover {
+        color: #ffffff;
+    }
+    .input-big {
+        width: 100%;
+    }
+
+    .input-full {
+        width: 100%;
+    }
+
+    .data-form {
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 80px;
+    }
+
+    .parents-about {
+        grid-column-gap: 80px;
+    }
+
+    .izm {
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 80px;
+    }
+
+    #no-passport-parent {
+        column-gap: 80px;
+    }
+    #no-passport {
+        column-gap: 80px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .input-big {
+        width: 386px;
+    }
+
+    .input-small {
+        width: 386px;
+    }
+
+    .select-big {
+        width: 386px;
+    }
+
+    .select-small {
+        width: 386px;
+    }
+
+    .data-form {
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 40px;
+    }
+
+    .parents-about {
+        grid-column-gap: 40px;
+    }
+
+    .izm {
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 40px;
+    }
+
+    #no-passport-parent {
+        column-gap: 40px;
+    }
+    #no-passport {
+        column-gap: 40px;
+    }
+    .pass-details__wrapper {
+        flex-direction: column;
+    }
+
+    .other-docs__wrapper {
+        grid-template-columns: none;
+    }
+
+    .small-svg svg {
+        position: absolute;
+        right: 2rem;
+        top: 2.4rem;
+        cursor: pointer;
+    }
+}
+
+@media (max-width: 991px) {
+    .input-big {
+        width: 290px;
+    }
+
+    .input-small {
+        width: 290px;
+    }
+
+    .input-full {
+        width: 100%;
+    }
+
+    .select-big {
+        width: 290px;
+    }
+
+    .select-small {
+        width: 290px;
+    }
+
+    .data-form {
+        grid-column-gap: 40px;
+    }
+
+    .parents-about {
+        grid-column-gap: 40px;
+    }
+
+    .izm {
+        grid-column-gap: 40px;
+    }
+
+    #no-passport-parent {
+        column-gap: 40px;
+    }
+    #no-passport {
+        column-gap: 40px;
+    }
+    .pass-details__wrapper {
+        flex-direction: column;
+    }
+
+    .RSO-title {
+        font-size: 20px;
+        width: 100%;
+    }
+
+    .other-docs__wrapper {
+        grid-template-columns: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .input-big {
+        width: 100%;
+    }
+    .accordion-button {
+        font-size: 20px;
+    }
+
+    .form-field label {
+        font-size: 12px;
+    }
+    .input-small {
+        width: 100%;
+    }
+
+    .input-full {
+        width: 100%;
+    }
+
+    .select-big {
+        width: 100%;
+    }
+
+    .select-small {
+        width: 100%;
+    }
+
+    .parents-wrapper__title {
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .izm {
+        display: flex;
+        flex-direction: column;
+      
+    }
+
+    #no-passport-parent {
+        column-gap: 40px;
+    }
+    #no-passport {
+        column-gap: 40px;
+    }
+    .pass-details__wrapper {
+        flex-direction: column;
+    }
+
+    .other-docs__wrapper {
+        grid-template-columns: none;
+    }
+
+    .RSO-title {
+        font-size: 17px;
+        width: 100%;
+    }
+
+    .dowmload-all {
+        display: none;
+    }
+
+    .blanks-wrapper {
+        grid-template-columns: none;
+    }
+
+    .statement-title {
+        font-size: 14px;
+        width: 100%;
+    }
+
+    .accordion-block-title {
+        font-size: 18px;
+    }
+
+    .docs {
+        grid-template-columns: 1fr;
+    }
+
+    .checkbox {
+        font-size: 14px;
+    }
+
+    .checkbox-title {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .right-check {
+        margin-left: 8px;
+    }
+
+    input[type='radio'] {
+        width: 15px;
+        height: 12px;
+    }
+
+    .nav-prev,
+    .nav-next {
+        padding: 12px 25px 12px 25px;
+    }
+
+    .add-education {
+        font-size: 14px;
+        margin: 10px auto;
+    }
+
+    .statement-item p,
+    .statement-item a {
+        font-size: 12px;
+    }
+
+    .download-blanks .file-choose {
+        font-size: 14px;
+    }
+
+    .education-wrapper {
+        column-gap: 15px;
+    }
+}
+
+@media (max-width: 575px) {
+    .accordion-title {
+        text-align: center;
+        font-size: 18px;
+    }
+    .box {
+        padding: 12px;
+    }
+    .accordion-button {
+        font-size: 16px;
+    }
+    .data-form {
+        display: block;
+        padding: 25px;
+    }
+
+    .form-field label {
+        font-size: 12px;
+    }
+    .parents-about {
+        grid-template-columns: none;
+        grid-column-gap: 20px;
+    }
+    .izm {
+        grid-template-columns: none;
+        grid-column-gap: 20px;
+    }
+    #no-passport-parent {
+        column-gap: 20px;
+    }
+    #no-passport {
+        column-gap: 20px;
+    }
+    .add-education {
+        font-size: 12px;
+    }
+
+    .small {
+        margin-top: 20px;
+    }
+
+    .checkbox {
+        margin-bottom: 20px;
+    }
+
+    .checkbox-title {
+        font-size: 14px;
+    }
+    .statement-wrapper {
+        flex-wrap: wrap;
+    }
+
+    .rso-question {
+        margin: 30px auto;
+        /*width: 100%;*/
+        padding: 20px;
+    }
+
+    .rso-question__title {
+        text-align: center;
+    }
+
+    #check-RSO {
+        text-align: center;
+    }
+    input[type='checkbox'] {
+        width: 50px;
+        height: 50px;
+        display: inline-block;
+    }
+
+    .addres {
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+
+    .RSO-title {
+        margin-bottom: 28px;
+    }
+    .agree-check p {
+        margin-left: 8px;
+        font-size: 11px;
+    }
 }
 </style>
