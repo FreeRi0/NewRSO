@@ -3353,50 +3353,60 @@ const isForeignChange = ref(false);
 
 const statementUp = (event) => {
     statement.value = event.files[0]
+    console.log('файл есть', statement.value);
     isStatementChange.value = true;
 };
 
 const selectPersonal = (event) => {
     consent_personal_data.value = event.files[0];
+    console.log('файл есть', consent_personal_data.value);
     isConsent_personal_dataChange.value = true;
 };
 
 const selectParentPersonal = (event) => {
     consent_personal_data_representative.value = event.files[0];
+    console.log('файл есть', consent_personal_data_representative.value);
     isConsent_personal_data_representativeChange.value = true;
 };
 
 const selectPass = (event) => {
     passportUpload.value = event.files[0];
+    console.log('файл есть', passportUpload.value);
     isPassChange.value = true;
 };
 
 const selectParentPersonalPass = (event) => {
     passport_representative.value = event.files[0];
+    console.log('файл есть', passport_representative.value);
     isParentPassChange.value = true;
 };
 const selectINN = (event) => {
     inn_file.value = event.files[0];
+    console.log('файл есть', inn_file.value);
     isInnChange.value = true;
 };
 
 const selectSnils = (event) => {
     snils_file.value = event.files[0];
+    console.log('файл есть', snils_file.value);
     isSnilsChange.value = true;
 };
 
 const selectEmployment = (event) => {
     employment_document.value = event.files[0];
+    console.log('файл есть', employment_document.value);
     isEmployeChange.value = true;
 };
 
 const selectIntPass = (event) => {
     international_passport.value = event.files[0];
+    console.log('файл есть', international_passport.value);
     isForeignChange.value = true;
 };
 
 const selectMilitary = (event) => {
     military_document.value = event.files[0];
+    console.log('файл есть', military_document.value);
     isMilitaryChange.value = true;
 };
 
@@ -3441,6 +3451,7 @@ const downloadBlankPersonal = async () => {
             docUrl.setAttribute('download', 'persnal.rtf');
             document.body.appendChild(docUrl);
             docUrl.click();
+            console.log(response, 'success');
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -3466,6 +3477,7 @@ const downloadBlankMembership = async () => {
             docUrl.setAttribute('download', 'membership.rtf');
             document.body.appendChild(docUrl);
             docUrl.click();
+            console.log(response, 'success');
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -3490,6 +3502,7 @@ const downloadBlankParent = async () => {
             docUrl.setAttribute('download', 'parent.rtf');
             document.body.appendChild(docUrl);
             docUrl.click();
+            console.log(response, 'success');
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -3511,6 +3524,7 @@ const downloadAll = async () => {
             link.setAttribute('download', 'file.zip');
             document.body.appendChild(link);
             link.click();
+            console.log(response, 'success');
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -3640,7 +3654,6 @@ const updateData = async () => {
                     },
                 },
             );
-            axiosrequestParent.value = parentRequest.data;
         }
 
         const axiosrequest2 = await HTTP.patch(
@@ -3724,13 +3737,13 @@ const updateData = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-
         const axiosrequest6 = ref(null);
+
         if (
             props.user.sent_verification === false &&
             props.user.is_verified === false
         ) {
-            axiosrequest6 = await HTTP.post(
+            const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
                 data.value,
                 {
@@ -3745,7 +3758,14 @@ const updateData = async () => {
         foreignDoc.value = axiosrequestForeignDocs.data;
         fd = axiosrequest5.data;
         data.value = axiosrequest6?.data;
-
+        console.log(axiosrequest1.data);
+        console.log(axiosrequestParent.data);
+        console.log(axiosrequest2.data);
+        console.log(axiosrequest3.data);
+        console.log(axiosrequestForeignDocs.data);
+        console.log(axiosrequest4.data);
+        console.log(axiosrequest5.data);
+        console.log(axiosrequest6?.data);
         swal.fire({
             position: 'top-center',
             icon: 'success',
@@ -3753,12 +3773,13 @@ const updateData = async () => {
             showConfirmButton: false,
             timer: 1000,
         });
+        console.log('resdp', axiosrequest1.data);
         emit('updateUserData', axiosrequest1.data);
         emit('updateRegionData', axiosrequest2.data);
         emit('updateDocData', axiosrequest3.data);
         emit('updateEducData', axiosrequest4.data);
         emit('updateFileData', axiosrequest5.data);
-        emit('updateParentData', axiosrequestParent.value);
+        emit('updateParentData', axiosrequestParent.data);
 
         emit('updateStatus', axiosrequest6?.data);
         isLoading.value = false;
