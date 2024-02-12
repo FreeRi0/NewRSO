@@ -3612,9 +3612,23 @@ const updateData = async () => {
             },
         );
 
-        const axiosrequestParent = ref(null);
+        const axiosrequestParent = ref({
+            parent_last_name: '',
+            parent_first_name: '',
+            parent_patronymic_name: '',
+            parent_date_of_birth: '',
+            relationship: '',
+            parent_phone_number: '',
+            russian_passport: '',
+            passport_number: '',
+            passport_date: '',
+            passport_authority: '',
+            region: '',
+            city: '',
+            address: '',
+        });
         if (!props.user.is_adult) {
-            const axiosrequestParent = await HTTP.patch(
+            const parentRequest = await HTTP.patch(
                 '/rsousers/me/parent/',
                 {
                     parent_last_name: props.user.parent.parent_last_name,

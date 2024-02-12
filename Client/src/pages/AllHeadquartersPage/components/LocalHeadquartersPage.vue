@@ -265,7 +265,7 @@ const searchLocals = computed(() => {
     return searchLocal(name.value);
 });
 
-const filtersDistricts = computed(() =>
+/*const filtersDistricts = computed(() =>
     selectedSortDistrict.value
         ? districts.value.find(
               (district) => district.name === selectedSortDistrict.value,
@@ -278,7 +278,7 @@ const filtersRegionals = computed(() =>
               (regional) => regional.name === selectedSortRegional.value,
           )?.local_headquarters ?? []
         : localHeadquarters.value,
-);
+);*/
 
 const getDistrictsHeadquartersForFilters = async () => {
     try {
@@ -316,26 +316,26 @@ const sortOptionss = ref([
 ]);
 
 const sortedLocalHeadquarters = computed(() => {
-    let tempHeadquartes = [];
-    if (selectedSortDistrict.value && selectedSortRegional.value) {
-        tempHeadquartes = Array.from(
-            new Set([...filtersDistricts.value, ...filtersRegionals.value]),
-        );
-    } else if (selectedSortDistrict.value) {
-        tempHeadquartes = [...filtersDistricts.value];
-    } else if (selectedSortRegional.value) {
-        tempHeadquartes = [...filtersRegionals.value];
-    } else {
-        tempHeadquartes = [...localHeadquarters.value];
+    let tempHeadquartes = [...localHeadquarters.value];
+
+    if (selectedSortRegional.value || selectedSortdistrict.value) {
+        let idRegionals = [];
+        if (selectedSortdistrict.value){
+            let districtId = districts.value.find(
+                (district) => district.name === selectedSortdistrict.value,
+            )?.id;
+            idRegionals = regionals.value.filter((regional) => regional.district_headquarter === districtId).map((reg) => reg.id);
+        }
+        if (selectedSortRegional.value){
+            idRegionals = [regionals.value.find(
+                (regional) => regional.name === selectedSortRegional.value,
+            )?.id];
+        }
+
+        tempHeadquartes = tempHeadquartes.filter((item) => {
+            return idRegionals.indexOf(item.regional_headquarter) >= 0;
+        });
     }
-
-
-    tempHeadquartes = tempHeadquartes.filter((item) => {
-        return (
-            selectedSortRegion.value == null ||
-            item.regional_headquarter == selectedSortRegion.value
-        );
-    });
 
     searchLocals.value;
 
@@ -372,6 +372,7 @@ const sortedLocalHeadquarters = computed(() => {
     }
 
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
+
     return tempHeadquartes;
 });
 

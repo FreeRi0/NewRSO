@@ -107,6 +107,7 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
 
+
         async searchRegions(name: String) {
             const responseSearchRegions = await HTTP.get(
                 `/regions/?search=${name}`,

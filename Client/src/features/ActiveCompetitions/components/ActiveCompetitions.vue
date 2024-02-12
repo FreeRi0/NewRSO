@@ -23,8 +23,8 @@
                     <active-competition-item
                         v-if="
                             competition.is_confirmed_by_junior ||
-                            (competition.junior_detachment.id ==
-                                commanderIds.detachment_commander.id &&
+                            (competition.junior_detachment?.id ==
+                                commanderIds.detachment_commander?.id &&
                                 !competition.is_confirmed_by_junior) ||
                             !competition.detachment
                         "
@@ -173,6 +173,7 @@ const onToggleSelectCompetition = (competition, isChecked) => {
 
 const confirmApplication = async (id, competitionId) => {
     if (commanderIds.value.regionalheadquarter_commander?.id == null) {
+    if (commanderIds.value.regionalheadquarter_commander?.id == null) {
         await HTTP.put(
             `/competitions/${competitionId}/applications/${id}/`,
             {
@@ -237,6 +238,7 @@ const onAction = async () => {
         }
 
         if (commanderIds.value.regionalheadquarter_commander?.id == null)
+        if (commanderIds.value.regionalheadquarter_commander?.id == null)
             await getCompetitionsJunior();
         else await getCompetitions();
     } catch (e) {
@@ -256,6 +258,7 @@ onMounted(async () => {
 onActivated(async () => {
     await getAllCompetition();
     await getMeCommander();
+    if (commanderIds.value.regionalheadquarter_commander?.id == null)
     if (commanderIds.value.regionalheadquarter_commander?.id == null)
         await getCompetitionsJunior();
     else await getCompetitions();

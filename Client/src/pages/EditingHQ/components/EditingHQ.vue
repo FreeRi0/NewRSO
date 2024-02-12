@@ -87,11 +87,11 @@ const getMembers = async () => {
             );
 
             members.value = membersResponse.data;
-            if (members.value.length) {
+            /*if (members.value.length) {
                 members.value.forEach((member) => {
-                    member.position = member.position.id;
+                    member.position = member.position?.id;
                 });
-            }
+            }*/
             isMembersLoading.value = false;
         }, 1000);
     } catch (error) {
@@ -105,10 +105,11 @@ onMounted(() => {
 });
 
 const onUpdateMember = (event, id) => {
-    const targetMember = members.value.find((member) => member.id === id);
+    const memberIndex = members.value.findIndex(member => member.id === id)
     const firstkey = Object.keys(event)[0];
-    targetMember[firstkey] = event[firstkey];
-    console.log(event);
+    members.value[memberIndex].change = true;
+    if (firstkey == 'position') members.value[memberIndex].position.id = event[firstkey];
+    else members.value[memberIndex][firstkey] = event[firstkey];
 };
 
 const isEmblemChange = ref(false);
@@ -164,25 +165,24 @@ const changeHeadquarter = async () => {
     formData.append('about', headquarter.value.about);
 
     for (let member of members.value) {
-        HTTP.patch(
-            `/educationals/${id}/members/${member.id}/`,
-            {
-                position: member.position,
-                is_trusted: member.is_trusted,
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+        if (member.change) {
+            await HTTP.patch(
+                `/educationals/${id}/members/${member.id}/`,
+                {
+                    position: member.position.id,
+                    is_trusted: member.is_trusted,
                 },
-            },
-        )
-            .then((response) => {
-                console.log(response.data);
-            })
-            // .catch((error) => {
-            //     console.error('There was an error!', error);
-            .catch(({ response }) => {
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            ).then((response) => {
+                member.position = response.data.position
+                member.is_trusted = response.is_trusted
+                member.change = false
+            }).catch(function ({ response }) {
                 isErrorMembers.value = response.data;
                 console.error('There was an error!', response.data);
                 console.log('Ошибки отправки формы', isErrorMembers.value);
@@ -194,6 +194,7 @@ const changeHeadquarter = async () => {
                     timer: 2500,
                 });
             });
+        }
     }
 
     if (isEmblemChange.value)
