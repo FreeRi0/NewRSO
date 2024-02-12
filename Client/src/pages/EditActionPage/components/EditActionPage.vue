@@ -596,7 +596,7 @@
                                             <div class="form__counter"></div>
                                         </div>
                                         <div class="form__field">
-                                            <!----<label class='flex align-items-center' style='display: flex'>
+                                           <label class='flex align-items-center' style='display: flex'>
                                             <div class="flex align-items-center">
                                                 <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
                                                 <label for="hours1" class="ml-2">За час</label>
@@ -609,9 +609,9 @@
                                                 <input v-model='timeData.hour' value="3" name="hours3" type='radio' class='form-radio'/>
                                                 <label for="hours3" class="ml-2">За 3 часа</label>
                                             </div>
-                                        </label> -->
+                                        </label>
                                         </div>
-                                    </div>
+                                    </div> -
                                 </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -1165,7 +1165,7 @@ function SubmitEvent(){
                 })
             putOrganizator(id, organizator)
             .then((resp)=>{
-                
+
             })
             .catch((e) =>{
                 console.log(e)
