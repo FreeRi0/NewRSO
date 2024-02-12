@@ -880,9 +880,12 @@
             <v-expansion-panel value="panelThree">
                 <v-expansion-panel-title>
                     <v-row no-gutters>
-                        <v-col cols="4" class="d-flex justify-start">
+                        <v-col cols="4" class="d-flex justify-start desctop">
                             Документы (паспорт, СНИЛС, ИНН, сведения о трудовой
                             деятельности, документ воинского учета)
+                        </v-col>
+                        <v-col cols="4" class="d-flex justify-start adaptive">
+                            Документы
                         </v-col>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
@@ -3923,6 +3926,9 @@ onMounted(() => {
 
 .input-small {
     width: 250px !important;
+    @media (max-width: 768px) {
+        width: 100% !important;
+    }
 }
 .input-full {
     width: 100% !important;
@@ -3931,6 +3937,20 @@ onMounted(() => {
     width: 465px !important;
     @media (max-width: 1024px) {
         width: 100% !important;
+    }
+}
+
+.desctop {
+    display: block;
+    @media (max-width: 768px) {
+       display: none !important;
+    }
+}
+
+.adaptive {
+    display: none;
+    @media (max-width: 768px) {
+       display: block;
     }
 }
 
@@ -4035,6 +4055,9 @@ onMounted(() => {
     font-size: 16px;
     color: #35383f;
     margin-bottom: 20px;
+    @media (max-width: 768px) {
+       width: 100%;
+    }
 }
 
 .select-big {
@@ -4049,7 +4072,11 @@ onMounted(() => {
     font-size: 16px;
     color: #35383f;
     margin-bottom: 20px;
+    @media (max-width: 768px) {
+       width: 100%;
+    }
 }
+
 
 .v-select__selection span {
     font-size: 16px;
@@ -4060,6 +4087,10 @@ onMounted(() => {
 .how {
     display: grid;
     grid-template-columns: 1.5fr 1.15fr;
+    @media (max-width: 575px) {
+      display: flex;
+      flex-direction: column;
+    }
 }
 
 .RSO-blanks {
@@ -4394,7 +4425,6 @@ onMounted(() => {
     .izm {
         display: flex;
         flex-direction: column;
-      
     }
 
     #no-passport-parent {
