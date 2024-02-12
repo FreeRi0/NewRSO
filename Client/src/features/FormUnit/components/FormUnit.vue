@@ -91,7 +91,7 @@
                                 * {{ getErrorField('region') }}
                             </p>
                         </div>
-                            {{ detachment.region }}
+
                         <div class="form__field">
                             <label class="form__label" for="city">Город </label>
                             <Input class="form__input" id="city" placeholder="Например, Барнаул" name="edit_city"
