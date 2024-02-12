@@ -205,6 +205,7 @@
                         <p class="parents-wrapper__title">
                             Законный представитель несовершеннолетнего
                         </p>
+                        <pre></pre>
                         <div class="parents">
                             <div class="parents-about">
                                 <div class="form-field">
@@ -3612,9 +3613,9 @@ const updateData = async () => {
             },
         );
 
-        const axiosrequestParent = ref(null);
+        const axiosrequestParent = ref({});
         if (!props.user.is_adult) {
-            const axiosrequestParent = await HTTP.patch(
+            axiosrequestParent.value = await HTTP.patch(
                 '/rsousers/me/parent/',
                 {
                     parent_last_name: props.user.parent.parent_last_name,
