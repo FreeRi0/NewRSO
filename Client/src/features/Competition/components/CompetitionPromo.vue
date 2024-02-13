@@ -2,9 +2,37 @@
     <section class="competition__promo-lso">
         <div class="competition__container">
             <div class="competition__image-box">
-                <img
+                <!-- <img
                     src="@app/assets/competition/promo.png"
                     alt="Логотип конкурса."
+                    width="1124"
+                    height="481"
+                /> -->
+                <img
+                    v-if="sizeImage == 'mobile'"
+                    src="@app/assets/competition/mobile-promo.png"
+                    alt="Логотип конкурса"
+                    width="312"
+                    height="150"
+                />
+                <img
+                    v-else-if="sizeImage == 'tablet'"
+                    src="@app/assets/competition/tablet-promo.png"
+                    alt="Логотип конкурса"
+                    width="668"
+                    height="320"
+                />
+                <img
+                    v-else-if="sizeImage == 'laptop'"
+                    src="@app/assets/competition/laptop-promo.png"
+                    alt="Логотип конкурса"
+                    width="836"
+                    height="402"
+                />
+                <img
+                    v-else
+                    src="@app/assets/competition/desktop-promo.png"
+                    alt="Логотип конкурса"
                     width="1124"
                     height="481"
                 />
@@ -49,22 +77,51 @@
                     </li>
                 </ul>
 
-                <!-- <span class="competition__label competition__rating"
+                <span class="competition__label competition__rating"
                     >Место в рейтинге: {{ squad.rating_position }}</span
-                > -->
+                >
             </div>
         </div>
 
-        <!-- <a href="#" class="competition__send-report">Отправить отчетность</a> -->
+        <a href="#" class="competition__send-report">Отчетность</a>
     </section>
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+
 defineProps({
     squad: {
         type: Object,
         default: () => ({}),
     },
+});
+
+let sizeImage = ref('desktop');
+
+const getSizeImage = () => {
+    console.log('ширина экрана', window.innerWidth);
+    if (window.innerWidth <= 360) {
+        sizeImage.value = 'mobile';
+    }
+    if (window.innerWidth > 360 && window.innerWidth <= 768) {
+        sizeImage.value = 'tablet';
+    }
+    if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+        sizeImage.value = 'laptop';
+    }
+    if (window.innerWidth > 1024) {
+        sizeImage.value = 'desktop';
+    }
+};
+
+onMounted(async () => {
+    getSizeImage();
+    window.addEventListener('resize', getSizeImage);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('resize', getSizeImage);
 });
 </script>
 <style lang="scss"></style>
