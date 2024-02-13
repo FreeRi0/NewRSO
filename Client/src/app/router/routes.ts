@@ -454,7 +454,7 @@ const routes: RouteRecordRaw[] = [
                                 path: 'verification',
                                 meta: {
                                     redirectTo: 'IndividualRequest',
-                                    label: 'Верификация заявок'
+                                    label: 'Верификация заявок',
                                 },
                                 children: [
                                     {
@@ -489,8 +489,8 @@ const routes: RouteRecordRaw[] = [
                                         meta: {
                                             requiresAuth: true,
                                         },
-                                    }
-                                ]
+                                    },
+                                ],
                             },
                             {
                                 path: 'submit',
@@ -510,29 +510,29 @@ const routes: RouteRecordRaw[] = [
                                             requiresAuth: true,
                                         },
                                     },
-                                    {
-                                        path: 'groupsubmit',
-                                        name: 'GroupSubmit',
-                                        component: () =>
-                                            import(
-                                                '@pages/GroupRequestPage/components/GroupSubmitPage.vue'
-                                            ),
-                                        meta: {
-                                            requiresAuth: true,
-                                        },
-                                    },
-                                    {
-                                        path: 'multistagerequest/:applicationId',
-                                        name: 'MultiStageRequest',
-                                        component: () =>
-                                            import(
-                                                '@pages/MultiStageRequestPage/components/MultiStageSubmitPage.vue'
-                                            ),
-                                        meta: {
-                                            requiresAuth: true,
-                                        },
-                                    },
-                                ]
+                                    // {
+                                    //     path: 'groupsubmit',
+                                    //     name: 'GroupSubmit',
+                                    //     component: () =>
+                                    //         import(
+                                    //             '@pages/GroupRequestPage/components/GroupSubmitPage.vue'
+                                    //         ),
+                                    //     meta: {
+                                    //         requiresAuth: true,
+                                    //     },
+                                    // },
+                                    // {
+                                    //     path: 'multistagerequest/:applicationId',
+                                    //     name: 'MultiStageRequest',
+                                    //     component: () =>
+                                    //         import(
+                                    //             '@pages/MultiStageRequestPage/components/MultiStageSubmitPage.vue'
+                                    //         ),
+                                    //     meta: {
+                                    //         requiresAuth: true,
+                                    //     },
+                                    // },
+                                ],
                             },
                         ],
                     },
