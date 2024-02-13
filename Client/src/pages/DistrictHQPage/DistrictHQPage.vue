@@ -40,9 +40,10 @@
         </section>
         <ManagementHQ
             :commander="commander"
-            :member="filteredMembers"
+            :member="member"
             head="Руководство окружного штаба"
             :position="position"
+            :leadership="districtHeadquarter.leadership"
         ></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды окружного штаба</h3>
@@ -67,7 +68,7 @@
 <script setup>
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
@@ -83,7 +84,6 @@ const commander = ref({});
 const position = ref({});
 const districtHeadquarter = ref({});
 const member = ref([]);
-const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
@@ -139,17 +139,6 @@ const fetchCommander = async () => {
         console.log('An error occurred:', error);
     }
 };
-
-const filteredMembers = computed(() => {
-    return member.value.filter((manager) => {
-        return (
-            manager.position &&
-            (manager.position === 'Командир' ||
-                manager.position === 'Мастер (методист)' ||
-                manager.position === 'Комиссар')
-        );
-    });
-});
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
