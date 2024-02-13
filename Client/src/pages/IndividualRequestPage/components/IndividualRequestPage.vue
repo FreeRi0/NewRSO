@@ -72,7 +72,7 @@ const currentApplicationId = ref(0);
 const getIndividualApplication = async () => {
     try {
         const { data } = await HTTP.get(
-            `/events/1/applications/${currentApplicationId.value}/`,
+            `/events/${route.params.id}/applications/${currentApplicationId.value}/`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,8 +90,18 @@ const getIndividualApplication = async () => {
 const onCancel = async () => {
     try {
         await HTTP.delete(
-            `/events/1/applications/${currentApplicationId.value}/`,
+            `/events/${route.params.id}/applications/${currentApplicationId.value}/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
             {},
+        );
+
+        const { data } = await HTTP.get(
+            `/events/${route.params.id}/applications/`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -99,6 +109,23 @@ const onCancel = async () => {
                 },
             },
         );
+
+        if (data.length) {
+            router.push({
+                name: 'IndividualRequest',
+                params: {
+                    id: route.params.id,
+                    applicationId: data[0]?.id,
+                },
+            });
+        } else {
+            router.push({
+                name: 'Action',
+                params: {
+                    id: route.params.id,
+                },
+            });
+        }
     } catch (e) {
         console.log('error cancel', e);
     }
@@ -107,7 +134,7 @@ const onCancel = async () => {
 const onAccept = async () => {
     try {
         await HTTP.post(
-            `/events/1/applications/${currentApplicationId.value}/confirm/`,
+            `/events/${route.params.id}/applications/${currentApplicationId.value}/confirm/`,
             {},
             {
                 headers: {
@@ -117,22 +144,31 @@ const onAccept = async () => {
             },
         );
 
-        const { data } = await HTTP.get(`/events/1/applications/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+        const { data } = await HTTP.get(
+            `/events/${route.params.id}/applications/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        });
+        );
 
         if (data.length) {
             router.push({
                 name: 'IndividualRequest',
                 params: {
-                    id: data[0],
+                    id: route.params.id,
+                    applicationId: data[0]?.id,
                 },
             });
         } else {
-            console.log('not');
+            router.push({
+                name: 'Action',
+                params: {
+                    id: route.params.id,
+                },
+            });
         }
     } catch (e) {
         console.log('error accept', e);
@@ -140,7 +176,7 @@ const onAccept = async () => {
 };
 
 watch(
-    [() => route.params.id, () => route.name],
+    [() => route.params.applicationId, () => route.name],
     ([newRouteId, newRouteName]) => {
         if (!newRouteId || newRouteName !== 'IndividualRequest') return;
         if (newRouteId === currentApplicationId.value) return;
@@ -194,7 +230,7 @@ watch(
 }
 .container {
     margin: 0 auto;
-    padding: 60px 130px;
+    padding: 0px 130px 60px 130px;
 }
 .deny_button {
     border-radius: 10px;
