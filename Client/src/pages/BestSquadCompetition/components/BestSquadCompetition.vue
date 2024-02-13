@@ -7,26 +7,29 @@
         <div class="competition__promo">
             <div class="competition__container">
                 <div class="competition__image-box">
-                    <!-- Компонент для адаптивного изображения при загрузке и ресайзе ---------------------------------->
-                    <img v-if='sizeImage == "mobile"'
+                    <img
+                        v-if="sizeImage == 'mobile'"
                         src="@app/assets/competition/mobile-promo.png"
                         alt="Логотип конкурса"
-                        width="1180"
-                        height="510"
+                        width="328"
+                        height="150"
                     />
-                    <img v-else-if='sizeImage == "tablet"'
+                    <img
+                        v-else-if="sizeImage == 'tablet'"
                         src="@app/assets/competition/tablet-promo.png"
                         alt="Логотип конкурса"
-                        width="1180"
-                        height="510"
+                        width="700"
+                        height="302"
                     />
-                    <img v-else-if='sizeImage == "laptop"'
+                    <img
+                        v-else-if="sizeImage == 'laptop'"
                         src="@app/assets/competition/laptop-promo.png"
                         alt="Логотип конкурса"
-                        width="1180"
-                        height="510"
+                        width="892"
+                        height="386"
                     />
-                    <img v-else
+                    <img
+                        v-else
                         src="@app/assets/competition/desktop-promo.png"
                         alt="Логотип конкурса"
                         width="1180"
