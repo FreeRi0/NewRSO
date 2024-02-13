@@ -271,10 +271,10 @@ const downloadDocument = async () => {
 };
 
 const imageSizeChange = ref({
-    mobile: '/assets/competition/mobile-promo.png',
-    tablet: '/assets/competition/tablet-promo.png',
-    laptop: '/assets/competition/laptop-promo.png',
-    desktop: '/assets/competition/desktop-promo.png',
+    mobile: 'mobile-promo.png',
+    tablet: 'tablet-promo.png',
+    laptop: 'laptop-promo.png',
+    desktop: 'desktop-promo.png',
 });
 
 // const imageSizeChange = ref({
@@ -286,22 +286,23 @@ const imageSizeChange = ref({
 
 //------Компонент для адаптивного изображения при загрузке и ресайзе-----------------------------------------
 
-let sizeImage = ref('');
+// let sizeImage = ref('');
+
+const sizeImage = new URL('/assets/competition/'+imageSizeChange.value.desktop, import.meta.url)
 
 const getSizeImage = () => {
     console.log('ширина экрана', window.innerWidth);
+    let image = imageSizeChange.value.desktop;
     if (window.innerWidth <= 360) {
-        sizeImage.value = imageSizeChange.value.mobile;
+        image = imageSizeChange.value.mobile;
     }
     if (window.innerWidth > 360 && window.innerWidth <= 768) {
-        sizeImage.value = imageSizeChange.value.tablet;
+        image = imageSizeChange.value.tablet;
     }
     if (window.innerWidth > 768 && window.innerWidth <= 1024) {
-        sizeImage.value = imageSizeChange.value.laptop;
+        image = imageSizeChange.value.laptop;
     }
-    if (window.innerWidth > 1024) {
-        sizeImage.value = imageSizeChange.value.desktop;
-    }
+    sizeImage.value = new URL('/assets/competition/'+image, import.meta.url);
 };
 
 //----------------------------------------------------------------------------------------------------------
