@@ -119,6 +119,7 @@ section.headquarters-management h3 {
     /*  */
     padding: 24px 20px;
     width: 280px;
+    height: 100%;
 }
 
 .card-position {
