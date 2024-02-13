@@ -78,7 +78,8 @@
                             class="user-data__title"
                             v-if="
                                 commander.detachment_commander?.id ||
-                                commander.educationalheadquarter_commander?.id ||
+                                commander.educationalheadquarter_commander
+                                    ?.id ||
                                 commander.localheadquarter_commander?.id ||
                                 commander.regionalheadquarter_commander?.id ||
                                 commander.districtheadquarter_commander?.id ||
@@ -127,7 +128,8 @@
                         >
                             <p>
                                 {{
-                                    position.userdetachmentposition?.headquarter?.name ??
+                                    position.userdetachmentposition?.headquarter
+                                        ?.name ??
                                     position.usereducationalheadquarterposition
                                         ?.headquarter?.name
                                 }}

@@ -120,7 +120,10 @@
                                 v-model="detachment.area"
                                 @update:value="changeValue"
                             ></SearchSelect>
-                            <p class="form__error" v-if="isError.area">
+                            <p
+                                class="form__error bottom-25"
+                                v-if="isError.area"
+                            >
                                 * {{ getErrorField('area') }}
                             </p>
                             <!-- <p>{{ detachment.area }}</p> -->
@@ -138,7 +141,10 @@
                                 type="date"
                                 v-model:value="detachment.founding_date"
                             />
-                            <p class="form__error" v-if="isError.founding_date">
+                            <p
+                                class="form__error bottom-20"
+                                v-if="isError.founding_date"
+                            >
                                 * {{ getErrorField('founding_date') }}
                             </p>
                         </div>
@@ -157,7 +163,10 @@
                                 v-model="detachment.region"
                                 @update:value="changeValue"
                             ></SearchSelect>
-                            <p class="form__error" v-if="isError.region">
+                            <p
+                                class="form__error bottom-25"
+                                v-if="isError.region"
+                            >
                                 * {{ getErrorField('region') }}
                             </p>
                         </div>
@@ -173,12 +182,11 @@
                             />
                         </div>
 
-                        <div class="form__field">
-                            <label class="form__label" for="select-institution"
-                                >Выберите учебное заведение
-                                <!-- <sup class="valid-red">*</sup> -->
+                        <!-- <div class="form__field">
+                            <label class="form__label" for="select-institution">Выберите учебное заведение
+                                 <sup class="valid-red">*</sup> 
                             </label>
-                            <!-- <Select
+                            <Select
                                 variant="outlined"
                                 clearable
                                 name="select_institution"
@@ -186,66 +194,83 @@
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="detachment.educational_institution"
                                 address="eduicational_institutions/"
-                            ></Select> -->
-                            <educInstitutionDropdown
-                                open-on-clear
-                                id="select-institution"
-                                name="select_institution"
+                            ></Select> 
+                            <educInstitutionDropdown open-on-clear id="select-institution" name="select_institution"
                                 placeholder="Например, Алтайский государственный медицинский университет"
-                                v-model="detachment.educational_institution"
-                                @update:value="changeValue"
-                                :SortDropdown="false"
-                                address="eduicational_institutions/"
-                            ></educInstitutionDropdown>
-                            <!-- <p
+                                v-model="detachment.educational_institution" @update:value="changeValue"
+                                :SortDropdown="false" address="eduicational_institutions/"></educInstitutionDropdown>
+                             <p
                                 class="form__error"
                                 v-if="isError.educational_institution"
                             >
                                 * Это поле не может быть пустым.
-                            </p> -->
-                        </div>
-
-                        <div
-                            v-if="
-                                roles.roles.value
-                                    .educationalheadquarter_commander ||
-                                roles.roles.value
-                                    .regionalheadquarter_commander ||
-                                roles.roles.value
-                                    .districtheadquarter_commander ||
-                                roles.roles.value
-                                    .centralheadquarter_commander ||
-                                roles.roles.value.localheadquarter_commander ||
-                                roles.roles.value.detachment_commander
-                            "
-                            class="form__field form__field--commander"
-                        >
-                            <label class="form__label" for="beast"
-                                >Командир отряда:
-                                <sup class="valid-red">*</sup>
-                            </label>
-                            <div v-if="!isCommanderLoading">
-                                <Dropdown
-                                    open-on-clear
-                                    id="beast"
-                                    name="edit_beast"
-                                    placeholder="Поиск по ФИО"
-                                    v-model="detachment.commander"
-                                    @update:value="changeValue"
-                                    address="users/"
-                                ></Dropdown>
-                            </div>
-                            <v-progress-circular
-                                class="circleLoader"
-                                v-else
-                                indeterminate
-                                color="blue"
-                            ></v-progress-circular>
-                            <p
-                                class="form__error form__error--commander"
-                                v-if="isError.commander"
+                            </p> 
+                        </div> -->
+                        <template v-if="detachment.region">
+                            <div
+                                v-if="
+                                    roles.roles.value
+                                        .educationalheadquarter_commander ||
+                                    roles.roles.value
+                                        .regionalheadquarter_commander ||
+                                    roles.roles.value
+                                        .districtheadquarter_commander ||
+                                    roles.roles.value
+                                        .centralheadquarter_commander ||
+                                    roles.roles.value
+                                        .localheadquarter_commander ||
+                                    roles.roles.value.detachment_commander
+                                "
+                                class="form__field form__field--commander"
                             >
-                                * {{ getErrorField('commander') }}
+                                <label class="form__label" for="beast"
+                                    >Командир отряда:
+                                    <sup class="valid-red">*</sup>
+                                </label>
+                                <div v-if="!isCommanderLoading">
+                                    <DropdownCommander
+                                        open-on-clear
+                                        id="beast"
+                                        name="edit_beast"
+                                        placeholder="Поиск по ФИО"
+                                        v-model="detachment.commander"
+                                        @update:value="changeValue"
+                                        address="rsousers"
+                                        :query="regionName"
+                                    >
+                                    </DropdownCommander>
+                                </div>
+                                <v-progress-circular
+                                    class="circleLoader"
+                                    v-else
+                                    indeterminate
+                                    color="blue"
+                                ></v-progress-circular>
+                                <p
+                                    class="form__error form__error--commander"
+                                    v-if="isError.commander"
+                                >
+                                    * {{ getErrorField('commander') }}
+                                </p>
+                            </div>
+                        </template>
+
+                        <div class="form__field" v-if="detachment.region">
+                            <label class="form__label" for="select-headquarter"
+                                >Выберите штаб СО ОО
+                            </label>
+                            <SearchSelect
+                                :items="headquarterRegion.value"
+                                open-on-clear
+                                id="select-region"
+                                name="select-headquarter"
+                                placeholder="Выбирите штаб"
+                                v-model="detachment.educational_headquarter"
+                                @update:value="changeValue"
+                            >
+                            </SearchSelect>
+                            <p class="form__error" v-if="isError.region">
+                                * {{ getErrorField('headquarter') }}
                             </p>
                         </div>
                     </div>
@@ -525,7 +550,8 @@
                                 placeholder="Расскажите об отряде"
                                 name="about_squad"
                                 v-model:value="detachment.about"
-                            ></TextareaAbout>
+                            >
+                            </TextareaAbout>
                             <div class="form__counter">
                                 {{ counterAbout }} / 500
                             </div>
@@ -1349,17 +1375,18 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount, watch } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
+import { HTTP } from '@app/http';
 // import { Select } from '@shared/components/selects';
 import { SearchSelect } from '@shared/components/selects';
-import { educInstitutionDropdown } from '@shared/components/selects';
-import { Dropdown } from '@shared/components/selects';
+// import { educInstitutionDropdown } from '@shared/components/selects';
+// import { Dropdown } from '@shared/components/selects';
+import { DropdownCommander } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { TextareaAbout } from '@shared/components/inputs';
-
 import { useRoleStore } from '@layouts/store/role';
 import { useSquadsStore } from '@features/store/squads';
 import { useRegionalsStore } from '@features/store/regionals';
@@ -1452,6 +1479,18 @@ const props = defineProps({
     isMembersLoading: {
         type: Boolean,
         default: false,
+    },
+    regionName: {
+        type: String,
+        default: '',
+    },
+    headquarterRegion: {
+        type: Array,
+        default: () => [],
+    },
+    headquarterItems: {
+        type: Array,
+        default: () => [],
     },
 });
 
@@ -1569,6 +1608,48 @@ const detachment = ref(props.detachment);
 
 //------------------------------------------------------------------------------------------------
 
+const getRegionName = computed(() => {
+    let item = regions.regions.value.filter(
+        (item) => item.id === detachment.value.region,
+    );
+    return item[0]?.name;
+});
+
+const regionName = ref(props.regionName);
+regionName.value = getRegionName;
+
+const headquarterItems = ref(props.headquarterItems);
+
+const getHeadquarter = async () => {
+    await HTTP.get('educationals', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((res) => {
+            headquarterItems.value = res.data;
+        })
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
+const getHeadquarterRegion = computed(() => {
+    return headquarterItems.value.filter(
+        (item) =>
+            item?.educational_institution?.region?.id ===
+            detachment?.value.region,
+    );
+});
+
+const headquarterRegion = ref(props.headquarterRegion);
+headquarterRegion.value = getHeadquarterRegion;
+
+// const queryCommander = computed(() => {
+
+//     return {search:'ssss', region:getRegionName.value};
+// });
+
 const counterSquad = computed(() => {
     return detachment.value.name.length || 0;
 });
@@ -1585,6 +1666,24 @@ const counterAbout = computed(() => {
     } else return 0;
 });
 
+// const searchCommander = async() => {
+//     try {
+//         isLoading.value = true;
+//         setTimeout(async () => {
+//             const ItemResponse = await HTTP.get(props.address, {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//             });
+//             items.value = ItemResponse.data;
+//             isLoading.value = false;
+//         }, 500);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+//     console.log(detachment.value.commanderName);
+// };
+
 //------------------------------------------------------------------------------------------------
 const panel = ref();
 
@@ -1599,6 +1698,7 @@ const openPanelTwo = () => {
 const openPanelThree = () => {
     panel.value = 'panelThree';
 };
+
 //-----------------------------------------------------------------------------------------------
 const showButtonPrev = computed(() => {
     return panel.value === 'panelThree';
@@ -1735,10 +1835,27 @@ onBeforeMount(async () => {
     regionalsStore.getRegions();
     roleStore.getRoles();
     positionsStore.getPositions();
+    getHeadquarter();
 });
+
+watch(
+    () => detachment.value.region,
+    () => {
+        detachment.value.educational_headquarter = null;
+        detachment.value.commander = null;
+    },
+);
 </script>
 
 <style lang="scss" scoped>
+.bottom-25 {
+    bottom: -25px;
+}
+
+.bottom-20 {
+    bottom: -25px;
+}
+
 .form-button {
     width: 132px;
     min-height: 52px;

@@ -1,13 +1,46 @@
 <template>
     <section class="headquarters-management">
         <h3>{{ head }}</h3>
-
-        <router-link :to="{ name: 'userpage', params: { id: props.commander.id } }" class="headquarters-management__container">
-        
+        <div class="headquarters-management__container">
+            <router-link
+                :to="{ name: 'userpage', params: { id: props.commander.id } }"
+            >
                 <div
                     class="manager-card"
-                    :key="manager"
-                    v-for="(manager, index) in joinMembers"
+                    :class="{
+                        'align-left': index % 2 === 0,
+                        'align-right': index % 2 !== 0,
+                    }"
+                >
+                    <div class="manager-card__avatar">
+                        <img
+                            :src="props.commander?.avatar?.photo"
+                            alt="фото"
+                            v-if="props.commander?.avatar?.photo"
+                        />
+                        <img
+                            src="@app/assets/user-avatar.png"
+                            alt="photo"
+                            v-else
+                        />
+                    </div>
+                    <div class="manager-card__box">
+                        <h5 id="name_length">
+                            {{ props.commander?.first_name }}
+                            {{ props.commander?.patronymic_name }}
+                            {{ props.commander?.last_name }}
+                        </h5>
+                        <p>{{ props.commander.position }}</p>
+                    </div>
+                </div>
+            </router-link>
+            <router-link
+                :to="{ name: 'userpage', params: { id: manager?.user?.id } }"
+                :key="manager"
+                v-for="(manager, index) in props.leadership"
+            >
+                <div
+                    class="manager-card"
                     :class="{
                         'align-left': index % 2 === 0,
                         'align-right': index % 2 !== 0,
@@ -31,18 +64,15 @@
                             {{ manager?.user?.patronymic_name }}
                             {{ manager?.user?.last_name }}
                         </h5>
-                        <p>{{ manager.position }}</p>
+                        <p>{{ manager.position.name }}</p>
                     </div>
                 </div>
-
-
-        </router-link>
+            </router-link>
+        </div>
     </section>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-
 const props = defineProps({
     member: {
         type: Array,
@@ -56,10 +86,9 @@ const props = defineProps({
     head: {
         type: String,
     },
-});
-
-const joinMembers = computed(() => {
-    return [{ user: props.commander, position: 'Командир' }, ...props.member];
+    leadership: {
+        type: Array,
+    },
 });
 </script>
 
