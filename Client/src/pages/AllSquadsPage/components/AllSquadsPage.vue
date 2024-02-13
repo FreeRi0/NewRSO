@@ -93,7 +93,7 @@
                 <div class="sort-filters">
                     <div class="squads-sort">
                         <div class="sort-filters">
-                            <div class="sort-select">
+                            <div class="sort-select sort-select--width">
                                 <educInstitutionDropdown
                                     class="sortedEducation"
                                     name="select_education"
@@ -246,7 +246,7 @@ const searchSquads = computed(() => {
 });
 
 const filteredSquadsByEducation = computed(() => {
-    return filteredSquad(education.value?education.value:'');
+    return filteredSquad(education.value ? education.value : '');
 });
 
 const sortedSquads = computed(() => {
@@ -454,6 +454,12 @@ onMounted(() => {
     margin-bottom: 0px;
     margin-left: 8px;
     border: 1px solid #35383f;
+}
+
+.sort-select {
+    &--width {
+        width: 305px;
+    }
 }
 
 @media (max-width: 575px) {
