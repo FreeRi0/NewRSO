@@ -451,37 +451,88 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
-                                path: 'individualrequest/:applicationId',
-                                name: 'IndividualRequest',
-                                component: () =>
-                                    import(
-                                        '@pages/IndividualRequestPage/components/IndividualRequestPage.vue'
-                                    ),
+                                path: 'verification',
                                 meta: {
-                                    requiresAuth: true,
+                                    redirectTo: 'IndividualRequest',
+                                    label: 'Верификация заявок'
                                 },
+                                children: [
+                                    {
+                                        path: 'individualrequest/:applicationId',
+                                        name: 'IndividualRequest',
+                                        component: () =>
+                                            import(
+                                                '@pages/IndividualRequestPage/components/IndividualRequestPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
+                                    {
+                                        path: 'grouprequest/:applicationId',
+                                        name: 'GroupRequest',
+                                        component: () =>
+                                            import(
+                                                '@pages/GroupRequestPage/components/GroupRequestPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
+                                    {
+                                        path: 'multistagerequest/:applicationId',
+                                        name: 'MultiStageRequest',
+                                        component: () =>
+                                            import(
+                                                '@pages/MultiStageRequestPage/components/MultiStageRequestPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    }
+                                ]
                             },
                             {
-                                path: 'grouprequest/:applicationId',
-                                name: 'GroupRequest',
-                                component: () =>
-                                    import(
-                                        '@pages/GroupRequestPage/components/GroupRequestPage.vue'
-                                    ),
+                                path: 'submit',
                                 meta: {
-                                    requiresAuth: true,
+                                    redirectTo: 'IndividualSubmit',
+                                    label: 'Создание заявки',
                                 },
-                            },
-                            {
-                                path: 'multistagerequest/:applicationId',
-                                name: 'MultiStageRequest',
-                                component: () =>
-                                    import(
-                                        '@pages/MultiStageRequestPage/components/MultiStageRequestPage.vue'
-                                    ),
-                                meta: {
-                                    requiresAuth: true,
-                                },
+                                children: [
+                                    {
+                                        path: 'individualsubmit',
+                                        name: 'IndividualSubmit',
+                                        component: () =>
+                                            import(
+                                                '@pages/IndividualRequestPage/components/IndividualSubmitPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
+                                    {
+                                        path: 'groupsubmit',
+                                        name: 'GroupSubmit',
+                                        component: () =>
+                                            import(
+                                                '@pages/GroupRequestPage/components/GroupSubmitPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
+                                    {
+                                        path: 'multistagerequest/:applicationId',
+                                        name: 'MultiStageRequest',
+                                        component: () =>
+                                            import(
+                                                '@pages/MultiStageRequestPage/components/MultiStageSubmitPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
+                                ]
                             },
                         ],
                     },
