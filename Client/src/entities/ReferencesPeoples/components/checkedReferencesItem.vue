@@ -39,7 +39,7 @@
             </div>
         </router-link>
 
-            <div class="horizontallso-item__wrapper">{{ action }}</div>
+            <div class="actionVal">{{ action }}</div>
 
         <div class="checked__confidant ml-3">
             <input
@@ -130,6 +130,14 @@ const updateMembership = (e) => {
     height: 36px;
     border-radius: 50%;
     overflow: cover;
+}
+
+.actionVal {
+    border-radius: 10px;
+    border: 1px solid #b6b6b6;
+    padding: 12px 70px;
+    height: 48px;
+    margin-left: 12px;
 }
 
 .checked-item p {

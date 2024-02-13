@@ -57,25 +57,17 @@ const props = defineProps({
     participant: {
         type: Object,
     },
-    // selectedParticipants: {
-    //     type: Array,
-    //     default: () => [],
-    // },
 });
 
-// const emit = defineEmits(['change','approve', 'reject']);
 const emit = defineEmits({
     select: null,
 });
 const checked = ref(false);
 
 const updateCheck = (e) => {
-    // console.log('ddddddUser', checked.value, props.participant.user.id);
-    // emit('change', checked.value, props.participant.user.id);
     emit('select', props.participant, e.target.checked);
 };
 
-// const selectedPeoples = ref(props.selectedParticipants);
 
 // watch(
 //     () => props.selectedParticipants,

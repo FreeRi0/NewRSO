@@ -221,6 +221,10 @@ onActivated(async () => {
     margin-bottom: 20px;
 }
 
+.checked {
+    margin-bottom: 80px;
+}
+
 .participants__actions-select {
     background-color: inherit;
     width: 224px;
@@ -238,5 +242,14 @@ onActivated(async () => {
         width: 24px;
         height: 24px;
     }
+}
+// .participants__list {
+//     padding-bottom: 80px;
+// }
+.text_total {
+    margin-top: 60px;
+    margin-bottom: 40px;
+    font-size: 20px;
+    font-weight: bold;
 }
 </style>
