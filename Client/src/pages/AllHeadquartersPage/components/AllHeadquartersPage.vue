@@ -91,7 +91,7 @@
                             </template>
                         </v-select>
                     </div>
-                    <div class="sort-select">=
+                    <div class="sort-select">
                         <v-select
                             class="form__select filter-district"
                             :items="regionals"
