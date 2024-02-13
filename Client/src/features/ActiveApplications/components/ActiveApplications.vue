@@ -4,19 +4,18 @@
 
     <template v-else>
         <div class="participants__actions">
-            <v-select
-                variant="outlined"
-                class="form__field participants__actions-select"
-                :items="actionsList"
-                v-model="action"
-                placeholder="Выберите действие"
-            />
-
-            <input
-                type="checkbox"
-                @click="select"
-                v-model="checkboxAll"
-            />
+            <div class="participants__actions-select mr-3">
+                <sortByEducation
+                    placeholder="Выберете действие"
+                    variant="outlined"
+                    clearable
+                    v-model="action"
+                    :options="actionsList"
+                ></sortByEducation>
+            </div>
+            <div class="contributor-sort__all">
+                <input type="checkbox" @click="select" v-model="checkboxAll" />
+            </div>
         </div>
         <div class="participants__list">
             <template
@@ -62,15 +61,23 @@ import { referenceItem } from '@entities/ReferencesPeoples';
 import { checkedReferencesItem } from '@entities/ReferencesPeoples';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
+import { sortByEducation } from '@shared/components/selects';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 const participantList = ref([]);
 const selectedParticipantList = ref([]);
-
+const checkboxAll = ref(false);
 const loading = ref(false);
 const action = ref('Одобрить');
-const actionsList = ref(['Одобрить', 'Отклонить']);
+// const actionsList = ref(['Одобрить', 'Отклонить']);
+const actionsList = ref([
+    {
+        value: 'Одобрить',
+        name: 'Одобрить',
+    },
+    { value: 'Отклонить', name: 'Отклонить' },
+]);
 
 const viewParticipants = async () => {
     try {
@@ -185,6 +192,18 @@ const onAction = async () => {
     }
 };
 
+// const select = (event) => {
+//     selectedParticipantList.value = [];
+//     console.log('fffss', checkboxAll.value, event);
+//     if (event.target.checked) {
+//         console.log('fffss',checkboxAll.value, event);
+//         for (let index in  participantList.value) {
+//             console.log('arr', selectedParticipantList.value);
+//             selectedParticipantList.value.push( participantList.value[index]);
+//         }
+//     }
+// };
+
 onMounted(async () => {
     await viewParticipants();
 });
@@ -194,28 +213,30 @@ onActivated(async () => {
 });
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .participants__actions {
     display: flex;
-    // display: grid;
-    // width: 100%;
-    // justify-content: flex-end;
-    // margin-bottom: 40px;
-    // //width: 224px;
-    // padding: 4px, 16px, 4px, 16px;
-    // border-radius: 10px;
-    // border: 1px;
-    // gap: 10px;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    margin-bottom: 20px;
 }
-
-// .v-input__control {
-//     width: 229px;
-// }
 
 .participants__actions-select {
     background-color: inherit;
-    min-width: 224px;
+    width: 224px;
     height: 48px;
     border-radius: 10px;
+}
+
+.contributor-sort__all {
+    padding: 11px 12px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    height: 48px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
 }
 </style>

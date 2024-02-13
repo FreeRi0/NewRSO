@@ -24,38 +24,7 @@
                 <activeApplications />
             </div>
             <div v-else-if="picked == 'Заявка на вступление в отряд'">
-                <div
-                    class="contributor-sort__all mb-8"
-                    v-if="detachments.length > 0"
-                >
-                    <input
-                        type="checkbox"
-                        @click="selectSquads"
-                        v-model="checkboxAllSquads"
-                    />
-                </div>
-                <div class="classes" v-if="detachments.length > 0">
-                    <div>Боец</div>
-                    <div>Отряд</div>
-                </div>
-                <ActiveSquads
-                    @change="changeSquads"
-                    :detachments="detachments"
-                    @approveMember="approveMember"
-                    @rejectMember="rejectMember"
-                    :selected-detch="selectedDetch"
-                />
-
-                <div class="selectedItems" v-if="selectedDetch.length > 0">
-                    <h3>Итого: {{ selectedDetch.length }}</h3>
-
-                    <CheckedSquadsList
-                        @change="changeSquads"
-                        @approveMember="approveMember"
-                        @rejectMember="rejectMember"
-                        :detachments="selectedDetch"
-                    ></CheckedSquadsList>
-                </div>
+                <ActiveSquads />
             </div>
 
             <div v-else-if="picked == 'Заявка на участие в мероприятии'">
@@ -136,64 +105,14 @@ const pages = ref([
     { pageTitle: 'Активные заявки', href: '#' },
 ]);
 
-
 const events = ref([]);
-const checkboxAll = ref(false);
-const checkboxAllSquads = ref(false);
-const participantsVisible = ref(12);
-const selectedPeoples = ref([]);
-const selectedDetch = ref([]);
+// const checkboxAll = ref(false);
+// const checkboxAllSquads = ref(false);
+// const participantsVisible = ref(12);
+// const selectedPeoples = ref([]);
+// const selectedDetch = ref([]);
 const selectedEvents = ref([]);
 const step = ref(12);
-
-// let tempParticipants = participants.value;
-
-// tempParticipants = tempParticipants.slice(0, participantsVisible.value);
-
-// const viewParticipants = async () => {
-//     try {
-//         isLoading.value = true;
-//         let id =
-//             roles.roles.value.regionalheadquarter_commander?.id ??
-//             roles.roles.value.detachment_commander?.id;
-//         const regComReq = ref(null);
-//         const detComReq = ref(null);
-//         setTimeout(async () => {
-//             if (roles.roles.value.regionalheadquarter_commander) {
-//                 const regComReq = await HTTP.get(
-//                     `/regionals/${id}/verifications/`,
-//                     {
-//                         headers: {
-//                             'Content-Type': 'application/json',
-//                             Authorization:
-//                                 'Token ' + localStorage.getItem('Token'),
-//                         },
-//                     },
-//                 );
-//                 participants.value = regComReq.data;
-//                 isLoading.value = false;
-//             } else if (roles.roles.value.detachment_commander) {
-//                 const detComReq = await HTTP.get(
-//                     `/detachments/${id}/verifications/`,
-//                     {
-//                         headers: {
-//                             'Content-Type': 'application/json',
-//                             Authorization:
-//                                 'Token ' + localStorage.getItem('Token'),
-//                         },
-//                     },
-//                 );
-//                 participants.value = detComReq.data;
-//                 isLoading.value = false;
-//             }
-//         }, 1000);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
-
-
 
 const viewEvents = async () => {
     try {
@@ -216,11 +135,6 @@ const viewEvents = async () => {
         console.log('an error occured ' + error);
     }
 };
-
-
-
-
-
 
 
 const changeEvents = (CheckedEvent, EventId) => {

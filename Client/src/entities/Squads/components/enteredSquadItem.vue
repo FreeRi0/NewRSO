@@ -4,7 +4,6 @@
             <input
                 type="checkbox"
                 v-model="checked"
-                :value="detachment"
                 @change="updateCheckSquad"
             />
         </div>
@@ -78,22 +77,25 @@ const props = defineProps({
     squad: {
         type: Object,
     },
-    selectedSquads: {
-        type: Array,
-        default: () => [],
+    position: {
+        type: Number,
+        default: 0,
     },
 });
 
-const emit = defineEmits(['change', 'approveMember', 'rejectMember']);
+const emit = defineEmits({
+    select: null,
+});
 const checked = ref(false);
 const updateCheckSquad = (e) => {
-    console.log('ddddddSquad', checked.value);
-    emit('change', checked.value, props.detachment.id);
+    // console.log('ddddddSquad', checked.value);
+    // emit('change', checked.value, props.detachment.id);
+    emit('select', props.detachment, e.target.checked);
 };
 
 const squad = ref({});
 
-const selectedDetch = ref(props.selectedSquads);
+// const selectedDetch = ref(props.selectedSquads);
 const viewSquad = async () => {
     let id = roles?.roles?.value?.detachment_commander.id;
     console.log('roles', roles.roles.value);
@@ -116,17 +118,30 @@ onMounted(() => {
     viewSquad();
 });
 
+// watch(
+//     () => props.selectedSquads,
+//     (newChecked) => {
+//         if (!newChecked) return;
+//         selectedDetch.value = newChecked;
+//         const checkedItem = newChecked.find(
+//             (item) => item.id == props.detachment.id,
+//         );
+//         console.log('checkedItem', checkedItem);
+//         if (!checkedItem) checked.value = false;
+//         else checked.value = true;
+//     },
+// );
+
 watch(
-    () => props.selectedSquads,
-    (newChecked) => {
-        if (!newChecked) return;
-        selectedDetch.value = newChecked;
-        const checkedItem = newChecked.find(
-            (item) => item.id == props.detachment.id,
-        );
-        console.log('checkedItem', checkedItem);
-        if (!checkedItem) checked.value = false;
-        else checked.value = true;
+    () => props.detachment.selected,
+    (newSelected) => {
+        // if (!newSelected) return;
+        // const checkedItem = newSelected.find(
+        //     (item) => item.id == props.detachment.id,
+        // );
+        // if (!checkedItem) checked.value = false;
+        // else checked.value = true;
+        checked.value = newSelected;
     },
 );
 </script>
