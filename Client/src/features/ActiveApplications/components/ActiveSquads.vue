@@ -14,7 +14,11 @@
                 ></sortByEducation>
             </div>
             <div class="contributor-sort__all">
-                <input type="checkbox" @click="selectSquads" v-model="checkboxAllSquads" />
+                <input
+                    type="checkbox"
+                    @click="selectSquads"
+                    v-model="checkboxAllSquads"
+                />
             </div>
         </div>
         <div class="participants__list">
@@ -181,10 +185,10 @@ const onAction = async () => {
 //     selectedDetachmentList.value = [];
 //     console.log('fffss', checkboxAllSquads.value, event);
 //     if (event.target.checked) {
-//         console.log('fffss',checkboxAllSquads.value, event);
-//         for (let index in  detachmentList.value) {
+//         console.log('fffss', checkboxAllSquads.value, event);
+//         for (let index in detachmentList.value) {
 //             console.log('arr', selectedDetachmentList.value);
-//             selectedDetachmentList.value.push( detachmentList.value[index]);
+//             selectedDetachmentList.value.push(detachmentList.value[index]);
 //         }
 //     }
 // };
@@ -197,16 +201,4 @@ onActivated(async () => {
     await viewDetachments();
 });
 </script>
-<style lang="scss">
-// .contributor-sort__all {
-//     padding: 11px 12px;
-//     border: 1px solid #b6b6b6;
-//     border-radius: 10px;
-//     height: 48px;
-//     width: 48px;
-//     input {
-//         width: 24px;
-//         height: 24px;
-//     }
-// }
-</style>
+<style lang="scss"></style>

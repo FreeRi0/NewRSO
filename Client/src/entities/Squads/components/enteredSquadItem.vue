@@ -88,8 +88,6 @@ const emit = defineEmits({
 });
 const checked = ref(false);
 const updateCheckSquad = (e) => {
-    // console.log('ddddddSquad', checked.value);
-    // emit('change', checked.value, props.detachment.id);
     emit('select', props.detachment, e.target.checked);
 };
 
@@ -135,12 +133,6 @@ onMounted(() => {
 watch(
     () => props.detachment.selected,
     (newSelected) => {
-        // if (!newSelected) return;
-        // const checkedItem = newSelected.find(
-        //     (item) => item.id == props.detachment.id,
-        // );
-        // if (!checkedItem) checked.value = false;
-        // else checked.value = true;
         checked.value = newSelected;
     },
 );
