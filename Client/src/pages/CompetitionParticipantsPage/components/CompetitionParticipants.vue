@@ -230,11 +230,16 @@ const searchCompetitionParticipants = async (name) => {
     } catch (error) {
         console.log('an error occured ' + error);
     }
+
 };
 
 const searchSquads = computed(() => {
     return searchCompetitionParticipants(name.value);
 });
+
+
+
+
 
 const sortedSquads = computed(() => {
     let tempSquads = squads.competitionSquads.value;
@@ -252,6 +257,7 @@ const sortedSquads = computed(() => {
 
             let fa = a.name.toLowerCase(),
                 fb = b.name.toLowerCase();
+
 
             if (fa < fb) {
                 return -1;
@@ -280,12 +286,19 @@ const sortedSquads = computed(() => {
         tempSquads.reverse();
     }
 
+
+
     if (!picked.value) {
         return tempSquads.slice(0, squadsVisible.value);
     }
     tempSquads = tempSquads.filter((item) => item.area === picked.value.name);
     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
+
+    tempSquads = tempSquads.filter(
+        (item) => item.detachment?.area === picked.value ?? item.junior_detachment?.area === picked.value,
+    );
+    tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
 
