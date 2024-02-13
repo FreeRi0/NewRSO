@@ -77,13 +77,13 @@
                     </li>
                 </ul>
 
-                <span class="competition__label competition__rating"
+                <!-- <span class="competition__label competition__rating"
                     >Место в рейтинге: {{ squad.rating_position }}</span
-                >
+                > -->
             </div>
         </div>
 
-        <a href="#" class="competition__send-report">Отчетность</a>
+        <!-- <a href="#" class="competition__send-report">Отчетность</a> -->
     </section>
 </template>
 
