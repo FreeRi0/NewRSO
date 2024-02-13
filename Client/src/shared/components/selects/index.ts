@@ -8,6 +8,7 @@ import educInstitutionDropdown from './educInstitutionDropdown.vue';
 import userDropdown from './userDropdown.vue';
 import SearchSelect from './SearchSelect.vue';
 import regionalsDropdown from './regionalsDropdown.vue';
+import DropdownCommander from './DropdownCommander.vue';
 
 export {
     sortByEducation,
@@ -20,4 +21,5 @@ export {
     regionalsDropdown,
     userDropdown,
     SearchSelect,
+    DropdownCommander
 };
