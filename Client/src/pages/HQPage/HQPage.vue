@@ -39,18 +39,21 @@
         </section>
         <ManagementHQ
             :commander="commander"
-            :member="filteredMembers"
+            :member="member"
             head="Руководство штаба"
             :position="position"
+            :leadership="headquarter.leadership"
         ></ManagementHQ>
-        <DetachmentsHQ></DetachmentsHQ>
+        <DetachmentsHQ
+            :headquarter="headquarter.educational.value"
+        ></DetachmentsHQ>
     </div>
 </template>
 <script setup>
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from './components/ManagementHQ.vue';
 import DetachmentsHQ from './components/DetachmentsHQ.vue';
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useEducationalsStore } from '@features/store/educationals';
 import { storeToRefs } from 'pinia';
@@ -75,7 +78,6 @@ let id = route.params.id;
 
 const { replaceTargetObjects } = usePage();
 
-
 const fetchCommander = async () => {
     try {
         let id = headquarter.educational.value.commander.id;
@@ -93,26 +95,13 @@ const fetchCommander = async () => {
     }
 };
 
-
-const filteredMembers = computed(() => {
-    return member.members.value.filter((manager) => {
-        return (
-            manager.position &&
-            (manager.position === 'Командир' ||
-                manager.position === 'Мастер (методист)' ||
-                manager.position === 'Комиссар')
-        );
-    });
-});
-
-
 watch(
     () => route.params.id,
 
-    async (newId, oldId) => {
+    async (newId) => {
         if (!newId || route.name !== 'HQ') return;
         // id = newId;
-        console.log('успешно', !newId, route.name, route.name !== 'HQ')
+        console.log('успешно', !newId, route.name, route.name !== 'HQ');
         await educationalsStore.getEducationalsId(newId);
         await educationalsStore.getEducationalsMembers(newId);
         await replaceTargetObjects([headquarter.educational.value]);

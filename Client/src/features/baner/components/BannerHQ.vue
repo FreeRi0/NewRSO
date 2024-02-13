@@ -169,6 +169,7 @@
                                 localHeadquarter.regional_headquarter ||
                             roles.roles.value.centralheadquarter_commander ||
                             IsTrusted)
+
                         "
                         class="hq-data__link"
                         :to="{
@@ -255,6 +256,7 @@
                             userId && (userId === districtHeadquarter?.commander?.id ||
                             roles.roles.value.centralheadquarter_commander ||
                             IsTrusted)
+
                         "
                         class="hq-data__link"
                         :to="{
@@ -344,6 +346,7 @@
                                 regionalHeadquarter.district_headquarter ||
                             roles.roles.value.centralheadquarter_commander ||
                             IsTrusted)
+
                         "
                         class="hq-data__link"
                         :to="{

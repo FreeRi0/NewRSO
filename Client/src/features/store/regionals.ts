@@ -135,9 +135,11 @@ export const useRegionalsStore = defineStore('regionals', {
                 this.isLoading = false;
             }
         },
-        async searchInstitution(name: String) {
+        async searchInstitution(name: String, region: any) {
+            let url = `/eduicational_institutions/?search=${name}`;
+            if (region) url += '&region__name='+region;
             const responseInstitution = await HTTP.get(
-                `/eduicational_institutions/?search=${name}`,
+                url,
                 {
                     headers: {
                         'Content-Type': 'application/json',

@@ -7,19 +7,34 @@
         <div class="competition__promo">
             <div class="competition__container">
                 <div class="competition__image-box">
-                    <!-- Компонент для адаптивного изображения при загрузке и ресайзе ---------------------------------->
                     <img
-                        :src="sizeImage"
+                        v-if="sizeImage == 'mobile'"
+                        src="@app/assets/competition/mobile-promo.png"
+                        alt="Логотип конкурса"
+                        width="328"
+                        height="150"
+                    />
+                    <img
+                        v-else-if="sizeImage == 'tablet'"
+                        src="@app/assets/competition/tablet-promo.png"
+                        alt="Логотип конкурса"
+                        width="700"
+                        height="302"
+                    />
+                    <img
+                        v-else-if="sizeImage == 'laptop'"
+                        src="@app/assets/competition/laptop-promo.png"
+                        alt="Логотип конкурса"
+                        width="892"
+                        height="386"
+                    />
+                    <img
+                        v-else
+                        src="@app/assets/competition/desktop-promo.png"
                         alt="Логотип конкурса"
                         width="1180"
                         height="510"
                     />
-                    <!-- <img
-                        src="@app/assets/competition/promo.png"
-                        alt="Логотип конкурса"
-                        width="1180"
-                        height="510"
-                    /> -->
                 </div>
             </div>
 
@@ -270,37 +285,23 @@ const downloadDocument = async () => {
         });
 };
 
-const imageSizeChange = ref({
-    mobile: '/assets/competition/mobile-promo.png',
-    tablet: '/assets/competition/tablet-promo.png',
-    laptop: '/assets/competition/laptop-promo.png',
-    desktop: '/assets/competition/desktop-promo.png',
-});
-
-// const imageSizeChange = ref({
-//     mobile: '@app/assets/competition/mobile-promo.png',
-//     tablet: '@app/assets/competition/tablet-promo.png',
-//     laptop: '@app/assets/competition/laptop-promo.png',
-//     desktop: '@app/assets/competition/desktop-promo.png',
-// });
-
 //------Компонент для адаптивного изображения при загрузке и ресайзе-----------------------------------------
 
-let sizeImage = ref('');
+let sizeImage = ref('desktop');
 
 const getSizeImage = () => {
     console.log('ширина экрана', window.innerWidth);
     if (window.innerWidth <= 360) {
-        sizeImage.value = imageSizeChange.value.mobile;
+        sizeImage.value = 'mobile';
     }
     if (window.innerWidth > 360 && window.innerWidth <= 768) {
-        sizeImage.value = imageSizeChange.value.tablet;
+        sizeImage.value = 'tablet';
     }
     if (window.innerWidth > 768 && window.innerWidth <= 1024) {
-        sizeImage.value = imageSizeChange.value.laptop;
+        sizeImage.value = 'laptop';
     }
     if (window.innerWidth > 1024) {
-        sizeImage.value = imageSizeChange.value.desktop;
+        sizeImage.value = 'desktop';
     }
 };
 

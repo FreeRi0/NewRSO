@@ -38,158 +38,51 @@
                 </div>
             </div>
         </router-link>
-        <div class="sort-select ml-3">
-            <sortByEducation
-                placeholder="Выберете действие"
-                variant="outlined"
-                clearable
-                v-model="user.is_verified"
-                :options="filteredPayed"
-            ></sortByEducation>
-        </div>
+
+            <div class="horizontallso-item__wrapper">{{ action }}</div>
+
         <div class="checked__confidant ml-3">
             <input
                 type="checkbox"
                 v-model="checked"
-                :value="participant.user"
                 @change="updateMembership"
             />
         </div>
-        <Button
-            class="save"
-            type="button"
-            label="Сохранить"
-            @click="ChangeStatus(participant.id)"
-        ></Button>
     </div>
-    <p v-if="isError" class="error">{{ isError.detail }}</p>
 </template>
 <script setup>
-import { Button } from '@shared/components/buttons';
-import { sortByEducation } from '@shared/components/selects';
+
 import { useRoute } from 'vue-router';
 import { ref, watch, inject } from 'vue';
-import { HTTP } from '@app/http';
 
 const props = defineProps({
     participant: {
         type: Object,
-        require: true,
     },
-    participants: {
-        type: Array,
-        require: true,
-    },
-    selectedParticipants: {
-        type: Array,
-        default: () => [],
+    action: {
+        type: String,
+        default: '',
     },
 });
 
-const emit = defineEmits(['change', 'approve', 'reject']);
-const updateMembership = (e) => {
-    console.log('checkeed', checked.value);
-    emit('change', checked.value, props.participant.user.id);
-};
+const emit = defineEmits({
+    select: null,
+});
 
 const checked = ref(true);
-const isError = ref([]);
 
-const selectedPeoples = ref(props.selectedParticipants);
-const swal = inject('$swal');
-
-const user = ref({
-    is_verified: null,
-});
-
-const filteredPayed = ref([
-    {
-        value: 'Одобрен',
-        name: 'Одобрен',
-    },
-    { value: 'Не одобрен', name: 'Не одобрен' },
-]);
-
-watch(
-    () => props.selectedParticipants,
-    (newChecked) => {
-        if (!newChecked) return;
-        selectedPeoples.value = newChecked;
-        const checkedItem = newChecked.find(
-            (item) => item.user.id == props.participant.user.id,
-        );
-    },
-    () => props.selectedParticipants,
-    (newApprove) => {
-        if (!newApprove) return;
-        selectedPeoples.value = newApproved;
-    },
-);
-
-const ChangeStatus = async () => {
-    try {
-        let { id, ...rest } = props.participant.user;
-        const approveReq = ref(null);
-        const rejectReq = ref(null);
-        if (user.value.is_verified === 'Одобрен') {
-            const approveReq = await HTTP.post(
-                `rsousers/${id}/verify/`,
-                user.value,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            console.log('response', approveReq.data);
-            console.log('responseee', props.participant.user);
-            emit('approve', props.participant.user.id);
-            console.log(approveReq.data);
-        } else {
-            const rejectReq = await HTTP.delete(
-                `rsousers/${id}/verify/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            console.log('resp', rejectReq.data);
-            emit('reject', props.participant.user.id);
-            console.log(rejectReq.data);
-        }
-    } catch (error) {
-        console.log('errr', error);
-        isError.value = error.response.data;
-        console.error('There was an error!', error);
-        isLoading.value = false;
-        if (isError.value) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        }
-    }
+const updateMembership = (e) => {
+    // console.log('checkeed', checked.value);
+    // emit('change', checked.value, props.participant.user.id);
+    emit('select', props.participant, e.target.checked);
 };
+
+
+// const isError = ref([]);
+
+// const selectedPeoples = ref(props.selectedParticipants);
+// const swal = inject('$swal');
+
 </script>
 <style lang="scss" scoped>
 .checked {

@@ -46,10 +46,12 @@
         </section>
         <ManagementHQ
             :commander="commander"
-            :member="filteredMembers"
+            :member="member"
             head="Руководство центрального штаба"
             :position="position"
-        ></ManagementHQ>
+            :leadership="centralHeadquarter.leadership"
+        >
+        </ManagementHQ>
         <HQandSquad></HQandSquad>
     </div>
 </template>
@@ -57,7 +59,7 @@
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import HQandSquad from '../RegionalHQPage/components/HQandSquad.vue';
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { usePage } from '@shared';
@@ -108,16 +110,7 @@ const aboutMembers = async () => {
         console.log('an error occured ' + error);
     }
 };
-const filteredMembers = computed(() => {
-    return member.value.filter((manager) => {
-        return (
-            manager.position &&
-            (manager.position === 'Командир' ||
-                manager.position === 'Мастер (методист)' ||
-                manager.position === 'Комиссар')
-        );
-    });
-});
+
 const fetchCommander = async () => {
     try {
         let id = centralHeadquarter.value.commander.id;
@@ -135,6 +128,7 @@ const fetchCommander = async () => {
         console.log('An error occurred:', error);
     }
 };
+
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutCentralHQs();

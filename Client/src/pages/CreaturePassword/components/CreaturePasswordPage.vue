@@ -26,7 +26,7 @@
 
                         <Input
                             class="creaturePass__input"
-                            placeholder="Новый пароль"
+                            placeholder="Введите новый пароль"
                             name="password"
                             v-model:value="new_password"
                         ></Input>
@@ -139,7 +139,7 @@ const resetPasswordForm = async () => {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .btn {
     margin: 40px auto;
     margin-bottom: 15px;

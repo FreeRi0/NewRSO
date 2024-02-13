@@ -41,9 +41,10 @@
         </section>
         <ManagementHQ
             :commander="commander"
-            :member="filteredMembers"
+            :member="member"
             head="Руководство регионального штаба"
             :position="position"
+            :leadership="regionalHeadquarter.leadership"
         ></ManagementHQ>
         <!-- <HQandSquad></HQandSquad> -->
         <section class="headquarters_squads">
@@ -70,7 +71,7 @@
 <script setup>
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
@@ -89,22 +90,10 @@ const commander = ref({});
 const position = ref({});
 const regionalHeadquarter = storeToRefs(regionalsStore);
 const member = storeToRefs(regionalsStore);
-const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
 const { replaceTargetObjects } = usePage();
-
-const filteredMembers = computed(() => {
-    return member.members.value.filter((manager) => {
-        return (
-            manager.position &&
-            (manager.position === 'Командир' ||
-                manager.position === 'Мастер (методист)' ||
-                manager.position === 'Комиссар')
-        );
-    });
-});
 
 const fetchCommander = async () => {
     try {

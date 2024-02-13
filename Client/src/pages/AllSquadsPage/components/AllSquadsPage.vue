@@ -93,13 +93,12 @@
                 <div class="sort-filters">
                     <div class="squads-sort">
                         <div class="sort-filters">
-                            <div class="sort-select">
+                            <div class="sort-select sort-select--width">
                                 <educInstitutionDropdown
                                     class="sortedEducation"
                                     name="select_education"
                                     id="select-education"
                                     v-model="education"
-                                    address="/eduicational_institutions/"
                                     placeholder="Образовательная организация"
                                     :SortDropdown="true"
                                 ></educInstitutionDropdown>
@@ -160,8 +159,6 @@ import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import {
     sortByEducation,
-    Select,
-    filterSelect,
     educInstitutionDropdown,
 } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
@@ -171,9 +168,7 @@ import { HTTP } from '@app/http';
 const squadsStore = useSquadsStore();
 const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
-console.log('squad', squads.squads.value);
-console.log('loading', isLoading.isLoading.value);
-// const squads = ref([]);
+
 const categories = ref([]);
 const name = ref('');
 const education = ref('');
@@ -251,7 +246,7 @@ const searchSquads = computed(() => {
 });
 
 const filteredSquadsByEducation = computed(() => {
-    return filteredSquad(education.value?education.value:'');
+    return filteredSquad(education.value ? education.value : '');
 });
 
 const sortedSquads = computed(() => {
@@ -297,11 +292,10 @@ const sortedSquads = computed(() => {
     // }
 
     if (!picked.value) {
-        return tempSquads;
+        return tempSquads.slice(0, squadsVisible.value);
     }
 
     tempSquads = tempSquads.filter((item) => item.area.name === picked.value);
-    console.log('picked', picked.value);
     tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
@@ -460,6 +454,12 @@ onMounted(() => {
     margin-bottom: 0px;
     margin-left: 8px;
     border: 1px solid #35383f;
+}
+
+.sort-select {
+    &--width {
+        width: 305px;
+    }
 }
 
 @media (max-width: 575px) {
