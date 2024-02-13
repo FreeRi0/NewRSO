@@ -200,11 +200,25 @@
 
         .btn.competition__status-application-button,
         a.competition__status-application-button {
+            min-width: 168px;
             margin: 0;
             margin-left: auto;
             color: #35383f;
             background-color: #ffffff;
             border-color: #ffffff; // -----------------------------------------
+
+            @media (max-width: 1024px) {
+                min-width: 114px;
+                padding: 10px 12px;
+                font-size: 12px;
+                // line-height: 20px;
+            }
+
+            @media (max-width: 768px) {
+                padding: 13px 12px;
+                // font-size: 12px;
+                line-height: 14px;
+            }
         }
     }
 

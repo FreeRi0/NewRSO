@@ -50,11 +50,11 @@ const roles = storeToRefs(roleStore);
 const meRoles = roles.roles.value;
 console.log(meRoles);
 
-const educComId = roles.roles.value.educationalheadquarter_commander.id;
-const regionComId = roles.roles.value.regionalheadquarter_commander.id;
-const districtComId = roles.roles.value.districtheadquarter_commander.id;
+const educComId = roles.roles.value.educationalheadquarter_commander?.id;
+const regionComId = roles.roles.value.regionalheadquarter_commander?.id;
+const districtComId = roles.roles.value.districtheadquarter_commander?.id;
 const centralComId = roles.roles.value.centralheadquarter_commander;
-const localComId = roles.roles.value.localheadquarter_commander.id;
+const localComId = roles.roles.value.localheadquarter_commander?.id;
 const detComId = roles.roles.value.detachment_commander?.id;
 
 const router = useRouter();
@@ -129,12 +129,11 @@ const getMembers = async () => {
             );
 
             members.value = membersResponse.data;
-            if (members.value.length) {
+            /*if (members.value.length) {
                 members.value.forEach((member) => {
                     member.position = member.position?.id;
                 });
-            }
-            console.log('участ', members.value);
+            }*/
             isMembersLoading.value = false;
         }, 1000);
     } catch (error) {
@@ -148,10 +147,11 @@ onMounted(() => {
 });
 
 const onUpdateMember = (event, id) => {
-    const targetMember = members.value.find((member) => member.id === id);
+    const memberIndex = members.value.findIndex(member => member.id === id)
     const firstkey = Object.keys(event)[0];
-    targetMember[firstkey] = event[firstkey];
-    console.log(event);
+    members.value[memberIndex].change = true;
+    if (firstkey == 'position') members.value[memberIndex].position.id = event[firstkey];
+    else members.value[memberIndex][firstkey] = event[firstkey];
 };
 
 const submited = ref(false);
@@ -261,25 +261,24 @@ const changeDetachment = async () => {
     formData.append('about', detachment.value.about);
 
     for (let member of members.value) {
-        HTTP.patch(
-            `/detachments/${id}/members/${member.id}/`,
-            {
-                position: member.position,
-                is_trusted: member.is_trusted,
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+        if (member.change) {
+            await HTTP.patch(
+                `/detachments/${id}/members/${member.id}/`,
+                {
+                    position: member.position.id,
+                    is_trusted: member.is_trusted,
                 },
-            },
-        )
-            .then((response) => {
-                console.log(response.data);
-            })
-            // .catch((error) => {
-            //     console.error('There was an error!', error);
-            .catch(({ response }) => {
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            ).then((response) => {
+                member.position = response.data.position
+                member.is_trusted = response.is_trusted
+                member.change = false
+            }).catch(({ response }) => {
                 isErrorMembers.value = response.data;
                 console.error('There was an error!', response.data);
                 console.log('Ошибки отправки формы', isErrorMembers.value);
@@ -291,6 +290,7 @@ const changeDetachment = async () => {
                     timer: 2500,
                 });
             });
+        }
     }
 
     if (isEmblemChange.value)

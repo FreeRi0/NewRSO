@@ -11,10 +11,10 @@
                 </v-btn>
                 <v-btn
                     class="squads-tabs__item"
-                    :class="{ active: picked === area.name }"
+                    :class="{ active: picked === area }"
                     v-for="area in categories"
                     :key="area"
-                    @click="picked = area.name"
+                    @click="picked = area"
                     >{{ area.name }}
                 </v-btn>
             </div>
@@ -23,7 +23,7 @@
                     type="text"
                     id="search"
                     class="squads-search__input"
-                    v-model="searchSquads"
+                    v-model="name"
                     placeholder="Поищем отряд?"
                 />
                 <svg
@@ -121,7 +121,7 @@
 
             <div v-show="vertical">
                 <competitionList
-                    :members="squads.competitionSquads.value"
+                    :members="sortedSquads"
                     v-if="!isLoading.isLoading.value"
                 ></competitionList>
                 <v-progress-circular
@@ -166,6 +166,34 @@ const squadsStore = useSquadsStore();
 const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
 const categories = ref([]);
+const name = ref('');
+
+const squadsVisible = ref(20);
+
+const step = ref(20);
+
+const ascending = ref(true);
+const sortBy = ref('alphabetically');
+
+const picked = ref('');
+
+const vertical = ref(true);
+
+const showVertical = () => {
+    vertical.value = !vertical.value;
+};
+
+const selectedSort = ref(null);
+
+const sortOptionss = ref([
+    {
+        value: 'alphabetically',
+        name: 'Алфавиту от А - Я',
+    },
+    { value: 'founding_date', name: 'Дате создания отряда' },
+    // { value: 'members_count', name: 'Количеству участников' },
+    // { value: 'rating', name: 'Место в рейтинге' },
+]);
 
 const getCategories = async () => {
     try {
@@ -181,61 +209,49 @@ const getCategories = async () => {
     }
 };
 
-
-onMounted(() => {
-    getCategories();
-    squadsStore.getCompetitionSquads();
-});
-
-const squadsVisible = ref(20);
-
-const step = ref(20);
-
-const ascending = ref(true);
-const sortBy = ref('alphabetically');
-
-const picked = ref('');
-
-const vertical = ref(true);
-
-const searchSquads = ref('');
-
-const showVertical = () => {
-    vertical.value = !vertical.value;
+const searchCompetitionParticipants = async (name) => {
+    try {
+        const responseSearchCompetitionSquads = await HTTP.get(
+            `/competitions/1/participants/?search=${name}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        squads.competitionSquads.value = responseSearchCompetitionSquads.data.reduce((acc, member) => {
+            if (member.detachment) acc.push(member.detachment);
+            acc.push(member.junior_detachment);
+            // console.log('acc', acc);
+            return acc;
+        }, []);
+        // this.competitionSquads = responseCompetitionSquads
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-const selectedSort = ref(null);
-
-const sortOptionss = ref([
-    {
-        value: 'alphabetically',
-        name: 'Алфавиту от А - Я',
-    },
-    { value: 'founding_date', name: 'Дате создания отряда' },
-    { value: 'members_count', name: 'Количеству участников' },
-    { value: 'rating', name: 'Место в рейтинге' },
-]);
+const searchSquads = computed(() => {
+    return searchCompetitionParticipants(name.value);
+});
 
 const sortedSquads = computed(() => {
     let tempSquads = squads.competitionSquads.value;
 
-    tempSquads = tempSquads.filter((item) => {
-        return (
-            item.detachment?.name.toUpperCase() ??
-            item.junior_detachment?.name
-                .toUpperCase()
-                .includes(searchSquads.value.toUpperCase())
-        );
-    });
+    searchSquads.value;
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa =
-                a.detachment.name.toLowerCase() ??
-                a.junior_detachment.name.toLowerCase();
-                fb =
-                b.detachment?.name.toLowerCase() ??
-                b.junior_detachment.name.toLowerCase();
+            // let fa =
+            //     a.detachment?.name.toLowerCase() ??
+            //     a.junior_detachment?.name.toLowerCase();
+            //     fb =
+            //     b.detachment?.name.toLowerCase() ??
+            //     b.junior_detachment?.name.toLowerCase();
+
+            let fa = a.name.toLowerCase(),
+                fb = b.name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -265,12 +281,17 @@ const sortedSquads = computed(() => {
     }
 
     if (!picked.value) {
-        return tempSquads;
+        return tempSquads.slice(0, squadsVisible.value);
     }
+    tempSquads = tempSquads.filter((item) => item.area === picked.value.name);
     tempSquads = tempSquads.slice(0, squadsVisible.value);
-    tempSquads = tempSquads.filter((item) => item.detachment?.area === picked.value ?? item.junior_detachment?.area === picked.value );
 
     return tempSquads;
+});
+
+onMounted(() => {
+    getCategories();
+    squadsStore.getCompetitionSquads();
 });
 </script>
 <style lang="scss">
@@ -312,7 +333,7 @@ const sortedSquads = computed(() => {
 }
 
 .squads {
-    padding: 40px 0px 60px 0px;
+    padding: 0px 0px 60px 0px;
 
     &-title {
         font-size: 52px;
