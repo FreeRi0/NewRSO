@@ -1,5 +1,5 @@
 <template>
-    <div class="horizontalSquad">
+     <div class="horizontalSquad">
         <router-link
             :to="{
                 name: 'PersonalDataUser',
@@ -50,69 +50,51 @@
             </div>
         </div>
         <div class="d-flex">
-            <div class="sort-select mr-3">
-                <sortByEducation
-                    placeholder="Выберете действие"
-                    variant="outlined"
-                    clearable
-                    v-model="user.applications"
-                    :options="filteredPayed"
-                ></sortByEducation>
-            </div>
+            <div class="horizontalSquad-item__wrapper">{{ action }}</div>
 
-            <div class="horizontalSquad__confidant mr-3">
+            <div class="horizontalSquad__confidant ml-3">
                 <input
                     type="checkbox"
                     v-model="checked"
-                    :value="detachment"
                     @change="updateSquads"
                 />
             </div>
-            <Button
-                class="save"
-                type="button"
-                label="Сохранить"
-                @click="ChangeStatus(detachment.id)"
-            ></Button>
         </div>
     </div>
-    <p v-if="isError" class="error">{{ isError.detail }}</p>
+    <!-- <p v-if="isError" class="error">{{ isError.detail }}</p> -->
 </template>
 <script setup>
-import { Button } from '@shared/components/buttons';
-import { sortByEducation } from '@shared/components/selects';
-import { ref, onMounted, watch, inject } from 'vue';
+import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 const props = defineProps({
     detachment: {
         type: Object,
-        require: true,
     },
     squad: {
         type: Object,
     },
-    selectedSquads: {
-        type: Array,
-        default: () => [],
+    action: {
+        type: String,
+        default: '',
     },
 });
 const roleStore = useRoleStore();
 roleStore.getRoles();
 const roles = storeToRefs(roleStore);
-const emit = defineEmits(['change', 'approveMember', 'rejectMember']);
+const emit = defineEmits({
+    select: null,
+});
 const updateSquads = (e) => {
-    console.log('dddddddft', checked.value);
-    emit('change', checked.value, props.detachment.id);
+    // console.log('dddddddft', checked.value);
+    // emit('change', checked.value, props.detachment.id);
+    emit('select', props.detachment, e.target.checked);
 };
 
 const checked = ref(true);
 const squad = ref({});
-const isError = ref([]);
 
-const swal = inject('$swal');
-const selectedDetch = ref(props.selectedSquads);
 const viewSquad = async () => {
     let id = roles?.roles?.value?.detachment_commander.id;
     console.log('roles', roles.roles.value);
@@ -136,102 +118,11 @@ onMounted(() => {
 });
 
 console.log('squad', props.squad);
-const user = ref({
-    applications: null,
-});
-
-const filteredPayed = ref([
-    {
-        value: 'Одобрить',
-        name: 'Одобрить',
-    },
-    { value: 'Отклонить', name: 'Отклонить' },
-]);
-
-watch(
-    () => props.selectedSquads,
-    (newChecked) => {
-        if (!newChecked) return;
-        selectedDetch.value = newChecked;
-    },
-    () => props.selectedSquads,
-    (newApprove) => {
-        if (!newApprove) return;
-        selectedDetch.value = newApproved;
-    },
-);
-
-const ChangeStatus = async () => {
-    try {
-        let id = squad.value.id;
-        console.log('squad', id);
-        let application_pk = props.detachment.id;
-        console.log('application', application_pk);
-        const approveReq = ref(null);
-        const rejectReq = ref(null);
-        if (user.value.applications === 'Одобрить') {
-            const approveReq = await HTTP.post(
-                `/detachments/${id}/applications/${application_pk}/accept/`,
-                user.value,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            console.log('response', approveReq.data);
-            emit('approveMember', props.detachment.id);
-            console.log(approveReq.data);
-        } else {
-            const rejectReq = await HTTP.delete(
-                `/detachments/${id}/applications/${application_pk}/accept/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            console.log('resp', rejectReq.data);
-            emit('rejectMember', props.detachment.id);
-            console.log(rejectReq.data);
-        }
-    } catch (error) {
-        console.log('errr', error);
-        isError.value = error.response.data;
-        console.error('There was an error!', error);
-        isLoading.value = false;
-        if (isError.value) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        }
-    }
-};
 </script>
 <style lang="scss" scoped>
 .horizontalSquad {
     display: grid;
-    grid-template-columns: 0.525fr 0.35fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-column-gap: 12px;
     // flex-wrap: wrap;
     // align-items: flex-start;
