@@ -13,9 +13,9 @@
                     :options="actionsList"
                 ></sortByEducation>
             </div>
-            <div class="contributor-sort__all">
+            <!-- <div class="contributor-sort__all">
                 <input type="checkbox" @click="select" v-model="checkboxAll" />
-            </div>
+            </div> -->
         </div>
         <div class="participants__list">
             <template
@@ -100,6 +100,7 @@ const viewParticipants = async () => {
                     },
                 );
                 participantList.value = regComReq.data;
+
                 loading.value = false;
             } else if (roles.roles.value.detachment_commander) {
                 const detComReq = await HTTP.get(
@@ -116,6 +117,7 @@ const viewParticipants = async () => {
                 loading.value = false;
             }
         }, 100);
+        selectedParticipantList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -187,6 +189,7 @@ const onAction = async () => {
                 );
         }
         await viewParticipants();
+
     } catch (e) {
         console.log('error action', e);
     }
