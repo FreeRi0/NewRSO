@@ -13,13 +13,13 @@
                     :options="actionsList"
                 ></sortByEducation>
             </div>
-            <div class="contributor-sort__all">
+            <!-- <div class="contributor-sort__all">
                 <input
                     type="checkbox"
                     @click="selectSquads"
                     v-model="checkboxAllSquads"
                 />
-            </div>
+            </div> -->
         </div>
         <div class="participants__list">
             <template v-for="detachment in detachmentList" :key="detachment.id">
