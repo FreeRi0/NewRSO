@@ -187,6 +187,13 @@ import { onActivated } from "vue";
 
 let actionsList = ref([]);
 
+onActivated(()=>{
+    getListActionsBySearch(text.value)
+    .then((resp)=>{
+      actionsList.value = resp.data;
+    })
+});
+
 //Массив полученных значений
 const SortedList = ref([]);
 const text = ref('');
@@ -202,17 +209,7 @@ function SearchByInput(){
       actionsList.value = resp.data;
     })
   }
-}
-onActivated(() => {
-    getListActions()
-        .then((responce) => {
-            actionsList.value = responce.data;
-        })
-        .catch((e) => {});
-});
-const actionNewList = computed(() => {
-    console.log(sortBy);
-});
+};
 
 //Сортировка
 const vertical = ref(true);

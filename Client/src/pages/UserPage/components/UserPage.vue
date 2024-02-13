@@ -7,6 +7,7 @@
                 :education="education"
                 :user_region="region"
                 :position="roles.positions.value"
+                :commander="roles.userRoles.value"
                 class="mt-3"
                 @upload-wall="uploadWall"
                 @update-wall="updateWall"
@@ -194,12 +195,14 @@ watch(
         id = newId;
         userStore.getUserId(id);
         roleStore.getPositions(id);
+        roleStore.getUserRoles(id);
     },
 );
 
 onMounted(() => {
     userStore.getUserId(id);
     roleStore.getPositions(id);
+    roleStore.getUserRoles(id);
 });
 </script>
 <style lang="scss" scoped>

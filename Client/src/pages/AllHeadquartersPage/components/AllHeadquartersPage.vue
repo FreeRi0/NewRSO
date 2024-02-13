@@ -259,48 +259,29 @@ const locals = ref([]);
 const districts = ref([]);
 const regionals = ref([]);
 
-
-const searchEducational = async (name) => {
-    try {
-        const filteredEducationals = await HTTP.get(
-            `/educationals/?search=${name}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        headquarters.educationals.value = filteredEducationals.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const filtersDistricts = computed(() =>
+/*const filtersDistricts = computed(() =>
     SelectedSortDistrict.value
         ? districts.value.find(
               (district) => district.name === SelectedSortDistrict.value,
           )?.AllHeadquarters ?? []
         : headquarters.educationals.value,
 );
-const filtersRegionals = computed(() =>
-    SelectedSortRegional.value
+const filtersRegionals = computed(() => {
+    let idRegional = SelectedSortRegional.value
         ? regionals.value.find(
-              (regional) => regional.name === SelectedSortRegional.value,
-          )?.AllHeadquarters ?? []
-        : headquarters.educationals.value,
-);
+        (regional) => regional.name === SelectedSortRegional.value,
+    )?.id ?? false : false;
+
+     return SelectedSortRegional.value ?
+         (idRegional ? headquarters.educationals.value.find((item) => item.regional_headquarter == idRegional) : []) :
+        headquarters.educationals.value
+});
 const filtersLocals = computed(() =>
     SelectedSortLocal.value
         ? locals.value.find((local) => local.name === SelectedSortLocal.value)
               ?.AllHeadquarters ?? []
         : headquarters.educationals.value,
-);
-
-const searchEducationals = computed(() => {
-    return searchEducational(name.value);
-});
+);*/
 
 const getDistrictsHeadquartersForFilters = async () => {
     try {
@@ -333,10 +314,6 @@ onMounted(() => {
     getLocalsHeadquartersForFilters();
 });
 
-const selectedSort = ref(0);
-const selectedSortLocal = ref(null);
-const selectedSortRegion = ref(null);
-const selectedSortDistrict = ref(null);
 
 const sortOptionss = ref([
     {
@@ -349,35 +326,42 @@ const sortOptionss = ref([
 
 const sortedHeadquarters = computed(() => {
     let tempHeadquartes = [];
-    const activeFilters = [
-        selectedSortDistrict.value && filtersDistricts.value,
-        SelectedSortRegional.value && filtersRegionals.value,
-        selectedSortLocal.value && filtersLocals.value,
+    /*const activeFilters = [
+        SelectedSortDistrict.value && filtersDistricts.value,
+        SelectedSortRegional.value && filtersRegionals && filtersRegionals.value,
+        SelectedSortLocal.value && filtersLocals.value,
     ].filter(Boolean);
 
     if (activeFilters.length > 0) {
         tempHeadquartes = Array.from(new Set(activeFilters.flat()));
     } else if (SelectedSortRegional.value) {
-        tempHeadquartes = [...filtersRegionals.value];
-    } else if (selectedSortDistrict.value) {
+        tempHeadquartes = filtersRegionals.value ? [...filtersRegionals.value] : [];
+    } else if (SelectedSortDistrict.value) {
         tempHeadquartes = [...filtersDistricts.value];
-    } else if (selectedSortLocal.value) {
+    } else if (SelectedSortLocal.value) {
         tempHeadquartes = [...filtersLocals.value];
     } else {
-        tempHeadquartes = [...headquarters.educationals.value];
+    }*/
+    tempHeadquartes = [...headquarters.educationals.value];
+
+    if (SelectedSortRegional.value || SelectedSortDistrict.value || SelectedSortLocal.value) {
+        let idRegionals = [];
+        if (SelectedSortDistrict.value){
+            let districtId = districts.value.find(
+                (district) => district.name === SelectedSortDistrict.value,
+            )?.id;
+            idRegionals = regionals.value.filter((regional) => regional.district_headquarter === districtId).map((reg) => reg.id);
+        }
+        if (SelectedSortRegional.value){
+            idRegionals = [regionals.value.find(
+                (regional) => regional.name === SelectedSortRegional.value,
+            )?.id];
+        }
+
+        tempHeadquartes = tempHeadquartes.filter((item) => {
+            return idRegionals.indexOf(item.regional_headquarter) >= 0;
+        });
     }
-
-    searchEducationals.value;
-
-    tempHeadquartes = tempHeadquartes.filter((item) => {
-        // console.log(educational_institution.id);
-        return (
-            (selectedSortRegion.value == null &&
-                selectedSortLocal.value == null) ||
-            (item.regional_headquarter == selectedSortRegion.value &&
-                item.local_headquarter == selectedSortLocal.value)
-        );
-    });
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
