@@ -173,7 +173,6 @@ const onToggleSelectCompetition = (competition, isChecked) => {
 
 const confirmApplication = async (id, competitionId) => {
     if (commanderIds.value.regionalheadquarter_commander?.id == null) {
-    if (commanderIds.value.regionalheadquarter_commander?.id == null) {
         await HTTP.put(
             `/competitions/${competitionId}/applications/${id}/`,
             {
@@ -238,9 +237,9 @@ const onAction = async () => {
         }
 
         if (commanderIds.value.regionalheadquarter_commander?.id == null)
-        if (commanderIds.value.regionalheadquarter_commander?.id == null)
-            await getCompetitionsJunior();
-        else await getCompetitions();
+            if (commanderIds.value.regionalheadquarter_commander?.id == null)
+                await getCompetitionsJunior();
+            else await getCompetitions();
     } catch (e) {
         console.log('error action', e);
     }
@@ -259,9 +258,9 @@ onActivated(async () => {
     await getAllCompetition();
     await getMeCommander();
     if (commanderIds.value.regionalheadquarter_commander?.id == null)
-    if (commanderIds.value.regionalheadquarter_commander?.id == null)
-        await getCompetitionsJunior();
-    else await getCompetitions();
+        if (commanderIds.value.regionalheadquarter_commander?.id == null)
+            await getCompetitionsJunior();
+        else await getCompetitions();
 });
 </script>
 
