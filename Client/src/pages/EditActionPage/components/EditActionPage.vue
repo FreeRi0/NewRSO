@@ -1,5 +1,5 @@
 <template>
-    <!-- <div class="container action">
+    <div class="container action">
         <div class="action-title">Редактирование мероприятия</div>
         <form @submit.prevent="SubmitEvent">
             <div class="col-auto form-container">
@@ -436,7 +436,6 @@
                                         placeholder="Например, ЛСО"
                                     ></sortByEducation>
                                 </div>
-                            </div>
                             </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -1006,7 +1005,6 @@
             </div>
         </form>
     </div>
-    </div> -->
 </template>
 
 <script setup>
