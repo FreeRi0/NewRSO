@@ -78,7 +78,8 @@
                             class="user-data__title"
                             v-if="
                                 commander.detachment_commander?.id ||
-                                commander.educationalheadquarter_commander?.id ||
+                                commander.educationalheadquarter_commander
+                                    ?.id ||
                                 commander.localheadquarter_commander?.id ||
                                 commander.regionalheadquarter_commander?.id ||
                                 commander.districtheadquarter_commander?.id ||
@@ -115,10 +116,6 @@
                         </li>
                         <li class="user-data__title" v-else><p>Кандитат</p></li>
 
-<<<<<<< HEAD
-                        <li class="user-data__title" v-if="detachment?.name">
-                            <p>{{ detachment?.name }}</p>
-=======
                         <li
                             class="user-data__title"
                             v-if="
@@ -131,12 +128,12 @@
                         >
                             <p>
                                 {{
-                                    position.userdetachmentposition?.headquarter?.name ??
+                                    position.userdetachmentposition?.headquarter
+                                        ?.name ??
                                     position.usereducationalheadquarterposition
                                         ?.headquarter?.name
                                 }}
                             </p>
->>>>>>> b86063553efd60a4953b947601923bb260257f22
                         </li>
                         <li
                             class="user-data__title"
