@@ -30,7 +30,7 @@
                             {{ props.commander?.patronymic_name }}
                             {{ props.commander?.last_name }}
                         </h5>
-                        <p>{{ props.commander.position }}</p>
+                        <p>Командир</p>
                     </div>
                 </div>
             </router-link>
@@ -87,7 +87,7 @@ const props = defineProps({
         type: String,
     },
     leadership: {
-        type: Object,
+        type: Array,
     },
 });
 </script>
@@ -119,6 +119,7 @@ section.headquarters-management h3 {
     /*  */
     padding: 24px 20px;
     width: 280px;
+    height: 100%;
 }
 
 .card-position {

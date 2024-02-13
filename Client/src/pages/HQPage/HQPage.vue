@@ -42,7 +42,7 @@
             :member="member"
             head="Руководство штаба"
             :position="position"
-            :leadership="headquarter.leadership"
+            :leadership="headquarter.educational.value.leadership"
         ></ManagementHQ>
         <DetachmentsHQ
             :headquarter="headquarter.educational.value"
