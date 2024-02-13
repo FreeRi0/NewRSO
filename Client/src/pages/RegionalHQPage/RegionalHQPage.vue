@@ -44,7 +44,7 @@
             :member="member"
             head="Руководство регионального штаба"
             :position="position"
-            :leadership="regionalHeadquarter.leadership"
+            :leadership="regionalHeadquarter.regional.value.leadership"
         ></ManagementHQ>
         <!-- <HQandSquad></HQandSquad> -->
         <section class="headquarters_squads">

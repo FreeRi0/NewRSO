@@ -87,7 +87,7 @@ const props = defineProps({
         type: String,
     },
     leadership: {
-        type: Object,
+        type: Array,
     },
 });
 </script>
