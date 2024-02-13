@@ -75,16 +75,6 @@
 
                 <div class="sort-filters">
                     <div class="sort-select">
-                        <!-- <Select
-                            clearable
-                            variant="outlined"
-                            name="select_district"
-                            id="select-district"
-                            v-model="selectedSortDistrict"
-                            class="filter-district"
-                            address="/districts/"
-                            placeholder="Окружные штабы"
-                        ></Select> -->
                         <v-select
                             class="form__select filter-district"
                             :items="districts"
@@ -101,17 +91,7 @@
                             </template>
                         </v-select>
                     </div>
-                    <div class="sort-select">
-                        <!-- <Select
-                            clearable
-                            variant="outlined"
-                            name="select_region"
-                            id="select-region"
-                            v-model="selectedSortRegion"
-                            class="filter-region"
-                            address="/regionals/"
-                            placeholder="Региональные штабы"
-                        ></Select> -->
+                    <div class="sort-select">=
                         <v-select
                             class="form__select filter-district"
                             :items="regionals"
@@ -122,33 +102,6 @@
                             v-model="SelectedSortRegional"
                             item-title="name"
                             placeholder="Региональные штабы"
-                        >
-                            <template #selection="{ item }">
-                                <pre>{{ item.title }}</pre>
-                            </template>
-                        </v-select>
-                    </div>
-                    <div class="sort-select">
-                        <!-- <Select
-                            clearable
-                            variant="outlined"
-                            name="select_local"
-                            id="select-local"
-                            v-model="selectedSortLocal"
-                            class="filter-local"
-                            address="/locals/"
-                            placeholder="Местные штабы"
-                        ></Select> -->
-                        <v-select
-                            class="form__select filter-district"
-                            :items="locals"
-                            clearable
-                            variant="outlined"
-                            name="select_local"
-                            id="select-local"
-                            v-model="SelectedSortLocal"
-                            item-title="name"
-                            placeholder="Местные штабы"
                         >
                             <template #selection="{ item }">
                                 <pre>{{ item.title }}</pre>
@@ -251,37 +204,10 @@ const SelectedSortDistrict = ref(
 const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
-const SelectedSortLocal = ref(
-    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName,
-);
 
 const locals = ref([]);
 const districts = ref([]);
 const regionals = ref([]);
-
-/*const filtersDistricts = computed(() =>
-    SelectedSortDistrict.value
-        ? districts.value.find(
-              (district) => district.name === SelectedSortDistrict.value,
-          )?.AllHeadquarters ?? []
-        : headquarters.educationals.value,
-);
-const filtersRegionals = computed(() => {
-    let idRegional = SelectedSortRegional.value
-        ? regionals.value.find(
-        (regional) => regional.name === SelectedSortRegional.value,
-    )?.id ?? false : false;
-
-     return SelectedSortRegional.value ?
-         (idRegional ? headquarters.educationals.value.find((item) => item.regional_headquarter == idRegional) : []) :
-        headquarters.educationals.value
-});
-const filtersLocals = computed(() =>
-    SelectedSortLocal.value
-        ? locals.value.find((local) => local.name === SelectedSortLocal.value)
-              ?.AllHeadquarters ?? []
-        : headquarters.educationals.value,
-);*/
 
 const getDistrictsHeadquartersForFilters = async () => {
     try {
@@ -326,25 +252,10 @@ const sortOptionss = ref([
 
 const sortedHeadquarters = computed(() => {
     let tempHeadquartes = [];
-    /*const activeFilters = [
-        SelectedSortDistrict.value && filtersDistricts.value,
-        SelectedSortRegional.value && filtersRegionals && filtersRegionals.value,
-        SelectedSortLocal.value && filtersLocals.value,
-    ].filter(Boolean);
 
-    if (activeFilters.length > 0) {
-        tempHeadquartes = Array.from(new Set(activeFilters.flat()));
-    } else if (SelectedSortRegional.value) {
-        tempHeadquartes = filtersRegionals.value ? [...filtersRegionals.value] : [];
-    } else if (SelectedSortDistrict.value) {
-        tempHeadquartes = [...filtersDistricts.value];
-    } else if (SelectedSortLocal.value) {
-        tempHeadquartes = [...filtersLocals.value];
-    } else {
-    }*/
     tempHeadquartes = [...headquarters.educationals.value];
 
-    if (SelectedSortRegional.value || SelectedSortDistrict.value || SelectedSortLocal.value) {
+    if (SelectedSortRegional.value || SelectedSortDistrict.value) {
         let idRegionals = [];
         if (SelectedSortDistrict.value){
             let districtId = districts.value.find(
@@ -417,9 +328,6 @@ onActivated(() => {
     SelectedSortRegional.value = JSON.parse(
         localStorage.getItem('AllHeadquarters_filters'),
     )?.regionalName;
-    SelectedSortLocal.value = JSON.parse(
-        localStorage.getItem('AllHeadquarters_filters'),
-    )?.localName;
 });
 </script>
 <style lang="scss">
