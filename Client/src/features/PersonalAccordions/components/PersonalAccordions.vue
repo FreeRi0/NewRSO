@@ -3656,6 +3656,7 @@ const updateData = async () => {
                     },
                 },
             );
+            axiosrequestParent.value = parentRequest.data;
         }
 
         const axiosrequest2 = await HTTP.patch(
@@ -3717,10 +3718,11 @@ const updateData = async () => {
             );
         }
 
+        let studyEducationId = Number.isInteger(props.user.education.study_institution)?props.user.education.study_institution:props.user.education.study_institution?.id;
         const axiosrequest4 = await HTTP.patch(
             '/rsousers/me/education/',
             {
-                study_institution: props.user.education.study_institution?.id,
+                study_institution: studyEducationId,
                 study_faculty: props.user.education.study_faculty,
                 study_year: props.user.education.study_year,
                 study_specialty: props.user.education.study_specialty,
@@ -3760,14 +3762,6 @@ const updateData = async () => {
         foreignDoc.value = axiosrequestForeignDocs.data;
         fd = axiosrequest5.data;
         data.value = axiosrequest6?.data;
-        console.log(axiosrequest1.data);
-        console.log(axiosrequestParent.data);
-        console.log(axiosrequest2.data);
-        console.log(axiosrequest3.data);
-        console.log(axiosrequestForeignDocs.data);
-        console.log(axiosrequest4.data);
-        console.log(axiosrequest5.data);
-        console.log(axiosrequest6?.data);
         swal.fire({
             position: 'top-center',
             icon: 'success',
@@ -3781,7 +3775,7 @@ const updateData = async () => {
         emit('updateDocData', axiosrequest3.data);
         emit('updateEducData', axiosrequest4.data);
         emit('updateFileData', axiosrequest5.data);
-        emit('updateParentData', axiosrequestParent.data);
+        emit('updateParentData', axiosrequestParent.value);
 
         emit('updateStatus', axiosrequest6?.data);
         isLoading.value = false;
