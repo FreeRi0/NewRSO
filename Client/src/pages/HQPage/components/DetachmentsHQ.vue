@@ -1,63 +1,56 @@
 <template>
-    <section class="headquarters-detachments" v-if='area'>
+    <section class="headquarters-detachments" v-if='squads.length'>
         <h3>Отряды штаба</h3>
         <div class="headquarters-detachments__container">
-            <div class="squad-card">
-                <div class="squad-card__ava">
-                    <img
-                        v-if="area.id === 1"
-                        src="@app/assets/headquarters/squad-ava6.png"
-                        alt="photo"
-                    />
-                    <img
-                        v-else-if="area.id === 2"
-                        src="@app/assets/headquarters/squad-ava3.png"
-                        alt="photo"
-                    />
-                    <img
-                        v-else-if="area.id === 3"
-                        src="@app/assets/headquarters/squad-ava.png"
-                        alt="photo"
-                    />
-                    <img
-                        v-else-if="area.id === 4"
-                        src="@app/assets/headquarters/squad-ava4.png"
-                        alt="photo"
-                    />
-                    <img
-                        v-else-if="area.id === 5"
-                        src="@app/assets/headquarters/squad-ava2.png"
-                        alt="photo"
-                    />
-                    <img
-                        v-else-if="area.id === 6"
-                        src="@app/assets/headquarters/squad-ava5.png"
-                        alt="photo"
-                    />
-
-                    <img v-else src="#" alt="" />
+            <div class="squads">
+                <div>
+                    <squadsList
+                        :squads="squads"
+                    ></squadsList>
                 </div>
-                <a href="/AllSquads">
-                    <h5>{{ area?.name }}</h5>
-                </a>
             </div>
         </div>
     </section>
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router';
-import { useSquadsStore } from '@features/store/squads';
 import { ref, watch } from 'vue';
-const squadsStore = useSquadsStore();
-const area = ref(null)
-const route = useRoute();
+import { HTTP } from '@app/http';
+import { squadsList } from '@features/Squads/components';
+
+const props = defineProps({
+    headquarter: {
+        type: Object,
+        required: true,
+    },
+});
+const squads = ref([]);
+
+const filteredSquad = async (education) => {
+    try {
+        const { data } = await HTTP.get(
+            `/detachments/?educational_institution__name=${education}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        squads.value = data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
 
 watch(
-    () => squadsStore.areas,
+    () => props.headquarter,
 
-    (newId) => {
-        area.value = squadsStore.areas.find((area) => area.id == route.params.id);
+    (newheadquarter) => {
+        if (Object.keys(props.headquarter).length === 0) {
+            return;
+        }
+        filteredSquad(props.headquarter.educational_institution?.name);
     },
 );
 
@@ -78,10 +71,6 @@ section.headquarters-detachments h3 {
 }
 
 .headquarters-detachments__container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    justify-items: center;
-    /*  */
     padding: 40px 0;
     margin-bottom: 36px;
     /* плашка */
@@ -89,26 +78,24 @@ section.headquarters-detachments h3 {
     background-color: white;
 }
 
-.squad-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /*  */
-    width: 280px;
-    margin-bottom: 40px;
-}
+.squads {
+    &-title {
+        font-size: 52px;
+        @media screen and (max-width: 575px) {
+            font-size: 32px;
+        }
+    }
 
-.squad-card__ava {
-    margin-bottom: 10px;
-}
-
-.squad-card h5 {
-    color: #35383f;
-    text-align: center;
-    font-family: 'BertSans';
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 140%;
+    &-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-row-gap: 40px;
+        @media screen and (max-width: 1024px) {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        @media screen and (max-width: 575px) {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
 }
 </style>

@@ -44,7 +44,9 @@
             :position="position"
             :leadership="headquarter.leadership"
         ></ManagementHQ>
-        <DetachmentsHQ></DetachmentsHQ>
+        <DetachmentsHQ
+            :headquarter="headquarter.educational.value"
+        ></DetachmentsHQ>
     </div>
 </template>
 <script setup>
