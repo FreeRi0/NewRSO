@@ -288,7 +288,7 @@ const imageSizeChange = ref({
 
 // let sizeImage = ref('');
 
-const sizeImage = new URL('/assets/competition/'+imageSizeChange.value.desktop, import.meta.url)
+const sizeImage = ref(new URL('/assets/competition/'+imageSizeChange.value.desktop, import.meta.url))
 
 const getSizeImage = () => {
     console.log('ширина экрана', window.innerWidth);
