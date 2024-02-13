@@ -1,5 +1,5 @@
 <template>
-    <section class="headquarters-detachments">
+    <section class="headquarters-detachments" v-if='area'>
         <h3>Отряды штаба</h3>
         <div class="headquarters-detachments__container">
             <div class="squad-card">
@@ -38,7 +38,7 @@
                     <img v-else src="#" alt="" />
                 </div>
                 <a href="/AllSquads">
-                    <h5>{{ area.name }}</h5>
+                    <h5>{{ area?.name }}</h5>
                 </a>
             </div>
         </div>
@@ -46,32 +46,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
+import { useSquadsStore } from '@features/store/squads';
+import { ref, watch } from 'vue';
+const squadsStore = useSquadsStore();
+const area = ref(null)
 const route = useRoute();
-let id = route.params.id;
 
-const area = ref({});
+watch(
+    () => squadsStore.areas,
 
-const aboutArea = async () => {
-    await HTTP.get(`/areas/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            area.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-onMounted(() => {
-    aboutArea();
-});
+    (newId) => {
+        area.value = squadsStore.areas.find((area) => area.id == route.params.id);
+    },
+);
+
 </script>
 
 <style scoped lang="scss">

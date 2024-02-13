@@ -28,6 +28,7 @@ export const useSquadsStore = defineStore('squads', {
             }
         },
         async getAreas() {
+            if (this.areas.length) return;
             try {
                 this.isLoading = true;
                 const responseAreas = await HTTP.get('/areas/', {

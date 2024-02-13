@@ -292,11 +292,10 @@ const sortedSquads = computed(() => {
     // }
 
     if (!picked.value) {
-        return tempSquads;
+        return tempSquads.slice(0, squadsVisible.value);
     }
 
     tempSquads = tempSquads.filter((item) => item.area.name === picked.value);
-    console.log('picked', picked.value);
     tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
