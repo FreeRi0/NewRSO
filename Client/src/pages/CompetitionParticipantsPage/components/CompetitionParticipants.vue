@@ -295,9 +295,9 @@ const sortedSquads = computed(() => {
     tempSquads = tempSquads.slice(0, squadsVisible.value);
 
 
-    tempSquads = tempSquads.filter(
-        (item) => item.detachment?.area === picked.value ?? item.junior_detachment?.area === picked.value,
-    );
+    // tempSquads = tempSquads.filter(
+    //     (item) => item.area === picked.name.value
+    // );
     tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
