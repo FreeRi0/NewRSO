@@ -30,7 +30,7 @@
                             {{ props.commander?.patronymic_name }}
                             {{ props.commander?.last_name }}
                         </h5>
-                        <p>{{ props.commander.position }}</p>
+                        <p>Командир</p>
                     </div>
                 </div>
             </router-link>
