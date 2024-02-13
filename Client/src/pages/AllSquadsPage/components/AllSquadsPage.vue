@@ -99,7 +99,6 @@
                                     name="select_education"
                                     id="select-education"
                                     v-model="education"
-                                    address="/eduicational_institutions/"
                                     placeholder="Образовательная организация"
                                     :SortDropdown="true"
                                 ></educInstitutionDropdown>
@@ -160,8 +159,6 @@ import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import {
     sortByEducation,
-    Select,
-    filterSelect,
     educInstitutionDropdown,
 } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
@@ -171,9 +168,7 @@ import { HTTP } from '@app/http';
 const squadsStore = useSquadsStore();
 const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
-console.log('squad', squads.squads.value);
-console.log('loading', isLoading.isLoading.value);
-// const squads = ref([]);
+
 const categories = ref([]);
 const name = ref('');
 const education = ref('');
