@@ -19,6 +19,12 @@
                     name="name_hq"
                     :maxlength="100"
                 />
+                <div class="form__counter" style="text-align: right">
+                    <p v-if="answers[index] != undefined">
+                        {{ answers[index].length }}/100
+                    </p>
+                    <p v-else>0/100</p>
+                </div>
             </div>
         </div>
 
@@ -30,8 +36,12 @@
                 v-for="(file, index) in files.length + 1"
                 :key="file"
             >
-                <div class="form-fileupload">
-                    <img src="@app/assets/icon/file.svg" alt="file" />
+                <div class="form-fileupload" v-if="files.length < 6">
+                    <img
+                        class="file-upload-svg"
+                        src="@app/assets/icon/file.svg"
+                        alt="file"
+                    />
 
                     <FileUpload
                         class="file-upload-text"
@@ -45,7 +55,11 @@
                         @clear="onRemove(index)"
                     ></FileUpload>
 
-                    <img src="@app/assets/icon/addFile.svg" alt="addFile" />
+                    <img
+                        class="paper-clip"
+                        src="@app/assets/icon/addFile.svg"
+                        alt="addFile"
+                    />
 
                     <div class="clip-text">
                         <p v-if="index < files.length">Удалить файл</p>
@@ -143,7 +157,6 @@ const onSubmit = async () => {
 };
 
 const onUpload = (file) => {
-    console.log(answers.value);
     files.value.push(file.files[0]);
 };
 
@@ -157,6 +170,12 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+.file-upload-svg {
+    margin-right: 8px;
+}
+.paper-clip {
+    margin-left: 20px;
+}
 .file-upload-text {
     font-family: Bert Sans;
     font-size: 16px;
@@ -176,13 +195,18 @@ onMounted(async () => {
     line-height: 26px;
     letter-spacing: 0em;
     text-align: left;
+    color: #35383f;
+}
+.form__field {
+    margin-bottom: 24px;
 }
 .form {
     &-input-container {
-        border: 1px solid black;
+        border: 1px solid #b6b6b6;
         border-radius: 15px;
         padding-left: 15px;
-        margin-bottom: 24px;
+        //margin-bottom: 24px;
+        margin-bottom: 4px;
     }
     &-label {
         font-family: Bert Sans;
@@ -191,14 +215,13 @@ onMounted(async () => {
         font-weight: 600;
         line-height: 24px;
         margin-bottom: 8px;
-        //styleName: название_инпуты;
         letter-spacing: 0em;
         text-align: left;
+        color: #35383f;
     }
     &-fileupload {
         display: flex;
         flex-direction: row;
-        gap: 8px;
 
         & :deep(.p-button-label) {
             text-decoration: underline;
@@ -208,14 +231,13 @@ onMounted(async () => {
         }
     }
     &-col {
-        padding-left: 15px;
         padding-right: 15px;
         margin-top: 25px;
     }
 }
 .uploads {
     & > .form-col:last-child {
-        color: grey;
+        color: #b6b6b6;
     }
 }
 .container {
@@ -223,10 +245,13 @@ onMounted(async () => {
     max-width: 1115px;
 }
 .main_title {
-    margin: 40px 0px;
+    font-family: Akrobat;
     font-size: 52px;
-    font-style: normal;
     font-weight: 700;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
+    margin: 40px 0px;
     line-height: normal;
 }
 .subtitle {
@@ -260,6 +285,7 @@ onMounted(async () => {
     margin-bottom: 60px;
 }
 .clip-text {
+    margin-left: 4px;
     font-family: Bert Sans;
     font-size: 14px;
     font-weight: 500;
