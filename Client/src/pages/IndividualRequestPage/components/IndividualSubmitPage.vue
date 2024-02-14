@@ -24,7 +24,7 @@
 
         <p class="file_text">Загрузи сопутствующие документы:</p>
 
-        <div>
+        <div class="uploads">
             <div
                 class="form-col"
                 v-for="(file, index) in files.length + 1"
@@ -191,6 +191,7 @@ onMounted(async () => {
         display: flex;
         flex-direction: row;
         gap: 8px;
+
         & :deep(.p-button-label) {
             text-decoration: underline;
         }
@@ -202,6 +203,11 @@ onMounted(async () => {
         padding-left: 15px;
         padding-right: 15px;
         margin-top: 25px;
+    }
+}
+.uploads {
+    & > .form-col:last-child {
+        color: lightcoral;
     }
 }
 .container {
