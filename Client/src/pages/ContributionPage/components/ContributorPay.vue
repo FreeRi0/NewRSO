@@ -93,7 +93,12 @@
                                     <p>Выбрано:{{ selectedAnswer }}</p>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                            <v-expansion-panel v-if="roles.roles.value.centrol" >
+                            <v-expansion-panel
+                                v-if="
+                                    roles.roles.value
+                                        .centralheadquarter_commander
+                                "
+                            >
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -107,7 +112,9 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
+
                                     <districtSearchFilter
+
                                         open-on-clear
                                         id="reg"
                                         name="regdrop"
@@ -120,7 +127,13 @@
                                     ></districtSearchFilter>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                            <v-expansion-panel v-if="district">
+                            <v-expansion-panel
+                                v-if="
+                                    district ||
+                                    roles.roles.value
+                                        .regionalheadquarter_commander?.id
+                                "
+                            >
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -188,15 +201,6 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <!-- <Select
-                                        variant="outlined"
-                                        clearable
-                                        name="select_educ"
-                                        id="select-educ"
-                                        v-model="searchEducation"
-                                        class="filter-educ"
-                                        address="api/v1/eduicational_institutions/"
-                                    ></Select> -->
                                     <educationalsDropdown
                                         open-on-clear
                                         id="reg"
