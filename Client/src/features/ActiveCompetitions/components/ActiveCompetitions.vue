@@ -134,6 +134,7 @@ const getCompetitionsJunior = async () => {
 };
 
 const getCompetitions = async () => {
+    console.log(commanderIds.value.regionalheadquarter_commander?.id);
     for (const competitionId of allCompetition.value) {
         try {
             loading.value = true;
@@ -236,8 +237,9 @@ const onAction = async () => {
         }
 
         if (commanderIds.value.regionalheadquarter_commander?.id == null)
-            await getCompetitionsJunior();
-        else await getCompetitions();
+            if (commanderIds.value.regionalheadquarter_commander?.id == null)
+                await getCompetitionsJunior();
+            else await getCompetitions();
     } catch (e) {
         console.log('error action', e);
     }
@@ -246,6 +248,7 @@ const onAction = async () => {
 onMounted(async () => {
     await getAllCompetition();
     await getMeCommander();
+    console.log();
     if (commanderIds.value.regionalheadquarter_commander?.id == null)
         await getCompetitionsJunior();
     else await getCompetitions();
@@ -255,8 +258,9 @@ onActivated(async () => {
     await getAllCompetition();
     await getMeCommander();
     if (commanderIds.value.regionalheadquarter_commander?.id == null)
-        await getCompetitionsJunior();
-    else await getCompetitions();
+        if (commanderIds.value.regionalheadquarter_commander?.id == null)
+            await getCompetitionsJunior();
+        else await getCompetitions();
 });
 </script>
 

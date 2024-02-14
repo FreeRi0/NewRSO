@@ -135,9 +135,9 @@ const routes: RouteRecordRaw[] = [
                                                 path: '',
                                                 name: 'allparticipants',
                                                 component: () =>
-                                            import(
-                                                '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
-                                            ),
+                                                    import(
+                                                        '@pages/ParticipantsAllPage.vue/components/ParticipantsAll.vue'
+                                                    ),
                                             },
                                             {
                                                 path: ':id',
@@ -416,41 +416,135 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true,
                     redirectTo: 'actionSquads',
-                    label: 'Мероприятия'
+                    label: 'Мероприятия',
                 },
                 //component: () => import('@entities/Actions/components/SeeYouLater.vue')
-                children:[
+                children: [
                     {
                         path: '',
                         name: 'actionSquads',
-                        component: () => import('@pages/actionSquadsPade/components/actionSquadsPage.vue')
+                        component: () =>
+                            import(
+                                '@pages/actionSquadsPade/components/actionSquadsPage.vue'
+                            ),
                     },
                     {
                         path: ':id',
                         meta: {
                             requiresAuth: true,
                             redirectTo: 'Action',
-                            label: 'Мероприятие'
+                            label: 'Мероприятие',
                         },
-                        children:[
+                        children: [
                             {
                                 path: '',
                                 name: 'Action',
-                                component: () => import('@pages/Event/components/Event.vue')
+                                component: () =>
+                                    import('@pages/Event/components/Event.vue'),
                             },
                             {
-                                path: "EditAction",
-                                name: "editAction",
-                                component: () => import("@pages/EditActionPage/components/EditActionPage.vue"),
+                                path: 'EditAction',
+                                name: 'editAction',
+                                component: () =>
+                                    import(
+                                        '@pages/EditActionPage/components/EditActionPage.vue'
+                                    ),
                             },
-                        ]
+                            {
+                                path: 'verification',
+                                meta: {
+                                    redirectTo: 'IndividualRequest',
+                                    label: 'Верификация заявок',
+                                },
+                                children: [
+                                    {
+                                        path: 'individualrequest/:applicationId',
+                                        name: 'IndividualRequest',
+                                        component: () =>
+                                            import(
+                                                '@pages/IndividualRequestPage/components/IndividualRequestPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
+                                    {
+                                        path: 'grouprequest/:applicationId',
+                                        name: 'GroupRequest',
+                                        component: () =>
+                                            import(
+                                                '@pages/GroupRequestPage/components/GroupRequestPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
+                                    {
+                                        path: 'multistagerequest/:applicationId',
+                                        name: 'MultiStageRequest',
+                                        component: () =>
+                                            import(
+                                                '@pages/MultiStageRequestPage/components/MultiStageRequestPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                path: 'submit',
+                                meta: {
+                                    redirectTo: 'IndividualSubmit',
+                                    label: 'Создание заявки',
+                                },
+                                children: [
+                                    {
+                                        path: 'individualsubmit',
+                                        name: 'IndividualSubmit',
+                                        component: () =>
+                                            import(
+                                                '@pages/IndividualRequestPage/components/IndividualSubmitPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
+                                    // {
+                                    //     path: 'groupsubmit',
+                                    //     name: 'GroupSubmit',
+                                    //     component: () =>
+                                    //         import(
+                                    //             '@pages/GroupRequestPage/components/GroupSubmitPage.vue'
+                                    //         ),
+                                    //     meta: {
+                                    //         requiresAuth: true,
+                                    //     },
+                                    // },
+                                    // {
+                                    //     path: 'multistagerequest/:applicationId',
+                                    //     name: 'MultiStageRequest',
+                                    //     component: () =>
+                                    //         import(
+                                    //             '@pages/MultiStageRequestPage/components/MultiStageSubmitPage.vue'
+                                    //         ),
+                                    //     meta: {
+                                    //         requiresAuth: true,
+                                    //     },
+                                    // },
+                                ],
+                            },
+                        ],
                     },
-                ]
-            }, 
+                ],
+            },
             {
-                path: "createAction",
-                name: "createAction",
-                component: () => import("@pages/CreationActionsPage/components/CreationActionsPage.vue")
+                path: 'createAction',
+                name: 'createAction',
+                component: () =>
+                    import(
+                        '@pages/CreationActionsPage/components/CreationActionsPage.vue'
+                    ),
             },
             {
                 path: '/AllParticipants/:id',
@@ -497,7 +591,8 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/roster',
                 name: 'Roster',
-                component: () => import('@pages/reestrPage/components/rosterPage.vue'),
+                component: () =>
+                    import('@pages/reestrPage/components/rosterPage.vue'),
             },
 
             {
@@ -676,18 +771,6 @@ const routes: RouteRecordRaw[] = [
                         ],
                     },
                 ],
-            },
-
-            {
-                path: '/individualrequest/:id',
-                name: 'IndividualRequest',
-                component: () =>
-                    import(
-                        '@pages/IndividualRequestPage/components/IndividualRequestPage.vue'
-                    ),
-                meta: {
-                    requiresAuth: true,
-                },
             },
         ],
     },
