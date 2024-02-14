@@ -16,6 +16,7 @@
             @select-banner="onSelectBanner"
             @delete-emblem="onDeleteEmblem"
             @delete-banner="onDeleteBanner"
+            @update-search-member="onUpdateSearchMember"
             @update-member="onUpdateMember"
         >
         </FormCentr>
@@ -34,11 +35,9 @@ import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
 const user = storeToRefs(userStore);
-const meId = user.currentUser.value.id;
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
-const meRoles = roles.roles.value;
 
 const educComId = roles.roles.value.educationalheadquarter_commander?.id;
 const regionComId = roles.roles.value.regionalheadquarter_commander?.id;
@@ -53,6 +52,8 @@ let id = route.params.id;
 
 const headquarter = ref(null);
 const members = ref([]);
+const timerSearchMember = ref(null);
+const searchMemberString = ref('');
 
 const { replaceTargetObjects } = usePage();
 
@@ -90,8 +91,9 @@ onBeforeRouteUpdate(async (to, from) => {
 
 const isMembersLoading = ref(false);
 
-const getMembers = async () => {
-    HTTP.get(`/centrals/${id}/members/`, {
+const getMembers = async (name) => {
+    isMembersLoading.value = true
+    HTTP.get(`/centrals/${id}/members/?search=${name}`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -102,13 +104,27 @@ const getMembers = async () => {
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
+        })
+        .finally(() => {
+            isMembersLoading.value = false
         });
 };
 
 onMounted(() => {
-    getMembers();
     getHeadquarter();
 });
+
+const onUpdateSearchMember = (event) => {
+    clearTimeout(timerSearchMember.value);
+
+    timerSearchMember.value = setTimeout(() => {
+        if (searchMemberString.value == event.target.value) return;
+        else searchMemberString.value = event.target.value;
+
+        if (event.target.value) getMembers(event.target.value)
+        else members.value = [];
+    }, 400);
+};
 
 const onUpdateMember = (event, id) => {
     const memberIndex = members.value.findIndex(member => member.id === id)
