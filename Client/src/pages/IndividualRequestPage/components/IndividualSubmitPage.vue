@@ -65,14 +65,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-//import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import InputText from 'primevue/inputtext';
 import FileUpload from 'primevue/fileupload';
 import { HTTP } from '@app/http';
 
 const eventInfo = ref({});
 const route = useRoute();
-//const router = useRouter();
+const router = useRouter();
 const answers = ref([]);
 const files = ref([]);
 
@@ -128,7 +128,15 @@ const onSubmit = async () => {
                 },
             },
         );
-        console.log('Заявка отправлена');
+
+        //console.log('Заявка отправлена');
+        
+        router.push({
+            name: 'Action',
+            params: {
+                id: route.params.id,
+            },
+        });
     } catch (e) {
         console.log('onSubmit error', e);
     }
@@ -207,7 +215,7 @@ onMounted(async () => {
 }
 .uploads {
     & > .form-col:last-child {
-        color: lightcoral;
+        color: grey;
     }
 }
 .container {
