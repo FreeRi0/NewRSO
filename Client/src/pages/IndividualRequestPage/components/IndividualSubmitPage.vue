@@ -36,7 +36,7 @@
                 v-for="(file, index) in files.length + 1"
                 :key="file"
             >
-                <div class="form-fileupload" v-if="files.length < 6">
+                <div class="form-fileupload" v-if="index < 6">
                     <img
                         class="file-upload-svg"
                         src="@app/assets/icon/file.svg"
