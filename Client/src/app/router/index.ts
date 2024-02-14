@@ -17,6 +17,8 @@ router.beforeEach((to, _from, next) => {
         !localStorage.getItem('Token')
     )
         next({ name: 'Login' });
+    else if (to.name === 'Login' && localStorage.getItem('Token'))
+        next({ name: 'mypage' });
     else next();
 });
 

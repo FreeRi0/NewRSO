@@ -58,7 +58,7 @@
                         <h3 class="filters-title">Основные фильтры</h3>
                         <v-expansion-panels>
                             <v-expansion-panel>
-                                <v-expansion-panel-title>
+                                <!-- <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
                                             <v-col
@@ -69,7 +69,7 @@
                                             </v-col>
                                         </v-row>
                                     </template>
-                                </v-expansion-panel-title>
+                                </v-expansion-panel-title> -->
                                 <v-expansion-panel-text class="inner-content">
                                     <div class="checkbox">
                                         <div
@@ -93,7 +93,12 @@
                                     <p>Выбрано:{{ selectedAnswer }}</p>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                            <v-expansion-panel>
+                            <v-expansion-panel
+                                v-if="
+                                    roles.roles.value
+                                        .centralheadquarter_commander
+                                "
+                            >
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -107,31 +112,28 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <!-- <div class="contributor-search filter">
-                                        <input
-                                            type="text"
-                                            id="search"
-                                            class="contributor-search__input"
-                                            v-model="searchHeadquarter"
-                                            placeholder="ввод?"
-                                        />
-                                        <img
-                                            src="@app/assets/icon/search.svg"
-                                            alt="search"
-                                        />
-                                    </div> -->
-                                    <Select
-                                        variant="outlined"
-                                        clearable
-                                        name="select_district"
-                                        id="select-district"
-                                        v-model="searchHeadquarter"
-                                        class="filter-district"
-                                        address="api/v1/districts/"
-                                    ></Select>
+
+                                    <districtSearchFilter
+
+                                        open-on-clear
+                                        id="reg"
+                                        name="regdrop"
+                                        placeholder="Выберите окружной штаб"
+                                        v-model="district"
+                                        @update:value="changeValue"
+                                        class="mb-2 region-input"
+                                        address="/districts/"
+                                        :SortDropdown="true"
+                                    ></districtSearchFilter>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                            <v-expansion-panel>
+                            <v-expansion-panel
+                                v-if="
+                                    district ||
+                                    roles.roles.value
+                                        .regionalheadquarter_commander?.id
+                                "
+                            >
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -145,31 +147,20 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <!-- <div class="contributor-search filter">
-                                        <input
-                                            type="text"
-                                            id="search"
-                                            class="contributor-search__input"
-                                            v-model="searchHeadquarterRegion"
-                                            placeholder="ввод?"
-                                        />
-                                        <img
-                                            src="@app/assets/icon/search.svg"
-                                            alt="search"
-                                        />
-                                    </div> -->
-                                    <Select
-                                        variant="outlined"
-                                        clearable
-                                        name="select_region"
-                                        id="select-region"
-                                        v-model="searchHeadquarterRegion"
-                                        class="filter-region"
-                                        address="api/v1/regionals/"
-                                    ></Select>
+                                    <regionalsDropdown
+                                        open-on-clear
+                                        id="reg"
+                                        name="regdrop"
+                                        placeholder="Выберите рег штаб"
+                                        v-model="reg"
+                                        @update:value="changeValue"
+                                        class="mb-2 region-input"
+                                        address="/regionals/"
+                                        :SortDropdown="true"
+                                    ></regionalsDropdown>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                            <v-expansion-panel>
+                            <v-expansion-panel v-if="reg">
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -183,31 +174,20 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <!-- <div class="contributor-search filter">
-                                        <input
-                                            type="text"
-                                            id="search"
-                                            class="contributor-search__input"
-                                            v-model="searchHeadquarterLocal"
-                                            placeholder="ввод?"
-                                        />
-                                        <img
-                                            src="@app/assets/icon/search.svg"
-                                            alt="search"
-                                        />
-                                    </div> -->
-                                    <Select
-                                        variant="outlined"
-                                        clearable
-                                        name="select_local"
-                                        id="select-local"
-                                        v-model="searchHeadquarterLocal"
-                                        class="filter-local"
-                                        address="api/v1/locals/"
-                                    ></Select>
+                                    <localSearchFilter
+                                        open-on-clear
+                                        id="reg"
+                                        name="regdrop"
+                                        placeholder="Выберите местный штаб"
+                                        v-model="local"
+                                        @update:value="changeValue"
+                                        class="mb-2 region-input"
+                                        address="/locals/"
+                                        :SortDropdown="true"
+                                    ></localSearchFilter>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                            <v-expansion-panel>
+                            <v-expansion-panel v-if="local">
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -215,37 +195,26 @@
                                                 cols="4"
                                                 class="d-flex justify-start"
                                             >
-                                                Обазовательная организация
+                                                Обазовательный штаб
                                             </v-col>
                                         </v-row>
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <!-- <div class="contributor-search filter">
-                                        <input
-                                            type="text"
-                                            id="search"
-                                            class="contributor-search__input"
-                                            v-model="searchEducation"
-                                            placeholder="ввод?"
-                                        />
-                                        <img
-                                            src="@app/assets/icon/search.svg"
-                                            alt="search"
-                                        />
-                                    </div> -->
-                                    <Select
-                                        variant="outlined"
-                                        clearable
-                                        name="select_educ"
-                                        id="select-educ"
-                                        v-model="searchEducation"
-                                        class="filter-educ"
-                                        address="api/v1/eduicational_institutions/"
-                                    ></Select>
+                                    <educationalsDropdown
+                                        open-on-clear
+                                        id="reg"
+                                        name="regdrop"
+                                        placeholder="Выберите обр штаб"
+                                        v-model="educ"
+                                        @update:value="changeValue"
+                                        class="mb-2 region-input"
+                                        address="/educationals/"
+                                        :SortDropdown="true"
+                                    ></educationalsDropdown>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                            <v-expansion-panel>
+                            <!-- <v-expansion-panel>
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -279,8 +248,8 @@
                                     </div>
                                     <p>Выбрано:{{ selectedCat }}</p>
                                 </v-expansion-panel-text>
-                            </v-expansion-panel>
-                            <v-expansion-panel>
+                            </v-expansion-panel> -->
+                            <v-expansion-panel v-if="educ">
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -294,33 +263,22 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <!-- <div class="contributor-search filter">
-                                        <input
-                                            type="text"
-                                            id="search"
-                                            class="contributor-search__input"
-                                            v-model="searchLSO"
-                                            placeholder="ввод?"
-                                        />
-                                        <img
-                                            src="@app/assets/icon/search.svg"
-                                            alt="search"
-                                        />
-                                    </div> -->
-                                    <Select
-                                        variant="outlined"
-                                        clearable
-                                        name="select_detachments"
-                                        id="select-detachments"
-                                        v-model="searchLSO"
-                                        class="filter-detachments"
-                                        address="api/v1/detachments/"
-                                    ></Select>
+                                    <lsoSerachFilter
+                                        open-on-clear
+                                        id="reg"
+                                        name="regdrop"
+                                        placeholder="Выберите отряд"
+                                        v-model="detachment"
+                                        @update:value="changeValue"
+                                        class="mb-2 region-input"
+                                        address="/detachments/"
+                                        :SortDropdown="true"
+                                    ></lsoSerachFilter>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
                         </v-expansion-panels>
-                        <h3 class="filters-title">Дополнительные фильтры</h3>
-                        <v-expansion-panels>
+                        <!-- <h3 class="filters-title">Дополнительные фильтры</h3> -->
+                        <!-- <v-expansion-panels>
                             <v-expansion-panel>
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
@@ -453,7 +411,7 @@
                                     />
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                        </v-expansion-panels>
+                        </v-expansion-panels> -->
 
                         <p>
                             Найдено пользователей:
@@ -540,7 +498,15 @@ import {
     contributorsList,
     checkedContributors,
 } from '@features/Contributor/components';
-import { sortByEducation, Select } from '@shared/components/selects';
+import {
+    sortByEducation,
+    Select,
+    districtSearchFilter,
+    regionalsDropdown,
+    lsoSerachFilter,
+    localSearchFilter,
+    educationalsDropdown,
+} from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
@@ -561,17 +527,17 @@ const pages = ref([
 
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
-const selectedSex = ref('Все');
-const selectedStatus = ref('Все');
-const selectedPay = ref('Все');
-const searchHeadquarter = ref(null);
-const searchHeadquarterLocal = ref(null);
-const searchHeadquarterRegion = ref(null);
-const searchLSO = ref(null);
+// const selectedSex = ref('Все');
+// const selectedStatus = ref('Все');
+// const selectedPay = ref('Все');
+const reg = ref('');
+const detachment = ref('');
+const district = ref('');
+const local = ref('');
 const isLoading = ref(false);
-const searchEducation = ref(null);
-const minAge = ref('');
-const maxAge = ref('');
+const educ = ref('');
+// const minAge = ref('');
+// const maxAge = ref('');
 const picked = ref(false);
 
 const checkboxAll = ref(false);
@@ -581,11 +547,12 @@ const selectedPeoples = ref([]);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
+
 const viewContributorsData = async () => {
     try {
         isLoading.value = true;
         setTimeout(async () => {
-            const viewParticipantsResponse = await HTTP.get('/users/', {
+            const viewParticipantsResponse = await HTTP.get('/rsousers', {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -601,11 +568,112 @@ const viewContributorsData = async () => {
             participants.value = viewParticipantsResponse.data;
             user.value = viewMembershipResponse.data;
             isLoading.value = false;
-        }, 1000);
+        }, 100);
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
+
+const filteredByDistrict = async (district) => {
+    try {
+        const { data } = await HTTP.get(
+            `/rsousers?district_headquarter__name=${district}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        participants.value = data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const filteredByRegional = async (reg) => {
+    try {
+        const { data } = await HTTP.get(
+            `/rsousers?regional_headquarter__name=${reg}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        participants.value = data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const filteredByLocal = async (local) => {
+    try {
+        const { data } = await HTTP.get(
+            `/rsousers?local_headquarter__name=${local}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        participants.value = data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const filteredByEduc = async (educ) => {
+    try {
+        const { data } = await HTTP.get(
+            `/rsousers?educational_headquarter__name${educ}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        participants.value = data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const filteredByLSO = async (detachment) => {
+    try {
+        const { data } = await HTTP.get(
+            `/rsousers?detachment__name=${detachment}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        participants.value = data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const filteredDistrict = computed(() => {
+    return filteredByDistrict(district.value ? district.value : '');
+});
+const filteredReg = computed(() => {
+    return filteredByRegional(reg.value ? reg.value : '');
+});
+const filteredLocal = computed(() => {
+    return filteredByLocal(local.value ? local.value : '');
+});
+const filteredEduc = computed(() => {
+    return filteredByEduc(educ.value ? educ.value : '');
+});
+const filteredLSO = computed(() => {
+    return filteredByLSO(detachment.value ? detachment.value : '');
+});
 
 const select = (event) => {
     selectedPeoples.value = [];
@@ -646,22 +714,22 @@ const categories = ref([
     { name: 'Сельскохозяйственные', id: 'c8' },
 ]);
 
-const sexes = ref([
-    { name: 'Все', id: 's1', checked: true },
-    { name: 'Мужской', id: 's2' },
-    { name: 'Женский', id: 's3' },
-]);
-const status = ref([
-    { name: 'Все', id: 'st1', checked: true },
-    { name: 'Верифицированный', id: 'st2' },
-    { name: 'Неверифицированный', id: 'st3' },
-]);
+// const sexes = ref([
+//     { name: 'Все', id: 's1', checked: true },
+//     { name: 'Мужской', id: 's2' },
+//     { name: 'Женский', id: 's3' },
+// ]);
+// const status = ref([
+//     { name: 'Все', id: 'st1', checked: true },
+//     { name: 'Верифицированный', id: 'st2' },
+//     { name: 'Неверифицированный', id: 'st3' },
+// ]);
 
-const pay = ref([
-    { name: 'Все', id: 'p1', checked: true },
-    { name: 'Оплачен', id: 'p2' },
-    { name: 'Не оплачен', id: 'p3' },
-]);
+// const pay = ref([
+//     { name: 'Все', id: 'p1', checked: true },
+//     { name: 'Оплачен', id: 'p2' },
+//     { name: 'Не оплачен', id: 'p3' },
+// ]);
 
 const sortOptionss = ref([
     {
@@ -674,10 +742,14 @@ const sortOptionss = ref([
 const sortedParticipants = computed(() => {
     let tempParticipants = participants.value;
 
-    tempParticipants = tempParticipants.slice(0, participantsVisible.value);
+    filteredDistrict.value;
+    filteredReg.value;
+    filteredLocal.value;
+    filteredEduc.value;
+    filteredLSO.value;
 
     tempParticipants = tempParticipants.filter((item) => {
-        return item.first_name
+        return item.last_name
             .toUpperCase()
             .includes(searchParticipants.value.toUpperCase());
     });
@@ -712,46 +784,46 @@ const sortedParticipants = computed(() => {
         tempParticipants.reverse();
     }
 
-    const rangeSexes = {
-        Все: () => true,
-        Мужской: (participant) => participant.gender == 'male',
-        Женский: (participant) => participant.gender == 'female',
-    };
+    // const rangeSexes = {
+    //     Все: () => true,
+    //     Мужской: (participant) => participant.gender == 'male',
+    //     Женский: (participant) => participant.gender == 'female',
+    // };
 
-    const rangeStatus = {
-        Все: () => true,
-        Верифицированный: (participant) => participant.is_verified == true,
-        Неверифицированный: (participant) => participant.is_verified == false,
-    };
+    // const rangeStatus = {
+    //     Все: () => true,
+    //     Верифицированный: (participant) => participant.is_verified == true,
+    //     Неверифицированный: (participant) => participant.is_verified == false,
+    // };
 
-    const rangePayed = {
-        Все: () => true,
-        Оплачен: (participant) => participant.membership_fee == true,
-        'Не оплачен': (participant) => participant.membership_fee == false,
-    };
+    // const rangePayed = {
+    //     Все: () => true,
+    //     Оплачен: (participant) => participant.membership_fee == true,
+    //     'Не оплачен': (participant) => participant.membership_fee == false,
+    // };
 
-    tempParticipants = tempParticipants.filter((item) => {
-        return rangeSexes[selectedSex.value](item) || false;
-    });
+    // tempParticipants = tempParticipants.filter((item) => {
+    //     return rangeSexes[selectedSex.value](item) || false;
+    // });
 
-    tempParticipants = tempParticipants.filter((item) => {
-        return rangeStatus[selectedStatus.value](item) || false;
-    });
+    // tempParticipants = tempParticipants.filter((item) => {
+    //     return rangeStatus[selectedStatus.value](item) || false;
+    // });
 
-    tempParticipants = tempParticipants.filter((item) => {
-        return rangePayed[selectedPay.value](item) || false;
-    });
+    // tempParticipants = tempParticipants.filter((item) => {
+    //     return rangePayed[selectedPay.value](item) || false;
+    // });
 
-    if (!minAge.value && !maxAge.value) {
-        return tempParticipants;
-    }
-    tempParticipants = tempParticipants.filter((item) => {
-        return (
-            item.date_of_birth >= minAge.value &&
-            item.date_of_birth <= maxAge.value
-        );
-    });
-
+    // if (!minAge.value && !maxAge.value) {
+    //     return tempParticipants;
+    // }
+    // tempParticipants = tempParticipants.filter((item) => {
+    //     return (
+    //         item.date_of_birth >= minAge.value &&
+    //         item.date_of_birth <= maxAge.value
+    //     );
+    // });
+    tempParticipants = tempParticipants.slice(0, participantsVisible.value);
     return tempParticipants;
 });
 

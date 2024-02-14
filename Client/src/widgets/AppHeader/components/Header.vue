@@ -297,10 +297,10 @@ const userPages = computed(() => [
             id: user.currentUser.value?.central_headquarter_id,
         },
     },
-    { title: 'Активные заявки', name: 'active' },
+    { title: 'Активные заявки', name: 'active', },
     // { title: 'Поиск участников', link: '#' },
-    { title: 'Членский взнос', name: 'contributorPay' },
-    { title: 'Оформление справок', name: 'references' },
+    { title: 'Членский взнос', name: 'contributorPay', },
+    { title: 'Оформление справок', name: 'references', },
     { title: 'Настройки профиля', name: 'personaldata' },
     { title: 'Выйти из ЛК', button: true },
 ]);

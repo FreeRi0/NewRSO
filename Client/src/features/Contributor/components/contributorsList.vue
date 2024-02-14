@@ -6,7 +6,9 @@
         :selectedParticipants="selectedPeoples"
         :key="participant.id"
         :reference="false"
+        v-if="participants.length > 0"
     />
+    <h2 v-else>Пользователи не найдены...</h2>
 </template>
 
 <script setup>

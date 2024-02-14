@@ -41,14 +41,14 @@
 import { ref, onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
-import { useRegionalsStore } from '@features/store/regionals';
+import { useEducationalsStore } from '@features/store/educationals';
 
 defineOptions({
     inheritAttrs: false,
 });
 const emit = defineEmits(['update:value']);
 
-const regionalsStore = useRegionalsStore();
+const educationalsStore = useEducationalsStore();
 
 const props = defineProps({
     items: {
@@ -98,7 +98,7 @@ const searchEducation = (val) => {
     if (name.value.length < 3) {
         return;
     }
-    regionalsStore.searchInstitution(name.value);
+    educationalsStore.searchEducationals(name.value);
     console.log('val', val);
 };
 
@@ -166,8 +166,10 @@ onMounted(() => {
             line-height: 16px;
         }
     }
-
     &__title {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         @media (max-width: 768px) {
             width: 100%;
             margin-bottom: 3px;
