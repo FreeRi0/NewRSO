@@ -454,7 +454,7 @@ const routes: RouteRecordRaw[] = [
                                 path: 'verification',
                                 meta: {
                                     redirectTo: 'IndividualRequest',
-                                    label: 'Верификация заявок',
+                                    label: 'Заявка на участие',
                                 },
                                 children: [
                                     {
@@ -496,7 +496,7 @@ const routes: RouteRecordRaw[] = [
                                 path: 'submit',
                                 meta: {
                                     redirectTo: 'IndividualSubmit',
-                                    label: 'Создание заявки',
+                                    label: 'Заявка на участие',
                                 },
                                 children: [
                                     {
