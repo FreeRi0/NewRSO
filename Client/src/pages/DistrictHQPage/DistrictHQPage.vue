@@ -207,6 +207,14 @@ const HQandSquads = ref([
     {
         name: 'ЛСО',
         link: '/AllSquads',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'AllHeadquarters',
+                filters: {
+                    districtName: districtHeadquarter.value.name,
+                },
+            });
+        },
     },
 ]);
 </script>
