@@ -262,8 +262,6 @@ watch(
 }
 .subtitle {
     margin: 20px 0px;
-    leading-trim: both;
-    text-edge: cap;
     font-size: 20px;
     font-style: normal;
     font-weight: 600;

@@ -43,11 +43,7 @@
                             </div>
                         </li>
                         <li class="header__nav-item disable">
-                            <a
-                                class="header__nav-link"
-                                @click.prevent
-                                href="/actionSquads"
-                            >
+                            <a class="header__nav-link" href="/actionSquads">
                                 Мероприятия
                             </a>
                         </li>
@@ -108,8 +104,7 @@
                             "
                         >
                             <div
-                                v-for="item in regionals.filteredRegional
-                                    .value"
+                                v-for="item in regionals.filteredRegional.value"
                             >
                                 <p>{{ item.name }}</p>
                             </div>
@@ -297,10 +292,10 @@ const userPages = computed(() => [
             id: user.currentUser.value?.central_headquarter_id,
         },
     },
-    { title: 'Активные заявки', name: 'active', },
+    { title: 'Активные заявки', name: 'active' },
     // { title: 'Поиск участников', link: '#' },
-    { title: 'Членский взнос', name: 'contributorPay', },
-    { title: 'Оформление справок', name: 'references', },
+    { title: 'Членский взнос', name: 'contributorPay' },
+    { title: 'Оформление справок', name: 'references' },
     { title: 'Настройки профиля', name: 'personaldata' },
     { title: 'Выйти из ЛК', button: true },
 ]);
@@ -597,11 +592,11 @@ onMounted(() => {
         }
     }
 
-    &__nav-item.disable {
-        & > a {
-            cursor: not-allowed;
-        }
-    }
+    // &__nav-item.disable {
+    //     & > a {
+    //         cursor: not-allowed;
+    //     }
+    // }
 
     &__nav-link {
         display: block;
