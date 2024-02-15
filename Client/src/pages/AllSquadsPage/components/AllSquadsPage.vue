@@ -367,7 +367,7 @@ const sortedSquads = computed(() => {
 
 onMounted(() => {
     getCategories();
-    squadsStore.getSquads();
+  
 });
 onActivated(() => {
     SelectedSortDistrict.value = JSON.parse(

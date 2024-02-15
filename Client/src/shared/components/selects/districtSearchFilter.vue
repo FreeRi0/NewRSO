@@ -66,7 +66,6 @@
       item-title="name"
       item-value="id"
       v-bind="$attrs"
-      @keyup="searchEducInstitution"
       @update:value="changeValue"
       :address="addressRef"
       :no-data-text="noDataText"

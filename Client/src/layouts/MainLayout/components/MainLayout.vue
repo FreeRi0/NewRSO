@@ -46,7 +46,9 @@ const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
 import { usePositionsStore } from '@features/store/positions';
+import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
+import { useLocalsStore } from '@features/store/local';
 import { useDistrictsStore } from '@features/store/districts';
 // const regionalsStore = useRegionalsStore();
 // const regionalHeadquarters = storeToRefs(regionalsStore);
@@ -55,7 +57,9 @@ const userStore = useUserStore();
 const regionsStore = useRegionalsStore();
 const districtsStore = useDistrictsStore();
 const positionsStore = usePositionsStore();
+const educationalsStore = useEducationalsStore();
 const squadsStore = useSquadsStore();
+const localsStore = useLocalsStore();
 const currentUser = storeToRefs(userStore);
 console.log('user', currentUser.currentUser.value);
 
@@ -68,7 +72,10 @@ onMounted(() => {
     regionsStore.getRegions();
     regionsStore.getRegionals();
     positionsStore.getPositions();
+    educationalsStore.getEducationals();
     squadsStore.getAreas();
+    squadsStore.getSquads();
+    localsStore.getLocals();
 });
 
 //запрос на коммандира
