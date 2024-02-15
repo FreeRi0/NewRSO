@@ -290,6 +290,8 @@ onActivated(() => {
     selectedSortDistrict.value =
         JSON.parse(localStorage.getItem('regionalHeadquarters_filters'))
             ?.districtName ?? null;
+
+    localStorage.removeItem('regionalHeadquarters_filters');
 });
 
 onMounted(() => {

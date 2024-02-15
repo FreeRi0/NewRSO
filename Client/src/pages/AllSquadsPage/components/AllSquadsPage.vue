@@ -377,6 +377,8 @@ onActivated(() => {
     SelectedSortRegional.value = JSON.parse(
         localStorage.getItem('AllHeadquarters_filters'),
     )?.regionalName;
+
+    localStorage.removeItem('AllHeadquarters_filters');
 });
 </script>
 <style lang="scss" scoped>
