@@ -861,7 +861,7 @@
                             <div
                                 v-for="organizator in organizators"
                                 class="form-container"
-                                v-bind="organizator"
+                                :key="organizator"
                             >
                                 <div class="form-col">
                                     <div class="form__field">
@@ -973,7 +973,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template v-slot="{ expanded }">
+                            <template>
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -1041,6 +1041,7 @@
                             <div
                                 v-for="answer in answers"
                                 class="form-container"
+                                :key="answer"
                             >
                                 <div class="form-col">
                                     <div class="form__field">
