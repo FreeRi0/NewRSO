@@ -48,8 +48,8 @@
                     id="reg"
                     name="regdrop"
                     placeholder="Выберите окружной штаб"
-                    v-model="props.district"
-                    @update:value="changeValue"
+                    v-model="districtRef"
+                    @update:value="updateDistrict"
                     class="mb-2 region-input"
                     :items="districts"
                     :SortDropdown="true"
@@ -73,16 +73,15 @@
                     id="reg"
                     name="regdrop"
                     placeholder="Выберите рег штаб"
-                    v-model="props.reg"
-                    @update:value="updateLocal"
-
+                    v-model="regRef"
+                    @update:value="updateReg"
                     class="mb-2 region-input"
                     :items="regionals"
                     :SortDropdown="true"
                 ></regionalsDropdown>
             </v-expansion-panel-text>
         </v-expansion-panel>
-        <v-expansion-panel v-if="reg !== null">
+        <v-expansion-panel v-if="regRef !== null">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -100,14 +99,14 @@
                     name="regdrop"
                     placeholder="Выберите местный штаб"
                     v-model="localRef"
-                    @update:value="changeValue"
+                    @update:value="updateLocal"
                     class="mb-2 region-input"
                     :items="locals"
                     :SortDropdown="true"
                 ></localSearchFilter>
             </v-expansion-panel-text>
         </v-expansion-panel>
-        <v-expansion-panel v-if="local !== null">
+        <v-expansion-panel v-if="localRef !== null">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -123,8 +122,8 @@
                     id="reg"
                     name="regdrop"
                     placeholder="Выберите обр штаб"
-                    v-model="props.educ"
-                    @update:value="changeValue"
+                    v-model="educRef"
+                    @update:value="updateEduc"
                     class="mb-2 region-input"
                     :items="educHead"
                     :SortDropdown="true"
@@ -161,7 +160,7 @@
                 <p>Выбрано:{{ selectedCat }}</p>
             </v-expansion-panel-text>
         </v-expansion-panel>
-        <v-expansion-panel v-if="educ !== null">
+        <v-expansion-panel v-if="educRef !== null">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -177,8 +176,8 @@
                     id="reg"
                     name="regdrop"
                     placeholder="Выберите отряд"
-                    v-model="props.detachment"
-                    @update:value="changeValue"
+                    v-model="detachmentRef"
+                    @update:value="updateDetachment"
                     class="mb-2 region-input"
                     :items="detachments"
                     :SortDropdown="true"
@@ -242,14 +241,42 @@ const props = defineProps({
     },
     sortedParticipants: { type: Array, required: false },
 });
+const districtRef = ref(props.district);
+const localRef = ref(props.local);
+const regRef = ref(props.reg);
+const educRef = ref(props.educ);
+const detachmentRef = ref(props.detachment);
 
-const emit = defineEmits(['updateLocal']);
+const emit = defineEmits([
+    'updateDistrict',
+    'updateReg',
+    'updateLocal',
+    'updateEduc',
+    'updateDetachment',
+]);
+
+const updateDistrict = () => {
+    emit('updateDistrict', districtRef.value);
+    console.log(districtRef.value);
+};
+const updateReg = () => {
+    emit('updateReg', regRef.value);
+    console.log(regRef.value);
+};
 const updateLocal = () => {
     emit('updateLocal', localRef.value);
     console.log(localRef.value);
 };
-const localRef = ref(props.local);
 
+const updateEduc = () => {
+    emit('updateEduc', educRef.value);
+    console.log(educRef.value);
+};
+
+const updateDetachment = () => {
+    emit('updateDetachment', detachmentRef.value);
+    console.log(detachmentRef.value);
+};
 </script>
 <style lang="scss">
 .v-expansion-panel {

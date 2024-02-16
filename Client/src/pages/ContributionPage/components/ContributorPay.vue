@@ -53,7 +53,7 @@
                         type="text"
                         id="search"
                         class="contributor-search__input"
-                        v-model="name"
+                        v-model.trim="name"
                         placeholder="Поищем пользователей?"
                     />
                     <img src="@app/assets/icon/search.svg" alt="search" />
@@ -214,7 +214,11 @@
 
                     <div class="filters">
                         <filters
+                            @update-district="updateDistrict"
+                            @update-reg="updateReg"
                             @update-local="updateLocal"
+                            @update-educ="updateEduc"
+                            @update-detachment="updateDetachment"
                             :area="false"
                             :level-search="false"
                             :district="district"
@@ -302,7 +306,6 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { RadioButton } from '@shared/components/buttons';
 import { Dropdown } from '@shared/components/dropdown';
 import { Input } from '@shared/components/inputs';
 import {
@@ -310,15 +313,7 @@ import {
     checkedContributors,
     filters,
 } from '@features/Contributor/components';
-import {
-    sortByEducation,
-    Select,
-    districtSearchFilter,
-    regionalsDropdown,
-    lsoSerachFilter,
-    localSearchFilter,
-    educationalsDropdown,
-} from '@shared/components/selects';
+import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
@@ -360,16 +355,40 @@ const local = ref(null);
 const isLoading = ref(false);
 const educ = ref(null);
 const picked = ref(true);
-
 const checkboxAll = ref(false);
 const levelAccess = ref(7);
 const step = ref(12);
 const selectedPeoples = ref([]);
-
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
+
+const updateDistrict = (districtVal) => {
+    viewContributorsData('?district_headquarter__name=' + districtVal);
+    let districtId = districtsStore.districts.find(
+        (dis) => dis.name == districtVal,
+    )?.id;
+    district.value = districtVal;
+    regionals.value = regionalsStore.regionals.filter(
+        (regional) => regional.district_headquarter == districtId,
+    );
+};
+
+const updateReg = (regVal) => {
+    if (regVal) {
+        viewContributorsData('?regional_headquarter__name=' + regVal);
+    } else if (levelAccess.value < 2) {
+        viewContributorsData('?district_headquarter__name=' + district.value);
+    }
+
+    let regId = regionalsStore.regionals.find(
+        (regional) => regional.name == regVal,
+    )?.id;
+    reg.value = regVal;
+    locals.value = localsStore.locals.filter(
+        (loc) => loc.regional_headquarter == regId,
+    );
+};
 const updateLocal = (localVal) => {
-    // local.value = localVal;
     if (localVal) {
         viewContributorsData('?local_headquarter__name=' + localVal);
     } else if (levelAccess.value < 3) {
@@ -377,11 +396,34 @@ const updateLocal = (localVal) => {
     }
 
     let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
-    console.log('locid', locId);
+    local.value = localVal;
     educHead.value = educationalsStore.educationals.filter(
         (edh) => edh.local_headquarter == locId,
     );
-    console.log('educHead', educHead.value);
+};
+
+const updateEduc = (educVal) => {
+    if (educVal) {
+        viewContributorsData('?educational_headquarter__name=' + educVal);
+    } else if (levelAccess.value < 4) {
+        viewContributorsData('?local_headquarter__name=' + local.value);
+    }
+    let educId = educationalsStore.educationals.find(
+        (edh) => edh.name == educVal,
+    )?.id;
+    educ.value = educVal;
+    detachments.value = squadsStore.squads.filter(
+        (squad) => squad.educational_headquarter == educId,
+    );
+};
+
+const updateDetachment = (detachmentVal) => {
+    if (detachmentVal) {
+        viewContributorsData('?detachment__name=' + detachmentVal);
+    } else if (levelAccess.value < 5) {
+        viewContributorsData('?educational_headquarter__name=' + educ.value);
+    }
+    detachment.value = detachmentVal;
 };
 
 const viewContributorsData = async (search) => {
@@ -406,9 +448,9 @@ const select = (event) => {
     console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
         console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.value) {
+        for (let index in participants.users.value) {
             console.log('arr', selectedPeoples.value);
-            selectedPeoples.value.push(participants.value[index]);
+            selectedPeoples.value.push(participants.users.value[index]);
         }
     }
 };
@@ -418,7 +460,9 @@ const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
     console.log('fff', CheckedUser, UserId);
     if (CheckedUser) {
-        participant = participants.value.find((item) => item.id == UserId);
+        participant = participants.users.value.find(
+            (item) => item.id == UserId,
+        );
         selectedPeoples.value.push(participant);
     } else {
         selectedPeoples.value = selectedPeoples.value.filter(
@@ -426,19 +470,6 @@ const changePeoples = (CheckedUser, UserId) => {
         );
     }
 };
-
-// const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
-
-// const categories = ref([
-//     { name: 'Все', id: 'c1', checked: true },
-//     { name: 'Сервисные', id: 'c2' },
-//     { name: 'Строительные', id: 'c3' },
-//     { name: 'Проводников', id: 'c4' },
-//     { name: 'Педагогические', id: 'c5' },
-//     { name: 'Медицинские', id: 'c6' },
-//     { name: 'Путинные', id: 'c7' },
-//     { name: 'Сельскохозяйственные', id: 'c8' },
-// ]);
 
 const sortOptionss = ref([
     {
@@ -450,11 +481,19 @@ const sortOptionss = ref([
 
 const sortedParticipants = computed(() => {
     let tempParticipants = participants.users.value;
-
     if (name.value.length > 3) {
         userStore.searchUsers(name.value);
-    } else if (name.value.length == 0) {
-        tempParticipants = participants.users.value;
+    } else if (roles.roles.value.centralheadquarter_commander) {
+        return [];
+    } else {
+        // let search = '';
+        // if (district.value) {
+        //     search = '?district_headquarter__name=' + district.value;
+        // } else if (reg.value) {
+        //     search = '?regional_headquarter__name=' + reg.value;
+        // }
+
+        // viewContributorsData(search);
     }
 
     tempParticipants = tempParticipants.sort((a, b) => {
@@ -563,91 +602,6 @@ watch(
     () => squadsStore.squads,
     () => {
         detachments.value = squadsStore.squads;
-    },
-);
-
-watch(
-    () => district.value,
-    () => {
-        viewContributorsData('?district_headquarter__name=' + district.value);
-        let districtId = districtsStore.districts.find(
-            (dis) => dis.name == district.value,
-        )?.id;
-        regionals.value = regionalsStore.regionals.filter(
-            (regional) => regional.district_headquarter == districtId,
-        );
-    },
-);
-
-watch(
-    () => reg.value,
-    () => {
-        if (reg.value) {
-            viewContributorsData('?regional_headquarter__name=' + reg.value);
-        } else if (levelAccess.value < 2) {
-            viewContributorsData(
-                '?district_headquarter__name=' + district.value,
-            );
-        }
-
-        let regId = regionalsStore.regionals.find(
-            (regional) => regional.name == reg.value,
-        )?.id;
-        locals.value = localsStore.locals.filter(
-            (loc) => loc.regional_headquarter == regId,
-        );
-    },
-);
-
-// watch(
-//     () => local.value,
-//     () => {
-//         if (local.value) {
-//             viewContributorsData('?local_headquarter__name=' + local.value);
-//         } else if (levelAccess.value < 3) {
-//             viewContributorsData('?regional_headquarter__name=' + reg.value);
-//         }
-
-//         let locId = localsStore.locals.find(
-//             (loc) => loc.name == local.value,
-//         )?.id;
-//         console.log('locid', locId);
-//         educHead.value = educationalsStore.educationals.filter(
-//             (edh) => edh.local_headquarter == locId,
-//         );
-//         console.log('educHead', educHead.value);
-//     },
-// );
-
-watch(
-    () => educ.value,
-    () => {
-        if (educ.value) {
-            viewContributorsData(
-                '?educational_headquarter__name=' + educ.value,
-            );
-        } else if (levelAccess.value < 4) {
-            viewContributorsData('?local_headquarter__name=' + local.value);
-        }
-        let educId = educationalsStore.educationals.find(
-            (edh) => edh.name == educ.value,
-        )?.id;
-        detachments.value = squadsStore.squads.filter(
-            (squad) => squad.educational_headquarter == educId,
-        );
-    },
-);
-
-watch(
-    () => detachment.value,
-    () => {
-        if (detachment.value) {
-            viewContributorsData('?detachment__name=' + detachment.value);
-        } else if (levelAccess.value < 5) {
-            viewContributorsData(
-                '?educational_headquarter__name=' + educ.value,
-            );
-        }
     },
 );
 </script>

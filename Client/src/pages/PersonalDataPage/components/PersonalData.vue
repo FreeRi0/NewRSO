@@ -142,7 +142,7 @@ const changeUsername = (username) => {
 // }
 const education = ref({});
 
-const picked = ref('Моя страница');
+const picked = ref('Персональные данные');
 const tabs = ref([
     {
         id: '1',
