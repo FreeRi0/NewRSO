@@ -9,27 +9,27 @@
                         type="button"
                         label="Уже в отряде"
                         class="memberBtn mr-2"
-                        :class="{ active: picked === true }"
-                        @click="picked = true"
+                        :class="{ active: picked === false }"
+                        @click="picked = false"
                     ></Button>
 
                     <Button
                         type="button"
                         label="Ожидают одобрение"
                         class="memberBtn"
-                        :class="{ active: picked === false }"
-                        @click="picked = false"
+                        :class="{ active: picked === true }"
+                        @click="picked = true"
                     ></Button>
                 </div>
             </nav>
             <div class="squad__wrapper">
                 <div class="squad__wrapper-container">
                     <ParticipantsList
-                        v-if="picked === true"
+                        v-if="picked === false"
                         :participants="member"
                     />
                     <VerifiedList
-                        v-else="picked === false"
+                        v-else="picked === true"
                         :verified="isVerified"
                     ></VerifiedList>
                 </div>
@@ -91,7 +91,6 @@ const getVerified = async () => {
         console.log('an error occured ' + error);
     }
 };
-
 
 console.log('length', isVerified.value.length);
 
