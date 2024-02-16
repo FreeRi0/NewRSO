@@ -12,10 +12,11 @@ export const useUserStore = defineStore('user', {
     }),
     actions: {
         async getUser() {
+            if (Object.keys(this.currentUser).length) return;
             try {
                 this.isLoading = true;
                 setTimeout(async () => {
-                    const responseUser = await HTTP.get('rsousers/me', {
+                    const responseUser = await HTTP.get('rsousers/me/', {
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization:

@@ -87,7 +87,8 @@
                     </div> -->
                 </div>
 
-                <div class="nav-user__location">
+                <div class="nav-user__location"
+                     v-if="userStore.currentUser && !userStore.isLoading">
                     <button class="nav-user__button" @click="show = !show">
                         <!-- <img
                             class="nav-user__button-mobile"
@@ -156,7 +157,8 @@
                     </div>
                 </div>
 
-                <div class="nav-user__menu user-menu">
+                <div class="nav-user__menu user-menu"
+                     v-if="userStore.currentUser && !userStore.isLoading">
                     <img
                         v-if="!user.currentUser.value"
                         src="@app/assets/user-avatar.png"
@@ -227,12 +229,12 @@ const userUpdate = (userData) => {
 };
 
 const pages = ref([
-    { title: 'ЛСО', link: '/allSquads' },
-    { title: 'Штабы СО ОО', link: '/AllHeadquarters' },
-    { title: 'Местные штабы', link: '/LocalHeadquarters' },
-    { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
-    { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '/CentralHQ/1' },
+    { title: 'ЛСО', link: '/allSquads', show: true },
+    { title: 'Штабы СО ОО', link: '/AllHeadquarters', show: true },
+    { title: 'Местные штабы', link: '/LocalHeadquarters', show: true },
+    { title: 'Региональные штабы', link: '/RegionalHeadquarters', show: true },
+    { title: 'Окружные штабы', link: '/DistrictHeadquarters', show: true },
+    { title: 'Центральный штаб', link: '/CentralHQ/1', show: true },
 ]);
 
 const userPages = computed(() => [
@@ -244,16 +246,18 @@ const userPages = computed(() => [
         title: 'Мой отряд',
         name: 'lso',
         params: {
-            id: user.currentUser?.value?.detachment_id,
+            id: userStore.currentUser?.detachment_id,
         },
+        show: userStore.currentUser?.detachment_id
     },
     {
         title: 'Штаб СО ОО',
         name: 'HQ',
         path: 'regionals',
         params: {
-            id: user.currentUser?.value?.educational_headquarter_id,
+            id: userStore.currentUser?.educational_headquarter_id,
         },
+        show: userStore.currentUser?.educational_headquarter_id
     },
     {
         title: 'Местный штаб',
@@ -261,9 +265,10 @@ const userPages = computed(() => [
         path: 'locals',
         params: {
             id:
-                user.currentUser?.value?.local_headquarter_id ??
+                userStore.currentUser?.local_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
         },
+        show: userStore.currentUser?.local_headquarter_id
     },
     {
         title: 'Региональный штаб',
@@ -271,9 +276,10 @@ const userPages = computed(() => [
         path: 'regionals',
         params: {
             id:
-                user.currentUser?.value?.regional_headquarter_id ??
+                userStore.currentUser?.regional_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
         },
+        show: userStore.currentUser?.regional_headquarter_id
     },
     {
         title: 'Окружной штаб',
@@ -281,23 +287,27 @@ const userPages = computed(() => [
         path: 'districts',
         params: {
             id:
-                user.currentUser?.value?.district_headquarter_id ??
+                userStore.currentUser?.district_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
         },
+        show: userStore.currentUser?.district_headquarter_id
     },
     {
         title: 'Центральный штаб',
         name: 'CentralHQ',
         params: {
-            id: user.currentUser.value?.central_headquarter_id,
+            id: userStore.currentUser?.central_headquarter_id,
         },
+        show: true
     },
-    { title: 'Активные заявки', name: 'active' },
-    // { title: 'Поиск участников', link: '#' },
-    { title: 'Членский взнос', name: 'contributorPay' },
-    { title: 'Оформление справок', name: 'references' },
-    { title: 'Настройки профиля', name: 'personaldata' },
-    { title: 'Выйти из ЛК', button: true },
+    { title: 'Активные заявки', name: 'active', show: true },
+    // { title: 'Поиск участников', link: '#', show: (userStore.currentUser?.central_headquarter_id ||
+    // userStore.currentUser?.district_headquarter_id || userStore.currentUser?.regional_headquarter_id) },
+    { title: 'Членский взнос', name: 'contributorPay', show: true },
+    { title: 'Оформление справок', name: 'references', show: (userStore.currentUser?.central_headquarter_id ||
+        userStore.currentUser?.district_headquarter_id || userStore.currentUser?.regional_headquarter_id) },
+    { title: 'Настройки профиля', name: 'personaldata', show: true },
+    { title: 'Выйти из ЛК', button: true, show: true },
 ]);
 
 let show = ref(false);
