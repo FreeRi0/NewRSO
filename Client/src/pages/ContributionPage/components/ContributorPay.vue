@@ -24,14 +24,20 @@
 
             <div
                 class="contributor-info"
-                v-if="picked === true && user.membership_fee === false"
+                v-if="
+                    picked === true &&
+                    userStore.currentUser.membership_fee === false
+                "
             >
                 Уважаемый пользователь, ваш членский взнос не оплачен.
             </div>
 
             <div
                 class="contributor-info"
-                v-else-if="picked === true && user.membership_fee === true"
+                v-else-if="
+                    picked === true &&
+                    userStore.currentUser.membership_fee === true
+                "
             >
                 Уважаемый пользователь, ваш членский взнос оплачен.
             </div>
@@ -112,9 +118,7 @@
                                     </template>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-
                                     <districtSearchFilter
-
                                         open-on-clear
                                         id="reg"
                                         name="regdrop"
@@ -122,18 +126,12 @@
                                         v-model="district"
                                         @update:value="changeValue"
                                         class="mb-2 region-input"
-                                        address="/districts/"
+                                        :items="districtsStore.districts"
                                         :SortDropdown="true"
                                     ></districtSearchFilter>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                            <v-expansion-panel
-                                v-if="
-                                    district ||
-                                    roles.roles.value
-                                        .regionalheadquarter_commander?.id
-                                "
-                            >
+                            <v-expansion-panel v-if="district !== null">
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -155,12 +153,12 @@
                                         v-model="reg"
                                         @update:value="changeValue"
                                         class="mb-2 region-input"
-                                        address="/regionals/"
+                                        :items="regionals"
                                         :SortDropdown="true"
                                     ></regionalsDropdown>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                            <v-expansion-panel v-if="reg">
+                            <v-expansion-panel v-if="reg !== null">
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -182,12 +180,12 @@
                                         v-model="local"
                                         @update:value="changeValue"
                                         class="mb-2 region-input"
-                                        address="/locals/"
+                                        :items="locals"
                                         :SortDropdown="true"
                                     ></localSearchFilter>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
-                            <v-expansion-panel v-if="local">
+                            <v-expansion-panel v-if="local !== null">
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -209,7 +207,7 @@
                                         v-model="educ"
                                         @update:value="changeValue"
                                         class="mb-2 region-input"
-                                        address="/educationals/"
+                                        :items="educHead"
                                         :SortDropdown="true"
                                     ></educationalsDropdown>
                                 </v-expansion-panel-text>
@@ -249,7 +247,7 @@
                                     <p>Выбрано:{{ selectedCat }}</p>
                                 </v-expansion-panel-text>
                             </v-expansion-panel> -->
-                            <v-expansion-panel v-if="educ">
+                            <v-expansion-panel v-if="educ !== null">
                                 <v-expansion-panel-title>
                                     <template v-slot:default="{ expanded }">
                                         <v-row no-gutters>
@@ -271,147 +269,12 @@
                                         v-model="detachment"
                                         @update:value="changeValue"
                                         class="mb-2 region-input"
-                                        address="/detachments/"
+                                        :items="detachments"
                                         :SortDropdown="true"
                                     ></lsoSerachFilter>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
                         </v-expansion-panels>
-                        <!-- <h3 class="filters-title">Дополнительные фильтры</h3> -->
-                        <!-- <v-expansion-panels>
-                            <v-expansion-panel>
-                                <v-expansion-panel-title>
-                                    <template v-slot:default="{ expanded }">
-                                        <v-row no-gutters>
-                                            <v-col
-                                                cols="4"
-                                                class="d-flex justify-start"
-                                            >
-                                                Пол
-                                            </v-col>
-                                        </v-row>
-                                    </template>
-                                </v-expansion-panel-title>
-                                <v-expansion-panel-text>
-                                    <div class="checkbox">
-                                        <div
-                                            class="checkbox-item"
-                                            v-for="sex in sexes"
-                                            :key="sex.id"
-                                        >
-                                            <RadioButton
-                                                :value="sex.name"
-                                                :label="sex.name"
-                                                :id="sex.id"
-                                                :checked="sex.checked"
-                                                name="sex"
-                                                v-model:checkedValue="
-                                                    selectedSex
-                                                "
-                                            />
-                                        </div>
-                                    </div>
-                                    <p>Выбрано:{{ selectedSex }}</p>
-                                </v-expansion-panel-text>
-                            </v-expansion-panel>
-                            <v-expansion-panel>
-                                <v-expansion-panel-title>
-                                    <template v-slot:default="{ expanded }">
-                                        <v-row no-gutters>
-                                            <v-col
-                                                cols="4"
-                                                class="d-flex justify-start"
-                                            >
-                                                Статус аккаунта
-                                            </v-col>
-                                        </v-row>
-                                    </template>
-                                </v-expansion-panel-title>
-                                <v-expansion-panel-text>
-                                    <div class="checkbox">
-                                        <div
-                                            class="checkbox-item"
-                                            v-for="stat in status"
-                                            :key="stat.id"
-                                        >
-                                            <RadioButton
-                                                :value="stat.name"
-                                                :label="stat.name"
-                                                :id="stat.id"
-                                                :checked="stat.checked"
-                                                name="status"
-                                                v-model:checkedValue="
-                                                    selectedStatus
-                                                "
-                                            />
-                                        </div>
-                                    </div>
-                                    <p>Выбрано:{{ selectedStatus }}</p>
-                                </v-expansion-panel-text>
-                            </v-expansion-panel>
-                            <v-expansion-panel>
-                                <v-expansion-panel-title>
-                                    <template v-slot:default="{ expanded }">
-                                        <v-row no-gutters>
-                                            <v-col
-                                                cols="4"
-                                                class="d-flex justify-start"
-                                            >
-                                                Членский взнос
-                                            </v-col>
-                                        </v-row>
-                                    </template>
-                                </v-expansion-panel-title>
-                                <v-expansion-panel-text>
-                                    <div class="checkbox">
-                                        <div
-                                            class="checkbox-item"
-                                            v-for="p in pay"
-                                            :key="p.id"
-                                        >
-                                            <RadioButton
-                                                :value="p.name"
-                                                :label="p.name"
-                                                :id="p.id"
-                                                :checked="p.checked"
-                                                name="pay"
-                                                v-model:checkedValue="
-                                                    selectedPay
-                                                "
-                                            />
-                                        </div>
-                                    </div>
-                                    <p>Выбрано:{{ selectedPay }}</p>
-                                </v-expansion-panel-text>
-                            </v-expansion-panel>
-                            <v-expansion-panel>
-                                <v-expansion-panel-title>
-                                    <template v-slot:default="{ expanded }">
-                                        <v-row no-gutters>
-                                            <v-col
-                                                cols="4"
-                                                class="d-flex justify-start"
-                                            >
-                                                Возраст
-                                            </v-col>
-                                        </v-row>
-                                    </template>
-                                </v-expansion-panel-title>
-                                <v-expansion-panel-text>
-                                    <Input
-                                        name="miAge"
-                                        type="number"
-                                        v-model:value="minAge"
-                                    />
-
-                                    <Input
-                                        name="mAge"
-                                        type="number"
-                                        v-model:value="maxAge"
-                                    />
-                                </v-expansion-panel-text>
-                            </v-expansion-panel>
-                        </v-expansion-panels> -->
 
                         <p>
                             Найдено пользователей:
@@ -507,19 +370,28 @@ import {
     localSearchFilter,
     educationalsDropdown,
 } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useDistrictsStore } from '@features/store/districts';
+import { useLocalsStore } from '@features/store/local';
+import { useEducationalsStore } from '@features/store/educationals';
+import { useSquadsStore } from '@features/store/squads';
+import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
 
 const roleStore = useRoleStore();
+const userStore = useUserStore();
 const roles = storeToRefs(roleStore);
-// let regComId = roles.roles.value.regionalheadquarter_commander;
+const regionalsStore = useRegionalsStore();
+const districtsStore = useDistrictsStore();
+const localsStore = useLocalsStore();
+const educationalsStore = useEducationalsStore();
+const squadsStore = useSquadsStore();
+
 const participants = ref([]);
 const participantsVisible = ref(12);
-
-const user = ref({});
-
 const pages = ref([
     { pageTitle: 'Личный кабинет', href: '#' },
     { pageTitle: 'Членский взнос', href: '/contributorPay' },
@@ -527,17 +399,17 @@ const pages = ref([
 
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
-// const selectedSex = ref('Все');
-// const selectedStatus = ref('Все');
-// const selectedPay = ref('Все');
-const reg = ref('');
-const detachment = ref('');
-const district = ref('');
-const local = ref('');
+const regionals = ref([]);
+const districts = ref([]);
+const locals = ref([]);
+const educHead = ref([]);
+const detachments = ref([]);
+const reg = ref(null);
+const detachment = ref(null);
+const district = ref(null);
+const local = ref(null);
 const isLoading = ref(false);
-const educ = ref('');
-// const minAge = ref('');
-// const maxAge = ref('');
+const educ = ref(null);
 const picked = ref(false);
 
 const checkboxAll = ref(false);
@@ -548,132 +420,22 @@ const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const viewContributorsData = async () => {
+const viewContributorsData = async (search) => {
     try {
         isLoading.value = true;
-        setTimeout(async () => {
-            const viewParticipantsResponse = await HTTP.get('/rsousers', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-            const viewMembershipResponse = await HTTP.get('/rsousers/me/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
 
-            participants.value = viewParticipantsResponse.data;
-            user.value = viewMembershipResponse.data;
-            isLoading.value = false;
-        }, 100);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const filteredByDistrict = async (district) => {
-    try {
-        const { data } = await HTTP.get(
-            `/rsousers?district_headquarter__name=${district}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
+        const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
             },
-        );
-        participants.value = data;
+        });
+        participants.value = viewParticipantsResponse.data;
+        isLoading.value = false;
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
-
-const filteredByRegional = async (reg) => {
-    try {
-        const { data } = await HTTP.get(
-            `/rsousers?regional_headquarter__name=${reg}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        participants.value = data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const filteredByLocal = async (local) => {
-    try {
-        const { data } = await HTTP.get(
-            `/rsousers?local_headquarter__name=${local}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        participants.value = data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const filteredByEduc = async (educ) => {
-    try {
-        const { data } = await HTTP.get(
-            `/rsousers?educational_headquarter__name${educ}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        participants.value = data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const filteredByLSO = async (detachment) => {
-    try {
-        const { data } = await HTTP.get(
-            `/rsousers?detachment__name=${detachment}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        participants.value = data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const filteredDistrict = computed(() => {
-    return filteredByDistrict(district.value ? district.value : '');
-});
-const filteredReg = computed(() => {
-    return filteredByRegional(reg.value ? reg.value : '');
-});
-const filteredLocal = computed(() => {
-    return filteredByLocal(local.value ? local.value : '');
-});
-const filteredEduc = computed(() => {
-    return filteredByEduc(educ.value ? educ.value : '');
-});
-const filteredLSO = computed(() => {
-    return filteredByLSO(detachment.value ? detachment.value : '');
-});
 
 const select = (event) => {
     selectedPeoples.value = [];
@@ -714,23 +476,6 @@ const categories = ref([
     { name: 'Сельскохозяйственные', id: 'c8' },
 ]);
 
-// const sexes = ref([
-//     { name: 'Все', id: 's1', checked: true },
-//     { name: 'Мужской', id: 's2' },
-//     { name: 'Женский', id: 's3' },
-// ]);
-// const status = ref([
-//     { name: 'Все', id: 'st1', checked: true },
-//     { name: 'Верифицированный', id: 'st2' },
-//     { name: 'Неверифицированный', id: 'st3' },
-// ]);
-
-// const pay = ref([
-//     { name: 'Все', id: 'p1', checked: true },
-//     { name: 'Оплачен', id: 'p2' },
-//     { name: 'Не оплачен', id: 'p3' },
-// ]);
-
 const sortOptionss = ref([
     {
         value: 'alphabetically',
@@ -741,12 +486,6 @@ const sortOptionss = ref([
 
 const sortedParticipants = computed(() => {
     let tempParticipants = participants.value;
-
-    filteredDistrict.value;
-    filteredReg.value;
-    filteredLocal.value;
-    filteredEduc.value;
-    filteredLSO.value;
 
     tempParticipants = tempParticipants.filter((item) => {
         return item.last_name
@@ -784,52 +523,139 @@ const sortedParticipants = computed(() => {
         tempParticipants.reverse();
     }
 
-    // const rangeSexes = {
-    //     Все: () => true,
-    //     Мужской: (participant) => participant.gender == 'male',
-    //     Женский: (participant) => participant.gender == 'female',
-    // };
-
-    // const rangeStatus = {
-    //     Все: () => true,
-    //     Верифицированный: (participant) => participant.is_verified == true,
-    //     Неверифицированный: (participant) => participant.is_verified == false,
-    // };
-
-    // const rangePayed = {
-    //     Все: () => true,
-    //     Оплачен: (participant) => participant.membership_fee == true,
-    //     'Не оплачен': (participant) => participant.membership_fee == false,
-    // };
-
-    // tempParticipants = tempParticipants.filter((item) => {
-    //     return rangeSexes[selectedSex.value](item) || false;
-    // });
-
-    // tempParticipants = tempParticipants.filter((item) => {
-    //     return rangeStatus[selectedStatus.value](item) || false;
-    // });
-
-    // tempParticipants = tempParticipants.filter((item) => {
-    //     return rangePayed[selectedPay.value](item) || false;
-    // });
-
-    // if (!minAge.value && !maxAge.value) {
-    //     return tempParticipants;
-    // }
-    // tempParticipants = tempParticipants.filter((item) => {
-    //     return (
-    //         item.date_of_birth >= minAge.value &&
-    //         item.date_of_birth <= maxAge.value
-    //     );
-    // });
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);
     return tempParticipants;
 });
 
-onMounted(() => {
-    viewContributorsData();
-});
+watch(
+    () => roles.roles.value,
+
+    (newRole, oldRole) => {
+        if (!roles.roles.value.centralheadquarter_commander) {
+            let search = '';
+
+            if (roles.roles.value.districtheadquarter_commander) {
+                district.value =
+                    roles.roles.value.districtheadquarter_commander.name;
+                search =
+                    '?district_headquarter__name=' +
+                    roles.roles.value.districtheadquarter_commander.name;
+            } else if (roles.roles.value.regionalheadquarter_commander) {
+                reg.value =
+                    roles.roles.value.regionalheadquarter_commander.name;
+                search =
+                    '?regional_headquarter__name=' +
+                    roles.roles.value.regionalheadquarter_commander.name;
+            } else if (roles.roles.value.localheadquarter_commander) {
+                local.value = roles.roles.value.localheadquarter_commander.name;
+                search =
+                    '?local_headquarter__name=' +
+                    roles.roles.value.localheadquarter_commander.name;
+            } else if (roles.roles.value.educationalheadquarter_commander) {
+                educ.value =
+                    roles.roles.value.educationalheadquarter_commander.name;
+                search =
+                    '?educational_headquarter__name=' +
+                    roles.roles.value.educationalheadquarter_commander.name;
+            } else if (roles.roles.value.detachment_commander) {
+                detachment.value = roles.roles.value.detachment_commander.name;
+                search =
+                    '?detachment__name=' +
+                    roles.roles.value.detachment_commander.name;
+            }
+            viewContributorsData(search);
+        }
+    },
+);
+
+watch(
+    () => regionalsStore.regionals,
+    () => {
+        regionals.value = regionalsStore.regionals;
+    },
+);
+
+watch(
+    () => localsStore.locals,
+    () => {
+        locals.value = localsStore.locals;
+    },
+);
+
+watch(
+    () => educationalsStore.educationals,
+    () => {
+        educHead.value = educationalsStore.educationals;
+    },
+);
+watch(
+    () => squadsStore.squads,
+    () => {
+        detachments.value = squadsStore.squads;
+    },
+);
+
+watch(
+    () => district.value,
+    () => {
+        viewContributorsData('?district_headquarter__name=' + district.value);
+        let districtId = districtsStore.districts.find(
+            (dis) => dis.name == district.value,
+        )?.id;
+        regionals.value = regionalsStore.regionals.filter(
+            (regional) => regional.district_headquarter == districtId,
+        );
+    },
+);
+
+watch(
+    () => reg.value,
+    () => {
+        viewContributorsData('?regional_headquarter__name=' + reg.value);
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regId,
+        );
+    },
+);
+
+watch(
+    () => local.value,
+    () => {
+        viewContributorsData('?local_headquarter__name=' + local.value);
+        let locId = localsStore.locals.find(
+            (loc) => loc.name == local.value,
+        )?.id;
+        console.log('locid', locId);
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.local_headquarter == locId,
+        );
+        console.log('educHead', educHead.value);
+    },
+);
+
+watch(
+    () => educ.value,
+    () => {
+        viewContributorsData('?educational_headquarter__name=' + educ.value);
+        let educId = educationalsStore.educationals.find(
+            (edh) => edh.name == educ.value,
+        )?.id;
+        detachments.value = squadsStore.squads.filter(
+            (squad) => squad.educational_headquarter == educId,
+        );
+        viewContributorsData('?detachment__name=' + detachment.value);
+    },
+);
+
+// watch(
+//     () => detachment.value,
+//     () => {
+//         viewContributorsData('?detachment__name=' + detachment.value);
+//     },
+// );
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
