@@ -239,6 +239,7 @@ const userPages = computed(() => [
     {
         title: 'Моя страница',
         name: 'mypage',
+        show: true
     },
     {
         title: 'Мой отряд',
