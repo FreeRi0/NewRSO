@@ -36,7 +36,7 @@
                     <ul class="header__nav-list">
                         <li
                             class="header__nav-item"
-                            v-if="user.currentUser.value"
+                            v-if="Object.keys(userStore.currentUser).length"
                         >
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
@@ -67,7 +67,7 @@
             <nav class="header__nav nav-user">
                 <div
                     class="nav-user__application-count"
-                    v-if="user.currentUser.value"
+                    v-if="Object.keys(userStore.currentUser).length"
                 >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <!-- <a href="#">
@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="nav-user__location"
-                     v-if="userStore.currentUser && !userStore.isLoading">
+                     v-if="Object.keys(userStore.currentUser).length && !userStore.isLoading">
                     <button class="nav-user__button" @click="show = !show">
                         <!-- <img
                             class="nav-user__button-mobile"
@@ -100,7 +100,7 @@
 
                         <span
                             v-if="
-                                user.currentUser.value?.region &&
+                                userStore.currentUser?.region &&
                                 !isLoading.isLoading.value
                             "
                         >
@@ -158,18 +158,18 @@
                 </div>
 
                 <div class="nav-user__menu user-menu"
-                     v-if="userStore.currentUser && !userStore.isLoading">
+                     v-if="Object.keys(userStore.currentUser).length && !userStore.isLoading">
                     <img
-                        v-if="!user.currentUser.value"
+                        v-if="!Object.keys(userStore.currentUser).length"
                         src="@app/assets/user-avatar.png"
                         alt="Фото бойца (заглушка)"
                     />
 
                     <Dropdown
-                        v-if="user.currentUser.value"
+                        v-if="Object.keys(userStore.currentUser).length"
                         :items="userPages"
                         :image="true"
-                        :url="user.currentUser.value.media?.photo"
+                        :url="userStore.currentUser?.media?.photo"
                         desc="Фотография пользователя"
                         @updateUser="userUpdate"
                     />
@@ -219,13 +219,11 @@ const regionals = storeToRefs(regionalsStore);
 const quantityIsActive = ref(props.quantityActive);
 
 const router = useRouter();
-const user = storeToRefs(userStore);
 
 const region = ref('');
 
 const userUpdate = (userData) => {
-    // console.log('UserUpdate', userData );
-    user.currentUser.value = userData;
+    userStore.currentUser = userData;
 };
 
 const pages = ref([
@@ -349,39 +347,6 @@ const headquertersNames = ref([
     },
 ]);
 
-const getHeadquarters = async () => {
-    for (let i = 0; i < headquertersNames.value.length; i++) {
-        const item = headquertersNames.value[i];
-
-        if (!user.user.value[item.id]) continue;
-
-        const { data } = await HTTP.get(
-            `${item.path}/${user.user.value[item.id]}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-
-        const { data: dataParent } = await HTTP.get(
-            `${item.parentPath}/${data[item.parentHqId]}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-
-        headquartersIds.value.push({
-            path: item.parentPath,
-            id: dataParent.id,
-        });
-    }
-};
-
 const updateRegion = async () => {
     try {
         const updateRegResponse = await HTTP.patch(
@@ -406,23 +371,18 @@ const updateRegion = async () => {
 };
 
 watch(
-    () => user.currentUser.value,
+    () => userStore.currentUser,
     (newUser, oldUser) => {
-        if (Object.keys(user.currentUser.value).length === 0) {
+        if (Object.keys(userStore.currentUser).length === 0) {
             return;
         }
 
         region.value = regionalsStore.regions.find(
-            (region) => region.name === user.currentUser.value.region,
+            (region) => region.name === userStore.currentUser.region,
         )?.id;
-        regionalsStore.searchRegionals(user.currentUser.value.region);
+        regionalsStore.searchRegionals(userStore.currentUser.region);
     },
 );
-
-onMounted(() => {
-    // await regionalsStore.getRegionals();
-    // regionalsStore.searchRegionals(user.currentUser.value.region);
-});
 </script>
 
 <style lang="scss">
