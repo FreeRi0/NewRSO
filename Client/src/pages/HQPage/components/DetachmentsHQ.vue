@@ -1,12 +1,10 @@
 <template>
-    <section class="headquarters-detachments" v-if='squads.length'>
+    <section class="headquarters-detachments" v-if="squads.length">
         <h3>Отряды штаба</h3>
         <div class="headquarters-detachments__container">
             <div class="squads">
                 <div>
-                    <squadsList
-                        :squads="squads"
-                    ></squadsList>
+                    <squadsList :squads="squads"></squadsList>
                 </div>
             </div>
         </div>
@@ -53,7 +51,6 @@ watch(
         filteredSquad(props.headquarter.educational_institution?.name);
     },
 );
-
 </script>
 
 <style scoped lang="scss">
@@ -69,7 +66,6 @@ section.headquarters-detachments h3 {
     margin-top: 60px;
     margin-bottom: 40px;
 }
-
 .headquarters-detachments__container {
     padding: 40px 0;
     margin-bottom: 36px;
@@ -90,6 +86,7 @@ section.headquarters-detachments h3 {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+
         @media screen and (max-width: 1024px) {
             grid-template-columns: 1fr 1fr 1fr;
         }

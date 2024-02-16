@@ -31,10 +31,8 @@
                     <div class="hq-data__contacts">
                         <div class="hq-data__participant-counter-HQ">
                             <span
-                                >{{
-                                    headquarter.participants_count
-                                }}
-                                участников</span
+                                >{{ headquarter.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </div>
                         <div class="hq-data__social-network">
@@ -78,7 +76,8 @@
                                     headquarter?.regional_headquarter ||
                                 roles.roles.value.localheadquarter_commander
                                     ?.id === headquarter?.local_headquarter ||
-                                roles.roles.value.centralheadquarter_commander ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
                                 IsTrusted)
                         "
                         class="hq-data__link"
@@ -163,13 +162,14 @@
                     </div>
                     <router-link
                         v-if="
-                            userId && (userId === localHeadquarter?.commander?.id ||
-                            roles.roles.value.regionalheadquarter_commander
-                                ?.id ===
-                                localHeadquarter.regional_headquarter ||
-                            roles.roles.value.centralheadquarter_commander ||
-                            IsTrusted)
-
+                            userId &&
+                            (userId === localHeadquarter?.commander?.id ||
+                                roles.roles.value.regionalheadquarter_commander
+                                    ?.id ===
+                                    localHeadquarter.regional_headquarter ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                IsTrusted)
                         "
                         class="hq-data__link"
                         :to="{
@@ -253,10 +253,11 @@
                     </div>
                     <router-link
                         v-if="
-                            userId && (userId === districtHeadquarter?.commander?.id ||
-                            roles.roles.value.centralheadquarter_commander ||
-                            IsTrusted)
-
+                            userId &&
+                            (userId === districtHeadquarter?.commander?.id ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                IsTrusted)
                         "
                         class="hq-data__link"
                         :to="{
@@ -340,13 +341,14 @@
                     </div>
                     <router-link
                         v-if="
-                            userId && (userId === regionalHeadquarter?.commander?.id ||
-                            roles.roles.value.districtheadquarter_commander
-                                ?.id ===
-                                regionalHeadquarter.district_headquarter ||
-                            roles.roles.value.centralheadquarter_commander ||
-                            IsTrusted)
-
+                            userId &&
+                            (userId === regionalHeadquarter?.commander?.id ||
+                                roles.roles.value.districtheadquarter_commander
+                                    ?.id ===
+                                    regionalHeadquarter.district_headquarter ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                IsTrusted)
                         "
                         class="hq-data__link"
                         :to="{
@@ -510,6 +512,9 @@ const props = defineProps({
     },
     member: {
         type: Object,
+    },
+    getEnding: {
+        type: Number,
     },
 });
 
@@ -724,11 +729,11 @@ onMounted(() => {
     background: #39bfbf;
     align-self: end;
     text-align: center;
-    font-family: 'BertSans';
+    font-family: 'Bert Sans';
     letter-spacing: 1.2px;
     font-size: 16px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 20px;
     color: white;
     padding: 16px 32px;
@@ -745,7 +750,7 @@ onMounted(() => {
 
 .hq-data__social-network {
     display: flex;
-    justify-content: space-between;
+    column-gap: 12px;
     margin: 12px 0 0;
 }
 .hq-data__social-network-Reg,
@@ -793,14 +798,34 @@ onMounted(() => {
     }
 }
 @media ((max-width: 590px)) {
+    .hq-metric {
+        display: block;
+    }
     .hq-data__wrapper {
-        margin: 0px 0 16px 18px;
+        margin: 0px 0 16px 0;
+        align-items: center;
+    }
+    .user-metric__avatar-wrapper {
+        grid-template-columns: 125px 125px;
+        margin-left: 50px;
     }
     .hq-metric__bottom {
         grid-row-start: 4;
     }
     .Squad-HQ__date p {
         margin-right: 10px;
+    }
+    .hq-data__contacts {
+        align-items: center;
+    }
+    .Squad-HQ__list,
+    .Squad-HQ__list-Local,
+    .Squad-HQ__list-Reg {
+        display: block;
+        text-align: center;
+    }
+    .Squad-HQ__name {
+        text-align: center;
     }
 }
 </style>

@@ -5,7 +5,6 @@ import { HTTP } from '@app/http';
 export const useUserStore = defineStore('user', {
     state: () => ({
         user: {},
-        users: [],
         privateUser: {},
         currentUser: {},
         isLoading: false,
@@ -61,24 +60,5 @@ export const useUserStore = defineStore('user', {
             this.privateUser = responsePrivate.data;
         },
 
-        async getUsers() {
-            try {
-                this.isLoading = true;
-                setTimeout(async () => {
-                    const responseUser = await HTTP.get('/rsousers', {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    });
-                    this.users = responseUser.data;
-                    this.isLoading = false;
-                }, 10);
-            } catch (error) {
-                console.log('an error occured ' + error);
-                this.isLoading = false;
-            }
-        }
     },
 });

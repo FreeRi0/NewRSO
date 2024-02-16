@@ -6,6 +6,7 @@
             :headquarter="headquarter.educational.value"
             :edict="edict"
             :member="member.members.value"
+            :getEnding="getEnding"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showDistrictHQ"
@@ -53,7 +54,7 @@
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from './components/ManagementHQ.vue';
 import DetachmentsHQ from './components/DetachmentsHQ.vue';
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useEducationalsStore } from '@features/store/educationals';
 import { storeToRefs } from 'pinia';
@@ -118,6 +119,20 @@ onMounted(() => {
     // await aboutEduc();
     replaceTargetObjects([headquarter.educational.value]);
     fetchCommander();
+});
+
+const participantsCount = ref(headquarter.educational.value.participants_count);
+
+const getEnding = computed(() => {
+    const count = participantsCount.value % 10;
+
+    if (count === 1 && participantsCount.value % 100 !== 11) {
+        return 'участник';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'участника';
+    } else {
+        return 'участников';
+    }
 });
 </script>
 <style scoped lang="scss">
@@ -204,9 +219,21 @@ onMounted(() => {
 }
 
 .about-hq {
-    font-size: 27px;
-    font-family: 'Akrobat';
     margin-bottom: 60px;
+}
+.about-hq h3 {
+    font-size: 32px;
+    font-family: 'Akrobat';
+    margin-bottom: 40px;
+    color: #35383f;
+}
+.about-hq p {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
 }
 
 @media (max-width: 1110px) {

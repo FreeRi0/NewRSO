@@ -2,12 +2,13 @@
     <v-autocomplete
         v-model="selected"
         :items="items"
+        v-if="props.SortDropdown"
         chips
         clearable
         v-model:search.trim="name"
         variant="outlined"
         item-title="name"
-        item-value="id"
+        item-value="value"
         v-bind="$attrs"
         @keyup="searchEducation"
         @update:value="changeValue"
@@ -33,6 +34,63 @@
                     </p>
                 </div>
             </div>
+        </template>
+    </v-autocomplete>
+    <v-autocomplete
+        v-model="selected"
+        :items="items"
+        chips
+        clearable
+        v-else
+        v-model:search.trim="name"
+        variant="outlined"
+        item-title="name"
+        item-value="id"
+        v-bind="$attrs"
+        @keyup="searchEducation"
+        @update:value="changeValue"
+        :address="address"
+        :no-data-text="noDataText"
+        class="option-select"
+    >
+        <template #prepend-inner v-if="changeUser">
+            <Icon
+                icon="clarity-search-line"
+                color="#222222"
+                width="24"
+                height="24"
+                class="option-select__icon mr-3"
+            >
+            </Icon>
+        </template>
+        <template v-slot:chip="{ props, item }">
+            <div class="option-select__content" v-if="!isLoading">
+                <div class="option-select__wrapper">
+                    <p class="option-select__title">
+                        {{ item.raw.name }}
+                    </p>
+                </div>
+            </div>
+            <v-progress-circular
+                class="circleLoader"
+                v-else
+                indeterminate
+                color="blue"
+            ></v-progress-circular>
+        </template>
+
+        <template v-slot:item="{ props, item }">
+            <v-container v-bind="props">
+                <div
+                    class="option-select__content option-select__content--option"
+                >
+                    <div class="option-select__wrapper">
+                        <p class="option-select__title">
+                            {{ item.raw.name }}
+                        </p>
+                    </div>
+                </div>
+            </v-container>
         </template>
     </v-autocomplete>
 </template>
@@ -64,6 +122,10 @@ const props = defineProps({
         default: 'Ничего не найдено...',
     },
     changeUser: {
+        type: Boolean,
+        default: true,
+    },
+    SortDropdown: {
         type: Boolean,
         default: true,
     },
@@ -122,6 +184,9 @@ onMounted(() => {
 .option-select {
     background-color: #ffffff;
     box-sizing: border-box;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    box-sizing: border-box;
 
     .v-field__input {
         padding: 10px 16px;
@@ -166,6 +231,7 @@ onMounted(() => {
             line-height: 16px;
         }
     }
+
     &__title {
         overflow: hidden;
         white-space: nowrap;

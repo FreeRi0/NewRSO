@@ -234,7 +234,7 @@ const getLocalsHeadquartersForFilters = async () => {
 };
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-    educationalsStore.getEducationals();
+   
     getRegionalsHeadquartersForFilters();
     getLocalsHeadquartersForFilters();
 });
@@ -304,7 +304,7 @@ const sortedHeadquarters = computed(() => {
     if (!ascending.value) {
         tempHeadquartes.reverse();
     }
-    
+
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     return tempHeadquartes;
 });

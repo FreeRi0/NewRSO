@@ -303,16 +303,22 @@ const sortedSquads = computed(() => {
 
     if (SelectedSortRegional.value || SelectedSortDistrict.value) {
         let idRegionals = [];
-        if (SelectedSortDistrict.value){
+        if (SelectedSortDistrict.value) {
             let districtId = districtsStore.districts.find(
                 (district) => district.name === SelectedSortDistrict.value,
             )?.id;
-            idRegionals = regionalsStore.regionals.filter((regional) => regional.district_headquarter === districtId).map((reg) => reg.id);
+            idRegionals = regionalsStore.regionals
+                .filter(
+                    (regional) => regional.district_headquarter === districtId,
+                )
+                .map((reg) => reg.id);
         }
-        if (SelectedSortRegional.value){
-            idRegionals = [regionalsStore.regionals.find(
-                (regional) => regional.name === SelectedSortRegional.value,
-            )?.id];
+        if (SelectedSortRegional.value) {
+            idRegionals = [
+                regionalsStore.regionals.find(
+                    (regional) => regional.name === SelectedSortRegional.value,
+                )?.id,
+            ];
         }
 
         tempSquads = tempSquads.filter((item) => {
@@ -367,7 +373,6 @@ const sortedSquads = computed(() => {
 
 onMounted(() => {
     getCategories();
-    squadsStore.getSquads();
 });
 onActivated(() => {
     SelectedSortDistrict.value = JSON.parse(
@@ -412,13 +417,13 @@ onActivated(() => {
     background-position: center;
 }
 .v-select__selection {
-    span {
+    span,
+    pre {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
 }
-
 .squads {
     padding: 0px 0px 60px 0px;
 
