@@ -43,11 +43,7 @@
                             </div>
                         </li>
                         <li class="header__nav-item disable">
-                            <a
-                                class="header__nav-link"
-                                @click.prevent
-                                href="/actionSquads"
-                            >
+                            <a class="header__nav-link" href="/actionSquads">
                                 Мероприятия
                             </a>
                         </li>
@@ -108,8 +104,7 @@
                             "
                         >
                             <div
-                                v-for="item in regionals.filteredRegional
-                                    .value"
+                                v-for="item in regionals.filteredRegional.value"
                             >
                                 <p>{{ item.name }}</p>
                             </div>
@@ -597,11 +592,11 @@ onMounted(() => {
         }
     }
 
-    &__nav-item.disable {
-        & > a {
-            cursor: not-allowed;
-        }
-    }
+    // &__nav-item.disable {
+    //     & > a {
+    //         cursor: not-allowed;
+    //     }
+    // }
 
     &__nav-link {
         display: block;

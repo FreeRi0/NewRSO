@@ -1,30 +1,27 @@
 <template>
-     <div class="horizontalSquad">
-        <router-link
-            :to="{
-                name: 'PersonalDataUser',
-                params: { id: detachment.user.id },
-            }"
-            class="horizontalSquad-item__wrapper mr-3"
-        >
-            <div class="horizontalSquad-img">
+    <div class="horizontallso">
+        <div class="horizontallso-item__wrapper mr-3">
+            <div class="horizontallso-img">
                 <img
-                    :src="detachment?.user?.media?.photo"
+                    :src="event?.user?.avatar?.photo"
                     alt="logo"
-                    v-if="detachment?.user?.media?.photo"
+                    v-if="event?.user?.avatar?.photo"
                 />
-                <img src="@app/assets/user-avatar.png" alt="photo" />
+                <img
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+                />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
-                        {{ detachment.user.last_name }}
+                        {{ event.user.last_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ detachment.user.first_name }}
+                        {{ event.user.first_name }}
                     </p>
                     <p class="horizontallso-item__list-full">
-                        {{ detachment.user.patronymic_name }}
+                        {{ event.user.patronymic_name }}
                     </p>
                 </div>
                 <div class="horizontallso-item__list-date">
@@ -34,18 +31,26 @@
                             padding-right: 8px;
                         "
                     ></span>
-                    <p>{{ detachment.user.date_of_birth }}</p>
+                    <p>{{ event.user.date_of_birth }}</p>
                 </div>
             </div>
-        </router-link>
-        <div class="horizontalSquad-item__wrapper">
+        </div>
+        <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
-                <img src="@app/assets/hq-emblem.png" alt="photo" v-else />
+                <img
+                    :src="event.event.banner"
+                    alt="logo"
+                    v-if="event.event.banner"
+                />
+                <img
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+                    v-else
+                />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ squad.name }}
+                    {{ event.event.name }}
                 </p>
             </div>
         </div>
@@ -56,78 +61,60 @@
                 <input
                     type="checkbox"
                     v-model="checked"
-                    @change="updateSquads"
+                    @change="updateCheckEvents"
                 />
             </div>
         </div>
     </div>
-    <!-- <p v-if="isError" class="error">{{ isError.detail }}</p> -->
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
+
 const props = defineProps({
-    detachment: {
+    event: {
         type: Object,
+        required: true,
     },
-    squad: {
-        type: Object,
-    },
-    action: {
-        type: String,
-        default: '',
+    selectedEvents: {
+        type: Array,
+        default: () => [],
     },
 });
 
 const emit = defineEmits({
     select: null,
 });
+
 const roleStore = useRoleStore();
 roleStore.getRoles();
 const roles = storeToRefs(roleStore);
 
-const updateSquads = (e) => {
-    // console.log('dddddddft', checked.value);
-    // emit('change', checked.value, props.detachment.id);
-    emit('select', props.detachment, e.target.checked);
+const updateCheckEvents = (e) => {
+    emit('select', props.event, e.target.checked);
 };
 
-const checked = ref(true);
-const squad = ref({});
+// const selectedEvent = ref(props.selectedCompetitions);
 
-const viewSquad = async () => {
-    let id = roles?.roles?.value?.detachment_commander.id;
-    console.log('roles', roles.roles.value);
-    console.log('id', id);
-    await HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            squad.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-onMounted(() => {
-    viewSquad();
-});
-
-console.log('squad', props.squad);
+// watch(
+//     () => props.selectedCompetitions,
+//     (newChecked) => {
+//         if (!newChecked) return;
+//         selectedEvent.value = newChecked;
+//         const checkedItem = newChecked.find(
+//             (item) => item.id == props.event.id,
+//         );
+//         if (!checkedItem) checked.value = false;
+//         else checked.value = true;
+//     },
+// );
 </script>
 <style lang="scss" scoped>
-.horizontalSquad {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 12px;
-    // flex-wrap: wrap;
-    // align-items: flex-start;
+.horizontallso {
+    display: flex;
+    align-items: flex-start;
     &-img {
         align-items: center;
         width: 36px;
@@ -135,9 +122,6 @@ console.log('squad', props.squad);
         justify-content: start;
         img {
             display: flex;
-            width: 36px;
-            height: 36px;
-            border-radius: 100%;
             position: relative;
             align-items: center;
         }
@@ -158,7 +142,7 @@ console.log('squad', props.squad);
         }
     }
 }
-.horizontalSquad-item__wrapper {
+.horizontallso-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: baseline;
@@ -172,30 +156,39 @@ console.log('squad', props.squad);
     margin-bottom: 12px;
     width: 100%;
 }
-.horizontallso-img {
-    img {
-        width: 36px;
-        height: 36px;
-        border-radius: 100%;
-    }
+
+.containerHorizontal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
-.horizontalSquad-item img {
+
+.horizontallso-item img {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     overflow: cover;
 }
 
-.horizontalSquad-item p {
+.horizontallso-item p {
     margin-left: 10px;
 }
 
 .horizontallso-item__list-date {
+    // width: 95px;
     display: grid;
     grid-template-columns: auto 1fr 0fr;
 }
 
-.horizontalSquad-item__list-img {
+.horizontallso-item__list-img-status {
+    position: absolute;
+    width: 18px;
+    max-height: 18px;
+    top: -17px;
+    right: -15px;
+}
+
+.horizontallso-itemo__list-img {
     margin-right: 13px;
 }
 
@@ -204,7 +197,7 @@ console.log('squad', props.squad);
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
     font-weight: 400;
-    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .horizontallso-item__list-date p {
@@ -214,7 +207,7 @@ console.log('squad', props.squad);
     font-weight: 400;
 }
 
-.horizontalSquad__confidant {
+.horizontallso__confidant {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
@@ -226,45 +219,20 @@ console.log('squad', props.squad);
     }
 }
 
-.containerHorizontal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-left: 10px;
-}
-
-.error {
-    color: #db0000;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'Acrobat';
-    margin-top: 10px;
-    text-align: center;
-}
-
-.save {
-    // background-color: white;
-    // color: #35383f;
-    // border: 1px solid black;
-    width: 168px;
-    height: 48px;
-    padding: 12px 32px;
-    margin: 0px;
-    span {
-        font-size: 16px;
-    }
-}
-
-.v-field {
-    border-radius: 10px;
-}
 .sort-select {
     height: 46px;
-    width: 185px;
 }
 
-.form__select {
-    margin-bottom: 0px;
-    border: none;
+.checked__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    height: 48px;
+    margin: 0px 12px;
+    width: 48px;
+    input {
+        width: 24px;
+        height: 24px;
+    }
 }
 </style>

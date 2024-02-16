@@ -13,9 +13,9 @@
                     :options="actionsList"
                 ></sortByEducation>
             </div>
-            <div class="contributor-sort__all">
+            <!-- <div class="contributor-sort__all">
                 <input type="checkbox" @click="select" v-model="checkboxAll" />
-            </div>
+            </div> -->
         </div>
         <div class="participants__list">
             <template
@@ -56,7 +56,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
-import { ref, onMounted, onActivated } from 'vue';
+import { ref, onMounted, onActivated, inject } from 'vue';
 import { referenceItem } from '@entities/ReferencesPeoples';
 import { checkedReferencesItem } from '@entities/ReferencesPeoples';
 import { useRoleStore } from '@layouts/store/role';
@@ -69,6 +69,8 @@ const participantList = ref([]);
 const selectedParticipantList = ref([]);
 const checkboxAll = ref(false);
 const loading = ref(false);
+const isError = ref([]);
+const swal = inject('$swal');
 const action = ref('Одобрить');
 // const actionsList = ref(['Одобрить', 'Отклонить']);
 const actionsList = ref([
@@ -100,6 +102,7 @@ const viewParticipants = async () => {
                     },
                 );
                 participantList.value = regComReq.data;
+
                 loading.value = false;
             } else if (roles.roles.value.detachment_commander) {
                 const detComReq = await HTTP.get(
@@ -116,6 +119,7 @@ const viewParticipants = async () => {
                 loading.value = false;
             }
         }, 100);
+        selectedParticipantList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -147,8 +151,26 @@ const confirmApplication = async (id) => {
                 },
             },
         );
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
     } catch (error) {
         console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
 
@@ -164,8 +186,26 @@ const cancelApplication = async (id) => {
             },
             {},
         );
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
     } catch (error) {
         console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
 

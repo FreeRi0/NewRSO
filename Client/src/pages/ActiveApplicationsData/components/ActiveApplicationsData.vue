@@ -28,7 +28,8 @@
             </div>
 
             <div v-else-if="picked == 'Заявка на участие в мероприятии'">
-                <div
+                <p>Блок в разработке....</p>
+                <!-- <div
                     class="contributor-sort__all mb-8"
                     v-if="events?.length > 0"
                 >
@@ -49,7 +50,7 @@
                     v-else
                     indeterminate
                     color="blue"
-                ></v-progress-circular>
+                ></v-progress-circular> -->
             </div>
 
             <div v-else-if="picked == 'Конкурсы'">
@@ -64,13 +65,10 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { Button } from '@shared/components/buttons';
 import { activeApplications } from '@features/ActiveApplications/components';
-import { checkedAppList } from '@features/ActiveApplications/components';
-import { CheckedSquadsList } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
-import { ActiveEventsApp } from '@features/ActiveApplications/components';
 import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { useRoleStore } from '@layouts/store/role';
 
@@ -79,7 +77,7 @@ import { storeToRefs } from 'pinia';
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 
-const isLoading = ref(false);
+// const isLoading = ref(false);
 const picked = ref('');
 const tabs = ref([
     {
@@ -105,49 +103,26 @@ const pages = ref([
     { pageTitle: 'Активные заявки', href: '#' },
 ]);
 
-const events = ref([]);
+// const events = ref([]);
 // const checkboxAll = ref(false);
 // const checkboxAllSquads = ref(false);
 // const participantsVisible = ref(12);
 // const selectedPeoples = ref([]);
 // const selectedDetch = ref([]);
-const selectedEvents = ref([]);
-const step = ref(12);
+// const selectedEvents = ref([]);
+// const step = ref(12);
 
-const viewEvents = async () => {
-    try {
-        isLoading.value = true;
-        let event_pk = 4;
-        setTimeout(async () => {
-            const eventsRequest = await HTTP.get(
-                `/events/${event_pk}/applications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-            events.value = eventsRequest.data;
-            isLoading.value = false;
-        }, 500);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-
-const changeEvents = (CheckedEvent, EventId) => {
-    let event = {};
-    if (CheckedEvent) {
-        event = events.value.find((item) => item.id == EventId);
-        selectedEvents.value.push(event);
-    } else {
-        selectedEvents.value = selectedEvents.value.filter(
-            (item) => item.id !== EventId,
-        );
-    }
-};
+// const changeEvents = (CheckedEvent, EventId) => {
+//     let event = {};
+//     if (CheckedEvent) {
+//         event = events.value.find((item) => item.id == EventId);
+//         selectedEvents.value.push(event);
+//     } else {
+//         selectedEvents.value = selectedEvents.value.filter(
+//             (item) => item.id !== EventId,
+//         );
+//     }
+// };
 
 watch(
     () => roles.roles.value,
@@ -156,7 +131,6 @@ watch(
         if (Object.keys(roles.roles.value).length === 0) {
             return;
         }
-        viewEvents();
     },
 );
 </script>

@@ -58,5 +58,6 @@ export const useUserStore = defineStore('user', {
             });
             this.privateUser = responsePrivate.data;
         },
+
     },
 });

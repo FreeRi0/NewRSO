@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
         <p class="main_title">Многоэтапная заявка</p>
         <p class="subtitle">Подал:</p>
         <div class="horizontallso-item__wrapper">
@@ -48,13 +47,8 @@
 </template>
 
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { ref } from 'vue';
-const pages = ref([
-    { pageTitle: 'Мероприятия', href: '#' },
-    { pageTitle: 'Мистер и Мисс РСО | Санкт-пете...', href: '#' },
-    { pageTitle: 'Заявка на участие', href: '#' },
-]);
+
 const headquarter = {
     id: 1,
     emblem: '123',
@@ -66,7 +60,7 @@ const application = {
 };
 </script>
 
-<style>
+<style scoped>
 .main_title {
     margin: 40px 0px;
     font-size: 52px;
@@ -90,6 +84,7 @@ const application = {
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
+    margin-left: 12px;
     width: 100%;
     margin-bottom: 12px;
 }
@@ -143,14 +138,12 @@ const application = {
 }
 .button {
     padding-top: 60px;
-    margin-left: 20px;
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
     line-height: 20px;
     text-align: center;
 }
-
 .deny_button {
     border-radius: 10px;
     border: 2px solid #35383f;
@@ -162,5 +155,9 @@ const application = {
     padding: 16px 32px;
     margin-left: 20px;
     color: #fff;
+}
+.container {
+    margin: 0 auto;
+    padding: 0px 130px 60px 130px;
 }
 </style>

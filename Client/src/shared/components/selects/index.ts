@@ -9,6 +9,9 @@ import userDropdown from './userDropdown.vue';
 import SearchSelect from './SearchSelect.vue';
 import regionalsDropdown from './regionalsDropdown.vue';
 import DropdownCommander from './DropdownCommander.vue';
+import districtSearchFilter from './districtSearchFilter.vue';
+import lsoSerachFilter from './lsoSerachFilter.vue';
+import localSearchFilter from './localSearchFilter.vue';
 
 export {
     sortByEducation,
@@ -17,9 +20,12 @@ export {
     filterSelect,
     regionsDropdown,
     educInstitutionDropdown,
+    lsoSerachFilter,
     educationalsDropdown,
     regionalsDropdown,
     userDropdown,
     SearchSelect,
-    DropdownCommander
+    DropdownCommander,
+    localSearchFilter,
+    districtSearchFilter
 };

@@ -14,11 +14,11 @@ router.beforeEach((to, _from, next) => {
         to.name !== 'CreaturePassword' &&
         to.name !== 'Competition' &&
         to.name !== 'faq' &&
-        // to.name !== 'redoc' &&
-        // to.name !== 'swagger' &&
         !localStorage.getItem('Token')
     )
         next({ name: 'Login' });
+    else if (to.name === 'Login' && localStorage.getItem('Token'))
+        next({ name: 'mypage' });
     else next();
 });
 

@@ -9,27 +9,27 @@
                         type="button"
                         label="Уже в отряде"
                         class="memberBtn mr-2"
-                        :class="{ active: picked === false }"
-                        @click="picked = false"
+                        :class="{ active: picked === true }"
+                        @click="picked = true"
                     ></Button>
 
                     <Button
                         type="button"
                         label="Ожидают одобрение"
                         class="memberBtn"
-                        :class="{ active: picked === true }"
-                        @click="picked = true"
+                        :class="{ active: picked === false }"
+                        @click="picked = false"
                     ></Button>
                 </div>
             </nav>
             <div class="squad__wrapper">
                 <div class="squad__wrapper-container">
                     <ParticipantsList
-                        v-if="picked === false"
+                        v-if="picked === true"
                         :participants="member"
                     />
                     <VerifiedList
-                        v-else="picked === true"
+                        v-else="picked === false"
                         :verified="isVerified"
                     ></VerifiedList>
                 </div>
