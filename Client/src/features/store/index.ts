@@ -6,6 +6,7 @@ export const useUserStore = defineStore('user', {
     state: () => ({
         user: {},
         privateUser: {},
+        users: [],
         currentUser: {},
         isLoading: false,
     }),
@@ -60,5 +61,14 @@ export const useUserStore = defineStore('user', {
             this.privateUser = responsePrivate.data;
         },
 
+        async searchUsers(name: String) {
+            const responseSearch = await HTTP.get(`rsousers?search=${name}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.users = responseSearch.data;
+        },
     },
 });

@@ -16,7 +16,7 @@
             </div>
             <!-- <Search v-model="searchParticipants" /> -->
             <div class="references-container">
-                <div class="filters">
+                <!-- <div class="filters">
                     <h3 class="filters-title">Основные фильтры</h3>
                     <v-expansion-panels>
                         <v-expansion-panel>
@@ -369,7 +369,7 @@
                     <p>
                         Найдено пользователей: {{ sortedParticipantsRef.length }}
                     </p>
-                </div>
+                </div> -->
                 <!-- <filters></filters> -->
 
                 <div class="references-items">
