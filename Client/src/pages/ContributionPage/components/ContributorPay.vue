@@ -60,158 +60,6 @@
                 </div>
 
                 <div class="contributor-container">
-                    <!-- <div class="filters">
-                        <h3 class="filters-title">Основные фильтры</h3>
-                        <v-expansion-panels>
-                            <v-expansion-panel
-                                v-if="
-                                    roles.roles.value
-                                        .centralheadquarter_commander
-                                "
-                            >
-                                <v-expansion-panel-title>
-                                    <template v-slot:default="{ expanded }">
-                                        <v-row no-gutters>
-                                            <v-col
-                                                cols="4"
-                                                class="d-flex justify-start"
-                                            >
-                                                Окружной штаб
-                                            </v-col>
-                                        </v-row>
-                                    </template>
-                                </v-expansion-panel-title>
-                                <v-expansion-panel-text>
-                                    <districtSearchFilter
-                                        open-on-clear
-                                        id="reg"
-                                        name="regdrop"
-                                        placeholder="Выберите окружной штаб"
-                                        v-model="district"
-                                        @update:value="changeValue"
-                                        class="mb-2 region-input"
-                                        :items="districtsStore.districts"
-                                        :SortDropdown="true"
-                                    ></districtSearchFilter>
-                                </v-expansion-panel-text>
-                            </v-expansion-panel>
-                            <v-expansion-panel v-if="district !== null">
-                                <v-expansion-panel-title>
-                                    <template v-slot:default="{ expanded }">
-                                        <v-row no-gutters>
-                                            <v-col
-                                                cols="4"
-                                                class="d-flex justify-start"
-                                            >
-                                                Региональный штаб
-                                            </v-col>
-                                        </v-row>
-                                    </template>
-                                </v-expansion-panel-title>
-                                <v-expansion-panel-text>
-                                    <regionalsDropdown
-                                        open-on-clear
-                                        id="reg"
-                                        name="regdrop"
-                                        placeholder="Выберите рег штаб"
-                                        v-model="reg"
-                                        @update:value="changeValue"
-                                        class="mb-2 region-input"
-                                        :items="regionals"
-                                        :SortDropdown="true"
-                                    ></regionalsDropdown>
-                                </v-expansion-panel-text>
-                            </v-expansion-panel>
-                            <v-expansion-panel v-if="reg !== null">
-                                <v-expansion-panel-title>
-                                    <template v-slot:default="{ expanded }">
-                                        <v-row no-gutters>
-                                            <v-col
-                                                cols="4"
-                                                class="d-flex justify-start"
-                                            >
-                                                Местный штаб
-                                            </v-col>
-                                        </v-row>
-                                    </template>
-                                </v-expansion-panel-title>
-                                <v-expansion-panel-text>
-                                    <localSearchFilter
-                                        open-on-clear
-                                        id="reg"
-                                        name="regdrop"
-                                        placeholder="Выберите местный штаб"
-                                        v-model="local"
-                                        @update:value="changeValue"
-                                        class="mb-2 region-input"
-                                        :items="locals"
-                                        :SortDropdown="true"
-                                    ></localSearchFilter>
-                                </v-expansion-panel-text>
-                            </v-expansion-panel>
-                            <v-expansion-panel v-if="local !== null">
-                                <v-expansion-panel-title>
-                                    <template v-slot:default="{ expanded }">
-                                        <v-row no-gutters>
-                                            <v-col
-                                                cols="4"
-                                                class="d-flex justify-start"
-                                            >
-                                                Обазовательный штаб
-                                            </v-col>
-                                        </v-row>
-                                    </template>
-                                </v-expansion-panel-title>
-                                <v-expansion-panel-text>
-                                    <educationalsDropdown
-                                        open-on-clear
-                                        id="reg"
-                                        name="regdrop"
-                                        placeholder="Выберите обр штаб"
-                                        v-model="educ"
-                                        @update:value="changeValue"
-                                        class="mb-2 region-input"
-                                        :items="educHead"
-                                        :SortDropdown="true"
-                                    ></educationalsDropdown>
-                                </v-expansion-panel-text>
-                            </v-expansion-panel>
-
-                            <v-expansion-panel v-if="educ !== null">
-                                <v-expansion-panel-title>
-                                    <template v-slot:default="{ expanded }">
-                                        <v-row no-gutters>
-                                            <v-col
-                                                cols="4"
-                                                class="d-flex justify-start"
-                                            >
-                                                ЛСО
-                                            </v-col>
-                                        </v-row>
-                                    </template>
-                                </v-expansion-panel-title>
-                                <v-expansion-panel-text>
-                                    <lsoSerachFilter
-                                        open-on-clear
-                                        id="reg"
-                                        name="regdrop"
-                                        placeholder="Выберите отряд"
-                                        v-model="detachment"
-                                        @update:value="changeValue"
-                                        class="mb-2 region-input"
-                                        :items="detachments"
-                                        :SortDropdown="true"
-                                    ></lsoSerachFilter>
-                                </v-expansion-panel-text>
-                            </v-expansion-panel>
-                        </v-expansion-panels>
-
-                        <p>
-                            Найдено пользователей:
-                            {{ sortedParticipants.length }}
-                        </p>
-                    </div> -->
-
                     <div class="filters">
                         <filters
                             @update-district="updateDistrict"
@@ -237,13 +85,24 @@
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
-                            <div class="contributor-sort__all">
+                            <div class="participants__actions">
+                                <div class="participants__actions-select mr-3">
+                                    <sortByEducation
+                                        placeholder="Выберете действие"
+                                        variant="outlined"
+                                        clearable
+                                        v-model="action"
+                                        :options="actionsList"
+                                    ></sortByEducation>
+                                </div>
+                            </div>
+                            <!-- <div class="contributor-sort__all">
                                 <input
                                     type="checkbox"
                                     @click="select"
                                     v-model="checkboxAll"
                                 />
-                            </div>
+                            </div> -->
                             <div class="sort-filters">
                                 <div class="sort-select">
                                     <sortByEducation
@@ -264,7 +123,7 @@
                             </div>
                         </div>
                         <div class="contributor-wrapper">
-                            <contributorsList
+                            <!-- <contributorsList
                                 :participants="sortedParticipants"
                                 :selected-peoples="selectedPeoples"
                                 @change="changePeoples"
@@ -275,7 +134,16 @@
                                 v-else
                                 indeterminate
                                 color="blue"
-                            ></v-progress-circular>
+                            ></v-progress-circular> -->
+                            <template
+                                v-for="participant in sortedParticipants"
+                                :key="participant.id"
+                            >
+                                <contributionAccessItem
+                                    :participant="participant"
+                                    @select="onToggleSelectCompetition"
+                                />
+                            </template>
                         </div>
                         <Button
                             @click="participantsVisible += step"
@@ -292,10 +160,25 @@
                 <div class="selectedItems" v-if="selectedPeoples.length > 0">
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
 
-                    <checkedContributors
+                    <!-- <checkedContributors
                         @change="changePeoples"
                         :participants="selectedPeoples"
-                    ></checkedContributors>
+                    ></checkedContributors> -->
+                    <selectedContributionAccessItem
+                        v-for="participant in selectedPeoples"
+                        :action="action"
+                        :participant="participant"
+                        :key="participant.id"
+                        @select="onToggleSelectCompetition"
+                    />
+                </div>
+                <div class="participants__btn" v-if="selectedPeoples.length">
+                    <Button
+                        class="save"
+                        type="button"
+                        label="Сохранить"
+                        @click="onAction"
+                    ></Button>
                 </div>
             </div>
             <div v-else class="mt-12">
@@ -306,15 +189,17 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { Dropdown } from '@shared/components/dropdown';
-import { Input } from '@shared/components/inputs';
 import {
     contributorsList,
     checkedContributors,
     filters,
 } from '@features/Contributor/components';
-import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, computed, onMounted, watch } from 'vue';
+import {
+    contributionAccessItem,
+    selectedContributionAccessItem,
+} from '@entities/ReferencesPeoples';
+import { sortByEducation } from '@shared/components/selects';
+import { ref, computed, watch, inject } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
 import { useDistrictsStore } from '@features/store/districts';
@@ -333,16 +218,21 @@ const districtsStore = useDistrictsStore();
 const localsStore = useLocalsStore();
 const educationalsStore = useEducationalsStore();
 const squadsStore = useSquadsStore();
-
+const action = ref('Оплачен');
 const participants = storeToRefs(userStore);
 const participantsVisible = ref(12);
 const pages = ref([
     { pageTitle: 'Личный кабинет', href: '#' },
     { pageTitle: 'Членский взнос', href: '/contributorPay' },
 ]);
-
-const selectedAnswer = ref('Пользователи');
-const selectedCat = ref('Все');
+const actionsList = ref([
+    {
+        value: 'Оплачен',
+        name: 'Оплачен',
+    },
+    { value: 'Не оплачен', name: 'Не оплачен' },
+]);
+const swal = inject('$swal');
 const regionals = ref([]);
 const districts = ref([]);
 const locals = ref([]);
@@ -354,10 +244,12 @@ const district = ref(null);
 const local = ref(null);
 const isLoading = ref(false);
 const educ = ref(null);
+const isError = ref([]);
 const picked = ref(true);
 const checkboxAll = ref(false);
 const levelAccess = ref(7);
 const step = ref(12);
+const name = ref('');
 const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -438,38 +330,136 @@ const viewContributorsData = async (search) => {
         });
         participants.users.value = viewParticipantsResponse.data;
         isLoading.value = false;
+        selectedPeoples.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
-const select = (event) => {
-    selectedPeoples.value = [];
-    console.log('fffss', checkboxAll.value, event);
-    if (event.target.checked) {
-        console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.users.value) {
-            console.log('arr', selectedPeoples.value);
-            selectedPeoples.value.push(participants.users.value[index]);
+// const select = (event) => {
+//     selectedPeoples.value = [];
+//     console.log('fffss', checkboxAll.value, event);
+//     if (event.target.checked) {
+//         console.log('fffss', checkboxAll.value, event);
+//         for (let index in participants.users.value) {
+//             console.log('arr', selectedPeoples.value);
+//             selectedPeoples.value.push(participants.users.value[index]);
+//         }
+//     }
+// };
+
+const onToggleSelectCompetition = (participant, checked) => {
+    if (checked) {
+        participant.selected = checked;
+        selectedPeoples.value.push(participant);
+    } else {
+        participant.selected = checked;
+        selectedPeoples.value = selectedPeoples.value.filter(
+            (c) => c.id !== participant.id,
+        );
+    }
+};
+
+const ChangeStatus = async (id) => {
+    try {
+        const changeStatus = await HTTP.post(
+            `rsousers/${id}/membership_fee_status/`,
+            {},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    } catch (error) {
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
         }
     }
 };
-const name = ref('');
 
-const changePeoples = (CheckedUser, UserId) => {
-    let participant = {};
-    console.log('fff', CheckedUser, UserId);
-    if (CheckedUser) {
-        participant = participants.users.value.find(
-            (item) => item.id == UserId,
+const ChangeCancelStatus = async (id) => {
+    try {
+        const changeCancelStatus = await HTTP.delete(
+            `rsousers/${id}/membership_fee_status/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+            {},
         );
-        selectedPeoples.value.push(participant);
-    } else {
-        selectedPeoples.value = selectedPeoples.value.filter(
-            (item) => item.id !== UserId,
-        );
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    } catch (error) {
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
+
+const onAction = async () => {
+    try {
+        for (const application of selectedPeoples.value) {
+            if (action.value === 'Оплачен') {
+                console.log('app', application);
+                await ChangeStatus(application.id);
+            } else {
+                await ChangeCancelStatus(application.id);
+            }
+            selectedPeoples.value = selectedPeoples.value.filter(
+                (participant) => participant.id != application.id,
+            );
+        }
+    } catch (e) {
+        console.log('error action', e);
+    }
+};
+
+// const changePeoples = (CheckedUser, UserId) => {
+//     let participant = {};
+//     console.log('fff', CheckedUser, UserId);
+//     if (CheckedUser) {
+//         participant = participants.users.value.find(
+//             (item) => item.id == UserId,
+//         );
+//         selectedPeoples.value.push(participant);
+//     } else {
+//         selectedPeoples.value = selectedPeoples.value.filter(
+//             (item) => item.id !== UserId,
+//         );
+//     }
+// };
 
 const sortOptionss = ref([
     {
@@ -492,7 +482,6 @@ const sortedParticipants = computed(() => {
         // } else if (reg.value) {
         //     search = '?regional_headquarter__name=' + reg.value;
         // }
-
         // viewContributorsData(search);
     }
 

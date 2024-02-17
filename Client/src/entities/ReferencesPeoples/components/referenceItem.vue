@@ -68,22 +68,6 @@ const updateCheck = (e) => {
     emit('select', props.participant, e.target.checked);
 };
 
-
-// watch(
-//     () => props.selectedParticipants,
-//     (newChecked) => {
-//         if (!newChecked) return;
-//         selectedPeoples.value = newChecked;
-//         console.log('newChecked', newChecked);
-//         const checkedItem = newChecked.find(
-//             (item) => item.user.id == props.participant.user.id,
-//         );
-//         console.log('checkedItem', checkedItem);
-//         if (!checkedItem) checked.value = false;
-//         else checked.value = true;
-//     },
-// );
-
 watch(
     () => props.participant.selected,
     (newSelected) => {

@@ -14,366 +14,14 @@
                 />
                 <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
-            <!-- <Search v-model="searchParticipants" /> -->
             <div class="references-container">
-                <!-- <div class="filters">
-                    <h3 class="filters-title">Основные фильтры</h3>
-                    <v-expansion-panels>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Уровень поиска
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text class="inner-content">
-                                <div class="checkbox">
-                                    <div
-                                        class="checkbox-item"
-                                        v-for="answer in answers"
-                                        :key="answer.id"
-                                    >
-                                        <RadioButton
-                                            :value="answer.name"
-                                            :label="answer.name"
-                                            :id="answer.id"
-                                            :checked="answer.checked"
-                                            :disabled="disabledRadio"
-                                            name="answer"
-                                            v-model:checkedValue="
-                                                selectedAnswer
-                                            "
-                                        />
-                                    </div>
-                                </div>
-                                <p>Выбрано:{{ selectedAnswer }}</p>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Окружной штаб
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="references-search filter">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        class="references-search__input"
-                                        v-model="searchHeadquarter"
-                                        placeholder="ввод?"
-                                    />
-                                    <img
-                                        src="@app/assets/icon/search.svg"
-                                        alt="search"
-                                    />
-                                </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Региональный штаб
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="references-search filter">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        class="references-search__input"
-                                        v-model="searchHeadquarterRegion"
-                                        placeholder="ввод?"
-                                    />
-                                    <img
-                                        src="@app/assets/icon/search.svg"
-                                        alt="search"
-                                    />
-                                </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Местный штаб
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="references-search filter">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        class="references-search__input"
-                                        v-model="searchHeadquarterLocal"
-                                        placeholder="ввод?"
-                                    />
-                                    <img
-                                        src="@app/assets/icon/search.svg"
-                                        alt="search"
-                                    />
-                                </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Обазовательная организация
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="references-search filter">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        class="references-search__input"
-                                        v-model="searchEducation"
-                                        placeholder="ввод?"
-                                    />
-                                    <img
-                                        src="@app/assets/icon/search.svg"
-                                        alt="search"
-                                    />
-                                </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Направление отряда
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="checkbox">
-                                    <div
-                                        class="checkbox-item"
-                                        v-for="cat in categories"
-                                        :key="cat.id"
-                                    >
-                                        <RadioButton
-                                            :value="cat.name"
-                                            :label="cat.name"
-                                            :id="cat.id"
-                                            :checked="cat.checked"
-                                            name="category"
-                                            v-model:checkedValue="selectedCat"
-                                        />
-                                    </div>
-                                </div>
-                                <p>Выбрано:{{ selectedCat }}</p>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            ЛСО
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="references-search filter">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        class="references-search__input"
-                                        v-model="searchLSO"
-                                        placeholder="ввод?"
-                                    />
-                                    <img
-                                        src="@app/assets/icon/search.svg"
-                                        alt="search"
-                                    />
-                                </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-                    <h3 class="filters-title">Дополнительные фильтры</h3>
-                    <v-expansion-panels>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Пол
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="checkbox">
-                                    <div
-                                        class="checkbox-item"
-                                        v-for="sex in sexes"
-                                        :key="sex.id"
-                                    >
-                                        <RadioButton
-                                            :value="sex.name"
-                                            :label="sex.name"
-                                            :id="sex.id"
-                                            :checked="sex.checked"
-                                            name="sex"
-                                            v-model:checkedValue="selectedSex"
-                                        />
-                                    </div>
-                                </div>
-                                <p>Выбрано:{{ selectedSex }}</p>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Статус аккаунта
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="checkbox">
-                                    <div
-                                        class="checkbox-item"
-                                        v-for="stat in status"
-                                        :key="stat.id"
-                                    >
-                                        <RadioButton
-                                            :value="stat.name"
-                                            :label="stat.name"
-                                            :id="stat.id"
-                                            :checked="stat.checked"
-                                            name="status"
-                                            v-model:checkedValue="
-                                                selectedStatus
-                                            "
-                                        />
-                                    </div>
-                                </div>
-                                <p>Выбрано:{{ selectedStatus }}</p>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Членский взнос
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <div class="checkbox">
-                                    <div
-                                        class="checkbox-item"
-                                        v-for="p in pay"
-                                        :key="p.id"
-                                    >
-                                        <RadioButton
-                                            :value="p.name"
-                                            :label="p.name"
-                                            :id="p.id"
-                                            :checked="p.checked"
-                                            name="pay"
-                                            v-model:checkedValue="selectedPay"
-                                        />
-                                    </div>
-                                </div>
-                                <p>Выбрано:{{ selectedPay }}</p>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel>
-                            <v-expansion-panel-title>
-                                <template v-slot:default="{ expanded }">
-                                    <v-row no-gutters>
-                                        <v-col
-                                            cols="4"
-                                            class="d-flex justify-start"
-                                        >
-                                            Возраст
-                                        </v-col>
-                                    </v-row>
-                                </template>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <Input
-                                    name="miAge"
-                                    type="number"
-                                    v-model:value="minAge"
-                                />
-
-                                <Input
-                                    name="mAge"
-                                    type="number"
-                                    v-model:value="maxAge"
-                                />
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-
-                    <p>
-                        Найдено пользователей: {{ sortedParticipantsRef.length }}
-                    </p>
-                </div> -->
-                <!-- <filters></filters> -->
                 <div class="filters">
                     <filters
+                        @update-district="updateDistrict"
+                        @update-reg="updateReg"
                         @update-local="updateLocal"
+                        @update-educ="updateEduc"
+                        @update-detachment="updateDetachment"
                         :area="false"
                         :level-search="false"
                         :district="district"
@@ -419,11 +67,11 @@
                         </div>
                     </div>
                     <div class="references-wrapper">
-                        <contributorsList
-                            :participants="sortedParticipantsRef"
+                        <referencesList
+                            :participants="sortedParticipants"
                             :selected-peoples="selectedPeoples"
                             @change="changePeoples"
-                        ></contributorsList>
+                        ></referencesList>
                     </div>
                     <Button
                         @click="participantsVisible += step"
@@ -481,17 +129,17 @@
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
-                        <checkedContributors
+                        <checkedReference
                             @change="changePeoples"
                             :participants="selectedPeoples"
-                        ></checkedContributors>
+                        ></checkedReference>
                     </div>
 
                     <Button type="submit" label="Получить справки"></Button>
                 </form>
-                <p class="error">
+                <!-- <p class="error">
                     {{ isError }}
-                </p>
+                </p> -->
             </div>
         </div>
 
@@ -505,16 +153,13 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { RadioButton } from '@shared/components/buttons';
-import { Dropdown } from '@shared/components/dropdown';
 import { Input } from '@shared/components/inputs';
 import {
-    contributorsList,
-    checkedContributors,
     filters,
 } from '@features/Contributor/components';
+import { referencesList, checkedReference } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, onMounted, inject, watch } from 'vue';
+import { ref, computed, inject, watch } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
 import { useDistrictsStore } from '@features/store/districts';
@@ -524,7 +169,6 @@ import { useSquadsStore } from '@features/store/squads';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
-import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
 
 const roleStore = useRoleStore();
 const userStore = useUserStore();
@@ -539,6 +183,25 @@ const selectedPeoples = ref([]);
 const swal = inject('$swal');
 const participantsVisible = ref(12);
 const isError = ref([]);
+const levelAccess = ref(7);
+const regionals = ref([]);
+const districts = ref([]);
+const locals = ref([]);
+const educHead = ref([]);
+const detachments = ref([]);
+const reg = ref(null);
+const detachment = ref(null);
+const district = ref(null);
+const local = ref(null);
+const isLoading = ref(false);
+const educ = ref(null);
+
+const checkboxAll = ref(false);
+const name = ref('');
+const step = ref(12);
+
+const ascending = ref(true);
+const sortBy = ref('alphabetically');
 
 const arr = computed(() => {
     let tempPeoples = selectedPeoples.value;
@@ -570,6 +233,70 @@ const viewContributorsData = async (search) => {
     } catch (error) {
         console.log('an error occured ' + error);
     }
+};
+
+const updateDistrict = (districtVal) => {
+    viewContributorsData('?district_headquarter__name=' + districtVal);
+    let districtId = districtsStore.districts.find(
+        (dis) => dis.name == districtVal,
+    )?.id;
+    district.value = districtVal;
+    regionals.value = regionalsStore.regionals.filter(
+        (regional) => regional.district_headquarter == districtId,
+    );
+};
+
+const updateReg = (regVal) => {
+    if (regVal) {
+        viewContributorsData('?regional_headquarter__name=' + regVal);
+    } else if (levelAccess.value < 2) {
+        viewContributorsData('?district_headquarter__name=' + district.value);
+    }
+
+    let regId = regionalsStore.regionals.find(
+        (regional) => regional.name == regVal,
+    )?.id;
+    reg.value = regVal;
+    locals.value = localsStore.locals.filter(
+        (loc) => loc.regional_headquarter == regId,
+    );
+};
+const updateLocal = (localVal) => {
+    if (localVal) {
+        viewContributorsData('?local_headquarter__name=' + localVal);
+    } else if (levelAccess.value < 3) {
+        viewContributorsData('?regional_headquarter__name=' + reg.value);
+    }
+
+    let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
+    local.value = localVal;
+    educHead.value = educationalsStore.educationals.filter(
+        (edh) => edh.local_headquarter == locId,
+    );
+};
+
+const updateEduc = (educVal) => {
+    if (educVal) {
+        viewContributorsData('?educational_headquarter__name=' + educVal);
+    } else if (levelAccess.value < 4) {
+        viewContributorsData('?local_headquarter__name=' + local.value);
+    }
+    let educId = educationalsStore.educationals.find(
+        (edh) => edh.name == educVal,
+    )?.id;
+    educ.value = educVal;
+    detachments.value = squadsStore.squads.filter(
+        (squad) => squad.educational_headquarter == educId,
+    );
+};
+
+const updateDetachment = (detachmentVal) => {
+    if (detachmentVal) {
+        viewContributorsData('?detachment__name=' + detachmentVal);
+    } else if (levelAccess.value < 5) {
+        viewContributorsData('?educational_headquarter__name=' + educ.value);
+    }
+    detachment.value = detachmentVal;
 };
 
 const SendReference = async () => {
@@ -611,27 +338,6 @@ const SendReference = async () => {
         });
 };
 
-const selectedAnswer = ref('Пользователи');
-const selectedCat = ref('Все');
-const regionals = ref([]);
-const districts = ref([]);
-const locals = ref([]);
-const educHead = ref([]);
-const detachments = ref([]);
-const reg = ref(null);
-const detachment = ref(null);
-const district = ref(null);
-const local = ref(null);
-const isLoading = ref(false);
-const educ = ref(null);
-
-const checkboxAll = ref(false);
-const name = ref('');
-const step = ref(12);
-
-const ascending = ref(true);
-const sortBy = ref('alphabetically');
-
 const select = (event) => {
     selectedPeoples.value = [];
     console.log('fffss', checkboxAll.value, event);
@@ -643,7 +349,7 @@ const select = (event) => {
         }
     }
 };
-const searchParticipants = ref('');
+
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
     console.log('fff', CheckedUser, UserId);
@@ -667,13 +373,21 @@ const sortOptionss = ref([
     { value: 'date_of_birth', name: 'По дате вступления в РСО' },
 ]);
 
-const sortedParticipantsRef = computed(() => {
+const sortedParticipants = computed(() => {
     let tempParticipants = participants.users.value;
 
     if (name.value.length > 3) {
         userStore.searchUsers(name.value);
-    } else if (name.value.length == 0) {
+    } else if (roles.roles.value.centralheadquarter_commander) {
         return [];
+    } else {
+        // let search = '';
+        // if (district.value) {
+        //     search = '?district_headquarter__name=' + district.value;
+        // } else if (reg.value) {
+        //     search = '?regional_headquarter__name=' + reg.value;
+        // }
+        // viewContributorsData(search);
     }
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -782,91 +496,6 @@ watch(
     () => squadsStore.squads,
     () => {
         detachments.value = squadsStore.squads;
-    },
-);
-
-watch(
-    () => district.value,
-    () => {
-        viewContributorsData('?district_headquarter__name=' + district.value);
-        let districtId = districtsStore.districts.find(
-            (dis) => dis.name == district.value,
-        )?.id;
-        regionals.value = regionalsStore.regionals.filter(
-            (regional) => regional.district_headquarter == districtId,
-        );
-    },
-);
-
-watch(
-    () => reg.value,
-    () => {
-        if (reg.value) {
-            viewContributorsData('?regional_headquarter__name=' + reg.value);
-        } else if (levelAccess.value < 2) {
-            viewContributorsData(
-                '?district_headquarter__name=' + district.value,
-            );
-        }
-
-        let regId = regionalsStore.regionals.find(
-            (regional) => regional.name == reg.value,
-        )?.id;
-        locals.value = localsStore.locals.filter(
-            (loc) => loc.regional_headquarter == regId,
-        );
-    },
-);
-
-// watch(
-//     () => local.value,
-//     () => {
-//         if (local.value) {
-//             viewContributorsData('?local_headquarter__name=' + local.value);
-//         } else if (levelAccess.value < 3) {
-//             viewContributorsData('?regional_headquarter__name=' + reg.value);
-//         }
-
-//         let locId = localsStore.locals.find(
-//             (loc) => loc.name == local.value,
-//         )?.id;
-//         console.log('locid', locId);
-//         educHead.value = educationalsStore.educationals.filter(
-//             (edh) => edh.local_headquarter == locId,
-//         );
-//         console.log('educHead', educHead.value);
-//     },
-// );
-
-watch(
-    () => educ.value,
-    () => {
-        if (educ.value) {
-            viewContributorsData(
-                '?educational_headquarter__name=' + educ.value,
-            );
-        } else if (levelAccess.value < 4) {
-            viewContributorsData('?local_headquarter__name=' + local.value);
-        }
-        let educId = educationalsStore.educationals.find(
-            (edh) => edh.name == educ.value,
-        )?.id;
-        detachments.value = squadsStore.squads.filter(
-            (squad) => squad.educational_headquarter == educId,
-        );
-    },
-);
-
-watch(
-    () => detachment.value,
-    () => {
-        if (detachment.value) {
-            viewContributorsData('?detachment__name=' + detachment.value);
-        } else if (levelAccess.value < 5) {
-            viewContributorsData(
-                '?educational_headquarter__name=' + educ.value,
-            );
-        }
     },
 );
 </script>
