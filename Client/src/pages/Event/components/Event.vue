@@ -36,33 +36,63 @@
             </div>
         </div>
         <h2 class="title title--subtitle">О мероприятии</h2>
-        <div class="event_type_wrap">
-
-        </div>
+        <div class="event_type_wrap"></div>
         <p class="text event_type_wrap">
             {{ event.description }}
         </p>
-        <!-- Доработать grid, при уменьшении список не сдвигается, если много текста, то не переносится на новую строчку -->
         <div class="event">
-            <div class="event-cols-2">Форма заявки: Одиночная</div>
-            <div class="event-cols-2">Начало мероприятия: {{ event.time_data.start_date }}, {{ event.time_data.start_time }} </div>
+            <div class="event-cols-2">
+                <img src="@app/assets/icon_items/list.svg" alt="" />
+                Форма заявки: {{ event.application_type }}
+            </div>
+            <div class="event-cols-2">
+                <img src="@app/assets/icon_items/clock.svg" alt="" />
+                Начало мероприятия: {{ event.time_data.start_date }},
+                {{ event.time_data.start_time }}
+            </div>
         </div>
         <div class="event">
-            <div class="event-cols-2">Маштаб мероприятия: {{  }}</div>
-            <div class="event-cols-2">Окончание мероприятия: {{ event.time_data.end_date }}, {{ event.time_data.end_time }} </div>
+            <div class="event-cols-2">
+                <img src="@app/assets/icon_items/map.svg" alt="" />
+                Маштаб мероприятия: {{ event.scale }}
+            </div>
+            <div class="event-cols-2">
+                <img src="@app/assets/icon_items/clock.svg" alt="g" />
+                Окончание мероприятия: {{ event.time_data.end_date }},
+                {{ event.time_data.end_time }}
+            </div>
         </div>
         <div class="event">
-            <div class="event-cols-2">Планируемое число участников: {{ event.participants_number }}</div>
-            <div class="event-cols-2">Начало регистрации: {{ event.time_data.start_date }}, {{ event.time_data.start_time }} </div>
+            <div class="event-cols-2">
+                <img src="@app/assets/icon_items/group.svg" alt="" />
+                Планируемое число участников: {{ event.participants_number }}
+            </div>
+            <div class="event-cols-2">
+                <img src="@app/assets/icon_items/clock.svg" alt="" />
+                Начало регистрации: {{ event.time_data.start_date }},
+                {{ event.time_data.start_time }}
+            </div>
         </div>
         <div class="event">
-            <div class="event-cols-2">Адрес: {{ event.address }}</div>
-            <div class="event-cols-2">Окончание регистрации: {{ event.time_data.registration_end_date }}, {{ event.time_data.registration_end_time }} </div>
+            <div class="event-cols-2">
+                <img src="@app/assets/icon_items/label.svg" alt="" />
+                Адрес: {{ event.address }}
+            </div>
+            <div class="event-cols-2">
+                <img src="@app/assets/icon_items/clock.svg" alt="" />
+                Окончание регистрации:
+                {{ event.time_data.registration_end_date }},
+                {{ event.time_data.registration_end_time }}
+            </div>
         </div>
         <!-- Организаторы -->
         <h2 class="title title--subtitle">Организаторы</h2>
         <div v-if="organizators.length != 0" class="card_wrap">
-            <v-card v-for="organizator in organizators" class="event_card_wrap">
+            <v-card
+                v-for="organizator in organizators"
+                class="event_card_wrap"
+                :key="organizator.id"
+            >
                 <v-img width="120"></v-img>
                 <div class="text text--organizer">
                     {{ organizator.name }}
@@ -145,8 +175,7 @@
         </section>
         <!-- Другие мероприятия -->
         <h2 class="title title--subtitle event_border">Другие мероприятия</h2>
-        <div class="other_events_wrap">
-        </div>
+        <div class="other_events_wrap"></div>
         <Button
             class="form-button btn_wrap"
             type="button"
@@ -164,7 +193,12 @@ import { Button } from '@shared/components/buttons';
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
 import { ActionItem } from '@entities/index';
-import { getAction, getOrganizator, getListActions, getParticipants } from '@services/ActionService';
+import {
+    getAction,
+    getOrganizator,
+    getListActions,
+    getParticipants,
+} from '@services/ActionService';
 import { onActivated } from 'vue';
 
 const route = useRoute();
@@ -194,37 +228,35 @@ const event = ref({
         registration_end_date: '',
         registration_end_time: '',
         hour: '',
-    }
-})
+    },
+});
 
 const otherevents = ref({});
 
-const organizators = ref([])
+const organizators = ref([]);
 onActivated(() => {
-    getAction(route.params.id)
-    .then((resp)=>{
+    getAction(route.params.id).then((resp) => {
         event.value = resp.data;
-        getOrganizator(route.params.id)
-        .then((resp)=>{
+        getOrganizator(route.params.id).then((resp) => {
             organizators.value = resp.data;
-        })
-    })
+        });
+    });
     getParticipants(route.params.id)
-        .then((resp)=>{
-            participants.value = resp.data
+        .then((resp) => {
+            participants.value = resp.data;
         })
-        .catch((e)=>{
-            console.log(e)
-        })
+        .catch((e) => {
+            console.log(e);
+        });
     getListActions()
-        .then((resp)=>{
+        .then((resp) => {
             otherevents.value = resp.data;
         })
-    .catch((e)=>{
-        console.log(e)
-    })
-})
-function EditAction(){
+        .catch((e) => {
+            console.log(e);
+        });
+});
+function EditAction() {
     router.push({ name: 'editAction', params: { id: route.params.id } });
 }
 
@@ -234,7 +266,7 @@ const items = ref([
         icon: './assets/icon_items/list.svg',
     },
     {
-        text: "",
+        text: '',
         icon: './assets/icon_items/clock.svg',
     },
     {
@@ -292,7 +324,7 @@ const participants = ref([
         status: '',
         image: '',
         category: Number,
-    }
+    },
 ]);
 
 // member.value = member.value.sort((a, b) => a.is_trusted - b.is_trusted);
@@ -302,33 +334,36 @@ const participants = ref([
 </script>
 
 <style lang="scss" scoped>
-
-.event{
+.event {
     width: 100%;
     height: 40px;
     display: flex;
     flex-direction: row;
-    &-cols-2{
+    &-cols-2 {
         display: flex;
         flex-direction: row;
         justify-content: start;
         width: 48%;
+        height: 24px;
         margin-left: 1%;
         margin-right: 1%;
-        height: 40px;
     }
-    &-empty{
+    &-cols-2 img {
+        width: 24px;
+        height: 24px;
+    }
+    &-empty {
         height: 60px;
         margin-top: 20px;
         margin-bottom: 20px;
         color: white;
         border-radius: 20px;
-        background-color: rgba(28, 92, 148, 1);;
+        background-color: rgba(28, 92, 148, 1);
         justify-content: center;
         align-items: center;
     }
 }
-.title--subtitle{
+.title--subtitle {
     margin-top: 20px;
     margin-bottom: 20px;
 }

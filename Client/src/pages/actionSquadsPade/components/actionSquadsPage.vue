@@ -305,7 +305,11 @@ import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
 import { ref } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
-import { sortByEducation, Select } from '@shared/components/selects';
+import {
+    sortByEducation,
+    Select,
+    regionsDropdown,
+} from '@shared/components/selects';
 
 import {
     getListActions,
@@ -361,7 +365,7 @@ const actionFormSearch = ref({
     search: '',
 });
 function SendSearchForm() {
-    console.log(actionFormSearch);
+    console.log(`?${formdata}`);
 }
 //Изменение расположения блоков
 const showVertical = () => {

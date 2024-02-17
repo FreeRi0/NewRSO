@@ -6,7 +6,7 @@
                 <v-expansion-panels variant="accordion">
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -442,7 +442,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -617,7 +617,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -784,7 +784,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -964,7 +964,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -1191,7 +1191,7 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
-    fd.set('banner', urlBanner.value);
+    fd.set('banner', urlBanner.value + '.jpg');
     createAction(fd)
         .then((resp) => {
             console.log('Форма передалась успешно', resp.data);
