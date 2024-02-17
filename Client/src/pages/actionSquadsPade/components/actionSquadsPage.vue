@@ -7,93 +7,219 @@
             :button="true"
         ></bannerCreate>
 
-        <h2 class='action-title'>Мероприятия</h2>
-        <div class='searcher'>
-          <div class='squads-search'>
-        <input
-            type='text'
-            id='search'
-            class='squads-search__input'
-            placeholder='Найти мероприятие'
-            v-model="text"
-            @input = "SearchByInput"
-        />
-        <svg
-            width='28'
-            height='28'
-            viewBox='0 0 28 28'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-        >
-            <path
-                d='M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z'
-                stroke='#898989'
-                stroke-width='2'
-                stroke-linecap='round'
-                stroke-linejoin='round'
-            />
-        </svg>
-    </div>
-
+        <h2 class="action-title">Мероприятия</h2>
+        <div class="searcher">
+            <div class="squads-search">
+                <input
+                    type="text"
+                    id="search"
+                    class="squads-search__input"
+                    placeholder="Найти мероприятие"
+                    v-model="text"
+                    @input="SearchByInput"
+                />
+                <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 28 28"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z"
+                        stroke="#898989"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+            </div>
         </div>
-        <div class='row-cols-2 action-slides'>
-            <div class='col settings-container'>
-                    <v-expansion-panels class='settings-header' variant="accordion">
-                        <v-expansion-panel class='settings-body' title="Тип мероприятия">
-                            <v-expansion-panel-text>
-                              <div class="settings-checkbox">
-                                  <input v-model="actionFormSearch.format.online" value="Онлайн" type="checkbox" name="online" />
-                                  <label for="online">Онлайн</label>
-                              </div>
-                              <div class="settings-checkbox">
-                                  <input v-model="actionFormSearch.format.offline" value="Оффлайн" type="checkbox" name="offline" />
-                                  <label for="offline">Оффлайн</label>
-                              </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel class='settings-body' title="Статус мероприятия">
-                            <v-expansion-panel-text>
-                              <div class="settings-checkbox">
-                                  <input v-model="actionFormSearch.status" value="Незавершен" type="checkbox" name="open" />
-                                  <label for="open">Незавершен</label>
-                              </div>
-                              <div class="settings-checkbox">
-                                  <input v-model="actionFormSearch.status" value="Завершен" type="checkbox" name="close" />
-                                  <label for="close">Завершен</label>
-                              </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel class='settings-body' title="Маштаб">
-                            <v-expansion-panel-text>
-                              <div class="flex align-items-center">
+        <div class="row-cols-2 action-slides">
+            <div class="col settings-container">
+                <v-expansion-panels class="settings-header" variant="accordion">
+                    <v-expansion-panel
+                        class="settings-body"
+                        title="Тип мероприятия"
+                    >
+                        <v-expansion-panel-text>
+                            <div class="settings-checkbox">
+                                <input
+                                    v-model="actionFormSearch.format.online"
+                                    value="Онлайн"
+                                    type="checkbox"
+                                    name="online"
+                                />
+                                <label for="online">Онлайн</label>
+                            </div>
+                            <div class="settings-checkbox">
+                                <input
+                                    v-model="actionFormSearch.format.offline"
+                                    value="Оффлайн"
+                                    type="checkbox"
+                                    name="offline"
+                                />
+                                <label for="offline">Оффлайн</label>
+                            </div>
+                        </v-expansion-panel-text>
+                    </v-expansion-panel>
+                    <v-expansion-panel
+                        class="settings-body"
+                        title="Статус мероприятия"
+                    >
+                        <v-expansion-panel-text>
+                            <div class="settings-checkbox">
+                                <input
+                                    v-model="actionFormSearch.status.start"
+                                    value="Незавершен"
+                                    type="checkbox"
+                                    name="open"
+                                />
+                                <label for="open">Незавершен</label>
+                            </div>
+                            <div class="settings-checkbox">
+                                <input
+                                    v-model="actionFormSearch.status.finish"
+                                    value="Завершен"
+                                    type="checkbox"
+                                    name="close"
+                                />
+                                <label for="close">Завершен</label>
+                            </div>
+                        </v-expansion-panel-text>
+                    </v-expansion-panel>
+                    <v-expansion-panel class="settings-body" title="Масштаб">
+                        <v-expansion-panel-text>
+                            <div class="flex align-items-center">
                                 <div class="settings-radio">
-                                    <input v-model='actionFormSearch.roads' type='radio' value='Все'/>
+                                    <input
+                                        v-model="actionFormSearch.roads"
+                                        type="radio"
+                                        value="Все"
+                                    />
                                     <label class="ml-2">Все</label>
                                 </div>
                                 <div class="settings-radio">
-                                    <input v-model='actionFormSearch.roads' type='radio' value='Всероссийское'/>
+                                    <input
+                                        v-model="actionFormSearch.roads"
+                                        type="radio"
+                                        value="Всероссийское"
+                                    />
                                     <label class="ml-2">Всероссийское</label>
                                 </div>
-                              </div>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                        <v-expansion-panel class='settings-body' title="Направление">
-                            <v-expansion-panel-text>
-                                <v-radio-group v-model='actionFormSearch.direction'>
-                                    <v-radio v-model='actionFormSearch.direction' label="Все" value="Все"></v-radio>
-                                    <v-radio v-model='actionFormSearch.direction' label="Добровольческое" value="Добровольческое"></v-radio>
-                                    <v-radio v-model='actionFormSearch.direction' label="Образовательное" value="Образовательное"></v-radio>
-                                    <v-radio v-model='actionFormSearch.direction' label="Патриотическое" value="Патриотическое"></v-radio>
-                                    <v-radio v-model='actionFormSearch.direction' label="Спортивное" value="Спортивное"></v-radio>
-                                    <v-radio v-model='actionFormSearch.direction' label="Творческое" value="Творческое"></v-radio>
-                                </v-radio-group>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-                    <div class='settings-buttoms'>
-                        <Button class='settings-btminv' type='button' @click='ClearSearchForm' >Сбросить</Button>
-                        <Button class='settings-btm' type='button' @click='SendSearchForm'>Сохранить</Button>
-                  </div>
+                                <div class="settings-radio">
+                                    <input
+                                        v-model="actionFormSearch.roads"
+                                        type="radio"
+                                        value="Окружное"
+                                    />
+                                    <label class="ml-2">Окружное</label>
+                                </div>
+                                <div class="settings-radio">
+                                    <input
+                                        v-model="actionFormSearch.roads"
+                                        type="radio"
+                                        value="Региональное"
+                                    />
+                                    <label class="ml-2">Региональное</label>
+                                </div>
+                                <div class="settings-radio">
+                                    <input
+                                        v-model="actionFormSearch.roads"
+                                        type="radio"
+                                        value="Городское"
+                                    />
+                                    <label class="ml-2">Городское</label>
+                                </div>
+                                <div class="settings-radio">
+                                    <input
+                                        v-model="actionFormSearch.roads"
+                                        type="radio"
+                                        value="Мероприятие ОО"
+                                    />
+                                    <label class="ml-2">Мероприятие ОО</label>
+                                </div>
+                                <div class="settings-radio">
+                                    <input
+                                        v-model="actionFormSearch.roads"
+                                        type="radio"
+                                        value="Отрядное"
+                                    />
+                                    <label class="ml-2">Отрядное</label>
+                                </div>
+                            </div>
+                        </v-expansion-panel-text>
+                    </v-expansion-panel>
+                    <v-expansion-panel
+                        class="settings-body"
+                        title="Направление"
+                    >
+                        <v-expansion-panel-text>
+                            <div class="settings-radio">
+                                <input
+                                    v-model="actionFormSearch.direction"
+                                    type="radio"
+                                    value="Все"
+                                />
+                                <label class="ml-2">Все</label>
+                            </div>
+                            <div class="settings-radio">
+                                <input
+                                    v-model="actionFormSearch.direction"
+                                    type="radio"
+                                    value="Добровольческое"
+                                />
+                                <label class="ml-2">Добровольческое</label>
+                            </div>
+                            <div class="settings-radio">
+                                <input
+                                    v-model="actionFormSearch.direction"
+                                    type="radio"
+                                    value="Образовательное"
+                                />
+                                <label class="ml-2">Образовательное</label>
+                            </div>
+                            <div class="settings-radio">
+                                <input
+                                    v-model="actionFormSearch.direction"
+                                    type="radio"
+                                    value="Патриотическое"
+                                />
+                                <label class="ml-2">Патриотическое</label>
+                            </div>
+                            <div class="settings-radio">
+                                <input
+                                    v-model="actionFormSearch.direction"
+                                    type="radio"
+                                    value="Патриотическое"
+                                />
+                                <label class="ml-2">Спортивное</label>
+                            </div>
+                            <div class="settings-radio">
+                                <input
+                                    v-model="actionFormSearch.direction"
+                                    type="radio"
+                                    value="Все"
+                                />
+                                <label class="ml-2">Творческое</label>
+                            </div>
+                        </v-expansion-panel-text>
+                    </v-expansion-panel>
+                </v-expansion-panels>
+                <div class="settings-buttoms">
+                    <Button
+                        class="settings-btminv"
+                        type="button"
+                        @click="ClearSearchForm"
+                        >Сбросить</Button
+                    >
+                    <Button
+                        class="settings-btm"
+                        type="button"
+                        @click="SendSearchForm"
+                        >Сохранить</Button
+                    >
+                </div>
             </div>
             <!--Привет) Страницы мероприятий писал и подключал Modestra -->
             <!--Я в поисках работы, если вам требуется Frontend разработчик, пишите сюда -->
@@ -181,17 +307,19 @@ import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { sortByEducation, Select } from '@shared/components/selects';
 
-import { getListActions, getListActionsBySearch } from '@services/ActionService';
-import { computed } from "vue";
-import { onActivated } from "vue";
+import {
+    getListActions,
+    getListActionsBySearch,
+} from '@services/ActionService';
+import { computed } from 'vue';
+import { onActivated } from 'vue';
 
 let actionsList = ref([]);
 
-onActivated(()=>{
-    getListActionsBySearch(text.value)
-    .then((resp)=>{
-      actionsList.value = resp.data;
-    })
+onActivated(() => {
+    getListActionsBySearch(text.value).then((resp) => {
+        actionsList.value = resp.data;
+    });
 });
 
 //Массив полученных значений
@@ -199,17 +327,15 @@ const SortedList = ref([]);
 const text = ref('');
 
 //Поиск нового значения
-function SearchByInput(){
-  if(text.value.length <= 4){
-    return;
-  }
-  else{
-    getListActionsBySearch(text.value)
-    .then((resp)=>{
-      actionsList.value = resp.data;
-    })
-  }
-};
+function SearchByInput() {
+    if (text.value.length <= 4) {
+        return;
+    } else {
+        getListActionsBySearch(text.value).then((resp) => {
+            actionsList.value = resp.data;
+        });
+    }
+}
 
 //Сортировка
 const vertical = ref(true);
@@ -222,15 +348,18 @@ function ClearSearchForm() {
 
 //До лучших времен...
 const actionFormSearch = ref({
-        format: {
-          online: null,
-          offline: null,
-        },
-        direction: '',
-        status: '',
-        roads: '',
-        search: '',
-    });
+    format: {
+        online: null,
+        offline: null,
+    },
+    direction: '',
+    status: {
+        start: null,
+        finish: null,
+    },
+    roads: '',
+    search: '',
+});
 function SendSearchForm() {
     console.log(actionFormSearch);
 }
@@ -261,38 +390,43 @@ const sortOptionss = ref([
         font-size: 52px;
         @media screen and (max-width: 575px) {
             font-size: 32px;
-          }
-        }
-        &-slides{
-          display: flex;
-          flex-direction: row;
-          margin-bottom: 20px;
         }
     }
-    //Стили аккордеонов
-    .settings{
-      &-container{
+    &-slides {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 20px;
+    }
+}
+//Стили аккордеонов
+.settings {
+    &-container {
         width: 320px;
         margin-right: 16px;
         margin-bottom: 20px;
-      }
-      &-text{
+    }
+    &-text {
         align-items: baseline;
-      }
-      &-buttoms{
+    }
+    &-buttoms {
         width: 100%;
         margin-top: 40px;
         height: 40px;
         display: flex;
         justify-content: space-around;
-      }
-      &-radio{
+    }
+    &-radio {
         display: flex;
         flex-direction: row;
         align-items: center;
         margin-left: 10px;
-      }
-      &-select{
+    }
+    &-radio input {
+        width: 15px;
+        height: 15px;
+        margin-right: 5px;
+    }
+    &-select {
         padding-right: 5px;
     }
     &-btm {
@@ -302,19 +436,19 @@ const sortOptionss = ref([
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-      &-checkbox{
+    }
+    &-checkbox {
         display: flex;
         flex-direction: row;
         margin-top: 10px;
         margin-bottom: 10px;
-      }
-      &-checkbox input{
+    }
+    &-checkbox input {
         width: 24px;
         height: 24px;
         margin-right: 10px;
-      }
-      &-label{
+    }
+    &-label {
         font-family: Bert Sans;
         font-size: 1.2vw;
         font-style: normal;
@@ -322,8 +456,8 @@ const sortOptionss = ref([
         line-height: 24px;
         margin-top: 5px;
         margin-bottom: 2px;
-      }
-      &-btminv{
+    }
+    &-btminv {
         width: 114px;
         border-radius: 10px;
         border: 2px solid #35383f;

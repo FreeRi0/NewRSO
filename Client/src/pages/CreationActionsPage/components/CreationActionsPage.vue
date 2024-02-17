@@ -293,6 +293,7 @@
                                                     </div>
                                                     <input
                                                         type="file"
+                                                        accept="image/png, image/jpeg"
                                                         id="upload-banner"
                                                         name="squad-banner"
                                                         hidden
@@ -692,10 +693,7 @@
                                     <v-container fluid>
                                         <div class="form-checkbox">
                                             <input
-                                                v-model="
-                                                    maininfo.document_data
-                                                        .passport
-                                                "
+                                                v-model="document_data.passport"
                                                 type="checkbox"
                                                 name="passport"
                                             />
@@ -705,9 +703,7 @@
                                         </div>
                                         <div class="form-checkbox">
                                             <input
-                                                v-model="
-                                                    maininfo.document_data.snils
-                                                "
+                                                v-model="document_data.snils"
                                                 type="checkbox"
                                                 name="snils"
                                             />
@@ -715,9 +711,7 @@
                                         </div>
                                         <div class="form-checkbox">
                                             <input
-                                                v-model="
-                                                    maininfo.document_data.inn
-                                                "
+                                                v-model="document_data.inn"
                                                 type="checkbox"
                                                 name="inn"
                                             />
@@ -726,8 +720,7 @@
                                         <div class="form-checkbox">
                                             <input
                                                 v-model="
-                                                    maininfo.document_data
-                                                        .work_book
+                                                    document_data.work_book
                                                 "
                                                 type="checkbox"
                                                 name="workbook"
@@ -739,8 +732,7 @@
                                         <div class="form-checkbox">
                                             <input
                                                 v-model="
-                                                    maininfo.document_data
-                                                        .military_document
+                                                    document_data.military_document
                                                 "
                                                 type="checkbox"
                                                 name="military"
@@ -753,8 +745,7 @@
                                         <div class="form-checkbox">
                                             <input
                                                 v-model="
-                                                    maininfo.document_data
-                                                        .consent_personal_data
+                                                    document_data.consent_personal_data
                                                 "
                                                 type="checkbox"
                                                 name="consert"
@@ -1081,8 +1072,8 @@ import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
 import {
     createAction,
-    createOrganizator,
     putTimeData,
+    putDocuments,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
@@ -1099,18 +1090,9 @@ const maininfo = ref({
     conference_link: '',
     address: '',
     description: '',
-    participants_number: Number,
+    participants_number: 0,
     application_type: '',
     available_structural_units: '',
-    document_data: {
-        passport: false,
-        snils: false,
-        inn: false,
-        work_book: false,
-        military_document: false,
-        consent_personal_data: false,
-        additional_info: '',
-    },
 });
 
 const urlBanner = ref(null);
@@ -1118,14 +1100,17 @@ const urlBanner = ref(null);
 const selectBanner = (event) => {
     maininfo.value.banner = event.target.files[0];
     console.log('Файл есть', maininfo.value.banner);
-    urlBanner.value = URL.createObjectURL(maininfo.value.banner);
+    urlBanner.value = URL.createObjectURL(maininfo.value.banner)
+        .toString()
+        .slice(5);
+    console.log('Ссылка', urlBanner.value);
 };
 
 const resetBanner = () => {
     maininfo.value.banner = null;
     urlBanner.value = null;
 };
-
+//Что-то придумать
 const scale_massive = ref([
     { name: 'Отрядное' },
     { name: 'Образовательное' },
@@ -1143,14 +1128,6 @@ const direction_massive = ref([
     { name: 'Творческое' },
 ]);
 
-const available_structural_units = ref([
-    { name: 'Отряды' },
-    { name: 'Образовательные Отряды' },
-    { name: 'Местные штабы' },
-    { name: 'Региональные штабы' },
-    { name: 'Окружные штабы' },
-    { name: 'Центральные штабы' },
-]);
 const area = ref('');
 const area_massive = ref([
     { name: 'ЛСО' },
@@ -1158,6 +1135,15 @@ const area_massive = ref([
     { name: 'Окружной штаб' },
 ]);
 
+const document_data = ref({
+    passport: false,
+    snils: false,
+    inn: false,
+    work_book: false,
+    military_document: false,
+    consent_personal_data: false,
+    additional_info: '',
+});
 const time_data = ref({
     event_duration_type: '',
     start_date: '',
@@ -1188,12 +1174,6 @@ const answers = ref([
         answer: '',
     },
 ]);
-//Формы самой страницы
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '#' },
-    { pageTitle: 'Создание штаба СО ОО', href: '#' },
-]);
 
 function AddOrganizator() {
     organizators.value.push({
@@ -1206,27 +1186,26 @@ function AddOrganizator() {
     });
 }
 function SubmitEvent() {
-    /* //Внести все значения в FormData
+    //Внести все значения в FormData
     let fd = new FormData();
-    fd.append('banner', maininfo.banner);*/
-    createAction(maininfo.value).then((resp) => {
-        console.log('Форма передалась успешно', resp.data);
-        //Возвращает 500
-        createOrganizator(resp.data.id)
-            .then((resp) => {
-                console.log('Организаторы добавлены', resp.data);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-        putTimeData(resp.data.id, time_data.value)
-            .then((resp) => {
-                console.log('Время изменено', resp.data);
-            })
-            .catch(() => {});
+    Object.entries(maininfo.value).forEach(([key, item]) => {
+        fd.append(key, item);
     });
-    //Временное решение
-    router.go(-1);
+    fd.set('banner', urlBanner.value);
+    createAction(fd)
+        .then((resp) => {
+            console.log('Форма передалась успешно', resp.data);
+            putDocuments(resp.data.id, document_data.value)
+                .then(() => {})
+                .catch(() => {});
+            putTimeData(resp.data.id, time_data.value).then((resp) => {
+                console.log('Удалось изменить время', resp.data);
+            });
+            router.push({ name: 'actionSquads' });
+        })
+        .catch((e) => {
+            console.log(e);
+        });
 }
 
 function AddQuestion() {
