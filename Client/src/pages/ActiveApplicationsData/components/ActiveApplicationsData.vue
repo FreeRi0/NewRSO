@@ -78,7 +78,7 @@ const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 
 // const isLoading = ref(false);
-const picked = ref('');
+const picked = ref('Верификация аккаунтов');
 const tabs = ref([
     {
         id: '1',
@@ -103,26 +103,6 @@ const pages = ref([
     { pageTitle: 'Активные заявки', href: '#' },
 ]);
 
-// const events = ref([]);
-// const checkboxAll = ref(false);
-// const checkboxAllSquads = ref(false);
-// const participantsVisible = ref(12);
-// const selectedPeoples = ref([]);
-// const selectedDetch = ref([]);
-// const selectedEvents = ref([]);
-// const step = ref(12);
-
-// const changeEvents = (CheckedEvent, EventId) => {
-//     let event = {};
-//     if (CheckedEvent) {
-//         event = events.value.find((item) => item.id == EventId);
-//         selectedEvents.value.push(event);
-//     } else {
-//         selectedEvents.value = selectedEvents.value.filter(
-//             (item) => item.id !== EventId,
-//         );
-//     }
-// };
 
 watch(
     () => roles.roles.value,
