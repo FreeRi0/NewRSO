@@ -112,18 +112,14 @@
                         </li>
                         <li class="hq-data__participant-counter">
                             <span
-                                >{{
-                                    localHeadquarter.participants_count
-                                }}
-                                участников</span
+                                >{{ localHeadquarter.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
-                                >{{
-                                    districtHeadquarter?.members_count
-                                }}
-                                действующих членов</span
+                                >{{ localHeadquarter.members_count }}
+                                {{ getEndingMembers }}</span
                             >
                         </li>
                     </ul>
@@ -203,18 +199,14 @@
                         </li>
                         <li class="hq-data__participant-counter">
                             <span
-                                >{{
-                                    districtHeadquarter.participants_count
-                                }}
-                                участников</span
+                                >{{ districtHeadquarter.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
-                                >{{
-                                    districtHeadquarter.members_count
-                                }}
-                                действующих членов</span
+                                >{{ districtHeadquarter.members_count }}
+                                {{ getEndingMembers }}</span
                             >
                         </li>
                     </ul>
@@ -291,18 +283,14 @@
                         </li>
                         <li class="hq-data__participant-counter">
                             <span
-                                >{{
-                                    regionalHeadquarter.participants_count
-                                }}
-                                участников</span
+                                >{{ regionalHeadquarter.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
-                                >{{
-                                    regionalHeadquarter.members_count
-                                }}
-                                действующих членов</span
+                                >{{ regionalHeadquarter.members_count }}
+                                {{ getEndingMembers }}</span
                             >
                         </li>
                     </ul>
@@ -390,18 +378,14 @@
                         </li>
                         <li class="hq-data__participant-counter">
                             <span
-                                >{{
-                                    centralHeadquarter.participants_count
-                                }}
-                                участников</span
+                                >{{ centralHeadquarter.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
-                                >{{
-                                    centralHeadquarter.members_count
-                                }}
-                                действующих членов</span
+                                >{{ centralHeadquarter.members_count }}
+                                {{ getEndingMembers }}</span
                             >
                         </li>
                     </ul>
@@ -514,6 +498,9 @@ const props = defineProps({
         type: Object,
     },
     getEnding: {
+        type: Number,
+    },
+    getEndingMembers: {
         type: Number,
     },
 });

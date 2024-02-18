@@ -29,6 +29,8 @@
             v-else
             :centralHeadquarter="centralHeadquarter"
             :member="member"
+            :getEnding="getEnding"
+            :getEndingMembers="getEndingMembers"
         ></BannerHQ>
         <section class="about-hq">
             <h3>Описание центрального штаба</h3>
@@ -59,7 +61,7 @@
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import HQandSquad from '../RegionalHQPage/components/HQandSquad.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { usePage } from '@shared';
@@ -152,6 +154,30 @@ watch(
 onMounted(() => {
     aboutCentralHQs();
     aboutMembers();
+});
+
+const getEnding = computed(() => {
+    const count = centralHeadquarter.value.participants_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'участник';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'участника';
+    } else {
+        return 'участников';
+    }
+});
+
+const getEndingMembers = computed(() => {
+    const count = centralHeadquarter.value.members_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'действующий член';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'действующих члена';
+    } else {
+        return 'действующих членов';
+    }
 });
 </script>
 <style lang="scss" scoped>

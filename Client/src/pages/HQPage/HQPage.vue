@@ -121,12 +121,10 @@ onMounted(() => {
     fetchCommander();
 });
 
-const participantsCount = ref(headquarter.educational.value.participants_count);
-
 const getEnding = computed(() => {
-    const count = participantsCount.value % 10;
+    const count = educationalsStore.educational.participants_count;
 
-    if (count === 1 && participantsCount.value % 100 !== 11) {
+    if (count === 1 && count % 100 !== 11) {
         return 'участник';
     } else if ([2, 3, 4].includes(count)) {
         return 'участника';
