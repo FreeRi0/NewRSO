@@ -525,7 +525,6 @@ import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
 import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
-import { HTTP } from '@app/http';
 
 const roleStore = useRoleStore();
 const userStore = useUserStore();
