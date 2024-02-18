@@ -209,7 +209,7 @@ const isLoading = storeToRefs(squadsStore);
 
 const categories = ref([]);
 const name = ref('');
-const education = ref('');
+const education = ref(null);
 
 const SelectedSortDistrict = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName,

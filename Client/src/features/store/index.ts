@@ -6,15 +6,17 @@ export const useUserStore = defineStore('user', {
     state: () => ({
         user: {},
         privateUser: {},
+        users: [],
         currentUser: {},
         isLoading: false,
     }),
     actions: {
         async getUser() {
+            if (Object.keys(this.currentUser).length) return;
             try {
                 this.isLoading = true;
                 setTimeout(async () => {
-                    const responseUser = await HTTP.get('rsousers/me', {
+                    const responseUser = await HTTP.get('rsousers/me/', {
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization:
@@ -59,5 +61,14 @@ export const useUserStore = defineStore('user', {
             this.privateUser = responsePrivate.data;
         },
 
+        async searchUsers(name: String) {
+            const responseSearch = await HTTP.get(`rsousers?search=${name}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.users = responseSearch.data;
+        },
     },
 });

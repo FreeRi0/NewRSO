@@ -9,14 +9,14 @@
                     type="text"
                     id="search"
                     class="references-search__input"
-                    v-model="searchParticipants"
+                    v-model="name"
                     placeholder="Поищем пользователей?"
                 />
                 <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
             <!-- <Search v-model="searchParticipants" /> -->
             <div class="references-container">
-                <div class="filters">
+                <!-- <div class="filters">
                     <h3 class="filters-title">Основные фильтры</h3>
                     <v-expansion-panels>
                         <v-expansion-panel>
@@ -369,9 +369,27 @@
                     <p>
                         Найдено пользователей: {{ sortedParticipantsRef.length }}
                     </p>
-                </div>
+                </div> -->
                 <!-- <filters></filters> -->
-
+                <div class="filters">
+                    <filters
+                        @update-local="updateLocal"
+                        :area="false"
+                        :level-search="false"
+                        :district="district"
+                        :districts="districts"
+                        :reg="reg"
+                        :regionals="regionals"
+                        :local="local"
+                        :locals="locals"
+                        :educ="educ"
+                        :educ-head="educHead"
+                        :detachment="detachment"
+                        :detachments="detachments"
+                        :roles="roles.roles.value"
+                        :sorted-participants="sortedParticipants"
+                    />
+                </div>
                 <div class="references-items">
                     <div class="references-sort">
                         <div class="references-sort__all">
@@ -463,7 +481,6 @@
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
-
                         <checkedContributors
                             @change="changePeoples"
                             :participants="selectedPeoples"
@@ -473,8 +490,8 @@
                     <Button type="submit" label="Получить справки"></Button>
                 </form>
                 <p class="error">
-            {{ isError }}
-        </p>
+                    {{ isError }}
+                </p>
             </div>
         </div>
 
@@ -494,13 +511,30 @@ import { Input } from '@shared/components/inputs';
 import {
     contributorsList,
     checkedContributors,
+    filters,
 } from '@features/Contributor/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, onMounted, inject } from 'vue';
-import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
+import { ref, computed, onMounted, inject, watch } from 'vue';
+import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useDistrictsStore } from '@features/store/districts';
+import { useLocalsStore } from '@features/store/local';
+import { useEducationalsStore } from '@features/store/educationals';
+import { useSquadsStore } from '@features/store/squads';
+import { useUserStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
+import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
 
-const participants = ref([]);
+const roleStore = useRoleStore();
+const userStore = useUserStore();
+const roles = storeToRefs(roleStore);
+const regionalsStore = useRegionalsStore();
+const districtsStore = useDistrictsStore();
+const localsStore = useLocalsStore();
+const educationalsStore = useEducationalsStore();
+const squadsStore = useSquadsStore();
+const participants = storeToRefs(userStore);
 const selectedPeoples = ref([]);
 const swal = inject('$swal');
 const participantsVisible = ref(12);
@@ -521,25 +555,22 @@ const refData = ref({
     recipient: '',
 });
 
-const viewParticipants = async () => {
-    await HTTP.get('/users/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-        .then((response) => {
-            participants.value = response.data;
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
+const viewContributorsData = async (search) => {
+    try {
+        isLoading.value = true;
 
-onMounted(() => {
-    viewParticipants();
-});
+        const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        participants.users.value = viewParticipantsResponse.data;
+        isLoading.value = false;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
 
 const SendReference = async () => {
     await HTTP.post('/membership_certificates/internal/', refData.value, {
@@ -582,19 +613,20 @@ const SendReference = async () => {
 
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
-const selectedSex = ref('Все');
-const selectedStatus = ref('Все');
-const selectedPay = ref('Все');
-const searchHeadquarter = ref('');
-const searchHeadquarterLocal = ref('');
-const searchHeadquarterRegion = ref('');
-const searchLSO = ref('');
-const searchEducation = ref('');
-const minAge = ref('');
-const maxAge = ref('');
+const regionals = ref([]);
+const districts = ref([]);
+const locals = ref([]);
+const educHead = ref([]);
+const detachments = ref([]);
+const reg = ref(null);
+const detachment = ref(null);
+const district = ref(null);
+const local = ref(null);
+const isLoading = ref(false);
+const educ = ref(null);
 
 const checkboxAll = ref(false);
-
+const name = ref('');
 const step = ref(12);
 
 const ascending = ref(true);
@@ -605,9 +637,9 @@ const select = (event) => {
     console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
         console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.value) {
+        for (let index in participants.users.value) {
             console.log('arr', selectedPeoples.value);
-            selectedPeoples.value.push(participants.value[index]);
+            selectedPeoples.value.push(participants.users.value[index]);
         }
     }
 };
@@ -616,7 +648,9 @@ const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
     console.log('fff', CheckedUser, UserId);
     if (CheckedUser) {
-        participant = participants.value.find((item) => item.id == UserId);
+        participant = participants.users.value.find(
+            (item) => item.id == UserId,
+        );
         selectedPeoples.value.push(participant);
     } else {
         selectedPeoples.value = selectedPeoples.value.filter(
@@ -624,36 +658,6 @@ const changePeoples = (CheckedUser, UserId) => {
         );
     }
 };
-
-const answers = ref([{ name: 'Пользователи', id: 'f7', checked: true }]);
-
-const categories = ref([
-    { name: 'Все', id: 'c1', checked: true },
-    { name: 'Сервисные', id: 'c2' },
-    { name: 'Строительные', id: 'c3' },
-    { name: 'Проводников', id: 'c4' },
-    { name: 'Педагогические', id: 'c5' },
-    { name: 'Медицинские', id: 'c6' },
-    { name: 'Путинные', id: 'c7' },
-    { name: 'Сельскохозяйственные', id: 'c8' },
-]);
-
-const sexes = ref([
-    { name: 'Все', id: 's1', checked: true },
-    { name: 'Мужской', id: 's2' },
-    { name: 'Женский', id: 's3' },
-]);
-const status = ref([
-    { name: 'Все', id: 'st1', checked: true },
-    { name: 'Верифицированный', id: 'st2' },
-    { name: 'Неверифицированный', id: 'st3' },
-]);
-
-const pay = ref([
-    { name: 'Все', id: 'p1', checked: true },
-    { name: 'Оплачен', id: 'p2' },
-    { name: 'Не оплачен', id: 'p3' },
-]);
 
 const sortOptionss = ref([
     {
@@ -664,16 +668,13 @@ const sortOptionss = ref([
 ]);
 
 const sortedParticipantsRef = computed(() => {
-    let tempParticipants = participants.value;
+    let tempParticipants = participants.users.value;
 
-    tempParticipants = tempParticipants.slice(0, participantsVisible.value);
-
-    tempParticipants = tempParticipants.filter((item) => {
-        return item.first_name
-            .toUpperCase()
-            .includes(searchParticipants.value.toUpperCase());
-    });
-
+    if (name.value.length > 3) {
+        userStore.searchUsers(name.value);
+    } else if (name.value.length == 0) {
+        return [];
+    }
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
             let fa = a.first_name.toLowerCase(),
@@ -704,45 +705,170 @@ const sortedParticipantsRef = computed(() => {
         tempParticipants.reverse();
     }
 
-    const rangeSexes = {
-        Все: () => true,
-        Мужской: (participant) => participant.sex == 'Мужской',
-        Женский: (participant) => participant.sex == 'Женский',
-    };
-
-    const rangeStatus = {
-        Все: () => true,
-        Верифицированный: (participant) => participant.verify == true,
-        Неверифицированный: (participant) => participant.verify == false,
-    };
-
-    const rangePayed = {
-        Все: () => true,
-        Оплачен: (participant) => participant.payed == true,
-        'Не оплачен': (participant) => participant.payed == false,
-    };
-
-    tempParticipants = tempParticipants.filter((item) => {
-        return rangeSexes[selectedSex.value](item) || false;
-    });
-
-    tempParticipants = tempParticipants.filter((item) => {
-        return rangeStatus[selectedStatus.value](item) || false;
-    });
-
-    tempParticipants = tempParticipants.filter((item) => {
-        return rangePayed[selectedPay.value](item) || false;
-    });
-
-    if (!minAge.value && !maxAge.value) {
-        return tempParticipants;
-    }
-    tempParticipants = tempParticipants.filter((item) => {
-        return item.days >= minAge.value && item.days <= maxAge.value;
-    });
+    tempParticipants = tempParticipants.slice(0, participantsVisible.value);
 
     return tempParticipants;
 });
+
+watch(
+    () => roles.roles.value,
+
+    (newRole, oldRole) => {
+        if (!roles.roles.value.centralheadquarter_commander) {
+            let search = '';
+
+            if (roles.roles.value.districtheadquarter_commander) {
+                district.value =
+                    roles.roles.value.districtheadquarter_commander.name;
+                search =
+                    '?district_headquarter__name=' +
+                    roles.roles.value.districtheadquarter_commander.name;
+                levelAccess.value = 1;
+            } else if (roles.roles.value.regionalheadquarter_commander) {
+                reg.value =
+                    roles.roles.value.regionalheadquarter_commander.name;
+                search =
+                    '?regional_headquarter__name=' +
+                    roles.roles.value.regionalheadquarter_commander.name;
+                levelAccess.value = 2;
+            } else if (roles.roles.value.localheadquarter_commander) {
+                local.value = roles.roles.value.localheadquarter_commander.name;
+                search =
+                    '?local_headquarter__name=' +
+                    roles.roles.value.localheadquarter_commander.name;
+                levelAccess.value = 3;
+            } else if (roles.roles.value.educationalheadquarter_commander) {
+                educ.value =
+                    roles.roles.value.educationalheadquarter_commander.name;
+                search =
+                    '?educational_headquarter__name=' +
+                    roles.roles.value.educationalheadquarter_commander.name;
+                levelAccess.value = 4;
+            } else if (roles.roles.value.detachment_commander) {
+                detachment.value = roles.roles.value.detachment_commander.name;
+                search =
+                    '?detachment__name=' +
+                    roles.roles.value.detachment_commander.name;
+                levelAccess.value = 5;
+            }
+            viewContributorsData(search);
+        } else {
+            levelAccess.value = 0;
+        }
+    },
+);
+
+watch(
+    () => regionalsStore.regionals,
+    () => {
+        regionals.value = regionalsStore.regionals;
+    },
+);
+
+watch(
+    () => localsStore.locals,
+    () => {
+        locals.value = localsStore.locals;
+    },
+);
+
+watch(
+    () => educationalsStore.educationals,
+    () => {
+        educHead.value = educationalsStore.educationals;
+    },
+);
+watch(
+    () => squadsStore.squads,
+    () => {
+        detachments.value = squadsStore.squads;
+    },
+);
+
+watch(
+    () => district.value,
+    () => {
+        viewContributorsData('?district_headquarter__name=' + district.value);
+        let districtId = districtsStore.districts.find(
+            (dis) => dis.name == district.value,
+        )?.id;
+        regionals.value = regionalsStore.regionals.filter(
+            (regional) => regional.district_headquarter == districtId,
+        );
+    },
+);
+
+watch(
+    () => reg.value,
+    () => {
+        if (reg.value) {
+            viewContributorsData('?regional_headquarter__name=' + reg.value);
+        } else if (levelAccess.value < 2) {
+            viewContributorsData(
+                '?district_headquarter__name=' + district.value,
+            );
+        }
+
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regId,
+        );
+    },
+);
+
+// watch(
+//     () => local.value,
+//     () => {
+//         if (local.value) {
+//             viewContributorsData('?local_headquarter__name=' + local.value);
+//         } else if (levelAccess.value < 3) {
+//             viewContributorsData('?regional_headquarter__name=' + reg.value);
+//         }
+
+//         let locId = localsStore.locals.find(
+//             (loc) => loc.name == local.value,
+//         )?.id;
+//         console.log('locid', locId);
+//         educHead.value = educationalsStore.educationals.filter(
+//             (edh) => edh.local_headquarter == locId,
+//         );
+//         console.log('educHead', educHead.value);
+//     },
+// );
+
+watch(
+    () => educ.value,
+    () => {
+        if (educ.value) {
+            viewContributorsData(
+                '?educational_headquarter__name=' + educ.value,
+            );
+        } else if (levelAccess.value < 4) {
+            viewContributorsData('?local_headquarter__name=' + local.value);
+        }
+        let educId = educationalsStore.educationals.find(
+            (edh) => edh.name == educ.value,
+        )?.id;
+        detachments.value = squadsStore.squads.filter(
+            (squad) => squad.educational_headquarter == educId,
+        );
+    },
+);
+
+watch(
+    () => detachment.value,
+    () => {
+        if (detachment.value) {
+            viewContributorsData('?detachment__name=' + detachment.value);
+        } else if (levelAccess.value < 5) {
+            viewContributorsData(
+                '?educational_headquarter__name=' + educ.value,
+            );
+        }
+    },
+);
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
