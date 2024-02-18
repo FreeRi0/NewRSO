@@ -2795,4 +2795,8 @@ usePage({ isHidden: true });
     padding-top: 20px;
     padding-bottom: 20px;
 }
+.v-row.v-row--no-gutters .v-col-4 {
+    flex: none;
+    max-width: none;
+}
 </style>
