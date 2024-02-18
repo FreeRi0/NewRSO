@@ -254,6 +254,23 @@ const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
+const viewContributorsData = async (search) => {
+    try {
+        isLoading.value = true;
+        const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        participants.users.value = viewParticipantsResponse.data;
+        isLoading.value = false;
+        selectedPeoples.value = [];
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
 const updateDistrict = (districtVal) => {
     viewContributorsData('?district_headquarter__name=' + districtVal);
     let districtId = districtsStore.districts.find(
@@ -316,24 +333,6 @@ const updateDetachment = (detachmentVal) => {
         viewContributorsData('?educational_headquarter__name=' + educ.value);
     }
     detachment.value = detachmentVal;
-};
-
-const viewContributorsData = async (search) => {
-    try {
-        isLoading.value = true;
-
-        const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        participants.users.value = viewParticipantsResponse.data;
-        isLoading.value = false;
-        selectedPeoples.value = [];
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
 };
 
 // const select = (event) => {
@@ -437,29 +436,28 @@ const onAction = async () => {
             } else {
                 await ChangeCancelStatus(application.id);
             }
+            application.selected = false;
             selectedPeoples.value = selectedPeoples.value.filter(
                 (participant) => participant.id != application.id,
             );
         }
+        let search = '';
+        if (district.value) {
+            search = '?district_headquarter__name=' + district.value;
+        } else if (reg.value) {
+            search = '?regional_headquarter__name=' + reg.value;
+        } else if (local.value) {
+            search = '?local_headquarter__name=' + local.value;
+        } else if (educ.value) {
+            search = '?educational_headquarter__name=' + educ.value;
+        } else if (detachment.value) {
+            search = '?detachment__name=' + detachment.value;
+        }
+        viewContributorsData(search);
     } catch (e) {
         console.log('error action', e);
     }
 };
-
-// const changePeoples = (CheckedUser, UserId) => {
-//     let participant = {};
-//     console.log('fff', CheckedUser, UserId);
-//     if (CheckedUser) {
-//         participant = participants.users.value.find(
-//             (item) => item.id == UserId,
-//         );
-//         selectedPeoples.value.push(participant);
-//     } else {
-//         selectedPeoples.value = selectedPeoples.value.filter(
-//             (item) => item.id !== UserId,
-//         );
-//     }
-// };
 
 const sortOptionss = ref([
     {
@@ -481,6 +479,12 @@ const sortedParticipants = computed(() => {
         //     search = '?district_headquarter__name=' + district.value;
         // } else if (reg.value) {
         //     search = '?regional_headquarter__name=' + reg.value;
+        // } else if (local.value) {
+        //     search = '?local_headquarter__name=' + local.value;
+        // } else if (educ.value) {
+        //     search = '?educational_headquarter__name=' + educ.value;
+        // } else if (detachment.value) {
+        //     search = '?detachment__name=' + detachment.value;
         // }
         // viewContributorsData(search);
     }

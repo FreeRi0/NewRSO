@@ -16,7 +16,7 @@
                         roles.roles.value.centralheadquarter_commander)) ||
                 props.user.privacy?.privacy_photo === 'Все'
             "
-            :banner="user?.media?.banner"
+            :banner="user.media?.banner"
             @upload-wall="uploadWall"
             @update-wall="updateWall"
             @delete-wall="deleteWall"
@@ -47,7 +47,7 @@
                         roles.roles.value.centralheadquarter_commander)) ||
                 props.user.privacy?.privacy_photo === 'Все'
             "
-            :avatar="user?.media?.photo"
+            :avatar="user.media?.photo"
             @upload="uploadAva"
             @update="updateAva"
             @delete="deleteAva"

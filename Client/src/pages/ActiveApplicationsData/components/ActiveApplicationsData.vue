@@ -28,29 +28,9 @@
             </div>
 
             <div v-else-if="picked == 'Заявка на участие в мероприятии'">
-                <p>Блок в разработке....</p>
-                <!-- <div
-                    class="contributor-sort__all mb-8"
-                    v-if="events?.length > 0"
-                >
-                    <input
-                        type="checkbox"
-                        @click="selectEvents"
-                        v-model="checkboxAllEvents"
-                    />
-                </div>
+                <!-- <p>Блок в разработке....</p> -->
                 <ActiveEventsApp
-                    @change="changeEvents"
-                    :events="events"
-                    :selected-events="selectedEvents"
-                    v-if="!isLoading"
                 />
-                <v-progress-circular
-                    class="circleLoader"
-                    v-else
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular> -->
             </div>
 
             <div v-else-if="picked == 'Конкурсы'">
@@ -71,7 +51,7 @@ import { activeApplications } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
 import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { useRoleStore } from '@layouts/store/role';
-
+import { ActiveEventsApp } from '@features/ActiveApplications/components';
 import { storeToRefs } from 'pinia';
 
 const roleStore = useRoleStore();

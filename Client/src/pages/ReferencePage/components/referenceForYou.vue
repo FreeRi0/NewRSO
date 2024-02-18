@@ -40,13 +40,13 @@
                 </div>
                 <div class="references-items">
                     <div class="references-sort">
-                        <div class="references-sort__all">
+                        <!-- <div class="references-sort__all">
                             <input
                                 type="checkbox"
                                 @click="select"
                                 v-model="checkboxAll"
                             />
-                        </div>
+                        </div> -->
                         <div class="sort-filters">
                             <div class="sort-select">
                                 <sortByEducation
@@ -154,10 +154,11 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
+import { filters } from '@features/Contributor/components';
 import {
-    filters,
-} from '@features/Contributor/components';
-import { referencesList, checkedReference } from '@features/references/components';
+    referencesList,
+    checkedReference,
+} from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed, inject, watch } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
@@ -230,6 +231,7 @@ const viewContributorsData = async (search) => {
         });
         participants.users.value = viewParticipantsResponse.data;
         isLoading.value = false;
+        selectedPeoples.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -338,17 +340,17 @@ const SendReference = async () => {
         });
 };
 
-const select = (event) => {
-    selectedPeoples.value = [];
-    console.log('fffss', checkboxAll.value, event);
-    if (event.target.checked) {
-        console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.users.value) {
-            console.log('arr', selectedPeoples.value);
-            selectedPeoples.value.push(participants.users.value[index]);
-        }
-    }
-};
+// const select = (event) => {
+//     selectedPeoples.value = [];
+//     console.log('fffss', checkboxAll.value, event);
+//     if (event.target.checked) {
+//         console.log('fffss', checkboxAll.value, event);
+//         for (let index in participants.users.value) {
+//             console.log('arr', selectedPeoples.value);
+//             selectedPeoples.value.push(participants.users.value[index]);
+//         }
+//     }
+// };
 
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};

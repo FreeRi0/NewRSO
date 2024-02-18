@@ -83,19 +83,17 @@ const actionsList = ref([
 
 const viewEvents = async () => {
     try {
-        let event_pk = 4;
-        setTimeout(async () => {
-            const eventsRequest = await HTTP.get(
-                `/events/${event_pk}/applications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
+        let event_pk = 15;
+        const eventsRequest = await HTTP.get(
+            `/events/${event_pk}/applications/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
-            );
-            eventsList.value = eventsRequest.dataж;
-        }, 100);
+            },
+        );
+        eventsList.value = eventsRequest.dataж;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -115,10 +113,10 @@ const onToggleSelectCompetition = (event, checked) => {
     }
 };
 
-const confirmApplication = async (id, application_pk) => {
+const confirmApplication = async (id, event_pk) => {
     try {
         const approveReq = await HTTP.post(
-            `/detachments/${id}/applications/${application_pk}/accept/`,
+            `/events/${event_pk}/applications/${id}/confirm/`,
             {},
             {
                 headers: {
@@ -150,10 +148,10 @@ const confirmApplication = async (id, application_pk) => {
     }
 };
 
-const cancelApplication = async (id, application_pk) => {
+const cancelApplication = async (id, event_pk) => {
     try {
         const rejectReq = await HTTP.delete(
-            `/detachments/${id}/applications/${application_pk}/accept/`,
+            `/events/${event_pk}/applications/${id}/`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -207,7 +205,7 @@ const onAction = async () => {
                 (event) => event.id != application.id,
             );
         }
-        await viewDetachments();
+        await viewEvents();
     } catch (e) {
         console.log('error action', e);
     }
