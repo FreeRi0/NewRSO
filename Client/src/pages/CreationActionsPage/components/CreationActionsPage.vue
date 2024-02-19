@@ -1079,20 +1079,33 @@ import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
+import { onActivated } from 'vue';
+import { useRoleStore } from '@layouts/store/role';
 const router = useRouter();
+const user = useRoleStore();
+
+onActivated(() => {
+    console.log(user.userRoles);
+});
 
 const maininfo = ref({
     format: '',
     direction: '',
     name: '',
     scale: '',
-    banner: null,
+    //banner: null,
     conference_link: '',
     address: '',
     description: '',
     participants_number: 0,
     application_type: '',
     available_structural_units: '',
+    org_central_headquarter: 1,
+    //org_district_headquarter: 0,
+    //org_regional_headquarter: 0,
+    //org_local_headquarter: 0,
+    //org_educational_headquarter: 0,
+    //org_detachment: 0,
 });
 
 const urlBanner = ref(null);
@@ -1191,20 +1204,28 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
-    fd.set('banner', urlBanner.value + '.jpg');
+    //fd.set('banner', urlBanner.value);
+
     createAction(fd)
         .then((resp) => {
             console.log('Форма передалась успешно', resp.data);
             putDocuments(resp.data.id, document_data.value)
                 .then(() => {})
-                .catch(() => {});
+                .catch((e) => {
+                    console.error(e);
+                });
             putTimeData(resp.data.id, time_data.value).then((resp) => {
                 console.log('Удалось изменить время', resp.data);
             });
+            putDocuments(resp.data.id, document_data.value)
+                .then(() => {})
+                .catch((e) => {
+                    console.error(e);
+                });
             router.push({ name: 'actionSquads' });
         })
         .catch((e) => {
-            console.log(e);
+            console.error(e);
         });
 }
 

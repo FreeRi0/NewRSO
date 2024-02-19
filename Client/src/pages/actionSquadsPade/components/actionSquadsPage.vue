@@ -364,9 +364,7 @@ const actionFormSearch = ref({
     roads: '',
     search: '',
 });
-function SendSearchForm() {
-    console.log(`?${formdata}`);
-}
+function SendSearchForm() {}
 //Изменение расположения блоков
 const showVertical = () => {
     vertical.value = !vertical.value;

@@ -95,7 +95,7 @@
             >
                 <v-img width="120"></v-img>
                 <div class="text text--organizer">
-                    {{ organizator.name }}
+                    {{ organizator.organization }}
                 </div>
                 <div class="text text--status">
                     {{ organizator.status }}
@@ -233,7 +233,6 @@ const event = ref({
 
 const otherevents = ref({});
 
-const organizators = ref([]);
 onActivated(() => {
     getAction(route.params.id).then((resp) => {
         event.value = resp.data;
@@ -260,62 +259,15 @@ function EditAction() {
     router.push({ name: 'editAction', params: { id: route.params.id } });
 }
 
-const items = ref([
+const organizators = ref([
     {
-        text: 'Форма заявки: Многоэтапная',
-        icon: './assets/icon_items/list.svg',
+        organizer: '',
+        organizer_phone_number: '',
+        organizer_email: '',
+        organization: '',
+        telegram: '',
+        is_contact_person: false,
     },
-    {
-        text: '',
-        icon: './assets/icon_items/clock.svg',
-    },
-    {
-        text: 'Масштаб мероприятия: Всероссийское',
-        icon: './assets/icon_items/map.svg',
-    },
-    {
-        text: 'Окончание мероприятия: 08.07.2023, 16:00',
-        icon: './assets/icon_items/clock.svg',
-    },
-    {
-        text: 'Планируемое количество участников: 350',
-        icon: './assets/icon_items/group.svg',
-    },
-    {
-        text: 'Начало регистрации: 18.06.2023, 10:30 ',
-        icon: './assets/icon_items/clock.svg',
-    },
-    {
-        text: 'Адрес: г. Барнаул, ул. Малахова, д. 44, ТЦ «Огни»',
-        icon: './assets/icon_items/label.svg',
-    },
-    {
-        text: 'Окончание регистрации: 4.07.2023, 10:30',
-        icon: './assets/icon_items/clock.svg',
-    },
-]);
-
-const cards = ref([
-    /*{
-        avatar: './assets/avatar.png',
-        name: 'Александрова Вероника Александровна',
-        status: 'Командир',
-    },
-    {
-        avatar: './assets/avatar.png',
-        name: 'Александрова Вероника Александровна',
-        status: 'Комиссар',
-    },
-    {
-        avatar: './assets/avatar.png',
-        name: 'Александрова Вероника Александровна',
-        status: 'Методист',
-    },
-    {
-        avatar: './assets/avatar.png',
-        name: 'Александрова Вероника Александровна',
-        status: 'Методист',
-    },*/
 ]);
 
 const participants = ref([
