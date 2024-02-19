@@ -130,36 +130,6 @@
                 ></educationalsDropdown>
             </v-expansion-panel-text>
         </v-expansion-panel>
-        <v-expansion-panel v-if="area">
-            <v-expansion-panel-title>
-                <template v-slot:default="{ expanded }">
-                    <v-row no-gutters>
-                        <v-col cols="4" class="d-flex justify-start">
-                            Направление отряда
-                        </v-col>
-                    </v-row>
-                </template>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-                <div class="checkbox">
-                    <div
-                        class="checkbox-item"
-                        v-for="cat in categories"
-                        :key="cat.id"
-                    >
-                        <RadioButton
-                            :value="cat.name"
-                            :label="cat.name"
-                            :id="cat.id"
-                            :checked="cat.checked"
-                            name="category"
-                            v-model:checkedValue="selectedCat"
-                        />
-                    </div>
-                </div>
-                <p>Выбрано:{{ selectedCat }}</p>
-            </v-expansion-panel-text>
-        </v-expansion-panel>
         <v-expansion-panel v-if="educRef !== null">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
@@ -195,7 +165,15 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { RadioButton } from '@shared/components/buttons';
-import { storeToRefs } from 'pinia';
+// import { useRoleStore } from '@layouts/store/role';
+// import { useRegionalsStore } from '@features/store/regionals';
+// import { useDistrictsStore } from '@features/store/districts';
+// import { useLocalsStore } from '@features/store/local';
+// import { useEducationalsStore } from '@features/store/educationals';
+// import { useSquadsStore } from '@features/store/squads';
+// import { useUserStore } from '@features/store/index';
+// import { storeToRefs } from 'pinia';
+// import { HTTP } from '@app/http';
 import {
     districtSearchFilter,
     regionalsDropdown,
@@ -204,18 +182,9 @@ import {
     educationalsDropdown,
 } from '@shared/components/selects';
 
+
 const props = defineProps({
     levelSearch: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    otherFilters: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    area: {
         type: Boolean,
         required: false,
         default: false,
@@ -241,11 +210,29 @@ const props = defineProps({
     },
     sortedParticipants: { type: Array, required: false },
 });
+
+// const roleStore = useRoleStore();
+// const userStore = useUserStore();
+// const roles = storeToRefs(roleStore);
+// const regionalsStore = useRegionalsStore();
+// const districtsStore = useDistrictsStore();
+// const localsStore = useLocalsStore();
+// const educationalsStore = useEducationalsStore();
+// const squadsStore = useSquadsStore();
+
+// const isLoading = ref(false);
+// // const participants = storeToRefs(userStore);
+// const regionals = ref([]);
+// const districts = ref([]);
+// const locals = ref([]);
+// const educHead = ref([]);
+// const detachments = ref([]);
 const districtRef = ref(props.district);
 const localRef = ref(props.local);
 const regRef = ref(props.reg);
 const educRef = ref(props.educ);
 const detachmentRef = ref(props.detachment);
+const levelAccess = ref(7);
 
 const emit = defineEmits([
     'updateDistrict',
@@ -277,6 +264,98 @@ const updateDetachment = () => {
     emit('updateDetachment', detachmentRef.value);
     console.log(detachmentRef.value);
 };
+
+// const viewContributorsData = async (search) => {
+//     try {
+//         isLoading.value = true;
+
+//         const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+//         participants.users.value = viewParticipantsResponse.data;
+//         isLoading.value = false;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
+
+// watch(
+//     () => roles.roles.value,
+
+//     (newRole, oldRole) => {
+//         if (!roles.roles.value.centralheadquarter_commander) {
+//             let search = '';
+
+//             if (roles.roles.value.districtheadquarter_commander) {
+//                 districtRef.value =
+//                     roles.roles.value.districtheadquarter_commander.name;
+//                 search =
+//                     '?district_headquarter__name=' +
+//                     roles.roles.value.districtheadquarter_commander.name;
+//                 levelAccess.value = 1;
+//             } else if (roles.roles.value.regionalheadquarter_commander) {
+//                 regRef.value =
+//                     roles.roles.value.regionalheadquarter_commander.name;
+//                 search =
+//                     '?regional_headquarter__name=' +
+//                     roles.roles.value.regionalheadquarter_commander.name;
+//                 levelAccess.value = 2;
+//             } else if (roles.roles.value.localheadquarter_commander) {
+//                 localRef.value = roles.roles.value.localheadquarter_commander.name;
+//                 search =
+//                     '?local_headquarter__name=' +
+//                     roles.roles.value.localheadquarter_commander.name;
+//                 levelAccess.value = 3;
+//             } else if (roles.roles.value.educationalheadquarter_commander) {
+//                 educRef.value =
+//                     roles.roles.value.educationalheadquarter_commander.name;
+//                 search =
+//                     '?educational_headquarter__name=' +
+//                     roles.roles.value.educationalheadquarter_commander.name;
+//                 levelAccess.value = 4;
+//             } else if (roles.roles.value.detachment_commander) {
+//                 detachmentRef.value = roles.roles.value.detachment_commander.name;
+//                 search =
+//                     '?detachment__name=' +
+//                     roles.roles.value.detachment_commander.name;
+//                 levelAccess.value = 5;
+//             }
+//             viewContributorsData(search);
+//         } else {
+//             levelAccess.value = 0;
+//         }
+//     },
+// );
+
+// watch(
+//     () => regionalsStore.regionals,
+//     () => {
+//         regionals.value = regionalsStore.regionals;
+//     },
+// );
+
+// watch(
+//     () => localsStore.locals,
+//     () => {
+//         locals.value = localsStore.locals;
+//     },
+// );
+
+// watch(
+//     () => educationalsStore.educationals,
+//     () => {
+//         educHead.value = educationalsStore.educationals;
+//     },
+// );
+// watch(
+//     () => squadsStore.squads,
+//     () => {
+//         detachments.value = squadsStore.squads;
+//     },
+// );
 </script>
 <style lang="scss">
 .v-expansion-panel {

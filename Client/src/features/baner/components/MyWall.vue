@@ -1,14 +1,14 @@
 <template>
     <div class="user-metric">
         <bannerPhoto
-            :banner="user?.media?.banner"
+            :banner="user.media?.banner"
             @upload-wall="uploadWall"
             @update-wall="updateWall"
             @delete-wall="deleteWall"
             :edited="true"
         ></bannerPhoto>
         <Avatar
-            :avatar="user?.media?.photo"
+            :avatar="user.media?.photo"
             @upload="uploadAva"
             @update="updateAva"
             @delete="deleteAva"

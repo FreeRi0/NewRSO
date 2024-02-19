@@ -13,9 +13,6 @@
                     :options="actionsList"
                 ></sortByEducation>
             </div>
-            <!-- <div class="contributor-sort__all">
-                <input type="checkbox" @click="select" v-model="checkboxAll" />
-            </div> -->
         </div>
         <div class="participants__list">
             <template
@@ -126,8 +123,6 @@ const viewParticipants = async () => {
 };
 
 const onToggleSelectCompetition = (participant, checked) => {
-    // console.log('participant', participant.selected);
-    // console.log('checked', checked);
     if (checked) {
         participant.selected = checked;
         selectedParticipantList.value.push(participant);
