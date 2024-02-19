@@ -2799,4 +2799,8 @@ usePage({ isHidden: true });
     flex: none;
     max-width: none;
 }
+
+.v-list-item-title {
+    white-space: wrap;
+}
 </style>

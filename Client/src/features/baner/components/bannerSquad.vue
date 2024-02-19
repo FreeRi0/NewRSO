@@ -41,13 +41,19 @@
                             >
                         </div>
                         <div class="squad-data__social-network">
-                            <div class="squad-data__link-vk">
-                                <a href="https://vk.com" target="_blank">
+                            <div
+                                class="squad-data__link-vk"
+                                v-if="squad.social_vk"
+                            >
+                                <a :href="squad.social_vk" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div class="squad-data__link-telegram">
-                                <a href="https://t.me" target="_blank">
+                            <div
+                                class="squad-data__link-telegram"
+                                v-if="squad.social_tg"
+                            >
+                                <a :href="squad.social_tg" target="_blank">
                                     <img
                                         src="@/app/assets/icon/telegram-blue.svg"
                                         alt=""
@@ -55,12 +61,15 @@
                                 </a>
                             </div>
                             <div class="squad-data__link-share-link">
-                                <a href="#" target="_blank">
+                                <a @click="copyL">
                                     <img
                                         src="@/app/assets/icon/to-share-link.svg"
                                         alt=""
                                     />
                                 </a>
+                                <div class="copy-message" hidden>
+                                    Ссылка скопирована
+                                </div>
                             </div>
                             <!-- <pre>dddddssss   {{ userId }}</pre> -->
                         </div>
@@ -307,6 +316,15 @@ onMounted(() => {
     viewDetachments();
     viewRegionals();
 });
+
+const copyL = () => {
+    navigator.clipboard.writeText(window.location.href);
+    const copyMessage = document.querySelector('.copy-message');
+    copyMessage.hidden = false;
+    setTimeout(() => {
+        copyMessage.hidden = true;
+    }, 2000);
+};
 </script>
 <style lang="scss" scoped>
 .squad-metric {
@@ -528,6 +546,24 @@ onMounted(() => {
     display: flex;
     column-gap: 12px;
     margin-top: 17px;
+}
+.copy-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #35383f;
+    border-radius: 10px;
+    color: #35383f;
+    font-size: 16px;
+    font-family: 'Bert Sans';
+    text-align: center;
+}
+
+.squad-data__link-share-link a {
+    cursor: pointer;
 }
 </style>
 @shared/components/inputs/imagescomp@shared/components/inputs/imagescomp
