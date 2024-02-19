@@ -40,13 +40,17 @@
                 </div>
                 <div class="references-items">
                     <div class="references-sort">
-                        <!-- <div class="references-sort__all">
-                            <input
-                                type="checkbox"
-                                @change="select"
-                                v-model="checkboxAll"
-                            />
-                        </div> -->
+                 
+                        <div class="d-flex align-center">
+                            <div class="references-sort__all">
+                                <input
+                                    type="checkbox"
+                                    @click="select"
+                                    v-model="checkboxAll"
+                                />
+                            </div>
+                            <div class="ml-3">Выбрать всё</div>
+                        </div>
                         <div class="sort-filters">
                             <div class="sort-select">
                                 <sortByEducation

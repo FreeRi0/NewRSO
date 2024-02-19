@@ -85,6 +85,19 @@
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
+                            <div class="d-flex align-center">
+                                <div class="contributor-sort__all ">
+                                    <input
+                                        type="checkbox"
+                                        @click="select"
+                                        placeholder="Выбрать все"
+                                        v-model="checkboxAll"
+                                    />
+                                </div>
+                                <div class="ml-3">Выбрать всё</div>
+                            </div>
+
+                            <!-- <p>Выбрать все</p> -->
                             <div class="participants__actions">
                                 <div class="participants__actions-select mr-3">
                                     <sortByEducation
@@ -96,13 +109,7 @@
                                     ></sortByEducation>
                                 </div>
                             </div>
-                            <div class="contributor-sort__all">
-                                <input
-                                    type="checkbox"
-                                    @click="select"
-                                    v-model="checkboxAll"
-                                />
-                            </div>
+
                             <div class="sort-filters">
                                 <div class="sort-select">
                                     <sortByEducation
@@ -347,10 +354,11 @@ const select = (event) => {
         // console.log('fffss', checkboxAll.value, event);
         for (let index in participants.value) {
             // console.log('arr', selectedPeoples.value);
-            participants.value[index].selected = event.target.checked;
+
+            participants.value[index].selected = true;
             selectedPeoples.value.push(participants.value[index]);
         }
-    } else if (!event.target.checked) {
+    } else {
         for (let index in participants.value) {
             // console.log('arr', selectedPeoples.value);
             participants.value[index].selected = false;

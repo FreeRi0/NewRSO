@@ -40,13 +40,17 @@
                 </div>
                 <div class="references-items">
                     <div class="references-sort">
-                        <!-- <div class="references-sort__all">
-                            <input
-                                type="checkbox"
-                                @click="select"
-                                v-model="checkboxAll"
-                            />
-                        </div> -->
+                        <div class="d-flex align-center">
+                            <div class="references-sort__all">
+                                <input
+                                    type="checkbox"
+                                    @click="select"
+                                    v-model="checkboxAll"
+                                />
+                            </div>
+                            <div class="ml-3">Выбрать всё</div>
+                        </div>
+
                         <div class="sort-filters">
                             <div class="sort-select">
                                 <sortByEducation
@@ -260,6 +264,7 @@ const updateDistrict = (districtVal) => {
         (regional) => regional.district_headquarter == districtId,
     );
 };
+
 const updateReg = (regVal) => {
     let search = '';
     if (regVal) {
@@ -325,7 +330,6 @@ const updateDetachment = (detachmentVal) => {
     detachment.value = detachmentVal;
 };
 
-
 const SendReference = async () => {
     await HTTP.post('/membership_certificates/internal/', refData.value, {
         headers: {
@@ -365,25 +369,23 @@ const SendReference = async () => {
         });
 };
 
-// const select = (event) => {
-//     selectedPeoples.value = [];
-//     console.log('fffss', checkboxAll.value, event);
-//     if (event.target.checked) {
-//         console.log('fffss', checkboxAll.value, event);
-//         for (let index in participants.users.value) {
-//             console.log('arr', selectedPeoples.value);
-//             selectedPeoples.value.push(participants.users.value[index]);
-//         }
-//     }
-// };
+const select = (event) => {
+    selectedPeoples.value = [];
+    console.log('fffss', checkboxAll.value, event);
+    if (event.target.checked) {
+        console.log('fffss', checkboxAll.value, event);
+        for (let index in participants.value) {
+            console.log('arr', selectedPeoples.value);
+            selectedPeoples.value.push(participants.value[index]);
+        }
+    }
+};
 
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
     console.log('fff', CheckedUser, UserId);
     if (CheckedUser) {
-        participant = participants.value.find(
-            (item) => item.id == UserId,
-        );
+        participant = participants.value.find((item) => item.id == UserId);
         selectedPeoples.value.push(participant);
     } else {
         selectedPeoples.value = selectedPeoples.value.filter(
