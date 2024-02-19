@@ -19,7 +19,10 @@
             </div>
 
             <div id="right">
-                <div></div>
+                <div class="horizontallso__confidant">
+                    <input type="checkbox" v-model="isChecked" @change="onCheckbox" />
+                </div>
+                <p class="choose_all"> Выбрать всех </p>
 
                 <multi-stage-submit-item
                     v-for="headquarter in headquartersJunior"
@@ -63,6 +66,7 @@ import { HTTP } from '@app/http';
 import MultiStageSubmitItem from './MultiStageSubmitItem.vue';
 import MultiStageSubmitSelect from './MultiStageSubmitSelect.vue';
 
+const isChecked = ref(false);
 const route = useRoute();
 //const router = useRouter();
 const answers = ref();
@@ -107,6 +111,21 @@ const onAction = () => {
         console.log('onAction error', e);
     }
 };
+
+const onCheckbox = async (isChecked) => {
+    console.log(isChecked);
+    if (selectedCompetitionsList.value.length == 0){
+        for (const obj of headquartersJunior.value) {
+            obj.selected = true;
+            selectedCompetitionsList.value.push(obj);
+        }
+    } else {
+        for (const obj of headquartersJunior.value) {
+            obj.selected = false;
+        }
+        selectedCompetitionsList.value = [];
+    }
+}
 
 onMounted(async () => {
     await getHeadquartersJunior();
@@ -190,5 +209,26 @@ onMounted(async () => {
     line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
+}
+.horizontallso__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    width: 48px;
+    height: 48px;
+    input {
+        width: 100%;
+        height: 100%;
+    }
+}
+.choose_all{
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383F;
 }
 </style>
