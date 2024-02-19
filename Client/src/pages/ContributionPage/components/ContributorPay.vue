@@ -53,7 +53,8 @@
                         type="text"
                         id="search"
                         class="contributor-search__input"
-                        @keyUp="searchContributors"
+                        @keyup="searchContributors"
+                        v-model='name'
                         placeholder="Поищем пользователей?"
                     />
                     <img src="@app/assets/icon/search.svg" alt="search" />
@@ -451,9 +452,6 @@ const sortOptionss = ref([
 ]);
 
 const searchContributors = (event) => {
-    console.log('name', name.value, event.target.value);
-    if (name.value == event.target.value) return;
-    else name.value = event.target.value;
     if (name.value) {
         clearTimeout(timerSearch.value);
         timerSearch.value = setTimeout(() => {
