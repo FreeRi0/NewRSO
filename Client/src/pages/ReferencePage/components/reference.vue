@@ -22,7 +22,6 @@
                         @update-local="updateLocal"
                         @update-educ="updateEduc"
                         @update-detachment="updateDetachment"
-                        :area="false"
                         :level-search="false"
                         :district="district"
                         :districts="districts"
@@ -137,17 +136,19 @@
                             :participants="selectedPeoples"
                         ></checkedReference>
                     </div>
-                    <p class="error" v-if="isError.detail">
-                        {{ isError.detail }}
-                    </p>
-                    <p class="error" v-if="isError">
-                        {{ isError.cert_end_date }}
-                    </p>
-                    <p class="error" v-if="isError">
-                        {{ isError.recipient }}
-                    </p>
+
                     <Button type="submit" label="Получить справки"></Button>
+                    <!-- <p v-if="isError">{{ isError.detail }}</p> -->
                 </form>
+                <p class="error" v-if="isError.detail">
+                    {{ isError.detail }}
+                </p>
+                <p class="error" v-if="isError">
+                    {{ isError.cert_end_date }}
+                </p>
+                <p class="error" v-if="isError">
+                    {{ isError.recipient }}
+                </p>
             </div>
         </div>
     </div>
@@ -419,7 +420,6 @@ const sortedParticipants = computed(() => {
     }
 
     tempParticipants = tempParticipants.slice(0, participantsVisible.value);
-
     return tempParticipants;
 });
 

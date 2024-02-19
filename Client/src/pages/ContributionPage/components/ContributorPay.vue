@@ -53,7 +53,7 @@
                         type="text"
                         id="search"
                         class="contributor-search__input"
-                        v-model.trim="name"
+                        @keyUp="searchContributors"
                         placeholder="Поищем пользователей?"
                     />
                     <img src="@app/assets/icon/search.svg" alt="search" />
@@ -67,7 +67,6 @@
                             @update-local="updateLocal"
                             @update-educ="updateEduc"
                             @update-detachment="updateDetachment"
-                            :area="false"
                             :level-search="false"
                             :district="district"
                             :districts="districts"
@@ -96,13 +95,13 @@
                                     ></sortByEducation>
                                 </div>
                             </div>
-                            <!-- <div class="contributor-sort__all">
+                            <div class="contributor-sort__all">
                                 <input
                                     type="checkbox"
                                     @click="select"
                                     v-model="checkboxAll"
                                 />
-                            </div> -->
+                            </div>
                             <div class="sort-filters">
                                 <div class="sort-select">
                                     <sortByEducation
@@ -123,18 +122,6 @@
                             </div>
                         </div>
                         <div class="contributor-wrapper">
-                            <!-- <contributorsList
-                                :participants="sortedParticipants"
-                                :selected-peoples="selectedPeoples"
-                                @change="changePeoples"
-                                v-if="!isLoading"
-                            ></contributorsList>
-                            <v-progress-circular
-                                class="circleLoader"
-                                v-else
-                                indeterminate
-                                color="blue"
-                            ></v-progress-circular> -->
                             <template
                                 v-for="participant in sortedParticipants"
                                 :key="participant.id"
@@ -159,11 +146,6 @@
                 </div>
                 <div class="selectedItems" v-if="selectedPeoples.length > 0">
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
-
-                    <!-- <checkedContributors
-                        @change="changePeoples"
-                        :participants="selectedPeoples"
-                    ></checkedContributors> -->
                     <selectedContributionAccessItem
                         v-for="participant in selectedPeoples"
                         :action="action"
@@ -240,6 +222,7 @@ const educHead = ref([]);
 const detachments = ref([]);
 const reg = ref(null);
 const detachment = ref(null);
+const timerSearch = ref(null);
 const district = ref(null);
 const local = ref(null);
 const isLoading = ref(false);
@@ -335,17 +318,17 @@ const updateDetachment = (detachmentVal) => {
     detachment.value = detachmentVal;
 };
 
-// const select = (event) => {
-//     selectedPeoples.value = [];
-//     console.log('fffss', checkboxAll.value, event);
-//     if (event.target.checked) {
-//         console.log('fffss', checkboxAll.value, event);
-//         for (let index in participants.users.value) {
-//             console.log('arr', selectedPeoples.value);
-//             selectedPeoples.value.push(participants.users.value[index]);
-//         }
-//     }
-// };
+const select = (event) => {
+    selectedPeoples.value = [];
+    console.log('fffss', checkboxAll.value, event);
+    if (event.target.checked) {
+        console.log('fffss', checkboxAll.value, event);
+        for (let index in participants.users.value) {
+            console.log('arr', selectedPeoples.value);
+            selectedPeoples.value.push(participants.users.value[index]);
+        }
+    }
+};
 
 const onToggleSelectCompetition = (participant, checked) => {
     if (checked) {
@@ -467,27 +450,36 @@ const sortOptionss = ref([
     { value: 'date_of_birth', name: 'По дате вступления в РСО' },
 ]);
 
-const sortedParticipants = computed(() => {
-    let tempParticipants = participants.users.value;
-    if (name.value.length > 3) {
-        userStore.searchUsers(name.value);
+const searchContributors = (event) => {
+    console.log('name', name.value, event.target.value);
+    if (name.value == event.target.value) return;
+    else name.value = event.target.value;
+    if (name.value) {
+        clearTimeout(timerSearch.value);
+        timerSearch.value = setTimeout(() => {
+            userStore.searchUsers(name.value);
+        }, 400);
     } else if (roles.roles.value.centralheadquarter_commander) {
         return [];
     } else {
-        // let search = '';
-        // if (district.value) {
-        //     search = '?district_headquarter__name=' + district.value;
-        // } else if (reg.value) {
-        //     search = '?regional_headquarter__name=' + reg.value;
-        // } else if (local.value) {
-        //     search = '?local_headquarter__name=' + local.value;
-        // } else if (educ.value) {
-        //     search = '?educational_headquarter__name=' + educ.value;
-        // } else if (detachment.value) {
-        //     search = '?detachment__name=' + detachment.value;
-        // }
-        // viewContributorsData(search);
+        let search = '';
+        if (district.value) {
+            search = '?district_headquarter__name=' + district.value;
+        } else if (reg.value) {
+            search = '?regional_headquarter__name=' + reg.value;
+        } else if (local.value) {
+            search = '?local_headquarter__name=' + local.value;
+        } else if (educ.value) {
+            search = '?educational_headquarter__name=' + educ.value;
+        } else if (detachment.value) {
+            search = '?detachment__name=' + detachment.value;
+        }
+        viewContributorsData(search);
     }
+};
+
+const sortedParticipants = computed(() => {
+    let tempParticipants = participants.users.value;
 
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {

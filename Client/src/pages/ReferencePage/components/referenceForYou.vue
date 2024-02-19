@@ -22,7 +22,6 @@
                         @update-local="updateLocal"
                         @update-educ="updateEduc"
                         @update-detachment="updateDetachment"
-                        :area="false"
                         :level-search="false"
                         :district="district"
                         :districts="districts"
@@ -140,6 +139,15 @@
                 <!-- <p class="error">
                     {{ isError }}
                 </p> -->
+                <p class="error" v-if="isError.detail">
+                    {{ isError.detail }}
+                </p>
+                <p class="error" v-if="isError">
+                    {{ isError.cert_end_date }}
+                </p>
+                <p class="error" v-if="isError">
+                    {{ isError.recipient }}
+                </p>
             </div>
         </div>
 
@@ -183,7 +191,7 @@ const participants = storeToRefs(userStore);
 const selectedPeoples = ref([]);
 const swal = inject('$swal');
 const participantsVisible = ref(12);
-const isError = ref([]);
+const isError = ref('');
 const levelAccess = ref(7);
 const regionals = ref([]);
 const districts = ref([]);

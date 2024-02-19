@@ -130,36 +130,6 @@
                 ></educationalsDropdown>
             </v-expansion-panel-text>
         </v-expansion-panel>
-        <v-expansion-panel v-if="area">
-            <v-expansion-panel-title>
-                <template v-slot:default="{ expanded }">
-                    <v-row no-gutters>
-                        <v-col cols="4" class="d-flex justify-start">
-                            Направление отряда
-                        </v-col>
-                    </v-row>
-                </template>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-                <div class="checkbox">
-                    <div
-                        class="checkbox-item"
-                        v-for="cat in categories"
-                        :key="cat.id"
-                    >
-                        <RadioButton
-                            :value="cat.name"
-                            :label="cat.name"
-                            :id="cat.id"
-                            :checked="cat.checked"
-                            name="category"
-                            v-model:checkedValue="selectedCat"
-                        />
-                    </div>
-                </div>
-                <p>Выбрано:{{ selectedCat }}</p>
-            </v-expansion-panel-text>
-        </v-expansion-panel>
         <v-expansion-panel v-if="educRef !== null">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
@@ -215,16 +185,6 @@ import {
 
 const props = defineProps({
     levelSearch: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    otherFilters: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    area: {
         type: Boolean,
         required: false,
         default: false,

@@ -83,7 +83,7 @@ const actionsList = ref([
 
 const viewEvents = async () => {
     try {
-        let event_pk = 15;
+        let event_pk = 4;
         const eventsRequest = await HTTP.get(
             `/events/${event_pk}/applications/`,
             {
