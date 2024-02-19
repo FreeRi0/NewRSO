@@ -424,6 +424,7 @@ onActivated(() => {
         text-overflow: ellipsis;
     }
 }
+
 .squads {
     padding: 0px 0px 60px 0px;
 
@@ -433,7 +434,6 @@ onActivated(() => {
             font-size: 32px;
         }
     }
-
     &-wrapper {
         padding: 60px 0px;
         display: grid;
