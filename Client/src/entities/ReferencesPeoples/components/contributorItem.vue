@@ -15,11 +15,7 @@
                     alt="logo"
                     v-if="participant.media?.photo"
                 />
-                <img
-                    src="@app/assets/user-avatar.png"
-                    alt="photo"
-                    v-else
-                />
+                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
@@ -47,10 +43,6 @@
 
         <div v-if="reference"></div>
 
-        <div v-else class="horizontallso-info">
-            <p v-if="participant.membership_fee">Оплачен</p>
-            <p v-else>Не оплачен</p>
-        </div>
     </div>
 </template>
 <script setup>
@@ -157,7 +149,6 @@ watch(
         height: 48px;
     }
     @media (max-width: 768px) {
-
         margin-top: 12px;
     }
 }

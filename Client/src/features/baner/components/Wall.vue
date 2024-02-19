@@ -16,7 +16,7 @@
                         roles.roles.value.centralheadquarter_commander)) ||
                 props.user.privacy?.privacy_photo === 'Все'
             "
-            :banner="user?.media?.banner"
+            :banner="user.media?.banner"
             @upload-wall="uploadWall"
             @update-wall="updateWall"
             @delete-wall="deleteWall"
@@ -47,7 +47,7 @@
                         roles.roles.value.centralheadquarter_commander)) ||
                 props.user.privacy?.privacy_photo === 'Все'
             "
-            :avatar="user?.media?.photo"
+            :avatar="user.media?.photo"
             @upload="uploadAva"
             @update="updateAva"
             @delete="deleteAva"
@@ -115,7 +115,9 @@
                             </p>
                         </li>
                         <li class="user-data__title" v-else><p>Кандитат</p></li>
-
+                        <!-- <li class="user-data__title" v-if="detachment?.name">
+                            <p>{{ detachment?.name }}</p>
+                        </li> -->
                         <li
                             class="user-data__title"
                             v-if="
@@ -141,7 +143,7 @@
                         >
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
-                        <!-- <li class="user-data__regional-office">
+                        <li class="user-data__regional-office">
                             <div v-if="user.region">
                                 <div
                                     v-for="item in regionals.filteredRegional
@@ -150,7 +152,7 @@
                                     <p>{{ item.name }}</p>
                                 </div>
                             </div>
-                        </li> -->
+                        </li>
                         <li v-if="user?.education?.study_faculty">
                             <p>{{ user?.education?.study_faculty }}</p>
                         </li>

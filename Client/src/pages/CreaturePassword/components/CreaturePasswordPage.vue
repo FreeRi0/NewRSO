@@ -109,11 +109,9 @@ const resetPasswordForm = async () => {
             ...auth.value,
             new_password: new_password.value,
         });
-        console.log(response.data);
-        localStorage.setItem('Token', response.data.auth_token);
         isLoading.value = false;
         router.push({
-            name: 'mypage',
+            name: 'Login',
         });
         swal.fire({
             position: 'top-center',
