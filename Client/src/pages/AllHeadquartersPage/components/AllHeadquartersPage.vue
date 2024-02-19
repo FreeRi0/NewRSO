@@ -183,7 +183,7 @@ const crosspageFilters = useCrosspageFilter();
 const headquarters = storeToRefs(educationalsStore);
 
 const headquartersVisible = ref(20);
-const isLoading =  storeToRefs(educationalsStore);
+const isLoading = storeToRefs(educationalsStore);
 
 const step = ref(20);
 
@@ -234,11 +234,10 @@ const getLocalsHeadquartersForFilters = async () => {
 };
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-   
+
     getRegionalsHeadquartersForFilters();
     getLocalsHeadquartersForFilters();
 });
-
 
 const sortOptionss = ref([
     {
@@ -256,16 +255,22 @@ const sortedHeadquarters = computed(() => {
 
     if (SelectedSortRegional.value || SelectedSortDistrict.value) {
         let idRegionals = [];
-        if (SelectedSortDistrict.value){
+        if (SelectedSortDistrict.value) {
             let districtId = districts.value.find(
                 (district) => district.name === SelectedSortDistrict.value,
             )?.id;
-            idRegionals = regionals.value.filter((regional) => regional.district_headquarter === districtId).map((reg) => reg.id);
+            idRegionals = regionals.value
+                .filter(
+                    (regional) => regional.district_headquarter === districtId,
+                )
+                .map((reg) => reg.id);
         }
-        if (SelectedSortRegional.value){
-            idRegionals = [regionals.value.find(
-                (regional) => regional.name === SelectedSortRegional.value,
-            )?.id];
+        if (SelectedSortRegional.value) {
+            idRegionals = [
+                regionals.value.find(
+                    (regional) => regional.name === SelectedSortRegional.value,
+                )?.id,
+            ];
         }
 
         tempHeadquartes = tempHeadquartes.filter((item) => {

@@ -68,7 +68,6 @@ const updateMembership = (e) => {
 watch(
     () => props.participant.selected,
     (newSelected) => {
-        if (!newSelected) return;
         checked.value = newSelected;
         // const checkedItem = newSelected.find(
         //     (item) => item.id == props.participant.id,
