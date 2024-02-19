@@ -347,11 +347,13 @@ const select = (event) => {
         // console.log('fffss', checkboxAll.value, event);
         for (let index in participants.value) {
             // console.log('arr', selectedPeoples.value);
-            participants.value[index].selected = true;
+            participants.value[index].selected = event.target.checked;
             selectedPeoples.value.push(participants.value[index]);
-            // if(checkboxAll.value == true) {
-            //     participants.value[index].selected = false;
-            // }
+        }
+    } else if (!event.target.checked) {
+        for (let index in participants.value) {
+            // console.log('arr', selectedPeoples.value);
+            participants.value[index].selected = false;
         }
     }
 };
