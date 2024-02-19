@@ -3,7 +3,6 @@
         <div class="horizontallso__confidant">
             <input type="checkbox" v-model="isChecked" @change="onCheckbox" />
         </div>
-        {{ headquarter[index] }}
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img
