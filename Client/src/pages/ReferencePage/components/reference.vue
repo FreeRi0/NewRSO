@@ -9,6 +9,7 @@
                     type="text"
                     id="search"
                     class="references-search__input"
+                    @keyup="searchContributors"
                     v-model="name"
                     placeholder="Поищем пользователей?"
                 />
@@ -167,14 +168,13 @@ import {
 import { useLocalsStore } from '@features/store/local';
 import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
-import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed, inject, watch } from 'vue';
 import { HTTP } from '@app/http';
 
 const roleStore = useRoleStore();
-const userStore = useUserStore();
+
 const roles = storeToRefs(roleStore);
 const regionalsStore = useRegionalsStore();
 const districtsStore = useDistrictsStore();
@@ -182,7 +182,7 @@ const localsStore = useLocalsStore();
 const educationalsStore = useEducationalsStore();
 const squadsStore = useSquadsStore();
 const name = ref('');
-const participants = storeToRefs(userStore);
+const participants = ref([]);
 const participantsVisible = ref(12);
 const levelAccess = ref(7);
 const regionals = ref([]);
@@ -190,6 +190,7 @@ const districts = ref([]);
 const locals = ref([]);
 const educHead = ref([]);
 const detachments = ref([]);
+const timerSearch = ref(null);
 const reg = ref(null);
 const detachment = ref(null);
 const district = ref(null);
@@ -227,15 +228,21 @@ const viewContributorsData = async (search) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        participants.users.value = viewParticipantsResponse.data;
+        participants.value = viewParticipantsResponse.data;
         isLoading.value = false;
+        selectedPeoples.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
 const updateDistrict = (districtVal) => {
-    viewContributorsData('?district_headquarter__name=' + districtVal);
+    let search = '';
+    search = '?district_headquarter__name=' + districtVal;
+
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search);
+
     let districtId = districtsStore.districts.find(
         (dis) => dis.name == districtVal,
     )?.id;
@@ -244,13 +251,15 @@ const updateDistrict = (districtVal) => {
         (regional) => regional.district_headquarter == districtId,
     );
 };
-
 const updateReg = (regVal) => {
+    let search = '';
     if (regVal) {
-        viewContributorsData('?regional_headquarter__name=' + regVal);
+        search = '?regional_headquarter__name=' + regVal;
     } else if (levelAccess.value < 2) {
-        viewContributorsData('?district_headquarter__name=' + district.value);
+        search = '?district_headquarter__name=' + district.value;
     }
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search);
 
     let regId = regionalsStore.regionals.find(
         (regional) => regional.name == regVal,
@@ -261,11 +270,14 @@ const updateReg = (regVal) => {
     );
 };
 const updateLocal = (localVal) => {
+    let search = '';
     if (localVal) {
-        viewContributorsData('?local_headquarter__name=' + localVal);
+        search = '?local_headquarter__name=' + localVal;
     } else if (levelAccess.value < 3) {
-        viewContributorsData('?regional_headquarter__name=' + reg.value);
+        search = '?regional_headquarter__name=' + reg.value;
     }
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search);
 
     let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
     local.value = localVal;
@@ -275,11 +287,14 @@ const updateLocal = (localVal) => {
 };
 
 const updateEduc = (educVal) => {
+    let search = '';
     if (educVal) {
-        viewContributorsData('?educational_headquarter__name=' + educVal);
+        search = '?educational_headquarter__name=' + educVal;
     } else if (levelAccess.value < 4) {
-        viewContributorsData('?local_headquarter__name=' + local.value);
+        search = '?local_headquarter__name=' + local.value;
     }
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search);
     let educId = educationalsStore.educationals.find(
         (edh) => edh.name == educVal,
     )?.id;
@@ -290,11 +305,14 @@ const updateEduc = (educVal) => {
 };
 
 const updateDetachment = (detachmentVal) => {
+    let search = '';
     if (detachmentVal) {
-        viewContributorsData('?detachment__name=' + detachmentVal);
+        search = '?detachment__name=' + detachmentVal;
     } else if (levelAccess.value < 5) {
-        viewContributorsData('?educational_headquarter__name=' + educ.value);
+        search = '?educational_headquarter__name=' + educ.value;
     }
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search);
     detachment.value = detachmentVal;
 };
 
@@ -342,9 +360,9 @@ const select = (event) => {
     console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
         console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.users.value) {
+        for (let index in participants.value) {
             console.log('arr', selectedPeoples.value);
-            selectedPeoples.value.push(participants.users.value[index]);
+            selectedPeoples.value.push(participants.value[index]);
         }
     }
 };
@@ -353,9 +371,7 @@ const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
     console.log('fff', CheckedUser, UserId);
     if (CheckedUser) {
-        participant = participants.users.value.find(
-            (item) => item.id == UserId,
-        );
+        participant = participants.value.find((item) => item.id == UserId);
         selectedPeoples.value.push(participant);
     } else {
         selectedPeoples.value = selectedPeoples.value.filter(
@@ -372,23 +388,34 @@ const sortOptionss = ref([
     { value: 'date_of_birth', name: 'По дате вступления в РСО' },
 ]);
 
-const sortedParticipants = computed(() => {
-    let tempParticipants = participants.users.value;
-
-    if (name.value.length > 3) {
-        userStore.searchUsers(name.value);
-    } else if (roles.roles.value.centralheadquarter_commander) {
+const searchContributors = (event) => {
+    let search = '';
+    if (!name.value && roles.roles.value.centralheadquarter_commander) {
         return [];
-    } else {
-        // let search = '';
-        // if (district.value) {
-        //     search = '?district_headquarter__name=' + district.value;
-        // } else if (reg.value) {
-        //     search = '?regional_headquarter__name=' + reg.value;
-        // }
-        // viewContributorsData(search);
+    }
+    if (district.value) {
+        search = '?district_headquarter__name=' + district.value;
+    } else if (reg.value) {
+        search = '?regional_headquarter__name=' + reg.value;
+    } else if (local.value) {
+        search = '?local_headquarter__name=' + local.value;
+    } else if (educ.value) {
+        search = '?educational_headquarter__name=' + educ.value;
+    } else if (detachment.value) {
+        search = '?detachment__name=' + detachment.value;
+    }
+    if (search) {
+        search += '&search=' + name.value;
     }
 
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        viewContributorsData(search);
+    }, 400);
+};
+
+const sortedParticipants = computed(() => {
+    let tempParticipants = participants.value;
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
             let fa = a.first_name.toLowerCase(),

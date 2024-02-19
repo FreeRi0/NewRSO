@@ -65,19 +65,17 @@ const updateMembership = (e) => {
     emit('select', props.participant, e.target.checked);
 };
 
-const selectedPeoples = ref(props.selectedParticipants);
-
 watch(
     () => props.participant.selected,
     (newSelected) => {
         if (!newSelected) return;
         checked.value = newSelected;
-        const checkedItem = newSelected.find(
-            (item) => item.id == props.participant.id,
-        );
-        console.log('checkedItem', checkedItem);
-        if (!checkedItem) checked.value = false;
-        else checked.value = true;
+        // const checkedItem = newSelected.find(
+        //     (item) => item.id == props.participant.id,
+        // );
+        // console.log('checkedItem', checkedItem);
+        // if (!checkedItem) checked.value = false;
+        // else checked.value = true;
     },
 );
 </script>
