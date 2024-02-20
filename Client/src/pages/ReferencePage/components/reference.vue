@@ -40,7 +40,6 @@
                 </div>
                 <div class="references-items">
                     <div class="references-sort">
-
                         <div class="d-flex align-center">
                             <div class="references-sort__all">
                                 <input
@@ -107,6 +106,10 @@
                                 v-model:value="refData.cert_start_date"
                             />
                         </div>
+                        <p class="error" v-if="isError.cert_start_date">
+                            {{ '' + isError.cert_start_date }}
+                        </p>
+
                         <div class="form-field">
                             <label for="facultet"
                                 >Дата окончания действия справки
@@ -119,6 +122,9 @@
                             />
                         </div>
                     </div>
+                    <p class="error" v-if="isError.cert_end_date">
+                        {{ '' + isError.cert_end_date }}
+                    </p>
                     <div class="form-field another">
                         <label for="course"
                             >Справка выдана для предоставления
@@ -133,6 +139,9 @@
                             placeholder="Ответ"
                         />
                     </div>
+                    <p class="error" v-if="isError.recipient">
+                        {{ '' + isError.recipient }}
+                    </p>
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
@@ -146,13 +155,7 @@
                     <!-- <p v-if="isError">{{ isError.detail }}</p> -->
                 </form>
                 <p class="error" v-if="isError.detail">
-                    {{ isError.detail }}
-                </p>
-                <p class="error" v-if="isError">
-                    {{ isError.cert_end_date }}
-                </p>
-                <p class="error" v-if="isError">
-                    {{ isError.recipient }}
+                    {{ '' + isError.detail }}
                 </p>
             </div>
         </div>
@@ -202,7 +205,7 @@ const local = ref(null);
 const isLoading = ref(false);
 const educ = ref(null);
 const swal = inject('$swal');
-const isError = ref('');
+const isError = ref([]);
 const checkboxAll = ref(false);
 const step = ref(12);
 const ascending = ref(true);
@@ -326,7 +329,6 @@ const SendReference = async () => {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
-        responseType: 'blob',
     })
         .then((response) => {
             swal.fire({
