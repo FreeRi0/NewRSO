@@ -109,7 +109,7 @@
                     color="blue"
                 ></v-progress-circular>
             </div>
-            <Button
+            <!-- <Button
                 @click="squadsVisible += step"
                 v-if="squadsVisible < squads.competitionSquads.value.length"
                 label="Показать еще"
@@ -118,7 +118,7 @@
                 @click="squadsVisible -= step"
                 v-else
                 label="Свернуть все"
-            ></Button>
+            ></Button> -->
         </div>
     </div>
 </template>
@@ -140,9 +140,9 @@ const isLoading = storeToRefs(squadsStore);
 const categories = ref([]);
 const name = ref('');
 
-const squadsVisible = ref(20);
+// const squadsVisible = ref(20);
 
-const step = ref(20);
+// const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -242,10 +242,10 @@ const sortedSquads = computed(() => {
     }
 
     if (!picked.value) {
-        return tempSquads.slice(0, squadsVisible.value);
+        return tempSquads
     }
     tempSquads = tempSquads.filter((item) => item.area === picked.value.name);
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
+    // tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
 
