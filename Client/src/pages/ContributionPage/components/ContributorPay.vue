@@ -624,12 +624,6 @@ watch(
     },
 );
 
-// onMounted(() => {
-//     viewContributorsData();
-// })
-// onActivated(() => {
-//     viewContributorsData();
-// })
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
