@@ -345,7 +345,8 @@
                                 variant="outlined"
                                 type="text"
                                 placeholder="Поиск по ФИО"
-                                v-model="searchMembers"
+                                v-model="searchMemberField"
+                                @keyup="searchMember"
                             >
                                 <template #prepend-inner>
                                     <Icon
@@ -358,16 +359,16 @@
                                 </template>
                             </v-text-field>
                             <MembersList
-                                :items="sortedMembers"
+                                :items="members"
                                 :submited="submited"
                                 :functions="positionsStore.positions"
                                 :is-error-members="isErrorMembers"
-                                v-if="members && !isMembersLoading"
+                                v-if="members.length && !isMembersLoading"
                                 @update-member="onUpdateMember"
                             ></MembersList>
                             <v-progress-circular
                                 class="circleLoader"
-                                v-else
+                                v-else-if='isMembersLoading'
                                 indeterminate
                                 color="blue"
                             ></v-progress-circular>
@@ -770,10 +771,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount, watch } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Select, Dropdown } from '@shared/components/selects';
+import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { useRoleStore } from '@layouts/store/role';
@@ -788,6 +789,7 @@ const roles = storeToRefs(roleStore);
 
 const emit = defineEmits([
     'update:value',
+    'updateSearchMember',
     'updateMember',
     'changeHeadquarter',
     'selectEmblem',
@@ -848,6 +850,7 @@ const getErrorField = (field) => {
     else return props.isError[field][0];
 };
 
+const searchMemberField = ref(props.searchMember);
 const headquarter = ref(props.headquarter);
 //----------------------------------------------------------------------------------------------------------
 const counterName = computed(() => {
@@ -881,15 +884,10 @@ const showButtonPrev = computed(() => {
 });
 
 //-----------------------------------------------------------------------
-const searchMembers = ref('');
 
-const sortedMembers = computed(() => {
-    return props.members.filter((item) => {
-        return item.user.last_name
-            .toUpperCase()
-            .includes(searchMembers.value.toUpperCase());
-    });
-});
+const searchMember = (event) => {
+    emit('updateSearchMember', event);
+};
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);

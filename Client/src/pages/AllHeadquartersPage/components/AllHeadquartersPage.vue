@@ -162,13 +162,12 @@
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import {
     HeadquartersList,
     horizontalHeadquarters,
 } from '@features/Headquarters/components';
-import { sortByEducation, Select } from '@shared/components/selects';
+import { sortByEducation } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -184,7 +183,7 @@ const crosspageFilters = useCrosspageFilter();
 const headquarters = storeToRefs(educationalsStore);
 
 const headquartersVisible = ref(20);
-const isLoading =  storeToRefs(educationalsStore);
+const isLoading = storeToRefs(educationalsStore);
 
 const step = ref(20);
 
@@ -235,11 +234,10 @@ const getLocalsHeadquartersForFilters = async () => {
 };
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-    educationalsStore.getEducationals();
+
     getRegionalsHeadquartersForFilters();
     getLocalsHeadquartersForFilters();
 });
-
 
 const sortOptionss = ref([
     {
@@ -257,16 +255,22 @@ const sortedHeadquarters = computed(() => {
 
     if (SelectedSortRegional.value || SelectedSortDistrict.value) {
         let idRegionals = [];
-        if (SelectedSortDistrict.value){
+        if (SelectedSortDistrict.value) {
             let districtId = districts.value.find(
                 (district) => district.name === SelectedSortDistrict.value,
             )?.id;
-            idRegionals = regionals.value.filter((regional) => regional.district_headquarter === districtId).map((reg) => reg.id);
+            idRegionals = regionals.value
+                .filter(
+                    (regional) => regional.district_headquarter === districtId,
+                )
+                .map((reg) => reg.id);
         }
-        if (SelectedSortRegional.value){
-            idRegionals = [regionals.value.find(
-                (regional) => regional.name === SelectedSortRegional.value,
-            )?.id];
+        if (SelectedSortRegional.value) {
+            idRegionals = [
+                regionals.value.find(
+                    (regional) => regional.name === SelectedSortRegional.value,
+                )?.id,
+            ];
         }
 
         tempHeadquartes = tempHeadquartes.filter((item) => {
@@ -305,7 +309,7 @@ const sortedHeadquarters = computed(() => {
     if (!ascending.value) {
         tempHeadquartes.reverse();
     }
-    
+
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     return tempHeadquartes;
 });
@@ -328,6 +332,7 @@ onActivated(() => {
     SelectedSortRegional.value = JSON.parse(
         localStorage.getItem('AllHeadquarters_filters'),
     )?.regionalName;
+    localStorage.removeItem('AllHeadquarters_filters');
 });
 </script>
 <style lang="scss">

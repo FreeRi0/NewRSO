@@ -4,7 +4,6 @@
             <input
                 type="checkbox"
                 v-model="checked"
-                :value="event"
                 @change="updateCheckEvents"
             />
         </div>
@@ -68,38 +67,39 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+
+const roleStore = useRoleStore();
+roleStore.getRoles();
 
 const props = defineProps({
     event: {
         type: Object,
         required: true,
     },
-    selectedEvents: {
-        type: Array,
-        default: () => [],
+    position: {
+        type: Number,
+        default: 0,
     },
 });
 
-const emit = defineEmits(['change']);
+const emit = defineEmits({
+    select: null,
+});
 const checked = ref(false);
 
 const updateCheckEvents = (e) => {
     console.log('ddddddSquad', checked.value);
-    emit('change', checked.value, props.event.id);
+    emit('select', props.event, e.target.checked);
 };
 
-const selectedEvent = ref(props.selectedCompetitions);
+// const selectedEvent = ref(props.selectedCompetitions);
 
 watch(
-    () => props.selectedCompetitions,
-    (newChecked) => {
-        if (!newChecked) return;
-        selectedEvent.value = newChecked;
-        const checkedItem = newChecked.find(
-            (item) => item.id == props.event.id,
-        );
-        if (!checkedItem) checked.value = false;
-        else checked.value = true;
+    () => props.event.selected,
+    (newSelected) => {
+        checked.value = newSelected;
     },
 );
 </script>

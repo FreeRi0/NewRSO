@@ -16,7 +16,7 @@
                         roles.roles.value.centralheadquarter_commander)) ||
                 props.user.privacy?.privacy_photo === 'Все'
             "
-            :banner="user?.media?.banner"
+            :banner="user.media?.banner"
             @upload-wall="uploadWall"
             @update-wall="updateWall"
             @delete-wall="deleteWall"
@@ -47,7 +47,7 @@
                         roles.roles.value.centralheadquarter_commander)) ||
                 props.user.privacy?.privacy_photo === 'Все'
             "
-            :avatar="user?.media?.photo"
+            :avatar="user.media?.photo"
             @upload="uploadAva"
             @update="updateAva"
             @delete="deleteAva"
@@ -115,7 +115,9 @@
                             </p>
                         </li>
                         <li class="user-data__title" v-else><p>Кандитат</p></li>
-
+                        <!-- <li class="user-data__title" v-if="detachment?.name">
+                            <p>{{ detachment?.name }}</p>
+                        </li> -->
                         <li
                             class="user-data__title"
                             v-if="
@@ -141,7 +143,7 @@
                         >
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
-                        <!-- <li class="user-data__regional-office">
+                        <li class="user-data__regional-office">
                             <div v-if="user.region">
                                 <div
                                     v-for="item in regionals.filteredRegional
@@ -150,7 +152,7 @@
                                     <p>{{ item.name }}</p>
                                 </div>
                             </div>
-                        </li> -->
+                        </li>
                         <li v-if="user?.education?.study_faculty">
                             <p>{{ user?.education?.study_faculty }}</p>
                         </li>
@@ -193,11 +195,18 @@
                         "
                     >
                         <div class="user-data__link-vk mr-2">
-                            <a :href="user.social_vk" target="_blank">
+                            <a
+                                :href="user.social_vk"
+                                target="_blank"
+                                v-if="user.social_vk"
+                            >
                                 <img src="@/app/assets/icon/vk-blue.svg" />
                             </a>
                         </div>
-                        <div class="user-data__link-telegram mr-2">
+                        <div
+                            class="user-data__link-telegram mr-2"
+                            v-if="user.social_tg"
+                        >
                             <a :href="user.social_tg">
                                 <img
                                     src="@/app/assets/icon/telegram-blue.svg"
@@ -206,12 +215,15 @@
                             </a>
                         </div>
                         <div class="user-data__link-share-link">
-                            <a href="#" target="_blank">
+                            <a @click="copyL">
                                 <img
                                     src="@/app/assets/icon/to-share-link.svg"
                                     alt=""
                                 />
                             </a>
+                            <div class="copy-message" hidden>
+                                Ссылка скопирована
+                            </div>
                         </div>
                     </div>
                     <div class="user-data__contact-contact">
@@ -416,6 +428,15 @@ onMounted(() => {
     // regionalsStore.searchRegionals(props.user.region);
     getUserData();
 });
+
+const copyL = () => {
+    navigator.clipboard.writeText(window.location.href);
+    const copyMessage = document.querySelector('.copy-message');
+    copyMessage.hidden = false;
+    setTimeout(() => {
+        copyMessage.hidden = true;
+    }, 2000);
+};
 </script>
 <style lang="scss" scoped>
 .profile-settings-top {
@@ -573,6 +594,25 @@ onMounted(() => {
 .user-data__introductions p,
 .user-data__introductions img {
     margin-right: 5px;
+}
+
+.copy-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #35383f;
+    border-radius: 10px;
+    color: #35383f;
+    font-size: 16px;
+    font-family: 'Bert Sans';
+    text-align: center;
+}
+
+.user-data__link-share-link a {
+    cursor: pointer;
 }
 </style>
 @shared/components/inputs/imagescomp@shared/components/inputs/imagescomp

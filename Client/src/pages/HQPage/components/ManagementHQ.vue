@@ -19,17 +19,18 @@
                             v-if="props.commander?.avatar?.photo"
                         />
                         <img
-                            src="@app/assets/user-avatar.png"
+                            class="img_alt"
+                            src="@app/assets/user-avatar-manage.png"
                             alt="photo"
                             v-else
                         />
                     </div>
                     <div class="manager-card__box">
-                        <h5 id="name_length">
+                        <p id="name_length">
                             {{ props.commander?.first_name }}
                             {{ props.commander?.patronymic_name }}
                             {{ props.commander?.last_name }}
-                        </h5>
+                        </p>
                         <p>Командир</p>
                     </div>
                 </div>
@@ -131,7 +132,6 @@ section.headquarters-management h3 {
     justify-content: center;
 }
 .manager-card__avatar img {
-    margin-bottom: 32px;
     width: 120px;
     height: 120px;
     border-radius: 100%;
@@ -147,13 +147,13 @@ section.headquarters-management h3 {
     align-items: center;
 }
 
-.manager-card__box h5 {
+.manager-card__box #name_length {
     color: #35383f;
     text-align: center;
-    font-family: 'BertSans';
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
+    font-family: 'Akrobat';
+    font-size: 24px;
+    font-weight: lighter;
+    // font-weight: normal;
     line-height: normal;
     /*  */
     margin-bottom: 16px;
@@ -161,12 +161,11 @@ section.headquarters-management h3 {
 
 .manager-card__box p {
     color: #676767;
+    font-family: 'Akrobat';
     text-align: center;
-    font-family: 'BertSans';
     font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 140%;
+    font-weight: normal;
+    line-height: 22.4px;
 }
 
 // адаптив
@@ -203,9 +202,9 @@ section.headquarters-management h3 {
         height: 173px;
     }
     .manager-card__box {
-        width: 127px;
+        width: 114px;
     }
-    .manager-card__box h5 {
+    .manager-card__box #name_length {
         font-size: 12px;
         margin-bottom: 8px;
     }

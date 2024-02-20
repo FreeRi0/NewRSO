@@ -12,7 +12,10 @@
                 </div>
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
-                        <li class="Squad-HQ__university">
+                        <li
+                            class="Squad-HQ__university"
+                            v-if="squad.educational_institution?.short_name"
+                        >
                             <p>
                                 {{ squad.educational_institution?.short_name }}
                             </p>
@@ -33,17 +36,24 @@
                     <div class="squad-data__contacts">
                         <div class="squad-data__participant-counter">
                             <span
-                                >{{ squad.participants_count }} участников</span
+                                >{{ squad.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </div>
                         <div class="squad-data__social-network">
-                            <div class="squad-data__link-vk">
-                                <a href="https://vk.com" target="_blank">
+                            <div
+                                class="squad-data__link-vk"
+                                v-if="squad.social_vk"
+                            >
+                                <a :href="squad.social_vk" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div class="squad-data__link-telegram">
-                                <a href="https://t.me" target="_blank">
+                            <div
+                                class="squad-data__link-telegram"
+                                v-if="squad.social_tg"
+                            >
+                                <a :href="squad.social_tg" target="_blank">
                                     <img
                                         src="@/app/assets/icon/telegram-blue.svg"
                                         alt=""
@@ -51,12 +61,15 @@
                                 </a>
                             </div>
                             <div class="squad-data__link-share-link">
-                                <a href="#" target="_blank">
+                                <a @click="copyL">
                                     <img
                                         src="@/app/assets/icon/to-share-link.svg"
                                         alt=""
                                     />
                                 </a>
+                                <div class="copy-message" hidden>
+                                    Ссылка скопирована
+                                </div>
                             </div>
                             <!-- <pre>dddddssss   {{ userId }}</pre> -->
                         </div>
@@ -137,6 +150,9 @@ const props = defineProps({
     },
     applications: {
         type: Array,
+    },
+    getEnding: {
+        type: Number,
     },
 });
 
@@ -300,6 +316,15 @@ onMounted(() => {
     viewDetachments();
     viewRegionals();
 });
+
+const copyL = () => {
+    navigator.clipboard.writeText(window.location.href);
+    const copyMessage = document.querySelector('.copy-message');
+    copyMessage.hidden = false;
+    setTimeout(() => {
+        copyMessage.hidden = true;
+    }, 2000);
+};
 </script>
 <style lang="scss" scoped>
 .squad-metric {
@@ -313,18 +338,22 @@ onMounted(() => {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     background: rgba(244, 244, 244, 0);
+    @media screen and (max-width: 575px) {
+        display: block;
+    }
     &__bottom {
         grid-column-start: 1;
         grid-column-end: 5;
         grid-row-start: 3;
         grid-row-end: 5;
         padding: 20px 0px 16px 300px;
-        @media screen and (max-width: 768px) {
-            padding: 20px 00px 16px 300px;
-        }
-        @media screen and (max-width: 575px) {
-            padding: 116px 14px 16px 14px;
-        }
+    }
+}
+
+.squad-metric__bottom {
+    @media screen and (max-width: 575px) {
+        padding: 20px 0px 16px 0;
+        text-align: center;
     }
 }
 
@@ -333,6 +362,18 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    @media screen and (max-width: 575px) {
+        align-items: center;
+        margin: 0px 0 16px 0;
+        flex-wrap: wrap;
+    }
+}
+.user-metric__avatar-wrapper {
+    @media screen and (max-width: 575px) {
+        grid-template-columns: 125px 125px;
+        justify-content: center;
+        margin-left: 40px;
+    }
 }
 
 .squad-data__name {
@@ -385,7 +426,7 @@ onMounted(() => {
 .squad-data__list time {
     color: #35383f;
     /*  */
-    font-family: 'BertSans';
+    font-family: 'Bert Sans';
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -404,10 +445,10 @@ onMounted(() => {
     background: #39bfbf;
     align-self: end;
     text-align: center;
-    font-family: 'BertSans';
+    font-family: 'Bert Sans';
     font-size: 16px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 20px;
     color: white;
     padding: 16px 32px;
@@ -424,6 +465,9 @@ onMounted(() => {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+    @media screen and (max-width: 575px) {
+        text-align: center;
+    }
 }
 .slogan {
     margin-top: 20px;
@@ -435,6 +479,10 @@ onMounted(() => {
     // grid-template-columns: 360px 250px;
     display: flex;
     flex-wrap: wrap;
+    @media screen and (max-width: 575px) {
+        text-align: center;
+        display: block;
+    }
 }
 .Squad-HQ__list li {
     border-right: none;
@@ -464,10 +512,10 @@ onMounted(() => {
     background: #39bfbf;
     align-self: end;
     text-align: center;
-    font-family: 'BertSans';
+    font-family: 'Bert Sans';
     font-size: 16px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 20px;
     color: white;
     padding: 16px 32px;
@@ -478,6 +526,10 @@ onMounted(() => {
     @media screen and (max-width: 768px) {
         flex-wrap: wrap;
     }
+    @media screen and (max-width: 575px) {
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
 }
 
 .squad-data__contacts {
@@ -486,11 +538,32 @@ onMounted(() => {
     @media screen and (max-width: 768px) {
         margin-bottom: 20px;
     }
+    @media screen and (max-width: 575px) {
+        align-items: center;
+    }
 }
 .squad-data__social-network {
     display: flex;
-    justify-content: space-between;
+    column-gap: 12px;
     margin-top: 17px;
+}
+.copy-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #35383f;
+    border-radius: 10px;
+    color: #35383f;
+    font-size: 16px;
+    font-family: 'Bert Sans';
+    text-align: center;
+}
+
+.squad-data__link-share-link a {
+    cursor: pointer;
 }
 </style>
 @shared/components/inputs/imagescomp@shared/components/inputs/imagescomp

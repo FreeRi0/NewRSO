@@ -58,7 +58,7 @@
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, onMounted, onActivated } from 'vue';
+import { ref, onMounted, onActivated, inject } from 'vue';
 import { enteredSquad } from '@entities/Squads/components';
 import { checkedEnteredSquadItem } from '@entities/Squads';
 import { useRoleStore } from '@layouts/store/role';
@@ -69,7 +69,8 @@ const roles = storeToRefs(roleStore);
 const detachmentList = ref([]);
 const selectedDetachmentList = ref([]);
 const checkboxAllSquads = ref(false);
-
+const isError = ref([]);
+const swal = inject('$swal');
 const loading = ref(false);
 const action = ref('Одобрить');
 // const actionsList = ref(['Одобрить', 'Отклонить']);
@@ -80,8 +81,6 @@ const actionsList = ref([
     },
     { value: 'Отклонить', name: 'Отклонить' },
 ]);
-const emit = defineEmits(['change']);
-
 const viewDetachments = async () => {
     try {
         if (!roles.roles.value.detachment_commander) return;
@@ -100,6 +99,7 @@ const viewDetachments = async () => {
             detachmentList.value = detComRequest.data;
             loading.value = false;
         }, 100);
+        selectedDetachmentList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -131,8 +131,26 @@ const confirmApplication = async (id, application_pk) => {
                 },
             },
         );
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
     } catch (error) {
         console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
 
@@ -148,8 +166,26 @@ const cancelApplication = async (id, application_pk) => {
             },
             {},
         );
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
     } catch (error) {
         console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
 

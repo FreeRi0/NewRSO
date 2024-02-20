@@ -12,6 +12,8 @@
             v-else-if="showDistrictHQ"
             :districtHeadquarter="districtHeadquarter"
             :member="member"
+            :getEnding="getEnding"
+            :getEndingMembers="getEndingMembers"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showLocalHQ"
@@ -68,7 +70,7 @@
 <script setup>
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
@@ -207,8 +209,40 @@ const HQandSquads = ref([
     {
         name: 'ЛСО',
         link: '/AllSquads',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'AllHeadquarters',
+                filters: {
+                    districtName: districtHeadquarter.value.name,
+                },
+            });
+        },
     },
 ]);
+
+const getEnding = computed(() => {
+    const count = districtHeadquarter.value.participants_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'участник';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'участника';
+    } else {
+        return 'участников';
+    }
+});
+
+const getEndingMembers = computed(() => {
+    const count = districtHeadquarter.value.members_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'действующий член';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'действующих члена';
+    } else {
+        return 'действующих членов';
+    }
+});
 </script>
 <style lang="scss" scoped>
 .title {
@@ -290,9 +324,21 @@ const HQandSquads = ref([
 }
 
 .about-hq {
-    font-size: 27px;
-    font-family: 'Akrobat';
     margin-bottom: 60px;
+}
+.about-hq h3 {
+    font-size: 32px;
+    font-family: 'Akrobat';
+    margin-bottom: 40px;
+    color: #35383f;
+}
+.about-hq p {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
 }
 @media (max-width: 1110px) {
     .Squad-HQ__list {

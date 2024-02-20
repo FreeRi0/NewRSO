@@ -7,11 +7,7 @@
                     alt="logo"
                     v-if="participant.media?.photo"
                 />
-                <img
-                    src="@app/assets/user-avatar.png"
-                    alt="photo"
-                    v-else
-                />
+                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
@@ -36,64 +32,48 @@
                 </div>
             </div>
         </div>
+        <div class="actionVal">
+            <p>{{ action }}</p>
+        </div>
         <div class="checked__confidant ml-3">
             <input
                 type="checkbox"
                 v-model="checked"
                 :value="participant"
-
                 @change="updateMembership"
             />
         </div>
     </div>
 </template>
 <script setup>
-import { Button } from '@shared/components/buttons';
-import { Select, sortByEducation } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
-import { ref, watch, inject } from 'vue';
-import { HTTP } from '@app/http';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
     participant: {
         type: Object,
         require: true,
     },
-    participants: {
-        type: Array,
-        require: true,
-    },
-    selectedParticipants: {
-        type: Array,
-        default: () => [],
+    action: {
+        type: String,
+        default: '',
     },
 });
 
-const emit = defineEmits(['change']);
+const emit = defineEmits({
+    select: null,
+});
 const updateMembership = (e) => {
-    console.log('checkeed', checked.value);
-    emit('change', checked.value, props.participant.id );
+    emit('select', props.participant, e.target.checked);
 };
 
-
 const checked = ref(true);
-
-const swal = inject('$swal');
-const selectedPeoples = ref(props.selectedParticipants);
-
-watch(
-    () => props.selectedParticipants,
-    (newChecked) => {
-        if (!newChecked) return;
-        selectedPeoples.value = newChecked;
-    },
-);
-
 </script>
 <style lang="scss" scoped>
 .checked {
     display: flex;
     align-items: center;
+    margin-bottom: 12px;
     &-img {
         align-items: center;
         width: 36px;
@@ -142,13 +122,18 @@ watch(
     margin-left: 10px;
 }
 
-.error {
-    color: #db0000;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'Acrobat';
-    margin-top: 10px;
-    text-align: center;
+.actionVal {
+    border-radius: 10px;
+    border: 1px solid #b6b6b6;
+    padding: 12px 50px;
+    height: 48px;
+    margin-left: 12px;
+    P {
+        font-size: 16px;
+        font-weight: 400;
+        width: 90px;
+        color: #35383f;
+    }
 }
 .checked-item__list-date {
     width: 95px;
