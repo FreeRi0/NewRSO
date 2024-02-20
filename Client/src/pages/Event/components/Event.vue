@@ -5,10 +5,7 @@
         </h1>
         <div class="banner_wrap">
             <div>
-                <img
-                    src="@/app/assets/banner_event.jpg"
-                    alt="Баннер личной страницы(пусто)"
-                />
+                <img :src="event.banner" alt="Баннер личной страницы(пусто)" />
             </div>
             <div class="banner_wrap_btn">
                 <Button
@@ -188,11 +185,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
 import { Button } from '@shared/components/buttons';
 import { useRoute, useRouter } from 'vue-router';
-import { onMounted } from 'vue';
-import { ActionItem } from '@entities/index';
 import {
     getAction,
     getOrganizator,
@@ -200,6 +194,7 @@ import {
     getParticipants,
 } from '@services/ActionService';
 import { onActivated } from 'vue';
+import { getRsouserById } from '@services/UserService';
 
 const route = useRoute();
 const router = useRouter();
@@ -238,6 +233,9 @@ onActivated(() => {
         event.value = resp.data;
         getOrganizator(route.params.id).then((resp) => {
             organizators.value = resp.data;
+            getRsouserById(organizators.value.organizator).then((resp) => {
+                console.log(resp.data);
+            });
         });
     });
     getParticipants(route.params.id)
@@ -355,6 +353,11 @@ const participants = ref([
 
 .banner_wrap {
     position: relative;
+}
+.banner_wrap img {
+    height: 540px;
+    width: 100%;
+    border: 1px solid black;
 }
 
 .banner_wrap_btn {

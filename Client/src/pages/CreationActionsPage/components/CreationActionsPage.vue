@@ -586,9 +586,7 @@
                                         <InputText
                                             id="action-hours-end-hq"
                                             class="form__input form-input-container"
-                                            v-model="
-                                                time_data.registration_end_time
-                                            "
+                                            v-model="time_data.end_time"
                                             placeholder="Например 18:30"
                                             name="action-hours-end-hq"
                                             type="time"
@@ -610,6 +608,24 @@
                                                 <label for="hours3" class="ml-2">За 3 часа</label>
                                             </div>
                                         </label> -->
+                                        <div class="form__field">
+                                            <label
+                                                class="form-label"
+                                                for="action-hours-end-hq"
+                                                >Время в часах</label
+                                            >
+                                            <InputText
+                                                id="action-hours-end-hq"
+                                                class="form__input form-input-container"
+                                                v-model="
+                                                    time_data.registration_end_time
+                                                "
+                                                placeholder="Например 18:30"
+                                                name="action-hours-end-hq"
+                                                type="time"
+                                            />
+                                            <div class="form__counter"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1112,11 +1128,6 @@ const urlBanner = ref(null);
 
 const selectBanner = (event) => {
     maininfo.value.banner = event.target.files[0];
-    console.log('Файл есть', maininfo.value.banner);
-    urlBanner.value = URL.createObjectURL(maininfo.value.banner)
-        .toString()
-        .slice(5);
-    console.log('Ссылка', urlBanner.value);
 };
 
 const resetBanner = () => {
@@ -1204,7 +1215,6 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
-    //fd.set('banner', urlBanner.value);
 
     createAction(fd)
         .then((resp) => {

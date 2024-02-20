@@ -6,7 +6,7 @@
                 <v-expansion-panels variant="accordion">
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -444,7 +444,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -627,7 +627,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -804,7 +804,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -984,7 +984,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -1098,13 +1098,12 @@ import {
     putTimeData,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
-const router = useRoute();
-
-const id = router.params.id;
-console.log(id);
+const router = useRouter();
+const route = useRoute();
+const id = route.params.id;
 
 onActivated(() => {
     getAction(id)
@@ -1173,15 +1172,6 @@ const maininfo = ref({
         work_book: false,
     },
 });
-
-const available_structural_units = ref([
-    { name: 'Отряды' },
-    { name: 'Образовательные Отряды' },
-    { name: 'Местные штабы' },
-    { name: 'Региональные штабы' },
-    { name: 'Окружные штабы' },
-    { name: 'Центральные штабы' },
-]);
 const area = ref('');
 const area_massive = ref([
     { name: 'ЛСО' },
@@ -1212,12 +1202,6 @@ const answers = ref([
         },
     ],
 ]);
-//Формы самой страницы
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '#' },
-    { pageTitle: 'Создание штаба СО ОО', href: '#' },
-]);
 
 function AddOrganizator() {
     organizators.value.push({
@@ -1231,10 +1215,12 @@ function AddOrganizator() {
     });
 }
 function SubmitEvent() {
-    console.log(maininfo.value);
-    putAction(id, maininfo.value)
+    let fd = new FormData();
+    Object.entries(maininfo.value).forEach(([key, item]) => {
+        fd.append(key, item);
+    });
+    putAction(id, fd)
         .then((resp) => {
-            console.log('Удалось изменить данные', resp.data);
             putTimeData(resp.data.id, maininfo.value.time_data)
                 .then((resp) => {
                     console.log('Удалось изменить время', resp.data);
@@ -1242,19 +1228,19 @@ function SubmitEvent() {
                 .catch((e) => {
                     console.log(e);
                 });
-            putOrganizator(id, organizators.value)
-                .then((resp) => {
-                    console.log('Организаторы изменены', resp.data);
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
+            organizators.value.forEach((organizator) => {
+                putOrganizator(id, organizator, organizator.id)
+                    .then((resp) => {
+                        console.log(resp.data);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            });
+            router.push({ name: 'actionSquads' });
         })
         .catch((e) => {
             console.log(e);
-        })
-        .finally(() => {
-            router.go(-1);
         });
 }
 

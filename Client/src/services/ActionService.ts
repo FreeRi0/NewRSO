@@ -38,7 +38,7 @@ export function putTimeData(id: number, data: object) {
 export function createAction(data: object) {
     return HTTP.post('/events/', data, {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
@@ -54,7 +54,7 @@ export function getAction(id: number) {
 export function putAction(id: number, data: object) {
     return HTTP.put(`/events/${id}/`, data, {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
@@ -94,8 +94,8 @@ export function getOrganizator(id: number) {
     });
 }
 
-export function putOrganizator(id: number, data: object) {
-    return HTTP.put(`/events/${id}/organizers`, data, {
+export function putOrganizator(id: number, data: object, org_id: number) {
+    return HTTP.put(`/events/${id}/organizers/${org_id}`, data, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
