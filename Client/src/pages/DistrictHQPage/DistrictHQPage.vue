@@ -12,6 +12,8 @@
             v-else-if="showDistrictHQ"
             :districtHeadquarter="districtHeadquarter"
             :member="member"
+            :getEnding="getEnding"
+            :getEndingMembers="getEndingMembers"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showLocalHQ"
@@ -40,9 +42,10 @@
         </section>
         <ManagementHQ
             :commander="commander"
-            :member="filteredMembers"
+            :member="member"
             head="Руководство окружного штаба"
             :position="position"
+            :leadership="districtHeadquarter.leadership"
         ></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды окружного штаба</h3>
@@ -83,7 +86,6 @@ const commander = ref({});
 const position = ref({});
 const districtHeadquarter = ref({});
 const member = ref([]);
-const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
@@ -139,17 +141,6 @@ const fetchCommander = async () => {
         console.log('An error occurred:', error);
     }
 };
-
-const filteredMembers = computed(() => {
-    return member.value.filter((manager) => {
-        return (
-            manager.position &&
-            (manager.position === 'Командир' ||
-                manager.position === 'Мастер (методист)' ||
-                manager.position === 'Комиссар')
-        );
-    });
-});
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
@@ -218,8 +209,40 @@ const HQandSquads = ref([
     {
         name: 'ЛСО',
         link: '/AllSquads',
+        click: () => {
+            crosspageFilters.addFilter({
+                pageName: 'AllHeadquarters',
+                filters: {
+                    districtName: districtHeadquarter.value.name,
+                },
+            });
+        },
     },
 ]);
+
+const getEnding = computed(() => {
+    const count = districtHeadquarter.value.participants_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'участник';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'участника';
+    } else {
+        return 'участников';
+    }
+});
+
+const getEndingMembers = computed(() => {
+    const count = districtHeadquarter.value.members_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'действующий член';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'действующих члена';
+    } else {
+        return 'действующих членов';
+    }
+});
 </script>
 <style lang="scss" scoped>
 .title {
@@ -301,9 +324,21 @@ const HQandSquads = ref([
 }
 
 .about-hq {
-    font-size: 27px;
-    font-family: 'Akrobat';
     margin-bottom: 60px;
+}
+.about-hq h3 {
+    font-size: 32px;
+    font-family: 'Akrobat';
+    margin-bottom: 40px;
+    color: #35383f;
+}
+.about-hq p {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
 }
 @media (max-width: 1110px) {
     .Squad-HQ__list {

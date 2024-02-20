@@ -880,9 +880,12 @@
             <v-expansion-panel value="panelThree">
                 <v-expansion-panel-title>
                     <v-row no-gutters>
-                        <v-col cols="4" class="d-flex justify-start">
+                        <v-col cols="4" class="d-flex justify-start desctop">
                             Документы (паспорт, СНИЛС, ИНН, сведения о трудовой
                             деятельности, документ воинского учета)
+                        </v-col>
+                        <v-col cols="4" class="d-flex justify-start adaptive">
+                            Документы
                         </v-col>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
@@ -1511,7 +1514,6 @@
                                                 :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="statementUp"
-
                                                 chooseLabel="Выбрать файл"
                                             />
                                         </div>
@@ -3258,14 +3260,13 @@
 </template>
 <script setup>
 import { ref, computed, onMounted, reactive, inject } from 'vue';
-import { RadioButton } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { useRouter } from 'vue-router';
 import {
     Select,
     sortByEducation,
     regionsDropdown,
-    educInstitutionDropdown
+    educInstitutionDropdown,
 } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
@@ -3352,7 +3353,7 @@ const isMilitaryChange = ref(false);
 const isForeignChange = ref(false);
 
 const statementUp = (event) => {
-    statement.value = event.files[0]
+    statement.value = event.files[0];
     console.log('файл есть', statement.value);
     isStatementChange.value = true;
 };
@@ -3612,9 +3613,23 @@ const updateData = async () => {
             },
         );
 
-        const axiosrequestParent = ref(null);
+        const axiosrequestParent = ref({
+            parent_last_name: '',
+            parent_first_name: '',
+            parent_patronymic_name: '',
+            parent_date_of_birth: '',
+            relationship: '',
+            parent_phone_number: '',
+            russian_passport: '',
+            passport_number: '',
+            passport_date: '',
+            passport_authority: '',
+            region: '',
+            city: '',
+            address: '',
+        });
         if (!props.user.is_adult) {
-            const axiosrequestParent = await HTTP.patch(
+            const parentRequest = await HTTP.patch(
                 '/rsousers/me/parent/',
                 {
                     parent_last_name: props.user.parent.parent_last_name,
@@ -3640,6 +3655,7 @@ const updateData = async () => {
                     },
                 },
             );
+            axiosrequestParent.value = parentRequest.data;
         }
 
         const axiosrequest2 = await HTTP.patch(
@@ -3701,10 +3717,11 @@ const updateData = async () => {
             );
         }
 
+        let studyEducationId = Number.isInteger(props.user.education.study_institution)?props.user.education.study_institution:props.user.education.study_institution?.id;
         const axiosrequest4 = await HTTP.patch(
             '/rsousers/me/education/',
             {
-                study_institution: props.user.education.study_institution?.id,
+                study_institution: studyEducationId,
                 study_faculty: props.user.education.study_faculty,
                 study_year: props.user.education.study_year,
                 study_specialty: props.user.education.study_specialty,
@@ -3744,14 +3761,6 @@ const updateData = async () => {
         foreignDoc.value = axiosrequestForeignDocs.data;
         fd = axiosrequest5.data;
         data.value = axiosrequest6?.data;
-        console.log(axiosrequest1.data);
-        console.log(axiosrequestParent.data);
-        console.log(axiosrequest2.data);
-        console.log(axiosrequest3.data);
-        console.log(axiosrequestForeignDocs.data);
-        console.log(axiosrequest4.data);
-        console.log(axiosrequest5.data);
-        console.log(axiosrequest6?.data);
         swal.fire({
             position: 'top-center',
             icon: 'success',
@@ -3765,7 +3774,7 @@ const updateData = async () => {
         emit('updateDocData', axiosrequest3.data);
         emit('updateEducData', axiosrequest4.data);
         emit('updateFileData', axiosrequest5.data);
-        emit('updateParentData', axiosrequestParent.data);
+        emit('updateParentData', axiosrequestParent.value);
 
         emit('updateStatus', axiosrequest6?.data);
         isLoading.value = false;
@@ -3895,11 +3904,19 @@ onMounted(() => {
 .data-form {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
-    column-gap: 140px;
+    column-gap: 40px;
     padding: 40px;
     border: 1px solid #a3a3a3;
     border-radius: 10px;
     margin-top: 40px;
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        column-gap: 0px;
+    }
+    @media (max-width: 575px) {
+        display: flex;
+        flex-direction: column;
+    }
 }
 .form-field label {
     font-size: 16px;
@@ -3910,12 +3927,32 @@ onMounted(() => {
 
 .input-small {
     width: 250px !important;
+    @media (max-width: 768px) {
+        width: 100% !important;
+    }
 }
 .input-full {
     width: 100% !important;
 }
 .input-big {
     width: 465px !important;
+    @media (max-width: 1024px) {
+        width: 100% !important;
+    }
+}
+
+.desctop {
+    display: block;
+    @media (max-width: 768px) {
+        display: none !important;
+    }
+}
+
+.adaptive {
+    display: none !important;
+    @media (max-width: 768px) {
+        display: block !important;
+    }
 }
 
 .nav-btn__wrapper {
@@ -3952,6 +3989,13 @@ onMounted(() => {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-column-gap: 140px;
+        @media (max-width: 768px) {
+            column-gap: 40px;
+        }
+        @media (max-width: 575px) {
+           display: flex;
+           flex-direction: column;
+        }
     }
     &-wrapper {
         margin-top: 40px;
@@ -3960,6 +4004,9 @@ onMounted(() => {
         &__title {
             font-size: 24px;
             padding: 40px 40px 0px;
+            @media (max-width: 768px) {
+            font-size: 18px;
+        }
         }
     }
 }
@@ -3987,6 +4034,14 @@ onMounted(() => {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     column-gap: 114px;
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 40px;
+    }
+    @media (max-width: 575px) {
+        display: flex;
+        flex-direction: column;
+    }
 }
 .addres {
     margin-top: 55px;
@@ -4019,6 +4074,9 @@ onMounted(() => {
     font-size: 16px;
     color: #35383f;
     margin-bottom: 20px;
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 }
 
 .select-big {
@@ -4033,6 +4091,9 @@ onMounted(() => {
     font-size: 16px;
     color: #35383f;
     margin-bottom: 20px;
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 }
 
 .v-select__selection span {
@@ -4044,6 +4105,10 @@ onMounted(() => {
 .how {
     display: grid;
     grid-template-columns: 1.5fr 1.15fr;
+    @media (max-width: 575px) {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .RSO-blanks {
@@ -4054,8 +4119,12 @@ onMounted(() => {
     &__title {
         font-size: 20px;
         font-weight: bold;
-        width: 878px;
+        width: 100%;
         margin-bottom: 40px;
+        @media (max-width: 575px) {
+            font-size: 16px;
+            font-weight: normal;
+        }
     }
 }
 
@@ -4068,19 +4137,35 @@ onMounted(() => {
     display: flex;
 }
 
+.dowmload-all {
+    display: block !important;
+    @media (max-width: 768px) {
+        display: none !important;
+    }
+}
 .blanks-wrapper {
     display: grid;
     grid-template-columns: 4fr 1fr;
+    @media (max-width: 768px) {
+        grid-template-columns: 5fr;
+    }
 }
 
 .pass-details__wrapper {
     display: flex;
     justify-content: space-between;
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 }
 
 .other-docs__wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    @media (max-width: 768px) {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .know {
@@ -4108,14 +4193,6 @@ onMounted(() => {
         margin-bottom: 40px;
     }
 }
-
-// .no-RSO-foreign {
-
-// }
-
-// .yes-RSO-foreign {
-//     display: none;
-// }
 
 .v-expansion-panel {
     &__shadow {
@@ -4166,6 +4243,10 @@ onMounted(() => {
 .statement-title {
     font-size: 16px;
     font-weight: bold;
+    @media (max-width: 768px) {
+        font-size: 14px;
+        max-width: 500px;
+    }
 }
 
 .statement-item {
@@ -4180,6 +4261,10 @@ onMounted(() => {
     font-size: 16px;
     display: block;
     margin-left: 8px;
+    @media (max-width: 768px) {
+        font-size: 14px;
+        max-width: 290px;
+    }
 }
 
 .statement-item a {
@@ -4189,6 +4274,9 @@ onMounted(() => {
     display: flex;
     margin-bottom: 40px;
     align-items: flex-start;
+    @media (max-width: 768px) {
+        flex-wrap: wrap;
+    }
 }
 
 .p-icon {
@@ -4199,4 +4287,348 @@ onMounted(() => {
     color: #1f7cc0;
     margin-left: 5px;
 }
+// @media (max-width: 1439px) {
+//     a:not([href]):not([class]),
+//     a:not([href]):not([class]):hover {
+//         color: #ffffff;
+//     }
+//     .input-big {
+//         width: 100%;
+//     }
+
+//     .input-full {
+//         width: 100%;
+//     }
+
+//     .data-form {
+//         grid-template-columns: 1fr 1fr;
+//         grid-column-gap: 80px;
+//     }
+
+//     .parents-about {
+//         grid-column-gap: 80px;
+//     }
+
+//     .izm {
+//         grid-template-columns: 1fr 1fr;
+//         grid-column-gap: 80px;
+//     }
+
+//     #no-passport-parent {
+//         column-gap: 80px;
+//     }
+//     #no-passport {
+//         column-gap: 80px;
+//     }
+// }
+
+// @media (max-width: 1024px) {
+//     .input-big {
+//         width: 386px;
+//     }
+
+//     .input-small {
+//         width: 386px;
+//     }
+
+//     .select-big {
+//         width: 386px;
+//     }
+
+//     .select-small {
+//         width: 386px;
+//     }
+
+//     .data-form {
+//         grid-template-columns: 1fr 1fr;
+//         grid-column-gap: 40px;
+//     }
+
+//     .parents-about {
+//         grid-column-gap: 40px;
+//     }
+
+//     .izm {
+//         grid-template-columns: 1fr 1fr;
+//         grid-column-gap: 40px;
+//     }
+
+//     #no-passport-parent {
+//         column-gap: 40px;
+//     }
+//     #no-passport {
+//         column-gap: 40px;
+//     }
+//     .pass-details__wrapper {
+//         flex-direction: column;
+//     }
+
+//     .other-docs__wrapper {
+//         grid-template-columns: none;
+//     }
+
+//     .small-svg svg {
+//         position: absolute;
+//         right: 2rem;
+//         top: 2.4rem;
+//         cursor: pointer;
+//     }
+// }
+
+// @media (max-width: 991px) {
+//     .input-big {
+//         width: 290px;
+//     }
+
+//     .input-small {
+//         width: 290px;
+//     }
+
+//     .input-full {
+//         width: 100%;
+//     }
+
+//     .select-big {
+//         width: 290px;
+//     }
+
+//     .select-small {
+//         width: 290px;
+//     }
+
+//     .data-form {
+//         grid-column-gap: 40px;
+//     }
+
+//     .parents-about {
+//         grid-column-gap: 40px;
+//     }
+
+//     .izm {
+//         grid-column-gap: 40px;
+//     }
+
+//     #no-passport-parent {
+//         column-gap: 40px;
+//     }
+//     #no-passport {
+//         column-gap: 40px;
+//     }
+//     .pass-details__wrapper {
+//         flex-direction: column;
+//     }
+
+//     .RSO-title {
+//         font-size: 20px;
+//         width: 100%;
+//     }
+
+//     .other-docs__wrapper {
+//         grid-template-columns: none;
+//     }
+// }
+
+// @media (max-width: 767px) {
+//     .input-big {
+//         width: 100%;
+//     }
+//     .accordion-button {
+//         font-size: 20px;
+//     }
+
+//     .form-field label {
+//         font-size: 12px;
+//     }
+//     .input-small {
+//         width: 100%;
+//     }
+
+//     .input-full {
+//         width: 100%;
+//     }
+
+//     .select-big {
+//         width: 100%;
+//     }
+
+//     .select-small {
+//         width: 100%;
+//     }
+
+//     .parents-wrapper__title {
+//         text-align: center;
+//         font-size: 18px;
+//     }
+
+//     .izm {
+//         display: flex;
+//         flex-direction: column;
+//     }
+
+//     #no-passport-parent {
+//         column-gap: 40px;
+//     }
+//     #no-passport {
+//         column-gap: 40px;
+//     }
+//     .pass-details__wrapper {
+//         flex-direction: column;
+//     }
+
+//     .other-docs__wrapper {
+//         grid-template-columns: none;
+//     }
+
+//     .RSO-title {
+//         font-size: 17px;
+//         width: 100%;
+//     }
+
+//     .dowmload-all {
+//         display: none;
+//     }
+
+//     .blanks-wrapper {
+//         grid-template-columns: none;
+//     }
+
+//     .statement-title {
+//         font-size: 14px;
+//         width: 100%;
+//     }
+
+//     .accordion-block-title {
+//         font-size: 18px;
+//     }
+
+//     .docs {
+//         grid-template-columns: 1fr;
+//     }
+
+//     .checkbox {
+//         font-size: 14px;
+//     }
+
+//     .checkbox-title {
+//         font-size: 14px;
+//         margin-bottom: 12px;
+//     }
+
+//     .right-check {
+//         margin-left: 8px;
+//     }
+
+//     input[type='radio'] {
+//         width: 15px;
+//         height: 12px;
+//     }
+
+//     .nav-prev,
+//     .nav-next {
+//         padding: 12px 25px 12px 25px;
+//     }
+
+//     .add-education {
+//         font-size: 14px;
+//         margin: 10px auto;
+//     }
+
+//     .statement-item p,
+//     .statement-item a {
+//         font-size: 12px;
+//     }
+
+//     .download-blanks .file-choose {
+//         font-size: 14px;
+//     }
+
+//     .education-wrapper {
+//         column-gap: 15px;
+//     }
+// }
+
+// @media (max-width: 575px) {
+//     .accordion-title {
+//         text-align: center;
+//         font-size: 18px;
+//     }
+//     .box {
+//         padding: 12px;
+//     }
+//     .accordion-button {
+//         font-size: 16px;
+//     }
+//     .data-form {
+//         display: block;
+//         padding: 25px;
+//     }
+
+//     .form-field label {
+//         font-size: 12px;
+//     }
+//     .parents-about {
+//         grid-template-columns: none;
+//         grid-column-gap: 20px;
+//     }
+//     .izm {
+//         grid-template-columns: none;
+//         grid-column-gap: 20px;
+//     }
+//     #no-passport-parent {
+//         column-gap: 20px;
+//     }
+//     #no-passport {
+//         column-gap: 20px;
+//     }
+//     .add-education {
+//         font-size: 12px;
+//     }
+
+//     .small {
+//         margin-top: 20px;
+//     }
+
+//     .checkbox {
+//         margin-bottom: 20px;
+//     }
+
+//     .checkbox-title {
+//         font-size: 14px;
+//     }
+//     .statement-wrapper {
+//         flex-wrap: wrap;
+//     }
+
+//     .rso-question {
+//         margin: 30px auto;
+//         /*width: 100%;*/
+//         padding: 20px;
+//     }
+
+//     .rso-question__title {
+//         text-align: center;
+//     }
+
+//     #check-RSO {
+//         text-align: center;
+//     }
+//     input[type='checkbox'] {
+//         width: 50px;
+//         height: 50px;
+//         display: inline-block;
+//     }
+
+//     .addres {
+//         margin-top: 20px;
+//         margin-bottom: 15px;
+//     }
+
+//     .RSO-title {
+//         margin-bottom: 28px;
+//     }
+//     .agree-check p {
+//         margin-left: 8px;
+//         font-size: 11px;
+//     }
+// }
 </style>

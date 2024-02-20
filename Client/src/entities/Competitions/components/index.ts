@@ -1,4 +1,4 @@
 import applicationCompetitionItem from './applicationCompetitionItem.vue';
+import selectedApplicationEventItem from './selectedApplicationCompetition.vue';
 
-
-export {applicationCompetitionItem}
+export { applicationCompetitionItem, selectedApplicationEventItem };

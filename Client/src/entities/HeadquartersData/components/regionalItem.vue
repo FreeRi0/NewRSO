@@ -9,7 +9,7 @@
                     alt="logo"
                     v-if="regionalHeadquarter.emblem"
                 />
-                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
+                <img src="@app/assets/hq-emblem-squad.png" alt="logo" v-else />
             </div>
             <div class="container-headquarters">
                 <p class="headquarters-wrapper__item-title">
@@ -35,6 +35,15 @@ const props = defineProps({
         display: block;
         margin: 0px auto;
         border-radius: 100%;
+        object-fit: cover;
+        overflow: hidden;
+        @media screen and (max-width: 450px) {
+            width: 100px;
+            height: 100px;
+        }
     }
+}
+.container-headquarters {
+    padding-top: 10px;
 }
 </style>

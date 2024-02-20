@@ -31,14 +31,15 @@
                     <div class="hq-data__contacts">
                         <div class="hq-data__participant-counter-HQ">
                             <span
-                                >{{
-                                    headquarter.participants_count
-                                }}
-                                участников</span
+                                >{{ headquarter.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </div>
                         <div class="hq-data__social-network">
-                            <div class="hq-data__link-vk">
+                            <div
+                                class="hq-data__link-vk"
+                                v-if="headquarter.social_vk"
+                            >
                                 <a
                                     :href="headquarter.social_vk"
                                     target="_blank"
@@ -46,7 +47,10 @@
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div class="hq-data__link-telegram">
+                            <div
+                                class="hq-data__link-telegram"
+                                v-if="headquarter.social_tg"
+                            >
                                 <a
                                     :href="headquarter.social_tg"
                                     target="_blank"
@@ -58,12 +62,15 @@
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
-                                <a href="#" target="_blank">
+                                <a @click="copyL">
                                     <img
                                         src="@/app/assets/icon/to-share-link.svg"
                                         alt=""
                                     />
                                 </a>
+                                <div class="copy-message" hidden>
+                                    Ссылка скопирована
+                                </div>
                             </div>
                             <!-- <pre>{{ userId }} {{ headquarter.commander.id }}</pre> -->
                         </div>
@@ -78,7 +85,8 @@
                                     headquarter?.regional_headquarter ||
                                 roles.roles.value.localheadquarter_commander
                                     ?.id === headquarter?.local_headquarter ||
-                                roles.roles.value.centralheadquarter_commander ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
                                 IsTrusted)
                         "
                         class="hq-data__link"
@@ -113,18 +121,14 @@
                         </li>
                         <li class="hq-data__participant-counter">
                             <span
-                                >{{
-                                    localHeadquarter.participants_count
-                                }}
-                                участников</span
+                                >{{ localHeadquarter.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
-                                >{{
-                                    districtHeadquarter?.members_count
-                                }}
-                                действующих членов</span
+                                >{{ localHeadquarter.members_count }}
+                                {{ getEndingMembers }}</span
                             >
                         </li>
                     </ul>
@@ -132,7 +136,10 @@
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
                         <div class="hq-data__social-network-Reg">
-                            <div class="hq-data__link-vk">
+                            <div
+                                class="hq-data__link-vk"
+                                v-if="localHeadquarter.social_vk"
+                            >
                                 <a
                                     :href="localHeadquarter.social_vk"
                                     target="_blank"
@@ -140,7 +147,10 @@
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div class="hq-data__link-telegram">
+                            <div
+                                class="hq-data__link-telegram"
+                                v-if="localHeadquarter.social_tg"
+                            >
                                 <a
                                     :href="localHeadquarter.social_tg"
                                     target="_blank"
@@ -152,23 +162,28 @@
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
-                                <a href="#" target="_blank">
+                                <a @click="copyL">
                                     <img
                                         src="@/app/assets/icon/to-share-link.svg"
                                         alt=""
                                     />
                                 </a>
+                                <div class="copy-message" hidden>
+                                    Ссылка скопирована
+                                </div>
                             </div>
                         </div>
                     </div>
                     <router-link
                         v-if="
-                            userId && (userId === localHeadquarter?.commander?.id ||
-                            roles.roles.value.regionalheadquarter_commander
-                                ?.id ===
-                                localHeadquarter.regional_headquarter ||
-                            roles.roles.value.centralheadquarter_commander ||
-                            IsTrusted)
+                            userId &&
+                            (userId === localHeadquarter?.commander?.id ||
+                                roles.roles.value.regionalheadquarter_commander
+                                    ?.id ===
+                                    localHeadquarter.regional_headquarter ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                IsTrusted)
                         "
                         class="hq-data__link"
                         :to="{
@@ -202,18 +217,14 @@
                         </li>
                         <li class="hq-data__participant-counter">
                             <span
-                                >{{
-                                    districtHeadquarter.participants_count
-                                }}
-                                участников</span
+                                >{{ districtHeadquarter.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
-                                >{{
-                                    districtHeadquarter.members_count
-                                }}
-                                действующих членов</span
+                                >{{ districtHeadquarter.members_count }}
+                                {{ getEndingMembers }}</span
                             >
                         </li>
                     </ul>
@@ -221,7 +232,10 @@
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
                         <div class="hq-data__social-network-Reg">
-                            <div class="hq-data__link-vk">
+                            <div
+                                class="hq-data__link-vk"
+                                v-if="districtHeadquarter.social_vk"
+                            >
                                 <a
                                     :href="districtHeadquarter.social_vk"
                                     target="_blank"
@@ -229,7 +243,10 @@
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div class="hq-data__link-telegram">
+                            <div
+                                class="hq-data__link-telegram"
+                                v-if="districtHeadquarter.social_tg"
+                            >
                                 <a
                                     :href="districtHeadquarter.social_tg"
                                     target="_blank"
@@ -241,20 +258,25 @@
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
-                                <a href="#" target="_blank">
+                                <a @click="copyL">
                                     <img
                                         src="@/app/assets/icon/to-share-link.svg"
                                         alt=""
                                     />
                                 </a>
+                                <div class="copy-message" hidden>
+                                    Ссылка скопирована
+                                </div>
                             </div>
                         </div>
                     </div>
                     <router-link
                         v-if="
-                            userId && (userId === districtHeadquarter?.commander?.id ||
-                            roles.roles.value.centralheadquarter_commander ||
-                            IsTrusted)
+                            userId &&
+                            (userId === districtHeadquarter?.commander?.id ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                IsTrusted)
                         "
                         class="hq-data__link"
                         :to="{
@@ -288,18 +310,14 @@
                         </li>
                         <li class="hq-data__participant-counter">
                             <span
-                                >{{
-                                    regionalHeadquarter.participants_count
-                                }}
-                                участников</span
+                                >{{ regionalHeadquarter.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
-                                >{{
-                                    regionalHeadquarter.members_count
-                                }}
-                                действующих членов</span
+                                >{{ regionalHeadquarter.members_count }}
+                                {{ getEndingMembers }}</span
                             >
                         </li>
                     </ul>
@@ -307,7 +325,10 @@
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
                         <div class="hq-data__social-network-Reg">
-                            <div class="hq-data__link-vk">
+                            <div
+                                class="hq-data__link-vk"
+                                v-if="regionalHeadquarter.social_vk"
+                            >
                                 <a
                                     :href="regionalHeadquarter.social_vk"
                                     target="_blank"
@@ -315,7 +336,10 @@
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div class="hq-data__link-telegram">
+                            <div
+                                class="hq-data__link-telegram"
+                                v-if="regionalHeadquarter.social_tg"
+                            >
                                 <a
                                     :href="regionalHeadquarter.social_tg"
                                     target="_blank"
@@ -327,23 +351,28 @@
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
-                                <a href="#" target="_blank">
+                                <a @click="copyL">
                                     <img
                                         src="@/app/assets/icon/to-share-link.svg"
                                         alt=""
                                     />
                                 </a>
+                                <div class="copy-message" hidden>
+                                    Ссылка скопирована
+                                </div>
                             </div>
                         </div>
                     </div>
                     <router-link
                         v-if="
-                            userId && (userId === regionalHeadquarter?.commander?.id ||
-                            roles.roles.value.districtheadquarter_commander
-                                ?.id ===
-                                regionalHeadquarter.district_headquarter ||
-                            roles.roles.value.centralheadquarter_commander ||
-                            IsTrusted)
+                            userId &&
+                            (userId === regionalHeadquarter?.commander?.id ||
+                                roles.roles.value.districtheadquarter_commander
+                                    ?.id ===
+                                    regionalHeadquarter.district_headquarter ||
+                                roles.roles.value
+                                    .centralheadquarter_commander ||
+                                IsTrusted)
                         "
                         class="hq-data__link"
                         :to="{
@@ -385,18 +414,14 @@
                         </li>
                         <li class="hq-data__participant-counter">
                             <span
-                                >{{
-                                    centralHeadquarter.participants_count
-                                }}
-                                участников</span
+                                >{{ centralHeadquarter.participants_count }}
+                                {{ getEnding }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
-                                >{{
-                                    centralHeadquarter.members_count
-                                }}
-                                действующих членов</span
+                                >{{ centralHeadquarter.members_count }}
+                                {{ getEndingMembers }}</span
                             >
                         </li>
                     </ul>
@@ -404,7 +429,10 @@
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts-central">
                         <div class="hq-data__social-network-central">
-                            <div class="hq-data__link-vk">
+                            <div
+                                class="hq-data__link-vk"
+                                v-if="centralHeadquarter.social_vk"
+                            >
                                 <a
                                     :href="centralHeadquarter.social_vk"
                                     target="_blank"
@@ -412,7 +440,10 @@
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div class="hq-data__link-telegram">
+                            <div
+                                class="hq-data__link-telegram"
+                                v-if="centralHeadquarter.social_tg"
+                            >
                                 <a
                                     :href="centralHeadquarter.social_tg"
                                     target="_blank"
@@ -424,12 +455,15 @@
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
-                                <a href="#" target="_blank">
+                                <a @click="copyL">
                                     <img
                                         src="@/app/assets/icon/to-share-link.svg"
                                         alt=""
                                     />
                                 </a>
+                                <div class="copy-message" hidden>
+                                    Ссылка скопирована
+                                </div>
                             </div>
                             <!-- <pre>{{ centralHeadquarter.commander.id }}</pre>
                             <pre>{{  IsTrusted }}</pre> -->
@@ -508,6 +542,12 @@ const props = defineProps({
     member: {
         type: Object,
     },
+    getEnding: {
+        type: Number,
+    },
+    getEndingMembers: {
+        type: Number,
+    },
 });
 
 const aboutEduc = async () => {
@@ -548,6 +588,15 @@ watch(
 onMounted(() => {
     aboutEduc();
 });
+
+const copyL = () => {
+    navigator.clipboard.writeText(window.location.href);
+    const copyMessage = document.querySelector('.copy-message');
+    copyMessage.hidden = false;
+    setTimeout(() => {
+        copyMessage.hidden = true;
+    }, 2000);
+};
 </script>
 <style lang="scss" scoped>
 .hq-metric {
@@ -721,14 +770,17 @@ onMounted(() => {
     background: #39bfbf;
     align-self: end;
     text-align: center;
-    font-family: 'BertSans';
+    font-family: 'Bert Sans';
     letter-spacing: 1.2px;
     font-size: 16px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 20px;
     color: white;
     padding: 16px 32px;
+}
+.hq-data__link-share-link a {
+    cursor: pointer;
 }
 .hq-data__contacts-wrapper {
     display: flex;
@@ -742,7 +794,7 @@ onMounted(() => {
 
 .hq-data__social-network {
     display: flex;
-    justify-content: space-between;
+    column-gap: 12px;
     margin: 12px 0 0;
 }
 .hq-data__social-network-Reg,
@@ -751,6 +803,21 @@ onMounted(() => {
     // justify-content: space-between;
     margin: 12px 0 0;
     column-gap: 12px;
+}
+
+.copy-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #35383f;
+    border-radius: 10px;
+    color: #35383f;
+    font-size: 16px;
+    font-family: 'Bert Sans';
+    text-align: center;
 }
 
 @media ((max-width: 1095px)) {
@@ -790,14 +857,34 @@ onMounted(() => {
     }
 }
 @media ((max-width: 590px)) {
+    .hq-metric {
+        display: block;
+    }
     .hq-data__wrapper {
-        margin: 0px 0 16px 18px;
+        margin: 0px 0 16px 0;
+        align-items: center;
+    }
+    .user-metric__avatar-wrapper {
+        grid-template-columns: 125px 125px;
+        margin-left: 50px;
     }
     .hq-metric__bottom {
         grid-row-start: 4;
     }
     .Squad-HQ__date p {
         margin-right: 10px;
+    }
+    .hq-data__contacts {
+        align-items: center;
+    }
+    .Squad-HQ__list,
+    .Squad-HQ__list-Local,
+    .Squad-HQ__list-Reg {
+        display: block;
+        text-align: center;
+    }
+    .Squad-HQ__name {
+        text-align: center;
     }
 }
 </style>

@@ -6,6 +6,7 @@
             :headquarter="headquarter.educational.value"
             :edict="edict"
             :member="member.members.value"
+            :getEnding="getEnding"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showDistrictHQ"
@@ -39,18 +40,21 @@
         </section>
         <ManagementHQ
             :commander="commander"
-            :member="filteredMembers"
+            :member="member"
             head="Руководство штаба"
             :position="position"
+            :leadership="headquarter.educational.value.leadership"
         ></ManagementHQ>
-        <DetachmentsHQ></DetachmentsHQ>
+        <DetachmentsHQ
+            :headquarter="headquarter.educational.value"
+        ></DetachmentsHQ>
     </div>
 </template>
 <script setup>
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from './components/ManagementHQ.vue';
 import DetachmentsHQ from './components/DetachmentsHQ.vue';
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useEducationalsStore } from '@features/store/educationals';
 import { storeToRefs } from 'pinia';
@@ -75,7 +79,6 @@ let id = route.params.id;
 
 const { replaceTargetObjects } = usePage();
 
-
 const fetchCommander = async () => {
     try {
         let id = headquarter.educational.value.commander.id;
@@ -93,26 +96,13 @@ const fetchCommander = async () => {
     }
 };
 
-
-const filteredMembers = computed(() => {
-    return member.members.value.filter((manager) => {
-        return (
-            manager.position &&
-            (manager.position === 'Командир' ||
-                manager.position === 'Мастер (методист)' ||
-                manager.position === 'Комиссар')
-        );
-    });
-});
-
-
 watch(
     () => route.params.id,
 
-    async (newId, oldId) => {
+    async (newId) => {
         if (!newId || route.name !== 'HQ') return;
         // id = newId;
-        console.log('успешно', !newId, route.name, route.name !== 'HQ')
+        console.log('успешно', !newId, route.name, route.name !== 'HQ');
         await educationalsStore.getEducationalsId(newId);
         await educationalsStore.getEducationalsMembers(newId);
         await replaceTargetObjects([headquarter.educational.value]);
@@ -129,6 +119,18 @@ onMounted(() => {
     // await aboutEduc();
     replaceTargetObjects([headquarter.educational.value]);
     fetchCommander();
+});
+
+const getEnding = computed(() => {
+    const count = educationalsStore.educational.participants_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'участник';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'участника';
+    } else {
+        return 'участников';
+    }
 });
 </script>
 <style scoped lang="scss">
@@ -215,9 +217,21 @@ onMounted(() => {
 }
 
 .about-hq {
-    font-size: 27px;
-    font-family: 'Akrobat';
     margin-bottom: 60px;
+}
+.about-hq h3 {
+    font-size: 32px;
+    font-family: 'Akrobat';
+    margin-bottom: 40px;
+    color: #35383f;
+}
+.about-hq p {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
 }
 
 @media (max-width: 1110px) {

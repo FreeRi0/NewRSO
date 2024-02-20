@@ -36,14 +36,6 @@
                 </div>
             </div>
         </div>
-        <div class="sort-select ml-3" v-if="!reference">
-            <sortByEducation
-                placeholder="Выберете действие"
-                variant="outlined"
-                v-model="participantItem.membership_fee"
-                :options="filteredPayed"
-            ></sortByEducation>
-        </div>
         <div class="checked__confidant ml-3">
             <input
                 type="checkbox"
@@ -53,14 +45,7 @@
                 @change="updateMembership"
             />
         </div>
-        <Button v-if="!reference"
-            class="save"
-            type="button"
-            label="Сохранить"
-            @click="ChangeStatus(participant.id)"
-        ></Button>
     </div>
-    <p v-if="isError" class="error">{{ isError.detail }}</p>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
@@ -82,10 +67,6 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    reference: {
-        type: Boolean,
-        default: true
-    }
 });
 
 const emit = defineEmits(['change']);
@@ -96,23 +77,9 @@ const updateMembership = (e) => {
 
 
 const checked = ref(true);
-const isError = ref([]);
-
 
 const swal = inject('$swal');
 const selectedPeoples = ref(props.selectedParticipants);
-
-const participantItem = ref({
-    membership_fee: null,
-});
-
-const filteredPayed = ref([
-    {
-        value: 'Оплачен',
-        name: 'Оплачен',
-    },
-    { value: 'Неоплачен', name: 'Неоплачен' },
-]);
 
 watch(
     () => props.selectedParticipants,
@@ -122,42 +89,6 @@ watch(
     },
 );
 
-const ChangeStatus = async () => {
-    let { id, ...rest } = props.participant;
-    await HTTP.post(
-        `rsousers/${id}/membership_fee_status/`,
-        participantItem.value,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
-    )
-        .then((response) => {
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            // participant.value = response.data; //emit
-            console.log(response.data);
-        })
-
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
-};
 </script>
 <style lang="scss" scoped>
 .checked {
@@ -291,6 +222,3 @@ const ChangeStatus = async () => {
     border: none;
 }
 </style>
-
-// v-for="participant in participants" // :key="participant.id"
-   <!-- @change="(event) => updateMembership(participant, event)" -->

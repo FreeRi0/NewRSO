@@ -58,7 +58,14 @@
                     v-for="(item, i) in items"
                     :key="i"
                     class="dropdown__item dropdown__item_not"
-                    v-show="item.button || item.link || !item.hasOwnProperty('params') || (item.hasOwnProperty('params') && item.params.id)"
+                    v-show="
+                        item.show && (
+                            item.button ||
+                            item.link ||
+                            !item.hasOwnProperty('params') ||
+                            (item.hasOwnProperty('params') && item.params.id)
+                        )
+                    "
                 >
                     <button
                         class="dropdown__button-item"
@@ -89,12 +96,18 @@
                         :to="{ name: item.name }"
                         >{{ item.title }}</router-link
                     >
-                    <!-- <router-link
-                        v-else-if="!item.hasOwnProperty('params') && props.isPrivate"
+                    <router-link
+                        v-else-if="
+                            !item.hasOwnProperty('params') &&
+                            (roles.roles.value.regionalheadquarter_commander ||
+                                roles.roles.value.detachment_commander)
+                        "
                         class="dropdown__link"
                         :to="{ name: item.name }"
-                        >{{ item.title }}</router-link
-                    > -->
+                        ><p>
+                            {{ item.title }}
+                        </p></router-link
+                    >
                 </li>
             </ul>
         </transition>
@@ -103,7 +116,11 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
-const emit = defineEmits(['updateUser'])
+import { useRoleStore } from '@layouts/store/role';
+import { storeToRefs } from 'pinia';
+const emit = defineEmits(['updateUser']);
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
 const router = useRouter();
 const props = defineProps({
     title: {
@@ -134,6 +151,14 @@ const props = defineProps({
         type: String,
         //   default: () => ({}),
     },
+    detCom: {
+        type: Boolean,
+        default: false,
+    },
+    regCom: {
+        type: Boolean,
+        default: false,
+    },
     name: {
         type: String,
         default: '',
@@ -153,7 +178,7 @@ const props = defineProps({
 
 const LogOut = () => {
     localStorage.removeItem('Token');
-    emit('updateUser', {})
+    emit('updateUser', {});
     router.push('/');
 };
 </script>

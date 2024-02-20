@@ -12,7 +12,7 @@
         v-bind="$attrs"
         @keyup="searchEducInstitution"
         @update:value="changeValue"
-        :address="address"
+        :address="addressRef"
         :no-data-text="noDataText"
         class="option-select"
     >
@@ -69,7 +69,7 @@
         v-bind="$attrs"
         @keyup="searchEducInstitution"
         @update:value="changeValue"
-        :address="address"
+        :address="addressRef"
         :no-data-text="noDataText"
         class="option-select"
     >
@@ -116,11 +116,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
+import { useUserStore } from '@features/store/index';
+const userStore = useUserStore();
+const user = storeToRefs(userStore);
 
 defineOptions({
     inheritAttrs: false,
@@ -153,6 +156,7 @@ const props = defineProps({
     },
 });
 const name = ref('');
+const addressRef = ref(props.address)
 
 const selected = ref(null);
 const isLoading = ref(false);
@@ -166,30 +170,38 @@ const items = ref(props.items);
 const onChangeItem = async () => {
     try {
         isLoading.value = true;
-        setTimeout(async () => {
-            const ItemResponse = await HTTP.get(props.address, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            items.value = ItemResponse.data;
-            isLoading.value = false;
-        }, 500);
+        const ItemResponse = await HTTP.get(addressRef.value, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        items.value = ItemResponse.data;
+        isLoading.value = false;
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
+const timer = ref(null);
+
 const searchEducInstitution = (val) => {
-    if (name.value.length < 3) {
-        return;
-    }
-    regionalsStore.searchInstitution(name.value);
-    console.log('val', val);
+    clearTimeout(timer.value);
+
+    timer.value = setTimeout(() => {
+        regionalsStore.searchInstitution(name.value, (props.address?'':user?.currentUser?.value?.region?.name));
+    }, 200);
 };
 
+watch(
+    () => user.currentUser.value,
+    (newUser, oldUser) => {
+        if (!addressRef.value) addressRef.value = '/eduicational_institutions/?region__name='+user?.currentUser?.value?.region?.name;
+        onChangeItem();
+    },
+);
+
 onMounted(() => {
-    onChangeItem();
+    if (props.address) onChangeItem();
 });
 </script>
 

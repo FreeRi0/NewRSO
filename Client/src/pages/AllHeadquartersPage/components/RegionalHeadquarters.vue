@@ -235,10 +235,20 @@ const sortOptionss = ref([
 ]);
 
 const sortedRegionalHeadquarters = computed(() => {
-    let tempHeadquarters = filtersDistricts.value;
+    let tempHeadquarters = [...regionalHeadquarters.regionals.value];
 
-    // поиск
     searchReg.value;
+
+    if (selectedSortDistrict.value) {
+        let districtId = districts.value.find(
+            (district) => district.name === selectedSortDistrict.value,
+        )?.id;
+
+        tempHeadquarters = tempHeadquarters.filter((item) => {
+            return item.district_headquarter === districtId;
+        });
+    }
+
     // сортировка
     tempHeadquarters = tempHeadquarters.sort((a, b) => {
         if (sortBy.value === 'alphabetically') {
@@ -263,8 +273,6 @@ const sortedRegionalHeadquarters = computed(() => {
         tempHeadquarters.reverse();
     }
 
-
-
     tempHeadquarters = tempHeadquarters.slice(0, headquartersVisible.value);
     return tempHeadquarters;
 });
@@ -282,6 +290,8 @@ onActivated(() => {
     selectedSortDistrict.value =
         JSON.parse(localStorage.getItem('regionalHeadquarters_filters'))
             ?.districtName ?? null;
+
+    localStorage.removeItem('regionalHeadquarters_filters');
 });
 
 onMounted(() => {

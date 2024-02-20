@@ -93,13 +93,46 @@
                 <div class="sort-filters">
                     <div class="squads-sort">
                         <div class="sort-filters">
-                            <div class="sort-select">
+                            <div class="sort-select sort-select--width">
+                                <v-select
+                                    class="form__select filter-district"
+                                    :items="districtsStore.districts"
+                                    clearable
+                                    variant="outlined"
+                                    name="select_district"
+                                    id="select-district"
+                                    v-model="SelectedSortDistrict"
+                                    item-title="name"
+                                    placeholder="Окружной штаб"
+                                >
+                                    <template #selection="{ item }">
+                                        <pre>{{ item.title }}</pre>
+                                    </template>
+                                </v-select>
+                            </div>
+                            <div class="sort-select sort-select--width">
+                                <v-select
+                                    class="form__select filter-district"
+                                    :items="regionalsStore.regionals"
+                                    clearable
+                                    variant="outlined"
+                                    name="select_region"
+                                    id="select-region"
+                                    v-model="SelectedSortRegional"
+                                    item-title="name"
+                                    placeholder="Региональные штабы"
+                                >
+                                    <template #selection="{ item }">
+                                        <pre>{{ item.title }}</pre>
+                                    </template>
+                                </v-select>
+                            </div>
+                            <div class="sort-select sort-select--width">
                                 <educInstitutionDropdown
-                                    class="sortedEducation"
+                                    class="form__select filter-district sortedEducation"
                                     name="select_education"
                                     id="select-education"
                                     v-model="education"
-                                    address="/eduicational_institutions/"
                                     placeholder="Образовательная организация"
                                     :SortDropdown="true"
                                 ></educInstitutionDropdown>
@@ -160,23 +193,30 @@ import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import {
     sortByEducation,
-    Select,
-    filterSelect,
     educInstitutionDropdown,
 } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onActivated } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
+import { useDistrictsStore } from '@features/store/districts';
+import { useRegionalsStore } from '@features/store/regionals';
 const squadsStore = useSquadsStore();
+const districtsStore = useDistrictsStore();
+const regionalsStore = useRegionalsStore();
 const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
-console.log('squad', squads.squads.value);
-console.log('loading', isLoading.isLoading.value);
-// const squads = ref([]);
+
 const categories = ref([]);
 const name = ref('');
-const education = ref('');
+const education = ref(null);
+
+const SelectedSortDistrict = ref(
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName,
+);
+const SelectedSortRegional = ref(
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
+);
 
 const getCategories = async () => {
     try {
@@ -251,14 +291,40 @@ const searchSquads = computed(() => {
 });
 
 const filteredSquadsByEducation = computed(() => {
-    return filteredSquad(education.value);
+    return filteredSquad(education.value ? education.value : '');
 });
 
 const sortedSquads = computed(() => {
+    // TODO добавляем фильтры по округу и региону
     let tempSquads = squads.squads.value;
 
     searchSquads.value;
     filteredSquadsByEducation.value;
+
+    if (SelectedSortRegional.value || SelectedSortDistrict.value) {
+        let idRegionals = [];
+        if (SelectedSortDistrict.value) {
+            let districtId = districtsStore.districts.find(
+                (district) => district.name === SelectedSortDistrict.value,
+            )?.id;
+            idRegionals = regionalsStore.regionals
+                .filter(
+                    (regional) => regional.district_headquarter === districtId,
+                )
+                .map((reg) => reg.id);
+        }
+        if (SelectedSortRegional.value) {
+            idRegionals = [
+                regionalsStore.regionals.find(
+                    (regional) => regional.name === SelectedSortRegional.value,
+                )?.id,
+            ];
+        }
+
+        tempSquads = tempSquads.filter((item) => {
+            return idRegionals.indexOf(item.regional_headquarter) >= 0;
+        });
+    }
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -297,18 +363,27 @@ const sortedSquads = computed(() => {
     // }
 
     if (!picked.value) {
-        return tempSquads;
+        return tempSquads.slice(0, squadsVisible.value);
     }
 
     tempSquads = tempSquads.filter((item) => item.area.name === picked.value);
-    console.log('picked', picked.value);
     tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
 
 onMounted(() => {
     getCategories();
-    squadsStore.getSquads();
+});
+onActivated(() => {
+    SelectedSortDistrict.value = JSON.parse(
+        localStorage.getItem('AllHeadquarters_filters'),
+    )?.districtName;
+
+    SelectedSortRegional.value = JSON.parse(
+        localStorage.getItem('AllHeadquarters_filters'),
+    )?.regionalName;
+
+    localStorage.removeItem('AllHeadquarters_filters');
 });
 </script>
 <style lang="scss" scoped>
@@ -342,7 +417,8 @@ onMounted(() => {
     background-position: center;
 }
 .v-select__selection {
-    span {
+    span,
+    pre {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -358,7 +434,6 @@ onMounted(() => {
             font-size: 32px;
         }
     }
-
     &-wrapper {
         padding: 60px 0px;
         display: grid;
@@ -460,6 +535,12 @@ onMounted(() => {
     margin-bottom: 0px;
     margin-left: 8px;
     border: 1px solid #35383f;
+}
+
+.sort-select {
+    &--width {
+        width: 193px;
+    }
 }
 
 @media (max-width: 575px) {

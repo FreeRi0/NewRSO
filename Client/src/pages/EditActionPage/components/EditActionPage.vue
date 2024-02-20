@@ -606,7 +606,7 @@
                                         <div class="form__counter"></div>
                                     </div>
                                     <div class="form__field">
-                                        <!----<label class='flex align-items-center' style='display: flex'>
+                                        <!--<label class='flex align-items-center' style='display: flex'>
                                             <div class="flex align-items-center">
                                                 <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
                                                 <label for="hours1" class="ml-2">За час</label>
