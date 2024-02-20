@@ -76,7 +76,10 @@
                                     <label class="form-label"
                                         >Выберете формат мероприятия</label
                                     >
-                                    <div class="flex align-items-center" style="display: flex">
+                                    <div
+                                        class="flex align-items-center"
+                                        style="display: flex"
+                                    >
                                         <div class="flex align-items-center">
                                             <input
                                                 v-model="maininfo.format"
@@ -290,6 +293,7 @@
                                                     </div>
                                                     <input
                                                         type="file"
+                                                        accept="image/png, image/jpeg"
                                                         id="upload-banner"
                                                         name="squad-banner"
                                                         hidden
@@ -503,76 +507,107 @@
                             </template>
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
-                                <div class="form-container">
-                                    <div class="form-col">
-                                        <div class="form__field">
-                                            <label
-                                                class="form-label"
-                                                for="action-start-hq"
-                                                >Начало мероприятия<sup
-                                                    class="valid-red"
-                                                    >*</sup
-                                                ></label
-                                            >
-                                            <InputText
-                                                id="action-start-hq"
-                                                v-model="time_data.start_date"
-                                                class="form__input form-input-container"
-                                                placeholder="Например 26.06.2024"
-                                                name="action-start-hq"
-                                                type="date"
-                                            />
-                                        </div>
-                                        <div class="form__field">
-                                            <label
-                                                class="form-label"
-                                                for="action-end-hq"
-                                                >Окончание мероприятия</label
-                                            >
-                                            <InputText
-                                                id="action-end-hq"
-                                                v-model="time_data.end_date"
-                                                class="form__input form-input-container"
-                                                placeholder="Например 27.06.2024"
-                                                name="action-end-hq"
-                                                type="date"
-                                            />
-                                        </div>
-                                        <div class="form__field">
-                                            <label
-                                                class="form-label"
-                                                for="end-registration-hq"
-                                                >Окончение регистрации</label
-                                            >
-                                            <InputText
-                                                id="end-registration-hq"
-                                                class="form__input form-input-container"
-                                                v-model="
-                                                    time_data.registration_end_date
-                                                "
-                                                placeholder="Например, 15.05.2023"
-                                                name="end-registration-hq"
-                                                type="date"
-                                            />
-                                        </div>
+                            <div class="form-container">
+                                <div class="form-col">
+                                    <div class="form__field">
+                                        <label
+                                            class="form-label"
+                                            for="action-start-hq"
+                                            >Начало мероприятия<sup
+                                                class="valid-red"
+                                                >*</sup
+                                            ></label
+                                        >
+                                        <InputText
+                                            id="action-start-hq"
+                                            v-model="time_data.start_date"
+                                            class="form__input form-input-container"
+                                            placeholder="Например 26.06.2024"
+                                            name="action-start-hq"
+                                            type="date"
+                                        />
                                     </div>
-                                    <div class="form-col">
-                                        <div class="form__field">
-                                            <label
-                                                class="form-label"
-                                                for="action-hours-start-hq"
-                                                >Время в часах</label
-                                            >
-                                            <InputText
-                                                id="action-hours-start-hq"
-                                                class="form__input form-input-container"
-                                                v-model="time_data.start_time"
-                                                placeholder="Например 7:30"
-                                                name="action-hours-start-hq"
-                                                type="time"
-                                            />
-                                            <div class="form__counter"></div>
-                                        </div>
+                                    <div class="form__field">
+                                        <label
+                                            class="form-label"
+                                            for="action-end-hq"
+                                            >Окончание мероприятия</label
+                                        >
+                                        <InputText
+                                            id="action-end-hq"
+                                            v-model="time_data.end_date"
+                                            class="form__input form-input-container"
+                                            placeholder="Например 27.06.2024"
+                                            name="action-end-hq"
+                                            type="date"
+                                        />
+                                    </div>
+                                    <div class="form__field">
+                                        <label
+                                            class="form-label"
+                                            for="end-registration-hq"
+                                            >Окончение регистрации</label
+                                        >
+                                        <InputText
+                                            id="end-registration-hq"
+                                            class="form__input form-input-container"
+                                            v-model="
+                                                time_data.registration_end_date
+                                            "
+                                            placeholder="Например, 15.05.2023"
+                                            name="end-registration-hq"
+                                            type="date"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="form-col">
+                                    <div class="form__field">
+                                        <label
+                                            class="form-label"
+                                            for="action-hours-start-hq"
+                                            >Время в часах</label
+                                        >
+                                        <InputText
+                                            id="action-hours-start-hq"
+                                            class="form__input form-input-container"
+                                            v-model="time_data.start_time"
+                                            placeholder="Например 7:30"
+                                            name="action-hours-start-hq"
+                                            type="time"
+                                        />
+                                        <div class="form__counter"></div>
+                                    </div>
+                                    <div class="form__field">
+                                        <label
+                                            class="form-label"
+                                            for="action-hours-end-hq"
+                                            >Время в часах</label
+                                        >
+                                        <InputText
+                                            id="action-hours-end-hq"
+                                            class="form__input form-input-container"
+                                            v-model="time_data.end_time"
+                                            placeholder="Например 18:30"
+                                            name="action-hours-end-hq"
+                                            type="time"
+                                        />
+                                        <div class="form__counter"></div>
+                                    </div>
+                                    <div class="form__field">
+                                        <!----<label class='flex align-items-center' style='display: flex'>
+                                            <div class="flex align-items-center">
+                                                <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
+                                                <label for="hours1" class="ml-2">За час</label>
+                                            </div>
+                                            <div class="flex align-items-center">
+                                                <input v-model='timeData.hour' value="2" name="hours2" type='radio' class='form-radio'/>
+                                                <label for="hours2" class="ml-2">За 2 часа</label>
+                                            </div>
+                                            <div class="flex align-items-center">
+                                                <input v-model='timeData.hour' value="3" name="hours3" type='radio' class='form-radio'/>
+                                                <label for="hours3" class="ml-2">За 3 часа</label>
+                                            </div>
+                                        </label> -->
                                         <div class="form__field">
                                             <label
                                                 class="form-label"
@@ -591,31 +626,19 @@
                                             />
                                             <div class="form__counter"></div>
                                         </div>
-                                        <div class="form__field">
-                                            <!----<label class='flex align-items-center' style='display: flex'>
-                                            <div class="flex align-items-center">
-                                                <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
-                                                <label for="hours1" class="ml-2">За час</label>
-                                            </div>
-                                            <div class="flex align-items-center">
-                                                <input v-model='timeData.hour' value="2" name="hours2" type='radio' class='form-radio'/>
-                                                <label for="hours2" class="ml-2">За 2 часа</label>
-                                            </div>
-                                            <div class="flex align-items-center">
-                                                <input v-model='timeData.hour' value="3" name="hours3" type='radio' class='form-radio'/>
-                                                <label for="hours3" class="ml-2">За 3 часа</label>
-                                            </div>
-                                        </label> -->
-                                        </div>
                                     </div>
                                 </div>
+                            </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
                             <template v-slot="{ expanded }">
                                 <v-row no-gutters>
-                                    <v-col cols="4" class="d-flex justify-start">
+                                    <v-col
+                                        cols="4"
+                                        class="d-flex justify-start"
+                                    >
                                         Документы
                                     </v-col>
                                 </v-row>
@@ -675,58 +698,104 @@
                             </template>
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
-                        <div class='form-container'>
-                            <div class='form-col-100'>
-                                <label class="form-label">Какие личные данные участников вам нужны?
-                                Отметьте их галочкой, и в дальнейшем у вас будет возможность скачать все документы участников.</label>
-                                <v-container fluid>
-                                    <div class="form-checkbox">
-                                        <input v-model="maininfo.document_data.passport" type="checkbox" name="passport" />
-                                        <label for="passport">Паспорт</label>
-                                    </div>
-                                    <div class="form-checkbox">
-                                        <input v-model="maininfo.document_data.snils" type="checkbox" name="snils" />
-                                        <label for="snils">СНИЛС</label>
-                                    </div>
-                                    <div class="form-checkbox">
-                                        <input v-model="maininfo.document_data.inn" type="checkbox" name="inn" />
-                                        <label for="inn">ИНН</label>
-                                    </div>
-                                    <div class="form-checkbox">
-                                        <input v-model="maininfo.document_data.work_book" type="checkbox" name="workbook" />
-                                        <label for="workbook">Трудовая книжка</label>
-                                    </div>
-                                    <div class="form-checkbox">
-                                        <input v-model="maininfo.document_data.military_document" type="checkbox" name="military" />
-                                        <label for="military">Военный билет или приписное свидетельство</label>
-                                    </div>
-                                    <div class="form-checkbox">
-                                        <input v-model="maininfo.document_data.consent_personal_data" type="checkbox" name="consert" />
-                                        <label for="consert">Согласие на обработку персональных данных</label>
-                                    </div>
-                                </v-container>
-                                <label class='form-label'>Добавьте Документы</label>
-                                <div class='form-col'>
-                                    <div class="form-fileupload">
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            chooseLabel="Выбрать файл"
-                                        ></FileUpload>
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                            <div class="form-container">
+                                <div class="form-col-100">
+                                    <label class="form-label"
+                                        >Какие личные данные участников вам
+                                        нужны? Отметьте их галочкой, и в
+                                        дальнейшем у вас будет возможность
+                                        скачать все документы участников.</label
+                                    >
+                                    <v-container fluid>
+                                        <div class="form-checkbox">
+                                            <input
+                                                v-model="document_data.passport"
+                                                type="checkbox"
+                                                name="passport"
+                                            />
+                                            <label for="passport"
+                                                >Паспорт</label
+                                            >
+                                        </div>
+                                        <div class="form-checkbox">
+                                            <input
+                                                v-model="document_data.snils"
+                                                type="checkbox"
+                                                name="snils"
+                                            />
+                                            <label for="snils">СНИЛС</label>
+                                        </div>
+                                        <div class="form-checkbox">
+                                            <input
+                                                v-model="document_data.inn"
+                                                type="checkbox"
+                                                name="inn"
+                                            />
+                                            <label for="inn">ИНН</label>
+                                        </div>
+                                        <div class="form-checkbox">
+                                            <input
+                                                v-model="
+                                                    document_data.work_book
+                                                "
+                                                type="checkbox"
+                                                name="workbook"
+                                            />
+                                            <label for="workbook"
+                                                >Трудовая книжка</label
+                                            >
+                                        </div>
+                                        <div class="form-checkbox">
+                                            <input
+                                                v-model="
+                                                    document_data.military_document
+                                                "
+                                                type="checkbox"
+                                                name="military"
+                                            />
+                                            <label for="military"
+                                                >Военный билет или приписное
+                                                свидетельство</label
+                                            >
+                                        </div>
+                                        <div class="form-checkbox">
+                                            <input
+                                                v-model="
+                                                    document_data.consent_personal_data
+                                                "
+                                                type="checkbox"
+                                                name="consert"
+                                            />
+                                            <label for="consert"
+                                                >Согласие на обработку
+                                                персональных данных</label
+                                            >
+                                        </div>
+                                    </v-container>
+                                    <label class="form-label"
+                                        >Добавьте Документы</label
+                                    >
+                                    <div class="form-col">
+                                        <div class="form-fileupload">
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                :customUpload="true"
+                                                chooseLabel="Выбрать файл"
+                                            ></FileUpload>
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="form-container">
+                                    <div class="form-border"></div>
+                                </div>
                             </div>
-                            <div class="form-container">
-                                <div class="form-border"></div>
-                            </div>
-                        </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                     <v-expansion-panel>
@@ -799,6 +868,7 @@
                             <div
                                 v-for="organizator in organizators"
                                 class="form-container"
+                                :key="organizator"
                             >
                                 <div class="form-col">
                                     <div class="form__field">
@@ -890,8 +960,16 @@
                                 </div>
                                 <div class="form__field">
                                     <div class="form-checkbox">
-                                        <input v-model="organizators.is_contact_person" type="checkbox" name="person" />
-                                        <label for="person">Сделать контактным лицом</label>
+                                        <input
+                                            v-model="
+                                                organizators.is_contact_person
+                                            "
+                                            type="checkbox"
+                                            name="person"
+                                        />
+                                        <label for="person"
+                                            >Сделать контактным лицом</label
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -970,6 +1048,7 @@
                             <div
                                 v-for="answer in answers"
                                 class="form-container"
+                                :key="answer"
                             >
                                 <div class="form-col">
                                     <div class="form__field">
@@ -1006,54 +1085,56 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref, inject } from 'vue';
-import { createAction, createOrganizator, putTimeData } from '@services/ActionService';
-import { sortByEducation, Select } from '@shared/components/selects';
-import { useRoute, useRouter } from 'vue-router';
-import { uploadPhoto } from '@shared/components/imagescomp';
+import { ref } from 'vue';
+import {
+    createAction,
+    putTimeData,
+    putDocuments,
+} from '@services/ActionService';
+import { sortByEducation } from '@shared/components/selects';
+import { useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
-import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
-import textarea from '@shared/components/inputs/textarea.vue';
+import { onActivated } from 'vue';
+import { useRoleStore } from '@layouts/store/role';
 const router = useRouter();
-const swal = inject('$swal');
+const user = useRoleStore();
+
+onActivated(() => {
+    console.log(user.userRoles);
+});
 
 const maininfo = ref({
     format: '',
     direction: '',
     name: '',
     scale: '',
-    banner: null,
+    //banner: null,
     conference_link: '',
     address: '',
     description: '',
-    participants_number: Number,
+    participants_number: 0,
     application_type: '',
     available_structural_units: '',
-    document_data: {
-        passport: false,
-        snils: false,
-        inn: false,
-        work_book: false,
-        military_document: false,
-        consent_personal_data: false,
-        additional_info: '',
-    },
+    org_central_headquarter: 1,
+    //org_district_headquarter: 0,
+    //org_regional_headquarter: 0,
+    //org_local_headquarter: 0,
+    //org_educational_headquarter: 0,
+    //org_detachment: 0,
 });
 
 const urlBanner = ref(null);
 
 const selectBanner = (event) => {
     maininfo.value.banner = event.target.files[0];
-    console.log('Файл есть', maininfo.value.banner);
-    urlBanner.value = URL.createObjectURL(maininfo.value.banner);
 };
 
 const resetBanner = () => {
-    maininfo.banner = null;
+    maininfo.value.banner = null;
     urlBanner.value = null;
 };
-
+//Что-то придумать
 const scale_massive = ref([
     { name: 'Отрядное' },
     { name: 'Образовательное' },
@@ -1071,14 +1152,6 @@ const direction_massive = ref([
     { name: 'Творческое' },
 ]);
 
-const available_structural_units = ref([
-    { name: 'Отряды' },
-    { name: 'Образовательные Отряды' },
-    { name: 'Местные штабы' },
-    { name: 'Региональные штабы' },
-    { name: 'Окружные штабы' },
-    { name: 'Центральные штабы' },
-]);
 const area = ref('');
 const area_massive = ref([
     { name: 'ЛСО' },
@@ -1086,6 +1159,15 @@ const area_massive = ref([
     { name: 'Окружной штаб' },
 ]);
 
+const document_data = ref({
+    passport: false,
+    snils: false,
+    inn: false,
+    work_book: false,
+    military_document: false,
+    consent_personal_data: false,
+    additional_info: '',
+});
 const time_data = ref({
     event_duration_type: '',
     start_date: '',
@@ -1116,12 +1198,6 @@ const answers = ref([
         answer: '',
     },
 ]);
-//Формы самой страницы
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '#' },
-    { pageTitle: 'Создание штаба СО ОО', href: '#' },
-]);
 
 function AddOrganizator() {
     organizators.value.push({
@@ -1134,34 +1210,33 @@ function AddOrganizator() {
     });
 }
 function SubmitEvent() {
-    /* //Внести все значения в FormData
+    //Внести все значения в FormData
     let fd = new FormData();
-    fd.append('banner', maininfo.banner);*/
-    createAction(maininfo.value)
+    Object.entries(maininfo.value).forEach(([key, item]) => {
+        fd.append(key, item);
+    });
+
+    createAction(fd)
         .then((resp) => {
             console.log('Форма передалась успешно', resp.data);
-            //Возвращает 500
-            createOrganizator(resp.data.id)
-                .then((resp) => {
-                    console.log('Организаторы добавлены', resp.data);
-                })
+            putDocuments(resp.data.id, document_data.value)
+                .then(() => {})
                 .catch((e) => {
-                    console.log(e);
+                    console.error(e);
                 });
-            putTimeData(resp.data.id, time_data.value)
-                .then((resp) => {
-                    console.log('Время изменено', resp.data);
-                })
-                .catch((e) => {});
+            putTimeData(resp.data.id, time_data.value).then((resp) => {
+                console.log('Удалось изменить время', resp.data);
+            });
+            putDocuments(resp.data.id, document_data.value)
+                .then(() => {})
+                .catch((e) => {
+                    console.error(e);
+                });
+            router.push({ name: 'actionSquads' });
         })
-        putTimeData(resp.data.id).then((resp)=>{
-            console.log("Время изменено", resp.data)
-        })
-        .catch((e)=>{
-
-        })
-        //Временное решение
-        router.go(-1);
+        .catch((e) => {
+            console.error(e);
+        });
 }
 
 function AddQuestion() {
@@ -1198,109 +1273,109 @@ function AddQuestion() {
     }
 }
 //Пользовательские стили для формы
-.form{
-  &-container{
-    display: flex;
-    margin-right: 16px;
-    margin-bottom: 20px;
-    margin-top: 20px;
-  }
-  &-col{
-    width:50%;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-  &-input{
-    width: 100%;
-    height: 40px;
-  }
-  &-checkbox{
-    display: flex;
-    flex-direction: row;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  &-checkbox input{
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-  }
-  &-fileupload{
-    display:flex;
-    flex-direction: row;
-  }
-  &-radio{
-    margin-left: 10px;
-  }
-  &-radio input{
-    width: 20px;
-    height: 20px;
-  }
-  &-input-container{
-    border: 1px solid black;
-    border-radius: 15px;
-    padding-left: 15px;
-  }
-  &-title{
-    font-family: Bert Sans;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 24px;
-  }
-  &-row{
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  &-border{
-    width: 100%;
-    margin-top: 10px;
-    margin-left: 10px;
-    border-bottom: 1px solid black;
-  }
-  &-col-100{
-    width: 100%;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 600;
-    margin-top: 3px;
-    margin-bottom: 3px;
-  }
-  &-label{
-    font-family: Bert Sans;
-    font-size: 1.2vw;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 24px;
-    margin-top: 5px;
-    margin-bottom: 2px;
-  }
-  &-add-block:hover{
-    cursor: pointer;
-  }
-  &-btm{
-    width: 114px;
-    border-radius: 10px;
-    background-color: #39BFBF;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  &-btminv{
-    width: 114px;
-    border-radius: 10px;
-    border: 2px solid #35383F;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  &-add{
-    margin-top: 10px;
-    text-decoration: underline;
-  }
-  &-add:hover{
-    cursor: pointer;
-  }
+.form {
+    &-container {
+        display: flex;
+        margin-right: 16px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+    &-col {
+        width: 50%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    &-input {
+        width: 100%;
+        height: 40px;
+    }
+    &-checkbox {
+        display: flex;
+        flex-direction: row;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    &-checkbox input {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+    }
+    &-fileupload {
+        display: flex;
+        flex-direction: row;
+    }
+    &-radio {
+        margin-left: 10px;
+    }
+    &-radio input {
+        width: 20px;
+        height: 20px;
+    }
+    &-input-container {
+        border: 1px solid black;
+        border-radius: 15px;
+        padding-left: 15px;
+    }
+    &-title {
+        font-family: Bert Sans;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 24px;
+    }
+    &-row {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    &-border {
+        width: 100%;
+        margin-top: 10px;
+        margin-left: 10px;
+        border-bottom: 1px solid black;
+    }
+    &-col-100 {
+        width: 100%;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        margin-top: 3px;
+        margin-bottom: 3px;
+    }
+    &-label {
+        font-family: Bert Sans;
+        font-size: 0.9vw;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 24px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+    &-add-block:hover {
+        cursor: pointer;
+    }
+    &-btm {
+        width: 114px;
+        border-radius: 10px;
+        background-color: #39bfbf;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &-btminv {
+        width: 114px;
+        border-radius: 10px;
+        border: 2px solid #35383f;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &-add {
+        margin-top: 10px;
+        text-decoration: underline;
+    }
+    &-add:hover {
+        cursor: pointer;
+    }
 }
 .upload {
     width: 100%;
@@ -1317,8 +1392,8 @@ function AddQuestion() {
         background-color: #5153b9;
         border-radius: 50%;
     }
-  }
-  .v-expansion-panel {
+}
+.v-expansion-panel {
     &__shadow {
         box-shadow: none;
     }
