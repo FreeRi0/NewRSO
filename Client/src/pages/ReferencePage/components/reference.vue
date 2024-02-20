@@ -40,7 +40,7 @@
                 </div>
                 <div class="references-items">
                     <div class="references-sort">
-                 
+
                         <div class="d-flex align-center">
                             <div class="references-sort__all">
                                 <input
@@ -202,7 +202,7 @@ const local = ref(null);
 const isLoading = ref(false);
 const educ = ref(null);
 const swal = inject('$swal');
-const isError = ref([]);
+const isError = ref('');
 const checkboxAll = ref(false);
 const step = ref(12);
 const ascending = ref(true);
