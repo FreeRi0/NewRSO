@@ -104,6 +104,7 @@
                                 name="date_start"
                                 type="date"
                                 class="input-big"
+                                v-model:value="refData.cert_start_date"
                             />
                         </div>
                         <div class="form-field">
@@ -114,6 +115,7 @@
                                 name="date_end"
                                 type="date"
                                 class="input-big"
+                                v-model:value="refData.cert_end_date"
                             />
                         </div>
                     </div>
@@ -125,6 +127,7 @@
                         <Input
                             name="spravka-field"
                             type="text"
+                            v-model:value="refData.recipient"
                             id="course"
                             class="input-full"
                             placeholder="Ответ"
@@ -145,13 +148,13 @@
                     {{ isError }}
                 </p> -->
                 <p class="error" v-if="isError.detail">
-                    {{ isError.detail }}
+                    {{ isError }}
                 </p>
                 <p class="error" v-if="isError">
-                    {{ isError.cert_end_date }}
+                    {{ isErrored }}
                 </p>
                 <p class="error" v-if="isError">
-                    {{ isError.recipient }}
+                    {{ isError }}
                 </p>
             </div>
         </div>
@@ -339,13 +342,6 @@ const SendReference = async () => {
         responseType: 'blob',
     })
         .then((response) => {
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
             refData.value = response.data;
             const url = new Blob([response.data], { type: 'application/zip' });
             const link = document.createElement('a');
@@ -353,11 +349,20 @@ const SendReference = async () => {
             link.setAttribute('download', 'external.zip');
             document.body.appendChild(link);
             link.click();
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             console.log(response, 'success');
             console.log(response);
         })
         .catch(({ response }) => {
+
             isError.value = response.data;
+            console.log(response, 'error');
             console.error('There was an error!', response.data);
             swal.fire({
                 position: 'top-center',
