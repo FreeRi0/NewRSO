@@ -166,10 +166,10 @@
         </v-expansion-panel>
     </v-expansion-panels>
 
-    <p>
+    <!-- <p>
         Найдено пользователей:
         {{ sortedParticipants.length }}
-    </p>
+    </p> -->
 </template>
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
@@ -221,12 +221,12 @@ const props = defineProps({
 });
 
 const answers = ref([
-    { name: 'Все', value: all, id: 'all', checked: true },
-    { name: 'Окружные штабы', value: districts, id: 'dist' },
-    { name: 'Региональные штабы', value: regs, id: 'regss' },
-    { name: 'Местные штабы', value: locs, id: 'locss' },
-    { name: 'Штабы СО ОО', value: educs, id: 'educss' },
-    { name: 'ЛСО', value: lso, id: 'squadss' },
+    { name: 'Все', value: 'all', id: 'all', checked: true },
+    { name: 'Окружные штабы', value: 'districts', id: 'dist' },
+    { name: 'Региональные штабы', value: 'regs', id: 'regss' },
+    { name: 'Местные штабы', value: 'locs', id: 'locss' },
+    { name: 'Штабы СО ОО', value: 'educs', id: 'educss' },
+    { name: 'ЛСО', value: 'lso', id: 'squadss' },
 ]);
 
 // const roleStore = useRoleStore();
@@ -250,6 +250,7 @@ const localRef = ref(props.local);
 const regRef = ref(props.reg);
 const educRef = ref(props.educ);
 const detachmentRef = ref(props.detachment);
+const selectedAnswer = ref(null);
 const levelAccess = ref(7);
 
 const emit = defineEmits([

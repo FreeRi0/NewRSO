@@ -141,13 +141,13 @@ const changeDetachment = async () => {
     formData.append('founding_date', detachment.value.founding_date);
     formData.append('region', detachment.value.region);
     formData.append('city', detachment.value.city);
-    // formData.append('educational_headquarter', detachment.value.educational_headquarter);
-    // if (detachment.value.educational_institution) {
-    //     formData.append(
-    //         'educational_institution',
-    //         detachment.value.educational_institution,
-    //     );
-    // } else formData.append('educational_institution', '');
+    formData.append('educational_headquarter', detachment.value.educational_headquarter);
+    if (detachment.value.educational_institution) {
+        formData.append(
+            'educational_institution',
+            detachment.value.educational_institution,
+        );
+    } else formData.append('educational_institution', '');
 
     if (
         roles.roles.value.educationalheadquarter_commander ||

@@ -107,41 +107,45 @@
             </div>
             <div class="contributor-items">
                 <div class="contributor-sort">
-                    <div class="sort-layout sort-types">
-                        <Button
-                            v-if="vertical"
-                            type="button"
-                            class="dashboard sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
-                        </Button>
-                        <Button
-                            v-else="!vertical"
-                            type="button"
-                            class="dashboardD sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
-                        </Button>
-                        <Button
-                            v-if="!vertical"
-                            type="button"
-                            class="menuuA sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        ></Button>
-                        <Button
-                            v-else="vertical"
-                            type="button"
-                            class="menuu sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        ></Button>
+                    <div class="sort-layout">
+                        <div>
+                            <Button
+                                v-if="vertical"
+                                type="button"
+                                class="dashboard"
+                                icon="icon"
+                                color="white"
+                                @click="showVertical"
+                            >
+                            </Button>
+                            <Button
+                                v-else
+                                type="button"
+                                class="dashboardD"
+                                icon="icon"
+                                color="white"
+                                @click="showVertical"
+                            >
+                            </Button>
+                        </div>
+                        <div>
+                            <Button
+                                v-if="!vertical"
+                                type="button"
+                                class="menuuA"
+                                icon="icon"
+                                color="white"
+                                @click="showVertical"
+                            ></Button>
+                            <Button
+                                v-else
+                                type="button"
+                                class="menuu"
+                                icon="icon"
+                                color="white"
+                                @click="showVertical"
+                            ></Button>
+                        </div>
                     </div>
 
                     <div class="sort-filters">
@@ -177,116 +181,53 @@
 </template>
 
 <style lang="scss">
-//Общий стиль компонента
-.action {
+.contributor {
+    padding: 0px 0px 60px 0px;
     &-title {
-        height: 116px;
         font-size: 52px;
-        @media screen and (max-width: 575px) {
-            font-size: 32px;
-        }
     }
-    &-slides {
-        display: flex;
-        flex-direction: row;
-        margin-bottom: 20px;
-    }
-}
-//Стили аккордеонов
-.settings {
-    &-container {
-        width: 320px;
-        margin-right: 16px;
-        margin-bottom: 20px;
-    }
-    &-text {
-        align-items: baseline;
-    }
-    &-buttoms {
-        width: 100%;
-        margin-top: 40px;
-        height: 40px;
-        display: flex;
-        justify-content: space-around;
-    }
-    &-select {
-        padding-right: 5px;
-    }
-    &-btm {
-        width: 114px;
-        border-radius: 10px;
-        background-color: #39bfbf;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    &-btminv {
-        width: 114px;
-        border-radius: 10px;
-        border: 2px solid #35383f;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    &-body {
-        display: flex;
-        flex-direction: column;
-    }
-}
-//Стиль карточки
-.postcard {
-    &-container {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    &-containerline {
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-    }
-}
-//Стиль сортировки
-.sort {
-    &-container {
-        width: 100%;
-        height: 50px;
+    &-sort {
         display: flex;
         justify-content: space-between;
-    }
-    &-select {
-        margin-right: 8px;
-    }
-    &-types {
-        height: 50px;
-    }
-    &-button {
-        margin-right: 5px;
-        border: 1px solid black;
-        border-radius: 5px;
-        width: 25px;
-        height: 25px;
-    }
-    &-alphabet {
-        width: 320px;
-        display: flex;
-        justify-content: flex-end;
-    }
-    &-select {
-        height: 50px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-    }
-    &-radio {
-    }
-    .education {
-        width: 305px;
-        @media screen and (max-width: 768px) {
-            width: 100%;
+        align-items: flex-end;
+        @media (max-width: 1024px) {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 60px;
         }
     }
+    &-container {
+        display: grid;
+        grid-template-columns: 0.5fr 1.5fr;
+        align-items: baseline;
+        grid-column-gap: 36px;
+    }
+    &-search {
+        position: relative;
+        box-sizing: border-box;
+        margin: 60px 0px 0px 0px;
+        img {
+            position: absolute;
+            top: 15px;
+            left: 16px;
+        }
+        &__input {
+            width: 100%;
+            padding: 13px 0px 10px 60px;
+            border-radius: 10px;
+            border: 1px solid black;
+        }
+    }
+    &-info {
+        font-size: 18px;
+        font-weight: 400;
+        margin-top: 60px;
+    }
+    &-wrapper {
+        padding-top: 40px;
+    }
 }
+
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
@@ -310,46 +251,11 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .ascend {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
     background-position: center;
-}
-//Стиль карточки
-.postcard {
-    &-container {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    &-containerline {
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-    }
-}
-//Стиль поисковика
-.searcher {
-    width: 100%;
-    height: 50px;
-    margin-bottom: 40px;
-}
-.squads-search {
-    position: relative;
-    box-sizing: border-box;
-
-    svg {
-        position: absolute;
-        top: 10px;
-        left: 16px;
-    }
-
-    &__input {
-        width: 100%;
-        padding: 13px 0px 10px 60px;
-        border-radius: 10px;
-        border: 1px solid black;
-    }
 }
 </style>
 
@@ -415,7 +321,7 @@ const updateDistrict = (districtVal) => {
     search = '?district_headquarter__name=' + districtVal;
 
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    // viewContributorsData(search);
 
     let districtId = districtsStore.districts.find(
         (dis) => dis.name == districtVal,
@@ -434,7 +340,7 @@ const updateReg = (regVal) => {
         search = '?district_headquarter__name=' + district.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    // viewContributorsData(search);
 
     let regId = regionalsStore.regionals.find(
         (regional) => regional.name == regVal,
@@ -452,7 +358,7 @@ const updateLocal = (localVal) => {
         search = '?regional_headquarter__name=' + reg.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    // viewContributorsData(search);
 
     let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
     local.value = localVal;
@@ -469,7 +375,7 @@ const updateEduc = (educVal) => {
         search = '?local_headquarter__name=' + local.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    // viewContributorsData(search);
     let educId = educationalsStore.educationals.find(
         (edh) => edh.name == educVal,
     )?.id;
@@ -487,7 +393,7 @@ const updateDetachment = (detachmentVal) => {
         search = '?educational_headquarter__name=' + educ.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    // viewContributorsData(search);
     detachment.value = detachmentVal;
 };
 
@@ -513,7 +419,7 @@ const searchContributors = (event) => {
 
     clearTimeout(timerSearch.value);
     timerSearch.value = setTimeout(() => {
-        viewContributorsData(search);
+        // viewContributorsData(search);
     }, 400);
 };
 
@@ -558,7 +464,7 @@ watch(
                     roles.roles.value.detachment_commander.name;
                 levelAccess.value = 5;
             }
-            viewContributorsData(search);
+            // viewContributorsData(search);
         } else {
             levelAccess.value = 0;
         }
@@ -591,5 +497,4 @@ watch(
         detachments.value = squadsStore.squads;
     },
 );
-
 </script>

@@ -103,25 +103,25 @@ export const useSquadsStore = defineStore('squads', {
             );
             this.squads = responseFilteredSquads.data;
         },
-        // async getSquadMembers(id: String) {
-        //     try {
-        //         this.isLoading = true;
-        //         const responseMembers = await HTTP.get(
-        //             `/detachments/${id}/members/`,
-        //             {
-        //                 headers: {
-        //                     'Content-Type': 'application/json',
-        //                     Authorization:
-        //                         'Token ' + localStorage.getItem('Token'),
-        //                 },
-        //             },
-        //         );
-        //         this.members = responseMembers.data;
-        //         this.isLoading = false;
-        //     } catch (error) {
-        //         this.isLoading = false;
-        //         console.log('an error occured ' + error);
-        //     }
-        // },
+        async getSquadMembers(id: String) {
+            try {
+                this.isLoading = true;
+                const responseMembers = await HTTP.get(
+                    `/detachments/${id}/members/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.members = responseMembers.data;
+                this.isLoading = false;
+            } catch (error) {
+                this.isLoading = false;
+                console.log('an error occured ' + error);
+            }
+        },
     },
 });
