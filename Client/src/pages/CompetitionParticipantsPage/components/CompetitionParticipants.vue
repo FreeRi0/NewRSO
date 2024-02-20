@@ -44,10 +44,10 @@
             </div>
 
             <div class="squads-sort">
-                <p class="countParticipants">
+                <!-- <p class="countParticipants">
                     Всего участников:
-                    {{ sortedSquads.length }}
-                </p>
+                    {{ squads.competitionSquads.value.length }}
+                </p> -->
                 <div class="sort-filters">
                     <!-- <div class="sort-select">
                         <Select
@@ -111,7 +111,7 @@
             </div>
             <Button
                 @click="squadsVisible += step"
-                v-if="squadsVisible < sortedSquads.length"
+                v-if="squadsVisible < squads.competitionSquads.value.length"
                 label="Показать еще"
             ></Button>
             <Button
@@ -317,7 +317,7 @@ onMounted(() => {
 
     &-sort {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: flex-end;
     }
 
