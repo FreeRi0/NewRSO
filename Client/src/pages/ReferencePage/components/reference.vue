@@ -23,7 +23,7 @@
                         @update-local="updateLocal"
                         @update-educ="updateEduc"
                         @update-detachment="updateDetachment"
-                        :level-search="false"
+
                         :district="district"
                         :districts="districts"
                         :reg="reg"
@@ -38,6 +38,7 @@
                         :sorted-participants="sortedParticipants"
                     />
                 </div>
+                <!-- <pre>{{ reg }}</pre> -->
                 <div class="references-items">
                     <div class="references-sort">
                         <div class="d-flex align-center">
@@ -165,23 +166,23 @@
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { filters } from '@features/Contributor/components';
-import { useRoleStore } from '@layouts/store/role';
-import { useRegionalsStore } from '@features/store/regionals';
-import { useDistrictsStore } from '@features/store/districts';
 import {
     referencesList,
     checkedReference,
 } from '@features/references/components';
+import { sortByEducation } from '@shared/components/selects';
+import { ref, computed, watch, inject, onMounted, onActivated } from 'vue';
+import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useDistrictsStore } from '@features/store/districts';
 import { useLocalsStore } from '@features/store/local';
 import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
-import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, inject, watch } from 'vue';
 import { HTTP } from '@app/http';
 
 const roleStore = useRoleStore();
-
 const roles = storeToRefs(roleStore);
 const regionalsStore = useRegionalsStore();
 const districtsStore = useDistrictsStore();

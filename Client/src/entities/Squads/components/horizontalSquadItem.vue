@@ -9,7 +9,7 @@
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontal-item-title">{{ member.detachment?.name }}</p>
+                <p class="horizontal-item-title ml-2">{{ member.detachment?.name }}</p>
                 <div class="rating" v-if="rating">
                     <p>Место в рейтинге: 102</p>
                 </div>
@@ -23,7 +23,7 @@
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontal-item-title">{{ member.junior_detachment?.name }}</p>
+                <p class="horizontal-item-title ml-2">{{ member.junior_detachment?.name }}</p>
                 <div class="rating" v-if="rating">
                     <p>Место в рейтинге: 102</p>
                 </div>
@@ -41,8 +41,8 @@
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
-            <div class="containerHorizontal">
-                <p class="horizontal-item-title">"{{ squad.name }}"</p>
+            <div class="containerHorizontal ml-2">
+                <p class="horizontal-item-title">{{ squad.name }}</p>
             </div>
         </router-link>
     </div>
@@ -73,7 +73,7 @@ const props = defineProps({
         grid-template-columns: auto 1fr auto;
         align-items: baseline;
         align-items: center;
-
+        width: 100%;
         padding: 4px 20px;
 
         border-radius: 10px;

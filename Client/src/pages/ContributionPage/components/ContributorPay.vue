@@ -68,7 +68,7 @@
                             @update-local="updateLocal"
                             @update-educ="updateEduc"
                             @update-detachment="updateDetachment"
-                            :level-search="false"
+
                             :district="district"
                             :districts="districts"
                             :reg="reg"
@@ -180,8 +180,6 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import {
-    contributorsList,
-    checkedContributors,
     filters,
 } from '@features/Contributor/components';
 import {
@@ -200,7 +198,6 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
-import { Participants } from '@features/Participants';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
