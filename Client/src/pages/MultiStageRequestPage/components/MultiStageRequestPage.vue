@@ -5,11 +5,6 @@
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img
-                    :src="headquarter.emblem"
-                    alt="logo"
-                    v-if="headquarter.emblem"
-                />
-                <img
                     src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
                     alt="photo"
                     v-else
@@ -47,17 +42,51 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { HTTP } from '@app/http';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
-const headquarter = {
-    id: 1,
-    emblem: '123',
-    name: 'Name HQ',
-};
-const application = {
-    id: 1,
-    document: '123',
-};
+
+const route = useRoute();
+
+const headquarters = ref({});
+const application = ref({});
+
+const getApplicationInfo = async () => {
+    try{
+        const { data } = HTTP.get(`/events/${route.params.id}/multi_applications/all`, {
+            headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+        });
+        application.value = data;
+    } catch(e) {
+        console.log('getApplicationInfo error', e);
+    }
+}
+
+const getHeadquarters = async () => {
+    try {
+        const {data} = HTTP.get(`/events/${route.params.id}/multi_applications/detail/${application.value.organizer_id}`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            }
+        });
+        headquarters.value = data;
+    } catch(e) {
+        console.log('getHeadquarters error', e);
+    }
+}
+
+onMounted(async () => {
+    await getApplicationInfo();
+    await getHeadquarters();
+    console.log(application.value);
+    console.log(headquarters.value);
+});
 </script>
 
 <style scoped>
