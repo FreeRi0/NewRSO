@@ -1,39 +1,6 @@
 <template>
     <h3 class="filters-title">Основные фильтры</h3>
     <v-expansion-panels>
-        <v-expansion-panel v-if="levelSearch">
-            <v-expansion-panel-title>
-                <template v-slot:default="{ expanded }">
-                    <v-row no-gutters>
-                        <v-col cols="4" class="d-flex justify-start">
-                            Уровень поиска
-                        </v-col>
-                    </v-row>
-                </template>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text class="inner-content">
-                <div class="checkbox">
-                    <div
-                        class="checkbox-item"
-                        v-for="answer in answers"
-                        :key="answer.id"
-                    >
-                        <input
-                            class="radiobutton"
-                            type="radio"
-                            :id="answer.id"
-                            :label="answer.name"
-                            :value="answer.name"
-                            :name="answer.name"
-                            :checked="answer.checked"
-                            v-model="selectedAnswer"
-                        />
-                        <label :for="id">{{ answer.name }}</label>
-                    </div>
-                </div>
-                <p>Выбрано:{{ selectedAnswer }}</p>
-            </v-expansion-panel-text>
-        </v-expansion-panel>
         <v-expansion-panel v-if="roles.centralheadquarter_commander">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
@@ -59,7 +26,7 @@
             </v-expansion-panel-text>
         </v-expansion-panel>
         <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title v-if="districtRef !== null">
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -167,15 +134,15 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { RadioButton } from '@shared/components/buttons';
-// import { useRoleStore } from '@layouts/store/role';
-// import { useRegionalsStore } from '@features/store/regionals';
-// import { useDistrictsStore } from '@features/store/districts';
-// import { useLocalsStore } from '@features/store/local';
-// import { useEducationalsStore } from '@features/store/educationals';
-// import { useSquadsStore } from '@features/store/squads';
-// import { useUserStore } from '@features/store/index';
-// import { storeToRefs } from 'pinia';
-// import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useDistrictsStore } from '@features/store/districts';
+import { useLocalsStore } from '@features/store/local';
+import { useEducationalsStore } from '@features/store/educationals';
+import { useSquadsStore } from '@features/store/squads';
+import { useUserStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
+import { HTTP } from '@app/http';
 import {
     districtSearchFilter,
     regionalsDropdown,
@@ -185,16 +152,11 @@ import {
 } from '@shared/components/selects';
 
 const props = defineProps({
-    levelSearch: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
     district: {
         type: String,
     },
     reg: { type: String },
-    local: { type: Object, default: () => {} },
+    local: { type: String },
     educ: { type: String },
     detachment: { type: String },
     districts: {
@@ -212,18 +174,9 @@ const props = defineProps({
     sortedParticipants: { type: Array, required: false },
 });
 
-const answers = ref([
-    { name: 'Все', value: 'all', id: 'all', checked: true },
-    { name: 'Окружные штабы', value: 'districts', id: 'dist' },
-    { name: 'Региональные штабы', value: 'regs', id: 'regss' },
-    { name: 'Местные штабы', value: 'locs', id: 'locss' },
-    { name: 'Штабы СО ОО', value: 'educs', id: 'educss' },
-    { name: 'ЛСО', value: 'lso', id: 'squadss' },
-]);
-
-// const roleStore = useRoleStore();
+const roleStore = useRoleStore();
 // const userStore = useUserStore();
-// const roles = storeToRefs(roleStore);
+const roles = storeToRefs(roleStore);
 // const regionalsStore = useRegionalsStore();
 // const districtsStore = useDistrictsStore();
 // const localsStore = useLocalsStore();
@@ -242,7 +195,6 @@ const localRef = ref(props.local);
 const regRef = ref(props.reg);
 const educRef = ref(props.educ);
 const detachmentRef = ref(props.detachment);
-const selectedAnswer = ref(null);
 const levelAccess = ref(7);
 
 const emit = defineEmits([

@@ -64,13 +64,13 @@
                         ></sortByEducation>
                     </div> -->
 
-                    <Button
+                    <!-- <Button
                         type="button"
                         class="ascend"
                         icon="switch"
                         @click="ascending = !ascending"
                         color="white"
-                    ></Button>
+                    ></Button> -->
                 </div>
             </div>
             <div class="d-flex mt-5">
@@ -216,7 +216,11 @@ const sortedSquads = computed(() => {
     if (!picked.value) {
         return tempSquads;
     }
-    tempSquads = tempSquads.filter((item) => item.area === picked.value.name);
+    tempSquads = tempSquads.filter(
+        (item) =>
+            item.junior_detachment?.area === picked.value.name ||
+            item.detachment?.area === picked.value.name,
+    );
     // tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
