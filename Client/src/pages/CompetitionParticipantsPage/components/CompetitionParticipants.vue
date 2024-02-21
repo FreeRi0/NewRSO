@@ -78,7 +78,7 @@
                     ></Button>
                 </div>
             </div>
-            <!-- <div class="d-flex mt-5">
+            <div class="d-flex mt-5">
                 <button
                     type="button"
                     class="contributorBtn"
@@ -96,7 +96,7 @@
                 >
                     Дебют
                 </button>
-            </div> -->
+            </div>
             <div class="horizontal">
                 <horizontalCompetitionList
                     :members="sortedSquads"

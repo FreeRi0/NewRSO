@@ -16,17 +16,17 @@
             </div>
         </router-link>
     </div>
-    <div v-else-if="props.competition === true && member">
-        <router-link :to="{ name: 'lso', params: { id: member.id } }"
+    <div v-else-if="props.competition === true && member.junior_detachment">
+        <router-link :to="{ name: 'lso', params: { id: member.junior_detachment.id } }"
             class="horizontal-item"
 
         >
             <div class="horizontal-img">
-                <img :src="member?.banner" alt="logo" v-if="member?.banner" />
+                <img :src="member.junior_detachment?.banner" alt="logo" v-if="member.junior_detachment?.banner" />
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontal-item-title">"{{ member?.name }}"</p>
+                <p class="horizontal-item-title">"{{ member.junior_detachment?.name }}"</p>
                 <div class="rating" v-if="rating">
                     <p>Место в рейтинге: 102</p>
                 </div>

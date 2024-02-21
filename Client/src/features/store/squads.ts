@@ -12,6 +12,7 @@ export const useSquadsStore = defineStore('squads', {
     }),
     actions: {
         async getSquads() {
+            if (this.squads.length) return;
             try {
                 this.isLoading = true;
                 const responseSquads = await HTTP.get('detachments/', {
@@ -91,9 +92,9 @@ export const useSquadsStore = defineStore('squads', {
                 console.log('an error occured ' + error);
             }
         },
-        async getFilteredSquads(name: String) {
+        async getFilteredSquads(name: String, education: String) {
             const responseFilteredSquads = await HTTP.get(
-                `/detachments/?search=${name}`,
+                `/detachments/?search=${name}&educational_institution__name=${education}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
