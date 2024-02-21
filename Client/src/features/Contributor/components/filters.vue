@@ -18,15 +18,25 @@
                         v-for="answer in answers"
                         :key="answer.id"
                     >
-                        <RadioButton
+                        <!-- <RadioButton
                             :value="answer.name"
                             :label="answer.name"
                             :id="answer.id"
                             :checked="answer.checked"
-                            :disabled="disabledRadio"
                             name="answer"
                             v-model:checkedValue="selectedAnswer"
+                        /> -->
+                        <input
+                            class="radiobutton"
+                            type="radio"
+                            :id="answer.id"
+                            :label="answer.name"
+                            :value="answer.name"
+                            :name="answer.name"
+                            :checked="answer.checked"
+                            v-model="selectedAnswer"
                         />
+                        <label :for="id">{{ answer.name }}</label>
                     </div>
                 </div>
                 <p>Выбрано:{{ selectedAnswer }}</p>
@@ -156,10 +166,10 @@
         </v-expansion-panel>
     </v-expansion-panels>
 
-    <p>
+    <!-- <p>
         Найдено пользователей:
         {{ sortedParticipants.length }}
-    </p>
+    </p> -->
 </template>
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
@@ -181,7 +191,6 @@ import {
     localSearchFilter,
     educationalsDropdown,
 } from '@shared/components/selects';
-
 
 const props = defineProps({
     levelSearch: {
@@ -211,6 +220,15 @@ const props = defineProps({
     sortedParticipants: { type: Array, required: false },
 });
 
+const answers = ref([
+    { name: 'Все', value: 'all', id: 'all', checked: true },
+    { name: 'Окружные штабы', value: 'districts', id: 'dist' },
+    { name: 'Региональные штабы', value: 'regs', id: 'regss' },
+    { name: 'Местные штабы', value: 'locs', id: 'locss' },
+    { name: 'Штабы СО ОО', value: 'educs', id: 'educss' },
+    { name: 'ЛСО', value: 'lso', id: 'squadss' },
+]);
+
 // const roleStore = useRoleStore();
 // const userStore = useUserStore();
 // const roles = storeToRefs(roleStore);
@@ -232,6 +250,7 @@ const localRef = ref(props.local);
 const regRef = ref(props.reg);
 const educRef = ref(props.educ);
 const detachmentRef = ref(props.detachment);
+const selectedAnswer = ref(null);
 const levelAccess = ref(7);
 
 const emit = defineEmits([

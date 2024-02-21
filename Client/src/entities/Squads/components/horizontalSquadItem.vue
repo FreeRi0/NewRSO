@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="props.competition === true && member">
+    <div v-if="props.competition === true && member ">
         <router-link :to="{ name: 'lso', params: { id: member.id } }"
             class="horizontal-item"
         >
@@ -9,7 +9,7 @@
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontal-item-title">"{{ member?.name }}"</p>
+                <p class="horizontal-item-title">{{ member?.name }}</p>
                 <div class="rating" v-if="rating">
                     <p>Место в рейтинге: 102</p>
                 </div>
@@ -65,7 +65,7 @@ const props = defineProps({
     },
     member: {
         type: Object,
-    }
+    },
 });
 </script>
 <style lang="scss" scoped>

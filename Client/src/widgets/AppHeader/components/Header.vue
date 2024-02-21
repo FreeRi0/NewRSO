@@ -43,7 +43,11 @@
                             </div>
                         </li>
                         <li class="header__nav-item disable">
-                            <a class="header__nav-link" href="/actionSquads">
+                            <a
+                                class="header__nav-link"
+                                @click.prevent
+                                href="/actionSquads"
+                            >
                                 Мероприятия
                             </a>
                         </li>
@@ -87,8 +91,13 @@
                     </div> -->
                 </div>
 
-                <div class="nav-user__location"
-                     v-if="Object.keys(userStore.currentUser).length && !userStore.isLoading">
+                <div
+                    class="nav-user__location"
+                    v-if="
+                        Object.keys(userStore.currentUser).length &&
+                        !userStore.isLoading
+                    "
+                >
                     <button class="nav-user__button" @click="show = !show">
                         <!-- <img
                             class="nav-user__button-mobile"
@@ -157,8 +166,13 @@
                     </div>
                 </div>
 
-                <div class="nav-user__menu user-menu"
-                     v-if="Object.keys(userStore.currentUser).length && !userStore.isLoading">
+                <div
+                    class="nav-user__menu user-menu"
+                    v-if="
+                        Object.keys(userStore.currentUser).length &&
+                        !userStore.isLoading
+                    "
+                >
                     <img
                         v-if="!Object.keys(userStore.currentUser).length"
                         src="@app/assets/user-avatar.png"
@@ -239,7 +253,7 @@ const userPages = computed(() => [
     {
         title: 'Моя страница',
         name: 'mypage',
-        show: true
+        show: true,
     },
     {
         title: 'Мой отряд',
@@ -247,7 +261,7 @@ const userPages = computed(() => [
         params: {
             id: userStore.currentUser?.detachment_id,
         },
-        show: userStore.currentUser?.detachment_id
+        show: userStore.currentUser?.detachment_id,
     },
     {
         title: 'Штаб СО ОО',
@@ -256,7 +270,7 @@ const userPages = computed(() => [
         params: {
             id: userStore.currentUser?.educational_headquarter_id,
         },
-        show: userStore.currentUser?.educational_headquarter_id
+        show: userStore.currentUser?.educational_headquarter_id,
     },
     {
         title: 'Местный штаб',
@@ -267,7 +281,7 @@ const userPages = computed(() => [
                 userStore.currentUser?.local_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
         },
-        show: userStore.currentUser?.local_headquarter_id
+        show: userStore.currentUser?.local_headquarter_id,
     },
     {
         title: 'Региональный штаб',
@@ -278,7 +292,7 @@ const userPages = computed(() => [
                 userStore.currentUser?.regional_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
         },
-        show: userStore.currentUser?.regional_headquarter_id
+        show: userStore.currentUser?.regional_headquarter_id,
     },
     {
         title: 'Окружной штаб',
@@ -289,7 +303,7 @@ const userPages = computed(() => [
                 userStore.currentUser?.district_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
         },
-        show: userStore.currentUser?.district_headquarter_id
+        show: userStore.currentUser?.district_headquarter_id,
     },
     {
         title: 'Центральный штаб',
@@ -297,14 +311,20 @@ const userPages = computed(() => [
         params: {
             id: userStore.currentUser?.central_headquarter_id,
         },
-        show: true
+        show: true,
     },
     { title: 'Активные заявки', name: 'active', show: true },
     // { title: 'Поиск участников', link: '#', show: (userStore.currentUser?.central_headquarter_id ||
     // userStore.currentUser?.district_headquarter_id || userStore.currentUser?.regional_headquarter_id) },
     { title: 'Членский взнос', name: 'contributorPay', show: true },
-    { title: 'Оформление справок', name: 'references', show: (userStore.currentUser?.central_headquarter_id ||
-        userStore.currentUser?.district_headquarter_id || userStore.currentUser?.regional_headquarter_id) },
+    {
+        title: 'Оформление справок',
+        name: 'references',
+        show:
+            userStore.currentUser?.central_headquarter_id ||
+            userStore.currentUser?.district_headquarter_id ||
+            userStore.currentUser?.regional_headquarter_id,
+    },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },
 ]);
@@ -563,11 +583,11 @@ watch(
         }
     }
 
-    // &__nav-item.disable {
-    //     & > a {
-    //         cursor: not-allowed;
-    //     }
-    // }
+    &__nav-item.disable {
+        & > a {
+            cursor: not-allowed;
+        }
+    }
 
     &__nav-link {
         display: block;

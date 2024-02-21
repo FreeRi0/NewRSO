@@ -104,8 +104,12 @@
                                 name="date_start"
                                 type="date"
                                 class="input-big"
+                                v-model:value="refData.cert_start_date"
                             />
                         </div>
+                        <p class="error" v-if="isError.cert_start_date">
+                            {{ '' + isError.cert_start_date }}
+                        </p>
                         <div class="form-field">
                             <label for="facultet"
                                 >Дата окончания действия справки
@@ -114,9 +118,13 @@
                                 name="date_end"
                                 type="date"
                                 class="input-big"
+                                v-model:value="refData.cert_end_date"
                             />
                         </div>
                     </div>
+                    <p class="error" v-if="isError.cert_end_date">
+                        {{ '' + isError.cert_end_date }}
+                    </p>
                     <div class="form-field another">
                         <label for="course"
                             >Справка выдана для предоставления
@@ -125,11 +133,15 @@
                         <Input
                             name="spravka-field"
                             type="text"
+                            v-model:value="refData.recipient"
                             id="course"
                             class="input-full"
                             placeholder="Ответ"
                         />
                     </div>
+                    <p class="error" v-if="isError.recipient">
+                        {{ '' + isError.recipient }}
+                    </p>
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
@@ -141,17 +153,9 @@
 
                     <Button type="submit" label="Получить справки"></Button>
                 </form>
-                <!-- <p class="error">
-                    {{ isError }}
-                </p> -->
+
                 <p class="error" v-if="isError.detail">
-                    {{ isError.detail }}
-                </p>
-                <p class="error" v-if="isError">
-                    {{ isError.cert_end_date }}
-                </p>
-                <p class="error" v-if="isError">
-                    {{ isError.recipient }}
+                    {{ '' + isError.detail }}
                 </p>
             </div>
         </div>
@@ -194,7 +198,7 @@ const participants = ref([]);
 const selectedPeoples = ref([]);
 const swal = inject('$swal');
 const participantsVisible = ref(12);
-const isError = ref('');
+const isError = ref([]);
 const levelAccess = ref(7);
 const regionals = ref([]);
 const districts = ref([]);
@@ -336,16 +340,8 @@ const SendReference = async () => {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
-        responseType: 'blob',
     })
         .then((response) => {
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
             refData.value = response.data;
             const url = new Blob([response.data], { type: 'application/zip' });
             const link = document.createElement('a');
@@ -353,6 +349,13 @@ const SendReference = async () => {
             link.setAttribute('download', 'external.zip');
             document.body.appendChild(link);
             link.click();
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             console.log(response, 'success');
             console.log(response);
         })

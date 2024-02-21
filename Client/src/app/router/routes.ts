@@ -521,17 +521,17 @@ const routes: RouteRecordRaw[] = [
                                     //         requiresAuth: true,
                                     //     },
                                     // },
-                                    // {
-                                    //     path: 'multistagerequest/:applicationId',
-                                    //     name: 'MultiStageRequest',
-                                    //     component: () =>
-                                    //         import(
-                                    //             '@pages/MultiStageRequestPage/components/MultiStageSubmitPage.vue'
-                                    //         ),
-                                    //     meta: {
-                                    //         requiresAuth: true,
-                                    //     },
-                                    // },
+                                    {
+                                        path: 'multistagesubmit',
+                                        name: 'MultiStageSubmit',
+                                        component: () =>
+                                            import(
+                                                '@pages/MultiStageRequestPage/components/MultiStageSubmitPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
                                 ],
                             },
                         ],

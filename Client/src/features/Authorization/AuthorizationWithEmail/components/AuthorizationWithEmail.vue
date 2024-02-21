@@ -78,7 +78,7 @@ const data = ref({
 });
 const visible = ref(false);
 
-const isError = ref('');
+const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 const router = useRouter();

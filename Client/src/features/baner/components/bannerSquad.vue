@@ -120,6 +120,9 @@
                 <p class="error" v-if="isError.non_field_errors">
                     {{ '' + isError.non_field_errors }}
                 </p>
+                <p class="error" v-if="isError.non_field_errors">
+                    {{ '' + isError.error }}
+                </p>
             </div>
         </div>
     </div>
