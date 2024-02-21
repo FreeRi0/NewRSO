@@ -6,14 +6,9 @@
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
                 <img
-                    :src="headquarter[index]?.emblem"
+                    class="competition__avatar_circle"
+                    :src="headquarter?.emblem"
                     alt="logo"
-                    v-if="headquarter[index]?.emblem"
-                />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                    v-else
                 />
             </div>
             <div class="containerHorizontal">
@@ -98,5 +93,10 @@ watch(
         width: 100%;
         height: 100%;
     }
+}
+.competition__avatar_circle {
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
 }
 </style>
