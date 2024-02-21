@@ -17,61 +17,7 @@
 
         <div id="wrapper">
             <div id="left">
-                <div class="filters">
-                    <p class="subtitle">Основные фильтры</p>
-                    <p class="filter_name">Уровни поиска</p>
-                    <div class="radio_text">
-                        <p class="radio_button">
-                            <input
-                                name="search_level"
-                                type="radio"
-                                value="all"
-                                checked
-                            />
-                            Все
-                        </p>
-                        <p class="radio_button">
-                            <input
-                                name="search_level"
-                                type="radio"
-                                value="district"
-                            />
-                            Окружные штабы
-                        </p>
-                        <p class="radio_button">
-                            <input
-                                name="search_level"
-                                type="radio"
-                                value="regional"
-                            />
-                            Региональное отделение
-                        </p>
-                        <p class="radio_button">
-                            <input
-                                name="search_level"
-                                type="radio"
-                                value="local"
-                            />
-                            Местные штабы
-                        </p>
-                        <p class="radio_button">
-                            <input
-                                name="search_level"
-                                type="radio"
-                                value="educational"
-                            />
-                            Штабы СО ОО
-                        </p>
-                        <p class="radio_button">
-                            <input
-                                name="search_level"
-                                type="radio"
-                                value="detachments"
-                            />
-                            ЛСО
-                        </p>
-                    </div>
-                </div>
+                <!-- Место под фильтры -->
             </div>
 
             <div id="right" v-if="sortedHeadquartersJunior.length">
