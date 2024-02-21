@@ -386,7 +386,7 @@ onActivated(() => {
     localStorage.removeItem('AllHeadquarters_filters');
 });
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
@@ -556,6 +556,17 @@ onActivated(() => {
     .sort-select {
         margin-top: 12px;
     }
+}
+
+.option-select .v-field__input input::placeholder,
+.form__select .v-field__input input::placeholder {
+    color: #35383f;
+    opacity: revert;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
 }
 </style>
 @shared/components/selects/inputs @shared/components/inputs/imagescomp

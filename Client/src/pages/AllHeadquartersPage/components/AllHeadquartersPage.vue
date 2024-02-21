@@ -502,5 +502,16 @@ pre {
         margin-top: 12px;
     }
 }
+
+.option-select .v-field__input input::placeholder,
+.form__select .v-field__input input::placeholder {
+    color: #35383f;
+    opacity: revert;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
+}
 </style>
 @shared/components/selects/inputs @shared/components/inputs/imagescomp

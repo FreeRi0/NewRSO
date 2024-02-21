@@ -236,7 +236,7 @@
 
 .password-input,
 .region-input {
-    border: 1px solid #a3a3a3;
+    border: 2px solid #a3a3a3;
     border-radius: 10px;
     font-size: 16px;
     color: #35383f;
@@ -387,6 +387,11 @@ input {
 .option-select .v-field__input input::placeholder {
     color: #a3a3a3;
     opacity: revert;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
 }
 </style>
 
