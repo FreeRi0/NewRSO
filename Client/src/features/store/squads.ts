@@ -58,17 +58,7 @@ export const useSquadsStore = defineStore('squads', {
                         },
                     },
                 );
-                this.competitionSquads = responseCompetitionSquads.data.reduce(
-                    (acc: any, member: any) => {
-                        if (member.detachment) acc.push(member.detachment);
-                        acc.push(member.junior_detachment);
-
-                        // console.log('acc', acc);
-
-                        return acc;
-                    },
-                    [],
-                );
+                this.competitionSquads = responseCompetitionSquads.data;
                 // console.log('soirt', this.competitionSquads)
                 this.isLoading = false;
             } catch (error) {
