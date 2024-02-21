@@ -18,6 +18,34 @@
         <div id="wrapper">
             <div id="left">
                 <!-- Место под фильтры -->
+
+                <div class="uploads">
+                    <div
+                        class="form-col"
+                        v-for="(file, index) in files.length + 1"
+                        :key="file"
+                    >
+                        <div class="form-fileupload" v-if="index < 6">
+                            <img
+                                class="paper-clip"
+                                src="@app/assets/icon/addFile.svg"
+                                alt="addFile"
+                            />
+
+                            <FileUpload
+                                class="file-upload-text"
+                                mode="basic"
+                                name="demo[]"
+                                accept=".pdf, .jpeg, .png"
+                                :maxFileSize="7000000"
+                                :customUpload="true"
+                                chooseLabel="Выбрать файл"
+                                @select="onUpload"
+                                @clear="onRemove(index)"
+                            ></FileUpload>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div id="right" v-if="sortedHeadquartersJunior.length">
@@ -68,9 +96,10 @@
 
         <template v-if="selectedCompetitionsList.length">
             <p class="text_total">
-                Итого: {{ selectedCompetitionsList.length }}
+                Итого: {{ selectedCompetitionsList.length }} ({{ memberCount }}
+                участников)
             </p>
-
+            <!-- ({{ selectedCompetitionsList.reduce((sum, el) => sum + el.members_count) }}) -->
             <multi-stage-submit-select
                 v-for="headquarter in selectedCompetitionsList"
                 :key="headquarter.id"
@@ -97,6 +126,7 @@ import { useRouter } from 'vue-router';
 
 import MultiStageSubmitItem from './MultiStageSubmitItem.vue';
 import MultiStageSubmitSelect from './MultiStageSubmitSelect.vue';
+import FileUpload from 'primevue/fileupload';
 
 import { sortByEducation } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
@@ -109,10 +139,12 @@ const headquartersJunior = ref([]);
 const sortedHeadquartersJunior = ref([]);
 const selectedCompetitionsList = ref([]);
 
+const memberCount = ref(0);
 const name = ref('');
 const timerSearch = ref(null);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
+const files = ref([]);
 
 const sortOptionss = ref([
     {
@@ -137,7 +169,12 @@ const getHeadquartersJunior = async () => {
         if (data[0].district_headquarters) {
             headquartersJunior.value.push(
                 ...data[0].district_headquarters.map((item) => {
+                    delete item?.detachments;
+                    delete item?.educational_headquarters;
                     item.district_headquarter = item.id;
+                    // item.district_headquarter = {};
+                    // item.district_headquarter.id = item.id;
+                    // item.district_headquarter.name = item.name;
                     item.id = i;
                     i += 1;
                     return item;
@@ -147,7 +184,12 @@ const getHeadquartersJunior = async () => {
         if (data[0].regional_headquarters) {
             headquartersJunior.value.push(
                 ...data[0].regional_headquarters.map((item) => {
+                    delete item?.detachments;
+                    delete item?.educational_headquarters;
                     item.regional_headquarter = item.id;
+                    // item.regional_headquarter = {};
+                    // item.regional_headquarter.id = item.id;
+                    // item.regional_headquarter.name = item.name;
                     item.id = i;
                     i += 1;
                     return item;
@@ -157,7 +199,12 @@ const getHeadquartersJunior = async () => {
         if (data[0].local_headquarters) {
             headquartersJunior.value.push(
                 ...data[0].local_headquarters.map((item) => {
+                    delete item?.detachments;
+                    delete item?.educational_headquarters;
                     item.local_headquarter = item.id;
+                    // item.local_headquarter = {};
+                    // item.local_headquarter.id = item.id;
+                    // item.local_headquarter.name = item.name;
                     item.id = i;
                     i += 1;
                     return item;
@@ -167,7 +214,12 @@ const getHeadquartersJunior = async () => {
         if (data[0].educational_headquarters) {
             headquartersJunior.value.push(
                 ...data[0].educational_headquarters.map((item) => {
+                    delete item?.detachments;
+                    delete item?.educational_headquarters;
                     item.educational_headquarter = item.id;
+                    // item.educational_headquarter = {};
+                    // item.educational_headquarter.id = item.id;
+                    // item.educational_headquarter.name = item.name;
                     item.id = i;
                     i += 1;
                     return item;
@@ -175,9 +227,15 @@ const getHeadquartersJunior = async () => {
             );
         }
         if (data[0].detachments) {
+            delete data[0].detachments?.detachments;
             headquartersJunior.value.push(
                 ...data[0].detachments.map((item) => {
+                    delete item?.detachments;
+                    delete item?.educational_headquarters;
                     item.detachment = item.id;
+                    // item.detachment = {};
+                    // item.detachment.id = item.id;
+                    // item.detachment.name = item.name;
                     item.id = i;
                     i += 1;
                     return item;
@@ -223,16 +281,73 @@ const sortedByName = async (name) => {
     console.log(sortedHeadquartersJunior.value);
 };
 
+const onUpload = (file) => {
+    files.value.push(file.files[0]);
+};
+
+const onRemove = (index) => {
+    files.value.splice(index, 1);
+};
+
 const onAction = async () => {
     try {
-        console.log(selectedCompetitionsList.value);
         selectedCompetitionsList.value = selectedCompetitionsList.value.map(
             (item) => {
-                item.participants_count = 1;
+                delete item.id;
+                delete item.name;
+                delete item.members_count;
+                delete item.selected;
+                item.participants_count = 1; // item.members_count;
                 return item;
             },
         );
-        console.log(selectedCompetitionsList.value);
+
+        if (files.value.length > 0) {
+            let payload = {};
+
+            const { data } = await HTTP.get(`/users/me/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+
+            console.log(data);
+            payload.user = data;
+            console.log(payload);
+
+            const { data: event_data } = await HTTP.get(
+                `/events/${route.params.id}`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+
+            console.log(event_data);
+            payload.event = event_data?.name;
+            console.log(payload);
+
+            console.log('files', files);
+            for (let file of files.value) {
+                console.log(file);
+                console.log(payload);
+                payload.document = file;
+                await HTTP.post(
+                    `/events/${route.params.id}/user_documents/`,
+                    payload,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+            }
+        }
 
         await HTTP.post(
             `/events/${route.params.id}/multi_applications/`,
@@ -278,6 +393,13 @@ watch(selectedCompetitionsList, (newSelectedCompetitionsList) => {
 watch(ascending, () => {
     if (!ascending.value) {
         sortedHeadquartersJunior.value.reverse();
+    }
+});
+
+watch(selectedCompetitionsList, () => {
+    memberCount.value = 0;
+    for (const obj of headquartersJunior.value) {
+        if (obj.selected) memberCount.value += obj.members_count;
     }
 });
 
@@ -444,26 +566,33 @@ onMounted(async () => {
     top: 15px;
     left: 16px;
 }
-.radio_text {
-    font-family: Bert Sans;
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: black;
-}
-.filter_name {
-    font-family: Bert Sans;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 26px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #35383f;
-    margin-bottom: 20px;
-}
-.radio_button {
-    margin-bottom: 16px;
+.form {
+    &-fileupload {
+        display: flex;
+        flex-direction: row;
+        margin-left: 4px;
+        font-family: Bert Sans;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 21px;
+        letter-spacing: 0em;
+        gap: 10px;
+        text-align: left;
+        color: #1f7cc0;
+        & > :deep(.p-) {
+            display: none;
+        }
+
+        & :deep(.p-button-label) {
+            text-decoration: underline;
+        }
+        & :deep(svg) {
+            display: none;
+        }
+    }
+    &-col {
+        margin-left: 4px;
+        margin-top: 36px;
+    }
 }
 </style>
