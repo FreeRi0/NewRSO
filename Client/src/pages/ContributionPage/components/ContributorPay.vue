@@ -68,7 +68,6 @@
                             @update-local="updateLocal"
                             @update-educ="updateEduc"
                             @update-detachment="updateDetachment"
-
                             :district="district"
                             :districts="districts"
                             :reg="reg"
@@ -86,7 +85,7 @@
                     <div class="contributor-items">
                         <div class="contributor-sort">
                             <div class="d-flex align-center">
-                                <div class="contributor-sort__all ">
+                                <div class="contributor-sort__all">
                                     <input
                                         type="checkbox"
                                         @click="select"
@@ -164,6 +163,8 @@
                 </div>
                 <div class="participants__btn" v-if="selectedPeoples.length">
                     <Button
+                        :loaded="isLoading"
+                        :disabled="isLoading || !action"
                         class="save"
                         type="button"
                         label="Сохранить"
@@ -179,9 +180,7 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import {
-    filters,
-} from '@features/Contributor/components';
+import { filters } from '@features/Contributor/components';
 import {
     contributionAccessItem,
     selectedContributionAccessItem,
@@ -620,7 +619,6 @@ watch(
         detachments.value = squadsStore.squads;
     },
 );
-
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
@@ -822,5 +820,9 @@ p {
 
 .v-expansion-panel-title {
     padding: 7px 0px;
+}
+
+.participants__actions {
+    width: 230px;
 }
 </style>
