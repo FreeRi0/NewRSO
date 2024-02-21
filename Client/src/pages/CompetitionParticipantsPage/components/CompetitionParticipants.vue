@@ -55,14 +55,14 @@
                             :SortDropdown="true"
                         ></educInstitutionDropdown>
                     </div> -->
-                    <div class="sort-select">
+                    <!-- <div class="sort-select">
                         <sortByEducation
                             variant="outlined"
                             clearable
                             v-model="sortBy"
                             :options="sortOptionss"
                         ></sortByEducation>
-                    </div>
+                    </div> -->
 
                     <Button
                         type="button"
@@ -179,35 +179,35 @@ const sortedSquads = computed(() => {
             );
         });
     }
-    tempSquads = tempSquads.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa =
-                    a.junior_detachment?.name.toLowerCase() ||
-                    a.detachment?.name.toLowerCase(),
-                fb =
-                    b.junior_detachment?.toLowerCase() ||
-                    b.detachment?.name.toLowerCase();
+    // tempSquads = tempSquads.sort((a, b) => {
+    //     if (sortBy.value == 'alphabetically') {
+    //         let fa =
+    //                 a.junior_detachment?.name.toLowerCase() ||
+    //                 a.detachment?.name.toLowerCase(),
+    //             fb =
+    //                 b.junior_detachment?.toLowerCase() ||
+    //                 b.detachment?.name.toLowerCase();
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'founding_date') {
-            let fc = a.junior_detachment?.founding_date || a.detachment?.founding_date,
-                fn = b.junior_detachment?.founding_date || b.detachment?.founding_date;
+    //         if (fa < fb) {
+    //             return -1;
+    //         }
+    //         if (fa > fb) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     } else if (sortBy.value == 'founding_date') {
+    //         let fc = a.junior_detachment?.founding_date || a.detachment?.founding_date,
+    //             fn = b.junior_detachment?.founding_date || b.detachment?.founding_date;
 
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        } 
-    });
+    //         if (fc < fn) {
+    //             return -1;
+    //         }
+    //         if (fc > fn) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     }
+    // });
 
     if (!ascending.value) {
         tempSquads.reverse();
