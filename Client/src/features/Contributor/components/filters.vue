@@ -1,37 +1,6 @@
 <template>
     <h3 class="filters-title">Основные фильтры</h3>
     <v-expansion-panels>
-        <v-expansion-panel v-if="levelSearch">
-            <v-expansion-panel-title>
-                <template v-slot:default="{ expanded }">
-                    <v-row no-gutters>
-                        <v-col cols="4" class="d-flex justify-start">
-                            Уровень поиска
-                        </v-col>
-                    </v-row>
-                </template>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text class="inner-content">
-                <div class="checkbox">
-                    <div
-                        class="checkbox-item"
-                        v-for="answer in answers"
-                        :key="answer.id"
-                    >
-                        <RadioButton
-                            :value="answer.name"
-                            :label="answer.name"
-                            :id="answer.id"
-                            :checked="answer.checked"
-                            :disabled="disabledRadio"
-                            name="answer"
-                            v-model:checkedValue="selectedAnswer"
-                        />
-                    </div>
-                </div>
-                <p>Выбрано:{{ selectedAnswer }}</p>
-            </v-expansion-panel-text>
-        </v-expansion-panel>
         <v-expansion-panel v-if="roles.centralheadquarter_commander">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
@@ -57,7 +26,7 @@
             </v-expansion-panel-text>
         </v-expansion-panel>
         <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title v-if="districtRef !== null">
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -156,24 +125,24 @@
         </v-expansion-panel>
     </v-expansion-panels>
 
-    <p>
+    <!-- <p>
         Найдено пользователей:
         {{ sortedParticipants.length }}
-    </p>
+    </p> -->
 </template>
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { RadioButton } from '@shared/components/buttons';
-// import { useRoleStore } from '@layouts/store/role';
-// import { useRegionalsStore } from '@features/store/regionals';
-// import { useDistrictsStore } from '@features/store/districts';
-// import { useLocalsStore } from '@features/store/local';
-// import { useEducationalsStore } from '@features/store/educationals';
-// import { useSquadsStore } from '@features/store/squads';
-// import { useUserStore } from '@features/store/index';
-// import { storeToRefs } from 'pinia';
-// import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useDistrictsStore } from '@features/store/districts';
+import { useLocalsStore } from '@features/store/local';
+import { useEducationalsStore } from '@features/store/educationals';
+import { useSquadsStore } from '@features/store/squads';
+import { useUserStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
+import { HTTP } from '@app/http';
 import {
     districtSearchFilter,
     regionalsDropdown,
@@ -182,18 +151,12 @@ import {
     educationalsDropdown,
 } from '@shared/components/selects';
 
-
 const props = defineProps({
-    levelSearch: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
     district: {
         type: String,
     },
     reg: { type: String },
-    local: { type: Object, default: () => {} },
+    local: { type: String },
     educ: { type: String },
     detachment: { type: String },
     districts: {
@@ -211,9 +174,9 @@ const props = defineProps({
     sortedParticipants: { type: Array, required: false },
 });
 
-// const roleStore = useRoleStore();
+const roleStore = useRoleStore();
 // const userStore = useUserStore();
-// const roles = storeToRefs(roleStore);
+const roles = storeToRefs(roleStore);
 // const regionalsStore = useRegionalsStore();
 // const districtsStore = useDistrictsStore();
 // const localsStore = useLocalsStore();

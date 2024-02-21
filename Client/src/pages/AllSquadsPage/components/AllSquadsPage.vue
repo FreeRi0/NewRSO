@@ -18,7 +18,7 @@
                 <v-btn
                     class="squads-tabs__item"
                     :class="{ active: picked === area.name }"
-                    v-for="area in categories"
+                    v-for="area in categories.areas.value"
                     :key="area"
                     @click="picked = area.name"
                     >{{ area.name }}
@@ -207,8 +207,9 @@ const regionalsStore = useRegionalsStore();
 const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
 
-const categories = ref([]);
+const categories = storeToRefs(squadsStore);
 const name = ref('');
+const timerSearch = ref(null);
 const education = ref(null);
 
 const SelectedSortDistrict = ref(
@@ -218,50 +219,45 @@ const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
 
-const getCategories = async () => {
-    try {
-        const categoryResponse = await HTTP.get('/areas/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        categories.value = categoryResponse.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+// const searchDetachments = (event) => {
+//     if(name.value ) {
+//         squadsStore.getFilteredSquads(name.value)
+//     }
+//     clearTimeout(timerSearch.value);
+//     timerSearch.value = setTimeout(() => {
+//     }, 400);
+// }
 
-const searchSquad = async (name) => {
-    try {
-        const { data } = await HTTP.get(`/detachments/?search=${name}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        squads.squads.value = data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+// const searchSquad = async (name) => {
+//     try {
+//         const { data } = await HTTP.get(`/detachments/?search=${name}`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+//         squads.squads.value = data;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
-const filteredSquad = async (education) => {
-    try {
-        const { data } = await HTTP.get(
-            `/detachments/?educational_institution__name=${education}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        squads.squads.value = data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+// const filteredSquad = async (education) => {
+//     try {
+//         const { data } = await HTTP.get(
+//             `/detachments/?educational_institution__name=${education}`,
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             },
+//         );
+//         squads.squads.value = data;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 const squadsVisible = ref(20);
 const step = ref(20);
@@ -286,20 +282,10 @@ const sortOptionss = ref([
     { value: 'members_count', name: 'Количеству участников' },
 ]);
 
-const searchSquads = computed(() => {
-    return searchSquad(name.value);
-});
-
-const filteredSquadsByEducation = computed(() => {
-    return filteredSquad(education.value ? education.value : '');
-});
 
 const sortedSquads = computed(() => {
     // TODO добавляем фильтры по округу и региону
     let tempSquads = squads.squads.value;
-
-    searchSquads.value;
-    filteredSquadsByEducation.value;
 
     if (SelectedSortRegional.value || SelectedSortDistrict.value) {
         let idRegionals = [];
@@ -323,6 +309,16 @@ const sortedSquads = computed(() => {
 
         tempSquads = tempSquads.filter((item) => {
             return idRegionals.indexOf(item.regional_headquarter) >= 0;
+        });
+    }
+    if (education.value) {
+        tempSquads = tempSquads.filter((item) => {
+            return item.educational_institution.name === education.value;
+        });
+    }
+    if(name.value) {
+        tempSquads = tempSquads.filter((item) => {
+            return item.name.toLowerCase().indexOf(name.value.toLowerCase()) >= 0;
         });
     }
 
@@ -372,8 +368,9 @@ const sortedSquads = computed(() => {
 });
 
 onMounted(() => {
-    getCategories();
-});
+    squadsStore.getSquads();
+})
+
 onActivated(() => {
     SelectedSortDistrict.value = JSON.parse(
         localStorage.getItem('AllHeadquarters_filters'),
@@ -386,7 +383,7 @@ onActivated(() => {
     localStorage.removeItem('AllHeadquarters_filters');
 });
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
@@ -556,6 +553,17 @@ onActivated(() => {
     .sort-select {
         margin-top: 12px;
     }
+}
+
+.option-select .v-field__input input::placeholder,
+.form__select .v-field__input input::placeholder {
+    color: #35383f;
+    opacity: revert;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
 }
 </style>
 @shared/components/selects/inputs @shared/components/inputs/imagescomp

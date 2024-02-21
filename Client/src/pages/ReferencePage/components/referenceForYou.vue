@@ -107,6 +107,9 @@
                                 v-model:value="refData.cert_start_date"
                             />
                         </div>
+                        <p class="error" v-if="isError.cert_start_date">
+                            {{ '' + isError.cert_start_date }}
+                        </p>
                         <div class="form-field">
                             <label for="facultet"
                                 >Дата окончания действия справки
@@ -119,6 +122,9 @@
                             />
                         </div>
                     </div>
+                    <p class="error" v-if="isError.cert_end_date">
+                        {{ '' + isError.cert_end_date }}
+                    </p>
                     <div class="form-field another">
                         <label for="course"
                             >Справка выдана для предоставления
@@ -133,6 +139,9 @@
                             placeholder="Ответ"
                         />
                     </div>
+                    <p class="error" v-if="isError.recipient">
+                        {{ '' + isError.recipient }}
+                    </p>
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
@@ -144,17 +153,9 @@
 
                     <Button type="submit" label="Получить справки"></Button>
                 </form>
-                <!-- <p class="error">
-                    {{ isError }}
-                </p> -->
+
                 <p class="error" v-if="isError.detail">
-                    {{ isError }}
-                </p>
-                <p class="error" v-if="isError">
-                    {{ isErrored }}
-                </p>
-                <p class="error" v-if="isError">
-                    {{ isError }}
+                    {{ '' + isError.detail }}
                 </p>
             </div>
         </div>
@@ -197,7 +198,7 @@ const participants = ref([]);
 const selectedPeoples = ref([]);
 const swal = inject('$swal');
 const participantsVisible = ref(12);
-const isError = ref('');
+const isError = ref([]);
 const levelAccess = ref(7);
 const regionals = ref([]);
 const districts = ref([]);
@@ -339,7 +340,6 @@ const SendReference = async () => {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
-        responseType: 'blob',
     })
         .then((response) => {
             refData.value = response.data;
@@ -360,9 +360,7 @@ const SendReference = async () => {
             console.log(response);
         })
         .catch(({ response }) => {
-
             isError.value = response.data;
-            console.log(response, 'error');
             console.error('There was an error!', response.data);
             swal.fire({
                 position: 'top-center',

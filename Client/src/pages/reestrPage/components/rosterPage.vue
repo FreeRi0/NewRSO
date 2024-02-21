@@ -1,476 +1,195 @@
 <template>
     <div class="container">
-        <h2 class='action-title'>Реестр участников</h2>
-        <div class="searcher">
-            <div class='squads-search'>
+        <div class="contributor">
+            <h2 class="contributor-title">Реестр участников</h2>
+            <div class="contributor-search">
                 <input
-                    type='text'
-                    id='search'
-                    class='squads-search__input'
-                    placeholder='Найти участника'
+                    type="text"
+                    id="search"
+                    class="contributor-search__input"
+                    @keyup="searchContributors"
+                    v-model="name"
+                    placeholder="Начинавйте ввод?"
                 />
-                <svg
-                    width='28'
-                    height='28'
-                    viewBox='0 0 28 28'
-                    fill='none'
-                    xmlns='http://www.w3.org/2000/svg'
-                >
-                    <path
-                        d='M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z'
-                        stroke='#898989'
-                        stroke-width='2'
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
+                <img src="@app/assets/icon/search.svg" alt="search" />
+            </div>
+            <div class="contributor-container">
+                <div class="filters">
+                    <filters
+                        @update-district="updateDistrict"
+                        @update-reg="updateReg"
+                        @update-local="updateLocal"
+                        @update-educ="updateEduc"
+                        @update-detachment="updateDetachment"
+                        :district="district"
+                        :districts="districts"
+                        :reg="reg"
+                        :regionals="regionals"
+                        :local="local"
+                        :locals="locals"
+                        :educ="educ"
+                        :educ-head="educHead"
+                        :detachment="detachment"
+                        :detachments="detachments"
+                        :roles="roles.roles.value"
                     />
-                </svg>
-            </div>
-        </div>
-        <div class='row-cols-2 action-slides'>
-            <div class='col settings-container'>
-                <v-expansion-panels class='settings-header' variant="accordion">
-                    <v-expansion-panel title="Уровень поиска">
-                        <v-expansion-panel-text class='settings-body'>
-                          <div class='flex align-items-center' style='display: flex'>
-                              <input @click="loadParticipants" v-model="searchLevel" type='radio' value='Все' class='form-radio'/>
-                              <label class="ml-2 form-label">Все</label>
-                          </div>
-                          <div class='flex align-items-center' style='display: flex'>
-                              <input @click="loadParticipants" v-model="searchLevel" type='radio' value='Окружные' class='form-radio'/>
-                              <label class="ml-2 form-label">Окружные штабы</label>
-                          </div>
-                          <div class='flex align-items-center' style='display: flex'>
-                              <input @click="loadParticipants" v-model="searchLevel" type='radio' value='Региональные' class='form-radio'/>
-                              <label class="ml-2 form-label">Региональные штабы</label>
-                          </div>
-                          <div class='flex align-items-center' style='display: flex'>
-                              <input @click="loadParticipants" v-model="searchLevel" type='radio' value='Местные' class='form-radio'/>
-                              <label class="ml-2 form-label">Местные штабы</label>
-                          </div>
-                          <div class='flex align-items-center' style='display: flex'>
-                              <input @click="loadParticipants" v-model="searchLevel" type='radio' value='Штабы' class='form-radio'/>
-                              <label class="ml-2 form-label">Штабы СО ОО</label>
-                          </div>
-                          <div class='flex align-items-center' style='display: flex'>
-                              <input @click="loadParticipants" v-model="searchLevel" type='radio' value='ЛСО' class='form-radio'/>
-                              <label class="ml-2 form-label">ЛСО</label>
-                          </div>
-                        </v-expansion-panel-text>
-                    </v-expansion-panel>
-                    <v-expansion-panel v-if="searchLevel === 'Штабы'" title="Штабы СО ОО">
-                    <v-expansion-panel-text>
-                      <div class='search-panel squads-search'>
-                        <input
-                            type='text'
-                            id='search'
-                            class='squads-search__input'
-                            placeholder='Найти участника'
-                        />
-                        <svg
-                            width='28'
-                            height='28'
-                            viewBox='0 0 28 28'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <path
-                                d='M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z'
-                                stroke='#898989'
-                                stroke-width='2'
-                                stroke-linecap='round'
-                                stroke-linejoin='round'
-                            />
-                        </svg>
-                    </div>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                    <v-expansion-panel v-if="searchLevel === 'Местные'" title="Местные">
-                    <v-expansion-panel-text>
-                      <div class='search-panel squads-search'>
-                        <input
-                            type='text'
-                            id='search'
-                            class='squads-search__input'
-                            placeholder='Найти участника'
-                        />
-                        <svg
-                            width='28'
-                            height='28'
-                            viewBox='0 0 28 28'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <path
-                                d='M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z'
-                                stroke='#898989'
-                                stroke-width='2'
-                                stroke-linecap='round'
-                                stroke-linejoin='round'
-                            />
-                        </svg>
-                    </div>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                    <v-expansion-panel v-if="searchLevel === 'Региональные'" title="Региональные">
-                    <v-expansion-panel-text>
-                      <div class='search-panel squads-search'>
-                        <input
-                            type='text'
-                            id='search'
-                            class='squads-search__input'
-                            placeholder='Найти участника'
-                        />
-                        <svg
-                            width='28'
-                            height='28'
-                            viewBox='0 0 28 28'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <path
-                                d='M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z'
-                                stroke='#898989'
-                                stroke-width='2'
-                                stroke-linecap='round'
-                                stroke-linejoin='round'
-                            />
-                        </svg>
-                    </div>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                  <v-expansion-panel v-if="searchLevel === 'Окружные'" title="Окружные штабы">
-                    <v-expansion-panel-text>
-                      <div class='search-panel squads-search'>
-                        <input
-                            type='text'
-                            id='search'
-                            class='squads-search__input'
-                            placeholder='Найти участника'
-                        />
-                        <svg
-                            width='28'
-                            height='28'
-                            viewBox='0 0 28 28'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <path
-                                d='M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z'
-                                stroke='#898989'
-                                stroke-width='2'
-                                stroke-linecap='round'
-                                stroke-linejoin='round'
-                            />
-                        </svg>
-                    </div>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                  <v-expansion-panel v-if="searchLevel === 'detachments'" title="ЛСО">
-                    <v-expansion-panel-text>
-                      <div class='search-panel squads-search'>
-                        <input
-                            type='text'
-                            id='search'
-                            class='squads-search__input'
-                            placeholder='Найти участника'
-                        />
-                        <svg
-                            width='28'
-                            height='28'
-                            viewBox='0 0 28 28'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <path
-                                d='M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z'
-                                stroke='#898989'
-                                stroke-width='2'
-                                stroke-linecap='round'
-                                stroke-linejoin='round'
-                            />
-                        </svg>
-                    </div>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-            </div>
-            <div class="col" style="width: 100%">
-              <div class='sort-container'>
-                    <div class='sort-layout sort-types'>
-                        <Button v-if='vertical' type='button' class='dashboard sort-button' icon='icon' color='white'
-                                @click='showVertical'>
-                        </Button>
-                        <Button v-else='!vertical' type='button' class='dashboardD sort-button' icon='icon' color='white'
-                                @click='showVertical'>
-                        </Button>
-                        <Button
-                            v-if='!vertical'
-                            type='button'
-                            class='menuuA sort-button'
-                            icon='icon'
-                            color='white'
-                            @click='showVertical'
-                        ></Button>
-                        <Button
-                            v-else='vertical'
-                            type='button'
-                            class='menuu sort-button'
-                            icon='icon'
-                            color='white'
-                            @click='showVertical'
-                        ></Button>
-                    </div>
-                    <div class='sort-alphabet'>
-                        <sortByEducation
-                              variant="outlined"
-                              v-model="sortBy"
-                              :options="sortOptionss"
-                              class="sort-select select"
-                          ></sortByEducation>
-                        <Button
-                            type='button'
-                            class='ascend sort-button'
-                            icon='switch'
-                            @click='ascending = !ascending'
-                            color='white'
-                        ></Button>
-                    </div>
                 </div>
-                <div class="sort-container">
-                  <div class="postcard-container">
-                      <div v-if="vertical" v-for="element in SelectList">
-                        <ParticipantsCard :action="element"></ParticipantsCard>
-                      </div>
-                      <div v-if="!vertical" v-for="element in SelectList">
-                        
-                      </div>
-                  </div>
+                <div class="contributor-items">
+                    <div class="contributor-sort">
+                        <div class="sort-layout">
+                            <button
+                                class="showInfoBtn mr-4"
+                                v-if="!showInfo"
+                                @click="showInfo = !showInfo"
+                            >
+                                Показать статистику
+                            </button>
+
+                            <button
+                                class="showInfoBtn mr-4"
+                                v-else-if="showInfo"
+                                @click="showInfo = !showInfo"
+                            >
+                                Скрыть статистику
+                            </button>
+                        </div>
+
+                        <div class="sort-filters">
+                            <div class="sort-select">
+                                <sortByEducation
+                                    variant="outlined"
+                                    clearable
+                                    v-model="sortBy"
+                                    :options="sortOptionss"
+                                ></sortByEducation>
+                            </div>
+
+                            <Button
+                                type="button"
+                                class="ascend mb-2"
+                                icon="switch"
+                                @click="ascending = !ascending"
+                                color="white"
+                            ></Button>
+                        </div>
+                    </div>
+                    <registryList
+                        :items="sortedVal"
+                        :show-info="showInfo"
+                    ></registryList>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<style lang="scss">
-    //Общий стиль компонента
-    .action{
-        &-title{
-          height: 116px;
-          font-size: 52px;
-          @media screen and (max-width: 575px) {
-            font-size: 32px;
-          }
-        }
-        &-slides{
-          display: flex;
-          flex-direction: row;
-          margin-bottom: 20px;
-        }
+<style lang="scss" scoped>
+.contributor {
+    padding: 0px 0px 60px 0px;
+    &-title {
+        font-size: 52px;
     }
-    //Стили аккордеонов
-    .settings{
-        &-container{
-          width: 320px;
-          margin-right: 16px;
-          margin-bottom: 20px;
-        }
-        &-text{
-          align-items: baseline;
-        }
-      &-buttoms{
-        width: 100%;
-        margin-top: 40px;
-        height: 40px;
-        display:flex;
-        justify-content: space-around;
-      }
-      &-select{
-        padding-right: 5px;
-      }
-      &-btm{
-        width: 114px;
-        border-radius: 10px;
-        background-color: #39BFBF;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      &-btminv{
-        width: 114px;
-        border-radius: 10px;
-        border: 2px solid #35383F;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      &-body{
-        display: flex;
-        flex-direction: column;
-      }
-    }
-    //Стиль карточки
-    .postcard{
-      &-container{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-      &-containerline{
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-      }
-    }
-    //Стиль сортировки
-    .sort{
-      &-container{
-        width: 100%;
-        height: 50px;
-        display: flex;
-        justify-content: space-between;
-      }
-      &-select{
-        margin-right: 8px;
-      }
-      &-types{
-        height: 50px;
-      }
-      &-button{
-        margin-right: 5px;
-        border: 1px solid black;
-        border-radius: 5px;
-        width: 25px;
-        height: 25px;
-      }
-      &-alphabet {
-        width: 320px;
+    &-sort {
         display: flex;
         justify-content: flex-end;
-      }
-      &-select {
-        height: 50px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-      }
-      &-radio{
-
-      }
-      .education {
-        width: 305px;
-        @media screen and (max-width: 768px) {
-          width: 100%;
+        align-items: flex-end;
+        margin-bottom: 32px;
+        @media (max-width: 1024px) {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 60px;
         }
-      }
     }
-    .dashboard {
-      background-image: url('@app/assets/icon/darhboard-active.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
+    &-container {
+        display: grid;
+        grid-template-columns: 0.5fr 1.5fr;
+        align-items: baseline;
+        grid-column-gap: 36px;
     }
+    &-search {
+        position: relative;
+        box-sizing: border-box;
+        margin: 60px 0px 0px 0px;
+        img {
+            position: absolute;
+            top: 15px;
+            left: 16px;
+        }
+        &__input {
+            width: 100%;
+            padding: 13px 0px 10px 60px;
+            border-radius: 10px;
+            border: 1px solid black;
+        }
+    }
+    &-info {
+        font-size: 18px;
+        font-weight: 400;
+        margin-top: 60px;
+    }
+    &-wrapper {
+        padding-top: 40px;
+    }
+}
 
-    .dashboardD {
-      background-image: url('@app/assets/icon/darhboard-disable.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
+.showInfoBtn {
+    padding: 6px 16px;
+    border: 1px solid #35383f;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    height: 40px;
+}
 
-    .menuuA {
-      background-image: url('@app/assets/icon/MenuA.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-
-    .menuu {
-      background-image: url('@app/assets/icon/Menu.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-    .ascend {
-      background-image: url('@app/assets/icon/switch.svg');
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-    //Стиль карточки
-    .postcard{
-      &-container{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-      &-containerline{
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-      }
-    }
-    //Стиль поисковика
-    .searcher {
-      width: 100%;
-      height: 50px;
-      margin-bottom: 40px;
-
-    }
-    .squads-search {
-      position: relative;
-      box-sizing: border-box;
-
-      svg {
-        position: absolute;
-        top: 10px;
-        left: 16px;
-      }
-
-      &__input {
-        width: 100%;
-        padding: 13px 0px 10px 60px;
-        border-radius: 10px;
-        border: 1px solid black;
-      }
-    }
+.ascend {
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
 </style>
 
 <script setup>
-import { onUpdated, ref } from 'vue';
-import Button from "primevue/button";
-import { sortByEducation, Select } from '@shared/components/selects';
-import ParticipantsCard from '@entities/Participants/components/ParticipantsCard.vue';
-import { getDetachments, getParticipants, getEducationals } from '@services/ParticipantsService.ts';
-import { onActivated } from 'vue';
+import { ref, computed, watch, inject, onMounted, onActivated } from 'vue';
+import { sortByEducation } from '@shared/components/selects';
+import { filters } from '@features/Contributor/components';
+import { Button } from '@shared/components/buttons';
+import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useDistrictsStore } from '@features/store/districts';
+import { useLocalsStore } from '@features/store/local';
+import { useEducationalsStore } from '@features/store/educationals';
+import { useSquadsStore } from '@features/store/squads';
+import { storeToRefs } from 'pinia';
+import { HTTP } from '@app/http';
+import { registryList } from '@features/registry/components';
 
-const SelectList = ref([]);
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+const regionalsStore = useRegionalsStore();
 
-onActivated(()=>{
-
-})
-
-
-//Сортировка
-const vertical = ref(true);
+const userStore = useUserStore();
+const districtsStore = useDistrictsStore();
+const localsStore = useLocalsStore();
+const educationalsStore = useEducationalsStore();
+const squadsStore = useSquadsStore();
+const regionals = ref([]);
+const districts = ref([]);
+const locals = ref([]);
+const educHead = ref([]);
+const detachments = ref([]);
+const reg = ref(null);
+const detachment = ref(null);
+const timerSearch = ref(null);
+const district = ref(null);
+const local = ref(null);
+const isLoading = ref(false);
+const showInfo = ref(false);
+const educ = ref(null);
+const sortedVal = ref([]);
+//Сортировк
 const ascending = ref(true);
-
-function loadParticipants(){
-  switch(searchLevel.value){
-    case "ЛСО":
-      getDetachments()
-        .then((resp)=>{
-          SelectList.value = resp.data;
-          console.log("Линейные отряды",SelectList.value)
-        }).catch(e =>{
-          console.log(e);
-        }); break;
-    case "Местные":
-      getEducationals()
-        .then((resp)=>{
-          SelectList.value = resp.data;
-          console.log("Местные штабы",SelectList.value)
-        }).catch(e =>{
-          console.log(e);
-        }); break;
-    default:
-      break;
-  }
-}
+const levelAccess = ref(7);
+const name = ref('');
 
 const sortBy = ref('alphabetically');
 
@@ -483,11 +202,260 @@ const sortOptionss = ref([
     { value: 'members_count', name: 'Количеству участников' },
 ]);
 
-//Изменение расположения блоков
-const showVertical = () => {
-    vertical.value = !vertical.value;
+const viewHeadquartersData = async (resp, search) => {
+    try {
+        isLoading.value = true;
+        const viewHeadquartersResponse = await HTTP.get(
+            resp + search + '&registry=true',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        sortedVal.value = viewHeadquartersResponse.data;
+        isLoading.value = false;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
-const searchLevel = ref('');
+const sortedItems = async () => {
+    let search = '';
+    let resp = '';
+    if (detachment.value) {
+        resp = '/rsousers';
+        search = '?detachment__name=' + detachment.value;
+    } else if (educ.value) {
+        resp = '/educationals/';
+        search = '?educational_headquarter__name=' + educ.value;
+    } else if (local.value) {
+        resp = '/locals/';
+        search = '?local__name=' + local.value;
+    } else if (reg.value) {
+        resp = '/regionals/';
+        search = '?regional__name=' + reg.value;
+    } else if (district.value) {
+        resp = '/districts/';
+        search = '?district__name=' + district.value;
+    }
+    viewHeadquartersData(resp, search);
+};
 
+// const viewUsersData = async (search) => {
+//     try {
+//         isLoading.value = true;
+//         const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+//         sortedVal.value = viewParticipantsResponse.data;
+//         isLoading.value = false;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
+
+const updateDistrict = (districtVal) => {
+    let search = '';
+    let resp = '/districts/';
+    search = '?district_headquarter__name=' + districtVal;
+
+    if (name.value) search += '&search=' + name.value;
+    // viewContributorsData(search);
+    viewHeadquartersData(resp, search);
+
+    let districtId = districtsStore.districts.find(
+        (dis) => dis.name == districtVal,
+    )?.id;
+    district.value = districtVal;
+    regionals.value = regionalsStore.regionals.filter(
+        (regional) => regional.district_headquarter == districtId,
+    );
+};
+
+const updateReg = (regVal) => {
+    let search = '';
+    let resp = '/regionals/';
+    if (regVal) {
+        search = '?regional_headquarter__name=' + regVal;
+    } else if (levelAccess.value < 2) {
+        search = '?district_headquarter__name=' + district.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+    // viewContributorsData(search);
+    viewHeadquartersData(resp, search);
+
+    let regId = regionalsStore.regionals.find(
+        (regional) => regional.name == regVal,
+    )?.id;
+    reg.value = regVal;
+    locals.value = localsStore.locals.filter(
+        (loc) => loc.regional_headquarter == regId,
+    );
+};
+const updateLocal = (localVal) => {
+    let search = '';
+    let resp = '/locals/';
+    if (localVal) {
+        search = '?local_headquarter__name=' + localVal;
+    } else if (levelAccess.value < 3) {
+        search = '?regional_headquarter__name=' + reg.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+    // viewContributorsData(search);
+    viewHeadquartersData(resp, search);
+
+    let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
+    local.value = localVal;
+    educHead.value = educationalsStore.educationals.filter(
+        (edh) => edh.local_headquarter == locId,
+    );
+};
+
+const updateEduc = (educVal) => {
+    let search = '';
+    let resp = '/educationals/';
+    if (educVal) {
+        search = '?educational_headquarter__name=' + educVal;
+    } else if (levelAccess.value < 4) {
+        search = '?local_headquarter__name=' + local.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+    // viewContributorsData(search);
+    viewHeadquartersData(resp, search);
+    let educId = educationalsStore.educationals.find(
+        (edh) => edh.name == educVal,
+    )?.id;
+    educ.value = educVal;
+    detachments.value = squadsStore.squads.filter(
+        (squad) => squad.educational_headquarter == educId,
+    );
+};
+
+const updateDetachment = (detachmentVal) => {
+    let search = '';
+    let resp = '/detachments/';
+    if (detachmentVal) {
+        search = '?detachment__name=' + detachmentVal;
+    } else if (levelAccess.value < 5) {
+        search = '?educational_headquarter__name=' + educ.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+    // viewContributorsData(search);
+    viewHeadquartersData(resp, search);
+    detachment.value = detachmentVal;
+};
+
+const searchContributors = (event) => {
+    let search = '';
+    if (!name.value && roles.roles.value.centralheadquarter_commander) {
+        return [];
+    }
+    if (district.value) {
+        search = '?district_headquarter__name=' + district.value;
+    } else if (reg.value) {
+        search = '?regional_headquarter__name=' + reg.value;
+    } else if (local.value) {
+        search = '?local_headquarter__name=' + local.value;
+    } else if (educ.value) {
+        search = '?educational_headquarter__name=' + educ.value;
+    } else if (detachment.value) {
+        search = '?detachment__name=' + detachment.value;
+    }
+    if (search) {
+        search += '&search=' + name.value;
+    }
+
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        // viewContributorsData(search);
+        // viewHeadquartersData(search, resp)
+    }, 400);
+};
+
+watch(
+    () => roles.roles.value,
+
+    (newRole, oldRole) => {
+        if (!roles.roles.value.centralheadquarter_commander) {
+            let search = '';
+            let resp = '';
+
+            if (roles.roles.value.districtheadquarter_commander) {
+                district.value =
+                    roles.roles.value.districtheadquarter_commander.name;
+                search =
+                    '?district_headquarter__name=' +
+                    roles.roles.value.districtheadquarter_commander.name;
+                resp = '/districts/';
+                levelAccess.value = 1;
+            } else if (roles.roles.value.regionalheadquarter_commander) {
+                reg.value =
+                    roles.roles.value.regionalheadquarter_commander.name;
+                search =
+                    '?regional_headquarter__name=' +
+                    roles.roles.value.regionalheadquarter_commander.name;
+                resp = '/regionals/';
+                levelAccess.value = 2;
+            } else if (roles.roles.value.localheadquarter_commander) {
+                local.value = roles.roles.value.localheadquarter_commander.name;
+                search =
+                    '?local_headquarter__name=' +
+                    roles.roles.value.localheadquarter_commander.name;
+                resp = '/locals/';
+                levelAccess.value = 3;
+            } else if (roles.roles.value.educationalheadquarter_commander) {
+                educ.value =
+                    roles.roles.value.educationalheadquarter_commander.name;
+                search =
+                    '?educational_headquarter__name=' +
+                    roles.roles.value.educationalheadquarter_commander.name;
+                resp = '/educationals/';
+                levelAccess.value = 4;
+            } else if (roles.roles.value.detachment_commander) {
+                detachment.value = roles.roles.value.detachment_commander.name;
+                search =
+                    '?detachment__name=' +
+                    roles.roles.value.detachment_commander.name;
+                resp = '/rsousers';
+                levelAccess.value = 5;
+            }
+            // viewContributorsData(search);
+            viewHeadquartersData(resp, search);
+        } else {
+            levelAccess.value = 0;
+        }
+    },
+);
+
+watch(
+    () => regionalsStore.regionals,
+    () => {
+        regionals.value = regionalsStore.regionals;
+    },
+);
+
+watch(
+    () => localsStore.locals,
+    () => {
+        locals.value = localsStore.locals;
+    },
+);
+
+watch(
+    () => educationalsStore.educationals,
+    () => {
+        educHead.value = educationalsStore.educationals;
+    },
+);
+watch(
+    () => squadsStore.squads,
+    () => {
+        detachments.value = squadsStore.squads;
+    },
+);
 </script>

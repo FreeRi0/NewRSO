@@ -184,7 +184,7 @@
 
                         <!-- <div class="form__field">
                             <label class="form__label" for="select-institution">Выберите учебное заведение
-                                 <sup class="valid-red">*</sup> 
+                                 <sup class="valid-red">*</sup>
                             </label>
                             <Select
                                 variant="outlined"
@@ -194,7 +194,7 @@
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="detachment.educational_institution"
                                 address="eduicational_institutions/"
-                            ></Select> 
+                            ></Select>
                             <educInstitutionDropdown open-on-clear id="select-institution" name="select_institution"
                                 placeholder="Например, Алтайский государственный медицинский университет"
                                 v-model="detachment.educational_institution" @update:value="changeValue"
@@ -204,7 +204,7 @@
                                 v-if="isError.educational_institution"
                             >
                                 * Это поле не может быть пустым.
-                            </p> 
+                            </p>
                         </div> -->
                         <template v-if="detachment.region">
                             <div
@@ -269,6 +269,7 @@
                                 @update:value="changeValue"
                             >
                             </SearchSelect>
+
                             <p class="form__error" v-if="isError.region">
                                 * {{ getErrorField('headquarter') }}
                             </p>
@@ -373,7 +374,7 @@
 
                         <div class="form__field">
                             <label class="form__label" for="social-media-te"
-                                >Группа отряда в Телеграмме
+                                >Группа отряда в Телеграме
                             </label>
                             <TextareaAbout
                                 maxlength="50"

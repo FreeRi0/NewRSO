@@ -78,7 +78,7 @@ const data = ref({
 });
 const visible = ref(false);
 
-const isError = ref('');
+const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 const router = useRouter();
@@ -122,10 +122,9 @@ const LoginUser = async () => {
         }
     }
 };
-
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .v-field {
     border-radius: 10px;
 }
@@ -179,7 +178,7 @@ const LoginUser = async () => {
 }
 
 .password-input {
-    border: 1px solid #a3a3a3;
+    border: 2px solid #a3a3a3;
     border-radius: 10px;
     font-size: 16px;
     color: #35383f;
@@ -202,6 +201,17 @@ const LoginUser = async () => {
     @media screen and (max-width: 575px) {
         padding: 60px 16px;
     }
+}
+
+.password-input input.v-field__input::placeholder {
+    color: #a3a3a3;
+    opacity: revert;
+    font-weight: lighter;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
 }
 
 .authLinks {

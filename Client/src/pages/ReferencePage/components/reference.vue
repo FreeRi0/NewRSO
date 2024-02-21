@@ -23,7 +23,7 @@
                         @update-local="updateLocal"
                         @update-educ="updateEduc"
                         @update-detachment="updateDetachment"
-                        :level-search="false"
+
                         :district="district"
                         :districts="districts"
                         :reg="reg"
@@ -38,9 +38,9 @@
                         :sorted-participants="sortedParticipants"
                     />
                 </div>
+                <!-- <pre>{{ reg }}</pre> -->
                 <div class="references-items">
                     <div class="references-sort">
-
                         <div class="d-flex align-center">
                             <div class="references-sort__all">
                                 <input
@@ -107,6 +107,10 @@
                                 v-model:value="refData.cert_start_date"
                             />
                         </div>
+                        <p class="error" v-if="isError.cert_start_date">
+                            {{ '' + isError.cert_start_date }}
+                        </p>
+
                         <div class="form-field">
                             <label for="facultet"
                                 >Дата окончания действия справки
@@ -119,6 +123,9 @@
                             />
                         </div>
                     </div>
+                    <p class="error" v-if="isError.cert_end_date">
+                        {{ '' + isError.cert_end_date }}
+                    </p>
                     <div class="form-field another">
                         <label for="course"
                             >Справка выдана для предоставления
@@ -133,6 +140,9 @@
                             placeholder="Ответ"
                         />
                     </div>
+                    <p class="error" v-if="isError.recipient">
+                        {{ '' + isError.recipient }}
+                    </p>
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
@@ -146,13 +156,7 @@
                     <!-- <p v-if="isError">{{ isError.detail }}</p> -->
                 </form>
                 <p class="error" v-if="isError.detail">
-                    {{ isError.detail }}
-                </p>
-                <p class="error" v-if="isError">
-                    {{ isError.cert_end_date }}
-                </p>
-                <p class="error" v-if="isError">
-                    {{ isError.recipient }}
+                    {{ '' + isError.detail }}
                 </p>
             </div>
         </div>
@@ -162,23 +166,23 @@
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { filters } from '@features/Contributor/components';
-import { useRoleStore } from '@layouts/store/role';
-import { useRegionalsStore } from '@features/store/regionals';
-import { useDistrictsStore } from '@features/store/districts';
 import {
     referencesList,
     checkedReference,
 } from '@features/references/components';
+import { sortByEducation } from '@shared/components/selects';
+import { ref, computed, watch, inject, onMounted, onActivated } from 'vue';
+import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useDistrictsStore } from '@features/store/districts';
 import { useLocalsStore } from '@features/store/local';
 import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
-import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, inject, watch } from 'vue';
 import { HTTP } from '@app/http';
 
 const roleStore = useRoleStore();
-
 const roles = storeToRefs(roleStore);
 const regionalsStore = useRegionalsStore();
 const districtsStore = useDistrictsStore();
@@ -202,7 +206,7 @@ const local = ref(null);
 const isLoading = ref(false);
 const educ = ref(null);
 const swal = inject('$swal');
-const isError = ref('');
+const isError = ref([]);
 const checkboxAll = ref(false);
 const step = ref(12);
 const ascending = ref(true);
@@ -326,7 +330,6 @@ const SendReference = async () => {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
-        responseType: 'blob',
     })
         .then((response) => {
             swal.fire({
