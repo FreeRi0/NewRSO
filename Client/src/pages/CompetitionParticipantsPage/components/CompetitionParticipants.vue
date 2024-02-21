@@ -123,7 +123,10 @@ import {
     competitionList,
     horizontalCompetitionList,
 } from '@features/Squads/components';
-import { sortByEducation, educInstitutionDropdown} from '@shared/components/selects';
+import {
+    sortByEducation,
+    educInstitutionDropdown,
+} from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
@@ -178,8 +181,12 @@ const sortedSquads = computed(() => {
     }
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa =
+                    a.junior_detachment?.name.toLowerCase() ||
+                    a.detachment?.name.toLowerCase(),
+                fb =
+                    b.junior_detachment?.toLowerCase() ||
+                    b.detachment?.name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -189,8 +196,8 @@ const sortedSquads = computed(() => {
             }
             return 0;
         } else if (sortBy.value == 'founding_date') {
-            let fc = a.founding_date,
-                fn = b.founding_date;
+            let fc = a.junior_detachment?.founding_date || a.detachment?.founding_date,
+                fn = b.junior_detachment?.founding_date || b.detachment?.founding_date;
 
             if (fc < fn) {
                 return -1;
@@ -199,9 +206,7 @@ const sortedSquads = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'members_count') {
-            return a.members - b.members;
-        }
+        } 
     });
 
     if (!ascending.value) {
@@ -257,7 +262,6 @@ onMounted(() => {
         text-overflow: ellipsis;
     }
 }
-
 
 .squads {
     padding: 0px 0px 60px 0px;
@@ -322,7 +326,6 @@ onMounted(() => {
     margin-top: 40px;
 }
 
-
 .contributorBtn {
     border-radius: 30px;
     background-color: white;
@@ -337,7 +340,6 @@ onMounted(() => {
     color: white;
     border: 1px solid #1c5c94;
 }
-
 
 .squads-search {
     position: relative;
