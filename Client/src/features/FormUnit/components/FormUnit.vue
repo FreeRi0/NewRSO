@@ -374,7 +374,7 @@
 
                         <div class="form__field">
                             <label class="form__label" for="social-media-te"
-                                >Группа отряда в Телеграмме
+                                >Группа отряда в Телеграме
                             </label>
                             <TextareaAbout
                                 maxlength="50"

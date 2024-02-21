@@ -18,14 +18,6 @@
                         v-for="answer in answers"
                         :key="answer.id"
                     >
-                        <!-- <RadioButton
-                            :value="answer.name"
-                            :label="answer.name"
-                            :id="answer.id"
-                            :checked="answer.checked"
-                            name="answer"
-                            v-model:checkedValue="selectedAnswer"
-                        /> -->
                         <input
                             class="radiobutton"
                             type="radio"

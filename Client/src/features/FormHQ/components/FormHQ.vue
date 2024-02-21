@@ -319,7 +319,7 @@
 
                         <div class="form__field">
                             <label class="form__label" for="social-media-te"
-                                >Группа штаба в Телеграмме
+                                >Группа штаба в Телеграме
                             </label>
                             <TextareaAbout
                                 maxlength="50"

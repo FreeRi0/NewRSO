@@ -320,16 +320,22 @@ const sortedLocalHeadquarters = computed(() => {
 
     if (selectedSortRegional.value || selectedSortdistrict.value) {
         let idRegionals = [];
-        if (selectedSortdistrict.value){
+        if (selectedSortdistrict.value) {
             let districtId = districts.value.find(
                 (district) => district.name === selectedSortdistrict.value,
             )?.id;
-            idRegionals = regionals.value.filter((regional) => regional.district_headquarter === districtId).map((reg) => reg.id);
+            idRegionals = regionals.value
+                .filter(
+                    (regional) => regional.district_headquarter === districtId,
+                )
+                .map((reg) => reg.id);
         }
-        if (selectedSortRegional.value){
-            idRegionals = [regionals.value.find(
-                (regional) => regional.name === selectedSortRegional.value,
-            )?.id];
+        if (selectedSortRegional.value) {
+            idRegionals = [
+                regionals.value.find(
+                    (regional) => regional.name === selectedSortRegional.value,
+                )?.id,
+            ];
         }
 
         tempHeadquartes = tempHeadquartes.filter((item) => {
@@ -568,6 +574,17 @@ pre {
     .sort-select {
         margin-top: 12px;
     }
+}
+
+.option-select .v-field__input input::placeholder,
+.form__select .v-field__input input::placeholder {
+    color: #35383f;
+    opacity: revert;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
 }
 </style>
 @shared/components/inputs/imagescomp

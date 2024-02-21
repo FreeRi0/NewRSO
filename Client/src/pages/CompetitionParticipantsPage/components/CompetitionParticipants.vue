@@ -12,7 +12,7 @@
                 <v-btn
                     class="squads-tabs__item"
                     :class="{ active: picked === area }"
-                    v-for="area in categories"
+                    v-for="area in categories.areas.value"
                     :key="area"
                     @click="picked = area"
                     >{{ area.name }}
@@ -44,21 +44,16 @@
             </div>
 
             <div class="squads-sort">
-                <!-- <p class="countParticipants">
-                    Всего участников:
-                    {{ squads.competitionSquads.value.length }}
-                </p> -->
                 <div class="sort-filters">
                     <!-- <div class="sort-select">
-                        <Select
-                            variant="outlined"
-                            clearable
+                        <educInstitutionDropdown
+                            class="form__select filter-district sortedEducation"
                             name="select_education"
                             id="select-education"
-                            v-model="selectedSort"
-                            address="/eduicational_institutions/"
+                            v-model="education"
                             placeholder="Образовательная организация"
-                        ></Select>
+                            :SortDropdown="true"
+                        ></educInstitutionDropdown>
                     </div> -->
                     <div class="sort-select">
                         <sortByEducation
@@ -78,11 +73,11 @@
                     ></Button>
                 </div>
             </div>
-            <!-- <div class="d-flex mt-5">
+            <div class="d-flex mt-5">
                 <button
                     type="button"
                     class="contributorBtn"
-                    :class="{ active: switched === true }"
+                    :class="{ active: switched == true }"
                     @click="switched = true"
                 >
                     Тандем
@@ -91,12 +86,12 @@
                 <button
                     type="button"
                     class="contributorBtn ml-2"
-                    :class="{ active: switched === false }"
+                    :class="{ active: switched == false }"
                     @click="switched = false"
                 >
                     Дебют
                 </button>
-            </div> -->
+            </div>
             <div class="horizontal">
                 <horizontalCompetitionList
                     :members="sortedSquads"
@@ -128,7 +123,7 @@ import {
     competitionList,
     horizontalCompetitionList,
 } from '@features/Squads/components';
-import { sortByEducation, Select } from '@shared/components/selects';
+import { sortByEducation, educInstitutionDropdown} from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
@@ -137,11 +132,11 @@ import { HTTP } from '@app/http';
 const squadsStore = useSquadsStore();
 const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
-const categories = ref([]);
+const categories = storeToRefs(squadsStore);
 const name = ref('');
 
 // const squadsVisible = ref(20);
-
+const education = ref(null);
 // const step = ref(20);
 
 const ascending = ref(true);
@@ -162,53 +157,25 @@ const sortOptionss = ref([
     // { value: 'rating', name: 'Место в рейтинге' },
 ]);
 
-const getCategories = async () => {
-    try {
-        const categoryResponse = await HTTP.get('/areas/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        categories.value = categoryResponse.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const searchCompetitionParticipants = async (name) => {
-    try {
-        const responseSearchCompetitionSquads = await HTTP.get(
-            `/competitions/1/participants/?search=${name}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        squads.competitionSquads.value =
-            responseSearchCompetitionSquads.data.reduce((acc, member) => {
-                if (member.detachment) acc.push(member.detachment);
-                acc.push(member.junior_detachment);
-                // console.log('acc', acc);
-                return acc;
-            }, []);
-        // this.competitionSquads = responseCompetitionSquads
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const searchSquads = computed(() => {
-    return searchCompetitionParticipants(name.value);
-});
-
 const sortedSquads = computed(() => {
     let tempSquads = squads.competitionSquads.value;
-
-    searchSquads.value;
-
+    if (switched.value) {
+        tempSquads = tempSquads.filter((item) => item.detachment);
+    } else {
+        tempSquads = tempSquads.filter((item) => !item.detachment);
+    }
+    if (name.value) {
+        tempSquads = tempSquads.filter((item) => {
+            return (
+                item.junior_detachment?.name
+                    .toLowerCase()
+                    .indexOf(name.value.toLowerCase()) >= 0 ||
+                item.detachment?.name
+                    .toLowerCase()
+                    .indexOf(name.value.toLowerCase()) >= 0
+            );
+        });
+    }
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
             let fa = a.name.toLowerCase(),
@@ -242,7 +209,7 @@ const sortedSquads = computed(() => {
     }
 
     if (!picked.value) {
-        return tempSquads
+        return tempSquads;
     }
     tempSquads = tempSquads.filter((item) => item.area === picked.value.name);
     // tempSquads = tempSquads.slice(0, squadsVisible.value);
@@ -250,7 +217,6 @@ const sortedSquads = computed(() => {
 });
 
 onMounted(() => {
-    getCategories();
     squadsStore.getCompetitionSquads();
 });
 </script>
@@ -291,6 +257,7 @@ onMounted(() => {
         text-overflow: ellipsis;
     }
 }
+
 
 .squads {
     padding: 0px 0px 60px 0px;
@@ -355,11 +322,6 @@ onMounted(() => {
     margin-top: 40px;
 }
 
-.active {
-    background-color: #1c5c94;
-    color: white;
-    border: 1px solid #1c5c94;
-}
 
 .contributorBtn {
     border-radius: 30px;
@@ -369,6 +331,13 @@ onMounted(() => {
     margin: 0px;
     padding: 10px 24px;
 }
+
+.active {
+    background-color: #1c5c94;
+    color: white;
+    border: 1px solid #1c5c94;
+}
+
 
 .squads-search {
     position: relative;
