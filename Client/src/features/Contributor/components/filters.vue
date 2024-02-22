@@ -50,7 +50,7 @@
                 ></regionalsDropdown>
             </v-expansion-panel-text>
         </v-expansion-panel>
-        <v-expansion-panel v-if="regRef !== null">
+        <v-expansion-panel v-if="regRef">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -75,7 +75,7 @@
                 ></localSearchFilter>
             </v-expansion-panel-text>
         </v-expansion-panel>
-        <v-expansion-panel v-if="localRef !== null">
+        <v-expansion-panel v-if="localRef !== null || regRef">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -227,6 +227,40 @@ const updateDetachment = () => {
     emit('updateDetachment', detachmentRef.value);
     console.log(detachmentRef.value);
 };
+
+watch(
+    () => props.district,
+    () => {
+        districtRef.value = props.district;
+    },
+);
+watch(
+    () => props.reg,
+    () => {
+        regRef.value = props.reg;
+    },
+);
+
+watch(
+    () => props.local,
+    () => {
+        localRef.value = props.local;
+    },
+);
+
+watch(
+    () => props.educ,
+    () => {
+        educRef.value = props.educ;
+    },
+);
+
+watch(
+    () => props.detachment,
+    () => {
+        detachmentRef.value = props.detachment;
+    },
+);
 
 // const viewContributorsData = async (search) => {
 //     try {
