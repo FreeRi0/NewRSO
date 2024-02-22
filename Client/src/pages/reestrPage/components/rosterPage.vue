@@ -9,7 +9,7 @@
                     class="contributor-search__input"
                     @keyup="searchContributors"
                     v-model="name"
-                    placeholder="Начинавйте ввод?"
+                    placeholder="Начинайте ввод?"
                 />
                 <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
@@ -45,6 +45,7 @@
                             >
                                 Показать статистику
                             </button>
+
 
                             <button
                                 class="showInfoBtn mr-4"
@@ -239,16 +240,16 @@ const sortedItems = async () => {
         resp = '/rsousers';
         search = '?detachment__name=' + detachment.value;
     } else if (educ.value) {
-        resp = '/educationals/';
+        resp = '/detachments/';
         search = '?educational_headquarter__name=' + educ.value;
     } else if (local.value) {
-        resp = '/locals/';
+        resp = '/educationals/';
         search = '?local__name=' + local.value;
     } else if (reg.value) {
-        resp = '/regionals/';
+        resp = '/locals/';
         search = '?regional__name=' + reg.value;
     } else if (district.value) {
-        resp = '/districts/';
+        resp = '/regionals/';
         search = '?district__name=' + district.value;
     }
     viewHeadquartersData(resp, search);
@@ -374,7 +375,6 @@ const searchContributors = (event) => {
         resp = '/locals/';
         search = '?local_headquarter__name=' + local.value;
     } else if (local.value) {
-        // resp = '/educationals/'
         resp = local.value ? '/educationals/' : '/locals/';
         search = '?educational_headquarter_name=' + educ.value;
     } else if (educ.value) {
