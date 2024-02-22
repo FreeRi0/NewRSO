@@ -588,12 +588,6 @@ const routes: RouteRecordRaw[] = [
                 },
             },
             //Реестр участников
-            {
-                path: '/roster',
-                name: 'Roster',
-                component: () =>
-                    import('@pages/reestrPage/components/rosterPage.vue'),
-            },
 
             {
                 path: '/Competition',
@@ -697,6 +691,16 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     label: 'Членский взнос',
+                },
+            },
+
+            {
+                path: '/roster',
+                name: 'Roster',
+                component: () =>
+                    import('@pages/reestrPage/components/rosterPage.vue'),
+                meta: {
+                    label: 'Реестр участников',
                 },
             },
             {

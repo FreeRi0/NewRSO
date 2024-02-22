@@ -163,7 +163,6 @@
                     :squads="sortedSquads"
                     v-if="!isLoading.isLoading.value"
                 ></squadsList>
-                <!-- <pre>Loadd{{ isLoading.isLoading.value }}</pre> -->
                 <v-progress-circular
                     class="circleLoader"
                     v-else
@@ -567,4 +566,3 @@ onActivated(() => {
     border: none;
 }
 </style>
-@shared/components/selects/inputs @shared/components/inputs/imagescomp

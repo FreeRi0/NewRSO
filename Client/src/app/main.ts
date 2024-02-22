@@ -19,7 +19,7 @@ import * as icons from 'vuetify/iconsets/mdi';
 import router from './router';
 import { useFavicon } from '@vueuse/core';
 
-useFavicon('assets/vite.svg', {
+useFavicon('assets/favicon.ico', {
     baseUrl: '/',
     rel: 'icon',
 })
