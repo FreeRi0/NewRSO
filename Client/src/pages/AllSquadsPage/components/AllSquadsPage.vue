@@ -566,4 +566,3 @@ onActivated(() => {
     border: none;
 }
 </style>
-@shared/components/selects/inputs @shared/components/inputs/imagescomp

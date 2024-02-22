@@ -16,10 +16,9 @@
     <div class="horizontal-info d-flex" v-if="showInfo">
         <p>Проведённые мероприятия: {{ item.events_count }}</p>
         <div class="d-flex">
-             <p>ОШ: {{ item.district_headquarter }}</p>
-            <p v-if="item?.local_headquarter" class="mr-7">МШ:</p>
+            <!-- <p v-if="item?.local_headquarter" class="mr-7">МШ:</p>
             <p v-if="item?.educational_headquarter" class="mr-7">ШОО:</p>
-            <p v-if="item?.detachment" class="mr-7">ЛСО:</p>
+            <p v-if="item?.detachment" class="mr-7">ЛСО:</p> -->
             <div class="d-flex">
                 <img src="@app/assets/icon/people.svg" alt="people" />
                 <p class="ml-3">{{ item.participants_count }}</p>

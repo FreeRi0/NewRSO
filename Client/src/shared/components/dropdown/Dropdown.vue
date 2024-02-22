@@ -59,12 +59,11 @@
                     :key="i"
                     class="dropdown__item dropdown__item_not"
                     v-show="
-                        item.show && (
-                            item.button ||
+                        item.show &&
+                        (item.button ||
                             item.link ||
                             !item.hasOwnProperty('params') ||
-                            (item.hasOwnProperty('params') && item.params.id)
-                        )
+                            (item.hasOwnProperty('params') && item.params.id))
                     "
                 >
                     <button
