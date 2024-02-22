@@ -164,6 +164,8 @@
 <script setup>
 import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
+const emit = defineEmits(['uploadUserPic, updateUserPic']);
+
 const props = defineProps({
     photo: String,
 });
@@ -203,6 +205,7 @@ const uploadPhoto = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
+            emit('uploadUserPic', response.data.photo3);
             dialog.value = false;
             console.log(response, 'photo uploaded');
         })
