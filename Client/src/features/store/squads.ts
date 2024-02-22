@@ -12,9 +12,10 @@ export const useSquadsStore = defineStore('squads', {
     }),
     actions: {
         async getSquads() {
+            if (this.squads.length) return;
             try {
                 this.isLoading = true;
-                const responseSquads = await HTTP.get('detachments/', {
+                const responseSquads = await HTTP.get('/detachments/', {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -57,17 +58,7 @@ export const useSquadsStore = defineStore('squads', {
                         },
                     },
                 );
-                this.competitionSquads = responseCompetitionSquads.data.reduce(
-                    (acc: any, member: any) => {
-                        if (member.detachment) acc.push(member.detachment);
-                        acc.push(member.junior_detachment);
-
-                        // console.log('acc', acc);
-
-                        return acc;
-                    },
-                    [],
-                );
+                this.competitionSquads = responseCompetitionSquads.data;
                 // console.log('soirt', this.competitionSquads)
                 this.isLoading = false;
             } catch (error) {
@@ -91,9 +82,9 @@ export const useSquadsStore = defineStore('squads', {
                 console.log('an error occured ' + error);
             }
         },
-        async getFilteredSquads(name: String) {
+        async getFilteredSquads(name: String, education: String) {
             const responseFilteredSquads = await HTTP.get(
-                `/detachments/?search=${name}`,
+                `/detachments/?search=${name}&educational_institution__name=${education}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',

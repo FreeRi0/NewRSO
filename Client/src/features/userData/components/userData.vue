@@ -34,22 +34,25 @@
                 class="photo-item"
                 :photo="media.photo1"
                 :add="true"
-                @uploadUserPic="uploadUserPic"
+                @uploadUserPic="uploadUserPic1"
             ></userPhoto>
             <userPhoto2
                 class="photo-item"
                 :photo="media.photo2"
                 :add="true"
+                @uploadUserPic="uploadUserPic2"
             ></userPhoto2>
             <userPhoto3
                 class="photo-item"
                 :photo="media.photo3"
                 :add="true"
+                @uploadUserPic="uploadUserPic3"
             ></userPhoto3>
             <userPhoto4
                 class="photo-item"
                 :photo="media.photo4"
                 :add="true"
+                @uploadUserPic="uploadUserPic4"
             ></userPhoto4>
         </div>
     </div>
@@ -63,16 +66,11 @@ import {
     userPhoto3,
     userPhoto4,
 } from '@shared/components/imagescomp';
-import { ref, onMounted, watch, inject, computed } from 'vue';
+import { ref, onMounted, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 const emit = defineEmits(['uploadUserPic, updateUserPic', 'changeBio']);
-const uploadUserPic = (userPic) => {
-    console.log('photoUser', userPic);
-    emit('uploadUserPic', userPic);
-    console.log('userPic Uploaded!');
-};
 
 const userStore = useUserStore();
 let currentUser = storeToRefs(userStore);
@@ -96,6 +94,26 @@ const swal = inject('$swal');
 const counterSquad = computed(() => {
     return bio.value?.length || 0;
 });
+
+const uploadUserPic1 = (userPic) => {
+    media.value.photo1 = userPic;
+    emit('uploadUserPic', userPic);
+};
+
+const uploadUserPic2 = (userPic) => {
+    media.value.photo2 = userPic;
+    emit('uploadUserPic', userPic);
+};
+
+const uploadUserPic3 = (userPic) => {
+    media.value.photo3 = userPic;
+    emit('uploadUserPic', userPic);
+};
+
+const uploadUserPic4 = (userPic) => {
+    media.value.photo4 = userPic;
+    emit('uploadUserPic', userPic);
+};
 
 const getMedia = async () => {
     try {

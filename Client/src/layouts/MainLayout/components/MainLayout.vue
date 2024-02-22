@@ -74,7 +74,6 @@ onMounted(() => {
     positionsStore.getPositions();
     educationalsStore.getEducationals();
     squadsStore.getAreas();
-    squadsStore.getSquads();
     localsStore.getLocals();
 });
 

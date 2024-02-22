@@ -114,7 +114,7 @@
                             "
                         >
                             <div
-                                v-for="item in regionals.filteredRegional.value"
+                                v-for="item in regionals.filteredMyRegional.value"
                             >
                                 <p>{{ item.name }}</p>
                             </div>
@@ -401,7 +401,7 @@ watch(
         region.value = regionalsStore.regions.find(
             (region) => region.name === userStore.currentUser.region,
         )?.id;
-        regionalsStore.searchRegionals(userStore.currentUser.region);
+        regionalsStore.searchMyRegionals(userStore.currentUser.region);
     },
 );
 </script>

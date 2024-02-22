@@ -68,7 +68,6 @@
                             @update-local="updateLocal"
                             @update-educ="updateEduc"
                             @update-detachment="updateDetachment"
-                            :level-search="false"
                             :district="district"
                             :districts="districts"
                             :reg="reg"
@@ -86,7 +85,7 @@
                     <div class="contributor-items">
                         <div class="contributor-sort">
                             <div class="d-flex align-center">
-                                <div class="contributor-sort__all ">
+                                <div class="contributor-sort__all">
                                     <input
                                         type="checkbox"
                                         @click="select"
@@ -164,6 +163,8 @@
                 </div>
                 <div class="participants__btn" v-if="selectedPeoples.length">
                     <Button
+                        :loaded="isLoading"
+                        :disabled="isLoading || !action"
                         class="save"
                         type="button"
                         label="Сохранить"
@@ -179,11 +180,7 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import {
-    contributorsList,
-    checkedContributors,
-    filters,
-} from '@features/Contributor/components';
+import { filters } from '@features/Contributor/components';
 import {
     contributionAccessItem,
     selectedContributionAccessItem,
@@ -200,7 +197,6 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
-import { Participants } from '@features/Participants';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
@@ -248,7 +244,7 @@ const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const viewContributorsData = async (search) => {
+const viewContributorsData = async (search, join) => {
     try {
         isLoading.value = true;
         const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
@@ -257,8 +253,20 @@ const viewContributorsData = async (search) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+        // let response = ;
+        // if (join) {
+        //     const viewHeadquartersResponsetTwo = await HTTP.get(
+        //         '/educationals/' + search,
+        //         {
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 Authorization: 'Token ' + localStorage.getItem('Token'),
+        //             },
+        //         },
+        //     );
+        //     response = response.concat(viewHeadquartersResponsetTwo.data);
+        // }
         participants.value = viewParticipantsResponse.data;
-        console.log(participants);
         isLoading.value = false;
         selectedPeoples.value = [];
     } catch (error) {
@@ -308,12 +316,17 @@ const updateLocal = (localVal) => {
         search = '?regional_headquarter__name=' + reg.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    viewContributorsData(search, !localVal);
 
     let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
+    let regId = regionalsStore.regionals.find(
+        (regional) => regional.name == reg.value,
+    )?.id;
     local.value = localVal;
     educHead.value = educationalsStore.educationals.filter(
-        (edh) => edh.local_headquarter == locId,
+        (edh) =>
+            (locId && edh.local_headquarter == locId) ||
+            edh.regional_headquarter == regId,
     );
 };
 
@@ -321,17 +334,26 @@ const updateEduc = (educVal) => {
     let search = '';
     if (educVal) {
         search = '?educational_headquarter__name=' + educVal;
+    } else if (local.value) {
+        search = '?local_headquarter__name=' + local.value;
+    } else if (levelAccess.value < 3) {
+        search = '?regional_headquarter__name=' + reg.value;
     } else if (levelAccess.value < 4) {
         search = '?local_headquarter__name=' + local.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    viewContributorsData(search, educVal && !local.value);
     let educId = educationalsStore.educationals.find(
         (edh) => edh.name == educVal,
     )?.id;
+    let regId = regionalsStore.regionals.find(
+        (regional) => regional.name == reg.value,
+    )?.id;
     educ.value = educVal;
     detachments.value = squadsStore.squads.filter(
-        (squad) => squad.educational_headquarter == educId,
+        (squad) =>
+            (educId && squad.educational_headquarter == educId) ||
+            squad.regional_headquarter == regId,
     );
 };
 
@@ -555,7 +577,7 @@ watch(
     (newRole, oldRole) => {
         if (!roles.roles.value.centralheadquarter_commander) {
             let search = '';
-
+            // let join = false;
             if (roles.roles.value.districtheadquarter_commander) {
                 district.value =
                     roles.roles.value.districtheadquarter_commander.name;
@@ -569,6 +591,7 @@ watch(
                 search =
                     '?regional_headquarter__name=' +
                     roles.roles.value.regionalheadquarter_commander.name;
+                    // join = true;
                 levelAccess.value = 2;
             } else if (roles.roles.value.localheadquarter_commander) {
                 local.value = roles.roles.value.localheadquarter_commander.name;
@@ -601,6 +624,15 @@ watch(
     () => regionalsStore.regionals,
     () => {
         regionals.value = regionalsStore.regionals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regId,
+        );
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regId,
+        );
     },
 );
 
@@ -608,6 +640,12 @@ watch(
     () => localsStore.locals,
     () => {
         locals.value = localsStore.locals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regId,
+        );
     },
 );
 
@@ -615,15 +653,26 @@ watch(
     () => educationalsStore.educationals,
     () => {
         educHead.value = educationalsStore.educationals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regId,
+        );
     },
 );
 watch(
     () => squadsStore.squads,
     () => {
         detachments.value = squadsStore.squads;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        detachments.value = squadsStore.squads.filter(
+            (det) => det.regional_headquarter == regId,
+        );
     },
 );
-
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
@@ -825,5 +874,9 @@ p {
 
 .v-expansion-panel-title {
     padding: 7px 0px;
+}
+
+.participants__actions {
+    width: 230px;
 }
 </style>

@@ -1,38 +1,36 @@
 <template>
 
-    <div v-if="props.competition === true && member ">
-        <router-link :to="{ name: 'lso', params: { id: member.id } }"
+    <div v-if="props.competition === true" class="d-flex">
+        <router-link v-if="member.detachment" :to="{ name: 'lso', params: { id: member.detachment.id } }"
             class="horizontal-item"
         >
             <div class="horizontal-img">
-                <img :src="member?.banner" alt="logo" v-if="member?.banner" />
+                <img :src="member.detachment?.banner" alt="logo" v-if="member.detachment?.banner" />
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontal-item-title">{{ member?.name }}</p>
+                <p class="horizontal-item-title ml-2">{{ member.detachment?.name }}</p>
+                <div class="rating" v-if="rating">
+                    <p>Место в рейтинге: 102</p>
+                </div>
+            </div>
+        </router-link>
+        <router-link :to="{ name: 'lso', params: { id: member.junior_detachment.id } }"
+            class="horizontal-item ml-3"
+        >
+            <div class="horizontal-img">
+                <img :src="member.junior_detachment?.banner" alt="logo" v-if="member.junior_detachment?.banner" />
+                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
+            </div>
+            <div class="containerHorizontal">
+                <p class="horizontal-item-title ml-2">{{ member.junior_detachment?.name }}</p>
                 <div class="rating" v-if="rating">
                     <p>Место в рейтинге: 102</p>
                 </div>
             </div>
         </router-link>
     </div>
-    <div v-else-if="props.competition === true && member">
-        <router-link :to="{ name: 'lso', params: { id: member.id } }"
-            class="horizontal-item"
 
-        >
-            <div class="horizontal-img">
-                <img :src="member?.banner" alt="logo" v-if="member?.banner" />
-                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
-            </div>
-            <div class="containerHorizontal">
-                <p class="horizontal-item-title">"{{ member?.name }}"</p>
-                <div class="rating" v-if="rating">
-                    <p>Место в рейтинге: 102</p>
-                </div>
-            </div>
-        </router-link>
-    </div>
 
     <div v-else-if="props.competition === false">
         <router-link
@@ -43,8 +41,8 @@
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
-            <div class="containerHorizontal">
-                <p class="horizontal-item-title">"{{ squad.name }}"</p>
+            <div class="containerHorizontal ml-2">
+                <p class="horizontal-item-title">{{ squad.name }}</p>
             </div>
         </router-link>
     </div>
@@ -75,7 +73,7 @@ const props = defineProps({
         grid-template-columns: auto 1fr auto;
         align-items: baseline;
         align-items: center;
-
+        width: 100%;
         padding: 4px 20px;
 
         border-radius: 10px;

@@ -10,7 +10,7 @@
         item-title="name"
         item-value="value"
         v-bind="$attrs"
-        @keyup="searchEducInstitution"
+
         @update:value="changeValue"
         :address="addressRef"
         :no-data-text="noDataText"
@@ -182,15 +182,15 @@ const onChangeItem = async () => {
     }
 };
 
-const timer = ref(null);
+// const timer = ref(null);
 
-const searchEducInstitution = (val) => {
-    clearTimeout(timer.value);
+// const searchEducInstitution = (val) => {
+//     clearTimeout(timer.value);
 
-    timer.value = setTimeout(() => {
-        regionalsStore.searchInstitution(name.value, (props.address?'':user?.currentUser?.value?.region?.name));
-    }, 200);
-};
+//     timer.value = setTimeout(() => {
+//         regionalsStore.searchInstitution(name.value, (props.address?'':user?.currentUser?.value?.region?.name));
+//     }, 200);
+// };
 
 watch(
     () => user.currentUser.value,

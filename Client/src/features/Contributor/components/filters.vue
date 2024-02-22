@@ -1,47 +1,6 @@
 <template>
     <h3 class="filters-title">Основные фильтры</h3>
     <v-expansion-panels>
-        <v-expansion-panel v-if="levelSearch">
-            <v-expansion-panel-title>
-                <template v-slot:default="{ expanded }">
-                    <v-row no-gutters>
-                        <v-col cols="4" class="d-flex justify-start">
-                            Уровень поиска
-                        </v-col>
-                    </v-row>
-                </template>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text class="inner-content">
-                <div class="checkbox">
-                    <div
-                        class="checkbox-item"
-                        v-for="answer in answers"
-                        :key="answer.id"
-                    >
-                        <!-- <RadioButton
-                            :value="answer.name"
-                            :label="answer.name"
-                            :id="answer.id"
-                            :checked="answer.checked"
-                            name="answer"
-                            v-model:checkedValue="selectedAnswer"
-                        /> -->
-                        <input
-                            class="radiobutton"
-                            type="radio"
-                            :id="answer.id"
-                            :label="answer.name"
-                            :value="answer.name"
-                            :name="answer.name"
-                            :checked="answer.checked"
-                            v-model="selectedAnswer"
-                        />
-                        <label :for="id">{{ answer.name }}</label>
-                    </div>
-                </div>
-                <p>Выбрано:{{ selectedAnswer }}</p>
-            </v-expansion-panel-text>
-        </v-expansion-panel>
         <v-expansion-panel v-if="roles.centralheadquarter_commander">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
@@ -67,11 +26,11 @@
             </v-expansion-panel-text>
         </v-expansion-panel>
         <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title v-if="districtRef !== null">
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
-                            <!-- <pre>ss{{ props.reg}}</pre> -->
+
                             Региональный штаб
                         </v-col>
                     </v-row>
@@ -91,12 +50,12 @@
                 ></regionalsDropdown>
             </v-expansion-panel-text>
         </v-expansion-panel>
-        <v-expansion-panel v-if="regRef !== null">
+        <v-expansion-panel v-if="regRef">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
-                            <!-- <pre>ss{{ props.local }}</pre> -->
+
                             Местный штаб
                         </v-col>
                     </v-row>
@@ -116,7 +75,7 @@
                 ></localSearchFilter>
             </v-expansion-panel-text>
         </v-expansion-panel>
-        <v-expansion-panel v-if="localRef !== null">
+        <v-expansion-panel v-if="localRef !== null || regRef">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -140,7 +99,7 @@
                 ></educationalsDropdown>
             </v-expansion-panel-text>
         </v-expansion-panel>
-        <v-expansion-panel v-if="educRef !== null">
+        <v-expansion-panel v-if="educRef !== null || roles.roles.value.detachment_commander">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -166,24 +125,24 @@
         </v-expansion-panel>
     </v-expansion-panels>
 
-    <!-- <p>
+    <p>
         Найдено пользователей:
         {{ sortedParticipants.length }}
-    </p> -->
+    </p>
 </template>
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { RadioButton } from '@shared/components/buttons';
-// import { useRoleStore } from '@layouts/store/role';
-// import { useRegionalsStore } from '@features/store/regionals';
-// import { useDistrictsStore } from '@features/store/districts';
-// import { useLocalsStore } from '@features/store/local';
-// import { useEducationalsStore } from '@features/store/educationals';
-// import { useSquadsStore } from '@features/store/squads';
-// import { useUserStore } from '@features/store/index';
-// import { storeToRefs } from 'pinia';
-// import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useDistrictsStore } from '@features/store/districts';
+import { useLocalsStore } from '@features/store/local';
+import { useEducationalsStore } from '@features/store/educationals';
+import { useSquadsStore } from '@features/store/squads';
+import { useUserStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
+import { HTTP } from '@app/http';
 import {
     districtSearchFilter,
     regionalsDropdown,
@@ -193,16 +152,11 @@ import {
 } from '@shared/components/selects';
 
 const props = defineProps({
-    levelSearch: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
     district: {
         type: String,
     },
     reg: { type: String },
-    local: { type: Object, default: () => {} },
+    local: { type: String },
     educ: { type: String },
     detachment: { type: String },
     districts: {
@@ -220,37 +174,14 @@ const props = defineProps({
     sortedParticipants: { type: Array, required: false },
 });
 
-const answers = ref([
-    { name: 'Все', value: 'all', id: 'all', checked: true },
-    { name: 'Окружные штабы', value: 'districts', id: 'dist' },
-    { name: 'Региональные штабы', value: 'regs', id: 'regss' },
-    { name: 'Местные штабы', value: 'locs', id: 'locss' },
-    { name: 'Штабы СО ОО', value: 'educs', id: 'educss' },
-    { name: 'ЛСО', value: 'lso', id: 'squadss' },
-]);
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
 
-// const roleStore = useRoleStore();
-// const userStore = useUserStore();
-// const roles = storeToRefs(roleStore);
-// const regionalsStore = useRegionalsStore();
-// const districtsStore = useDistrictsStore();
-// const localsStore = useLocalsStore();
-// const educationalsStore = useEducationalsStore();
-// const squadsStore = useSquadsStore();
-
-// const isLoading = ref(false);
-// // const participants = storeToRefs(userStore);
-// const regionals = ref([]);
-// const districts = ref([]);
-// const locals = ref([]);
-// const educHead = ref([]);
-// const detachments = ref([]);
 const districtRef = ref(props.district);
 const localRef = ref(props.local);
 const regRef = ref(props.reg);
 const educRef = ref(props.educ);
 const detachmentRef = ref(props.detachment);
-const selectedAnswer = ref(null);
 const levelAccess = ref(7);
 
 const emit = defineEmits([
@@ -284,97 +215,41 @@ const updateDetachment = () => {
     console.log(detachmentRef.value);
 };
 
-// const viewContributorsData = async (search) => {
-//     try {
-//         isLoading.value = true;
+watch(
+    () => props.district,
+    () => {
+        districtRef.value = props.district;
+    },
+);
+watch(
+    () => props.reg,
+    () => {
+        regRef.value = props.reg;
+    },
+);
 
-//         const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-//         participants.users.value = viewParticipantsResponse.data;
-//         isLoading.value = false;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
+watch(
+    () => props.local,
+    () => {
+        localRef.value = props.local;
+    },
+);
 
-// watch(
-//     () => roles.roles.value,
+watch(
+    () => props.educ,
+    () => {
+        educRef.value = props.educ;
+    },
+);
 
-//     (newRole, oldRole) => {
-//         if (!roles.roles.value.centralheadquarter_commander) {
-//             let search = '';
+watch(
+    () => props.detachment,
+    () => {
+        detachmentRef.value = props.detachment;
+    },
+);
 
-//             if (roles.roles.value.districtheadquarter_commander) {
-//                 districtRef.value =
-//                     roles.roles.value.districtheadquarter_commander.name;
-//                 search =
-//                     '?district_headquarter__name=' +
-//                     roles.roles.value.districtheadquarter_commander.name;
-//                 levelAccess.value = 1;
-//             } else if (roles.roles.value.regionalheadquarter_commander) {
-//                 regRef.value =
-//                     roles.roles.value.regionalheadquarter_commander.name;
-//                 search =
-//                     '?regional_headquarter__name=' +
-//                     roles.roles.value.regionalheadquarter_commander.name;
-//                 levelAccess.value = 2;
-//             } else if (roles.roles.value.localheadquarter_commander) {
-//                 localRef.value = roles.roles.value.localheadquarter_commander.name;
-//                 search =
-//                     '?local_headquarter__name=' +
-//                     roles.roles.value.localheadquarter_commander.name;
-//                 levelAccess.value = 3;
-//             } else if (roles.roles.value.educationalheadquarter_commander) {
-//                 educRef.value =
-//                     roles.roles.value.educationalheadquarter_commander.name;
-//                 search =
-//                     '?educational_headquarter__name=' +
-//                     roles.roles.value.educationalheadquarter_commander.name;
-//                 levelAccess.value = 4;
-//             } else if (roles.roles.value.detachment_commander) {
-//                 detachmentRef.value = roles.roles.value.detachment_commander.name;
-//                 search =
-//                     '?detachment__name=' +
-//                     roles.roles.value.detachment_commander.name;
-//                 levelAccess.value = 5;
-//             }
-//             viewContributorsData(search);
-//         } else {
-//             levelAccess.value = 0;
-//         }
-//     },
-// );
 
-// watch(
-//     () => regionalsStore.regionals,
-//     () => {
-//         regionals.value = regionalsStore.regionals;
-//     },
-// );
-
-// watch(
-//     () => localsStore.locals,
-//     () => {
-//         locals.value = localsStore.locals;
-//     },
-// );
-
-// watch(
-//     () => educationalsStore.educationals,
-//     () => {
-//         educHead.value = educationalsStore.educationals;
-//     },
-// );
-// watch(
-//     () => squadsStore.squads,
-//     () => {
-//         detachments.value = squadsStore.squads;
-//     },
-// );
 </script>
 <style lang="scss">
 .v-expansion-panel {
