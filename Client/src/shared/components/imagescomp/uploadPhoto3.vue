@@ -28,21 +28,24 @@
                                     <v-container>
                                         <v-row>
                                             <v-file-input
-
                                                 @change="selectFile"
+                                                type="file"
                                                 show-size
                                                 prepend-icon="mdi-camera"
                                                 counter
-                                            ></v-file-input>
-
+                                            />
+                                        </v-row>
+                                        <v-row class="align-center justify-end">
+                                            <v-btn
+                                                v-if="preview"
+                                                class="button-wrapper mt-5"
+                                                @click="cropImage()"
+                                                prepend-icon="crop"
+                                                variant="plain"
+                                            >Обрезать фото</v-btn>
                                         </v-row>
                                         <v-row>
-                                            <v-card class="mt-5 mx-auto">
-                                                <img
-                                                    v-if="preview"
-                                                    :src="preview"
-                                                />
-                                            </v-card>
+                                            <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview" />
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
@@ -164,6 +167,9 @@
 <script setup>
 import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
+
 const emit = defineEmits(['uploadUserPic, updateUserPic']);
 
 const props = defineProps({
@@ -172,14 +178,24 @@ const props = defineProps({
 
 const dialog = ref(false);
 let preview = ref(null);
-const showPhoto = ref(false);
+// const showPhoto = ref(false);
 const isError = ref([]);
 const swal = inject('$swal');
+const cropper = ref();
 
 const userPhotos = ref({
     photo3: null,
 });
 
+const cropImage = () => {
+    if (cropper.value) {
+        const { canvas } = cropper.value.getResult();
+        preview.value = canvas.toDataURL('image/jpeg')
+        canvas.toBlob((blob) => {
+            userPhotos.value.photo3 = new File([blob], "photo1.jpg", { type: "image/jpeg" })
+        }, 'image/jpeg');
+    }
+};
 
 const selectFile = (event) => {
     userPhotos.value.photo3 = event.target.files[0];

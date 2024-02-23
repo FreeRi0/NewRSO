@@ -41,18 +41,38 @@
                                         <v-row>
                                             <v-file-input
                                                 @change="selectFile"
+                                                type="file"
                                                 show-size
                                                 prepend-icon="mdi-camera"
                                                 counter
-                                            ></v-file-input>
+                                            />
                                         </v-row>
-                                        <v-row>
-                                            <v-card class="mt-5 mx-auto">
-                                                <img
-                                                    v-if="preview"
-                                                    :src="preview"
-                                                />
-                                            </v-card>
+                                        <v-row class="align-center justify-end">
+                                            <v-btn
+                                                v-if="preview"
+                                                class="button-wrapper mt-5"
+                                                @click="cropImage()"
+                                                prepend-icon="crop"
+                                                variant="plain"
+                                            >Обрезать фото</v-btn>
+                                        </v-row>
+                                        <v-row v-if="preview">
+                                            <Cropper
+                                                ref="cropper"
+                                                class="cropper mt-5 mx-auto"
+                                                :src="preview"
+                                                @change="onChangeCrop"
+                                                :stencil-component="CircleStencil"
+                                            />
+                                            <Preview
+                                                :width="120"
+                                                :height="120"
+                                                :image="result.image"
+                                                :coordinates="result.coordinates"
+                                                class="mt-9"
+                                                style='border-radius: 50%'
+
+                                            />
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
@@ -177,7 +197,10 @@
 <script setup>
 import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+// import { useRoute } from 'vue-router';
+import { Cropper, Preview, CircleStencil } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
+
 const props = defineProps({
     avatar: String,
     edited: {
@@ -190,12 +213,32 @@ const emit = defineEmits(['upload', 'update', 'delete']);
 const media = ref({
     photo: null,
 });
+const cropper = ref();
+let result = ref({
+    coordinates: null,
+    image: null
+})
 
-const route = useRoute();
+// const route = useRoute();
 const dialog = ref(false);
 const preview = ref(null);
 const isError = ref([]);
 const swal = inject('$swal');
+
+const cropImage = () => {
+    if (cropper.value) {
+        const { canvas } = cropper.value.getResult();
+        preview.value = canvas.toDataURL('image/jpeg')
+        canvas.toBlob((blob) => {
+            media.value = new File([blob], "photo1.jpg", { type: "image/jpeg" })
+        }, 'image/jpeg');
+    }
+};
+
+const onChangeCrop = ({ coordinates, image }) => {
+    result.value.coordinates = coordinates;
+    result.value.image = image;
+}
 
 const selectFile = (event) => {
     media.value = event.target.files[0];
