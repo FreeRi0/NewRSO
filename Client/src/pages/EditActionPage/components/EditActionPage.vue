@@ -113,7 +113,7 @@
                                                 ></label
                                             >
                                             <sortByEducation
-                                                :options="scale_massive"
+                                                :options="scale_massive_sorted"
                                                 placeholder="Например, ЛСО"
                                                 v-model="maininfo.scale"
                                             >
@@ -1089,7 +1089,7 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref, onActivated } from 'vue';
+import { ref, onActivated, watch } from 'vue';
 import {
     getAction,
     getOrganizator,
@@ -1101,6 +1101,8 @@ import { sortByEducation } from '@shared/components/selects';
 import { useRoute, useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
+import { useRoleStore } from '@layouts/store/role';
+const rolesStore = useRoleStore();
 const router = useRouter();
 const route = useRoute();
 const id = route.params.id;
@@ -1109,6 +1111,7 @@ onActivated(() => {
     getAction(id)
         .then((resp) => {
             maininfo.value = resp.data;
+            maininfo.value.banner = null;
             getOrganizator(id)
                 .then((resp) => {
                     organizators.value = resp.data;
@@ -1120,9 +1123,23 @@ onActivated(() => {
         .catch((e) => {
             console.log(e);
         });
+    watch(
+        () => rolesStore.roles,
+        (newRole) => {
+            Object.entries(newRole).forEach(([obj, value], index) => {
+                if (value !== null) {
+                    console.log(`${obj} + ${value} + ${index}`);
+                    const filted = scale_massive.value.find(
+                        (commander) => commander.value === obj,
+                    );
+                    scale_massive_sorted.value.push(filted); //Работает
+                }
+            });
+        },
+    );
 });
 
-// //Переменные для основной формы
+const scale_massive_sorted = ref([]);
 
 const scale_massive = ref([
     { name: 'Отрядное' },
