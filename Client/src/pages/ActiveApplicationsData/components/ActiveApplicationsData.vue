@@ -9,7 +9,7 @@
         >
             <h2 class="profile-title">Активные заявки</h2>
 
-            <div class="d-flex mt-9 mb-9">
+            <div class="d-flex mt-9 mb-9 active-tabs">
                 <button
                     class="contributorBtn"
                     :class="{ active: picked === tab.name }"
@@ -28,9 +28,7 @@
             </div>
 
             <div v-else-if="picked == 'Заявка на участие в мероприятии'">
-                <!-- <p>Блок в разработке....</p> -->
-                <ActiveEventsApp
-                />
+                <ActiveEventsApp />
             </div>
 
             <div v-else-if="picked == 'Конкурсы'">
@@ -83,7 +81,6 @@ const pages = ref([
     { pageTitle: 'Активные заявки', href: '#' },
 ]);
 
-
 watch(
     () => roles.roles.value,
 
@@ -99,6 +96,10 @@ watch(
 .profile-title {
     font-size: 40px;
     margin-bottom: 40px;
+    @media screen and (max-width: 575px) {
+       font-size: 32px;
+       margin-bottom: 20px;
+    }
 }
 
 .contributorBtn {
@@ -109,11 +110,27 @@ watch(
     margin: 0px;
     padding: 10px 24px;
     margin: 7px;
+    @media screen and (max-width: 768px) {
+        font-size: 12px;
+        padding: 8px 16px;
+        margin: 12px 8px 0px 0px;
+    }
 }
 
 .active {
     background-color: #1c5c94;
     color: white;
+}
+
+.active-app {
+    padding-bottom: 60px;
+}
+
+.active-tabs {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .contributor-sort__all {
