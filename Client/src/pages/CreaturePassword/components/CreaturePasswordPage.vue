@@ -26,7 +26,7 @@
 
                         <Input
                             class="creaturePass__input"
-                            placeholder="Новый пароль"
+                            placeholder="Введите новый пароль"
                             name="password"
                             v-model:value="new_password"
                         ></Input>
@@ -109,11 +109,9 @@ const resetPasswordForm = async () => {
             ...auth.value,
             new_password: new_password.value,
         });
-        console.log(response.data);
-        localStorage.setItem('Token', response.data.auth_token);
         isLoading.value = false;
         router.push({
-            name: 'mypage',
+            name: 'Login',
         });
         swal.fire({
             position: 'top-center',
@@ -139,7 +137,7 @@ const resetPasswordForm = async () => {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .btn {
     margin: 40px auto;
     margin-bottom: 15px;

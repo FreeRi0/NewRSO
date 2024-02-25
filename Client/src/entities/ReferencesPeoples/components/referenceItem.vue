@@ -4,9 +4,9 @@
             <input
                 type="checkbox"
                 v-model="checked"
-                :value="participant.user"
                 @change="updateCheck"
             />
+            <!-- :value="participant.user" -->
         </div>
         <router-link
             class="horizontallso-item__wrapper"
@@ -56,36 +56,22 @@ import { HTTP } from '@app/http';
 const props = defineProps({
     participant: {
         type: Object,
-        require: true,
-    },
-    selectedParticipants: {
-        type: Array,
-        default: () => [],
     },
 });
 
-const emit = defineEmits(['change','approve', 'reject']);
+const emit = defineEmits({
+    select: null,
+});
 const checked = ref(false);
 
 const updateCheck = (e) => {
-    console.log('ddddddUser', checked.value, props.participant.user.id);
-    emit('change', checked.value, props.participant.user.id);
+    emit('select', props.participant, e.target.checked);
 };
 
-const selectedPeoples = ref(props.selectedParticipants);
-
 watch(
-    () => props.selectedParticipants,
-    (newChecked) => {
-        if (!newChecked) return;
-        selectedPeoples.value = newChecked;
-        console.log('newChecked', newChecked);
-        const checkedItem = newChecked.find(
-            (item) => item.user.id == props.participant.user.id,
-        );
-        console.log('checkedItem', checkedItem);
-        if (!checkedItem) checked.value = false;
-        else checked.value = true;
+    () => props.participant.selected,
+    (newSelected) => {
+        checked.value = newSelected;
     },
 );
 </script>

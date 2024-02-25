@@ -1,13 +1,47 @@
 <template>
     <section class="headquarters-management">
         <h3>{{ head }}</h3>
-
-        <router-link :to="{ name: 'userpage', params: { id: props.commander.id } }" class="headquarters-management__container">
-        
+        <div class="headquarters-management__container">
+            <router-link
+                :to="{ name: 'userpage', params: { id: props.commander.id } }"
+            >
                 <div
                     class="manager-card"
-                    :key="manager"
-                    v-for="(manager, index) in joinMembers"
+                    :class="{
+                        'align-left': index % 2 === 0,
+                        'align-right': index % 2 !== 0,
+                    }"
+                >
+                    <div class="manager-card__avatar">
+                        <img
+                            :src="props.commander?.avatar?.photo"
+                            alt="фото"
+                            v-if="props.commander?.avatar?.photo"
+                        />
+                        <img
+                            class="img_alt"
+                            src="@app/assets/user-avatar-manage.png"
+                            alt="photo"
+                            v-else
+                        />
+                    </div>
+                    <div class="manager-card__box">
+                        <p id="name_length">
+                            {{ props.commander?.first_name }}
+                            {{ props.commander?.patronymic_name }}
+                            {{ props.commander?.last_name }}
+                        </p>
+                        <p>Командир</p>
+                    </div>
+                </div>
+            </router-link>
+            <router-link
+                :to="{ name: 'userpage', params: { id: manager?.user?.id } }"
+                :key="manager"
+                v-for="(manager, index) in props.leadership"
+            >
+                <div
+                    class="manager-card"
                     :class="{
                         'align-left': index % 2 === 0,
                         'align-right': index % 2 !== 0,
@@ -31,18 +65,15 @@
                             {{ manager?.user?.patronymic_name }}
                             {{ manager?.user?.last_name }}
                         </h5>
-                        <p>{{ manager.position }}</p>
+                        <p>{{ manager.position.name }}</p>
                     </div>
                 </div>
-
-
-        </router-link>
+            </router-link>
+        </div>
     </section>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-
 const props = defineProps({
     member: {
         type: Array,
@@ -56,10 +87,9 @@ const props = defineProps({
     head: {
         type: String,
     },
-});
-
-const joinMembers = computed(() => {
-    return [{ user: props.commander, position: 'Командир' }, ...props.member];
+    leadership: {
+        type: Array,
+    },
 });
 </script>
 
@@ -90,6 +120,7 @@ section.headquarters-management h3 {
     /*  */
     padding: 24px 20px;
     width: 280px;
+    height: 100%;
 }
 
 .card-position {
@@ -101,7 +132,6 @@ section.headquarters-management h3 {
     justify-content: center;
 }
 .manager-card__avatar img {
-    margin-bottom: 32px;
     width: 120px;
     height: 120px;
     border-radius: 100%;
@@ -117,13 +147,13 @@ section.headquarters-management h3 {
     align-items: center;
 }
 
-.manager-card__box h5 {
+.manager-card__box #name_length {
     color: #35383f;
     text-align: center;
-    font-family: 'BertSans';
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
+    font-family: 'Akrobat';
+    font-size: 24px;
+    font-weight: lighter;
+    // font-weight: normal;
     line-height: normal;
     /*  */
     margin-bottom: 16px;
@@ -131,12 +161,11 @@ section.headquarters-management h3 {
 
 .manager-card__box p {
     color: #676767;
+    font-family: 'Akrobat';
     text-align: center;
-    font-family: 'BertSans';
     font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 140%;
+    font-weight: normal;
+    line-height: 22.4px;
 }
 
 // адаптив
@@ -173,9 +202,9 @@ section.headquarters-management h3 {
         height: 173px;
     }
     .manager-card__box {
-        width: 127px;
+        width: 114px;
     }
-    .manager-card__box h5 {
+    .manager-card__box #name_length {
         font-size: 12px;
         margin-bottom: 8px;
     }

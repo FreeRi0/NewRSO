@@ -113,9 +113,10 @@
                                                 ></label
                                             >
                                             <sortByEducation
-                                                :options="scale_massive"
+                                                :options="scale_massive_sorted"
                                                 placeholder="Например, ЛСО"
                                                 v-model="maininfo.scale"
+                                                :sorts-boolean="true"
                                             >
                                             </sortByEducation>
                                         </div>
@@ -586,9 +587,7 @@
                                         <InputText
                                             id="action-hours-end-hq"
                                             class="form__input form-input-container"
-                                            v-model="
-                                                time_data.registration_end_time
-                                            "
+                                            v-model="time_data.end_time"
                                             placeholder="Например 18:30"
                                             name="action-hours-end-hq"
                                             type="time"
@@ -610,6 +609,24 @@
                                                 <label for="hours3" class="ml-2">За 3 часа</label>
                                             </div>
                                         </label> -->
+                                        <div class="form__field">
+                                            <label
+                                                class="form-label"
+                                                for="action-hours-end-hq"
+                                                >Время в часах</label
+                                            >
+                                            <InputText
+                                                id="action-hours-end-hq"
+                                                class="form__input form-input-container"
+                                                v-model="
+                                                    time_data.registration_end_time
+                                                "
+                                                placeholder="Например 18:30"
+                                                name="action-hours-end-hq"
+                                                type="time"
+                                            />
+                                            <div class="form__counter"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1069,7 +1086,7 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import {
     createAction,
     putTimeData,
@@ -1082,10 +1099,23 @@ import InputText from 'primevue/inputtext';
 import { onActivated } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 const router = useRouter();
-const user = useRoleStore();
+const rolesStore = useRoleStore();
 
 onActivated(() => {
-    console.log(user.userRoles);
+    watch(
+        () => rolesStore.roles,
+        (newRole) => {
+            Object.entries(newRole).forEach(([obj, value], index) => {
+                if (value !== null) {
+                    console.log(`${obj} + ${value} + ${index}`);
+                    const filted = scale_massive.value.find(
+                        (commander) => commander.value === obj,
+                    );
+                    scale_massive_sorted.value.push(filted); //Работает
+                }
+            });
+        },
+    );
 });
 
 const maininfo = ref({
@@ -1093,40 +1123,49 @@ const maininfo = ref({
     direction: '',
     name: '',
     scale: '',
+<<<<<<< HEAD
     banner: '',
+=======
+    banner: null,
+>>>>>>> 3f803ef1749b1757c49b4eaa29bead670247da7f
     conference_link: '',
     address: '',
     description: '',
     participants_number: 0,
     application_type: '',
     available_structural_units: '',
-    org_central_headquarter: 1,
-    //org_district_headquarter: 0,
-    //org_regional_headquarter: 0,
-    //org_local_headquarter: 0,
-    //org_educational_headquarter: 0,
-    //org_detachment: 0,
+    org_central_headquarter: 0,
+    org_district_headquarter: 0,
+    org_regional_headquarter: 0,
+    org_local_headquarter: 0,
+    org_educational_headquarter: 0,
+    org_detachment: 0,
 });
 
 const urlBanner = ref(null);
 
 const selectBanner = (event) => {
     maininfo.value.banner = event.target.files[0];
+<<<<<<< HEAD
     console.log('Файл есть', maininfo.value.banner);
+=======
+>>>>>>> 3f803ef1749b1757c49b4eaa29bead670247da7f
 };
 
 const resetBanner = () => {
     maininfo.value.banner = null;
     urlBanner.value = null;
 };
-//Что-то придумать
+
+const scale_massive_sorted = ref([]);
+
 const scale_massive = ref([
-    { name: 'Отрядное' },
-    { name: 'Образовательное' },
-    { name: 'Городское' },
-    { name: 'Региональное' },
-    { name: 'Окружное' },
-    { name: 'Всероссийское' },
+    { name: 'Отрядное', value: 'detachment_commander' },
+    { name: 'Образовательное', value: 'educationalheadquarter_commander' },
+    { name: 'Городское', value: 'localheadquarter_commander' },
+    { name: 'Региональное', value: 'regionalheadquarter_commander' },
+    { name: 'Окружное', value: 'districtheadquarter_commander' },
+    { name: 'Всероссийское', value: 'centralheadquarter_commander' },
 ]);
 
 const direction_massive = ref([
@@ -1200,7 +1239,10 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3f803ef1749b1757c49b4eaa29bead670247da7f
     createAction(fd)
         .then((resp) => {
             console.log('Форма передалась успешно', resp.data);

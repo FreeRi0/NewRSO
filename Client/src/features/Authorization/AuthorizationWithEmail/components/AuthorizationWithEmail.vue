@@ -71,13 +71,14 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
+const user = storeToRefs(userStore);
 const data = ref({
     username: '',
     password: '',
 });
 const visible = ref(false);
 
-const isError = ref('');
+const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 const router = useRouter();
@@ -121,6 +122,7 @@ const LoginUser = async () => {
         }
     }
 };
+
 </script>
 
 <style lang="scss" scoped>

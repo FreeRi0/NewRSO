@@ -36,7 +36,7 @@
                     <ul class="header__nav-list">
                         <li
                             class="header__nav-item"
-                            v-if="user.currentUser.value"
+                            v-if="Object.keys(userStore.currentUser).length"
                         >
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
@@ -71,7 +71,7 @@
             <nav class="header__nav nav-user">
                 <div
                     class="nav-user__application-count"
-                    v-if="user.currentUser.value"
+                    v-if="Object.keys(userStore.currentUser).length"
                 >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <!-- <a href="#">
@@ -91,7 +91,13 @@
                     </div> -->
                 </div>
 
-                <div class="nav-user__location">
+                <div
+                    class="nav-user__location"
+                    v-if="
+                        Object.keys(userStore.currentUser).length &&
+                        !userStore.isLoading
+                    "
+                >
                     <button class="nav-user__button" @click="show = !show">
                         <!-- <img
                             class="nav-user__button-mobile"
@@ -103,13 +109,12 @@
 
                         <span
                             v-if="
-                                user.currentUser.value?.region &&
+                                userStore.currentUser?.region &&
                                 !isLoading.isLoading.value
                             "
                         >
                             <div
-                                v-for="item in regionals.filteredRegional
-                                    .value"
+                                v-for="item in regionals.filteredRegional.value"
                             >
                                 <p>{{ item.name }}</p>
                             </div>
@@ -161,18 +166,24 @@
                     </div>
                 </div>
 
-                <div class="nav-user__menu user-menu">
+                <div
+                    class="nav-user__menu user-menu"
+                    v-if="
+                        Object.keys(userStore.currentUser).length &&
+                        !userStore.isLoading
+                    "
+                >
                     <img
-                        v-if="!user.currentUser.value"
+                        v-if="!Object.keys(userStore.currentUser).length"
                         src="@app/assets/user-avatar.png"
                         alt="Фото бойца (заглушка)"
                     />
 
                     <Dropdown
-                        v-if="user.currentUser.value"
+                        v-if="Object.keys(userStore.currentUser).length"
                         :items="userPages"
                         :image="true"
-                        :url="user.currentUser.value.media?.photo"
+                        :url="userStore.currentUser?.media?.photo"
                         desc="Фотография пользователя"
                         @updateUser="userUpdate"
                     />
@@ -222,43 +233,44 @@ const regionals = storeToRefs(regionalsStore);
 const quantityIsActive = ref(props.quantityActive);
 
 const router = useRouter();
-const user = storeToRefs(userStore);
 
 const region = ref('');
 
 const userUpdate = (userData) => {
-    // console.log('UserUpdate', userData );
-    user.currentUser.value = userData;
+    userStore.currentUser = userData;
 };
 
 const pages = ref([
-    { title: 'ЛСО', link: '/allSquads' },
-    { title: 'Штабы СО ОО', link: '/AllHeadquarters' },
-    { title: 'Местные штабы', link: '/LocalHeadquarters' },
-    { title: 'Региональные штабы', link: '/RegionalHeadquarters' },
-    { title: 'Окружные штабы', link: '/DistrictHeadquarters' },
-    { title: 'Центральный штаб', link: '/CentralHQ/1' },
+    { title: 'ЛСО', link: '/allSquads', show: true },
+    { title: 'Штабы СО ОО', link: '/AllHeadquarters', show: true },
+    { title: 'Местные штабы', link: '/LocalHeadquarters', show: true },
+    { title: 'Региональные штабы', link: '/RegionalHeadquarters', show: true },
+    { title: 'Окружные штабы', link: '/DistrictHeadquarters', show: true },
+    { title: 'Центральный штаб', link: '/CentralHQ/1', show: true },
 ]);
 
 const userPages = computed(() => [
     {
         title: 'Моя страница',
         name: 'mypage',
+        show: true,
     },
     {
         title: 'Мой отряд',
         name: 'lso',
         params: {
-            id: user.currentUser?.value?.detachment_id,
+            id: userStore.currentUser?.detachment_id,
         },
+        show: userStore.currentUser?.detachment_id,
     },
     {
         title: 'Штаб СО ОО',
         name: 'HQ',
         path: 'regionals',
         params: {
-            id: user.currentUser?.value?.educational_headquarter_id,
+            id: userStore.currentUser?.educational_headquarter_id,
         },
+        show: userStore.currentUser?.educational_headquarter_id,
     },
     {
         title: 'Местный штаб',
@@ -266,9 +278,10 @@ const userPages = computed(() => [
         path: 'locals',
         params: {
             id:
-                user.currentUser?.value?.local_headquarter_id ??
+                userStore.currentUser?.local_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
         },
+        show: userStore.currentUser?.local_headquarter_id,
     },
     {
         title: 'Региональный штаб',
@@ -276,9 +289,10 @@ const userPages = computed(() => [
         path: 'regionals',
         params: {
             id:
-                user.currentUser?.value?.regional_headquarter_id ??
+                userStore.currentUser?.regional_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
         },
+        show: userStore.currentUser?.regional_headquarter_id,
     },
     {
         title: 'Окружной штаб',
@@ -286,23 +300,33 @@ const userPages = computed(() => [
         path: 'districts',
         params: {
             id:
-                user.currentUser?.value?.district_headquarter_id ??
+                userStore.currentUser?.district_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
         },
+        show: userStore.currentUser?.district_headquarter_id,
     },
     {
         title: 'Центральный штаб',
         name: 'CentralHQ',
         params: {
-            id: user.currentUser.value?.central_headquarter_id,
+            id: userStore.currentUser?.central_headquarter_id,
         },
+        show: true,
     },
-    { title: 'Активные заявки', name: 'active' },
-    // { title: 'Поиск участников', link: '#' },
-    { title: 'Членский взнос', name: 'contributorPay' },
-    { title: 'Оформление справок', name: 'references' },
-    { title: 'Настройки профиля', name: 'personaldata' },
-    { title: 'Выйти из ЛК', button: true },
+    { title: 'Активные заявки', name: 'active', show: true },
+    // { title: 'Поиск участников', link: '#', show: (userStore.currentUser?.central_headquarter_id ||
+    // userStore.currentUser?.district_headquarter_id || userStore.currentUser?.regional_headquarter_id) },
+    { title: 'Членский взнос', name: 'contributorPay', show: true },
+    {
+        title: 'Оформление справок',
+        name: 'references',
+        show:
+            userStore.currentUser?.central_headquarter_id ||
+            userStore.currentUser?.district_headquarter_id ||
+            userStore.currentUser?.regional_headquarter_id,
+    },
+    { title: 'Настройки профиля', name: 'personaldata', show: true },
+    { title: 'Выйти из ЛК', button: true, show: true },
 ]);
 
 let show = ref(false);
@@ -344,39 +368,6 @@ const headquertersNames = ref([
     },
 ]);
 
-const getHeadquarters = async () => {
-    for (let i = 0; i < headquertersNames.value.length; i++) {
-        const item = headquertersNames.value[i];
-
-        if (!user.user.value[item.id]) continue;
-
-        const { data } = await HTTP.get(
-            `${item.path}/${user.user.value[item.id]}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-
-        const { data: dataParent } = await HTTP.get(
-            `${item.parentPath}/${data[item.parentHqId]}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-
-        headquartersIds.value.push({
-            path: item.parentPath,
-            id: dataParent.id,
-        });
-    }
-};
-
 const updateRegion = async () => {
     try {
         const updateRegResponse = await HTTP.patch(
@@ -401,23 +392,18 @@ const updateRegion = async () => {
 };
 
 watch(
-    () => user.currentUser.value,
+    () => userStore.currentUser,
     (newUser, oldUser) => {
-        if (Object.keys(user.currentUser.value).length === 0) {
+        if (Object.keys(userStore.currentUser).length === 0) {
             return;
         }
 
         region.value = regionalsStore.regions.find(
-            (region) => region.name === user.currentUser.value.region,
+            (region) => region.name === userStore.currentUser.region,
         )?.id;
-        regionalsStore.searchRegionals(user.currentUser.value.region);
+        regionalsStore.searchRegionals(userStore.currentUser.region);
     },
 );
-
-onMounted(() => {
-    // await regionalsStore.getRegionals();
-    // regionalsStore.searchRegionals(user.currentUser.value.region);
-});
 </script>
 
 <style lang="scss">

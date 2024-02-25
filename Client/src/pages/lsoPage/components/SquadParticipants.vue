@@ -62,7 +62,7 @@ import {
 
 const isVerified = ref([]);
 const route = useRoute();
-const picked = ref(false);
+const picked = ref(true);
 let id = route.params.id;
 
 const props = defineProps({
@@ -91,7 +91,6 @@ const getVerified = async () => {
         console.log('an error occured ' + error);
     }
 };
-
 
 console.log('length', isVerified.value.length);
 

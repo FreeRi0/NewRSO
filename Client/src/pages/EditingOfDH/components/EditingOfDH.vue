@@ -103,11 +103,11 @@ const getMembers = async () => {
             });
 
             members.value = membersResponse.data;
-            if (members.value.length) {
+            /*if (members.value.length) {
                 members.value.forEach((member) => {
-                    member.position = member.position.id;
+                    member.position = member.position?.id;
                 });
-            }
+            }*/
             isMembersLoading.value = false;
         }, 1000);
     } catch (error) {
@@ -121,9 +121,11 @@ onMounted(() => {
 });
 
 const onUpdateMember = (event, id) => {
-    const targetMember = members.value.find((member) => member.id === id);
+    const memberIndex = members.value.findIndex(member => member.id === id)
     const firstkey = Object.keys(event)[0];
-    targetMember[firstkey] = event[firstkey];
+    members.value[memberIndex].change = true;
+    if (firstkey == 'position') members.value[memberIndex].position.id = event[firstkey];
+    else members.value[memberIndex][firstkey] = event[firstkey];
 };
 
 const submited = ref(false);
@@ -188,19 +190,28 @@ const changeHeadquarter = async () => {
         formData.append('about', headquarter.value.about);
 
         for (let member of members.value) {
-            await HTTP.patch(
-                `/districts/${id}/members/${member.id}/`,
-                {
-                    position: member.position,
-                    is_trusted: member.is_trusted,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
+            if (member.change) {
+                await HTTP.patch(
+                    `/districts/${id}/members/${member.id}/`,
+                    {
+                        position: member.position.id,
+                        is_trusted: member.is_trusted,
                     },
-                },
-            );
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                ).then((response) => {
+                    member.position = response.data.position
+                    member.is_trusted = response.is_trusted
+                    member.change = false
+                })
+                    .catch(function (error) {
+                        console.log('an error occured ' + error);
+                    });
+            }
         }
 
         if (isEmblemChange.value)

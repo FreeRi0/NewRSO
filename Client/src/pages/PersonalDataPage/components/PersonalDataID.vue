@@ -5,6 +5,9 @@
             <Wall
                 :user="privateUser.privateUser.value"
                 :education="education"
+                :user_region="region"
+                :position="roles.positions.value"
+                :commander="roles.userRoles.value"
                 class="mt-3"
 
             ></Wall>
@@ -22,11 +25,13 @@ import { Wall } from '@features/baner/components';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
+const roleStore = useRoleStore();
 const privateUser = storeToRefs(userStore);
-
+const roles = storeToRefs(roleStore);
 const education = ref({});
 const route = useRoute();
 let id = route.params.id;
@@ -34,6 +39,8 @@ let id = route.params.id;
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         userStore.getPrivateUserId(id);
+        roleStore.getPositions(id);
+        roleStore.getUserRoles(id);
     }
 });
 
@@ -43,10 +50,14 @@ watch(
     (newId) => {
         id = newId;
         userStore.getPrivateUserId(id);
+        roleStore.getPositions(id);
+        roleStore.getUserRoles(id);
     },
 );
 onMounted(() => {
     userStore.getPrivateUserId(id);
+    roleStore.getPositions(id);
+    roleStore.getUserRoles(id);
 })
 
 </script>

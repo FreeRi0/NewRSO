@@ -6,7 +6,7 @@
                 <v-expansion-panels variant="accordion">
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -113,7 +113,7 @@
                                                 ></label
                                             >
                                             <sortByEducation
-                                                :options="scale_massive"
+                                                :options="scale_massive_sorted"
                                                 placeholder="Например, ЛСО"
                                                 v-model="maininfo.scale"
                                             >
@@ -444,7 +444,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -606,7 +606,7 @@
                                         <div class="form__counter"></div>
                                     </div>
                                     <div class="form__field">
-                                        <!----<label class='flex align-items-center' style='display: flex'>
+                                        <!--<label class='flex align-items-center' style='display: flex'>
                                             <div class="flex align-items-center">
                                                 <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
                                                 <label for="hours1" class="ml-2">За час</label>
@@ -627,7 +627,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -804,7 +804,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -984,7 +984,7 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            <template>
+                            <template v-slot="{ expanded }">
                                 <v-row no-gutters>
                                     <v-col
                                         cols="4"
@@ -1089,7 +1089,7 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref, onActivated } from 'vue';
+import { ref, onActivated, watch } from 'vue';
 import {
     getAction,
     getOrganizator,
@@ -1098,18 +1098,20 @@ import {
     putTimeData,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
-const router = useRoute();
-
-const id = router.params.id;
-console.log(id);
+import { useRoleStore } from '@layouts/store/role';
+const rolesStore = useRoleStore();
+const router = useRouter();
+const route = useRoute();
+const id = route.params.id;
 
 onActivated(() => {
     getAction(id)
         .then((resp) => {
             maininfo.value = resp.data;
+            maininfo.value.banner = null;
             getOrganizator(id)
                 .then((resp) => {
                     organizators.value = resp.data;
@@ -1121,9 +1123,23 @@ onActivated(() => {
         .catch((e) => {
             console.log(e);
         });
+    watch(
+        () => rolesStore.roles,
+        (newRole) => {
+            Object.entries(newRole).forEach(([obj, value], index) => {
+                if (value !== null) {
+                    console.log(`${obj} + ${value} + ${index}`);
+                    const filted = scale_massive.value.find(
+                        (commander) => commander.value === obj,
+                    );
+                    scale_massive_sorted.value.push(filted); //Работает
+                }
+            });
+        },
+    );
 });
 
-// //Переменные для основной формы
+const scale_massive_sorted = ref([]);
 
 const scale_massive = ref([
     { name: 'Отрядное' },
@@ -1173,15 +1189,6 @@ const maininfo = ref({
         work_book: false,
     },
 });
-
-const available_structural_units = ref([
-    { name: 'Отряды' },
-    { name: 'Образовательные Отряды' },
-    { name: 'Местные штабы' },
-    { name: 'Региональные штабы' },
-    { name: 'Окружные штабы' },
-    { name: 'Центральные штабы' },
-]);
 const area = ref('');
 const area_massive = ref([
     { name: 'ЛСО' },
@@ -1212,12 +1219,6 @@ const answers = ref([
         },
     ],
 ]);
-//Формы самой страницы
-const pages = ref([
-    { pageTitle: 'Структура', href: '#' },
-    { pageTitle: 'Штабы СО ОО', href: '#' },
-    { pageTitle: 'Создание штаба СО ОО', href: '#' },
-]);
 
 function AddOrganizator() {
     organizators.value.push({
@@ -1231,10 +1232,12 @@ function AddOrganizator() {
     });
 }
 function SubmitEvent() {
-    console.log(maininfo.value);
-    putAction(id, maininfo.value)
+    let fd = new FormData();
+    Object.entries(maininfo.value).forEach(([key, item]) => {
+        fd.append(key, item);
+    });
+    putAction(id, fd)
         .then((resp) => {
-            console.log('Удалось изменить данные', resp.data);
             putTimeData(resp.data.id, maininfo.value.time_data)
                 .then((resp) => {
                     console.log('Удалось изменить время', resp.data);
@@ -1242,19 +1245,19 @@ function SubmitEvent() {
                 .catch((e) => {
                     console.log(e);
                 });
-            putOrganizator(id, organizators.value)
-                .then((resp) => {
-                    console.log('Организаторы изменены', resp.data);
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
+            organizators.value.forEach((organizator) => {
+                putOrganizator(id, organizator, organizator.id)
+                    .then((resp) => {
+                        console.log(resp.data);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            });
+            router.push({ name: 'actionSquads' });
         })
         .catch((e) => {
             console.log(e);
-        })
-        .finally(() => {
-            router.go(-1);
         });
 }
 

@@ -5,11 +5,7 @@
     >
         <router-link :to="{ name: 'lso', params: { id: member.id } }">
             <div class="round-img">
-                <img
-                    :src="member?.banner"
-                    alt="logo"
-                    v-if="member?.banner"
-                />
+                <img :src="member?.banner" alt="logo" v-if="member?.banner" />
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="container-squad">
@@ -30,11 +26,7 @@
     >
         <router-link :to="{ name: 'lso', params: { id: member.id } }">
             <div class="round-img">
-                <img
-                    :src="member?.banner"
-                    alt="logo"
-                    v-if="member?.banner"
-                />
+                <img :src="member?.banner" alt="logo" v-if="member?.banner" />
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="container-squad">
@@ -54,12 +46,14 @@
         class="squads-wrapper__item rating_wrapper"
     >
         <router-link :to="{ name: 'lso', params: { id: squad.id } }">
-            <div class="round-img">
+            <div class="round-img" id="img-squad">
                 <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
-                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
+                <img src="@app/assets/hq-emblem-squad.png" alt="logo" v-else />
             </div>
             <div class="container-squad">
-                <p class="squads-wrapper__item-title normal-title">
+                <p
+                    class="squads-wrapper__item-title normal-title squad-title-normal"
+                >
                     {{ squad.name }}
                 </p>
             </div>
@@ -82,7 +76,7 @@ const props = defineProps({
     },
     member: {
         type: Object,
-    }
+    },
 });
 </script>
 <style lang="scss">
@@ -93,6 +87,14 @@ const props = defineProps({
         display: block;
         margin: 0px auto;
         border-radius: 100%;
+        object-fit: cover;
+        overflow: hidden;
+    }
+}
+#img-squad img {
+    @media screen and (max-width: 450px) {
+        width: 100px;
+        height: 100px;
     }
 }
 .squads-wrapper__item {
@@ -118,5 +120,9 @@ const props = defineProps({
 
 .rating__wrapper {
     width: 200px;
+}
+
+.squad-title-normal {
+    padding-top: 10px;
 }
 </style>

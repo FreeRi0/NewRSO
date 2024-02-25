@@ -17,6 +17,8 @@
             v-else-if="showLocalHQ"
             :localHeadquarter="localHeadquarter"
             :member="member"
+            :getEnding="getEnding"
+            :getEndingMembers="getEndingMembers"
         ></BannerHQ>
         <BannerHQ
             v-else-if="showRegionalHQ"
@@ -40,9 +42,10 @@
         </section>
         <ManagementHQ
             :commander="commander"
-            :member="filteredMembers"
+            :member="member"
             head="Руководство местного штаба"
             :position="position"
+            :leadership="localHeadquarter.leadership"
         ></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды местного штаба</h3>
@@ -83,7 +86,6 @@ const commander = ref({});
 const position = ref({});
 const localHeadquarter = ref({});
 const member = ref([]);
-const educt = ref({});
 const route = useRoute();
 let id = route.params.id;
 
@@ -121,17 +123,6 @@ const aboutMembers = async () => {
         console.log('an error occured ' + error);
     }
 };
-
-const filteredMembers = computed(() => {
-    return member.value.filter((manager) => {
-        return (
-            manager.position &&
-            (manager.position === 'Командир' ||
-                manager.position === 'Мастер (методист)' ||
-                manager.position === 'Комиссар')
-        );
-    });
-});
 
 const fetchCommander = async () => {
     try {
@@ -194,6 +185,30 @@ const HQandSquads = ref([
         link: '/AllSquads',
     },
 ]);
+
+const getEnding = computed(() => {
+    const count = localHeadquarter.value.participants_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'участник';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'участника';
+    } else {
+        return 'участников';
+    }
+});
+
+const getEndingMembers = computed(() => {
+    const count = localHeadquarter.value.members_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'действующий член';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'действующих члена';
+    } else {
+        return 'действующих членов';
+    }
+});
 </script>
 <style scoped lang="scss">
 .title {
@@ -275,9 +290,21 @@ const HQandSquads = ref([
 }
 
 .about-hq {
-    font-size: 27px;
-    font-family: 'Akrobat';
     margin-bottom: 60px;
+}
+.about-hq h3 {
+    font-size: 32px;
+    font-family: 'Akrobat';
+    margin-bottom: 40px;
+    color: #35383f;
+}
+.about-hq p {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
 }
 
 @media (max-width: 1110px) {

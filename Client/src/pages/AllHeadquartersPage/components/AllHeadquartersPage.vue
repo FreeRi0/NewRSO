@@ -75,16 +75,6 @@
 
                 <div class="sort-filters">
                     <div class="sort-select">
-                        <!-- <Select
-                            clearable
-                            variant="outlined"
-                            name="select_district"
-                            id="select-district"
-                            v-model="selectedSortDistrict"
-                            class="filter-district"
-                            address="/districts/"
-                            placeholder="Окружные штабы"
-                        ></Select> -->
                         <v-select
                             class="form__select filter-district"
                             :items="districts"
@@ -102,16 +92,6 @@
                         </v-select>
                     </div>
                     <div class="sort-select">
-                        <!-- <Select
-                            clearable
-                            variant="outlined"
-                            name="select_region"
-                            id="select-region"
-                            v-model="selectedSortRegion"
-                            class="filter-region"
-                            address="/regionals/"
-                            placeholder="Региональные штабы"
-                        ></Select> -->
                         <v-select
                             class="form__select filter-district"
                             :items="regionals"
@@ -122,33 +102,6 @@
                             v-model="SelectedSortRegional"
                             item-title="name"
                             placeholder="Региональные штабы"
-                        >
-                            <template #selection="{ item }">
-                                <pre>{{ item.title }}</pre>
-                            </template>
-                        </v-select>
-                    </div>
-                    <div class="sort-select">
-                        <!-- <Select
-                            clearable
-                            variant="outlined"
-                            name="select_local"
-                            id="select-local"
-                            v-model="selectedSortLocal"
-                            class="filter-local"
-                            address="/locals/"
-                            placeholder="Местные штабы"
-                        ></Select> -->
-                        <v-select
-                            class="form__select filter-district"
-                            :items="locals"
-                            clearable
-                            variant="outlined"
-                            name="select_local"
-                            id="select-local"
-                            v-model="SelectedSortLocal"
-                            item-title="name"
-                            placeholder="Местные штабы"
                         >
                             <template #selection="{ item }">
                                 <pre>{{ item.title }}</pre>
@@ -209,13 +162,12 @@
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import {
     HeadquartersList,
     horizontalHeadquarters,
 } from '@features/Headquarters/components';
-import { sortByEducation, Select } from '@shared/components/selects';
+import { sortByEducation } from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -231,7 +183,7 @@ const crosspageFilters = useCrosspageFilter();
 const headquarters = storeToRefs(educationalsStore);
 
 const headquartersVisible = ref(20);
-const isLoading =  storeToRefs(educationalsStore);
+const isLoading = storeToRefs(educationalsStore);
 
 const step = ref(20);
 
@@ -251,56 +203,10 @@ const SelectedSortDistrict = ref(
 const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
-const SelectedSortLocal = ref(
-    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName,
-);
 
 const locals = ref([]);
 const districts = ref([]);
 const regionals = ref([]);
-
-
-const searchEducational = async (name) => {
-    try {
-        const filteredEducationals = await HTTP.get(
-            `/educationals/?search=${name}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        headquarters.educationals.value = filteredEducationals.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const filtersDistricts = computed(() =>
-    SelectedSortDistrict.value
-        ? districts.value.find(
-              (district) => district.name === SelectedSortDistrict.value,
-          )?.AllHeadquarters ?? []
-        : headquarters.educationals.value,
-);
-const filtersRegionals = computed(() =>
-    SelectedSortRegional.value
-        ? regionals.value.find(
-              (regional) => regional.name === SelectedSortRegional.value,
-          )?.AllHeadquarters ?? []
-        : headquarters.educationals.value,
-);
-const filtersLocals = computed(() =>
-    SelectedSortLocal.value
-        ? locals.value.find((local) => local.name === SelectedSortLocal.value)
-              ?.AllHeadquarters ?? []
-        : headquarters.educationals.value,
-);
-
-const searchEducationals = computed(() => {
-    return searchEducational(name.value);
-});
 
 const getDistrictsHeadquartersForFilters = async () => {
     try {
@@ -328,15 +234,10 @@ const getLocalsHeadquartersForFilters = async () => {
 };
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-    educationalsStore.getEducationals();
+
     getRegionalsHeadquartersForFilters();
     getLocalsHeadquartersForFilters();
 });
-
-const selectedSort = ref(0);
-const selectedSortLocal = ref(null);
-const selectedSortRegion = ref(null);
-const selectedSortDistrict = ref(null);
 
 const sortOptionss = ref([
     {
@@ -349,35 +250,33 @@ const sortOptionss = ref([
 
 const sortedHeadquarters = computed(() => {
     let tempHeadquartes = [];
-    const activeFilters = [
-        selectedSortDistrict.value && filtersDistricts.value,
-        SelectedSortRegional.value && filtersRegionals.value,
-        selectedSortLocal.value && filtersLocals.value,
-    ].filter(Boolean);
 
-    if (activeFilters.length > 0) {
-        tempHeadquartes = Array.from(new Set(activeFilters.flat()));
-    } else if (SelectedSortRegional.value) {
-        tempHeadquartes = [...filtersRegionals.value];
-    } else if (selectedSortDistrict.value) {
-        tempHeadquartes = [...filtersDistricts.value];
-    } else if (selectedSortLocal.value) {
-        tempHeadquartes = [...filtersLocals.value];
-    } else {
-        tempHeadquartes = [...headquarters.educationals.value];
+    tempHeadquartes = [...headquarters.educationals.value];
+
+    if (SelectedSortRegional.value || SelectedSortDistrict.value) {
+        let idRegionals = [];
+        if (SelectedSortDistrict.value) {
+            let districtId = districts.value.find(
+                (district) => district.name === SelectedSortDistrict.value,
+            )?.id;
+            idRegionals = regionals.value
+                .filter(
+                    (regional) => regional.district_headquarter === districtId,
+                )
+                .map((reg) => reg.id);
+        }
+        if (SelectedSortRegional.value) {
+            idRegionals = [
+                regionals.value.find(
+                    (regional) => regional.name === SelectedSortRegional.value,
+                )?.id,
+            ];
+        }
+
+        tempHeadquartes = tempHeadquartes.filter((item) => {
+            return idRegionals.indexOf(item.regional_headquarter) >= 0;
+        });
     }
-
-    searchEducationals.value;
-
-    tempHeadquartes = tempHeadquartes.filter((item) => {
-        // console.log(educational_institution.id);
-        return (
-            (selectedSortRegion.value == null &&
-                selectedSortLocal.value == null) ||
-            (item.regional_headquarter == selectedSortRegion.value &&
-                item.local_headquarter == selectedSortLocal.value)
-        );
-    });
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -410,7 +309,7 @@ const sortedHeadquarters = computed(() => {
     if (!ascending.value) {
         tempHeadquartes.reverse();
     }
-    
+
     tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     return tempHeadquartes;
 });
@@ -433,9 +332,7 @@ onActivated(() => {
     SelectedSortRegional.value = JSON.parse(
         localStorage.getItem('AllHeadquarters_filters'),
     )?.regionalName;
-    SelectedSortLocal.value = JSON.parse(
-        localStorage.getItem('AllHeadquarters_filters'),
-    )?.localName;
+    localStorage.removeItem('AllHeadquarters_filters');
 });
 </script>
 <style lang="scss">

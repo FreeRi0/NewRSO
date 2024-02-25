@@ -29,6 +29,8 @@
             v-else
             :centralHeadquarter="centralHeadquarter"
             :member="member"
+            :getEnding="getEnding"
+            :getEndingMembers="getEndingMembers"
         ></BannerHQ>
         <section class="about-hq">
             <h3>Описание центрального штаба</h3>
@@ -46,10 +48,12 @@
         </section>
         <ManagementHQ
             :commander="commander"
-            :member="filteredMembers"
+            :member="member"
             head="Руководство центрального штаба"
             :position="position"
-        ></ManagementHQ>
+            :leadership="centralHeadquarter.leadership"
+        >
+        </ManagementHQ>
         <HQandSquad></HQandSquad>
     </div>
 </template>
@@ -57,7 +61,7 @@
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
 import HQandSquad from '../RegionalHQPage/components/HQandSquad.vue';
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { usePage } from '@shared';
@@ -108,16 +112,7 @@ const aboutMembers = async () => {
         console.log('an error occured ' + error);
     }
 };
-const filteredMembers = computed(() => {
-    return member.value.filter((manager) => {
-        return (
-            manager.position &&
-            (manager.position === 'Командир' ||
-                manager.position === 'Мастер (методист)' ||
-                manager.position === 'Комиссар')
-        );
-    });
-});
+
 const fetchCommander = async () => {
     try {
         let id = centralHeadquarter.value.commander.id;
@@ -135,6 +130,7 @@ const fetchCommander = async () => {
         console.log('An error occurred:', error);
     }
 };
+
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         aboutCentralHQs();
@@ -158,6 +154,30 @@ watch(
 onMounted(() => {
     aboutCentralHQs();
     aboutMembers();
+});
+
+const getEnding = computed(() => {
+    const count = centralHeadquarter.value.participants_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'участник';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'участника';
+    } else {
+        return 'участников';
+    }
+});
+
+const getEndingMembers = computed(() => {
+    const count = centralHeadquarter.value.members_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'действующий член';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'действующих члена';
+    } else {
+        return 'действующих членов';
+    }
 });
 </script>
 <style lang="scss" scoped>
@@ -240,9 +260,21 @@ onMounted(() => {
 }
 
 .about-hq {
-    font-size: 27px;
-    font-family: 'Akrobat';
     margin-bottom: 60px;
+}
+.about-hq h3 {
+    font-size: 32px;
+    font-family: 'Akrobat';
+    margin-bottom: 40px;
+    color: #35383f;
+}
+.about-hq p {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
 }
 @media (max-width: 1110px) {
     .Squad-HQ__list {

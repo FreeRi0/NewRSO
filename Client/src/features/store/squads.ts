@@ -28,6 +28,7 @@ export const useSquadsStore = defineStore('squads', {
             }
         },
         async getAreas() {
+            if (this.areas.length) return;
             try {
                 this.isLoading = true;
                 const responseAreas = await HTTP.get('/areas/', {
@@ -61,12 +62,13 @@ export const useSquadsStore = defineStore('squads', {
                         if (member.detachment) acc.push(member.detachment);
                         acc.push(member.junior_detachment);
 
-                        console.log('acc', acc);
+                        // console.log('acc', acc);
 
                         return acc;
                     },
                     [],
                 );
+                // console.log('soirt', this.competitionSquads)
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -101,25 +103,25 @@ export const useSquadsStore = defineStore('squads', {
             );
             this.squads = responseFilteredSquads.data;
         },
-        async getSquadMembers(id: String) {
-            try {
-                this.isLoading = true;
-                const responseMembers = await HTTP.get(
-                    `/detachments/${id}/members/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
-                this.members = responseMembers.data;
-                this.isLoading = false;
-            } catch (error) {
-                this.isLoading = false;
-                console.log('an error occured ' + error);
-            }
-        },
+        // async getSquadMembers(id: String) {
+        //     try {
+        //         this.isLoading = true;
+        //         const responseMembers = await HTTP.get(
+        //             `/detachments/${id}/members/`,
+        //             {
+        //                 headers: {
+        //                     'Content-Type': 'application/json',
+        //                     Authorization:
+        //                         'Token ' + localStorage.getItem('Token'),
+        //                 },
+        //             },
+        //         );
+        //         this.members = responseMembers.data;
+        //         this.isLoading = false;
+        //     } catch (error) {
+        //         this.isLoading = false;
+        //         console.log('an error occured ' + error);
+        //     }
+        // },
     },
 });

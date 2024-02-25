@@ -5,6 +5,7 @@
             <BannerSquad
                 :squad="squad.squad.value"
                 :member="member.members.value"
+                :getEnding="getEnding"
             ></BannerSquad>
             <section class="about-squad">
                 <h3>Об отряде</h3>
@@ -12,7 +13,7 @@
                     {{ squad.squad.value.about }}
                 </p>
             </section>
-            <div class="mt-8 d-flex">
+            <div class="mt-8 photoWrapper">
                 <squadPhotos
                     class="photo-item"
                     :squad-photos="squad.squad.value.photo1"
@@ -35,7 +36,8 @@
                 v-if="squad.squad.value.nomination"
                 :squad="squad.squad.value"
             ></CompetitionPromo>
-            <ManagementSquad class="mt-12"
+            <ManagementSquad
+                class="mt-12"
                 :commander="commander"
                 :member="filteredMembers"
                 head="Командир отряда"
@@ -98,13 +100,9 @@ const fetchCommander = async () => {
 
 const filteredMembers = computed(() => {
     return member.members.value.filter((manager) => {
-        return (
-            manager.position &&
-            (manager.position === 'Командир')
-        );
+        return manager.position && manager.position === 'Командир';
     });
 });
-
 
 watch(
     () => route.params.id,
@@ -128,24 +126,20 @@ onMounted(() => {
     replaceTargetObjects([squad.squad.value]);
     fetchCommander();
 });
+
+const getEnding = computed(() => {
+    const count = squadsStore.squad.participants_count;
+
+    if (count === 1 && count % 100 !== 11) {
+        return 'участник';
+    } else if ([2, 3, 4].includes(count)) {
+        return 'участника';
+    } else {
+        return 'участников';
+    }
+});
 </script>
 <style scoped lang="scss">
-.title {
-    //-----------------------------------общий класс для всех заголовков h1
-    // font-family: ;
-    font-size: 52px;
-    line-height: 62px;
-    font-weight: 700;
-    color: #35383f;
-
-    &--lso {
-        margin-bottom: 50px;
-    }
-}
-// .user-data__wrapper {
-//     margin: 20px 0 12px 298px;
-// }
-/* Данные отряда */
 .Squad-HQ__name {
     font-family: 'Akrobat';
     font-size: 32px;
@@ -189,7 +183,7 @@ onMounted(() => {
     background: #39bfbf;
     align-self: end;
     text-align: center;
-    font-family: 'BertSans';
+    font-family: 'Bert Sans';
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
@@ -232,15 +226,33 @@ section.about-squad {
     margin-bottom: 40px;
     /*  */
     color: #1e1e1e;
-    font-family: 'BertSans';
-    font-size: 18px;
+    font-family: 'Akrobat';
+    font-size: 24px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     line-height: normal;
 }
 .photo-item {
     width: 260px;
     margin-right: 20px;
+    @media screen and (max-width: 575px) {
+        height: 373px;
+        width: 280px;
+        margin-right: 0;
+    }
+}
+.photoWrapper {
+    display: flex;
+    @media screen and (max-width: 768px) {
+        display: grid;
+        grid-template-columns: 0.28fr 0.28fr;
+        grid-column-gap: 20px;
+        grid-row-gap: 20px;
+        justify-content: center;
+    }
+    @media screen and (max-width: 575px) {
+        grid-template-columns: 0.28fr;
+    }
 }
 
 @media (max-width: 1110px) {

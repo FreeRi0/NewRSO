@@ -383,6 +383,11 @@ input {
 .dateInput.mx-datepicker svg {
     margin-right: 6px;
 }
+.password-input input.v-field__input::placeholder,
+.option-select .v-field__input input::placeholder {
+    color: #a3a3a3;
+    opacity: revert;
+}
 </style>
 
 <script setup>
