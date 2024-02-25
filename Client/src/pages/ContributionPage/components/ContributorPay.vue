@@ -116,6 +116,7 @@
                                         clearable
                                         v-model="sortBy"
                                         :options="sortOptionss"
+                                        :sorts-boolean="false"
                                     ></sortByEducation>
                                 </div>
 
@@ -253,19 +254,6 @@ const viewContributorsData = async (search, join) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        // let response = ;
-        // if (join) {
-        //     const viewHeadquartersResponsetTwo = await HTTP.get(
-        //         '/educationals/' + search,
-        //         {
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 Authorization: 'Token ' + localStorage.getItem('Token'),
-        //             },
-        //         },
-        //     );
-        //     response = response.concat(viewHeadquartersResponsetTwo.data);
-        // }
         participants.value = viewParticipantsResponse.data;
         isLoading.value = false;
         selectedPeoples.value = [];
@@ -325,8 +313,7 @@ const updateLocal = (localVal) => {
     local.value = localVal;
     educHead.value = educationalsStore.educationals.filter(
         (edh) =>
-            (locId && edh.local_headquarter == locId) ||
-            edh.regional_headquarter == regId,
+            (locId && edh.local_headquarter == locId)
     );
 };
 
@@ -352,8 +339,7 @@ const updateEduc = (educVal) => {
     educ.value = educVal;
     detachments.value = squadsStore.squads.filter(
         (squad) =>
-            (educId && squad.educational_headquarter == educId) ||
-            squad.regional_headquarter == regId,
+            educId && squad.educational_headquarter == educId
     );
 };
 

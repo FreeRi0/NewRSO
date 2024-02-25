@@ -176,7 +176,7 @@ const props = defineProps({
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
-
+const squadsStore = useSquadsStore();
 const districtRef = ref(props.district);
 const localRef = ref(props.local);
 const regRef = ref(props.reg);
@@ -249,7 +249,9 @@ watch(
     },
 );
 
-
+onMounted(() => {
+    squadsStore.getSquads();
+})
 </script>
 <style lang="scss">
 .v-expansion-panel {
