@@ -1093,7 +1093,7 @@ const maininfo = ref({
     direction: '',
     name: '',
     scale: '',
-    //banner: null,
+    banner: '',
     conference_link: '',
     address: '',
     description: '',
@@ -1113,10 +1113,6 @@ const urlBanner = ref(null);
 const selectBanner = (event) => {
     maininfo.value.banner = event.target.files[0];
     console.log('Файл есть', maininfo.value.banner);
-    urlBanner.value = URL.createObjectURL(maininfo.value.banner)
-        .toString()
-        .slice(5);
-    console.log('Ссылка', urlBanner.value);
 };
 
 const resetBanner = () => {
@@ -1204,7 +1200,6 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
-    //fd.set('banner', urlBanner.value);
 
     createAction(fd)
         .then((resp) => {

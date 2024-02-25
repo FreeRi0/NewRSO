@@ -500,6 +500,7 @@ import { sortByEducation } from '@shared/components/selects';
 import { ref, computed, onMounted, inject } from 'vue';
 import { Checkbox, CheckboxGroup } from '@shared/components/checkboxes';
 import { HTTP } from '@app/http';
+import { watch } from 'fs';
 
 const participantsVisible = ref(12);
 const swal = inject('$swal');
@@ -584,7 +585,6 @@ const SendReference = async () => {
             });
         });
 };
-
 const selectedAnswer = ref('Пользователи');
 const selectedCat = ref('Все');
 const selectedSex = ref('Все');

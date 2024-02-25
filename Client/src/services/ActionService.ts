@@ -38,7 +38,7 @@ export function putTimeData(id: number, data: object) {
 export function createAction(data: object) {
     return HTTP.post('/events/', data, {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });

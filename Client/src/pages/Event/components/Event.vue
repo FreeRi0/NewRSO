@@ -6,7 +6,7 @@
         <div class="banner_wrap">
             <div>
                 <img
-                    src="@/app/assets/banner_event.jpg"
+                    :src="event.banner"
                     alt="Баннер личной страницы(пусто)"
                 />
             </div>
