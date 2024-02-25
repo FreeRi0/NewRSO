@@ -39,18 +39,23 @@
                                         <v-row>
                                             <v-file-input
                                                 @change="selectBanner"
+                                                type="file"
                                                 show-size
                                                 prepend-icon="mdi-camera"
                                                 counter
-                                            ></v-file-input>
+                                            />
+                                        </v-row>
+                                        <v-row class="align-center justify-end">
+                                            <v-btn
+                                                v-if="preview"
+                                                class="button-wrapper mt-5"
+                                                @click="cropImage()"
+                                                prepend-icon="crop"
+                                                variant="plain"
+                                            >Обрезать фото</v-btn>
                                         </v-row>
                                         <v-row>
-                                            <v-card class="mt-5 mx-auto">
-                                                <img
-                                                    v-if="preview"
-                                                    :src="preview"
-                                                />
-                                            </v-card>
+                                            <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview" />
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
@@ -169,14 +174,16 @@
 <script setup>
 import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+// import { useRoute } from 'vue-router';
 // const route = useRoute();
 // const id = route.params.id;
 const dialog = ref(false);
-const imgDataUrl = ref(null);
+// const imgDataUrl = ref(null);
 const preview = ref(null);
 const isError = ref([]);
 const swal = inject('$swal');
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
 
 const emit = defineEmits(['uploadWall, updateWall', 'deleteWall']);
 
@@ -191,6 +198,17 @@ const props = defineProps({
 const media = ref({
     banner: null,
 });
+const cropper = ref();
+
+const cropImage = () => {
+    if (cropper.value) {
+        const { canvas } = cropper.value.getResult();
+        preview.value = canvas.toDataURL('image/jpeg')
+        canvas.toBlob((blob) => {
+            media.value = new File([blob], "photo1.jpg", { type: "image/jpeg" })
+        }, 'image/jpeg');
+    }
+};
 
 const selectBanner = (event) => {
     media.value = event.target.files[0];

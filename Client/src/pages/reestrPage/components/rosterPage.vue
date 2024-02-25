@@ -46,7 +46,6 @@
                                 Показать статистику
                             </button>
 
-
                             <button
                                 class="showInfoBtn mr-4"
                                 v-else-if="showInfo"
@@ -63,6 +62,7 @@
                                     clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
+                                    :sorts-boolean="false"
                                 ></sortByEducation>
                             </div>
 
@@ -310,8 +310,7 @@ const updateLocal = (localVal) => {
     local.value = localVal;
     educHead.value = educationalsStore.educationals.filter(
         (edh) =>
-            (locId && edh.local_headquarter == locId) ||
-            edh.regional_headquarter == regId,
+            (locId && edh.local_headquarter == locId)
     );
 };
 
@@ -342,9 +341,7 @@ const updateEduc = (educVal) => {
     )?.id;
     educ.value = educVal;
     detachments.value = squadsStore.squads.filter(
-        (squad) =>
-            (educId && squad.educational_headquarter == educId) ||
-            squad.regional_headquarter == regId,
+        (squad) => educId && squad.educational_headquarter == educId,
     );
 };
 
@@ -403,8 +400,8 @@ const sortedHeadquarters = computed(() => {
 
     tempHeadquarters = tempHeadquarters.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa = a.name.toLowerCase() || a.last_name.toLowerCase(),
+                fb = b.name.toLowerCase() || b.last_name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -529,6 +526,9 @@ watch(
         let regId = regionalsStore.regionals.find(
             (regional) => regional.name == reg.value,
         )?.id;
+        // let educId = regionalsStore.educationals.find(
+        //     (ed) => ed.name == educ.value,
+        // )?.id;
         detachments.value = squadsStore.squads.filter(
             (squad) => squad.regional_headquarter == regId,
         );

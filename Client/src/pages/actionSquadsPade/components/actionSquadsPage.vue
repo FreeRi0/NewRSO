@@ -299,41 +299,46 @@
 
 <script setup>
 //Импорт файлов
-import SearchInput from '@features/ActionForm/components/SearchInput.vue';
 import Button from 'primevue/button';
 import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
-import {
-    sortByEducation,
-    Select,
-    regionsDropdown,
-} from '@shared/components/selects';
+import { sortByEducation } from '@shared/components/selects';
 
-import {
-    getListActions,
-    getListActionsBySearch,
-} from '@services/ActionService';
-import { computed } from 'vue';
+import { getListActionsBySearch } from '@services/ActionService';
 import { onActivated } from 'vue';
+import { useRoleStore } from '@layouts/store/role';
 
 let actionsList = ref([]);
+const rolesStore = useRoleStore();
 
 onActivated(() => {
     getListActionsBySearch(text.value).then((resp) => {
         actionsList.value = resp.data;
     });
+    watch(
+        () => rolesStore.roles,
+        (newRole) => {
+            Object.entries(newRole).forEach(([obj, value]) => {
+                //console.log(`${obj} + ${value}`);
+                if (value !== null) {
+                    console.log(`${obj} + ${value}`);
+                }
+            });
+        },
+    );
 });
 
 //Массив полученных значений
-const SortedList = ref([]);
 const text = ref('');
 
 //Поиск нового значения
 function SearchByInput() {
     if (text.value.length <= 4) {
-        return;
+        getListActionsBySearch('').then((resp) => {
+            actionsList.value = resp.data;
+        });
     } else {
         getListActionsBySearch(text.value).then((resp) => {
             actionsList.value = resp.data;

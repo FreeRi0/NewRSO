@@ -58,6 +58,7 @@
                                     clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
+                                    :sorts-boolean="false"
                                 ></sortByEducation>
                             </div>
 
@@ -304,8 +305,7 @@ const updateLocal = (localVal) => {
     local.value = localVal;
     educHead.value = educationalsStore.educationals.filter(
         (edh) =>
-            (locId && edh.local_headquarter == locId) ||
-            edh.regional_headquarter == regId,
+            (locId && edh.local_headquarter == locId)
     );
 };
 
@@ -330,9 +330,7 @@ const updateEduc = (educVal) => {
     )?.id;
     educ.value = educVal;
     detachments.value = squadsStore.squads.filter(
-        (squad) =>
-            (educId && squad.educational_headquarter == educId) ||
-            squad.regional_headquarter == regId,
+        (squad) => educId && squad.educational_headquarter == educId,
     );
 };
 

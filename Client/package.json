@@ -28,6 +28,7 @@
         "vite-plugin-require": "^1.1.11",
         "vue": "^3.3.4",
         "vue-3-mask": "^0.0.1-alpha",
+        "vue-advanced-cropper": "^2.8.8",
         "vue-datepicker-next": "^1.0.3",
         "vue-image-crop-upload": "^3.0.3",
         "vue-imask": "^7.1.3",
