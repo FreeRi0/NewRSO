@@ -238,6 +238,18 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
+                                path: '/createlhq',
+                                name: 'createlhq',
+                                component: () =>
+                                    import(
+                                        '@pages/CreationOfLHQ/components/CreationOfLHQ.vue'
+                                        ),
+                                meta: {
+                                    requiresAuth: true,
+                                    label: 'Создание местного штаба',
+                                },
+                            },
+                            {
                                 path: ':id',
                                 meta: {
                                     label: 'localHeadquarter.name',

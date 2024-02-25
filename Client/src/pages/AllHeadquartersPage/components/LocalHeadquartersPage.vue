@@ -3,8 +3,10 @@
         <div class="headquarters">
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
-                :button="false"
                 label="Создать штаб"
+                name="createlhq"
+                :button="false"
+                :educ-com="true"
             ></bannerCreate>
             <!-- :loc-com="true" -->
             <h2 class="headquarters-title">Местные штабы</h2>
