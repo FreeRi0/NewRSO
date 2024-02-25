@@ -179,7 +179,6 @@ import { storeToRefs } from 'pinia';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, computed, inject, watch } from 'vue';
 import { HTTP } from '@app/http';
-import { watch } from 'fs';
 
 const roleStore = useRoleStore();
 
@@ -361,28 +360,6 @@ const SendReference = async () => {
             });
         });
 };
-<<<<<<< HEAD
-const selectedAnswer = ref('Пользователи');
-const selectedCat = ref('Все');
-const selectedSex = ref('Все');
-const selectedStatus = ref('Все');
-const selectedPay = ref('Все');
-const searchHeadquarter = ref('');
-const searchHeadquarterLocal = ref('');
-const searchHeadquarterRegion = ref('');
-const searchLSO = ref('');
-const searchEducation = ref('');
-const minAge = ref('');
-const maxAge = ref('');
-
-const checkboxAll = ref(false);
-
-const step = ref(12);
-
-const ascending = ref(true);
-const sortBy = ref('alphabetically');
-=======
->>>>>>> 3f803ef1749b1757c49b4eaa29bead670247da7f
 
 const select = (event) => {
     selectedPeoples.value = [];

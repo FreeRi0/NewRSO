@@ -1123,11 +1123,7 @@ const maininfo = ref({
     direction: '',
     name: '',
     scale: '',
-<<<<<<< HEAD
-    banner: '',
-=======
     banner: null,
->>>>>>> 3f803ef1749b1757c49b4eaa29bead670247da7f
     conference_link: '',
     address: '',
     description: '',
@@ -1146,10 +1142,6 @@ const urlBanner = ref(null);
 
 const selectBanner = (event) => {
     maininfo.value.banner = event.target.files[0];
-<<<<<<< HEAD
-    console.log('Файл есть', maininfo.value.banner);
-=======
->>>>>>> 3f803ef1749b1757c49b4eaa29bead670247da7f
 };
 
 const resetBanner = () => {
@@ -1239,10 +1231,6 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
-<<<<<<< HEAD
-
-=======
->>>>>>> 3f803ef1749b1757c49b4eaa29bead670247da7f
     createAction(fd)
         .then((resp) => {
             console.log('Форма передалась успешно', resp.data);

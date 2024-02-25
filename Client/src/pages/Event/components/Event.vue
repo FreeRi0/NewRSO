@@ -5,14 +5,7 @@
         </h1>
         <div class="banner_wrap">
             <div>
-<<<<<<< HEAD
-                <img
-                    :src="event.banner"
-                    alt="Баннер личной страницы(пусто)"
-                />
-=======
                 <img :src="event.banner" alt="Баннер личной страницы(пусто)" />
->>>>>>> 3f803ef1749b1757c49b4eaa29bead670247da7f
             </div>
             <div class="banner_wrap_btn">
                 <Button
