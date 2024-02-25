@@ -5,6 +5,7 @@
             label="Создать мероприятие"
             name="createAction"
             :button="true"
+            v-if="rolesCount !== 0"
         ></bannerCreate>
 
         <h2 class="action-title">Мероприятия</h2>
@@ -286,6 +287,7 @@
                         v-if="!vertical"
                         v-for="action in actionsList"
                         class="postcard-containerline"
+                        :key="ac"
                     >
                         <ActionitemVertical
                             :action="action"
@@ -309,10 +311,25 @@ import { sortByEducation } from '@shared/components/selects';
 import { getListActionsBySearch } from '@services/ActionService';
 import { onActivated } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
+import { onMounted } from 'vue';
 
 let actionsList = ref([]);
+let rolesCount = 0;
 const rolesStore = useRoleStore();
 
+onMounted(() => {
+    watch(
+        () => rolesStore.roles,
+        (newRole) => {
+            Object.entries(newRole).forEach(([obj, value]) => {
+                //console.log(`${obj} + ${value}`);
+                if (value !== null) {
+                    rolesCount = rolesCount + 1;
+                }
+            });
+        },
+    );
+});
 onActivated(() => {
     getListActionsBySearch(text.value).then((resp) => {
         actionsList.value = resp.data;
@@ -323,7 +340,7 @@ onActivated(() => {
             Object.entries(newRole).forEach(([obj, value]) => {
                 //console.log(`${obj} + ${value}`);
                 if (value !== null) {
-                    console.log(`${obj} + ${value}`);
+                    rolesCount = rolesCount + 1;
                 }
             });
         },

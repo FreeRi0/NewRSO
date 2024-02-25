@@ -1096,7 +1096,7 @@ import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
-import { onActivated } from 'vue';
+import { onActivated, onMounted } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 const router = useRouter();
 const rolesStore = useRoleStore();
@@ -1117,6 +1117,7 @@ onActivated(() => {
         },
     );
 });
+onMounted(() => {});
 
 const maininfo = ref({
     format: '',
@@ -1130,7 +1131,7 @@ const maininfo = ref({
     participants_number: 0,
     application_type: '',
     available_structural_units: '',
-    org_central_headquarter: 0,
+    org_central_headquarter: 1,
     org_district_headquarter: 0,
     org_regional_headquarter: 0,
     org_local_headquarter: 0,
