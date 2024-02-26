@@ -43,7 +43,11 @@
                             </div>
                         </li>
                         <li class="header__nav-item disable">
-                            <a class="header__nav-link" href="/actionSquads">
+                            <a
+                                class="header__nav-link"
+                                href="/actionSquads"
+                                @click.prevent
+                            >
                                 Мероприятия
                             </a>
                         </li>
@@ -586,11 +590,11 @@ watch(
         }
     }
 
-    // &__nav-item.disable {
-    //     & > a {
-    //         cursor: not-allowed;
-    //     }
-    // }
+    &__nav-item.disable {
+        & > a {
+            cursor: not-allowed;
+        }
+    }
 
     &__nav-link {
         display: block;
