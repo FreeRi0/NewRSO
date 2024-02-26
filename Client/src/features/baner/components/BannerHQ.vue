@@ -866,7 +866,7 @@ const copyL = () => {
     }
     .user-metric__avatar-wrapper {
         grid-template-columns: 125px 125px;
-        margin-left: 50px;
+        margin-left: 64px;
     }
     .hq-metric__bottom {
         grid-row-start: 4;

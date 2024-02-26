@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import routes from './routes';
+// import { useUserStore } from '@features/store/index';
+
+// const userStore = useUserStore();
 
 const router = createRouter({
     history: createWebHistory(),
@@ -19,6 +22,8 @@ router.beforeEach((to, _from, next) => {
         next({ name: 'Login' });
     else if (to.name === 'Login' && localStorage.getItem('Token'))
         next({ name: 'mypage' });
+    // else if (to.name === 'active' && localStorage.getItem('Token') && userStore.currentUser !== userStore.user )
+    //     next({name: 'personaldata'})
     else next();
 });
 

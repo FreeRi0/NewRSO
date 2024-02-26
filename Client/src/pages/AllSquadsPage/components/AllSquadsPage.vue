@@ -143,6 +143,7 @@
                                     clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
+                                    :sorts-boolean="false"
                                 ></sortByEducation>
                             </div>
 
@@ -261,6 +262,7 @@ const SelectedSortRegional = ref(
 
 const squadsVisible = ref(20);
 const step = ref(20);
+
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');

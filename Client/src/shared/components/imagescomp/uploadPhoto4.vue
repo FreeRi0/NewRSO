@@ -109,21 +109,24 @@
                                         <v-container>
                                             <v-row>
                                                 <v-file-input
-
                                                     @change="selectFile"
+                                                    type="file"
                                                     show-size
                                                     prepend-icon="mdi-camera"
                                                     counter
-                                                ></v-file-input>
-
+                                                />
+                                            </v-row>
+                                            <v-row class="align-center justify-end">
+                                                <v-btn
+                                                    v-if="preview"
+                                                    class="button-wrapper mt-5"
+                                                    @click="cropImage()"
+                                                    prepend-icon="crop"
+                                                    variant="plain"
+                                                >Обрезать фото</v-btn>
                                             </v-row>
                                             <v-row>
-                                                <v-card class="mt-5 mx-auto">
-                                                    <img
-                                                        v-if="preview"
-                                                        :src="preview"
-                                                    />
-                                                </v-card>
+                                                <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview" />
                                             </v-row>
                                         </v-container>
                                     </v-card-text>
@@ -255,6 +258,7 @@ const updatePhoto = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
+            emit('uploadUserPic', response.data.photo4);
             dialog.value = false;
             console.log(response, 'updated');
         })

@@ -115,6 +115,7 @@ onMounted(() => {
 .squad__navigation {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     margin-top: 60px;
 }
 

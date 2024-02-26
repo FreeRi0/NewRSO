@@ -44,9 +44,7 @@
 
             <div
                 v-else-if="
-                    picked === false &&
-                    roles.roles.value.regionalheadquarter_commander
-                "
+                    picked === false"
             >
                 <div class="contributor-search">
                     <input
@@ -173,9 +171,6 @@
                     ></Button>
                 </div>
             </div>
-            <div v-else class="mt-12">
-                Доступно только для командиров рег штабов
-            </div>
         </div>
     </div>
 </template>
@@ -241,11 +236,12 @@ const checkboxAll = ref(false);
 const levelAccess = ref(7);
 const step = ref(12);
 const name = ref('');
+let search = '';
 const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const viewContributorsData = async (search, join) => {
+const viewContributorsData = async (search) => {
     try {
         isLoading.value = true;
         const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
@@ -577,7 +573,7 @@ watch(
                 search =
                     '?regional_headquarter__name=' +
                     roles.roles.value.regionalheadquarter_commander.name;
-                    // join = true;
+                // join = true;
                 levelAccess.value = 2;
             } else if (roles.roles.value.localheadquarter_commander) {
                 local.value = roles.roles.value.localheadquarter_commander.name;
@@ -659,6 +655,10 @@ watch(
         );
     },
 );
+
+onMounted(() => {
+    viewContributorsData(search);
+})
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
@@ -788,7 +788,7 @@ p {
 
 .contributor-sort__all {
     padding: 11px 12px;
-    border: 1px solid #b6b6b6;
+    border: px solid #b6b6b6;
     border-radius: 10px;
     height: 48px;
     width: 48px;
@@ -864,5 +864,18 @@ p {
 
 .participants__actions {
     width: 230px;
+}
+.option-select .v-field__input input::placeholder,
+.form__select .v-field__input input::placeholder {
+    color: #35383f;
+    opacity: revert;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
+}
+.v-input {
+    border: 1px solid #35383f;
 }
 </style>

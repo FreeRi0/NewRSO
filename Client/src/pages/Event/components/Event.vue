@@ -101,17 +101,6 @@
         </div>
         <!-- Контактные лица -->
         <h2 class="title title--subtitle">Контактные лица</h2>
-        <div class="card_wrap">
-            <v-card v-for="card in cards" :key="card" class="event_card_wrap">
-                <v-img width="120" :src="card.avatar"></v-img>
-                <div class="text text--organizer">
-                    {{ card.name }}
-                </div>
-                <div class="text text--status">
-                    {{ card.status }}
-                </div>
-            </v-card>
-        </div>
         <!-- Участники -->
         <h3 class="title title--subtitle">Участники</h3>
         <div class="event_btn_participant">
@@ -184,7 +173,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onActivated, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { useRoute, useRouter } from 'vue-router';
 import {
@@ -193,9 +182,9 @@ import {
     getListActions,
     getParticipants,
 } from '@services/ActionService';
-import { onActivated } from 'vue';
 import { getRsouserById } from '@services/UserService';
-
+import { useRoleStore } from '@layouts/store/role';
+const rolesStore = useRoleStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -229,6 +218,12 @@ const event = ref({
 const otherevents = ref({});
 
 onActivated(() => {
+    watch(
+        () => rolesStore.roles,
+        (newRole) => {
+            console.log('Роли пользователя загружены', newRole);
+        },
+    );
     getAction(route.params.id).then((resp) => {
         event.value = resp.data;
         getOrganizator(route.params.id).then((resp) => {

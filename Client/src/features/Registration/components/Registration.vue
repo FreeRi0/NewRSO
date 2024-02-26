@@ -166,12 +166,6 @@
     padding-inline-start: 0px;
 }
 
-.v-input--density-compact .v-field--variant-outlined,
-.v-input--density-compact .v-field--single-line,
-.v-input--density-compact .v-field--no-label {
-    --v-field-padding-bottom: 10px;
-}
-
 .v-field--variant-outlined,
 .v-field--single-line,
 .v-field--no-label {

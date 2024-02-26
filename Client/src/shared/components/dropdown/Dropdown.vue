@@ -228,4 +228,9 @@ const LogOut = () => {
 .dropdown__item_not::before {
     background-color: inherit;
 }
+
+.dropdown__list,
+.header__nav-list {
+    font-weight: 500 !important;
+}
 </style>

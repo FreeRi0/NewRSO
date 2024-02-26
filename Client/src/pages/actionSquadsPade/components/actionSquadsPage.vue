@@ -5,6 +5,7 @@
             label="Создать мероприятие"
             name="createAction"
             :button="true"
+            v-if="rolesCount !== 0"
         ></bannerCreate>
 
         <h2 class="action-title">Мероприятия</h2>
@@ -286,6 +287,7 @@
                         v-if="!vertical"
                         v-for="action in actionsList"
                         class="postcard-containerline"
+                        :key="ac"
                     >
                         <ActionitemVertical
                             :action="action"
@@ -311,6 +313,7 @@ import { onActivated } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 
 let actionsList = ref([]);
+let rolesCount = 0;
 const rolesStore = useRoleStore();
 
 onActivated(() => {
@@ -323,7 +326,7 @@ onActivated(() => {
             Object.entries(newRole).forEach(([obj, value]) => {
                 //console.log(`${obj} + ${value}`);
                 if (value !== null) {
-                    console.log(`${obj} + ${value}`);
+                    rolesCount = rolesCount + 1;
                 }
             });
         },

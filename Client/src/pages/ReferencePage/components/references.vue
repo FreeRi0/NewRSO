@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="referencesMenu" v-if="regComId">
+        <div class="referencesMenu">
             <h2 class="referencesMenu-title">Оформление справок</h2>
             <div class="referencesMenu-wrapper">
                 <div class="referencesMenu-item">
@@ -27,7 +27,6 @@
                 </div>
             </div>
         </div>
-        <div v-else>Доступно только командирам региональных штабов</div>
     </div>
 </template>
 <script setup>
@@ -36,7 +35,6 @@ import { storeToRefs } from 'pinia';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
-let regComId = roles.roles.value.regionalheadquarter_commander;
 </script>
 <style lang="scss">
 .referencesMenu {

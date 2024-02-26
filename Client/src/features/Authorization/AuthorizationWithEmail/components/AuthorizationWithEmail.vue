@@ -125,18 +125,18 @@ const LoginUser = async () => {
 </script>
 
 <style lang="scss">
+.justify-end {
+    @media screen and (max-width: 768px) {
+        justify-content: center !important;
+    }
+}
+
 .v-field {
     border-radius: 10px;
 }
 
 .v-field.v-field--appended {
     --v-field-padding-end: 10px;
-}
-
-.v-input--density-compact .v-field--variant-outlined,
-.v-input--density-compact .v-field--single-line,
-.v-input--density-compact .v-field--no-label {
-    --v-field-padding-bottom: 10px;
 }
 
 .v-field--variant-outlined,
@@ -213,6 +213,9 @@ const LoginUser = async () => {
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
 }
+.v-input__control {
+    font-weight: 500;
+}
 
 .authLinks {
     text-decoration: underline;
@@ -225,5 +228,21 @@ const LoginUser = async () => {
 }
 :global(.v-text-field input.v-field__input) {
     padding: 12px 6px 9px 16px;
+}
+
+.v-text-field .v-field--no-label input,
+.v-text-field .v-field--active input {
+    border-radius: 10px;
+}
+@media ((max-width: 768px)) {
+    .AuthWrapper {
+        min-height: 0;
+        padding: 100px 0;
+    }
+}
+@media ((max-width: 550px)) {
+    .AuthWrapper {
+        padding: 60px 0;
+    }
 }
 </style>
