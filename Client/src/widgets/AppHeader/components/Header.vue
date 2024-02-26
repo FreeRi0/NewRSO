@@ -43,11 +43,7 @@
                             </div>
                         </li>
                         <li class="header__nav-item disable">
-                            <a
-                                class="header__nav-link"
-                                @click.prevent
-                                href="/actionSquads"
-                            >
+                            <a class="header__nav-link" href="/actionSquads">
                                 Мероприятия
                             </a>
                         </li>
@@ -114,7 +110,8 @@
                             "
                         >
                             <div
-                                v-for="item in regionals.filteredMyRegional.value"
+                                v-for="item in regionals.filteredMyRegional
+                                    .value"
                             >
                                 <p>{{ item.name }}</p>
                             </div>
@@ -314,8 +311,14 @@ const userPages = computed(() => [
         show: true,
     },
     { title: 'Активные заявки', name: 'active', show: true },
-    { title: 'Поиск участников', link: 'roster', show: (userStore.currentUser?.central_headquarter_id ||
-    userStore.currentUser?.district_headquarter_id || userStore.currentUser?.regional_headquarter_id) },
+    {
+        title: 'Поиск участников',
+        link: 'roster',
+        show:
+            userStore.currentUser?.central_headquarter_id ||
+            userStore.currentUser?.district_headquarter_id ||
+            userStore.currentUser?.regional_headquarter_id,
+    },
     { title: 'Членский взнос', name: 'contributorPay', show: true },
     {
         title: 'Оформление справок',
@@ -583,11 +586,11 @@ watch(
         }
     }
 
-    &__nav-item.disable {
-        & > a {
-            cursor: not-allowed;
-        }
-    }
+    // &__nav-item.disable {
+    //     & > a {
+    //         cursor: not-allowed;
+    //     }
+    // }
 
     &__nav-link {
         display: block;
