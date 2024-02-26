@@ -229,6 +229,11 @@ const LoginUser = async () => {
 :global(.v-text-field input.v-field__input) {
     padding: 12px 6px 9px 16px;
 }
+
+.v-text-field .v-field--no-label input,
+.v-text-field .v-field--active input {
+    border-radius: 10px;
+}
 @media ((max-width: 768px)) {
     .AuthWrapper {
         min-height: 0;

@@ -192,6 +192,7 @@ const sortedVal = ref([]);
 const ascending = ref(true);
 const levelAccess = ref(7);
 const name = ref('');
+let search = '';
 
 const sortBy = ref('alphabetically');
 
@@ -544,4 +545,8 @@ watch(
         );
     },
 );
+
+onMounted(() => {
+    viewHeadquartersData(search);
+});
 </script>
