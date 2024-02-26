@@ -1,12 +1,6 @@
 <template>
     <div class="container">
-        <div
-            class="active-app"
-            v-if="
-                roles.roles.value.detachment_commander ||
-                roles.roles.value.regionalheadquarter_commander
-            "
-        >
+        <div class="active-app">
             <h2 class="profile-title">Активные заявки</h2>
 
             <div class="d-flex mt-9 mb-9 active-tabs">
@@ -34,9 +28,6 @@
             <div v-else-if="picked == 'Конкурсы'">
                 <active-competitions />
             </div>
-        </div>
-        <div v-else>
-            Доступно только командирам отрядов и региональных штабов.
         </div>
     </div>
 </template>
@@ -97,8 +88,8 @@ watch(
     font-size: 40px;
     margin-bottom: 40px;
     @media screen and (max-width: 575px) {
-       font-size: 32px;
-       margin-bottom: 20px;
+        font-size: 32px;
+        margin-bottom: 20px;
     }
 }
 

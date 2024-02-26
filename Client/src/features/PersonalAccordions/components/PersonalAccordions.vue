@@ -24,10 +24,6 @@
         <p class="accordion-title">
             Для вступления в РСО внесите ниже персональные данные
         </p>
-        <!--
-        <p>{{ selectedAnswer }}</p>
-        <p>{{ documents.russian_passport }}</p>
-        <p>{{ selectedAnswer == 'Нет' && !documents.russian_passport }}</p> -->
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
@@ -235,6 +231,7 @@
                                         placeholder="Выберете родителя"
                                         v-model="props.user.parent.relationship"
                                         :options="parents"
+                                        :sorts-boolean="false"
                                     ></sortByEducation>
                                 </div>
 
@@ -3238,22 +3235,21 @@
                 <Button
                     :disabled="
                         isLoading ||
-                        (!props.user.first_name &&
-                            !props.user.last_name &&
-                            !props.user.gender &&
-                            !props.user.date_of_birth &&
-                            !props.user.email &&
-                            !props.user.phone_number &&
-                            !props.user.user_region.reg_town &&
-                            !props.user.user_region.reg_region &&
-                            !props.user.user_region.reg_house &&
-                            !props.user.user_region.reg_fact_same_address &&
-                            !props.user.documents.pass_ser_num &&
-                            !props.user.documents.pass_date &&
-                            !props.user.documents.inn &&
-                            !props.user.documents.snils &&
-                            !props.user.education.study_institution &&
-                            !props.user.education.study_year)
+                        !props.user.first_name ||
+                         !props.user.last_name ||
+                        !props.user.gender ||
+                        !props.user.date_of_birth ||
+                        !props.user.email ||
+                        !props.user.phone_number ||
+                        !props.user.user_region.reg_town ||
+                        !props.user.user_region.reg_region_id ||
+                        !props.user.user_region.reg_house ||
+                        !props.user.documents.pass_ser_num ||
+                        !props.user.documents.pass_date ||
+                        !props.user.documents.inn ||
+                        !props.user.documents.snils ||
+                        !props.user.education.study_institution ||
+                        !props.user.education.study_year
                     "
                     :loaded="isLoading"
                     v-if="
@@ -3791,15 +3787,14 @@ const updateData = async () => {
             timer: 1000,
         });
         console.log('resdp', axiosrequest1.data);
+        isLoading.value = false;
         emit('updateUserData', axiosrequest1.data);
         emit('updateRegionData', axiosrequest2.data);
         emit('updateDocData', axiosrequest3.data);
         emit('updateEducData', axiosrequest4.data);
         emit('updateFileData', axiosrequest5.data);
         emit('updateParentData', axiosrequestParent.value);
-
         emit('updateStatus', axiosrequest6?.data);
-        isLoading.value = false;
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;

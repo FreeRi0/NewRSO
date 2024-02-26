@@ -114,7 +114,8 @@
                             "
                         >
                             <div
-                                v-for="item in regionals.filteredMyRegional.value"
+                                v-for="item in regionals.filteredMyRegional
+                                    .value"
                             >
                                 <p>{{ item.name }}</p>
                             </div>
@@ -188,8 +189,6 @@
                         @updateUser="userUpdate"
                     />
                 </div>
-
-                <!-- <p>{{ regionals.filteredRegional.value.name }}</p> -->
             </nav>
         </header>
     </div>
@@ -313,17 +312,28 @@ const userPages = computed(() => [
         },
         show: true,
     },
-    { title: 'Активные заявки', name: 'active', show: true },
-    { title: 'Поиск участников', link: 'roster', show: (userStore.currentUser?.central_headquarter_id ||
-    userStore.currentUser?.district_headquarter_id || userStore.currentUser?.regional_headquarter_id) },
-    { title: 'Членский взнос', name: 'contributorPay', show: true },
+    {
+        title: 'Активные заявки',
+        name: 'active',
+        show: roleStore.roles?.regionalheadquarter_commander || roleStore.roles?.detachment_commander,
+    },
+    {
+        title: 'Поиск участников',
+        link: 'roster',
+        show:
+        roleStore.roles?.centralheadquarter_commander ||
+        roleStore.roles?.districtheadquarter_commander ||
+            roleStore.roles?.regionalheadquarter_commander,
+    },
+    {
+        title: 'Членский взнос',
+        name: 'contributorPay',
+        show: roleStore.roles?.centralheadquarter_commander || roleStore.roles?.regionalheadquarter_commander ||  roleStore.roles?.districtheadquarter_commander,
+    },
     {
         title: 'Оформление справок',
         name: 'references',
-        show:
-            userStore.currentUser?.central_headquarter_id ||
-            userStore.currentUser?.district_headquarter_id ||
-            userStore.currentUser?.regional_headquarter_id,
+        show: roleStore.roles?.regionalheadquarter_commander || roleStore.roles?.centralheadquarter_commander,
     },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },

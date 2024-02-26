@@ -44,9 +44,7 @@
 
             <div
                 v-else-if="
-                    picked === false &&
-                    roles.roles.value.regionalheadquarter_commander
-                "
+                    picked === false"
             >
                 <div class="contributor-search">
                     <input
@@ -172,9 +170,6 @@
                         @click="onAction"
                     ></Button>
                 </div>
-            </div>
-            <div v-else class="mt-12">
-                Доступно только для командиров рег штабов
             </div>
         </div>
     </div>
