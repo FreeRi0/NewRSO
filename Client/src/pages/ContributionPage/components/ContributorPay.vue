@@ -236,6 +236,7 @@ const checkboxAll = ref(false);
 const levelAccess = ref(7);
 const step = ref(12);
 const name = ref('');
+let search = '';
 const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -654,6 +655,10 @@ watch(
         );
     },
 );
+
+onMounted(() => {
+    viewContributorsData(search);
+})
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,

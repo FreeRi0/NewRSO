@@ -171,7 +171,7 @@ import {
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, watch, inject, onMounted, onActivated } from 'vue';
+import { ref, computed, watch, inject, onMounted } from 'vue';
 import { useUserStore } from '@features/store/index';
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
@@ -212,6 +212,8 @@ const step = ref(12);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 const selectedPeoples = ref([]);
+
+let search = '';
 
 const arr = computed(() => {
     let tempPeoples = selectedPeoples.value;
@@ -563,6 +565,10 @@ watch(
         detachments.value = squadsStore.squads;
     },
 );
+
+onMounted(() => {
+    viewContributorsData(search);
+})
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
