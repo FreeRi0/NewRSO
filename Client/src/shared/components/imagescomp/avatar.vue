@@ -171,7 +171,6 @@
                 </v-card-text>
             </v-card>
         </v-menu>
-
     </div>
 </template>
 <script setup>
@@ -349,5 +348,16 @@ const deleteAvatar = async () => {
     clip-path: circle(50%);
     object-fit: cover;
     border-radius: 50%;
+}
+.v-btn--icon.v-btn--density-default {
+    background: rgba(0, 0, 0, 0.4);
+    margin-right: 15px;
+}
+.v-btn--icon {
+    border-radius: 50%;
+    border: 2px solid white;
+}
+.v-icon {
+    color: white;
 }
 </style>

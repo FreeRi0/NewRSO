@@ -22,7 +22,7 @@
         @submit.prevent="updateData"
     >
         <p class="accordion-title">
-            Для вступления в РСО внесите ниже персональные данные
+            Для вступления в РСО внесите ниже персональные данные.
         </p>
         <!--
         <p>{{ selectedAnswer }}</p>
@@ -94,7 +94,8 @@
                     <div class="data-form">
                         <div class="form-field">
                             <label for="surname"
-                                >Фамилия <span class="valid-red">*</span></label
+                                >Фамилия
+                                <span class="valid-red">&nbsp;*</span></label
                             >
                             <Input
                                 class="input-big"
@@ -108,18 +109,21 @@
                             {{ isError.last_name }}
                         </p>
                         <div class="form-field">
-                            <label for="surname-lat">Фамилия(Латиницей) </label>
+                            <label for="surname-lat"
+                                >Фамилия (Латиницей)
+                            </label>
                             <Input
                                 class="input-big"
                                 clearable
-                                placeholder="familia"
+                                placeholder="Familia"
                                 name="surname-lat"
                                 v-model:value="props.user.last_name_lat"
                             />
                         </div>
                         <div class="form-field">
                             <label for="name"
-                                >Имя <span class="valid-red">*</span></label
+                                >Имя
+                                <span class="valid-red">&nbsp;*</span></label
                             >
                             <Input
                                 class="input-big"
@@ -133,11 +137,11 @@
                             {{ isError.first_name }}
                         </p>
                         <div class="form-field">
-                            <label for="name-lat">Имя(Латиницей)</label>
+                            <label for="name-lat">Имя (Латиницей)</label>
                             <Input
                                 class="input-big"
                                 clearable
-                                placeholder="name"
+                                placeholder="Imia"
                                 name="name-lat"
                                 v-model:value="props.user.first_name_lat"
                             />
@@ -147,26 +151,26 @@
                             <Input
                                 class="input-big"
                                 clearable
-                                placeholder="Отчество"
+                                placeholder="Введите отчество"
                                 name="patronomyc"
                                 v-model:value="props.user.patronymic_name"
                             />
                         </div>
                         <div class="form-field">
                             <label for="patronomyc-lat"
-                                >Отчество(Латиницей)</label
+                                >Отчество (Латиницей)</label
                             >
                             <Input
                                 class="input-big"
                                 clearable
-                                placeholder="patronomyc"
+                                placeholder="Otchestvo"
                                 name="patronomyc-lat"
                                 v-model:value="props.user.patronymic_lat"
                             />
                         </div>
                         <div class="checkbox-wrapper">
                             <p class="checkbox-wrapper__title">
-                                Пол<span class="valid-red">*</span>
+                                Пол<span class="valid-red">&nbsp;*</span>
                             </p>
                             <div
                                 class="checkbox"
@@ -190,7 +194,7 @@
                         <div class="form-field">
                             <label for="date_of_birth"
                                 >Дата рождения<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
                             <Input
@@ -210,7 +214,7 @@
                                 <div class="form-field">
                                     <label for="surname-parent"
                                         >Фамилия<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
@@ -225,7 +229,7 @@
                                 <div class="form-field">
                                     <label for=""
                                         >Кем является<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <sortByEducation
@@ -239,25 +243,25 @@
                                 </div>
 
                                 <!-- <p>{{ user.is_adult }}</p> -->
-
                                 <div class="form-field">
-                                    <label for="patronomyc-parent"
-                                        >Отчество</label
+                                    <label for="name-parent"
+                                        >Имя<span class="valid-red"
+                                            >&nbsp;*</span
+                                        ></label
                                     >
                                     <Input
+                                        name="name-parent"
                                         class="input-big"
-                                        name="patronomyc-parent"
-                                        placeholder="Введите Отчество"
+                                        placeholder="Введите имя"
                                         v-model:value="
-                                            props.user.parent
-                                                .parent_patronymic_name
+                                            props.user.parent.parent_first_name
                                         "
                                     />
                                 </div>
                                 <div class="form-field">
                                     <label for="date-parent"
                                         >Дата рождения<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
@@ -271,17 +275,16 @@
                                     />
                                 </div>
                                 <div class="form-field">
-                                    <label for="name-parent"
-                                        >Имя<span class="valid-red"
-                                            >*</span
-                                        ></label
+                                    <label for="patronomyc-parent"
+                                        >Отчество</label
                                     >
                                     <Input
-                                        name="name-parent"
                                         class="input-big"
-                                        placeholder="Введите имя"
+                                        name="patronomyc-parent"
+                                        placeholder="Введите отчество"
                                         v-model:value="
-                                            props.user.parent.parent_first_name
+                                            props.user.parent
+                                                .parent_patronymic_name
                                         "
                                     />
                                 </div>
@@ -289,7 +292,7 @@
                                 <div class="form-field">
                                     <label for="phone-parent"
                                         >Телефон<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
@@ -314,7 +317,7 @@
                                     <p class="checkbox-title">
                                         Паспорт гражданина РФ<span
                                             class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         >
                                     </p>
 
@@ -362,7 +365,7 @@
                                 <div class="form-field" id="pass-no-pass-id">
                                     <label for="passInput"
                                         >Номер и серия<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
@@ -380,14 +383,14 @@
                                 <div class="form-field" id="pass-no-reg">
                                     <label for=""
                                         >Регион<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <regionsDropdown
                                         open-on-clear
                                         id="reg"
                                         name="regdrop"
-                                        placeholder="Поиск"
+                                        placeholder="Выберите регион"
                                         v-model="props.user.parent.region"
                                         @update:value="changeValue"
                                         address="/regions/"
@@ -398,7 +401,7 @@
                                 <div class="form-field" id="pass-no-date">
                                     <label for="pass-date-parent"
                                         >Дата выдачи<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
@@ -414,13 +417,13 @@
                                 <div class="form-field" id="pass-no-locality">
                                     <label for="locality-parent"
                                         >Населенный пункт<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
                                         name="locality-parent"
                                         class="input-big"
-                                        placeholder="Москва"
+                                        placeholder="Например, город Новосибирск"
                                         v-model:value="props.user.parent.city"
                                     />
                                 </div>
@@ -428,13 +431,13 @@
                                 <div class="form-field" id="pass-no-pass">
                                     <label for="pass-id-parent"
                                         >Кем выдан<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
                                         name="pass-id-parent"
                                         class="input-big"
-                                        placeholder="Название организации"
+                                        placeholder="Введите полное название организации как в паспорте"
                                         v-model:value="
                                             props.user.parent.passport_authority
                                         "
@@ -445,13 +448,13 @@
                                     <label for="addres-parent"
                                         >Улица, дом, квартира<span
                                             class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
                                         name="addres-parent"
                                         class="input-big"
-                                        placeholder="Москва"
+                                        placeholder="Например, ул. Приморская, дом 10, кв. 255"
                                         v-model:value="
                                             props.user.parent.address
                                         "
@@ -655,7 +658,9 @@
                         </p>
                         <div class="form-field">
                             <label for="phone-contact"
-                                >Телефон<span class="valid-red">*</span></label
+                                >Телефон<span class="valid-red"
+                                    >&nbsp;*</span
+                                ></label
                             >
                             <Input
                                 type="tel"
@@ -667,7 +672,9 @@
                         </div>
                         <div class="form-field">
                             <label for=""
-                                >Регион<span class="valid-red">*</span></label
+                                >Регион<span class="valid-red"
+                                    >&nbsp;*</span
+                                ></label
                             >
                             <!-- <Select
                                 variant="outlined"
@@ -680,7 +687,7 @@
                                 open-on-clear
                                 id="reg"
                                 name="regdrop"
-                                placeholder="Поиск"
+                                placeholder="Выберите регион"
                                 v-model="props.user.user_region.reg_region_id"
                                 @update:value="changeValue"
                                 address="/regions/"
@@ -690,7 +697,7 @@
                         <div class="form-field">
                             <label for="email-contact"
                                 >Электронная почта<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
                             <Input
@@ -704,14 +711,14 @@
                         <div class="form-field">
                             <label for="locality-contact"
                                 >Населенный пункт<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
                             <Input
                                 type="text"
                                 name="locality-contact"
                                 class="input-big"
-                                placeholder="Москва"
+                                placeholder="Город"
                                 v-model:value="props.user.user_region.reg_town"
                             />
                         </div>
@@ -722,7 +729,7 @@
                                     <Input
                                         name="socials"
                                         class="input-big mask-vk"
-                                        placeholder="https://vk.com/danya_porg"
+                                        placeholder="https://vk.com/id (или никнейм)"
                                         v-model:value="props.user.social_vk"
                                     />
                                 </div>
@@ -733,7 +740,7 @@
                                     <Input
                                         name="socials"
                                         class="input-big mask-tg"
-                                        placeholder="https://t.me/allenom"
+                                        placeholder="https://t.me/username"
                                         v-model:value="props.user.social_tg"
                                     />
                                 </div>
@@ -742,14 +749,14 @@
                         <div class="form-field">
                             <label for="addres-contact"
                                 >Улица, дом, квартира<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
                             <Input
                                 type="text"
                                 name="addres-contact"
                                 class="input-big"
-                                placeholder="ул. Комсомольская, д. 42, кв. 56"
+                                placeholder="Например, ул. Приморская, дом 10, кв. 255"
                                 v-model:value="props.user.user_region.reg_house"
                             />
                         </div>
@@ -758,7 +765,7 @@
                                 Адрес фактического проживания совпадает с
                                 адресом постоянной регистрации<span
                                     class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 >
                             </p>
 
@@ -810,7 +817,7 @@
                                     open-on-clear
                                     id="reg"
                                     name="regdrop"
-                                    placeholder="Поиск"
+                                    placeholder="Выберите регион"
                                     v-model="
                                         props.user.user_region.fact_region_id
                                     "
@@ -826,7 +833,7 @@
                                 <Input
                                     name="locality-fact"
                                     class="input-big"
-                                    placeholder="Москва"
+                                    placeholder="Город"
                                     v-model:value="
                                         props.user.user_region.fact_town
                                     "
@@ -840,7 +847,7 @@
                                     type="text"
                                     name="addres-fact"
                                     class="input-big"
-                                    placeholder="ул. Комсомольская, д. 42, кв. 56"
+                                    placeholder="Например, ул. Приморская, дом 10, кв. 255"
                                     v-model:value="
                                         props.user.user_region.fact_house
                                     "
@@ -947,7 +954,7 @@
                         <div class="checkbox one">
                             <p class="checkbox-title">
                                 Паспорт гражданина РФ<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 >
                             </p>
                             <div
@@ -981,7 +988,7 @@
                             <div class="form-field">
                                 <label for="pass-num"
                                     >Номер и серия<span class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     ></label
                                 >
                                 <Input
@@ -998,7 +1005,7 @@
                             <div class="form-field">
                                 <label for="pass-date"
                                     >Дата выдачи<span class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     ></label
                                 >
                                 <Input
@@ -1017,7 +1024,7 @@
                                     name="pass-id"
                                     type="text"
                                     class="input-full"
-                                    placeholder="Название организации"
+                                    placeholder="Например, ОВД Советского района города Новосибирска и может быть длиннее"
                                     v-model:value="
                                         props.user.documents.pass_whom
                                     "
@@ -1026,26 +1033,28 @@
                             <div class="form-field">
                                 <label for="SNILS-id"
                                     >Номер СНИЛС<span class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     ></label
                                 >
                                 <Input
                                     name="SNILS-d"
                                     type="text"
                                     class="input-big mask-snils"
-                                    placeholder="AA 999999999"
+                                    placeholder="___-___-___ __"
                                     v-model:value="props.user.documents.snils"
                                 />
                             </div>
                             <div class="form-field">
                                 <label for="INN-id"
-                                    >ИНН<span class="valid-red">*</span></label
+                                    >ИНН<span class="valid-red"
+                                        >&nbsp;*</span
+                                    ></label
                                 >
                                 <Input
                                     name="INN-id"
                                     type="text"
                                     class="input-big mask-inn"
-                                    placeholder="AA 999999999"
+                                    placeholder="____________"
                                     v-model:value="props.user.documents.inn"
                                 />
                             </div>
@@ -1057,7 +1066,7 @@
                                     class="input-big mask-workbook"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 999999999"
+                                    placeholder="AA 9999999"
                                     v-model:value="
                                         props.user.documents.work_book_num
                                     "
@@ -1071,7 +1080,7 @@
                                     class="input-big mask-foreign-pass"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 999999999"
+                                    placeholder="AA 9999999"
                                     v-model:value="
                                         props.user.documents.international_pass
                                     "
@@ -1109,7 +1118,7 @@
                                     class="input-big mask-military"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 999999999"
+                                    placeholder="AA 9999999"
                                     v-model:value="
                                         props.user.documents.mil_reg_doc_ser_num
                                     "
@@ -1123,12 +1132,14 @@
                             <div class="form-field one">
                                 <label for="pass-num"
                                     >Документ удостоверяющий личность
-                                    <span class="valid-red">*</span></label
+                                    <span class="valid-red"
+                                        >&nbsp;*</span
+                                    ></label
                                 >
                                 <Input
                                     type="text"
                                     class="input-full"
-                                    placeholder="документ"
+                                    placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
                                     v-model:value="foreignDoc.name"
                                 />
                             </div>
@@ -1136,7 +1147,7 @@
                             <div class="form-field">
                                 <label for="pass-date"
                                     >Дата выдачи<span class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     ></label
                                 >
                                 <Input
@@ -1148,7 +1159,7 @@
                             </div>
 
                             <div class="form-field">
-                                <label for="pass-id">серия номер</label>
+                                <label for="pass-id">Серия и номер</label>
                                 <Input
                                     type="text"
                                     id="pass-id"
@@ -1162,14 +1173,14 @@
                             <div class="form-field one">
                                 <label for="org-id"
                                     >Кем выдан<span class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     ></label
                                 >
                                 <Input
                                     type="text"
                                     id="org-id"
                                     class="input-full"
-                                    placeholder="оуфмс по моковской обл"
+                                    placeholder="Страна"
                                     v-model:value="foreignDoc.foreign_pass_whom"
                                 />
                             </div>
@@ -1183,7 +1194,7 @@
                                     class="input-big mask-workbook"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 999999999"
+                                    placeholder="AA 9999999"
                                     v-model:value="foreignDoc.work_book_num"
                                 />
                             </div>
@@ -1195,7 +1206,7 @@
                                     class="input-big mask-inn"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 999999999"
+                                    placeholder="999999999999"
                                     v-model:value="foreignDoc.inn"
                                 />
                             </div>
@@ -1209,7 +1220,7 @@
                                     vmaska
                                     maska="AA ##########"
                                     class="input-big mask-snils"
-                                    placeholder="AA 999999999"
+                                    placeholder="999-999-999 99"
                                     v-model:value="foreignDoc.snils"
                                 />
                             </div>
@@ -1309,7 +1320,7 @@
                             <label for="education-org"
                                 >Образовательная организация<span
                                     class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
 
@@ -1317,7 +1328,7 @@
                                 open-on-clear
                                 id="reg"
                                 name="regdrop"
-                                placeholder="Поиск"
+                                placeholder="Введите название образовательной организации"
                                 v-model="props.user.education.study_institution"
                                 @update:value="changeValue"
                                 address="/eduicational_institutions/"
@@ -1341,7 +1352,7 @@
                         <div class="form-field">
                             <label for="course"
                                 >Курс (класс)<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
                             <Input
@@ -1349,7 +1360,7 @@
                                 type="text"
                                 id="course"
                                 class="input-full"
-                                placeholder="1 курс"
+                                placeholder="Например, 1 курс, магистратура"
                                 v-model:value="props.user.education.study_year"
                             />
                         </div>
@@ -1472,7 +1483,7 @@
                                 <p class="statement-title">
                                     Заявление на вступление в РСО<span
                                         class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -1536,7 +1547,7 @@
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
-                                    данных<span class="valid-red">*</span>
+                                    данных<span class="valid-red">&nbsp;*</span>
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
@@ -1603,8 +1614,8 @@
                                 >
                                     Согласие законного представителя на
                                     обработку персональных данных
-                                    несовершеннолетнего<span class="valid-red"
-                                        >*</span
+                                    несовершеннолетнего<span class="valid-red">
+                                        &nbsp;*</span
                                     >
                                 </p>
                                 <div
@@ -1692,8 +1703,12 @@
                         <div class="pass-details__wrapper">
                             <div class="pass-details__item">
                                 <p class="statement-title">
-                                    Паспорт гражданина РФ<span class="valid-red"
-                                        >*</span
+                                    Паспорт гражданина РФ<span
+                                        class="valid-red sub"
+                                    >
+                                        &nbsp;*&nbsp;<sup
+                                            >для гражданина РФ</sup
+                                        ></span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -1749,7 +1764,10 @@
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
                                         class="valid-red"
-                                        >*</span
+                                    >
+                                        &nbsp;*&nbsp;<sup
+                                            >для несовершеннолетних</sup
+                                        ></span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -2033,7 +2051,7 @@
                         <TextArea
                             class="know"
                             name="know"
-                            placeholder="Напиши что нибудь"
+                            placeholder="Например, на сайте университета"
                             v-model:value="props.user.statement.rso_info_from"
                             :max-length="200"
                         ></TextArea>
@@ -2137,8 +2155,10 @@
                         <div class="pass-details__wrapper">
                             <div class="pass-details__item">
                                 <p class="statement-title">
-                                    Паспорт гражданина РФ<span class="valid-red"
-                                        >*</span
+                                    Паспорт гражданина РФ<span
+                                        class="valid-red"
+                                    >
+                                        &nbsp;*</span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -2184,7 +2204,8 @@
                                 >
                                     Паспорт законного представителя<span
                                         class="valid-red"
-                                        >*</span
+                                    >
+                                        &nbsp;*</span
                                     >
                                 </p>
                                 <div
@@ -2558,7 +2579,7 @@
                                 <p class="statement-title">
                                     Заявление на вступление в РСО<span
                                         class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -2615,7 +2636,7 @@
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
-                                    данных<span class="valid-red">*</span>
+                                    данных<span class="valid-red">&nbsp;*</span>
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
@@ -2697,7 +2718,7 @@
                             <div class="pass-details__item">
                                 <p class="statement-title">
                                     Паспорт иностранного гражданина
-                                    <span class="valid-red">*</span>
+                                    <span class="valid-red">&nbsp;*</span>
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
@@ -2982,7 +3003,7 @@
                                 <p class="statement-title">
                                     Паспорт иностранного гражданина<span
                                         class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -3028,7 +3049,7 @@
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
                                         class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -3717,7 +3738,11 @@ const updateData = async () => {
             );
         }
 
-        let studyEducationId = Number.isInteger(props.user.education.study_institution)?props.user.education.study_institution:props.user.education.study_institution?.id;
+        let studyEducationId = Number.isInteger(
+            props.user.education.study_institution,
+        )
+            ? props.user.education.study_institution
+            : props.user.education.study_institution?.id;
         const axiosrequest4 = await HTTP.patch(
             '/rsousers/me/education/',
             {
@@ -3849,9 +3874,9 @@ onMounted(() => {
     &-title {
         font-size: 20px;
         color: #35383f;
-        font-weight: 700;
+        font-weight: 600;
         margin-bottom: 40px;
-        font-family: BERTSANS;
+        font-family: 'Bert Sans';
     }
     &-form {
         padding-bottom: 40px;
@@ -3920,7 +3945,7 @@ onMounted(() => {
 }
 .form-field label {
     font-size: 16px;
-    font-family: BERTSANS;
+    font-family: 'Bert Sans';
     font-weight: 600;
     margin-bottom: 8px;
 }
@@ -3993,8 +4018,8 @@ onMounted(() => {
             column-gap: 40px;
         }
         @media (max-width: 575px) {
-           display: flex;
-           flex-direction: column;
+            display: flex;
+            flex-direction: column;
         }
     }
     &-wrapper {
@@ -4005,8 +4030,8 @@ onMounted(() => {
             font-size: 24px;
             padding: 40px 40px 0px;
             @media (max-width: 768px) {
-            font-size: 18px;
-        }
+                font-size: 18px;
+            }
         }
     }
 }
@@ -4287,6 +4312,30 @@ onMounted(() => {
     color: #1f7cc0;
     margin-left: 5px;
 }
+
+.valid-red {
+    color: red;
+}
+.statement-title sup {
+    color: #000000de;
+    font-weight: 500;
+}
+
+.accordion-block-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.v-expansion-panel-title--active {
+    border-bottom: none !important;
+}
+
+@media (max-width: 768px) {
+    .parents-wrapper__title,
+    .accordion-block-title {
+        font-size: 18px;
+    }
+}
+
 // @media (max-width: 1439px) {
 //     a:not([href]):not([class]),
 //     a:not([href]):not([class]):hover {
