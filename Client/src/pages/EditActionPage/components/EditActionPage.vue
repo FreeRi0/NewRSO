@@ -116,6 +116,7 @@
                                                 :options="scale_massive_sorted"
                                                 placeholder="Например, ЛСО"
                                                 v-model="maininfo.scale"
+                                                :sorts-boolean="true"
                                             >
                                             </sortByEducation>
                                         </div>
@@ -159,9 +160,6 @@
                                         <div class="form__counter"></div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form-label"
-                                            >Добавить баннер</label
-                                        >
                                         <div class="form__field photo-add">
                                             <p class="form__label">
                                                 Добавьте баннер
@@ -174,14 +172,11 @@
                                                 >
                                                     <img
                                                         v-if="
-                                                            maininfo.banner ??
-                                                            urlBanner
+                                                            maininfo.banner !=
+                                                            undefined
                                                         "
                                                         class="photo-add__image"
-                                                        :src="
-                                                            maininfo.banner ??
-                                                            urlBanner
-                                                        "
+                                                        :src="maininfo.banner"
                                                     />
                                                     <img
                                                         v-else
@@ -195,8 +190,8 @@
                                                         class="photo-add__label"
                                                         for="upload-banner"
                                                         v-if="
-                                                            !maininfo.banner &&
-                                                            !urlBanner
+                                                            !maininfo.banner !=
+                                                            undefined
                                                         "
                                                     >
                                                         <svg
@@ -328,9 +323,7 @@
                                             name="address_hq"
                                             :maxlength="100"
                                         />
-                                        <div class="form__counter">
-                                            {{ maininfo.address.length }}/100
-                                        </div>
+                                        <div class="form__counter"></div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form-label" for="group-hq"
@@ -1108,6 +1101,21 @@ const route = useRoute();
 const id = route.params.id;
 
 onActivated(() => {
+    watch(
+        () => rolesStore.roles,
+        (newRole) => {
+            console.log('Роли пользователя загружены');
+            Object.entries(newRole).forEach(([obj, value], index) => {
+                if (value !== null) {
+                    console.log(`${obj} + ${value} + ${index}`);
+                    const filted = scale_massive.value.find(
+                        (commander) => commander.value === obj,
+                    );
+                    scale_massive_sorted.value.push(filted); //Работает
+                }
+            });
+        },
+    );
     getAction(id)
         .then((resp) => {
             maininfo.value = resp.data;
@@ -1123,31 +1131,17 @@ onActivated(() => {
         .catch((e) => {
             console.log(e);
         });
-    watch(
-        () => rolesStore.roles,
-        (newRole) => {
-            Object.entries(newRole).forEach(([obj, value], index) => {
-                if (value !== null) {
-                    console.log(`${obj} + ${value} + ${index}`);
-                    const filted = scale_massive.value.find(
-                        (commander) => commander.value === obj,
-                    );
-                    scale_massive_sorted.value.push(filted); //Работает
-                }
-            });
-        },
-    );
 });
 
 const scale_massive_sorted = ref([]);
 
 const scale_massive = ref([
-    { name: 'Отрядное' },
-    { name: 'Образовательное' },
-    { name: 'Городское' },
-    { name: 'Региональное' },
-    { name: 'Окружное' },
-    { name: 'Городское' },
+    { name: 'Отрядное', value: 'detachment_commander' },
+    { name: 'Образовательное', value: 'educationalheadquarter_commander' },
+    { name: 'Городское', value: 'localheadquarter_commander' },
+    { name: 'Региональное', value: 'regionalheadquarter_commander' },
+    { name: 'Окружное', value: 'districtheadquarter_commander' },
+    { name: 'Всероссийское', value: 'centralheadquarter_commander' },
 ]);
 
 const direction_massive = ref([
@@ -1170,6 +1164,12 @@ const maininfo = ref({
     participants_number: Number,
     application_type: '',
     available_structural_units: '',
+    org_central_headquarter: 0,
+    org_district_headquarter: 0,
+    org_regional_headquarter: 0,
+    org_local_headquarter: 0,
+    org_educational_headquarter: 0,
+    org_detachment: 0,
     time_data: {
         event_duration_type: '',
         start_date: '',
@@ -1195,6 +1195,14 @@ const area_massive = ref([
     { name: 'Региональный штаб' },
     { name: 'Окружной штаб' },
 ]);
+
+const selectBanner = (event) => {
+    maininfo.value.banner = event.target.files[0];
+};
+
+const resetBanner = () => {
+    maininfo.value.banner = null;
+};
 
 //Переменные организаторов
 
