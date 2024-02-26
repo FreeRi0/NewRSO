@@ -427,7 +427,13 @@
                                         </div>
                                     </label>
                                 </div>
-                                <div class="form-col">
+                                <div
+                                    class="form-col"
+                                    v-if="
+                                        maininfo.application_type !==
+                                        'Персональная'
+                                    "
+                                >
                                     <label class="form-label"
                                         >Какие объекты могут формировать
                                         групповые заявки</label
@@ -1098,40 +1104,28 @@ import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
-import { onActivated, onMounted } from 'vue';
+import { onActivated, onMounted, watchEffect } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 import { getUser } from '@services/UserService';
 const router = useRouter();
 const rolesStore = useRoleStore();
-let org_id = 0;
-
-function AddOrginizationId(value) {
-    Object.entries(value).forEach(([key, value]) => {
-        if (key === 'id') {
-            console.log(`${key} + ${value}`);
-        }
-    });
-}
+const rules = ref([]);
 
 onActivated(() => {
     watch(
         () => rolesStore.roles,
         (newRole) => {
-            console.log(newRole);
+            rules.value = newRole;
+            console.log(rules.value);
             Object.entries(newRole).forEach(([key, value]) => {
-                //Найти более локанимное решение
+                //Найти более локаничное решение
                 if (value !== null) {
-                    Object.entries(value).forEach(([key, value]) => {
-                        if (key === 'id') {
-                        }
-                    });
                     const filted = scale_massive.value.find(
                         (commander) => commander.value === key,
                     );
                     scale_massive_sorted.value.push(filted); //Работает
                 }
             });
-            console.log(org_id);
         },
     );
     getUser().then((resp) => {
@@ -1205,6 +1199,132 @@ const area_massive = ref([
     { name: 'Окружной штаб' },
 ]);
 
+watchEffect(() => {
+    switch (maininfo.value.application_type) {
+        case 'Персональная':
+            area_massive.value = [{ name: 'ЛСО' }];
+            break;
+        case 'Групповая':
+            area_massive.value = [
+                { name: 'ЛСО' },
+                { name: 'Региональный штаб' },
+            ];
+            break;
+        case 'Многоэтапная':
+            area_massive.value = [
+                { name: 'ЛСО' },
+                { name: 'Региональный штаб' },
+                { name: 'Окружной штаб' },
+            ];
+            break;
+    }
+    switch (maininfo.value.scale) {
+        case 'Отрядное':
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'detachment_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_detachment = value;
+                        }
+                    });
+                }
+            });
+            break;
+        case 'Образовательное':
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'educationalheadquarter_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_educational_headquarter = value;
+                            maininfo.value.org_detachment = '';
+                        }
+                    });
+                }
+            });
+            break;
+        case 'Городское':
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'localheadquarter_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_local_headquarter = value;
+                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_detachment = '';
+                        }
+                    });
+                }
+            });
+            break;
+        case 'Региональное':
+            //Работает, на удивление...
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'regionalheadquarter_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_regional_headquarter = value;
+                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_detachment = '';
+                        }
+                    });
+                }
+            });
+            break;
+        case 'Окружное':
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'districtheadquarter_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_district_headquarter = value;
+                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_detachment = '';
+                        }
+                    });
+                }
+            });
+            break;
+        case 'Всероссийское':
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'centralheadquarter_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = value;
+                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_detachment = '';
+                        }
+                    });
+                }
+            });
+            break;
+    }
+});
+
 const document_data = ref({
     passport: false,
     snils: false,
@@ -1252,26 +1372,6 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
-    switch (maininfo.value.scale) {
-        case 'Отрядное':
-            maininfo.value.org_detachment = org_id;
-            break;
-        case 'Образовательное':
-            maininfo.value.org_educational_headquarter = org_id;
-            break;
-        case 'Городское':
-            maininfo.value.org_local_headquarter = org_id;
-            break;
-        case 'Региональное':
-            maininfo.value.org_regional_headquarter = org_id;
-            break;
-        case 'Окружное':
-            maininfo.value.org_central_headquarter = org_id;
-            break;
-        case 'Всероссийское':
-            maininfo.value.org_central_headquarter = org_id;
-            break;
-    }
     createAction(fd)
         .then((resp) => {
             console.log('Форма передалась успешно', resp.data);
