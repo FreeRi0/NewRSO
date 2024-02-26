@@ -24,10 +24,6 @@
         <p class="accordion-title">
             Для вступления в РСО внесите ниже персональные данные
         </p>
-        <!--
-        <p>{{ selectedAnswer }}</p>
-        <p>{{ documents.russian_passport }}</p>
-        <p>{{ selectedAnswer == 'Нет' && !documents.russian_passport }}</p> -->
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
@@ -235,6 +231,7 @@
                                         placeholder="Выберете родителя"
                                         v-model="props.user.parent.relationship"
                                         :options="parents"
+                                        :sorts-boolean="false"
                                     ></sortByEducation>
                                 </div>
 
@@ -3236,7 +3233,24 @@
                 class="form__button-group d-flex justify-space-between"
             >
                 <Button
-                    :disabled="isLoading"
+                    :disabled="
+                        isLoading ||
+                        !props.user.first_name ||
+                         !props.user.last_name ||
+                        !props.user.gender ||
+                        !props.user.date_of_birth ||
+                        !props.user.email ||
+                        !props.user.phone_number ||
+                        !props.user.user_region.reg_town ||
+                        !props.user.user_region.reg_region_id ||
+                        !props.user.user_region.reg_house ||
+                        !props.user.documents.pass_ser_num ||
+                        !props.user.documents.pass_date ||
+                        !props.user.documents.inn ||
+                        !props.user.documents.snils ||
+                        !props.user.education.study_institution ||
+                        !props.user.education.study_year
+                    "
                     :loaded="isLoading"
                     v-if="
                         props.user.sent_verification === false &&
@@ -3717,7 +3731,11 @@ const updateData = async () => {
             );
         }
 
-        let studyEducationId = Number.isInteger(props.user.education.study_institution)?props.user.education.study_institution:props.user.education.study_institution?.id;
+        let studyEducationId = Number.isInteger(
+            props.user.education.study_institution,
+        )
+            ? props.user.education.study_institution
+            : props.user.education.study_institution?.id;
         const axiosrequest4 = await HTTP.patch(
             '/rsousers/me/education/',
             {
@@ -3769,15 +3787,14 @@ const updateData = async () => {
             timer: 1000,
         });
         console.log('resdp', axiosrequest1.data);
+        isLoading.value = false;
         emit('updateUserData', axiosrequest1.data);
         emit('updateRegionData', axiosrequest2.data);
         emit('updateDocData', axiosrequest3.data);
         emit('updateEducData', axiosrequest4.data);
         emit('updateFileData', axiosrequest5.data);
         emit('updateParentData', axiosrequestParent.value);
-
         emit('updateStatus', axiosrequest6?.data);
-        isLoading.value = false;
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -3993,8 +4010,8 @@ onMounted(() => {
             column-gap: 40px;
         }
         @media (max-width: 575px) {
-           display: flex;
-           flex-direction: column;
+            display: flex;
+            flex-direction: column;
         }
     }
     &-wrapper {
@@ -4005,8 +4022,8 @@ onMounted(() => {
             font-size: 24px;
             padding: 40px 40px 0px;
             @media (max-width: 768px) {
-            font-size: 18px;
-        }
+                font-size: 18px;
+            }
         }
     }
 }
