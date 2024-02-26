@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" v-if="!loading">
         <p class="main_title">Многоэтапная заявка</p>
         <p class="subtitle" v-if="permissonDeny">
             Вы не можете подавать заявку
@@ -11,8 +11,7 @@
                 :route="route"
             />
         </div>
-        <div v-else-if="juniorHQ"><multi-stage-submit-second /></div>
-        <p class="subtitle" v-else>Вы уже подали заявку</p>
+        <div v-else><multi-stage-submit-second :route="route" /></div>
     </div>
 </template>
 
@@ -21,12 +20,12 @@ import { HTTP } from '@app/http';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
-import MultiStageSubmitSecond from './MultiStageSubmitSecond.vue';
-import MultiStageSubmitFirst from './MultiStageSubmitFirst.vue';
+import MultiStageSubmitFirst from './FirstStage/MultiStageSubmitFirst.vue';
+import MultiStageSubmitSecond from './SecondStage/MultiStageSubmitSecond.vue';
 
+const loading = ref(true);
 const route = useRoute();
 
-const juniorHQ = ref(false);
 const permissonDeny = ref(false);
 const processApplication = ref(false);
 
@@ -34,8 +33,6 @@ const eventInfo = ref({});
 const meInfo = ref({});
 const meCommander = ref({});
 const applications = ref([]);
-
-const checkJuniorHQ = async () => {};
 
 const checkApplicationOnProcess = async () => {
     if (applications.value.length) {
@@ -55,7 +52,6 @@ const getEventInfo = async () => {
             },
         });
         eventInfo.value = data;
-        console.log(eventInfo.value);
     } catch (e) {
         console.log('getEventInfo error', e);
     }
@@ -70,7 +66,6 @@ const getMeInfo = async () => {
             },
         });
         meInfo.value = data;
-        console.log(meInfo.value);
     } catch (e) {
         console.log('getMeInfo error', e);
     }
@@ -88,7 +83,6 @@ const getMeCommander = async () => {
             },
         );
         meCommander.value = data;
-        console.log(data);
     } catch (e) {
         console.log('getMeCommander error', e);
     }
@@ -107,10 +101,9 @@ const getApplicationinfo = async () => {
         );
         applications.value = data;
         await checkApplicationOnProcess();
-        console.log(applications.value);
+        loading.value = false;
     } catch (e) {
         permissonDeny.value = true;
-        console.log(permissonDeny.value);
         console.log('getApplicationinfo error', e);
     }
 };
@@ -120,9 +113,6 @@ onMounted(async () => {
     await getMeInfo();
     await getMeCommander();
     await getApplicationinfo();
-    if (processApplication.value) {
-        await checkJuniorHQ();
-    }
 });
 </script>
 

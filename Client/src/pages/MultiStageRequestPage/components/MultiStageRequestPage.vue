@@ -54,7 +54,6 @@
             </div>
         </div>
         <p v-else class="subtitle">Заявок нет</p>
-        <p v-else class="subtitle">Заявок нет</p>
     </div>
 </template>
 
