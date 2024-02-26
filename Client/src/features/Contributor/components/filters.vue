@@ -24,6 +24,7 @@
                     :SortDropdown="true"
                 ></districtSearchFilter>
             </v-expansion-panel-text>
+            <p v-if="districtRef">Выбрано: {{ districtRef }}</p>
         </v-expansion-panel>
         <v-expansion-panel>
             <v-expansion-panel-title v-if="districtRef !== null">
@@ -49,6 +50,7 @@
                     :SortDropdown="true"
                 ></regionalsDropdown>
             </v-expansion-panel-text>
+            <p v-if="regRef">Выбрано: {{ regRef }}</p>
         </v-expansion-panel>
         <v-expansion-panel v-if="regRef">
             <v-expansion-panel-title>
@@ -74,6 +76,7 @@
                     :SortDropdown="true"
                 ></localSearchFilter>
             </v-expansion-panel-text>
+            <p v-if="localRef">Выбрано: {{ localRef }}</p>
         </v-expansion-panel>
         <v-expansion-panel v-if="localRef !== null || regRef">
             <v-expansion-panel-title>
@@ -98,6 +101,7 @@
                     :SortDropdown="true"
                 ></educationalsDropdown>
             </v-expansion-panel-text>
+            <p v-if="educRef">Выбрано: {{ educRef }}</p>
         </v-expansion-panel>
         <v-expansion-panel v-if="educRef !== null || roles.roles.value.detachment_commander">
             <v-expansion-panel-title>
@@ -122,6 +126,7 @@
                     :SortDropdown="true"
                 ></lsoSerachFilter>
             </v-expansion-panel-text>
+            <p v-if="detachmentRef">Выбрано: {{detachmentRef }}</p>
         </v-expansion-panel>
     </v-expansion-panels>
 

@@ -178,7 +178,7 @@ import {
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, inject, watch } from 'vue';
+import { ref, computed, inject, watch, onMounted  } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
 import { useDistrictsStore } from '@features/store/districts';
@@ -213,6 +213,7 @@ const district = ref(null);
 const local = ref(null);
 const isLoading = ref(false);
 const educ = ref(null);
+let search = '';
 
 const checkboxAll = ref(false);
 const name = ref('');
@@ -576,6 +577,10 @@ watch(
         detachments.value = squadsStore.squads;
     },
 );
+
+onMounted(() => {
+    viewContributorsData(search);
+})
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
