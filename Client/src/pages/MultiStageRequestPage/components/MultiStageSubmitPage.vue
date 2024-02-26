@@ -1,120 +1,131 @@
 <template>
     <div class="container">
         <p class="main_title">Многоэтапная заявка</p>
-        <div class="form__field">
-            <div class="contributor-search">
-                <input
-                    type="text"
-                    id="search"
-                    class="contributor-search__input"
-                    @keyup="searchHeadquarters"
-                    v-model="name"
-                    placeholder="Начните вводить"
-                />
-                <img src="@app/assets/icon/search.svg" alt="search" />
+        <div v-if="!processApplication">
+            <div class="form__field">
+                <div class="contributor-search">
+                    <input
+                        type="text"
+                        id="search"
+                        class="contributor-search__input"
+                        @keyup="searchHeadquarters"
+                        v-model="name"
+                        placeholder="Начните вводить"
+                    />
+                    <img src="@app/assets/icon/search.svg" alt="search" />
+                </div>
             </div>
-        </div>
 
-        <div id="wrapper">
-            <div id="left">
-                <!-- Место под фильтры -->
+            <div id="wrapper">
+                <div id="left">
+                    <!-- Место под фильтры -->
 
-                <div class="uploads">
-                    <div
-                        class="form-col"
-                        v-for="(file, index) in files.length + 1"
-                        :key="file"
-                    >
-                        <div class="form-fileupload" v-if="index < 6">
-                            <img
-                                class="paper-clip"
-                                src="@app/assets/icon/addFile.svg"
-                                alt="addFile"
+                    <div class="uploads">
+                        <div
+                            class="form-col"
+                            v-for="(file, index) in files.length + 1"
+                            :key="file"
+                        >
+                            <div class="form-fileupload" v-if="index < 6">
+                                <img
+                                    class="paper-clip"
+                                    src="@app/assets/icon/addFile.svg"
+                                    alt="addFile"
+                                />
+
+                                <FileUpload
+                                    class="file-upload-text"
+                                    mode="basic"
+                                    name="demo[]"
+                                    accept=".pdf, .jpeg, .png"
+                                    :maxFileSize="7000000"
+                                    :customUpload="true"
+                                    chooseLabel="Выбрать файл"
+                                    @select="onUpload"
+                                    @clear="onRemove(index)"
+                                ></FileUpload>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="right" v-if="sortedHeadquartersJunior.length">
+                    <div class="additional_line">
+                        <div class="horizontallso__confidant">
+                            <input
+                                type="checkbox"
+                                v-model="isChecked"
+                                @change="onCheckbox"
                             />
+                        </div>
 
-                            <FileUpload
-                                class="file-upload-text"
-                                mode="basic"
-                                name="demo[]"
-                                accept=".pdf, .jpeg, .png"
-                                :maxFileSize="7000000"
-                                :customUpload="true"
-                                chooseLabel="Выбрать файл"
-                                @select="onUpload"
-                                @clear="onRemove(index)"
-                            ></FileUpload>
+                        <p class="choose_all">Выделить все</p>
+
+                        <a class="download_text" target="_blank">
+                            <img
+                                class="download_img"
+                                src="/assets/download.svg"
+                            />
+                            Cкачать список
+                        </a>
+
+                        <div class="sort_line">
+                            <div class="sort-select">
+                                <sortByEducation
+                                    variant="outlined"
+                                    clearable
+                                    v-model="sortBy"
+                                    :options="sortOptionss"
+                                ></sortByEducation>
+                            </div>
+                            <Button
+                                type="button"
+                                class="ascend"
+                                icon="switch"
+                                @click="ascending = !ascending"
+                                color="white"
+                            ></Button>
                         </div>
                     </div>
+
+                    <multi-stage-submit-item
+                        v-for="headquarter in sortedHeadquartersJunior"
+                        :key="headquarter"
+                        :headquarter="headquarter"
+                        @select="onToggleSelectCompetition"
+                    />
                 </div>
+                <p class="subtitle" v-else>Ничего не найдено.</p>
             </div>
 
-            <div id="right" v-if="sortedHeadquartersJunior.length">
-                <div class="additional_line">
-                    <div class="horizontallso__confidant">
-                        <input
-                            type="checkbox"
-                            v-model="isChecked"
-                            @change="onCheckbox"
-                        />
-                    </div>
-
-                    <p class="choose_all">Выделить все</p>
-
-                    <a class="download_text" target="_blank">
-                        <img class="download_img" src="/assets/download.svg" />
-                        Cкачать список
-                    </a>
-
-                    <div class="sort_line">
-                        <div class="sort-select">
-                            <sortByEducation
-                                variant="outlined"
-                                clearable
-                                v-model="sortBy"
-                                :options="sortOptionss"
-                            ></sortByEducation>
-                        </div>
-                        <Button
-                            type="button"
-                            class="ascend"
-                            icon="switch"
-                            @click="ascending = !ascending"
-                            color="white"
-                        ></Button>
-                    </div>
-                </div>
-
-                <multi-stage-submit-item
-                    v-for="headquarter in sortedHeadquartersJunior"
-                    :key="headquarter"
+            <template v-if="selectedCompetitionsList.length">
+                <p class="text_total">
+                    Итого: {{ selectedCompetitionsList.length }} ({{
+                        memberCount
+                    }}
+                    участников)
+                </p>
+                <!-- ({{ selectedCompetitionsList.reduce((sum, el) => sum + el.members_count) }}) -->
+                <multi-stage-submit-select
+                    v-for="headquarter in selectedCompetitionsList"
+                    :key="headquarter.id"
                     :headquarter="headquarter"
                     @select="onToggleSelectCompetition"
                 />
+            </template>
+            <div
+                class="competitions__btns"
+                v-if="selectedCompetitionsList.length"
+            >
+                <Button
+                    class="save"
+                    type="button"
+                    label="Подать заявку"
+                    @click="onAction"
+                ></Button>
             </div>
-            <p class="subtitle" v-else>Ничего не найдено.</p>
         </div>
-
-        <template v-if="selectedCompetitionsList.length">
-            <p class="text_total">
-                Итого: {{ selectedCompetitionsList.length }} ({{ memberCount }}
-                участников)
-            </p>
-            <!-- ({{ selectedCompetitionsList.reduce((sum, el) => sum + el.members_count) }}) -->
-            <multi-stage-submit-select
-                v-for="headquarter in selectedCompetitionsList"
-                :key="headquarter.id"
-                :headquarter="headquarter"
-                @select="onToggleSelectCompetition"
-            />
-        </template>
-        <div class="competitions__btns" v-if="selectedCompetitionsList.length">
-            <Button
-                class="save"
-                type="button"
-                label="Подать заявку"
-                @click="onAction"
-            ></Button>
-        </div>
+        <p class="subtitle" v-else>Вы уже подали заявку.</p>
     </div>
 </template>
 
@@ -135,6 +146,10 @@ const isChecked = ref(false);
 const route = useRoute();
 const router = useRouter();
 
+const processApplication = ref(false);
+const eventInfo = ref({});
+const meInfo = ref({});
+const applications = ref([]);
 const headquartersJunior = ref([]);
 const sortedHeadquartersJunior = ref([]);
 const selectedCompetitionsList = ref([]);
@@ -154,6 +169,62 @@ const sortOptionss = ref([
     { value: 'date_of_birth', name: 'По дате вступления в РСО' },
 ]);
 
+const checkApplicationOnProcess = async () => {
+    for (const app of applications.value) {
+        if (app.organizer_id == meInfo.value.id)
+            processApplication.value = true;
+    }
+};
+
+const getEventInfo = async () => {
+    try {
+        const { data } = await HTTP.get(`/events/${route.params.id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        eventInfo.value = data;
+        console.log(eventInfo.value);
+    } catch (e) {
+        console.log('getEventInfo error', e);
+    }
+};
+
+const getMeInfo = async () => {
+    try {
+        const { data } = await HTTP.get(`/users/me/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        meInfo.value = data;
+        console.log(meInfo.value);
+    } catch (e) {
+        console.log('getMeInfo error', e);
+    }
+};
+
+const getApplicationinfo = async () => {
+    try {
+        const { data } = await HTTP.get(
+            `/events/${route.params.id}/multi_applications/all`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        applications.value = data;
+        await checkApplicationOnProcess();
+        console.log(applications.value);
+    } catch (e) {
+        console.log('getApplicationinfo error', e);
+    }
+};
+
 const getHeadquartersJunior = async () => {
     try {
         const { data } = await HTTP.get(
@@ -172,9 +243,6 @@ const getHeadquartersJunior = async () => {
                     delete item?.detachments;
                     delete item?.educational_headquarters;
                     item.district_headquarter = item.id;
-                    // item.district_headquarter = {};
-                    // item.district_headquarter.id = item.id;
-                    // item.district_headquarter.name = item.name;
                     item.id = i;
                     i += 1;
                     return item;
@@ -187,9 +255,6 @@ const getHeadquartersJunior = async () => {
                     delete item?.detachments;
                     delete item?.educational_headquarters;
                     item.regional_headquarter = item.id;
-                    // item.regional_headquarter = {};
-                    // item.regional_headquarter.id = item.id;
-                    // item.regional_headquarter.name = item.name;
                     item.id = i;
                     i += 1;
                     return item;
@@ -202,9 +267,6 @@ const getHeadquartersJunior = async () => {
                     delete item?.detachments;
                     delete item?.educational_headquarters;
                     item.local_headquarter = item.id;
-                    // item.local_headquarter = {};
-                    // item.local_headquarter.id = item.id;
-                    // item.local_headquarter.name = item.name;
                     item.id = i;
                     i += 1;
                     return item;
@@ -217,9 +279,6 @@ const getHeadquartersJunior = async () => {
                     delete item?.detachments;
                     delete item?.educational_headquarters;
                     item.educational_headquarter = item.id;
-                    // item.educational_headquarter = {};
-                    // item.educational_headquarter.id = item.id;
-                    // item.educational_headquarter.name = item.name;
                     item.id = i;
                     i += 1;
                     return item;
@@ -233,9 +292,6 @@ const getHeadquartersJunior = async () => {
                     delete item?.detachments;
                     delete item?.educational_headquarters;
                     item.detachment = item.id;
-                    // item.detachment = {};
-                    // item.detachment.id = item.id;
-                    // item.detachment.name = item.name;
                     item.id = i;
                     i += 1;
                     return item;
@@ -304,33 +360,8 @@ const onAction = async () => {
 
         if (files.value.length > 0) {
             let payload = {};
-
-            const { data } = await HTTP.get(`/users/me/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-
-            console.log(data);
-            payload.user = data;
-            console.log(payload);
-
-            const { data: event_data } = await HTTP.get(
-                `/events/${route.params.id}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-
-            console.log(event_data);
-            payload.event = event_data?.name;
-            console.log(payload);
-
-            console.log('files', files);
+            payload.user = meInfo;
+            payload.event = eventInfo.value?.name;
             for (let file of files.value) {
                 console.log(file);
                 console.log(payload);
@@ -404,6 +435,9 @@ watch(selectedCompetitionsList, () => {
 });
 
 onMounted(async () => {
+    await getEventInfo();
+    await getMeInfo();
+    await getApplicationinfo();
     await getHeadquartersJunior();
 });
 </script>
