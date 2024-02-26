@@ -1095,6 +1095,7 @@
                                     "
                                     :options="militaryDocs"
                                     class="select-big"
+                                    :sorts-boolean="false"
                                 ></sortByEducation>
                                 <p
                                     class="error"
@@ -1119,6 +1120,8 @@
                                     v-model:value="
                                         props.user.documents.mil_reg_doc_ser_num
                                     "
+
+
                                 />
                             </div>
                         </div>
