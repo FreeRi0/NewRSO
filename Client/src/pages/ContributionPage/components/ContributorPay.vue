@@ -245,7 +245,7 @@ const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const viewContributorsData = async (search, join) => {
+const viewContributorsData = async (search) => {
     try {
         isLoading.value = true;
         const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {

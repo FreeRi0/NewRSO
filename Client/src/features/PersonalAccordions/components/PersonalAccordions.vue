@@ -3236,7 +3236,25 @@
                 class="form__button-group d-flex justify-space-between"
             >
                 <Button
-                    :disabled="isLoading"
+                    :disabled="
+                        isLoading ||
+                        (!props.user.first_name &&
+                            !props.user.last_name &&
+                            !props.user.gender &&
+                            !props.user.date_of_birth &&
+                            !props.user.email &&
+                            !props.user.phone_number &&
+                            !props.user.user_region.reg_town &&
+                            !props.user.user_region.reg_region &&
+                            !props.user.user_region.reg_house &&
+                            !props.user.user_region.reg_fact_same_address &&
+                            !props.user.documents.pass_ser_num &&
+                            !props.user.documents.pass_date &&
+                            !props.user.documents.inn &&
+                            !props.user.documents.snils &&
+                            !props.user.education.study_institution &&
+                            !props.user.education.study_year)
+                    "
                     :loaded="isLoading"
                     v-if="
                         props.user.sent_verification === false &&
@@ -3717,7 +3735,11 @@ const updateData = async () => {
             );
         }
 
-        let studyEducationId = Number.isInteger(props.user.education.study_institution)?props.user.education.study_institution:props.user.education.study_institution?.id;
+        let studyEducationId = Number.isInteger(
+            props.user.education.study_institution,
+        )
+            ? props.user.education.study_institution
+            : props.user.education.study_institution?.id;
         const axiosrequest4 = await HTTP.patch(
             '/rsousers/me/education/',
             {
@@ -3993,8 +4015,8 @@ onMounted(() => {
             column-gap: 40px;
         }
         @media (max-width: 575px) {
-           display: flex;
-           flex-direction: column;
+            display: flex;
+            flex-direction: column;
         }
     }
     &-wrapper {
@@ -4005,8 +4027,8 @@ onMounted(() => {
             font-size: 24px;
             padding: 40px 40px 0px;
             @media (max-width: 768px) {
-            font-size: 18px;
-        }
+                font-size: 18px;
+            }
         }
     }
 }
