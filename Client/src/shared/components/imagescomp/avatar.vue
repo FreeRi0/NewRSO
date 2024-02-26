@@ -142,18 +142,38 @@
                                             <v-row>
                                                 <v-file-input
                                                     @change="selectFile"
+                                                    type="file"
                                                     show-size
                                                     prepend-icon="mdi-camera"
                                                     counter
-                                                ></v-file-input>
+                                                />
                                             </v-row>
-                                            <v-row>
-                                                <v-card class="mt-5 mx-auto">
-                                                    <img
-                                                        v-if="preview"
-                                                        :src="preview"
-                                                    />
-                                                </v-card>
+                                            <v-row class="align-center justify-end">
+                                                <v-btn
+                                                    v-if="preview"
+                                                    class="button-wrapper mt-5"
+                                                    @click="cropImage()"
+                                                    prepend-icon="crop"
+                                                    variant="plain"
+                                                >Обрезать фото</v-btn>
+                                            </v-row>
+                                            <v-row v-if="preview">
+                                                <Cropper
+                                                    ref="cropper"
+                                                    class="cropper mt-5 mx-auto"
+                                                    :src="preview"
+                                                    @change="onChangeCrop"
+                                                    :stencil-component="CircleStencil"
+                                                />
+                                                <Preview
+                                                    :width="120"
+                                                    :height="120"
+                                                    :image="result.image"
+                                                    :coordinates="result.coordinates"
+                                                    class="mt-9"
+                                                    style='border-radius: 50%'
+
+                                                />
                                             </v-row>
                                         </v-container>
                                     </v-card-text>
