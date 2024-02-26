@@ -311,25 +311,11 @@ import { sortByEducation } from '@shared/components/selects';
 import { getListActionsBySearch } from '@services/ActionService';
 import { onActivated } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
-import { onMounted } from 'vue';
 
 let actionsList = ref([]);
 let rolesCount = 0;
 const rolesStore = useRoleStore();
 
-onMounted(() => {
-    watch(
-        () => rolesStore.roles,
-        (newRole) => {
-            console.log('Пользователь - командир');
-            Object.entries(newRole).forEach(([key, value]) => {
-                if (value !== null) {
-                    rolesCount = rolesCount + 1;
-                }
-            });
-        },
-    );
-});
 onActivated(() => {
     getListActionsBySearch(text.value).then((resp) => {
         actionsList.value = resp.data;
