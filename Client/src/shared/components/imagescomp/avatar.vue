@@ -142,18 +142,38 @@
                                             <v-row>
                                                 <v-file-input
                                                     @change="selectFile"
+                                                    type="file"
                                                     show-size
                                                     prepend-icon="mdi-camera"
                                                     counter
-                                                ></v-file-input>
+                                                />
                                             </v-row>
-                                            <v-row>
-                                                <v-card class="mt-5 mx-auto">
-                                                    <img
-                                                        v-if="preview"
-                                                        :src="preview"
-                                                    />
-                                                </v-card>
+                                            <v-row class="align-center justify-end">
+                                                <v-btn
+                                                    v-if="preview"
+                                                    class="button-wrapper mt-5"
+                                                    @click="cropImage()"
+                                                    prepend-icon="crop"
+                                                    variant="plain"
+                                                >Обрезать фото</v-btn>
+                                            </v-row>
+                                            <v-row v-if="preview">
+                                                <Cropper
+                                                    ref="cropper"
+                                                    class="cropper mt-5 mx-auto"
+                                                    :src="preview"
+                                                    @change="onChangeCrop"
+                                                    :stencil-component="CircleStencil"
+                                                />
+                                                <Preview
+                                                    :width="120"
+                                                    :height="120"
+                                                    :image="result.image"
+                                                    :coordinates="result.coordinates"
+                                                    class="mt-9"
+                                                    style='border-radius: 50%'
+
+                                                />
                                             </v-row>
                                         </v-container>
                                     </v-card-text>
@@ -191,7 +211,6 @@
                 </v-card-text>
             </v-card>
         </v-menu>
-
     </div>
 </template>
 <script setup>
@@ -392,5 +411,16 @@ const deleteAvatar = async () => {
     clip-path: circle(50%);
     object-fit: cover;
     border-radius: 50%;
+}
+.v-btn--icon.v-btn--density-default {
+    background: rgba(0, 0, 0, 0.4);
+    margin-right: 15px;
+}
+.v-btn--icon {
+    border-radius: 50%;
+    border: 2px solid white;
+}
+.v-icon {
+    color: white;
 }
 </style>

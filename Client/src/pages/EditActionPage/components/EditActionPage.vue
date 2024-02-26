@@ -1164,12 +1164,12 @@ const maininfo = ref({
     participants_number: Number,
     application_type: '',
     available_structural_units: '',
-    org_central_headquarter: 0,
-    org_district_headquarter: 0,
-    org_regional_headquarter: 0,
-    org_local_headquarter: 0,
-    org_educational_headquarter: 0,
-    org_detachment: 0,
+    org_central_headquarter: 1,
+    org_district_headquarter: null,
+    org_regional_headquarter: null,
+    org_local_headquarter: null,
+    org_educational_headquarter: null,
+    org_detachment: null,
     time_data: {
         event_duration_type: '',
         start_date: '',
@@ -1353,7 +1353,7 @@ function AddQuestion() {
     }
     &-label {
         font-family: Bert Sans;
-        font-size: 1.3vw;
+        font-size: 0.9vw;
         font-style: normal;
         font-weight: 600;
         line-height: 24px;

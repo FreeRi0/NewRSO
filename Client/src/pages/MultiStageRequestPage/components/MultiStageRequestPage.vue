@@ -54,6 +54,7 @@
             </div>
         </div>
         <p v-else class="subtitle">Заявок нет</p>
+        <p v-else class="subtitle">Заявок нет</p>
     </div>
 </template>
 
@@ -297,6 +298,11 @@ onMounted(async () => {
 .container {
     margin: 0 auto;
     padding: 0px 130px 60px 130px;
+}
+.competition__avatar_circle {
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
 }
 .competition__avatar_circle {
     border-radius: 50%;

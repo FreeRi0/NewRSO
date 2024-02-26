@@ -375,7 +375,7 @@ const copyL = () => {
     @media screen and (max-width: 575px) {
         grid-template-columns: 125px 125px;
         justify-content: center;
-        margin-left: 40px;
+        margin-left: 64px;
     }
 }
 

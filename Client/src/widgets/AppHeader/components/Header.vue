@@ -315,25 +315,32 @@ const userPages = computed(() => [
     {
         title: 'Активные заявки',
         name: 'active',
-        show: roleStore.roles?.regionalheadquarter_commander || roleStore.roles?.detachment_commander,
+        show:
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.detachment_commander,
     },
     {
         title: 'Поиск участников',
         link: 'roster',
         show:
-        roleStore.roles?.centralheadquarter_commander ||
-        roleStore.roles?.districtheadquarter_commander ||
+            roleStore.roles?.centralheadquarter_commander ||
+            roleStore.roles?.districtheadquarter_commander ||
             roleStore.roles?.regionalheadquarter_commander,
     },
     {
         title: 'Членский взнос',
         name: 'contributorPay',
-        show: roleStore.roles?.centralheadquarter_commander || roleStore.roles?.regionalheadquarter_commander ||  roleStore.roles?.districtheadquarter_commander,
+        show:
+            roleStore.roles?.centralheadquarter_commander ||
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.districtheadquarter_commander,
     },
     {
         title: 'Оформление справок',
         name: 'references',
-        show: roleStore.roles?.regionalheadquarter_commander || roleStore.roles?.centralheadquarter_commander,
+        show:
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.centralheadquarter_commander,
     },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },
