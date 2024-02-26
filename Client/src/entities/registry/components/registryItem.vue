@@ -53,7 +53,7 @@
             <p v-if="item?.educational_headquarter" class="mr-7">ШОО:</p>
             <p v-if="item?.detachment" class="mr-7">ЛСО:</p> -->
             <p v-if="item.membership_fee === true">Членский Взнос: Оплачен</p>
-            <p v-else>Членский Взнос: Неоплачен</p>
+            <p v-else-if="item.membership_fee === false">Членский Взнос: Неоплачен</p>
             <div class="d-flex"  v-if="item.participants_count">
                 <img src="@app/assets/icon/people.svg" alt="people" />
                 <p class="ml-3">{{ item.participants_count }}</p>

@@ -263,6 +263,7 @@ const SelectedSortRegional = ref(
 const squadsVisible = ref(20);
 const step = ref(20);
 
+
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 

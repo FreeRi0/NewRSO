@@ -44,9 +44,7 @@
 
             <div
                 v-else-if="
-                    picked === false &&
-                    roles.roles.value.regionalheadquarter_commander
-                "
+                    picked === false"
             >
                 <div class="contributor-search">
                     <input
@@ -173,9 +171,6 @@
                     ></Button>
                 </div>
             </div>
-            <div v-else class="mt-12">
-                Доступно только для командиров рег штабов
-            </div>
         </div>
     </div>
 </template>
@@ -245,7 +240,7 @@ const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
-const viewContributorsData = async (search, join) => {
+const viewContributorsData = async (search) => {
     try {
         isLoading.value = true;
         const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
