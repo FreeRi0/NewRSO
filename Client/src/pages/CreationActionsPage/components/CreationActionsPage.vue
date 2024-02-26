@@ -971,7 +971,7 @@
                                     <div class="form-checkbox">
                                         <input
                                             v-model="
-                                                organizators.is_contact_person
+                                                organizator.is_contact_person
                                             "
                                             type="checkbox"
                                             name="person"
@@ -1099,6 +1099,7 @@ import {
     createAction,
     putTimeData,
     putDocuments,
+    createOrganizator,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
@@ -1206,15 +1207,22 @@ watchEffect(() => {
             break;
         case 'Групповая':
             area_massive.value = [
+                { name: 'Округи' },
+                { name: 'Регионы' },
+                { name: 'Местные штабы' },
                 { name: 'ЛСО' },
-                { name: 'Региональный штаб' },
+                { name: 'Штабы ОО' },
+                { name: 'СО' },
             ];
             break;
         case 'Многоэтапная':
             area_massive.value = [
+                { name: 'Округи' },
+                { name: 'Регионы' },
+                { name: 'Местные штабы' },
                 { name: 'ЛСО' },
-                { name: 'Региональный штаб' },
-                { name: 'Окружной штаб' },
+                { name: 'Штабы ОО' },
+                { name: 'СО' },
             ];
             break;
     }
@@ -1388,6 +1396,9 @@ function SubmitEvent() {
                 .catch((e) => {
                     console.error(e);
                 });
+            createOrganizator(resp.data.id, organizators.value)
+                .then(() => {})
+                .catch(() => {});
             router.push({ name: 'actionSquads' });
         })
         .catch((e) => {

@@ -287,7 +287,7 @@
                         v-if="!vertical"
                         v-for="action in actionsList"
                         class="postcard-containerline"
-                        :key="ac"
+                        :key="action"
                     >
                         <ActionitemVertical
                             :action="action"
@@ -355,6 +355,19 @@ const ascending = ref(true);
 
 //События нажатия
 function ClearSearchForm() {
+    actionFormSearch.value = {
+        format: {
+            online: null,
+            offline: null,
+        },
+        direction: '',
+        status: {
+            start: null,
+            finish: null,
+        },
+        roads: '',
+        search: '',
+    };
     console.log('Форма очищена');
 }
 
@@ -373,6 +386,7 @@ const actionFormSearch = ref({
     search: '',
 });
 function SendSearchForm() {}
+
 //Изменение расположения блоков
 const showVertical = () => {
     vertical.value = !vertical.value;
