@@ -143,6 +143,7 @@
                                     clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
+                                    :sorts-boolean="false"
                                 ></sortByEducation>
                             </div>
 
@@ -566,4 +567,3 @@ onActivated(() => {
     border: none;
 }
 </style>
-@shared/components/selects/inputs @shared/components/inputs/imagescomp

@@ -238,6 +238,18 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
+                                path: '/createlhq',
+                                name: 'createlhq',
+                                component: () =>
+                                    import(
+                                        '@pages/CreationOfLHQ/components/CreationOfLHQ.vue'
+                                        ),
+                                meta: {
+                                    requiresAuth: true,
+                                    label: 'Создание местного штаба',
+                                },
+                            },
+                            {
                                 path: ':id',
                                 meta: {
                                     label: 'localHeadquarter.name',
@@ -588,12 +600,6 @@ const routes: RouteRecordRaw[] = [
                 },
             },
             //Реестр участников
-            {
-                path: '/roster',
-                name: 'Roster',
-                component: () =>
-                    import('@pages/reestrPage/components/rosterPage.vue'),
-            },
 
             {
                 path: '/Competition',
@@ -697,6 +703,16 @@ const routes: RouteRecordRaw[] = [
                     ),
                 meta: {
                     label: 'Членский взнос',
+                },
+            },
+
+            {
+                path: '/roster',
+                name: 'Roster',
+                component: () =>
+                    import('@pages/reestrPage/components/rosterPage.vue'),
+                meta: {
+                    label: 'Реестр участников',
                 },
             },
             {

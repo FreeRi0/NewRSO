@@ -21,7 +21,7 @@
                 "
                 class="required_verification"
             >
-                <p>Необходимо верифицироваться до 25 февраля 2024 года</p>
+                <p>Необходимо верифицироваться до 10 марта 2024 года</p>
             </div>
         </div>
 
@@ -40,7 +40,6 @@ import { onMounted, ref } from 'vue';
 import { AppBreadcrumbs, useBreadcrumbsStore } from '@shared/index';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@features/store/index';
-// import { useRegionalsStore } from '@features/store/regionals';
 const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 
 import { useRoleStore } from '@layouts/store/role';
@@ -50,8 +49,7 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { useLocalsStore } from '@features/store/local';
 import { useDistrictsStore } from '@features/store/districts';
-// const regionalsStore = useRegionalsStore();
-// const regionalHeadquarters = storeToRefs(regionalsStore);
+
 const roleStore = useRoleStore();
 const userStore = useUserStore();
 const regionsStore = useRegionalsStore();
@@ -75,6 +73,7 @@ onMounted(() => {
     educationalsStore.getEducationals();
     squadsStore.getAreas();
     localsStore.getLocals();
+  
 });
 
 //запрос на коммандира

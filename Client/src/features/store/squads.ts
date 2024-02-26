@@ -15,7 +15,7 @@ export const useSquadsStore = defineStore('squads', {
             if (this.squads.length) return;
             try {
                 this.isLoading = true;
-                const responseSquads = await HTTP.get('detachments/', {
+                const responseSquads = await HTTP.get('/detachments/', {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),

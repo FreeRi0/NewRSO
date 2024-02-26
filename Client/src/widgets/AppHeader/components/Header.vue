@@ -114,7 +114,7 @@
                             "
                         >
                             <div
-                                v-for="item in regionals.filteredRegional.value"
+                                v-for="item in regionals.filteredMyRegional.value"
                             >
                                 <p>{{ item.name }}</p>
                             </div>
@@ -314,8 +314,8 @@ const userPages = computed(() => [
         show: true,
     },
     { title: 'Активные заявки', name: 'active', show: true },
-    // { title: 'Поиск участников', link: '#', show: (userStore.currentUser?.central_headquarter_id ||
-    // userStore.currentUser?.district_headquarter_id || userStore.currentUser?.regional_headquarter_id) },
+    { title: 'Поиск участников', link: 'roster', show: (userStore.currentUser?.central_headquarter_id ||
+    userStore.currentUser?.district_headquarter_id || userStore.currentUser?.regional_headquarter_id) },
     { title: 'Членский взнос', name: 'contributorPay', show: true },
     {
         title: 'Оформление справок',
@@ -401,7 +401,7 @@ watch(
         region.value = regionalsStore.regions.find(
             (region) => region.name === userStore.currentUser.region,
         )?.id;
-        regionalsStore.searchRegionals(userStore.currentUser.region);
+        regionalsStore.searchMyRegionals(userStore.currentUser.region);
     },
 );
 </script>

@@ -113,9 +113,10 @@
                                                 ></label
                                             >
                                             <sortByEducation
-                                                :options="scale_massive"
+                                                :options="scale_massive_sorted"
                                                 placeholder="Например, ЛСО"
                                                 v-model="maininfo.scale"
+                                                :sorts-boolean="true"
                                             >
                                             </sortByEducation>
                                         </div>
@@ -892,7 +893,7 @@
                                         <label
                                             class="form-label"
                                             for="telegram-owner-hq"
-                                            >Telegram организатора</label
+                                            >Telegram</label
                                         >
                                         <InputText
                                             id="telegram-owner-hq"
@@ -908,11 +909,13 @@
                                         <label
                                             class="form-label"
                                             for="telegram-squad-hq"
-                                            >Telegram отряда</label
+                                            >Телефон</label
                                         >
                                         <InputText
                                             id="telegram-squad-hq"
-                                            v-model="organizator.telegramSquad"
+                                            v-model="
+                                                organizator.organizer_phone_number
+                                            "
                                             class="form__input form-input-container"
                                             placeholder="@Invar"
                                             name="telegram-squad-hq"
@@ -1085,7 +1088,7 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import {
     createAction,
     putTimeData,
@@ -1095,21 +1098,62 @@ import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
-import { onActivated } from 'vue';
+import { onActivated, onMounted } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
+import { getUser } from '@services/UserService';
 const router = useRouter();
-const user = useRoleStore();
+const rolesStore = useRoleStore();
+let org_id = 0;
+
+function AddOrginizationId(value) {
+    Object.entries(value).forEach(([key, value]) => {
+        if (key === 'id') {
+            console.log(`${key} + ${value}`);
+        }
+    });
+}
 
 onActivated(() => {
-    console.log(user.userRoles);
+    watch(
+        () => rolesStore.roles,
+        (newRole) => {
+            console.log(newRole);
+            Object.entries(newRole).forEach(([key, value]) => {
+                //Найти более локанимное решение
+                if (value !== null) {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                        }
+                    });
+                    const filted = scale_massive.value.find(
+                        (commander) => commander.value === key,
+                    );
+                    scale_massive_sorted.value.push(filted); //Работает
+                }
+            });
+            console.log(org_id);
+        },
+    );
+    getUser().then((resp) => {
+        console.log(resp.data);
+        organizators.value.push({
+            organizer: `${resp.data.last_name} ${resp.data.first_name} ${resp.data.patronymic_name}`,
+            organizer_phone_number: resp.data.phone_number,
+            organizer_email: resp.data.email,
+            organization: '',
+            telegram: resp.data.social_tg,
+            is_contact_person: true,
+        });
+    });
 });
+onMounted(() => {});
 
 const maininfo = ref({
     format: '',
     direction: '',
     name: '',
     scale: '',
-    //banner: null,
+    banner: null,
     conference_link: '',
     address: '',
     description: '',
@@ -1117,11 +1161,11 @@ const maininfo = ref({
     application_type: '',
     available_structural_units: '',
     org_central_headquarter: 1,
-    //org_district_headquarter: 0,
-    //org_regional_headquarter: 0,
-    //org_local_headquarter: 0,
-    //org_educational_headquarter: 0,
-    //org_detachment: 0,
+    org_district_headquarter: '',
+    org_regional_headquarter: '',
+    org_local_headquarter: '',
+    org_educational_headquarter: '',
+    org_detachment: '',
 });
 
 const urlBanner = ref(null);
@@ -1134,14 +1178,16 @@ const resetBanner = () => {
     maininfo.value.banner = null;
     urlBanner.value = null;
 };
-//Что-то придумать
+
+const scale_massive_sorted = ref([]);
+
 const scale_massive = ref([
-    { name: 'Отрядное' },
-    { name: 'Образовательное' },
-    { name: 'Городское' },
-    { name: 'Региональное' },
-    { name: 'Окружное' },
-    { name: 'Всероссийское' },
+    { name: 'Отрядное', value: 'detachment_commander' },
+    { name: 'Образовательное', value: 'educationalheadquarter_commander' },
+    { name: 'Городское', value: 'localheadquarter_commander' },
+    { name: 'Региональное', value: 'regionalheadquarter_commander' },
+    { name: 'Окружное', value: 'districtheadquarter_commander' },
+    { name: 'Всероссийское', value: 'centralheadquarter_commander' },
 ]);
 
 const direction_massive = ref([
@@ -1180,16 +1226,7 @@ const time_data = ref({
 
 //Переменные организаторов
 
-const organizators = ref([
-    {
-        organizer: '',
-        organizer_phone_number: '',
-        organizer_email: '',
-        organization: '',
-        telegram: '',
-        is_contact_person: false,
-    },
-]);
+const organizators = ref([]);
 
 //Ответы на вопросы
 const answers = ref([
@@ -1215,7 +1252,26 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
-
+    switch (maininfo.value.scale) {
+        case 'Отрядное':
+            maininfo.value.org_detachment = org_id;
+            break;
+        case 'Образовательное':
+            maininfo.value.org_educational_headquarter = org_id;
+            break;
+        case 'Городское':
+            maininfo.value.org_local_headquarter = org_id;
+            break;
+        case 'Региональное':
+            maininfo.value.org_regional_headquarter = org_id;
+            break;
+        case 'Окружное':
+            maininfo.value.org_central_headquarter = org_id;
+            break;
+        case 'Всероссийское':
+            maininfo.value.org_central_headquarter = org_id;
+            break;
+    }
     createAction(fd)
         .then((resp) => {
             console.log('Форма передалась успешно', resp.data);

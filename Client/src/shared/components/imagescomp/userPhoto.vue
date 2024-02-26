@@ -19,15 +19,11 @@
     </div>
 </template>
 <script setup>
-import { ref, inject } from 'vue';
-import { HTTP } from '@app/http';
 import { uploadPhoto } from '.';
 const emit = defineEmits(['uploadUserPic, updateUserPic']);
 
 const uploadUserPic = (userPic) => {
-    console.log('photoUser', userPic);
     emit('uploadUserPic', userPic);
-    console.log('userPic Uploaded!');
 };
 
 

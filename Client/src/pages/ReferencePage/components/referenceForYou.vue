@@ -58,6 +58,7 @@
                                     clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
+                                    :sorts-boolean="false"
                                 ></sortByEducation>
                             </div>
 
@@ -295,12 +296,16 @@ const updateLocal = (localVal) => {
         search = '?regional_headquarter__name=' + reg.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    viewContributorsData(search, !localVal);
 
     let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
+    let regId = regionalsStore.regionals.find(
+        (regional) => regional.name == reg.value,
+    )?.id;
     local.value = localVal;
     educHead.value = educationalsStore.educationals.filter(
-        (edh) => edh.local_headquarter == locId,
+        (edh) =>
+            (locId && edh.local_headquarter == locId)
     );
 };
 
@@ -308,17 +313,24 @@ const updateEduc = (educVal) => {
     let search = '';
     if (educVal) {
         search = '?educational_headquarter__name=' + educVal;
+    } else if (local.value) {
+        search = '?local_headquarter__name=' + local.value;
+    } else if (levelAccess.value < 3) {
+        search = '?regional_headquarter__name=' + reg.value;
     } else if (levelAccess.value < 4) {
         search = '?local_headquarter__name=' + local.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    viewContributorsData(search, educVal && !local.value);
     let educId = educationalsStore.educationals.find(
         (edh) => edh.name == educVal,
     )?.id;
+    let regId = regionalsStore.regionals.find(
+        (regional) => regional.name == reg.value,
+    )?.id;
     educ.value = educVal;
     detachments.value = squadsStore.squads.filter(
-        (squad) => squad.educational_headquarter == educId,
+        (squad) => educId && squad.educational_headquarter == educId,
     );
 };
 
@@ -521,6 +533,15 @@ watch(
     () => regionalsStore.regionals,
     () => {
         regionals.value = regionalsStore.regionals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regId,
+        );
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regId,
+        );
     },
 );
 
@@ -528,6 +549,12 @@ watch(
     () => localsStore.locals,
     () => {
         locals.value = localsStore.locals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regId,
+        );
     },
 );
 
@@ -535,6 +562,12 @@ watch(
     () => educationalsStore.educationals,
     () => {
         educHead.value = educationalsStore.educationals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regId,
+        );
     },
 );
 watch(

@@ -3,10 +3,12 @@
         <div class="headquarters">
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
-                :button="false"
-                :loc-com="true"
                 label="Создать штаб"
+                name="createlhq"
+                :button="false"
+                :educ-com="true"
             ></bannerCreate>
+            <!-- :loc-com="true" -->
             <h2 class="headquarters-title">Местные штабы</h2>
             <div class="headquarters-search">
                 <input
@@ -136,6 +138,7 @@
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
+                            :sorts-boolean="false"
                         ></sortByEducation>
                     </div>
 

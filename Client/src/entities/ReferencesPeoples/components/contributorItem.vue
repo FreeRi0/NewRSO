@@ -184,14 +184,6 @@ watch(
     }
 }
 
-.horizontallso-item__list-img-status {
-    position: absolute;
-    width: 18px;
-    max-height: 18px;
-    top: -17px;
-    right: -15px;
-}
-
 .horizontallso-itemo__list-img {
     margin-right: 13px;
 }
