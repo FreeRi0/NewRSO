@@ -7,7 +7,7 @@
                     type="text"
                     id="search"
                     class="contributor-search__input"
-                    @keyup="searchContributors"
+                    @keyup="searchItems"
                     v-model="name"
                     placeholder="Начинайте ввод?"
                 />
@@ -46,7 +46,6 @@
                                 Показать статистику
                             </button>
 
-
                             <button
                                 class="showInfoBtn mr-4"
                                 v-else-if="showInfo"
@@ -63,6 +62,7 @@
                                     clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
+                                    :sorts-boolean="false"
                                 ></sortByEducation>
                             </div>
 
@@ -233,27 +233,27 @@ const viewHeadquartersData = async (resp, search, join) => {
     }
 };
 
-const sortedItems = async () => {
-    let search = '';
-    let resp = '';
-    if (detachment.value) {
-        resp = '/rsousers';
-        search = '?detachment__name=' + detachment.value;
-    } else if (educ.value) {
-        resp = '/detachments/';
-        search = '?educational_headquarter__name=' + educ.value;
-    } else if (local.value) {
-        resp = '/educationals/';
-        search = '?local__name=' + local.value;
-    } else if (reg.value) {
-        resp = '/locals/';
-        search = '?regional__name=' + reg.value;
-    } else if (district.value) {
-        resp = '/regionals/';
-        search = '?district__name=' + district.value;
-    }
-    viewHeadquartersData(resp, search);
-};
+// const sortedItems = async () => {
+//     let search = '';
+//     let resp = '';
+//     if (detachment.value) {
+//         resp = '/rsousers';
+//         search = '?detachment__name=' + detachment.value;
+//     } else if (educ.value) {
+//         resp = '/detachments/';
+//         search = '?educational_headquarter__name=' + educ.value;
+//     } else if (local.value) {
+//         resp = '/educationals/';
+//         search = '?local__name=' + local.value;
+//     } else if (reg.value) {
+//         resp = '/locals/';
+//         search = '?regional__name=' + reg.value;
+//     } else if (district.value) {
+//         resp = '/regionals/';
+//         search = '?district__name=' + district.value;
+//     }
+//     viewHeadquartersData(resp, search);
+// };
 
 const updateDistrict = (districtVal) => {
     let search = '';
@@ -294,6 +294,7 @@ const updateReg = (regVal) => {
 const updateLocal = (localVal) => {
     let search = '';
     let resp = localVal ? '/educationals/' : '/locals/';
+    console.log('level', levelAccess.value, localVal);
     if (localVal) {
         search = '?local_headquarter__name=' + localVal;
     } else if (levelAccess.value < 3) {
@@ -309,9 +310,7 @@ const updateLocal = (localVal) => {
     )?.id;
     local.value = localVal;
     educHead.value = educationalsStore.educationals.filter(
-        (edh) =>
-            (locId && edh.local_headquarter == locId) ||
-            edh.regional_headquarter == regId,
+        (edh) => locId && edh.local_headquarter == locId,
     );
 };
 
@@ -333,7 +332,7 @@ const updateEduc = (educVal) => {
     }
     if (name.value) search += '&search=' + name.value;
 
-    viewHeadquartersData(resp, search, !educVal && !local.value);
+    viewHeadquartersData(resp, search, educVal && !local.value);
     let educId = educationalsStore.educationals.find(
         (edh) => edh.name == educVal,
     )?.id;
@@ -342,9 +341,7 @@ const updateEduc = (educVal) => {
     )?.id;
     educ.value = educVal;
     detachments.value = squadsStore.squads.filter(
-        (squad) =>
-            (educId && squad.educational_headquarter == educId) ||
-            squad.regional_headquarter == regId,
+        (squad) => educId && squad.educational_headquarter == educId,
     );
 };
 
@@ -362,7 +359,7 @@ const updateDetachment = (detachmentVal) => {
     detachment.value = detachmentVal;
 };
 
-const searchContributors = (event) => {
+const searchItems = (event) => {
     let search = '';
     let resp = '';
     if (!name.value && roles.roles.value.centralheadquarter_commander) {
@@ -370,21 +367,31 @@ const searchContributors = (event) => {
     }
     if (district.value) {
         resp = '/regionals/';
-        search = '?regional_headquarter__name=' + reg.value;
-    } else if (reg.value) {
+        // search = '?regional_headquarter__name=' + reg.value;
+        search = '?district_headquarter__name=' + district.value;
+    }
+    if (reg.value) {
         resp = '/locals/';
-        search = '?local_headquarter__name=' + local.value;
-    } else if (local.value) {
+        // search = '?local_headquarter__name=' + local.value;
+        search = '?regional_headquarter__name=' + reg.value;
+    }
+    if (local.value) {
         resp = local.value ? '/educationals/' : '/locals/';
-        search = '?educational_headquarter_name=' + educ.value;
-    } else if (educ.value) {
+
+        // search = '?educational_headquarter_name=' + educ.value;
+        search = '?local_headquarter__name=' + local.value;
+    }
+    if (educ.value) {
         resp = educ.value
             ? '/detachments/'
             : local.value
             ? '/educationals/'
             : '/locals/';
         search = '?detachment__name=' + detachment.value;
-    } else if (detachment.value) {
+
+        search = '?educational_headquarter__name=' + educ.value;
+    }
+    if (detachment.value) {
         resp = '/rsousers';
         search = '?detachment__name=' + detachment.value;
     }
@@ -403,8 +410,8 @@ const sortedHeadquarters = computed(() => {
 
     tempHeadquarters = tempHeadquarters.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa = a.name.toLowerCase() || a.last_name.toLowerCase(),
+                fb = b.name.toLowerCase() || b.last_name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -529,6 +536,9 @@ watch(
         let regId = regionalsStore.regionals.find(
             (regional) => regional.name == reg.value,
         )?.id;
+        // let educId = regionalsStore.educationals.find(
+        //     (ed) => ed.name == educ.value,
+        // )?.id;
         detachments.value = squadsStore.squads.filter(
             (squad) => squad.regional_headquarter == regId,
         );
