@@ -321,8 +321,8 @@ onMounted(() => {
     watch(
         () => rolesStore.roles,
         (newRole) => {
-            Object.entries(newRole).forEach(([obj, value]) => {
-                //console.log(`${obj} + ${value}`);
+            console.log('Пользователь - командир');
+            Object.entries(newRole).forEach(([key, value]) => {
                 if (value !== null) {
                     rolesCount = rolesCount + 1;
                 }
