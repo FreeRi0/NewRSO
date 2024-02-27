@@ -49,7 +49,6 @@ import { AppBreadcrumbs, useBreadcrumbsStore } from '@shared/index';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@features/store/index';
 const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
-
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
 import { usePositionsStore } from '@features/store/positions';
@@ -61,11 +60,8 @@ import { useDistrictsStore } from '@features/store/districts';
 const roleStore = useRoleStore();
 const userStore = useUserStore();
 const regionsStore = useRegionalsStore();
-const districtsStore = useDistrictsStore();
 const positionsStore = usePositionsStore();
-const educationalsStore = useEducationalsStore();
 const squadsStore = useSquadsStore();
-const localsStore = useLocalsStore();
 const currentUser = storeToRefs(userStore);
 console.log('user', currentUser.currentUser.value);
 
@@ -74,13 +70,9 @@ const isAuth = ref(!!localStorage.getItem('Token'));
 onMounted(() => {
     userStore.getUser();
     roleStore.getRoles();
-    districtsStore.getDistricts();
     regionsStore.getRegions();
-    regionsStore.getRegionals();
     positionsStore.getPositions();
-    educationalsStore.getEducationals();
     squadsStore.getAreas();
-    localsStore.getLocals();
 });
 
 //запрос на коммандира

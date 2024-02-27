@@ -380,9 +380,9 @@ const select = (event) => {
     console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
         console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.value) {
+        for (let index in sortedParticipants.value) {
             console.log('arr', selectedPeoples.value);
-            selectedPeoples.value.push(participants.value[index]);
+            selectedPeoples.value.push(sortedParticipants.value[index]);
         }
     }
 };
@@ -567,7 +567,47 @@ watch(
 );
 
 onMounted(() => {
-    viewContributorsData(search);
+    if (!roles.roles.value.centralheadquarter_commander) {
+            let search = '';
+
+            if (roles.roles.value.districtheadquarter_commander) {
+                district.value =
+                    roles.roles.value.districtheadquarter_commander.name;
+                search =
+                    '?district_headquarter__name=' +
+                    roles.roles.value.districtheadquarter_commander.name;
+                levelAccess.value = 1;
+            } else if (roles.roles.value.regionalheadquarter_commander) {
+                reg.value =
+                    roles.roles.value.regionalheadquarter_commander.name;
+                search =
+                    '?regional_headquarter__name=' +
+                    roles.roles.value.regionalheadquarter_commander.name;
+                levelAccess.value = 2;
+            } else if (roles.roles.value.localheadquarter_commander) {
+                local.value = roles.roles.value.localheadquarter_commander.name;
+                search =
+                    '?local_headquarter__name=' +
+                    roles.roles.value.localheadquarter_commander.name;
+                levelAccess.value = 3;
+            } else if (roles.roles.value.educationalheadquarter_commander) {
+                educ.value =
+                    roles.roles.value.educationalheadquarter_commander.name;
+                search =
+                    '?educational_headquarter__name=' +
+                    roles.roles.value.educationalheadquarter_commander.name;
+                levelAccess.value = 4;
+            } else if (roles.roles.value.detachment_commander) {
+                detachment.value = roles.roles.value.detachment_commander.name;
+                search =
+                    '?detachment__name=' +
+                    roles.roles.value.detachment_commander.name;
+                levelAccess.value = 5;
+            }
+            viewContributorsData(search);
+        } else {
+            levelAccess.value = 0;
+        }
 })
 </script>
 <style lang="scss">

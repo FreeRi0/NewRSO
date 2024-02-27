@@ -42,11 +42,11 @@
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
                         </li>
-                        <li class="header__nav-item disable">
+                        <!-- <li class="header__nav-item disable">
                             <a class="header__nav-link" href="/actionSquads">
                                 Мероприятия
                             </a>
-                        </li>
+                        </li> -->
                         <li class="header__nav-item competition__nav-item">
                             <a
                                 class="header__nav-link competition__link"
@@ -162,7 +162,53 @@
                         </div>
                     </div>
                 </div>
+                <div class="nav-user__location" v-if="!Object.keys(userStore.currentUser).length">
+                    <button class="nav-user__button" @click="show = !show">
+                        <span v-if="regionAction">
+                            {{ regionAction }}
+                        </span>
+                        <span v-else>Выберите региональное отделение</span>
+                    </button>
 
+                    <div
+                        class="header__overlay"
+                        @click="show = !show"
+                        v-if="show"
+                    ></div>
+
+                    <div class="nav-user__location-container" v-if="show">
+                        <button
+                            type="button"
+                            @click="show = !show"
+                            class="nav-user__location-close"
+                        >
+                            x
+                        </button>
+                        <label for="your-region">Ваш регион</label>
+                        <regionsDropdown
+                            open-on-clear
+                            id="reg"
+                            name="regdrop"
+                            placeholder="Выберите регион обучения"
+                            v-model="regionAction"
+                            @update:value="changeValue"
+                            address="/regions/"
+                            class="mb-2 region-input"
+                            :value-change="true"
+                        ></regionsDropdown>
+
+                        <div>
+                            <Button
+                                type="submit"
+                                class="nav-user__button-agree mt-2 mx-auto"
+                                label="Да, все верно"
+                                color="primary"
+                                size="large"
+                                @click="close()"
+                            ></Button>
+                        </div>
+                    </div>
+                </div>
                 <div
                     class="nav-user__menu user-menu"
                     v-if="
@@ -230,6 +276,9 @@ const quantityIsActive = ref(props.quantityActive);
 const router = useRouter();
 
 const region = ref('');
+
+const regionAction = ref(null);
+console.log('reg', regionAction);
 
 const userUpdate = (userData) => {
     userStore.currentUser = userData;
@@ -311,25 +360,32 @@ const userPages = computed(() => [
     {
         title: 'Активные заявки',
         name: 'active',
-        show: roleStore.roles?.regionalheadquarter_commander || roleStore.roles?.detachment_commander,
+        show:
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.detachment_commander,
     },
     {
         title: 'Поиск участников',
         link: 'roster',
         show:
-        roleStore.roles?.centralheadquarter_commander ||
-        roleStore.roles?.districtheadquarter_commander ||
+            roleStore.roles?.centralheadquarter_commander ||
+            roleStore.roles?.districtheadquarter_commander ||
             roleStore.roles?.regionalheadquarter_commander,
     },
     {
         title: 'Членский взнос',
         name: 'contributorPay',
-        show: roleStore.roles?.centralheadquarter_commander || roleStore.roles?.regionalheadquarter_commander ||  roleStore.roles?.districtheadquarter_commander,
+        show:
+            roleStore.roles?.centralheadquarter_commander ||
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.districtheadquarter_commander,
     },
     {
         title: 'Оформление справок',
         name: 'references',
-        show: roleStore.roles?.regionalheadquarter_commander || roleStore.roles?.centralheadquarter_commander,
+        show:
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.centralheadquarter_commander,
     },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },
@@ -391,10 +447,15 @@ const updateRegion = async () => {
         region.value = updateRegResponse.data.region;
         show.value = !show.value;
         // regionalsStore.searchRegionals(region.value);
-        userStore.getUser();
+        userStore.getUser()
     } catch (error) {
         console.log('an error occured ' + error);
     }
+};
+
+const close = () => {
+    // regionAction.value = regionAction;
+    show.value = !show.value;
 };
 
 watch(
@@ -410,6 +471,10 @@ watch(
         regionalsStore.searchMyRegionals(userStore.currentUser.region);
     },
 );
+
+// onMounted(() => {
+//   roleStore.getRoles();
+// })
 </script>
 
 <style lang="scss">

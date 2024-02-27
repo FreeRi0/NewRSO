@@ -42,10 +42,7 @@
                 Уважаемый пользователь, ваш членский взнос оплачен.
             </div>
 
-            <div
-                v-else-if="
-                    picked === false"
-            >
+            <div v-else-if="picked === false">
                 <div class="contributor-search">
                     <input
                         type="text"
@@ -308,8 +305,7 @@ const updateLocal = (localVal) => {
     )?.id;
     local.value = localVal;
     educHead.value = educationalsStore.educationals.filter(
-        (edh) =>
-            (locId && edh.local_headquarter == locId)
+        (edh) => locId && edh.local_headquarter == locId,
     );
 };
 
@@ -334,8 +330,7 @@ const updateEduc = (educVal) => {
     )?.id;
     educ.value = educVal;
     detachments.value = squadsStore.squads.filter(
-        (squad) =>
-            educId && squad.educational_headquarter == educId
+        (squad) => educId && squad.educational_headquarter == educId,
     );
 };
 
@@ -359,13 +354,13 @@ const select = (event) => {
         for (let index in participants.value) {
             // console.log('arr', selectedPeoples.value);
 
-            participants.value[index].selected = true;
-            selectedPeoples.value.push(participants.value[index]);
+            sortedParticipants.value[index].selected = true;
+            selectedPeoples.value.push(sortedParticipants.value[index]);
         }
     } else {
-        for (let index in participants.value) {
+        for (let index in sortedParticipants.value) {
             // console.log('arr', selectedPeoples.value);
-            participants.value[index].selected = false;
+            sortedParticipants.value[index].selected = false;
         }
     }
 };
@@ -657,8 +652,48 @@ watch(
 );
 
 onMounted(() => {
-    viewContributorsData(search);
-})
+    if (!roles.roles.value.centralheadquarter_commander) {
+        let search = '';
+        // let join = false;
+        if (roles.roles.value.districtheadquarter_commander) {
+            district.value =
+                roles.roles.value.districtheadquarter_commander.name;
+            search =
+                '?district_headquarter__name=' +
+                roles.roles.value.districtheadquarter_commander.name;
+            levelAccess.value = 1;
+        } else if (roles.roles.value.regionalheadquarter_commander) {
+            reg.value = roles.roles.value.regionalheadquarter_commander.name;
+            search =
+                '?regional_headquarter__name=' +
+                roles.roles.value.regionalheadquarter_commander.name;
+            // join = true;
+            levelAccess.value = 2;
+        } else if (roles.roles.value.localheadquarter_commander) {
+            local.value = roles.roles.value.localheadquarter_commander.name;
+            search =
+                '?local_headquarter__name=' +
+                roles.roles.value.localheadquarter_commander.name;
+            levelAccess.value = 3;
+        } else if (roles.roles.value.educationalheadquarter_commander) {
+            educ.value =
+                roles.roles.value.educationalheadquarter_commander.name;
+            search =
+                '?educational_headquarter__name=' +
+                roles.roles.value.educationalheadquarter_commander.name;
+            levelAccess.value = 4;
+        } else if (roles.roles.value.detachment_commander) {
+            detachment.value = roles.roles.value.detachment_commander.name;
+            search =
+                '?detachment__name=' +
+                roles.roles.value.detachment_commander.name;
+            levelAccess.value = 5;
+        }
+        viewContributorsData(search);
+    } else {
+        levelAccess.value = 0;
+    }
+});
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,

@@ -11,9 +11,7 @@
             <div class="containerHorizontal">
                 <p class="horizontal-item-title">"{{ squad.name }}"</p>
             </div>
-            <!-- <div>
-                <p class="horizontal-item-title">"{{ regHead }}"</p>
-            </div> -->
+           
         </router-link>
     </div>
 </template>
@@ -25,7 +23,6 @@ const props = defineProps({
     },
 });
 
-// const regHead = ref({})
 
 </script>
 <style lang="scss">
