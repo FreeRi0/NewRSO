@@ -3260,7 +3260,7 @@
                     :disabled="
                         isLoading ||
                         !props.user.first_name ||
-                         !props.user.last_name ||
+                        !props.user.last_name ||
                         !props.user.gender ||
                         !props.user.date_of_birth ||
                         !props.user.email ||
@@ -4343,6 +4343,9 @@ onMounted(() => {
 }
 .v-expansion-panel-title--active {
     border-bottom: none !important;
+}
+.v-input--horizontal {
+    border: 2px solid #35383f;
 }
 
 @media (max-width: 768px) {

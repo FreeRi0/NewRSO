@@ -54,7 +54,8 @@
                                                 @click="cropImage()"
                                                 prepend-icon="crop"
                                                 variant="plain"
-                                            >Обрезать фото</v-btn>
+                                                >Обрезать фото</v-btn
+                                            >
                                         </v-row>
                                         <v-row v-if="preview">
                                             <Cropper
@@ -62,16 +63,19 @@
                                                 class="cropper mt-5 mx-auto"
                                                 :src="preview"
                                                 @change="onChangeCrop"
-                                                :stencil-component="CircleStencil"
+                                                :stencil-component="
+                                                    CircleStencil
+                                                "
                                             />
                                             <Preview
                                                 :width="120"
                                                 :height="120"
                                                 :image="result.image"
-                                                :coordinates="result.coordinates"
+                                                :coordinates="
+                                                    result.coordinates
+                                                "
                                                 class="mt-9"
-                                                style='border-radius: 50%'
-
+                                                style="border-radius: 50%"
                                             />
                                         </v-row>
                                     </v-container>
@@ -148,14 +152,17 @@
                                                     counter
                                                 />
                                             </v-row>
-                                            <v-row class="align-center justify-end">
+                                            <v-row
+                                                class="align-center justify-end"
+                                            >
                                                 <v-btn
                                                     v-if="preview"
                                                     class="button-wrapper mt-5"
                                                     @click="cropImage()"
                                                     prepend-icon="crop"
                                                     variant="plain"
-                                                >Обрезать фото</v-btn>
+                                                    >Обрезать фото</v-btn
+                                                >
                                             </v-row>
                                             <v-row v-if="preview">
                                                 <Cropper
@@ -163,16 +170,19 @@
                                                     class="cropper mt-5 mx-auto"
                                                     :src="preview"
                                                     @change="onChangeCrop"
-                                                    :stencil-component="CircleStencil"
+                                                    :stencil-component="
+                                                        CircleStencil
+                                                    "
                                                 />
                                                 <Preview
                                                     :width="120"
                                                     :height="120"
                                                     :image="result.image"
-                                                    :coordinates="result.coordinates"
+                                                    :coordinates="
+                                                        result.coordinates
+                                                    "
                                                     class="mt-9"
-                                                    style='border-radius: 50%'
-
+                                                    style="border-radius: 50%"
                                                 />
                                             </v-row>
                                         </v-container>
@@ -235,8 +245,8 @@ const media = ref({
 const cropper = ref();
 let result = ref({
     coordinates: null,
-    image: null
-})
+    image: null,
+});
 
 // const route = useRoute();
 const dialog = ref(false);
@@ -247,9 +257,11 @@ const swal = inject('$swal');
 const cropImage = () => {
     if (cropper.value) {
         const { canvas } = cropper.value.getResult();
-        preview.value = canvas.toDataURL('image/jpeg')
+        preview.value = canvas.toDataURL('image/jpeg');
         canvas.toBlob((blob) => {
-            media.value = new File([blob], "photo1.jpg", { type: "image/jpeg" })
+            media.value = new File([blob], 'photo1.jpg', {
+                type: 'image/jpeg',
+            });
         }, 'image/jpeg');
     }
 };
@@ -257,7 +269,7 @@ const cropImage = () => {
 const onChangeCrop = ({ coordinates, image }) => {
     result.value.coordinates = coordinates;
     result.value.image = image;
-}
+};
 
 const selectFile = (event) => {
     media.value = event.target.files[0];
@@ -419,8 +431,10 @@ const deleteAvatar = async () => {
 .v-btn--icon {
     border-radius: 50%;
     border: 2px solid white;
+    color: white;
 }
-.v-icon {
+
+.v-avatar i {
     color: white;
 }
 </style>
