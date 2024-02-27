@@ -89,21 +89,7 @@ const route = useRoute();
 const router = useRouter();
 const answers = ref([]);
 const files = ref([]);
-
-const getEventInfo = async () => {
-    try {
-        const { data } = await HTTP.get(`/events/${route.params.id}/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-
-        eventInfo.value = data;
-    } catch (e) {
-        console.log('getEventInfo error', e);
-    }
-};
+const meInfo = ref({});
 
 const submitAnswers = async () => {
     try {
@@ -129,9 +115,57 @@ const submitAnswers = async () => {
     }
 };
 
+const getEventInfo = async () => {
+    try {
+        const { data } = await HTTP.get(`/events/${route.params.id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        eventInfo.value = data;
+    } catch (e) {
+        console.log('getEventInfo error', e);
+    }
+};
+
+const getMeInfo = async () => {
+    try {
+        const { data } = await HTTP.get(`/users/me/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        meInfo.value = data;
+    } catch (e) {
+        console.log('getMeInfo error', e);
+    }
+};
+
+const submitFiles = async () => {
+    getMeInfo();
+    getEventInfo();
+    let payload = {};
+    payload.user = meInfo.value;
+    payload.event = eventInfo.value?.name;
+    for (let file of files.value) {
+        console.log(file);
+        console.log(payload);
+        payload.document = file;
+        await HTTP.post(`/events/${route.params.id}/user_documents/`, payload, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+    }
+};
+
 const onSubmit = async () => {
     try {
         await submitAnswers();
+        if (files.value.length > 0) submitFiles();
         await HTTP.post(
             `/events/${route.params.id}/applications/`,
             {},
