@@ -761,10 +761,10 @@
                                 class="input-big"
                                 placeholder="Например, ул. Приморская, дом 10, кв. 255"
                                 v-model:value="props.user.user_region.reg_house"
-                                :max-length="180"
+                                :max-length="250"
                             />
                             <div class="form__counter">
-                                {{ counterHouse }} / 180
+                                {{ counterHouse }} / 250
                             </div>
                         </div>
                         <div class="checkbox addr" id="checkbox">
@@ -854,10 +854,10 @@
                                     v-model:value="
                                         props.user.user_region.fact_house
                                     "
-                                    :max-length="40"
+                                    :max-length="250"
                                 />
                                 <div class="form__counter">
-                                    {{ counterFactHouse }} / 40
+                                    {{ counterFactHouse }} / 250
                                 </div>
                             </div>
                         </div>
