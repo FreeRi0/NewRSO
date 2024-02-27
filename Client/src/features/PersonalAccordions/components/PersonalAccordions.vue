@@ -1120,8 +1120,6 @@
                                     v-model:value="
                                         props.user.documents.mil_reg_doc_ser_num
                                     "
-
-
                                 />
                             </div>
                         </div>
@@ -4341,12 +4339,29 @@ onMounted(() => {
     font-size: 24px;
     margin-bottom: 10px;
 }
+.v-expansion-panel-text__wrapper {
+    padding: 0;
+}
 .v-expansion-panel-title--active {
     border-bottom: none !important;
 }
-.v-input--horizontal {
-    border: 2px solid #35383f;
-}
+
+// .data-form {
+//     grid-template-columns: 1fr 1fr;
+//     grid-column-gap: 80px;
+// }
+// .parents-about,
+// #passport-parent-yes {
+//     grid-column-gap: 80px;
+//     grid-template-columns: 1fr 1fr;
+// }
+// .parents #pass-no-addr {
+//     margin-left: -30px;
+//     @media screen and (max-width: 1215px) {
+//         margin-right: auto;
+//         margin-left: 0;
+//     }
+// }
 
 @media (max-width: 768px) {
     .parents-wrapper__title,
