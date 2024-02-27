@@ -673,13 +673,6 @@
                                     >&nbsp;*</span
                                 ></label
                             >
-                            <!-- <Select
-                                variant="outlined"
-                                clearable
-                                v-model="props.user.user_region.reg_region_id"
-                                placeholder="Например, Карачаево-Черкесск"
-                                address="/regions/"
-                            ></Select> -->
                             <regionsDropdown
                                 open-on-clear
                                 id="reg"
@@ -717,8 +710,13 @@
                                 class="input-big"
                                 placeholder="Город"
                                 v-model:value="props.user.user_region.reg_town"
+                                :max-length="40"
                             />
+                            <div class="form__counter">
+                                {{ counterTown }} / 40
+                            </div>
                         </div>
+
                         <div class="scoial-networks">
                             <div class="add">
                                 <div class="form-field">
@@ -728,7 +726,11 @@
                                         class="input-big mask-vk"
                                         placeholder="https://vk.com/id (или никнейм)"
                                         v-model:value="props.user.social_vk"
+                                        :max-length="50"
                                     />
+                                    <div class="form__counter">
+                                        {{ counterVk }} / 50
+                                    </div>
                                 </div>
                                 <div class="form-field">
                                     <label for="socials"
@@ -739,7 +741,11 @@
                                         class="input-big mask-tg"
                                         placeholder="https://t.me/username"
                                         v-model:value="props.user.social_tg"
+                                        :max-length="50"
                                     />
+                                    <div class="form__counter">
+                                        {{ counterTg }} / 50
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -755,7 +761,11 @@
                                 class="input-big"
                                 placeholder="Например, ул. Приморская, дом 10, кв. 255"
                                 v-model:value="props.user.user_region.reg_house"
+                                :max-length="180"
                             />
+                            <div class="form__counter">
+                                {{ counterHouse }} / 180
+                            </div>
                         </div>
                         <div class="checkbox addr" id="checkbox">
                             <p class="checkbox-title">
@@ -802,14 +812,6 @@
                             </p>
                             <div class="form-field">
                                 <label for="">Регион</label>
-                                <!-- <Select
-                                    variant="outlined"
-                                    clearable
-                                    v-model="
-                                        props.user.user_region.fact_region_id
-                                    "
-                                    address="/regions/"
-                                ></Select> -->
                                 <regionsDropdown
                                     open-on-clear
                                     id="reg"
@@ -834,7 +836,11 @@
                                     v-model:value="
                                         props.user.user_region.fact_town
                                     "
+                                    :max-length="40"
                                 />
+                                <div class="form__counter">
+                                    {{ counterFactTown }} / 40
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="addres-fact"
@@ -848,7 +854,11 @@
                                     v-model:value="
                                         props.user.user_region.fact_house
                                     "
+                                    :max-length="40"
                                 />
+                                <div class="form__counter">
+                                    {{ counterFactHouse }} / 40
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -996,7 +1006,11 @@
                                     v-model:value="
                                         props.user.documents.pass_ser_num
                                     "
+                                    :max-length="20"
                                 />
+                                <div class="form__counter">
+                                    {{ counterPass }} / 20
+                                </div>
                             </div>
 
                             <div class="form-field">
@@ -1025,7 +1039,11 @@
                                     v-model:value="
                                         props.user.documents.pass_whom
                                     "
+                                    :max-length="230"
                                 />
+                                <div class="form__counter">
+                                    {{ counterPassWhom }} / 230
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="SNILS-id"
@@ -1039,7 +1057,11 @@
                                     class="input-big mask-snils"
                                     placeholder="___-___-___ __"
                                     v-model:value="props.user.documents.snils"
+                                    :max-length="30"
                                 />
+                                <div class="form__counter">
+                                    {{ counterSnils }} / 30
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="INN-id"
@@ -1053,7 +1075,11 @@
                                     class="input-big mask-inn"
                                     placeholder="____________"
                                     v-model:value="props.user.documents.inn"
+                                    :max-length="30"
                                 />
+                                <div class="form__counter">
+                                    {{ counterInn }} / 30
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="work-book">Трудовая книжка </label>
@@ -1067,7 +1093,11 @@
                                     v-model:value="
                                         props.user.documents.work_book_num
                                     "
+                                    :max-length="30"
                                 />
+                                <div class="form__counter">
+                                    {{ counterWorkbook }} / 30
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="foreign-pass">Загранпаспорт</label>
@@ -1081,7 +1111,12 @@
                                     v-model:value="
                                         props.user.documents.international_pass
                                     "
+                                    :max-length="30"
                                 />
+
+                                <div class="form__counter">
+                                    {{ counterIntPass }} / 30
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="">Документ воинского учета</label>
@@ -1120,9 +1155,12 @@
                                     v-model:value="
                                         props.user.documents.mil_reg_doc_ser_num
                                     "
-
-
+                                    :max-length="30"
                                 />
+
+                                <div class="form__counter">
+                                    {{ counterMilitary }} / 30
+                                </div>
                             </div>
                         </div>
                         <div
@@ -1141,7 +1179,11 @@
                                     class="input-full"
                                     placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
                                     v-model:value="foreignDoc.name"
+                                    :max-length="200"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherDoc }} / 200
+                                </div>
                             </div>
 
                             <div class="form-field">
@@ -1168,7 +1210,11 @@
                                     maska="AA ##########"
                                     placeholder="__ ___ ____"
                                     v-model:value="foreignDoc.foreign_pass_num"
+                                    :max-length="50"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherPassNum }} / 50
+                                </div>
                             </div>
                             <div class="form-field one">
                                 <label for="org-id"
@@ -1182,7 +1228,11 @@
                                     class="input-full"
                                     placeholder="Страна"
                                     v-model:value="foreignDoc.foreign_pass_whom"
+                                    :max-length="230"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherPassWhom }} / 230
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="work-book-foreign"
@@ -1196,7 +1246,11 @@
                                     maska="AA ##########"
                                     placeholder="AA 9999999"
                                     v-model:value="foreignDoc.work_book_num"
+                                    :max-length="15"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherWorkbook }} / 15
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="INN-id-foreign">ИНН</label>
@@ -1208,7 +1262,11 @@
                                     maska="AA ##########"
                                     placeholder="999999999999"
                                     v-model:value="foreignDoc.inn"
+                                    :max-length="30"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherInn }} / 30
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="snils-id-foreign"
@@ -1222,7 +1280,11 @@
                                     class="input-big mask-snils"
                                     placeholder="999-999-999 99"
                                     v-model:value="foreignDoc.snils"
+                                    :max-length="30"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherSnils }} / 30
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1347,7 +1409,11 @@
                                 v-model:value="
                                     props.user.education.study_faculty
                                 "
+                                :max-length="200"
                             />
+                            <div class="form__counter">
+                                {{ counterFacultet }} / 200
+                            </div>
                         </div>
                         <div class="form-field">
                             <label for="course"
@@ -1358,12 +1424,18 @@
                             <Input
                                 name="study_year"
                                 type="text"
-                                id="course"
                                 class="input-full"
                                 placeholder="Например, 1 курс, магистратура"
                                 v-model:value="props.user.education.study_year"
+                                :max-length="10"
                             />
+                            <div class="form__counter">
+                                {{ counterCourse }} / 10
+                            </div>
                         </div>
+                        <p class="error" v-if="isError.study_year">
+                            {{ '' + isError.study_year }}
+                        </p>
                         <div class="form-field">
                             <label for="speciality">Специальность</label>
                             <Input
@@ -1375,7 +1447,11 @@
                                 v-model:value="
                                     props.user.education.study_specialty
                                 "
+                                :max-length="100"
                             />
+                            <div class="form__counter">
+                                {{ counterSpeciality }} / 100
+                            </div>
                         </div>
                     </div>
                     <v-card-actions class="nav-btn__wrapper">
@@ -3273,7 +3349,10 @@
                         !props.user.documents.inn ||
                         !props.user.documents.snils ||
                         !props.user.education.study_institution ||
-                        !props.user.education.study_year
+                        !props.user.education.study_year ||
+                        !props.user.statement.statement ||
+                        !props.user.statement.consent_personal_data ||
+                        !props.user.statement.passport
                     "
                     :loaded="isLoading"
                     v-if="
@@ -3449,6 +3528,91 @@ const selectMilitary = (event) => {
     isMilitaryChange.value = true;
 };
 
+const counterCourse = computed(() => {
+    return props.user.education.study_year.length || 0;
+});
+
+const counterSpeciality = computed(() => {
+    return props.user.education.study_specialty.length || 0;
+});
+
+const counterFacultet = computed(() => {
+    return props.user.education.study_faculty.length || 0;
+});
+
+const counterTown = computed(() => {
+    return props.user.user_region.reg_town.length || 0;
+});
+
+const counterFactTown = computed(() => {
+    return props.user.user_region?.fact_town?.length || 0;
+});
+
+const counterFactHouse = computed(() => {
+    return props.user.user_region?.fact_house?.length || 0;
+});
+
+const counterHouse = computed(() => {
+    return props.user.user_region.reg_house.length || 0;
+});
+
+const counterVk = computed(() => {
+    return props.user.social_vk.length || 0;
+});
+
+const counterTg = computed(() => {
+    return props.user.social_tg.length || 0;
+});
+
+const counterSnils = computed(() => {
+    return props.user.documents.snils.length || 0;
+});
+
+const counterInn = computed(() => {
+    return props.user.documents.inn.length || 0;
+});
+
+const counterWorkbook = computed(() => {
+    return props.user.documents.work_book_num.length || 0;
+});
+const counterMilitary = computed(() => {
+    return props.user.documents.mil_reg_doc_ser_num.length || 0;
+});
+const counterIntPass = computed(() => {
+    return props.user.documents.international_pass.length || 0;
+});
+
+const counterPass = computed(() => {
+    return props.user.documents.pass_ser_num.length || 0;
+});
+
+const counterOtherDoc = computed(() => {
+    return foreignDoc.value.name?.length || 0;
+});
+
+const counterOtherWorkbook = computed(() => {
+    return foreignDoc.value.work_book_num?.length || 0;
+});
+
+const counterOtherPassNum = computed(() => {
+    return foreignDoc.value.foreign_pass_num?.length || 0;
+});
+
+const counterOtherPassWhom = computed(() => {
+    return foreignDoc.value.foreign_pass_whom?.length || 0;
+});
+
+const counterOtherSnils = computed(() => {
+    return foreignDoc.value.snils?.length || 0;
+});
+
+const counterOtherInn = computed(() => {
+    return foreignDoc.value.inn?.length || 0;
+});
+
+const counterPassWhom = computed(() => {
+    return props.user.documents.pass_whom.length || 0;
+});
 const counterKnow = computed(() => {
     return props.user.statement.rso_info_from.length || 0;
 });

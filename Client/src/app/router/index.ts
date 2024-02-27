@@ -20,11 +20,11 @@ router.beforeEach((to, _from, next) => {
         !localStorage.getItem('Token')
     )
         next({ name: 'Login' });
-    else if (to.name === 'Login' && localStorage.getItem('Token'))
-        next({ name: 'mypage' });
-    // else if (to.name === 'active' && localStorage.getItem('Token') && userStore.currentUser !== userStore.user )
-    //     next({name: 'personaldata'})
-    else next();
+    // else if (localStorage.getItem('Token'))
+    //        next({ name: 'mypage' });
+    // // else if (to.name === 'active' && localStorage.getItem('Token') && userStore.currentUser !== userStore.user )
+    // //     next({name: 'personaldata'})
+     else next();
 });
 
 export default router;

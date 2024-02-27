@@ -31,7 +31,6 @@
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
-
                             Региональный штаб
                         </v-col>
                     </v-row>
@@ -57,7 +56,6 @@
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
-
                             Местный штаб
                         </v-col>
                     </v-row>
@@ -103,7 +101,9 @@
             </v-expansion-panel-text>
             <p v-if="educRef">Выбрано: {{ educRef }}</p>
         </v-expansion-panel>
-        <v-expansion-panel v-if="educRef !== null || roles.roles.value.detachment_commander">
+        <v-expansion-panel
+            v-if="educRef !== null || roles.roles.value.detachment_commander"
+        >
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -126,7 +126,7 @@
                     :SortDropdown="true"
                 ></lsoSerachFilter>
             </v-expansion-panel-text>
-            <p v-if="detachmentRef">Выбрано: {{detachmentRef }}</p>
+            <p v-if="detachmentRef">Выбрано: {{ detachmentRef }}</p>
         </v-expansion-panel>
     </v-expansion-panels>
 
@@ -182,6 +182,10 @@ const props = defineProps({
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 const squadsStore = useSquadsStore();
+const localsStore = useLocalsStore();
+const districtsStore = useDistrictsStore();
+const regionsStore = useRegionalsStore();
+const educationalsStore = useEducationalsStore();
 const districtRef = ref(props.district);
 const localRef = ref(props.local);
 const regRef = ref(props.reg);
@@ -255,8 +259,12 @@ watch(
 );
 
 onMounted(() => {
+    districtsStore.getDistricts();
+    regionsStore.getRegionals();
+    educationalsStore.getEducationals();
+    localsStore.getLocals();
     squadsStore.getSquads();
-})
+});
 </script>
 <style lang="scss">
 .v-expansion-panel {

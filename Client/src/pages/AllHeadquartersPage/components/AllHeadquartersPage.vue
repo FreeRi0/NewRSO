@@ -235,7 +235,7 @@ const getLocalsHeadquartersForFilters = async () => {
 };
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-
+    educationalsStore.getEducationals();
     getRegionalsHeadquartersForFilters();
     getLocalsHeadquartersForFilters();
 });
