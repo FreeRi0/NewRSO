@@ -3349,10 +3349,7 @@
                         !props.user.documents.inn ||
                         !props.user.documents.snils ||
                         !props.user.education.study_institution ||
-                        !props.user.education.study_year ||
-                        !props.user.statement.statement ||
-                        !props.user.statement.consent_personal_data ||
-                        !props.user.statement.passport
+                        !props.user.education.study_year
                     "
                     :loaded="isLoading"
                     v-if="
@@ -3529,19 +3526,19 @@ const selectMilitary = (event) => {
 };
 
 const counterCourse = computed(() => {
-    return props.user.education.study_year.length || 0;
+    return props.user.education.study_year?.length || 0;
 });
 
 const counterSpeciality = computed(() => {
-    return props.user.education.study_specialty.length || 0;
+    return props.user.education.study_specialty?.length || 0;
 });
 
 const counterFacultet = computed(() => {
-    return props.user.education.study_faculty.length || 0;
+    return props.user.education.study_faculty?.length || 0;
 });
 
 const counterTown = computed(() => {
-    return props.user.user_region.reg_town.length || 0;
+    return props.user.user_region.reg_town?.length || 0;
 });
 
 const counterFactTown = computed(() => {
@@ -3553,37 +3550,37 @@ const counterFactHouse = computed(() => {
 });
 
 const counterHouse = computed(() => {
-    return props.user.user_region.reg_house.length || 0;
+    return props.user.user_region.reg_house?.length || 0;
 });
 
 const counterVk = computed(() => {
-    return props.user.social_vk.length || 0;
+    return props.user.social_vk?.length || 0;
 });
 
 const counterTg = computed(() => {
-    return props.user.social_tg.length || 0;
+    return props.user.social_tg?.length || 0;
 });
 
 const counterSnils = computed(() => {
-    return props.user.documents.snils.length || 0;
+    return props.user.documents.snils?.length || 0;
 });
 
 const counterInn = computed(() => {
-    return props.user.documents.inn.length || 0;
+    return props.user.documents.inn?.length || 0;
 });
 
 const counterWorkbook = computed(() => {
-    return props.user.documents.work_book_num.length || 0;
+    return props.user.documents.work_book_num?.length || 0;
 });
 const counterMilitary = computed(() => {
-    return props.user.documents.mil_reg_doc_ser_num.length || 0;
+    return props.user.documents.mil_reg_doc_ser_num?.length || 0;
 });
 const counterIntPass = computed(() => {
-    return props.user.documents.international_pass.length || 0;
+    return props.user.documents.international_pass?.length || 0;
 });
 
 const counterPass = computed(() => {
-    return props.user.documents.pass_ser_num.length || 0;
+    return props.user.documents.pass_ser_num?.length || 0;
 });
 
 const counterOtherDoc = computed(() => {
@@ -3611,10 +3608,10 @@ const counterOtherInn = computed(() => {
 });
 
 const counterPassWhom = computed(() => {
-    return props.user.documents.pass_whom.length || 0;
+    return props.user.documents.pass_whom?.length || 0;
 });
 const counterKnow = computed(() => {
-    return props.user.statement.rso_info_from.length || 0;
+    return props.user.statement.rso_info_from?.length || 0;
 });
 
 const getData = async () => {

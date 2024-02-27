@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, useRoute, useRouter } from 'vue-router';
 import routes from './routes';
 // import { useUserStore } from '@features/store/index';
 
@@ -8,6 +8,8 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+const route = useRoute()
 
 router.beforeEach((to, _from, next) => {
     if (
@@ -22,7 +24,7 @@ router.beforeEach((to, _from, next) => {
         next({ name: 'Login' });
     // else if (localStorage.getItem('Token'))
     //        next({ name: 'mypage' });
-    // else if (to.name === 'active' && localStorage.getItem('Token') )
+    // else if (to.name === 'active'&& localStorage.getItem('Token') )
     //     next({name: 'personaldata'})
      else next();
 });
