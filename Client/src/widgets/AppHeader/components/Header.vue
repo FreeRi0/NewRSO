@@ -447,7 +447,7 @@ const updateRegion = async () => {
         region.value = updateRegResponse.data.region;
         show.value = !show.value;
         // regionalsStore.searchRegionals(region.value);
-        userStore.getUser();
+        userStore.getUser()
     } catch (error) {
         console.log('an error occured ' + error);
     }

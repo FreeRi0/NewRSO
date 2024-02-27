@@ -359,13 +359,13 @@ const select = (event) => {
         for (let index in participants.value) {
             // console.log('arr', selectedPeoples.value);
 
-            participants.value[index].selected = true;
-            selectedPeoples.value.push(participants.value[index]);
+           sortedParticipants.value[index].selected = true;
+            selectedPeoples.value.push(sortedParticipants.value[index]);
         }
     } else {
-        for (let index in participants.value) {
+        for (let index in sortedParticipants.value) {
             // console.log('arr', selectedPeoples.value);
-            participants.value[index].selected = false;
+            sortedParticipants.value[index].selected = false;
         }
     }
 };

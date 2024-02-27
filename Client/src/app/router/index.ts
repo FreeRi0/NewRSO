@@ -22,8 +22,8 @@ router.beforeEach((to, _from, next) => {
         next({ name: 'Login' });
     // else if (localStorage.getItem('Token'))
     //        next({ name: 'mypage' });
-    // // else if (to.name === 'active' && localStorage.getItem('Token') && userStore.currentUser !== userStore.user )
-    // //     next({name: 'personaldata'})
+    else if (to.name === 'active' && localStorage.getItem('Token') )
+        next({name: 'personaldata'})
      else next();
 });
 

@@ -390,9 +390,9 @@ const select = (event) => {
     console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
         console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.value) {
+        for (let index in sortedParticipants.value) {
             console.log('arr', selectedPeoples.value);
-            selectedPeoples.value.push(participants.value[index]);
+            selectedPeoples.value.push(sortedParticipants.value[index]);
         }
     }
 };
