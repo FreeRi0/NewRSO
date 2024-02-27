@@ -761,10 +761,10 @@
                                 class="input-big"
                                 placeholder="Например, ул. Приморская, дом 10, кв. 255"
                                 v-model:value="props.user.user_region.reg_house"
-                                :max-length="180"
+                                :max-length="250"
                             />
                             <div class="form__counter">
-                                {{ counterHouse }} / 180
+                                {{ counterHouse }} / 250
                             </div>
                         </div>
                         <div class="checkbox addr" id="checkbox">
@@ -854,10 +854,10 @@
                                     v-model:value="
                                         props.user.user_region.fact_house
                                     "
-                                    :max-length="40"
+                                    :max-length="250"
                                 />
                                 <div class="form__counter">
-                                    {{ counterFactHouse }} / 40
+                                    {{ counterFactHouse }} / 250
                                 </div>
                             </div>
                         </div>
@@ -4502,12 +4502,29 @@ onMounted(() => {
     font-size: 24px;
     margin-bottom: 10px;
 }
+.v-expansion-panel-text__wrapper {
+    padding: 0;
+}
 .v-expansion-panel-title--active {
     border-bottom: none !important;
 }
-.v-input--horizontal {
-    border: 2px solid #35383f;
-}
+
+// .data-form {
+//     grid-template-columns: 1fr 1fr;
+//     grid-column-gap: 80px;
+// }
+// .parents-about,
+// #passport-parent-yes {
+//     grid-column-gap: 80px;
+//     grid-template-columns: 1fr 1fr;
+// }
+// .parents #pass-no-addr {
+//     margin-left: -30px;
+//     @media screen and (max-width: 1215px) {
+//         margin-right: auto;
+//         margin-left: 0;
+//     }
+// }
 
 @media (max-width: 768px) {
     .parents-wrapper__title,

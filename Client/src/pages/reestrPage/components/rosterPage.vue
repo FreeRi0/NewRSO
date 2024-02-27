@@ -333,7 +333,8 @@ const updateEduc = (educVal) => {
     }
     if (name.value) search += '&search=' + name.value;
 
-    viewHeadquartersData(resp, search, educVal && !local.value);
+    viewHeadquartersData(resp, search);
+    // , educVal && !local.value 
     let educId = educationalsStore.educationals.find(
         (edh) => edh.name == educVal,
     )?.id;
@@ -409,24 +410,24 @@ const searchItems = (event) => {
 const sortedHeadquarters = computed(() => {
     let tempHeadquarters = sortedVal.value;
 
-    tempHeadquarters = tempHeadquarters.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase() || a.last_name.toLowerCase(),
-                fb = b.name.toLowerCase() || b.last_name.toLowerCase();
+    // tempHeadquarters = tempHeadquarters.sort((a, b) => {
+    //     if (sortBy.value == 'alphabetically') {
+    //         let fa = a?.name.toLowerCase() || a?.last_name.toLowerCase(),
+    //             fb = b?.name.toLowerCase() || b?.last_name.toLowerCase();
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        }
-    });
+    //         if (fa < fb) {
+    //             return -1;
+    //         }
+    //         if (fa > fb) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     }
+    // });
 
-    if (!ascending.value) {
-        tempHeadquarters.reverse();
-    }
+    // if (!ascending.value) {
+    //     tempHeadquarters.reverse();
+    // }
     return tempHeadquarters;
 });
 
