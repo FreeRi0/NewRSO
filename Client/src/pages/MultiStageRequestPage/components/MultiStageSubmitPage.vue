@@ -1,10 +1,7 @@
 <template>
     <div class="container" v-if="!loading">
         <p class="main_title">Многоэтапная заявка</p>
-        <p class="subtitle" v-if="permissonDeny">
-            Вы не можете подавать заявку
-        </p>
-        <div v-else-if="!processApplication">
+        <div v-if="!processApplication">
             <multi-stage-submit-first
                 :me="meInfo"
                 :event="eventInfo"
@@ -26,7 +23,6 @@ import MultiStageSubmitSecond from './SecondStage/MultiStageSubmitSecond.vue';
 const loading = ref(true);
 const route = useRoute();
 
-const permissonDeny = ref(false);
 const processApplication = ref(false);
 
 const eventInfo = ref({});
@@ -103,7 +99,7 @@ const getApplicationinfo = async () => {
         await checkApplicationOnProcess();
         loading.value = false;
     } catch (e) {
-        permissonDeny.value = true;
+        loading.value = false;
         console.log('getApplicationinfo error', e);
     }
 };
