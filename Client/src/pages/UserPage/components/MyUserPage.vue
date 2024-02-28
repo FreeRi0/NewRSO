@@ -91,7 +91,6 @@ import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
 const currentUser = storeToRefs(userStore);
 const isLoading = storeToRefs(userStore);
-console.log('userTop', currentUser.currentUser.value);
 const education = ref({});
 const region = ref({});
 

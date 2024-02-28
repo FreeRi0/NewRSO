@@ -162,7 +162,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="nav-user__location" v-if="!Object.keys(userStore.currentUser).length">
+                <div
+                    class="nav-user__location"
+                    v-if="!Object.keys(userStore.currentUser).length"
+                >
                     <button class="nav-user__button" @click="show = !show">
                         <span v-if="regionAction">
                             {{ regionAction }}
@@ -278,7 +281,6 @@ const router = useRouter();
 const region = ref('');
 
 const regionAction = ref(null);
-console.log('reg', regionAction);
 
 const userUpdate = (userData) => {
     userStore.currentUser = userData;
@@ -303,18 +305,18 @@ const userPages = computed(() => [
         title: 'Мой отряд',
         name: 'lso',
         params: {
-            id: userStore.currentUser?.detachment_id,
+            id: userStore.currentUser?.detachment_id ? userStore.currentUser?.detachment_id : roleStore.roles?.detachment_commander?.id,
         },
-        show: userStore.currentUser?.detachment_id,
+        show: userStore.currentUser?.detachment_id || roleStore.roles?.detachment_commander,
     },
     {
         title: 'Штаб СО ОО',
         name: 'HQ',
         path: 'regionals',
         params: {
-            id: userStore.currentUser?.educational_headquarter_id,
+            id: userStore.currentUser?.educational_headquarter_id ? userStore.currentUser?.educational_headquarter_id : roleStore.roles?.educationalheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.educational_headquarter_id,
+        show: userStore.currentUser?.educational_headquarter_id || roleStore.roles?.educationalheadquarter_commander,
     },
     {
         title: 'Местный штаб',
@@ -322,10 +324,11 @@ const userPages = computed(() => [
         path: 'locals',
         params: {
             id:
-                userStore.currentUser?.local_headquarter_id ??
-                headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
+                /*userStore.currentUser?.local_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'locals')?.id,*/
+                userStore.currentUser?.local_headquarter_id ? userStore.currentUser?.local_headquarter_id : roleStore.roles?.localheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.local_headquarter_id,
+        show: userStore.currentUser?.local_headquarter_id || roleStore.roles?.localheadquarter_commander,
     },
     {
         title: 'Региональный штаб',
@@ -333,10 +336,11 @@ const userPages = computed(() => [
         path: 'regionals',
         params: {
             id:
-                userStore.currentUser?.regional_headquarter_id ??
-                headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
+                /*userStore.currentUser?.regional_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,*/
+            userStore.currentUser?.regional_headquarter_id ? userStore.currentUser?.regional_headquarter_id : roleStore.roles?.regionalheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.regional_headquarter_id,
+        show: userStore.currentUser?.regional_headquarter_id || roleStore.roles?.regionalheadquarter_commander,
     },
     {
         title: 'Окружной штаб',
@@ -344,10 +348,11 @@ const userPages = computed(() => [
         path: 'districts',
         params: {
             id:
-                userStore.currentUser?.district_headquarter_id ??
-                headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
+                /*userStore.currentUser?.district_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'districts')?.id,*/
+                userStore.currentUser?.district_headquarter_id ? userStore.currentUser?.district_headquarter_id : roleStore.roles?.districtheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.district_headquarter_id,
+        show: userStore.currentUser?.district_headquarter_id || roleStore.roles?.districtheadquarter_commander,
     },
     {
         title: 'Центральный штаб',
@@ -447,7 +452,7 @@ const updateRegion = async () => {
         region.value = updateRegResponse.data.region;
         show.value = !show.value;
         // regionalsStore.searchRegionals(region.value);
-        userStore.getUser()
+        userStore.getUser();
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -654,11 +659,11 @@ watch(
         }
     }
 
-    // &__nav-item.disable {
-    //     & > a {
-    //         cursor: not-allowed;
-    //     }
-    // }
+    &__nav-item.disable {
+        & > a {
+            cursor: not-allowed;
+        }
+    }
 
     &__nav-link {
         display: block;

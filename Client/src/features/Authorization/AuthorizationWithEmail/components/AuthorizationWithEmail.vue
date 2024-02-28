@@ -93,7 +93,6 @@ const LoginUser = async () => {
         });
         data.value = response.data;
         localStorage.setItem('Token', response.data.auth_token);
-        // localStorage.setItem('username', response.data.username);
         console.log(response.data);
         isLoading.value = false;
         router.push({

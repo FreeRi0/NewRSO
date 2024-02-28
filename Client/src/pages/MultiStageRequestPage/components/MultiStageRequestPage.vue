@@ -26,20 +26,19 @@
                 </div>
             </div>
             <div class="document">
-                <p class="subtitle" v-if="headquarters?.files">
-                    Сопутствующие документы:
-                </p>
-                <div
-                    class="file"
-                    v-for="file in applications.documents"
-                    :key="file"
-                >
+                <p class="subtitle" v-if="files">Сопутствующие документы:</p>
+                <div class="file" v-for="file in files" :key="file">
                     <div class="file_name">
-                        <img class="file_img" src="/assets/file_dock.svg" />{{
-                            file
-                        }}
+                        <img class="file_img" src="/assets/file_dock.svg" />
+                        <a :href="file.document" target="_blank">{{
+                            file.document.slice(file.document.indexOf('_') + 1)
+                        }}</a>
                     </div>
-                    <a class="download_text" target="_blank">
+                    <a
+                        class="download_text"
+                        :href="file.document"
+                        target="_blank"
+                    >
                         <img class="download_img" src="/assets/download.svg" />
                         скачать файл
                     </a>
@@ -69,6 +68,7 @@ const router = useRouter();
 
 const headquarters = ref({});
 const applications = ref([]);
+const files = ref([]);
 
 const getApplicationsInfo = async () => {
     try {
@@ -85,10 +85,36 @@ const getApplicationsInfo = async () => {
             console.log(obj);
             if (!obj.is_approved) applications.value.push(obj);
         }
-        console.log(applications.value);
-        console.log(applications.value.length);
+        //console.log(applications.value);
+        //console.log(applications.value.length);
     } catch (e) {
         console.log('getApplicationInfo error', e);
+    }
+};
+
+const getFilesInfo = async () => {
+    try {
+        const { data } = await HTTP.get(
+            `/events/${route.params.id}/user_documents/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        for (const file of data) {
+            if (
+                file.user.id == applications.value[0].organizer_id &&
+                file.event.id == route.params.id
+            )
+                files.value.push(file);
+        }
+        //files.value = data;
+        console.log(data);
+        console.log(applications.value);
+    } catch (e) {
+        console.log('getFilesInfo error', e);
     }
 };
 
@@ -104,7 +130,7 @@ const getHeadquarters = async () => {
             },
         );
         headquarters.value = data;
-        console.log(headquarters.value);
+        //console.log(headquarters.value);
     } catch (e) {
         console.log('getHeadquarters error', e);
     }
@@ -167,7 +193,10 @@ const redirect = async () => {
 };
 onMounted(async () => {
     await getApplicationsInfo();
-    if (applications.value.length > 0) await getHeadquarters();
+    if (applications.value.length > 0) {
+        await getFilesInfo();
+        await getHeadquarters();
+    }
 });
 </script>
 
@@ -268,6 +297,11 @@ onMounted(async () => {
 .container {
     margin: 0 auto;
     padding: 0px 130px 60px 130px;
+}
+.competition__avatar_circle {
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
 }
 .competition__avatar_circle {
     border-radius: 50%;

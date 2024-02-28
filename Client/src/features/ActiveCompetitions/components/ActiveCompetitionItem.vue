@@ -34,7 +34,12 @@
                     ></div>
 
                     <div class="containerHorizontal">
-                        <p>{{ competition.detachment.name }}</p>
+                        <p
+                            class="cursor_redirect"
+                            @click="clickDetacment(competition.detachment.id)"
+                        >
+                            {{ competition.detachment.name }}
+                        </p>
                     </div>
                 </div>
 
@@ -57,7 +62,14 @@
                     ></div>
 
                     <div class="containerHorizontal">
-                        <p>{{ competition.junior_detachment.name }}</p>
+                        <p
+                            class="cursor_redirect"
+                            @click="
+                                clickDetacment(competition.junior_detachment.id)
+                            "
+                        >
+                            {{ competition.junior_detachment.name }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -67,13 +79,15 @@
                     v-if="competition.competition?.banner"
                     class="competition__avatar_square"
                     :src="competition.competition?.banner"
-                    alt=""
+                    alt="banner"
                 />
 
                 <div v-else class="competition__avatar_square blue-bg"></div>
 
                 <div class="containerHorizontal">
-                    <p>{{ competition.competition?.name }}</p>
+                    <p class="cursor_redirect" @click="onCompetition">
+                        {{ competition.competition?.name }}
+                    </p>
                 </div>
             </div>
 
@@ -86,6 +100,10 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
     competition: {
@@ -110,6 +128,21 @@ const isChecked = ref(false);
 
 const onCheckbox = (e) => {
     emit('select', props.competition, e.target.checked);
+};
+
+const clickDetacment = (id) => {
+    router.push({
+        name: 'lso',
+        params: {
+            id: id,
+        },
+    });
+};
+
+const onCompetition = () => {
+    router.push({
+        name: 'Competition',
+    });
 };
 
 watch(
@@ -192,5 +225,8 @@ watch(
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+.cursor_redirect {
+    cursor: pointer;
 }
 </style>
