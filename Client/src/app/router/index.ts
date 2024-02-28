@@ -5,9 +5,6 @@ const router = createRouter({
     routes,
 });
 
-// let user = JSON.parse(localStorage.getItem('user'));
-// let user: any = JSON.parse(localStorage.getItem('user') as string);
-console.log('params', router);
 router.beforeEach((to, _from, next) => {
     if (
         to.name !== 'Login' &&
@@ -22,12 +19,12 @@ router.beforeEach((to, _from, next) => {
     // else if (localStorage.getItem('Token'))
     //        next({ name: 'mypage' });
     else if (
-        to.name === 'active' &&
+        to.name === 'PersonalDataUser' &&
         localStorage.getItem('user') !== to.params.id
-    )
-        console.log();
-  
-    else next();
+    ) {
+        next({ name: 'userpage', params:{id: to.params.id} });
+
+    }else next();
 });
 
 export default router;
