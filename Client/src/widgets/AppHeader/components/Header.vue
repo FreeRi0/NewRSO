@@ -195,8 +195,8 @@
                             placeholder="Выберите регион обучения"
                             v-model="regionAction"
                             @update:value="changeValue"
-                            address="/regions/"
                             class="mb-2 region-input"
+                            address="/regions/"
                             :value-change="true"
                         ></regionsDropdown>
 
@@ -264,6 +264,8 @@ const props = defineProps({
         type: Number,
     },
 });
+
+const emit = defineEmits(['change']);
 
 const roleStore = useRoleStore();
 const regionalsStore = useRegionalsStore();
@@ -449,10 +451,13 @@ const updateRegion = async () => {
                 },
             },
         );
-        region.value = updateRegResponse.data.region;
+        // console.log(updateRegResponse.data)
+        region.value = updateRegResponse.data.region.name;
+        emit('change', updateRegResponse.data.region.name);
         show.value = !show.value;
         // regionalsStore.searchRegionals(region.value);
-        userStore.getUser();
+
+        // userStore.getUser();
     } catch (error) {
         console.log('an error occured ' + error);
     }
