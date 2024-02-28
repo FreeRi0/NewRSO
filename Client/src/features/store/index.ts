@@ -23,6 +23,10 @@ export const useUserStore = defineStore('user', {
                                 'Token ' + localStorage.getItem('Token'),
                         },
                     });
+                    if(!Number.isInteger(localStorage.getItem('user'))) {
+                        localStorage.setItem('user', responseUser.data.id);
+                    }
+                    console.log('id', responseUser.data.id)
                     this.currentUser = responseUser.data;
                     this.isLoading = false;
                 }, 10);
