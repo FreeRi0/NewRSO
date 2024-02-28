@@ -162,7 +162,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="nav-user__location" v-if="!Object.keys(userStore.currentUser).length">
+                <div
+                    class="nav-user__location"
+                    v-if="!Object.keys(userStore.currentUser).length"
+                >
                     <button class="nav-user__button" @click="show = !show">
                         <span v-if="regionAction">
                             {{ regionAction }}
@@ -449,7 +452,7 @@ const updateRegion = async () => {
         region.value = updateRegResponse.data.region;
         show.value = !show.value;
         // regionalsStore.searchRegionals(region.value);
-        userStore.getUser()
+        userStore.getUser();
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -656,11 +659,11 @@ watch(
         }
     }
 
-    // &__nav-item.disable {
-    //     & > a {
-    //         cursor: not-allowed;
-    //     }
-    // }
+    &__nav-item.disable {
+        & > a {
+            cursor: not-allowed;
+        }
+    }
 
     &__nav-link {
         display: block;
