@@ -42,15 +42,11 @@
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
                         </li>
-                        <li class="header__nav-item disable">
-                            <a
-                                class="header__nav-link"
-                                href="/actionSquads"
-                                @click.prevent
-                            >
+                        <!-- <li class="header__nav-item disable">
+                            <a class="header__nav-link" href="/actionSquads">
                                 Мероприятия
                             </a>
-                        </li>
+                        </li> -->
                         <li class="header__nav-item competition__nav-item">
                             <a
                                 class="header__nav-link competition__link"
@@ -166,7 +162,56 @@
                         </div>
                     </div>
                 </div>
+                <div
+                    class="nav-user__location"
+                    v-if="!Object.keys(userStore.currentUser).length"
+                >
+                    <button class="nav-user__button" @click="show = !show">
+                        <span v-if="regionAction">
+                            {{ regionAction }}
+                        </span>
+                        <span v-else>Выберите региональное отделение</span>
+                    </button>
 
+                    <div
+                        class="header__overlay"
+                        @click="show = !show"
+                        v-if="show"
+                    ></div>
+
+                    <div class="nav-user__location-container" v-if="show">
+                        <button
+                            type="button"
+                            @click="show = !show"
+                            class="nav-user__location-close"
+                        >
+                            x
+                        </button>
+                        <label for="your-region">Ваш регион</label>
+                        <regionsDropdown
+                            open-on-clear
+                            id="reg"
+                            name="regdrop"
+                            placeholder="Выберите регион обучения"
+                            v-model="regionAction"
+                            @update:value="changeValue"
+                            address="/regions/"
+                            class="mb-2 region-input"
+                            :value-change="true"
+                        ></regionsDropdown>
+
+                        <div>
+                            <Button
+                                type="submit"
+                                class="nav-user__button-agree mt-2 mx-auto"
+                                label="Да, все верно"
+                                color="primary"
+                                size="large"
+                                @click="close()"
+                            ></Button>
+                        </div>
+                    </div>
+                </div>
                 <div
                     class="nav-user__menu user-menu"
                     v-if="
@@ -234,6 +279,9 @@ const quantityIsActive = ref(props.quantityActive);
 const router = useRouter();
 
 const region = ref('');
+
+const regionAction = ref(null);
+console.log('reg', regionAction);
 
 const userUpdate = (userData) => {
     userStore.currentUser = userData;
@@ -408,6 +456,11 @@ const updateRegion = async () => {
     }
 };
 
+const close = () => {
+    // regionAction.value = regionAction;
+    show.value = !show.value;
+};
+
 watch(
     () => userStore.currentUser,
     (newUser, oldUser) => {
@@ -421,6 +474,10 @@ watch(
         regionalsStore.searchMyRegionals(userStore.currentUser.region);
     },
 );
+
+// onMounted(() => {
+//   roleStore.getRoles();
+// })
 </script>
 
 <style lang="scss">

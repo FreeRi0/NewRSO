@@ -680,8 +680,8 @@
                 <v-expansion-panel-title>
                     <template v-slot="{ expanded }">
                         <v-row no-gutters>
-                            <v-col cols="4" class="d-flex justify-start">
-                                О работе с Личным кабинетом
+                            <v-col cols="4" class="d-flex justify-start"
+                                >Работа с Личным кабинетом
                             </v-col>
                         </v-row>
                     </template>
@@ -2507,6 +2507,83 @@
                             </v-list-group>
                         </v-list>
                     </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Как одобрить/отклонить заявку на Конкурс?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Перейдите в раздел «Личный кабинет» —
+                                        «Активные заявки» — «Конкурс». Выберите
+                                        заявку, проверьте данные, наведите
+                                        курсор мыши на кнопку «Выберите
+                                        действие», в выпадающем меню нажмите на
+                                        кнопку «Одобрить» или кнопку
+                                        «Отклонить».
+                                    </template>
+                                </v-list-group>
+                                <!-- <v-card-actions class="form__button-group"> -->
+                                <!-- </v-card-actions> -->
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
                 </v-expansion-panel-text>
             </v-expansion-panel>
 
@@ -2742,6 +2819,713 @@
                     </v-card>
                 </v-expansion-panel-text>
             </v-expansion-panel>
+            <v-expansion-panel>
+                <v-expansion-panel-title>
+                    <template v-slot="{ expanded }">
+                        <v-row no-gutters>
+                            <v-col cols="4" class="d-flex justify-start"
+                                >О Конкурсе
+                            </v-col>
+                        </v-row>
+                    </template>
+                    <template v-slot:actions="{ expanded }">
+                        <v-icon v-if="!expanded">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                        <v-icon v-else>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="15.5"
+                                    transform="rotate(-180 16 16)"
+                                    fill="#1F7CC0"
+                                    stroke="#1F7CC0"
+                                />
+                                <path
+                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </v-icon>
+                    </template>
+                </v-expansion-panel-title>
+
+                <v-expansion-panel-text>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Кто может принять участие в Конкурсе?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Принять участие в Конкурсе может любой
+                                        участник (боец) РСО в составе
+                                        студенческого отряда. Подробные условия
+                                        Конкурса размещены по
+                                        <a
+                                            class="accordion_text-link"
+                                            href="/Competition"
+                                            >ссылке</a
+                                        >.
+                                    </template>
+                                </v-list-group>
+                                <!-- <v-card-actions class="form__button-group">
+                                </v-card-actions> -->
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Какие номинации есть в Конкурсе?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Конкурс проводится в двух номинациях:
+                                        «Тандем» и «Дебют». В номинации «Тандем»
+                                        участвуют 2 отряда: действующий и новый
+                                        студенческий отряд, созданный не ранее
+                                        25 января 2024 года. Численность
+                                        действующего студенческого отряда не
+                                        должна быть меньше численности этого
+                                        отряда за 2023 год. В номинации «Дебют»
+                                        может принять участие новый студенческий
+                                        отряд, созданный не ранее 25 января 2024
+                                        года. Один отряд может подать заявку
+                                        только в одну из номинаций.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Как принять участие в Конкурсе?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Участнику РСО необходимо вступить в
+                                        отряд, который планирует участвовать или
+                                        уже участвует в Конкурсе, либо самому
+                                        создать новый отряд, став в нем
+                                        Командиром. Для участия студенческого
+                                        отряда в Конкурсе Командиру отряда
+                                        необходимо подать
+                                        <a
+                                            class="accordion_text-link"
+                                            href="/Competition"
+                                            >заявку на участие</a
+                                        >. Для подачи заявки от ЛСО допустимо
+                                        количество участников отряда от 1
+                                        человека.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Как Командиру отряда подать заявку на участие в конкурсе в номинации «Дебют»?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Перейдите на страницу
+                                        <a
+                                            class="accordion_text-link"
+                                            href="/Competition"
+                                            >«Конкурс»</a
+                                        >. Нажмите на кнопку «Участвовать»,
+                                        выберите в всплывающем окне номинацию
+                                        «Дебют». После подтверждения вашего
+                                        участия уполномоченным сотрудником
+                                        Организации статус «Заявка на
+                                        рассмотрении» изменится на статус «Вы
+                                        участник», также на странице вашего
+                                        отряда появится баннер с подробной
+                                        информацией о Конкурсе.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Как командиру отряда подать заявку на участие в конкурсе в номинации «Тандем»?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Перейдите на страницу
+                                        <a
+                                            class="accordion_text-link"
+                                            href="/Competition"
+                                            >«Конкурс»</a
+                                        >. Нажмите на кнопку «Участвовать»,
+                                        выберите в всплывающем окне номинацию
+                                        «Тандем». Далее выберите из предложенных
+                                        вариантов отряд-старт, вместе с которым
+                                        вы будете участвовать в Конкурсе.
+                                        Командиру отряда-старт необходимо
+                                        перейти на страницу «Активные заявки»
+                                        своего профиля и подтвердить совместное
+                                        участие. Далее, после подтверждения
+                                        заявки уполномоченным сотрудником
+                                        Организации статус «Заявка на
+                                        рассмотрении» изменится на статус «Вы
+                                        участник», также на страницах вашего
+                                        отряда и отряда-старт появятся баннеры с
+                                        подробной информацией о Конкурсе.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Как определяется место отряда в рейтинге отрядов-участников Конкурса?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Место отряда в рейтинге определяется на
+                                        основании суммы мест, полученных в
+                                        результате сложения занятых мест по
+                                        каждому отчетному показателю
+                                        деятельности студенческих отрядов МООО
+                                        «РСО». Ознакомиться с данными своего
+                                        отряда по каждому отчетному показателю
+                                        может Командир отряда, нажав на кнопку
+                                        «Отчетность» под баннером, размещенным
+                                        на странице отряда (доступно с 30 марта
+                                        2024 года).
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Как командиру отряда отправить отчетность для формирования места в рейтинге отрядов-участников Конкурса?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Перейдите на страницу своего отряда,
+                                        нажмите на кнопку «Отчетность»,
+                                        расположенную под баннером с информацией
+                                        о Конкурсе. На открывшейся странице
+                                        нажмите на кнопку «Внести данные»,
+                                        заполните нужные поля формы, нажмите
+                                        «Отправить данные на верификацию»
+                                        (доступно с 30 марта 2024 года).
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Как узнать рейтинг своего отряда в конкурсе?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Для ознакомления с местом в рейтинге
+                                        среди отрядов-участников Конкурса
+                                        перейдите на страницу своего отряда — на
+                                        баннере будет указано место (данные
+                                        появятся не ранее 30 марта 2024 года).
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                </v-expansion-panel-text>
+            </v-expansion-panel>
         </v-expansion-panels>
     </form>
 </template>
@@ -2802,5 +3586,17 @@ usePage({ isHidden: true });
 
 .v-list-item-title {
     white-space: wrap;
+}
+.accordion_text-link {
+    font-size: 18px;
+    color: #1f7cc0;
+    text-decoration-line: underline;
+    // border-bottom: 1px solid #1f7cc0;
+    // padding-bottom: 1px;
+    font-family: 'BertSans';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 </style>

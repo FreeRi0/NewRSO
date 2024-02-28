@@ -96,11 +96,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useEducationalsStore } from '@features/store/educationals';
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@features/store/index';
 
+const userStore = useUserStore();
+const user = storeToRefs(userStore);
 defineOptions({
     inheritAttrs: false,
 });
@@ -131,7 +135,8 @@ const props = defineProps({
     },
 });
 const name = ref('');
-
+const addressRef = ref(props.address);
+const isLoading = ref(false);
 const selected = ref(null);
 
 const changeValue = (event) => {
@@ -141,31 +146,57 @@ const changeValue = (event) => {
 
 const items = ref(props.items);
 
+// const onChangeItem = async () => {
+//     await HTTP.get(addressRef.value, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//     })
+//         .then((res) => {
+//             items.value = res.data;
+//             console.log(res.data);
+//         })
+//         .catch(function (error) {
+//             console.log('an error occured ' + error);
+//         });
+// };
 const onChangeItem = async () => {
-    await HTTP.get(props.address, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((res) => {
-            items.value = res.data;
-            console.log(res.data);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
+    try {
+        isLoading.value = true;
+        const ItemResponse = await HTTP.get(addressRef.value, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
+        items.value = ItemResponse.data;
+        isLoading.value = false;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+const timer = ref(null);
+const searchEducation = (val) => {
+    // if (name.value.length < 3) {
+    //     return;
+    // }
+    // educationalsStore.searchEducationals(name.value);
+    // console.log('val', val);
+    clearTimeout(timer.value);
+
+    timer.value = setTimeout(() => {
+        educationalsStore.searchEducationals(name.value);
+    }, 200);
 };
 
-const searchEducation = (val) => {
-    if (name.value.length < 3) {
-        return;
-    }
-    educationalsStore.searchEducationals(name.value);
-    console.log('val', val);
-};
+watch(
+  () => user.currentUser.value,
+  (newUser, oldUser) => {
+      onChangeItem();
+  },
+);
 
 onMounted(() => {
-    onChangeItem();
+    if (props.address) onChangeItem();
 });
 </script>
 
