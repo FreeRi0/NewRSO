@@ -274,6 +274,14 @@ const sortedHeadquarters = computed(() => {
             ];
         }
 
+        if(name.value) {
+            console.log('name', name.value);
+            tempHeadquartes = tempHeadquartes.filter((item) => {
+            return item.name.toLowerCase().indexOf(name.value.toLowerCase()) >= 0;
+        });
+    }
+
+
         tempHeadquartes = tempHeadquartes.filter((item) => {
             return idRegionals.indexOf(item.regional_headquarter) >= 0;
         });

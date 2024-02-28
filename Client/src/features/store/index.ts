@@ -26,7 +26,6 @@ export const useUserStore = defineStore('user', {
                     if(!Number.isInteger(localStorage.getItem('user'))) {
                         localStorage.setItem('user', responseUser.data.id);
                     }
-                    console.log('id', responseUser.data.id)
                     this.currentUser = responseUser.data;
                     this.isLoading = false;
                 }, 10);

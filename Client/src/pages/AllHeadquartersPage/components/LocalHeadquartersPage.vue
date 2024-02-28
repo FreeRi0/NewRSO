@@ -78,16 +78,6 @@
 
                 <div class="sort-filters">
                     <div class="sort-select">
-                        <!-- <Select
-                            variant="outlined"
-                            clearable
-                            name="select_district"
-                            id="select-district"
-                            v-model="selectedSortDistrict"
-                            class="filter-district"
-                            address="/districts/"
-                            placeholder="Окружные штабы"
-                        ></Select> -->
                         <v-select
                             class="form__select filter-district"
                             :items="districts"
@@ -105,16 +95,6 @@
                         </v-select>
                     </div>
                     <div class="sort-select">
-                        <!-- <Select
-                            variant="outlined"
-                            clearable
-                            name="select_region"
-                            id="select-region"
-                            v-model="selectedSortRegion"
-                            class="filter-region"
-                            address="/regionals/"
-                            placeholder="Региональные штабы"
-                        ></Select> -->
                         <v-select
                             class="form__select filter-district"
                             :items="regionals"
@@ -201,15 +181,18 @@ import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
+import { useLocalsStore } from '@features/store/local';
 import { onActivated } from 'vue';
 
 const crosspageFilters = useCrosspageFilter();
+
+const localStore = useLocalsStore();
 
 const localHeadquarters = ref([]);
 
 const headquartersVisible = ref(20);
 const isLocalLoading = ref(false);
-
+const timerSearch = ref(null);
 const step = ref(20);
 
 const ascending = ref(true);
@@ -250,6 +233,13 @@ const getLocalHeadquarters = async () => {
     }
 };
 
+// const searchLocal = (event) => {
+//     clearTimeout(timerSearch.value);
+//     timerSearch.value = setTimeout(() => {
+//         localStore.searchLocals(name.value)
+//     }, 400);
+// };
+
 const searchLocal = async (name) => {
     try {
         const filteredLocals = await HTTP.get(`/locals/?search=${name}`, {
@@ -263,10 +253,13 @@ const searchLocal = async (name) => {
         console.log('an error occured ' + error);
     }
 };
-
 const searchLocals = computed(() => {
-    return searchLocal(name.value);
+    searchLocal(name.value);
 });
+
+// const searchLocals = computed(() => {
+//     return localStore.searchLocals(name.value);
+// });
 
 /*const filtersDistricts = computed(() =>
     selectedSortDistrict.value
@@ -275,6 +268,7 @@ const searchLocals = computed(() => {
           )?.local_headquarters ?? []
         : localHeadquarters.value,
 );
+
 const filtersRegionals = computed(() =>
     selectedSortRegional.value
         ? regionals.value.find(

@@ -278,7 +278,6 @@ const router = useRouter();
 const region = ref('');
 
 const regionAction = ref(null);
-console.log('reg', regionAction);
 
 const userUpdate = (userData) => {
     userStore.currentUser = userData;
