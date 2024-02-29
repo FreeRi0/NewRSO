@@ -38,6 +38,7 @@ export const useRegionalsStore = defineStore('regionals', {
                 const regionName = Object.keys(region).length
                     ? region.name
                     : region;
+                    console.log('name',region.name)
                 const responseSearchMyRegionals = await HTTP.get(
                     `/regionals/?region=${regionName}`,
                     {
