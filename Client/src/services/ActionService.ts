@@ -78,7 +78,7 @@ export function getQuestion(id: number) {
 }
 //Отправка и изменение организаторов мероприятия
 export function createOrganizator(id: number, data: object) {
-    return HTTP.post(`/events/${id}/organizers`, data, {
+    return HTTP.post(`/events/${id}/organizers/`, data, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
