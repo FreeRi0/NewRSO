@@ -36,19 +36,22 @@
             <p>{{ answer.answer }}</p>
         </template>
 
-        <p class="subtitle">Сопутствующие документы:</p>
+        <template v-if="files.length">
+            <p class="subtitle">Сопутствующие документы:</p>
 
-        <div class="file" v-for="document in request.documents" :key="document">
-            <div class="file_name">
-                <img class="file_img" src="/assets/file_dock.svg" />{{
-                    document.file
-                }}
+            <div class="file" v-for="file in files" :key="file.id">
+                <div class="file_name">
+                    <img class="file_img" src="/assets/file_dock.svg" />
+                    <a :href="file.document" target="_blank">{{
+                        file.document.slice(file.document.indexOf('_') + 1)
+                    }}</a>
+                </div>
+                <a class="download_text" :href="file.document" target="_blank">
+                    <img class="download_img" src="/assets/download.svg" />
+                    скачать файл
+                </a>
             </div>
-            <a class="download_text" :href="document.file" target="_blank">
-                <img class="download_img" src="/assets/download.svg" />
-                скачать файл
-            </a>
-        </div>
+        </template>
 
         <div class="button">
             <button @click="onCancel" class="deny_button">Отклонить</button>
@@ -58,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 import { HTTP } from '@app/http';
@@ -68,6 +71,7 @@ const router = useRouter();
 
 const request = ref({});
 const currentApplicationId = ref(0);
+const files = ref([]);
 
 const getIndividualApplication = async () => {
     try {
@@ -131,6 +135,31 @@ const onCancel = async () => {
     }
 };
 
+const getFilesInfo = async () => {
+    try {
+        const { data } = await HTTP.get(
+            `/events/${route.params.id}/user_documents/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        for (const file of data) {
+            if (
+                //file.user.id == applications.value[0].organizer_id &&
+                file.event.id == route.params.id
+            )
+                files.value.push(file);
+        }
+        //files.value = data;
+        console.log(files.value);
+    } catch (e) {
+        console.log('getFilesInfo error', e);
+    }
+};
+
 const onAccept = async () => {
     try {
         await HTTP.post(
@@ -187,6 +216,10 @@ watch(
     },
     { immediate: true },
 );
+
+onMounted(async () => {
+    await getFilesInfo();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -287,7 +320,7 @@ watch(
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
-    margin-left: 12px;
+    // margin-left: 12px;
     width: 100%;
     margin-bottom: 12px;
 }
