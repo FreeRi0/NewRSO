@@ -292,18 +292,18 @@
                                             >&nbsp;*</span
                                         ></label
                                     >
-                                    <Input
-                                        type="tel"
-                                        vmaska
-                                        maska="+7 ### ###-##-##"
-                                        name="phone-parent"
-                                        class="input-small phone"
-                                        placeholder="+7(__) __ __ _"
-                                        v-model:value="
-                                            props.user.parent
-                                                .parent_phone_number
-                                        "
-                                    />
+                                    <div class="input-small phone">
+                                        <MaskInput
+                                            type="tel"
+                                            placeholder="+7(___) ___ __ __"
+                                            name="phone-parent"
+                                            v-model:value="
+                                                props.user.parent
+                                                    .parent_phone_number
+                                            "
+                                            mask="+7(###) ###-##-##"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div class="how">
@@ -365,16 +365,17 @@
                                             >&nbsp;*</span
                                         ></label
                                     >
-                                    <Input
-                                        name="passInput"
-                                        class="input-small"
-                                        vmaska
-                                        maska="####-######"
-                                        placeholder="__ __ ____"
-                                        v-model:value="
-                                            props.user.parent.passport_number
-                                        "
-                                    />
+                                    <div class="input-small">
+                                        <MaskInput
+                                            name="passInput"
+                                            mask="## ## ######"
+                                            placeholder="__ __ ______"
+                                            v-model:value="
+                                                props.user.parent
+                                                    .passport_number
+                                            "
+                                        />
+                                    </div>
                                 </div>
 
                                 <div class="form-field" id="pass-no-reg">
@@ -659,13 +660,15 @@
                                     >&nbsp;*</span
                                 ></label
                             >
-                            <Input
-                                type="tel"
-                                name="phone-contact"
-                                class="input-small phone"
-                                placeholder="+7(__) __ __ _"
-                                v-model:value="props.user.phone_number"
-                            />
+                            <div class="input-small phone">
+                                <MaskInput
+                                    type="tel"
+                                    placeholder="+7(___) ___ __ __"
+                                    name="phone-contact"
+                                    v-model:value="props.user.phone_number"
+                                    mask="+7(###) ###-##-##"
+                                />
+                            </div>
                         </div>
                         <div class="form-field">
                             <label for=""
@@ -998,19 +1001,20 @@
                                         >&nbsp;*</span
                                     ></label
                                 >
-                                <Input
-                                    name="pass-num "
-                                    type="text"
-                                    class="input-big"
-                                    placeholder="__ __ ____"
-                                    v-model:value="
-                                        props.user.documents.pass_ser_num
-                                    "
-                                    :max-length="20"
-                                />
-                                <div class="form__counter">
-                                    {{ counterPass }} / 20
+                                <div class="input-big">
+                                    <MaskInput
+                                        name="pass-num "
+                                        type="text"
+                                        mask="## ## ######"
+                                        placeholder="__ __ ______"
+                                        v-model:value="
+                                            props.user.documents.pass_ser_num
+                                        "
+                                    />
                                 </div>
+                                <!-- <div class="form__counter">
+                                    {{ counterPass }} / 20
+                                </div> -->
                             </div>
 
                             <div class="form-field">
@@ -1051,17 +1055,21 @@
                                         >&nbsp;*</span
                                     ></label
                                 >
-                                <Input
-                                    name="SNILS-d"
-                                    type="text"
-                                    class="input-big mask-snils"
-                                    placeholder="___-___-___ __"
-                                    v-model:value="props.user.documents.snils"
-                                    :max-length="30"
-                                />
-                                <div class="form__counter">
-                                    {{ counterSnils }} / 30
+                                <div class="input-big mask-snils">
+                                    <MaskInput
+                                        name="SNILS-d"
+                                        mask="###-###-### ##"
+                                        type="text"
+                                        placeholder="___-___-___ __"
+                                        v-model:value="
+                                            props.user.documents.snils
+                                        "
+                                    />
                                 </div>
+
+                                <!-- <div class="form__counter">
+                                    {{ counterSnils }} / 30
+                                </div> -->
                             </div>
                             <div class="form-field">
                                 <label for="INN-id"
@@ -4507,6 +4515,20 @@ onMounted(() => {
 }
 .v-expansion-panel-title--active {
     border-bottom: none !important;
+}
+.phone input,
+.input-small input,
+.input-big input {
+    box-sizing: border-box;
+    border: 2px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 16px 10px 16px;
+    margin-bottom: 20px;
+    font-family: 'Bert Sans';
+    color: #35383f;
 }
 
 // .data-form {
