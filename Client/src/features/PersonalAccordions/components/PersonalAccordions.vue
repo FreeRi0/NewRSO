@@ -365,7 +365,7 @@
                                             >&nbsp;*</span
                                         ></label
                                     >
-                                    <div class="input-small">
+                                    <div class="input-small passport-number">
                                         <MaskInput
                                             name="passInput"
                                             mask="## ## ######"
@@ -4517,7 +4517,7 @@ onMounted(() => {
     border-bottom: none !important;
 }
 .phone input,
-.input-small input,
+.passport-number input,
 .input-big input {
     box-sizing: border-box;
     border: 2px solid #a3a3a3;
