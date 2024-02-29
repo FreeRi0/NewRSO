@@ -63,16 +63,16 @@ const regionsStore = useRegionalsStore();
 const positionsStore = usePositionsStore();
 const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
-console.log('user', currentUser.currentUser.value);
-
 const isAuth = ref(!!localStorage.getItem('Token'));
 
 onMounted(() => {
-    userStore.getUser();
-    roleStore.getRoles();
+    if (localStorage.getItem('Token')) {
+        userStore.getUser();
+        roleStore.getRoles();
+        positionsStore.getPositions();
+        squadsStore.getAreas();
+    }
     regionsStore.getRegions();
-    positionsStore.getPositions();
-    squadsStore.getAreas();
 });
 
 //запрос на коммандира
