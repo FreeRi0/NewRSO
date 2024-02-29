@@ -598,6 +598,22 @@ watch(
 );
 
 watch(
+    () => districtsStore.districts,
+    () => {
+        districts.value = districtsStore.districts;
+        // let regId = regionalsStore.regionals.find(
+        //     (regional) => regional.name == reg.value,
+        // )?.id;
+        // locals.value = localsStore.locals.filter(
+        //     (loc) => loc.regional_headquarter == regId,
+        // );
+        // educHead.value = educationalsStore.educationals.filter(
+        //     (edh) => edh.regional_headquarter == regId,
+        // );
+    },
+);
+
+watch(
     () => regionalsStore.regionals,
     () => {
         regionals.value = regionalsStore.regionals;
