@@ -9,12 +9,22 @@
             </div>
             <div class="banner_wrap_btn">
                 <Button
+                    v-if="isorganizator === true"
                     class="form-button"
                     type="button"
                     label="Редактировать заявку"
                     variant="text"
                     size="large"
                     @click="EditAction"
+                ></Button>
+                <Button
+                    v-else
+                    class="form-button"
+                    type="button"
+                    label="Оставить заявку"
+                    variant="text"
+                    size="large"
+                    @click="AddParticipant"
                 ></Button>
                 <Button
                     type="button"
@@ -24,6 +34,7 @@
                     size="large"
                 ></Button>
                 <Button
+                    v-if="participant_active === true"
                     type="button"
                     class="form-button form-button--grey"
                     variant="text"
@@ -119,8 +130,34 @@
         <!-- Участники -->
         <h3 class="title title--subtitle">Участники</h3>
         <div class="event_btn_participant">
-            <button class="event_btn event_go">Уже идут</button>
-            <button class="event_btn event_ok">Ожидают одобрения</button>
+            <button
+                v-if="isGetAll"
+                class="event_btn event_go"
+                @click="ParticipantsWait"
+            >
+                Уже идут
+            </button>
+            <button
+                v-if="!isGetAll"
+                class="event_btn event_ok"
+                @click="ParticipantsWait"
+            >
+                Уже идут
+            </button>
+            <button
+                v-if="isGetAll"
+                class="event_btn event_ok"
+                @click="ParticipantsWait"
+            >
+                Ожидают одобрения
+            </button>
+            <button
+                v-if="!isGetAll"
+                class="event_btn event_go"
+                @click="ParticipantsWait"
+            >
+                Ожидают одобрения
+            </button>
         </div>
         <section v-if="participants.length != 0" class="section_wrap">
             <ul class="list_wrap">
@@ -203,6 +240,11 @@ const rolesStore = useRoleStore();
 const route = useRoute();
 const router = useRouter();
 
+//Костыли
+const participant_active = ref(false);
+const isorganizator = ref(true);
+const isGetAll = ref(false);
+
 const event = ref({
     id: '',
     author: '',
@@ -267,6 +309,13 @@ function EditAction() {
     router.push({ name: 'editAction', params: { id: route.params.id } });
 }
 
+function AddParticipant() {
+    router.push({ name: 'editAction', params: { id: route.params.id } });
+}
+
+function ParticipantsWait() {
+    isGetAll.value = !isGetAll.value;
+}
 const organizators = ref([
     {
         organizer: '',
