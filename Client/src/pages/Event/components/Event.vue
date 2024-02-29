@@ -85,22 +85,37 @@
         <!-- Организаторы -->
         <h2 class="title title--subtitle">Организаторы</h2>
         <div v-if="organizators.length != 0" class="card_wrap">
-            <v-card
+            <div
                 v-for="organizator in organizators"
                 class="event_card_wrap"
                 :key="organizator.id"
             >
-                <v-img width="120"></v-img>
+                <img src="" alt="Аватарка" />
                 <div class="text text--organizer">
                     {{ organizator.organization }}
                 </div>
                 <div class="text text--status">
                     {{ organizator.status }}
                 </div>
-            </v-card>
+            </div>
         </div>
         <!-- Контактные лица -->
         <h2 class="title title--subtitle">Контактные лица</h2>
+        <div v-if="organizators.length != 0" class="card_wrap">
+            <div
+                v-for="organizator in organizators"
+                class="event_card_wrap"
+                :key="organizator.id"
+            >
+                <img src="" alt="Аватарка" />
+                <div class="text text--organizer">
+                    {{ organizator.organization }}
+                </div>
+                <div class="text text--status">
+                    {{ organizator.status }}
+                </div>
+            </div>
+        </div>
         <!-- Участники -->
         <h3 class="title title--subtitle">Участники</h3>
         <div class="event_btn_participant">
@@ -419,10 +434,21 @@ const participants = ref([
 
 .event_card_wrap {
     max-width: 280px;
+    height: 274px;
+    box-shadow: 0px 6px 14px 3px rgba(34, 60, 80, 0.09);
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 24px 22px;
+}
+
+.event_card_wrap img {
+    width: 120px;
+    height: 120px;
+    min-height: 120px;
+    min-width: 120px;
+    border: 0.5px solid black;
+    border-radius: 50px;
 }
 
 .card_wrap {

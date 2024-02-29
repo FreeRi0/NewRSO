@@ -323,6 +323,7 @@ onActivated(() => {
     watch(
         () => rolesStore.roles,
         (newRole) => {
+            console.log('Роли загружены');
             Object.entries(newRole).forEach(([obj, value]) => {
                 //console.log(`${obj} + ${value}`);
                 if (value !== null) {
