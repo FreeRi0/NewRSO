@@ -1081,7 +1081,6 @@
                                     name="INN-id"
                                     type="text"
                                     class="input-big mask-inn"
-                                    placeholder="____________"
                                     v-model:value="props.user.documents.inn"
                                     :max-length="30"
                                 />
@@ -1097,7 +1096,6 @@
                                     class="input-big mask-workbook"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 9999999"
                                     v-model:value="
                                         props.user.documents.work_book_num
                                     "
@@ -1115,7 +1113,6 @@
                                     class="input-big mask-foreign-pass"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 9999999"
                                     v-model:value="
                                         props.user.documents.international_pass
                                     "
@@ -1159,7 +1156,6 @@
                                     class="input-big mask-military"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 9999999"
                                     v-model:value="
                                         props.user.documents.mil_reg_doc_ser_num
                                     "
@@ -1216,7 +1212,6 @@
                                     class="input-small pass-masked"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="__ ___ ____"
                                     v-model:value="foreignDoc.foreign_pass_num"
                                     :max-length="50"
                                 />
@@ -1252,7 +1247,6 @@
                                     class="input-big mask-workbook"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 9999999"
                                     v-model:value="foreignDoc.work_book_num"
                                     :max-length="15"
                                 />
@@ -1268,7 +1262,6 @@
                                     class="input-big mask-inn"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="999999999999"
                                     v-model:value="foreignDoc.inn"
                                     :max-length="30"
                                 />
@@ -1286,7 +1279,6 @@
                                     vmaska
                                     maska="AA ##########"
                                     class="input-big mask-snils"
-                                    placeholder="999-999-999 99"
                                     v-model:value="foreignDoc.snils"
                                     :max-length="30"
                                 />
