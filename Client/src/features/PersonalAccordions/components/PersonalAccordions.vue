@@ -304,9 +304,11 @@
                                             v-model="
                                                 user.parent
                                                     .parent_phone_number
+
                                             "
                                             mask="+7(###) ###-##-##"
                                         />
+
                                     </div>
                                 </div>
                             </div>
@@ -3402,7 +3404,7 @@ import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { TextArea } from '@shared/components/inputs';
-
+import { MaskInput } from 'vue-3-mask';
 import { userData } from '@features/userData';
 const props = defineProps({
     button: Boolean,
@@ -3416,6 +3418,7 @@ const emit = defineEmits([
     'updateParentData',
     'updateStatus',
 ]);
+const onNumber = ref('');
 const router = useRouter();
 const userStore = useUserStore();
 // const currentUser = storeToRefs(userStore);
@@ -3629,6 +3632,11 @@ const counterKnow = computed(() => {
     return props.user.statement.rso_info_from?.length || 0;
 });
 
+// const updateValue = (event) => {
+//     console.log('textt');
+//     emit('update:value', event.target.value);
+//     console.log('textt', event.target.value);
+// };
 const getData = async () => {
     try {
         const responseForeignDocs = await HTTP.get(

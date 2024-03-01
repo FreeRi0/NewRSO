@@ -73,10 +73,17 @@
                     </div>
                     <div class="references-wrapper">
                         <referencesList
+                            v-if="!isLoading"
                             :participants="sortedParticipants"
                             :selected-peoples="selectedPeoples"
                             @change="changePeoples"
                         ></referencesList>
+                        <v-progress-circular
+                            class="circleLoader"
+                            v-else
+                            indeterminate
+                            color="blue"
+                        ></v-progress-circular>
                     </div>
                     <Button
                         @click="participantsVisible += step"
@@ -257,7 +264,11 @@ const viewContributorsData = async (search) => {
 
 const updateDistrict = (districtVal) => {
     let search = '';
-    search = '?district_headquarter__name=' + districtVal;
+    if (districtVal) {
+        search = '?district_headquarter__name=' + districtVal;
+    } else {
+        search = '';
+    }
 
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
@@ -420,17 +431,22 @@ const sortOptionss = ref([
 const searchContributors = (event) => {
     let search = '';
     if (!name.value && roles.roles.value.centralheadquarter_commander) {
-        return [];
+    } else if (name.value && roles.roles.value.centralheadquarter_commander) {
+        search = '?search=' + name.value;
     }
     if (district.value) {
         search = '?district_headquarter__name=' + district.value;
-    } else if (reg.value) {
+    }
+    if (reg.value) {
         search = '?regional_headquarter__name=' + reg.value;
-    } else if (local.value) {
+    }
+    if (local.value) {
         search = '?local_headquarter__name=' + local.value;
-    } else if (educ.value) {
+    }
+    if (educ.value) {
         search = '?educational_headquarter__name=' + educ.value;
-    } else if (detachment.value) {
+    }
+    if (detachment.value) {
         search = '?detachment__name=' + detachment.value;
     }
     if (search) {
@@ -525,6 +541,7 @@ watch(
             viewContributorsData(search);
         } else {
             levelAccess.value = 0;
+            viewContributorsData('');
         }
     },
 );
@@ -532,15 +549,6 @@ watch(
     () => districtsStore.districts,
     () => {
         districts.value = districtsStore.districts;
-        // let regId = regionalsStore.regionals.find(
-        //     (regional) => regional.name == reg.value,
-        // )?.id;
-        // locals.value = localsStore.locals.filter(
-        //     (loc) => loc.regional_headquarter == regId,
-        // );
-        // educHead.value = educationalsStore.educationals.filter(
-        //     (edh) => edh.regional_headquarter == regId,
-        // );
     },
 );
 
@@ -632,6 +640,7 @@ onMounted(() => {
         viewContributorsData(search);
     } else {
         levelAccess.value = 0;
+        viewContributorsData('');
     }
 });
 </script>
