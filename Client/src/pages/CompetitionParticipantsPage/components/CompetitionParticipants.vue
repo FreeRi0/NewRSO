@@ -55,7 +55,7 @@
                             :SortDropdown="true"
                         ></educInstitutionDropdown>
                     </div> -->
-                    <div class="sort-select">
+                    <!-- <div class="sort-select">
                         <sortByEducation
                             variant="outlined"
                             clearable
@@ -63,15 +63,15 @@
                             :options="sortOptionss"
                             :sorts-boolean="false"
                         ></sortByEducation>
-                    </div>
+                    </div> -->
 
-                    <Button
+                    <!-- <Button
                         type="button"
                         class="ascend"
                         icon="switch"
                         @click="ascending = !ascending"
                         color="white"
-                    ></Button>
+                    ></Button> -->
                 </div>
             </div>
             <div class="d-flex mt-5">
@@ -180,28 +180,28 @@ const sortedSquads = computed(() => {
             );
         });
     }
-    tempSquads = tempSquads.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa =
-                    a.junior_detachment?.name.toLowerCase() ||
-                    a.detachment?.name.toLowerCase(),
-                fb =
-                    b.junior_detachment?.toLowerCase() ||
-                    b.detachment?.name.toLowerCase();
+    // tempSquads = tempSquads.sort((a, b) => {
+    //     if (sortBy.value == 'alphabetically') {
+    //         let fa =
+    //                 a.junior_detachment?.name.toLowerCase() ||
+    //                 a.detachment?.name.toLowerCase(),
+    //             fb =
+    //                 b.junior_detachment?.toLowerCase() ||
+    //                 b.detachment?.name.toLowerCase();
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        }
-    });
+    //         if (fa < fb) {
+    //             return -1;
+    //         }
+    //         if (fa > fb) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     }
+    // });
 
-    if (!ascending.value) {
-        tempSquads.reverse();
-    }
+    // if (!ascending.value) {
+    //     tempSquads.reverse();
+    // }
 
     if (!picked.value) {
         return tempSquads;
