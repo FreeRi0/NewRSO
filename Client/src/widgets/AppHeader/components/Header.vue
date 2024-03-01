@@ -394,22 +394,22 @@ const userPages = computed(() => [
         show:
             roleStore.roles?.centralheadquarter_commander ||
             roleStore.roles?.districtheadquarter_commander ||
-            roleStore.roles?.regionalheadquarter_commander,
+            roleStore.roles?.localheadquarter_commander ||
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.educationalheadquarter_commander ||
+            roleStore.roles?.detachment_commander,
     },
     {
         title: 'Членский взнос',
         name: 'contributorPay',
         show:
-            roleStore.roles?.centralheadquarter_commander ||
-            roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.districtheadquarter_commander,
+            roleStore.roles?.regionalheadquarter_commander
     },
     {
         title: 'Оформление справок',
         name: 'references',
         show:
-            roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.centralheadquarter_commander,
+            roleStore.roles?.regionalheadquarter_commander
     },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },
