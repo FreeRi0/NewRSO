@@ -55,7 +55,7 @@
                             </button>
                         </div>
 
-                        <div class="sort-filters">
+                        <!-- <div class="sort-filters">
                             <div class="sort-select">
                                 <sortByEducation
                                     variant="outlined"
@@ -73,7 +73,7 @@
                                 @click="ascending = !ascending"
                                 color="white"
                             ></Button>
-                        </div>
+                        </div> -->
                     </div>
                     <registryList
                         v-if="!isLoading"
