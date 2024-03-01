@@ -394,10 +394,7 @@ const userPages = computed(() => [
         show:
             roleStore.roles?.centralheadquarter_commander ||
             roleStore.roles?.districtheadquarter_commander ||
-            roleStore.roles?.localheadquarter_commander ||
-            roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.educationalheadquarter_commander ||
-            roleStore.roles?.detachment_commander,
+            roleStore.roles?.regionalheadquarter_commander
     },
     {
         title: 'Членский взнос',
