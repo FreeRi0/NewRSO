@@ -297,8 +297,12 @@
                                             type="tel"
                                             placeholder="+7(___) ___ __ __"
                                             name="phone-parent"
-                                            v-model:value="
-                                                props.user.parent
+                                            :value="
+                                                user.parent
+                                                    .parent_phone_number
+                                            "
+                                            v-model="
+                                                user.parent
                                                     .parent_phone_number
                                             "
                                             mask="+7(###) ###-##-##"
@@ -370,8 +374,12 @@
                                             name="passInput"
                                             mask="## ## ######"
                                             placeholder="__ __ ______"
-                                            v-model:value="
-                                                props.user.parent
+                                            :value="
+                                                user.parent
+                                                    .passport_number
+                                            "
+                                            v-model="
+                                                user.parent
                                                     .passport_number
                                             "
                                         />
@@ -665,7 +673,8 @@
                                     type="tel"
                                     placeholder="+7(___) ___ __ __"
                                     name="phone-contact"
-                                    v-model:value="props.user.phone_number"
+                                    :value="user.phone_number"
+                                    v-model="user.phone_number"
                                     mask="+7(###) ###-##-##"
                                 />
                             </div>
@@ -1007,9 +1016,8 @@
                                         type="text"
                                         mask="## ## ######"
                                         placeholder="__ __ ______"
-                                        v-model:value="
-                                            props.user.documents.pass_ser_num
-                                        "
+                                        :value="user.documents.pass_ser_num"
+                                        v-model="user.documents.pass_ser_num"
                                     />
                                 </div>
                                 <!-- <div class="form__counter">
@@ -1061,9 +1069,8 @@
                                         mask="###-###-### ##"
                                         type="text"
                                         placeholder="___-___-___ __"
-                                        v-model:value="
-                                            props.user.documents.snils
-                                        "
+                                        :value="user.documents.snils"
+                                        v-model="user.documents.snils"
                                     />
                                 </div>
 
