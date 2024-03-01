@@ -3,7 +3,7 @@
         <h3>{{ head }}</h3>
         <div class="headquarters-management__container">
             <router-link
-                :to="{ name: 'userpage', params: { id: props.commander.id } }"
+                :to="{ name: 'userpage', params: { id: props.commander?.id } }"
             >
                 <div
                     class="manager-card"

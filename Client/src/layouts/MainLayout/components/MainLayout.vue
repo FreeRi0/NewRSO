@@ -54,13 +54,13 @@ import { useRegionalsStore } from '@features/store/regionals';
 import { usePositionsStore } from '@features/store/positions';
 import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
-import { useLocalsStore } from '@features/store/local';
 import { useDistrictsStore } from '@features/store/districts';
 
 const roleStore = useRoleStore();
 const userStore = useUserStore();
 const regionsStore = useRegionalsStore();
 const positionsStore = usePositionsStore();
+// const districtStore  = useDistrictsStore();
 const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
 const isAuth = ref(!!localStorage.getItem('Token'));
@@ -71,6 +71,8 @@ onMounted(() => {
         roleStore.getRoles();
         positionsStore.getPositions();
         squadsStore.getAreas();
+        // districtStore.getDistricts();
+
     }
     regionsStore.getRegions();
 });

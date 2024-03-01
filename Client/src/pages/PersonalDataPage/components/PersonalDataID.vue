@@ -9,7 +9,6 @@
                 :position="roles.positions.value"
                 :commander="roles.userRoles.value"
                 class="mt-3"
-
             ></Wall>
             <AccordionsPersonal
                 :button="false"
@@ -22,7 +21,7 @@
 import { ref, onMounted, watch } from 'vue';
 import { AccordionsPersonal } from '@features/PersonalAccordions/components';
 import { Wall } from '@features/baner/components';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import {  useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { useRoleStore } from '@layouts/store/role';
@@ -30,6 +29,7 @@ import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
 const roleStore = useRoleStore();
+const router = useRouter();
 const privateUser = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
 const education = ref({});
@@ -55,11 +55,20 @@ watch(
     },
 );
 onMounted(() => {
-    userStore.getPrivateUserId(id);
-    roleStore.getPositions(id);
-    roleStore.getUserRoles(id);
-})
-
+    if (
+        roleStore.roles.regionalheadquarter_commander?.id ||
+        roleStore.roles.detachment_commander?.id
+    ) {
+        userStore.getPrivateUserId(id);
+        roleStore.getPositions(id);
+        roleStore.getUserRoles(id);
+    } else {
+        router.push({
+            name: 'userpage',
+            params: { id: route.params.id },
+        });
+    }
+});
 </script>
 <style lang="scss" scoped>
 .profile-title {

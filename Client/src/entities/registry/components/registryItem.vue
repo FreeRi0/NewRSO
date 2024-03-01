@@ -1,7 +1,6 @@
 <template>
-    <router-link
+    <div
         class="horizontal-item"
-        :to="{ name: 'RegionalHQ' || 'userpage' || 'LocalHQ', params: { id: item.id } }"
     >
         <div class="horizontal-img">
             <img :src="item.emblem" alt="logo" v-if="item.emblem" />
@@ -45,7 +44,7 @@
                 <p>{{ item.date_of_birth }}</p>
             </div>
         </div>
-    </router-link>
+    </div>
     <div class="horizontal-info d-flex" v-if="showInfo">
         <p v-if="item.events_count">Проведённые мероприятия: {{ item.events_count }}</p>
         <div class="d-flex">

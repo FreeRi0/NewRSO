@@ -1,7 +1,9 @@
 <template>
     <h3 class="filters-title">Основные фильтры</h3>
     <v-expansion-panels>
-        <v-expansion-panel v-if="roles.centralheadquarter_commander">
+        <v-expansion-panel
+            v-if="roles.roles.value.centralheadquarter_commander"
+        >
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -101,9 +103,7 @@
             </v-expansion-panel-text>
             <p v-if="educRef">Выбрано: {{ educRef }}</p>
         </v-expansion-panel>
-        <v-expansion-panel
-            v-if="educRef !== null || roles.roles.value.detachment_commander"
-        >
+        <v-expansion-panel v-if="educRef !== null">
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -261,8 +261,8 @@ watch(
 onMounted(() => {
     districtsStore.getDistricts();
     regionsStore.getRegionals();
-    educationalsStore.getEducationals();
     localsStore.getLocals();
+    educationalsStore.getEducationals();
     squadsStore.getSquads();
 });
 </script>

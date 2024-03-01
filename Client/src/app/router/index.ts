@@ -18,13 +18,14 @@ router.beforeEach((to, _from, next) => {
         next({ name: 'Login' });
     // else if (localStorage.getItem('Token'))
     //        next({ name: 'mypage' });
-    else if (
-        to.name === 'PersonalDataUser' &&
-        localStorage.getItem('user') !== to.params.id
-    ) {
-        next({ name: 'userpage', params:{id: to.params.id} });
+    // else if (
+    //     to.name === 'PersonalDataUser' &&
+    //     localStorage.getItem('user') !== to.params.id
+    // ) {
+    //     next({ name: 'userpage', params:{id: to.params.id} });
 
-    }else next();
+    // }
+    else next();
 });
 
 export default router;

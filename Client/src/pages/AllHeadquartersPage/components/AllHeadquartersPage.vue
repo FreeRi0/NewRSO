@@ -233,6 +233,27 @@ const getLocalsHeadquartersForFilters = async () => {
         console.log('error request districts headquarters');
     }
 };
+
+// const searchHeadquarter = async (name) => {
+//     try {
+//         const filteredHeadquarters = await HTTP.get(
+//             `/educationals/?search=${name}`,
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             },
+//         );
+//         educationalsStore.educationals = filteredHeadquarters.data;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
+// const searchHeadquarters = computed(() => {
+//     searchHeadquarter(name.value);
+// });
+
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
     educationalsStore.getEducationals();
@@ -274,19 +295,20 @@ const sortedHeadquarters = computed(() => {
             ];
         }
 
-        if(name.value) {
-            console.log('name', name.value);
-            tempHeadquartes = tempHeadquartes.filter((item) => {
-            return item.name.toLowerCase().indexOf(name.value.toLowerCase()) >= 0;
-        });
-    }
-
-
+        // searchHeadquarters.value;
         tempHeadquartes = tempHeadquartes.filter((item) => {
             return idRegionals.indexOf(item.regional_headquarter) >= 0;
         });
     }
 
+    if (name.value) {
+        console.log('name', name.value);
+        tempHeadquartes = tempHeadquartes.filter((item) => {
+            return (
+                item.name.toLowerCase().indexOf(name.value.toLowerCase()) >= 0
+            );
+        });
+    }
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
             let fa = a.name.toLowerCase(),
