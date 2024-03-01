@@ -238,8 +238,8 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
-                                path: '/createlhq',
-                                name: 'createlhq',
+                                path: '/CreateLHQ',
+                                name: 'CreateLHQ',
                                 component: () =>
                                     import(
                                         '@pages/CreationOfLHQ/components/CreationOfLHQ.vue'
