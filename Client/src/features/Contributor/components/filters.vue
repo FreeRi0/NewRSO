@@ -259,19 +259,6 @@ watch(
 );
 
 onMounted(() => {
-    // if (roles.roles.value.centralheadquarter_commander) {
-    //     districtsStore.getDistricts();
-    //     regionsStore.getRegionals();
-    //     localsStore.getLocals();
-    //     educationalsStore.getEducationals();
-    //     squadsStore.getSquads();
-    // }
-    // if (roles.roles.value.regionalheadquarter_commander?.id) {
-    //     localsStore.getLocals();
-    //     educationalsStore.getEducationals();
-    //     squadsStore.getSquads();
-    // }
-
     districtsStore.getDistricts();
     regionsStore.getRegionals();
     localsStore.getLocals();
