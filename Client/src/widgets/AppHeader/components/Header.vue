@@ -110,8 +110,7 @@
                             "
                         >
                             <div
-                                v-for="item in regionals.filteredMyRegional
-                                    .value"
+                                v-for="item in regionalsStore.filteredMyRegional"
                             >
                                 <p>{{ item.name }}</p>
                             </div>
@@ -265,7 +264,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['change']);
+const emit = defineEmits(['changeReg']);
 
 const roleStore = useRoleStore();
 const regionalsStore = useRegionalsStore();
@@ -273,8 +272,6 @@ const userStore = useUserStore();
 const roles = storeToRefs(roleStore);
 
 const isLoading = storeToRefs(regionalsStore);
-
-const regionals = storeToRefs(regionalsStore);
 
 const quantityIsActive = ref(props.quantityActive);
 
@@ -307,18 +304,26 @@ const userPages = computed(() => [
         title: 'Мой отряд',
         name: 'lso',
         params: {
-            id: userStore.currentUser?.detachment_id ? userStore.currentUser?.detachment_id : roleStore.roles?.detachment_commander?.id,
+            id: userStore.currentUser?.detachment_id
+                ? userStore.currentUser?.detachment_id
+                : roleStore.roles?.detachment_commander?.id,
         },
-        show: userStore.currentUser?.detachment_id || roleStore.roles?.detachment_commander,
+        show:
+            userStore.currentUser?.detachment_id ||
+            roleStore.roles?.detachment_commander,
     },
     {
         title: 'Штаб СО ОО',
         name: 'HQ',
         path: 'regionals',
         params: {
-            id: userStore.currentUser?.educational_headquarter_id ? userStore.currentUser?.educational_headquarter_id : roleStore.roles?.educationalheadquarter_commander?.id,
+            id: userStore.currentUser?.educational_headquarter_id
+                ? userStore.currentUser?.educational_headquarter_id
+                : roleStore.roles?.educationalheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.educational_headquarter_id || roleStore.roles?.educationalheadquarter_commander,
+        show:
+            userStore.currentUser?.educational_headquarter_id ||
+            roleStore.roles?.educationalheadquarter_commander,
     },
     {
         title: 'Местный штаб',
@@ -328,9 +333,13 @@ const userPages = computed(() => [
             id:
                 /*userStore.currentUser?.local_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'locals')?.id,*/
-                userStore.currentUser?.local_headquarter_id ? userStore.currentUser?.local_headquarter_id : roleStore.roles?.localheadquarter_commander?.id,
+                userStore.currentUser?.local_headquarter_id
+                    ? userStore.currentUser?.local_headquarter_id
+                    : roleStore.roles?.localheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.local_headquarter_id || roleStore.roles?.localheadquarter_commander,
+        show:
+            userStore.currentUser?.local_headquarter_id ||
+            roleStore.roles?.localheadquarter_commander,
     },
     {
         title: 'Региональный штаб',
@@ -340,9 +349,13 @@ const userPages = computed(() => [
             id:
                 /*userStore.currentUser?.regional_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,*/
-            userStore.currentUser?.regional_headquarter_id ? userStore.currentUser?.regional_headquarter_id : roleStore.roles?.regionalheadquarter_commander?.id,
+                userStore.currentUser?.regional_headquarter_id
+                    ? userStore.currentUser?.regional_headquarter_id
+                    : roleStore.roles?.regionalheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.regional_headquarter_id || roleStore.roles?.regionalheadquarter_commander,
+        show:
+            userStore.currentUser?.regional_headquarter_id ||
+            roleStore.roles?.regionalheadquarter_commander,
     },
     {
         title: 'Окружной штаб',
@@ -352,9 +365,13 @@ const userPages = computed(() => [
             id:
                 /*userStore.currentUser?.district_headquarter_id ??
                 headquartersIds.value.find((hq) => hq.path === 'districts')?.id,*/
-                userStore.currentUser?.district_headquarter_id ? userStore.currentUser?.district_headquarter_id : roleStore.roles?.districtheadquarter_commander?.id,
+                userStore.currentUser?.district_headquarter_id
+                    ? userStore.currentUser?.district_headquarter_id
+                    : roleStore.roles?.districtheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.district_headquarter_id || roleStore.roles?.districtheadquarter_commander,
+        show:
+            userStore.currentUser?.district_headquarter_id ||
+            roleStore.roles?.districtheadquarter_commander,
     },
     {
         title: 'Центральный штаб',
@@ -452,10 +469,12 @@ const updateRegion = async () => {
             },
         );
         // console.log(updateRegResponse.data)
-        region.value = updateRegResponse.data.region.name;
-        emit('change', updateRegResponse.data.region.name);
+        region.value = updateRegResponse.data.region.id;
+
         show.value = !show.value;
-        // regionalsStore.searchRegionals(region.value);
+        userStore.currentUser.region = updateRegResponse.data.region;
+        // console.log('reg',updateRegResponse.data.region);
+        regionalsStore.searchMyRegionals(updateRegResponse.data.region);
 
         // userStore.getUser();
     } catch (error) {
@@ -475,9 +494,12 @@ watch(
             return;
         }
 
-        region.value = regionalsStore.regions.find(
-            (region) => region.name === userStore.currentUser.region,
-        )?.id;
+        // region.value = regionalsStore.regions.find(
+        //     (region) => region.name === userStore.currentUser.region,
+        // )?.id;
+        region.value = userStore.currentUser.region.id;
+
+        // userStore.getUser();
         regionalsStore.searchMyRegionals(userStore.currentUser.region);
     },
 );

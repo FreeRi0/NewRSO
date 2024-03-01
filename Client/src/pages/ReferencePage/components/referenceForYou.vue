@@ -73,10 +73,17 @@
                     </div>
                     <div class="references-wrapper">
                         <referencesList
+                            v-if="!isLoading"
                             :participants="sortedParticipants"
                             :selected-peoples="selectedPeoples"
                             @change="changePeoples"
                         ></referencesList>
+                        <v-progress-circular
+                            class="circleLoader"
+                            v-else
+                            indeterminate
+                            color="blue"
+                        ></v-progress-circular>
                     </div>
                     <Button
                         @click="participantsVisible += step"
@@ -178,7 +185,7 @@ import {
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, inject, watch, onMounted  } from 'vue';
+import { ref, computed, inject, watch, onMounted } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
 import { useDistrictsStore } from '@features/store/districts';
@@ -257,7 +264,11 @@ const viewContributorsData = async (search) => {
 
 const updateDistrict = (districtVal) => {
     let search = '';
-    search = '?district_headquarter__name=' + districtVal;
+    if (districtVal) {
+        search = '?district_headquarter__name=' + districtVal;
+    } else {
+        search = '';
+    }
 
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
@@ -305,8 +316,7 @@ const updateLocal = (localVal) => {
     )?.id;
     local.value = localVal;
     educHead.value = educationalsStore.educationals.filter(
-        (edh) =>
-            (locId && edh.local_headquarter == locId)
+        (edh) => locId && edh.local_headquarter == locId,
     );
 };
 
@@ -421,17 +431,22 @@ const sortOptionss = ref([
 const searchContributors = (event) => {
     let search = '';
     if (!name.value && roles.roles.value.centralheadquarter_commander) {
-        return [];
+    } else if (name.value && roles.roles.value.centralheadquarter_commander) {
+        search = '?search=' + name.value;
     }
     if (district.value) {
         search = '?district_headquarter__name=' + district.value;
-    } else if (reg.value) {
+    }
+    if (reg.value) {
         search = '?regional_headquarter__name=' + reg.value;
-    } else if (local.value) {
+    }
+    if (local.value) {
         search = '?local_headquarter__name=' + local.value;
-    } else if (educ.value) {
+    }
+    if (educ.value) {
         search = '?educational_headquarter__name=' + educ.value;
-    } else if (detachment.value) {
+    }
+    if (detachment.value) {
         search = '?detachment__name=' + detachment.value;
     }
     if (search) {
@@ -526,7 +541,14 @@ watch(
             viewContributorsData(search);
         } else {
             levelAccess.value = 0;
+            viewContributorsData('');
         }
+    },
+);
+watch(
+    () => districtsStore.districts,
+    () => {
+        districts.value = districtsStore.districts;
     },
 );
 
@@ -580,47 +602,47 @@ watch(
 
 onMounted(() => {
     if (!roles.roles.value.centralheadquarter_commander) {
-            let search = '';
+        let search = '';
 
-            if (roles.roles.value.districtheadquarter_commander) {
-                district.value =
-                    roles.roles.value.districtheadquarter_commander.name;
-                search =
-                    '?district_headquarter__name=' +
-                    roles.roles.value.districtheadquarter_commander.name;
-                levelAccess.value = 1;
-            } else if (roles.roles.value.regionalheadquarter_commander) {
-                reg.value =
-                    roles.roles.value.regionalheadquarter_commander.name;
-                search =
-                    '?regional_headquarter__name=' +
-                    roles.roles.value.regionalheadquarter_commander.name;
-                levelAccess.value = 2;
-            } else if (roles.roles.value.localheadquarter_commander) {
-                local.value = roles.roles.value.localheadquarter_commander.name;
-                search =
-                    '?local_headquarter__name=' +
-                    roles.roles.value.localheadquarter_commander.name;
-                levelAccess.value = 3;
-            } else if (roles.roles.value.educationalheadquarter_commander) {
-                educ.value =
-                    roles.roles.value.educationalheadquarter_commander.name;
-                search =
-                    '?educational_headquarter__name=' +
-                    roles.roles.value.educationalheadquarter_commander.name;
-                levelAccess.value = 4;
-            } else if (roles.roles.value.detachment_commander) {
-                detachment.value = roles.roles.value.detachment_commander.name;
-                search =
-                    '?detachment__name=' +
-                    roles.roles.value.detachment_commander.name;
-                levelAccess.value = 5;
-            }
-            viewContributorsData(search);
-        } else {
-            levelAccess.value = 0;
+        if (roles.roles.value.districtheadquarter_commander) {
+            district.value =
+                roles.roles.value.districtheadquarter_commander.name;
+            search =
+                '?district_headquarter__name=' +
+                roles.roles.value.districtheadquarter_commander.name;
+            levelAccess.value = 1;
+        } else if (roles.roles.value.regionalheadquarter_commander) {
+            reg.value = roles.roles.value.regionalheadquarter_commander.name;
+            search =
+                '?regional_headquarter__name=' +
+                roles.roles.value.regionalheadquarter_commander.name;
+            levelAccess.value = 2;
+        } else if (roles.roles.value.localheadquarter_commander) {
+            local.value = roles.roles.value.localheadquarter_commander.name;
+            search =
+                '?local_headquarter__name=' +
+                roles.roles.value.localheadquarter_commander.name;
+            levelAccess.value = 3;
+        } else if (roles.roles.value.educationalheadquarter_commander) {
+            educ.value =
+                roles.roles.value.educationalheadquarter_commander.name;
+            search =
+                '?educational_headquarter__name=' +
+                roles.roles.value.educationalheadquarter_commander.name;
+            levelAccess.value = 4;
+        } else if (roles.roles.value.detachment_commander) {
+            detachment.value = roles.roles.value.detachment_commander.name;
+            search =
+                '?detachment__name=' +
+                roles.roles.value.detachment_commander.name;
+            levelAccess.value = 5;
         }
-})
+        viewContributorsData(search);
+    } else {
+        levelAccess.value = 0;
+        viewContributorsData('');
+    }
+});
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,

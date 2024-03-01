@@ -297,12 +297,18 @@
                                             type="tel"
                                             placeholder="+7(___) ___ __ __"
                                             name="phone-parent"
-                                            v-model:value="
-                                                props.user.parent
+                                            :value="
+                                                user.parent
                                                     .parent_phone_number
+                                            "
+                                            v-model="
+                                                user.parent
+                                                    .parent_phone_number
+
                                             "
                                             mask="+7(###) ###-##-##"
                                         />
+
                                     </div>
                                 </div>
                             </div>
@@ -370,8 +376,12 @@
                                             name="passInput"
                                             mask="## ## ######"
                                             placeholder="__ __ ______"
-                                            v-model:value="
-                                                props.user.parent
+                                            :value="
+                                                user.parent
+                                                    .passport_number
+                                            "
+                                            v-model="
+                                                user.parent
                                                     .passport_number
                                             "
                                         />
@@ -665,7 +675,8 @@
                                     type="tel"
                                     placeholder="+7(___) ___ __ __"
                                     name="phone-contact"
-                                    v-model:value="props.user.phone_number"
+                                    :value="user.phone_number"
+                                    v-model="user.phone_number"
                                     mask="+7(###) ###-##-##"
                                 />
                             </div>
@@ -1007,9 +1018,8 @@
                                         type="text"
                                         mask="## ## ######"
                                         placeholder="__ __ ______"
-                                        v-model:value="
-                                            props.user.documents.pass_ser_num
-                                        "
+                                        :value="user.documents.pass_ser_num"
+                                        v-model="user.documents.pass_ser_num"
                                     />
                                 </div>
                                 <!-- <div class="form__counter">
@@ -1061,9 +1071,8 @@
                                         mask="###-###-### ##"
                                         type="text"
                                         placeholder="___-___-___ __"
-                                        v-model:value="
-                                            props.user.documents.snils
-                                        "
+                                        :value="user.documents.snils"
+                                        v-model="user.documents.snils"
                                     />
                                 </div>
 
@@ -3387,7 +3396,7 @@ import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { TextArea } from '@shared/components/inputs';
-
+import { MaskInput } from 'vue-3-mask';
 import { userData } from '@features/userData';
 const props = defineProps({
     button: Boolean,
@@ -3401,6 +3410,7 @@ const emit = defineEmits([
     'updateParentData',
     'updateStatus',
 ]);
+const onNumber = ref('');
 const router = useRouter();
 const userStore = useUserStore();
 // const currentUser = storeToRefs(userStore);
@@ -3614,6 +3624,11 @@ const counterKnow = computed(() => {
     return props.user.statement.rso_info_from?.length || 0;
 });
 
+// const updateValue = (event) => {
+//     console.log('textt');
+//     emit('update:value', event.target.value);
+//     console.log('textt', event.target.value);
+// };
 const getData = async () => {
     try {
         const responseForeignDocs = await HTTP.get(

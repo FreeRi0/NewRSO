@@ -15,6 +15,8 @@
 </template>
 
 <script setup>
+import { MaskInput } from 'vue-3-mask';
+
 defineOptions({
     inheritAttrs: false,
 });

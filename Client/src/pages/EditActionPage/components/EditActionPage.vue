@@ -1,6 +1,6 @@
 <template>
     <div class="container action">
-        <div class="action-title">Редактирование мероприятия</div>
+        <div class="action-title">Создание мероприятия</div>
         <form @submit.prevent="SubmitEvent">
             <div class="col-auto form-container">
                 <v-expansion-panels variant="accordion">
@@ -172,11 +172,14 @@
                                                 >
                                                     <img
                                                         v-if="
-                                                            maininfo.banner !=
-                                                            undefined
+                                                            maininfo.banner ??
+                                                            urlBanner
                                                         "
                                                         class="photo-add__image"
-                                                        :src="maininfo.banner"
+                                                        :src="
+                                                            maininfo.banner ??
+                                                            urlBanner
+                                                        "
                                                     />
                                                     <img
                                                         v-else
@@ -190,8 +193,8 @@
                                                         class="photo-add__label"
                                                         for="upload-banner"
                                                         v-if="
-                                                            !maininfo.banner !=
-                                                            undefined
+                                                            !maininfo.banner &&
+                                                            !urlBanner
                                                         "
                                                     >
                                                         <svg
@@ -291,6 +294,7 @@
                                                     </div>
                                                     <input
                                                         type="file"
+                                                        accept="image/png, image/jpeg"
                                                         id="upload-banner"
                                                         name="squad-banner"
                                                         hidden
@@ -323,7 +327,9 @@
                                             name="address_hq"
                                             :maxlength="100"
                                         />
-                                        <div class="form__counter"></div>
+                                        <div class="form__counter">
+                                            {{ maininfo.address.length }}/100
+                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form-label" for="group-hq"
@@ -421,7 +427,13 @@
                                         </div>
                                     </label>
                                 </div>
-                                <div class="form-col">
+                                <div
+                                    class="form-col"
+                                    v-if="
+                                        maininfo.application_type !==
+                                        'Персональная'
+                                    "
+                                >
                                     <label class="form-label"
                                         >Какие объекты могут формировать
                                         групповые заявки</label
@@ -515,9 +527,7 @@
                                         >
                                         <InputText
                                             id="action-start-hq"
-                                            v-model="
-                                                maininfo.time_data.start_date
-                                            "
+                                            v-model="time_data.start_date"
                                             class="form__input form-input-container"
                                             placeholder="Например 26.06.2024"
                                             name="action-start-hq"
@@ -532,9 +542,7 @@
                                         >
                                         <InputText
                                             id="action-end-hq"
-                                            v-model="
-                                                maininfo.time_data.end_date
-                                            "
+                                            v-model="time_data.end_date"
                                             class="form__input form-input-container"
                                             placeholder="Например 27.06.2024"
                                             name="action-end-hq"
@@ -551,8 +559,7 @@
                                             id="end-registration-hq"
                                             class="form__input form-input-container"
                                             v-model="
-                                                maininfo.time_data
-                                                    .registration_end_date
+                                                time_data.registration_end_date
                                             "
                                             placeholder="Например, 15.05.2023"
                                             name="end-registration-hq"
@@ -570,9 +577,7 @@
                                         <InputText
                                             id="action-hours-start-hq"
                                             class="form__input form-input-container"
-                                            v-model="
-                                                maininfo.time_data.start_time
-                                            "
+                                            v-model="time_data.start_time"
                                             placeholder="Например 7:30"
                                             name="action-hours-start-hq"
                                             type="time"
@@ -588,10 +593,7 @@
                                         <InputText
                                             id="action-hours-end-hq"
                                             class="form__input form-input-container"
-                                            v-model="
-                                                maininfo.time_data
-                                                    .registration_end_time
-                                            "
+                                            v-model="time_data.end_time"
                                             placeholder="Например 18:30"
                                             name="action-hours-end-hq"
                                             type="time"
@@ -599,7 +601,7 @@
                                         <div class="form__counter"></div>
                                     </div>
                                     <div class="form__field">
-                                        <!--<label class='flex align-items-center' style='display: flex'>
+                                        <!----<label class='flex align-items-center' style='display: flex'>
                                             <div class="flex align-items-center">
                                                 <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
                                                 <label for="hours1" class="ml-2">За час</label>
@@ -613,6 +615,24 @@
                                                 <label for="hours3" class="ml-2">За 3 часа</label>
                                             </div>
                                         </label> -->
+                                        <div class="form__field">
+                                            <label
+                                                class="form-label"
+                                                for="action-hours-end-hq"
+                                                >Время в часах</label
+                                            >
+                                            <InputText
+                                                id="action-hours-end-hq"
+                                                class="form__input form-input-container"
+                                                v-model="
+                                                    time_data.registration_end_time
+                                                "
+                                                placeholder="Например 18:30"
+                                                name="action-hours-end-hq"
+                                                type="time"
+                                            />
+                                            <div class="form__counter"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -696,10 +716,7 @@
                                     <v-container fluid>
                                         <div class="form-checkbox">
                                             <input
-                                                v-model="
-                                                    maininfo.document_data
-                                                        .passport
-                                                "
+                                                v-model="document_data.passport"
                                                 type="checkbox"
                                                 name="passport"
                                             />
@@ -709,9 +726,7 @@
                                         </div>
                                         <div class="form-checkbox">
                                             <input
-                                                v-model="
-                                                    maininfo.document_data.snils
-                                                "
+                                                v-model="document_data.snils"
                                                 type="checkbox"
                                                 name="snils"
                                             />
@@ -719,9 +734,7 @@
                                         </div>
                                         <div class="form-checkbox">
                                             <input
-                                                v-model="
-                                                    maininfo.document_data.inn
-                                                "
+                                                v-model="document_data.inn"
                                                 type="checkbox"
                                                 name="inn"
                                             />
@@ -730,8 +743,7 @@
                                         <div class="form-checkbox">
                                             <input
                                                 v-model="
-                                                    maininfo.document_data
-                                                        .work_book
+                                                    document_data.work_book
                                                 "
                                                 type="checkbox"
                                                 name="workbook"
@@ -743,8 +755,7 @@
                                         <div class="form-checkbox">
                                             <input
                                                 v-model="
-                                                    maininfo.document_data
-                                                        .military_document
+                                                    document_data.military_document
                                                 "
                                                 type="checkbox"
                                                 name="military"
@@ -757,8 +768,7 @@
                                         <div class="form-checkbox">
                                             <input
                                                 v-model="
-                                                    maininfo.document_data
-                                                        .consent_personal_data
+                                                    document_data.consent_personal_data
                                                 "
                                                 type="checkbox"
                                                 name="consert"
@@ -877,7 +887,7 @@
                                         >
                                         <InputText
                                             id="name-hq"
-                                            v-model="organizator.organizer"
+                                            v-model="organizator.organization"
                                             class="form__input form-input-container"
                                             placeholder="Фамилия Имя Отчество"
                                             name="name_hq"
@@ -889,7 +899,7 @@
                                         <label
                                             class="form-label"
                                             for="telegram-owner-hq"
-                                            >Telegram организатора</label
+                                            >Telegram</label
                                         >
                                         <InputText
                                             id="telegram-owner-hq"
@@ -905,11 +915,13 @@
                                         <label
                                             class="form-label"
                                             for="telegram-squad-hq"
-                                            >Telegram отряда</label
+                                            >Телефон</label
                                         >
                                         <InputText
                                             id="telegram-squad-hq"
-                                            v-model="organizator.telegramSquad"
+                                            v-model="
+                                                organizator.organizer_phone_number
+                                            "
                                             class="form__input form-input-container"
                                             placeholder="@Invar"
                                             name="telegram-squad-hq"
@@ -946,7 +958,7 @@
                                         >
                                         <InputText
                                             id="organization-hq"
-                                            v-model="organizator.organization"
+                                            v-model="organization_stop"
                                             class="form__input form-input-container"
                                             placeholder="Например КузГТУ"
                                             name="organization-hq"
@@ -959,7 +971,7 @@
                                     <div class="form-checkbox">
                                         <input
                                             v-model="
-                                                organizators.is_contact_person
+                                                organizator.is_contact_person
                                             "
                                             type="checkbox"
                                             name="person"
@@ -1082,7 +1094,7 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref, onActivated, watch } from 'vue';
+import { ref, onActivated, watch, watchEffect } from 'vue';
 import {
     getAction,
     getOrganizator,
@@ -1099,6 +1111,7 @@ const rolesStore = useRoleStore();
 const router = useRouter();
 const route = useRoute();
 const id = route.params.id;
+const rules = ref([]);
 
 onActivated(() => {
     watch(
@@ -1131,7 +1144,139 @@ onActivated(() => {
         .catch((e) => {
             console.log(e);
         });
+    switch (maininfo.value.application_type) {
+        case 'Персональная':
+            area_massive.value = [{ name: 'ЛСО' }];
+            break;
+        case 'Групповая':
+            area_massive.value = [
+                { name: 'Округи' },
+                { name: 'Регионы' },
+                { name: 'Местные штабы' },
+                { name: 'ЛСО' },
+                { name: 'Штабы ОО' },
+                { name: 'СО' },
+            ];
+            break;
+        case 'Многоэтапная':
+            area_massive.value = [
+                { name: 'Округи' },
+                { name: 'Регионы' },
+                { name: 'Местные штабы' },
+                { name: 'ЛСО' },
+                { name: 'Штабы ОО' },
+                { name: 'СО' },
+            ];
+            break;
+    }
+    switch (maininfo.value.scale) {
+        case 'Отрядное':
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'detachment_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_detachment = value;
+                        }
+                    });
+                }
+            });
+            break;
+        case 'Образовательное':
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'educationalheadquarter_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_educational_headquarter = value;
+                            maininfo.value.org_detachment = '';
+                        }
+                    });
+                }
+            });
+            break;
+        case 'Городское':
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'localheadquarter_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_local_headquarter = value;
+                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_detachment = '';
+                        }
+                    });
+                }
+            });
+            break;
+        case 'Региональное':
+            //Работает, на удивление...
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'regionalheadquarter_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_regional_headquarter = value;
+                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_detachment = '';
+                        }
+                    });
+                }
+            });
+            break;
+        case 'Окружное':
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'districtheadquarter_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_district_headquarter = value;
+                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_detachment = '';
+                        }
+                    });
+                }
+            });
+            break;
+        case 'Всероссийское':
+            Object.entries(rules.value).forEach(([key, value]) => {
+                if (key === 'centralheadquarter_commander') {
+                    Object.entries(value).forEach(([key, value]) => {
+                        if (key === 'id') {
+                            console.log(value);
+                            maininfo.value.org_central_headquarter = value;
+                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_detachment = '';
+                        }
+                    });
+                }
+            });
+            break;
+    }
 });
+
+watchEffect(() => {});
 
 const scale_massive_sorted = ref([]);
 
@@ -1164,12 +1309,12 @@ const maininfo = ref({
     participants_number: Number,
     application_type: '',
     available_structural_units: '',
-    org_central_headquarter: 1,
-    org_district_headquarter: null,
-    org_regional_headquarter: null,
-    org_local_headquarter: null,
-    org_educational_headquarter: null,
-    org_detachment: null,
+    org_central_headquarter: '',
+    org_district_headquarter: '',
+    org_regional_headquarter: '',
+    org_local_headquarter: '',
+    org_educational_headquarter: '',
+    org_detachment: '',
     time_data: {
         event_duration_type: '',
         start_date: '',
@@ -1244,6 +1389,7 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
+
     putAction(id, fd)
         .then((resp) => {
             putTimeData(resp.data.id, maininfo.value.time_data)

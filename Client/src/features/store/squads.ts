@@ -27,7 +27,7 @@ export const useSquadsStore = defineStore('squads', {
                     },
                 });
                 this.total = Math.ceil(responseSquads.headers['x-total-count'] / this.limit)
-                this.squads = responseSquads.data;
+                this.squads = responseSquads.data; // добавить .data
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
