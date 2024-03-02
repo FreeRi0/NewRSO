@@ -1094,44 +1094,39 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import {
     createAction,
     putTimeData,
     putDocuments,
     createOrganizator,
+    getRoles,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import { onActivated, onMounted, watchEffect } from 'vue';
-import { useRoleStore } from '@layouts/store/role';
 import { getUser } from '@services/UserService';
 const router = useRouter();
-const rolesStore = useRoleStore();
 const rules = ref([]);
 
 const organization_stop = ref('');
 
 onActivated(() => {
-    watch(
-        () => rolesStore.roles,
-        (newRole) => {
-            rules.value = newRole;
-            console.log(rules.value);
-            console.log('Роли загружены');
-            Object.entries(newRole).forEach(([key, value]) => {
-                //Найти более локаничное решение
-                if (value !== null) {
-                    const filted = scale_massive.value.find(
-                        (commander) => commander.value === key,
-                    );
-                    scale_massive_sorted.value.push(filted); //Работает
-                }
-            });
-        },
-    );
+    getRoles().then((resp) => {
+        console.log(resp.data);
+        rules.value = resp.data;
+        Object.entries(resp.data).forEach(([key, value]) => {
+            if (value !== null) {
+                console.log(`${key} + ${value}`);
+                const filted = scale_massive.value.find(
+                    (commander) => commander.value === key,
+                );
+                scale_massive_sorted.value.push(filted); //Работает
+            }
+        });
+    });
     getUser().then((resp) => {
         console.log(resp.data);
         organizators.value.push({
@@ -1319,17 +1314,12 @@ watchEffect(() => {
         case 'Всероссийское':
             Object.entries(rules.value).forEach(([key, value]) => {
                 if (key === 'centralheadquarter_commander') {
-                    Object.entries(value).forEach(([key, value]) => {
-                        if (key === 'id') {
-                            console.log(value);
-                            maininfo.value.org_central_headquarter = value;
-                            maininfo.value.org_district_headquarter = '';
-                            maininfo.value.org_regional_headquarter = '';
-                            maininfo.value.org_local_headquarter = '';
-                            maininfo.value.org_educational_headquarter = '';
-                            maininfo.value.org_detachment = '';
-                        }
-                    });
+                    maininfo.value.org_central_headquarter = value;
+                    maininfo.value.org_district_headquarter = '';
+                    maininfo.value.org_regional_headquarter = '';
+                    maininfo.value.org_local_headquarter = '';
+                    maininfo.value.org_educational_headquarter = '';
+                    maininfo.value.org_detachment = '';
                 }
             });
             break;
