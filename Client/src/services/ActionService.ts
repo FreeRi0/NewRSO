@@ -130,3 +130,13 @@ export function getParticipants(id: number) {
         },
     });
 }
+
+//Временная функция
+export function getRoles() {
+    return HTTP.get(`/rsousers/me_commander`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+}
