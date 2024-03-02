@@ -110,8 +110,7 @@
                             "
                         >
                             <div
-                                v-for="item in regionals.filteredMyRegional
-                                    .value"
+                                v-for="item in regionalsStore.filteredMyRegional"
                             >
                                 <p>{{ item.name }}</p>
                             </div>
@@ -195,8 +194,8 @@
                             placeholder="Выберите регион обучения"
                             v-model="regionAction"
                             @update:value="changeValue"
-                            address="/regions/"
                             class="mb-2 region-input"
+                            address="/regions/"
                             :value-change="true"
                         ></regionsDropdown>
 
@@ -265,14 +264,14 @@ const props = defineProps({
     },
 });
 
+const emit = defineEmits(['changeReg']);
+
 const roleStore = useRoleStore();
 const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
 const roles = storeToRefs(roleStore);
 
 const isLoading = storeToRefs(regionalsStore);
-
-const regionals = storeToRefs(regionalsStore);
 
 const quantityIsActive = ref(props.quantityActive);
 
@@ -281,7 +280,6 @@ const router = useRouter();
 const region = ref('');
 
 const regionAction = ref(null);
-console.log('reg', regionAction);
 
 const userUpdate = (userData) => {
     userStore.currentUser = userData;
@@ -306,18 +304,26 @@ const userPages = computed(() => [
         title: 'Мой отряд',
         name: 'lso',
         params: {
-            id: userStore.currentUser?.detachment_id,
+            id: userStore.currentUser?.detachment_id
+                ? userStore.currentUser?.detachment_id
+                : roleStore.roles?.detachment_commander?.id,
         },
-        show: userStore.currentUser?.detachment_id,
+        show:
+            userStore.currentUser?.detachment_id ||
+            roleStore.roles?.detachment_commander,
     },
     {
         title: 'Штаб СО ОО',
         name: 'HQ',
         path: 'regionals',
         params: {
-            id: userStore.currentUser?.educational_headquarter_id,
+            id: userStore.currentUser?.educational_headquarter_id
+                ? userStore.currentUser?.educational_headquarter_id
+                : roleStore.roles?.educationalheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.educational_headquarter_id,
+        show:
+            userStore.currentUser?.educational_headquarter_id ||
+            roleStore.roles?.educationalheadquarter_commander,
     },
     {
         title: 'Местный штаб',
@@ -325,10 +331,15 @@ const userPages = computed(() => [
         path: 'locals',
         params: {
             id:
-                userStore.currentUser?.local_headquarter_id ??
-                headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
+                /*userStore.currentUser?.local_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'locals')?.id,*/
+                userStore.currentUser?.local_headquarter_id
+                    ? userStore.currentUser?.local_headquarter_id
+                    : roleStore.roles?.localheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.local_headquarter_id,
+        show:
+            userStore.currentUser?.local_headquarter_id ||
+            roleStore.roles?.localheadquarter_commander,
     },
     {
         title: 'Региональный штаб',
@@ -336,10 +347,15 @@ const userPages = computed(() => [
         path: 'regionals',
         params: {
             id:
-                userStore.currentUser?.regional_headquarter_id ??
-                headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
+                /*userStore.currentUser?.regional_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,*/
+                userStore.currentUser?.regional_headquarter_id
+                    ? userStore.currentUser?.regional_headquarter_id
+                    : roleStore.roles?.regionalheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.regional_headquarter_id,
+        show:
+            userStore.currentUser?.regional_headquarter_id ||
+            roleStore.roles?.regionalheadquarter_commander,
     },
     {
         title: 'Окружной штаб',
@@ -347,10 +363,15 @@ const userPages = computed(() => [
         path: 'districts',
         params: {
             id:
-                userStore.currentUser?.district_headquarter_id ??
-                headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
+                /*userStore.currentUser?.district_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'districts')?.id,*/
+                userStore.currentUser?.district_headquarter_id
+                    ? userStore.currentUser?.district_headquarter_id
+                    : roleStore.roles?.districtheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.district_headquarter_id,
+        show:
+            userStore.currentUser?.district_headquarter_id ||
+            roleStore.roles?.districtheadquarter_commander,
     },
     {
         title: 'Центральный штаб',
@@ -378,17 +399,12 @@ const userPages = computed(() => [
     {
         title: 'Членский взнос',
         name: 'contributorPay',
-        show:
-            roleStore.roles?.centralheadquarter_commander ||
-            roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.districtheadquarter_commander,
+        show: roleStore.roles?.regionalheadquarter_commander,
     },
     {
         title: 'Оформление справок',
         name: 'references',
-        show:
-            roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.centralheadquarter_commander,
+        show: roleStore.roles?.regionalheadquarter_commander,
     },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },
@@ -447,10 +463,15 @@ const updateRegion = async () => {
                 },
             },
         );
-        region.value = updateRegResponse.data.region;
+        // console.log(updateRegResponse.data)
+        region.value = updateRegResponse.data.region.id;
+
         show.value = !show.value;
-        // regionalsStore.searchRegionals(region.value);
-        userStore.getUser();
+        userStore.currentUser.region = updateRegResponse.data.region;
+        // console.log('reg',updateRegResponse.data.region);
+        regionalsStore.searchMyRegionals(updateRegResponse.data.region);
+
+        // userStore.getUser();
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -468,9 +489,12 @@ watch(
             return;
         }
 
-        region.value = regionalsStore.regions.find(
-            (region) => region.name === userStore.currentUser.region,
-        )?.id;
+        // region.value = regionalsStore.regions.find(
+        //     (region) => region.name === userStore.currentUser.region,
+        // )?.id;
+        region.value = userStore.currentUser.region.id;
+
+        // userStore.getUser();
         regionalsStore.searchMyRegionals(userStore.currentUser.region);
     },
 );

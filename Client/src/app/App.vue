@@ -1,15 +1,14 @@
 <template>
     <router-view v-slot="{ Component }">
-        <Header/>
+        <Header  />
         <keep-alive>
-                <component :is="Component"></component>
+            <component :is="Component"></component>
         </keep-alive>
-        <Footer/>
+        <Footer />
     </router-view>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { Header } from '@widgets/AppHeader';
 import { Footer } from '@widgets/AppFooter';
-
 </script>

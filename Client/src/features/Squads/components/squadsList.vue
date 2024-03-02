@@ -2,7 +2,7 @@
     <div class="squads-wrapper" v-if="squads.length > 0">
         <squadItem v-for="squad in squads" :squad="squad" :key="squad.id" />
     </div>
-
+    <!--Сделать item пагинации-->
     <h2 v-else>Отряд не найден...</h2>
 </template>
 <script setup>

@@ -13,6 +13,17 @@
                     :options="actionsList"
                 ></sortByEducation>
             </div>
+            <div class="d-flex align-center">
+                <div class="contributor-sort__all">
+                    <input
+                        type="checkbox"
+                        @click="select"
+                        placeholder="Выбрать все"
+                        v-model="checkboxAll"
+                    />
+                </div>
+                <div class="ml-3">Выбрать всё</div>
+            </div>
         </div>
         <div class="participants__list">
             <template
@@ -45,6 +56,7 @@
                 type="button"
                 label="Сохранить"
                 @click="onAction"
+                :disabled="!action"
             ></Button>
         </div>
         <div class="clear_select" v-else></div>
@@ -59,6 +71,7 @@ import { checkedReferencesItem } from '@entities/ReferencesPeoples';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 import { sortByEducation } from '@shared/components/selects';
+import { ParticipantsList } from '@features/Participants/components';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
@@ -119,6 +132,25 @@ const viewParticipants = async () => {
         selectedParticipantList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
+    }
+};
+
+const select = (event) => {
+    selectedParticipantList.value = [];
+    console.log('fffss', checkboxAll.value, event);
+    if (event.target.checked) {
+        // console.log('fffss', checkboxAll.value, event);
+        for (let index in participantList.value) {
+            // console.log('arr', selectedPeoples.value);
+
+            participantList.value[index].selected = true;
+            selectedParticipantList.value.push(participantList.value[index]);
+        }
+    } else {
+        for (let index in participantList.value) {
+            // console.log('arr', selectedPeoples.value);
+            participantList.value[index].selected = false;
+        }
     }
 };
 

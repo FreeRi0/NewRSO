@@ -9,6 +9,8 @@
     &--organizer {
         font-size: 20px;
         margin: 16px 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
         text-align: center;
         line-height: 26px;
         color: rgba(53, 56, 63, 1);

@@ -20,6 +20,17 @@
                     v-model="checkboxAllSquads"
                 />
             </div> -->
+            <div class="d-flex align-center">
+                <div class="contributor-sort__all">
+                    <input
+                        type="checkbox"
+                        @click="select"
+                        placeholder="Выбрать все"
+                        v-model="checkboxAll"
+                    />
+                </div>
+                <div class="ml-3">Выбрать всё</div>
+            </div>
         </div>
         <div class="participants__list">
             <template v-for="detachment in detachmentList" :key="detachment.id">
@@ -49,6 +60,7 @@
                 type="button"
                 label="Сохранить"
                 @click="onAction"
+                :disabled="!action"
             ></Button>
         </div>
         <div class="clear_select" v-else></div>
@@ -68,7 +80,7 @@ const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 const detachmentList = ref([]);
 const selectedDetachmentList = ref([]);
-const checkboxAllSquads = ref(false);
+const checkboxAll = ref(false);
 const isError = ref([]);
 const swal = inject('$swal');
 const loading = ref(false);
@@ -102,6 +114,25 @@ const viewDetachments = async () => {
         selectedDetachmentList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
+    }
+};
+
+const select = (event) => {
+    selectedDetachmentList.value = [];
+    console.log('fffss', checkboxAll.value, event);
+    if (event.target.checked) {
+        // console.log('fffss', checkboxAll.value, event);
+        for (let index in detachmentList.value) {
+            // console.log('arr', selectedPeoples.value);
+
+            detachmentList.value[index].selected = true;
+            selectedDetachmentList.value.push(detachmentList.value[index]);
+        }
+    } else {
+        for (let index in detachmentList.value) {
+            // console.log('arr', selectedPeoples.value);
+            detachmentList.value[index].selected = false;
+        }
     }
 };
 

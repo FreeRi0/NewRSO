@@ -292,18 +292,24 @@
                                             >&nbsp;*</span
                                         ></label
                                     >
-                                    <Input
-                                        type="tel"
-                                        vmaska
-                                        maska="+7 ### ###-##-##"
-                                        name="phone-parent"
-                                        class="input-small phone"
-                                        placeholder="+7(__) __ __ _"
-                                        v-model:value="
-                                            props.user.parent
-                                                .parent_phone_number
-                                        "
-                                    />
+                                    <div class="input-small phone">
+                                        <MaskInput
+                                            type="tel"
+                                            placeholder="+7(___) ___ __ __"
+                                            name="phone-parent"
+                                            :value="
+                                                user.parent
+                                                    .parent_phone_number
+                                            "
+                                            v-model="
+                                                user.parent
+                                                    .parent_phone_number
+
+                                            "
+                                            mask="+7(###) ###-##-##"
+                                        />
+
+                                    </div>
                                 </div>
                             </div>
                             <div class="how">
@@ -365,16 +371,21 @@
                                             >&nbsp;*</span
                                         ></label
                                     >
-                                    <Input
-                                        name="passInput"
-                                        class="input-small"
-                                        vmaska
-                                        maska="####-######"
-                                        placeholder="__ __ ____"
-                                        v-model:value="
-                                            props.user.parent.passport_number
-                                        "
-                                    />
+                                    <div class="input-small passport-number">
+                                        <MaskInput
+                                            name="passInput"
+                                            mask="## ## ######"
+                                            placeholder="__ __ ______"
+                                            :value="
+                                                user.parent
+                                                    .passport_number
+                                            "
+                                            v-model="
+                                                user.parent
+                                                    .passport_number
+                                            "
+                                        />
+                                    </div>
                                 </div>
 
                                 <div class="form-field" id="pass-no-reg">
@@ -659,13 +670,16 @@
                                     >&nbsp;*</span
                                 ></label
                             >
-                            <Input
-                                type="tel"
-                                name="phone-contact"
-                                class="input-small phone"
-                                placeholder="+7(__) __ __ _"
-                                v-model:value="props.user.phone_number"
-                            />
+                            <div class="input-small phone">
+                                <MaskInput
+                                    type="tel"
+                                    placeholder="+7(___) ___ __ __"
+                                    name="phone-contact"
+                                    :value="user.phone_number"
+                                    v-model="user.phone_number"
+                                    mask="+7(###) ###-##-##"
+                                />
+                            </div>
                         </div>
                         <div class="form-field">
                             <label for=""
@@ -998,19 +1012,19 @@
                                         >&nbsp;*</span
                                     ></label
                                 >
-                                <Input
-                                    name="pass-num "
-                                    type="text"
-                                    class="input-big"
-                                    placeholder="__ __ ____"
-                                    v-model:value="
-                                        props.user.documents.pass_ser_num
-                                    "
-                                    :max-length="20"
-                                />
-                                <div class="form__counter">
-                                    {{ counterPass }} / 20
+                                <div class="input-big">
+                                    <MaskInput
+                                        name="pass-num "
+                                        type="text"
+                                        mask="## ## ######"
+                                        placeholder="__ __ ______"
+                                        :value="user.documents.pass_ser_num"
+                                        v-model="user.documents.pass_ser_num"
+                                    />
                                 </div>
+                                <!-- <div class="form__counter">
+                                    {{ counterPass }} / 20
+                                </div> -->
                             </div>
 
                             <div class="form-field">
@@ -1051,17 +1065,20 @@
                                         >&nbsp;*</span
                                     ></label
                                 >
-                                <Input
-                                    name="SNILS-d"
-                                    type="text"
-                                    class="input-big mask-snils"
-                                    placeholder="___-___-___ __"
-                                    v-model:value="props.user.documents.snils"
-                                    :max-length="30"
-                                />
-                                <div class="form__counter">
-                                    {{ counterSnils }} / 30
+                                <div class="input-big mask-snils">
+                                    <MaskInput
+                                        name="SNILS-d"
+                                        mask="###-###-### ##"
+                                        type="text"
+                                        placeholder="___-___-___ __"
+                                        :value="user.documents.snils"
+                                        v-model="user.documents.snils"
+                                    />
                                 </div>
+
+                                <!-- <div class="form__counter">
+                                    {{ counterSnils }} / 30
+                                </div> -->
                             </div>
                             <div class="form-field">
                                 <label for="INN-id"
@@ -1073,7 +1090,6 @@
                                     name="INN-id"
                                     type="text"
                                     class="input-big mask-inn"
-                                    placeholder="____________"
                                     v-model:value="props.user.documents.inn"
                                     :max-length="30"
                                 />
@@ -1089,7 +1105,6 @@
                                     class="input-big mask-workbook"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 9999999"
                                     v-model:value="
                                         props.user.documents.work_book_num
                                     "
@@ -1107,7 +1122,6 @@
                                     class="input-big mask-foreign-pass"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 9999999"
                                     v-model:value="
                                         props.user.documents.international_pass
                                     "
@@ -1151,7 +1165,6 @@
                                     class="input-big mask-military"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 9999999"
                                     v-model:value="
                                         props.user.documents.mil_reg_doc_ser_num
                                     "
@@ -1208,7 +1221,6 @@
                                     class="input-small pass-masked"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="__ ___ ____"
                                     v-model:value="foreignDoc.foreign_pass_num"
                                     :max-length="50"
                                 />
@@ -1244,7 +1256,6 @@
                                     class="input-big mask-workbook"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 9999999"
                                     v-model:value="foreignDoc.work_book_num"
                                     :max-length="15"
                                 />
@@ -1260,7 +1271,6 @@
                                     class="input-big mask-inn"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="999999999999"
                                     v-model:value="foreignDoc.inn"
                                     :max-length="30"
                                 />
@@ -1278,7 +1288,6 @@
                                     vmaska
                                     maska="AA ##########"
                                     class="input-big mask-snils"
-                                    placeholder="999-999-999 99"
                                     v-model:value="foreignDoc.snils"
                                     :max-length="30"
                                 />
@@ -3387,7 +3396,7 @@ import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { TextArea } from '@shared/components/inputs';
-
+import { MaskInput } from 'vue-3-mask';
 import { userData } from '@features/userData';
 const props = defineProps({
     button: Boolean,
@@ -3401,6 +3410,7 @@ const emit = defineEmits([
     'updateParentData',
     'updateStatus',
 ]);
+const onNumber = ref('');
 const router = useRouter();
 const userStore = useUserStore();
 // const currentUser = storeToRefs(userStore);
@@ -3614,6 +3624,11 @@ const counterKnow = computed(() => {
     return props.user.statement.rso_info_from?.length || 0;
 });
 
+// const updateValue = (event) => {
+//     console.log('textt');
+//     emit('update:value', event.target.value);
+//     console.log('textt', event.target.value);
+// };
 const getData = async () => {
     try {
         const responseForeignDocs = await HTTP.get(
@@ -4507,6 +4522,20 @@ onMounted(() => {
 }
 .v-expansion-panel-title--active {
     border-bottom: none !important;
+}
+.phone input,
+.passport-number input,
+.input-big input {
+    box-sizing: border-box;
+    border: 2px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 16px 10px 16px;
+    margin-bottom: 20px;
+    font-family: 'Bert Sans';
+    color: #35383f;
 }
 
 // .data-form {
