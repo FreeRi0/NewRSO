@@ -6,7 +6,7 @@
         <div class="participants__actions">
             <div class="participants__actions-select mr-3">
                 <sortByEducation
-                    placeholder="Выберете действие"
+                    placeholder="Выберите действие"
                     variant="outlined"
                     clearable
                     v-model="action"

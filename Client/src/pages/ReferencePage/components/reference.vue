@@ -255,7 +255,7 @@ const viewContributorsData = async (search) => {
 
 const updateDistrict = (districtVal) => {
     let search = '';
-    if(districtVal) {
+    if (districtVal) {
         search = '?district_headquarter__name=' + districtVal;
     } else {
         search = '';
@@ -807,5 +807,10 @@ p {
     font-family: 'Acrobat';
     margin-top: 10px;
     text-align: center;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
 }
 </style>

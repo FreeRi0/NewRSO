@@ -298,17 +298,13 @@
                                             placeholder="+7(___) ___ __ __"
                                             name="phone-parent"
                                             :value="
-                                                user.parent
-                                                    .parent_phone_number
+                                                user.parent.parent_phone_number
                                             "
                                             v-model="
-                                                user.parent
-                                                    .parent_phone_number
-
+                                                user.parent.parent_phone_number
                                             "
                                             mask="+7(###) ###-##-##"
                                         />
-
                                     </div>
                                 </div>
                             </div>
@@ -376,13 +372,9 @@
                                             name="passInput"
                                             mask="## ## ######"
                                             placeholder="__ __ ______"
-                                            :value="
-                                                user.parent
-                                                    .passport_number
-                                            "
+                                            :value="user.parent.passport_number"
                                             v-model="
-                                                user.parent
-                                                    .passport_number
+                                                user.parent.passport_number
                                             "
                                         />
                                     </div>
@@ -416,6 +408,7 @@
                                         type="date"
                                         name="pass-date-parent"
                                         class="input-small"
+                                        max="9999-12-31"
                                         v-model:value="
                                             props.user.parent.passport_date
                                         "
@@ -1091,10 +1084,10 @@
                                     type="text"
                                     class="input-big mask-inn"
                                     v-model:value="props.user.documents.inn"
-                                    :max-length="30"
+                                    :max-length="12"
                                 />
                                 <div class="form__counter">
-                                    {{ counterInn }} / 30
+                                    {{ counterInn }} / 12
                                 </div>
                             </div>
                             <div class="form-field">
@@ -1272,10 +1265,10 @@
                                     vmaska
                                     maska="AA ##########"
                                     v-model:value="foreignDoc.inn"
-                                    :max-length="30"
+                                    :max-length="12"
                                 />
                                 <div class="form__counter">
-                                    {{ counterOtherInn }} / 30
+                                    {{ counterOtherInn }} / 12
                                 </div>
                             </div>
                             <div class="form-field">
@@ -4542,16 +4535,31 @@ onMounted(() => {
 //     grid-template-columns: 1fr 1fr;
 //     grid-column-gap: 80px;
 // }
-// .parents-about,
-// #passport-parent-yes {
-//     grid-column-gap: 80px;
-//     grid-template-columns: 1fr 1fr;
+// .docs {
+//     grid-template-columns: 1fr;
+//     column-gap: 40px;
 // }
-// .parents #pass-no-addr {
+// .parents-about {
+//     grid-column-gap: 80px;
+// }
+// #passport-parent-yes {
+//     margin-right: 40px;
+//     @media screen and (max-width: 1215px) {
+//         margin-right: 0;
+//     }
+// }
+// #pass-no-addr {
 //     margin-left: -30px;
 //     @media screen and (max-width: 1215px) {
 //         margin-right: auto;
 //         margin-left: 0;
+//     }
+// }
+// .izm {
+//     display: grid;
+//     grid-template-columns: 1fr 1fr;
+//     @media screen and (max-width: 1024px) {
+//         grid-column-gap: 80px;
 //     }
 // }
 
