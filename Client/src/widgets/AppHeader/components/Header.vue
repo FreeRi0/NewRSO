@@ -83,7 +83,7 @@
                         v-if="userStore.count.count"
                         class="nav-user__quantity-box"
                     >
-                        <span v-if="userStore.count.count < 100">{{
+                        <span v-if="userStore.count.count < 100" class="countNum">{{
                             userStore.count.count
                         }}</span>
                         <span v-else>99+</span>
@@ -550,6 +550,13 @@ watch(
 
     a {
         color: #35383f;
+    }
+    .countNum {
+        font-size: 16px;
+        font-family: 'BertSans', sans-serif;
+        font-weight: 500;
+        margin-left: 14px;
+        margin-top: 9px;
     }
 
     &__logo {
