@@ -112,9 +112,9 @@
         </div>
         <!-- Контактные лица -->
         <h2 class="title title--subtitle">Контактные лица</h2>
-        <div v-if="organizators.length != 0" class="card_wrap">
+        <div v-if="!organizators_filted" class="card_wrap">
             <div
-                v-for="organizator in organizators"
+                v-for="organizator in organizators_filted"
                 class="event_card_wrap"
                 :key="organizator.id"
             >
@@ -225,24 +225,18 @@
 </template>
 
 <script setup>
-import { ref, onActivated, watch } from 'vue';
+import { ref, onActivated } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { useRoute, useRouter } from 'vue-router';
-import {
-    getAction,
-    getOrganizator,
-    getListActions,
-    getParticipants,
-} from '@services/ActionService';
-import { getRsouserById } from '@services/UserService';
-import { useRoleStore } from '@layouts/store/role';
-const rolesStore = useRoleStore();
+import { getAction, getOrganizator } from '@services/ActionService';
+import { getUser } from '@services/UserService';
 const route = useRoute();
 const router = useRouter();
+const user = ref({});
 
 //Костыли
 const participant_active = ref(false);
-const isorganizator = ref(true);
+const isorganizator = ref(false);
 const isGetAll = ref(false);
 
 const event = ref({
@@ -272,38 +266,25 @@ const event = ref({
     },
 });
 
-const otherevents = ref({});
-
 onActivated(() => {
-    watch(
-        () => rolesStore.roles,
-        (newRole) => {
-            console.log('Роли пользователя загружены', newRole);
-        },
-    );
     getAction(route.params.id).then((resp) => {
         event.value = resp.data;
         getOrganizator(route.params.id).then((resp) => {
             organizators.value = resp.data;
-            getRsouserById(organizators.value.organizator).then((resp) => {
-                console.log(resp.data);
+            const filted = organizators.value.filter((org) => {
+                org.is_contact_person === true;
             });
+            organizators_filted.value.push(filted);
         });
     });
-    getParticipants(route.params.id)
-        .then((resp) => {
-            participants.value = resp.data;
-        })
-        .catch((e) => {
-            console.log(e);
+    getUser().then((resp) => {
+        console.log(resp.data);
+        organizators.value.forEach((value) => {
+            if (value.organizator == user.value.id) {
+                isorganizator.value = true;
+            }
         });
-    getListActions()
-        .then((resp) => {
-            otherevents.value = resp.data;
-        })
-        .catch((e) => {
-            console.log(e);
-        });
+    });
 });
 function EditAction() {
     router.push({ name: 'editAction', params: { id: route.params.id } });
@@ -326,6 +307,8 @@ const organizators = ref([
         is_contact_person: false,
     },
 ]);
+
+const organizators_filted = ref([]);
 
 const participants = ref([
     {

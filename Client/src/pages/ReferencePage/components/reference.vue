@@ -421,8 +421,7 @@ const sortOptionss = ref([
 const searchContributors = (event) => {
     let search = '';
     if (!name.value && roles.roles.value.centralheadquarter_commander) {
-    } else if (name.value && roles.roles.value.centralheadquarter_commander) {
-        search = '?search=' + name.value;
+        return [];
     }
     if (district.value) {
         search = '?district_headquarter__name=' + district.value;
@@ -529,7 +528,6 @@ watch(
             viewContributorsData(search);
         } else {
             levelAccess.value = 0;
-            viewContributorsData('');
         }
     },
 );
@@ -628,7 +626,6 @@ onMounted(() => {
         viewContributorsData(search);
     } else {
         levelAccess.value = 0;
-        viewContributorsData('');
     }
 });
 </script>
