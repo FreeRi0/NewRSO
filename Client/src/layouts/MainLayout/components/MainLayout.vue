@@ -72,8 +72,8 @@ onMounted(() => {
         positionsStore.getPositions();
         squadsStore.getAreas();
         // districtStore.getDistricts();
-
     }
+   
     regionsStore.getRegions();
 });
 

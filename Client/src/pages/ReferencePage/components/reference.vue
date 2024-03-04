@@ -369,8 +369,6 @@ const SendReference = async () => {
             link.setAttribute('download', 'external.zip');
             document.body.appendChild(link);
             link.click();
-            console.log(response, 'success');
-            console.log(response);
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -387,11 +385,8 @@ const SendReference = async () => {
 
 const select = (event) => {
     selectedPeoples.value = [];
-    console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
-        console.log('fffss', checkboxAll.value, event);
         for (let index in sortedParticipants.value) {
-            console.log('arr', selectedPeoples.value);
             selectedPeoples.value.push(sortedParticipants.value[index]);
         }
     }
@@ -399,7 +394,6 @@ const select = (event) => {
 
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
-    console.log('fff', CheckedUser, UserId);
     if (CheckedUser) {
         participant = participants.value.find((item) => item.id == UserId);
         selectedPeoples.value.push(participant);
@@ -448,6 +442,52 @@ const searchContributors = (event) => {
     }, 400);
 };
 
+const getUsersByRoles = () => {
+    if (!Object.keys(roleStore.roles).length) return false;
+    if (!roles.roles.value.centralheadquarter_commander) {
+        let search = '';
+        if (roles.roles.value.districtheadquarter_commander) {
+            district.value =
+                roles.roles.value.districtheadquarter_commander.name;
+            search =
+                '?district_headquarter__name=' +
+                roles.roles.value.districtheadquarter_commander.name;
+            levelAccess.value = 1;
+        } else if (roles.roles.value.regionalheadquarter_commander) {
+            reg.value = roles.roles.value.regionalheadquarter_commander.name;
+            search =
+                '?regional_headquarter__name=' +
+                roles.roles.value.regionalheadquarter_commander.name;
+            locals.value = localsStore.locals.filter(
+                (loc) => loc.regional_headquarter == reg.value,
+            );
+            levelAccess.value = 2;
+        } else if (roles.roles.value.localheadquarter_commander) {
+            local.value = roles.roles.value.localheadquarter_commander.name;
+            search =
+                '?local_headquarter__name=' +
+                roles.roles.value.localheadquarter_commander.name;
+            levelAccess.value = 3;
+        } else if (roles.roles.value.educationalheadquarter_commander) {
+            educ.value =
+                roles.roles.value.educationalheadquarter_commander.name;
+            search =
+                '?educational_headquarter__name=' +
+                roles.roles.value.educationalheadquarter_commander.name;
+            levelAccess.value = 4;
+        } else if (roles.roles.value.detachment_commander) {
+            detachment.value = roles.roles.value.detachment_commander.name;
+            search =
+                '?detachment__name=' +
+                roles.roles.value.detachment_commander.name;
+            levelAccess.value = 5;
+        }
+        viewContributorsData(search);
+    } else {
+        levelAccess.value = 0;
+    }
+};
+
 const sortedParticipants = computed(() => {
     let tempParticipants = participants.value;
     tempParticipants = tempParticipants.sort((a, b) => {
@@ -488,49 +528,10 @@ watch(
     () => roles.roles.value,
 
     (newRole, oldRole) => {
-        if (!roles.roles.value.centralheadquarter_commander) {
-            let search = '';
-
-            if (roles.roles.value.districtheadquarter_commander) {
-                district.value =
-                    roles.roles.value.districtheadquarter_commander.name;
-                search =
-                    '?district_headquarter__name=' +
-                    roles.roles.value.districtheadquarter_commander.name;
-                levelAccess.value = 1;
-            } else if (roles.roles.value.regionalheadquarter_commander) {
-                reg.value =
-                    roles.roles.value.regionalheadquarter_commander.name;
-                search =
-                    '?regional_headquarter__name=' +
-                    roles.roles.value.regionalheadquarter_commander.name;
-                levelAccess.value = 2;
-            } else if (roles.roles.value.localheadquarter_commander) {
-                local.value = roles.roles.value.localheadquarter_commander.name;
-                search =
-                    '?local_headquarter__name=' +
-                    roles.roles.value.localheadquarter_commander.name;
-                levelAccess.value = 3;
-            } else if (roles.roles.value.educationalheadquarter_commander) {
-                educ.value =
-                    roles.roles.value.educationalheadquarter_commander.name;
-                search =
-                    '?educational_headquarter__name=' +
-                    roles.roles.value.educationalheadquarter_commander.name;
-                levelAccess.value = 4;
-            } else if (roles.roles.value.detachment_commander) {
-                detachment.value = roles.roles.value.detachment_commander.name;
-                search =
-                    '?detachment__name=' +
-                    roles.roles.value.detachment_commander.name;
-                levelAccess.value = 5;
-            }
-            viewContributorsData(search);
-        } else {
-            levelAccess.value = 0;
-        }
+        getUsersByRoles();
     },
 );
+
 watch(
     () => districtsStore.districts,
     () => {
@@ -541,15 +542,13 @@ watch(
 watch(
     () => regionalsStore.regionals,
     () => {
-        regionals.value = regionalsStore.regionals;
-        let regId = regionalsStore.regionals.find(
-            (regional) => regional.name == reg.value,
-        )?.id;
-        locals.value = localsStore.locals.filter(
-            (loc) => loc.regional_headquarter == regId,
-        );
-        educHead.value = educationalsStore.educationals.filter(
-            (edh) => edh.regional_headquarter == regId,
+        let districtID = districtsStore.districts.length
+            ? districtsStore.districts.find(
+                  (dis) => (dis.name = district.value),
+              )?.id
+            : roleStore.roles.districtheadquarter_commander?.id;
+        regionals.value = regionalsStore.regionals.filter(
+            (reg) => reg.district_headquarter == district.value,
         );
     },
 );
@@ -557,12 +556,11 @@ watch(
 watch(
     () => localsStore.locals,
     () => {
-        locals.value = localsStore.locals;
-        let regId = regionalsStore.regionals.find(
-            (regional) => regional.name == reg.value,
-        )?.id;
+        let regID = regionalsStore.regionals.length
+            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
+            : roleStore.roles.regionalheadquarter_commander?.id;
         locals.value = localsStore.locals.filter(
-            (loc) => loc.regional_headquarter == regId,
+            (loc) => loc.regional_headquarter == regID,
         );
     },
 );
@@ -570,63 +568,37 @@ watch(
 watch(
     () => educationalsStore.educationals,
     () => {
-        educHead.value = educationalsStore.educationals;
-        let regId = regionalsStore.regionals.find(
-            (regional) => regional.name == reg.value,
-        )?.id;
+        let regID = regionalsStore.regionals.length
+            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
+            : roleStore.roles.regionalheadquarter_commander?.id;
+        let locID = localsStore.locals.length
+            ? localsStore.locals.find((loc) => loc.name == local.value)?.id
+            : roleStore.roles.localheadquarter_commander?.id;
         educHead.value = educationalsStore.educationals.filter(
-            (edh) => edh.regional_headquarter == regId,
+            (edh) => edh.regional_headquarter == regID,
         );
+        if (local.value) {
+            educHead.value = educationalsStore.educationals.filter(
+                (edh) => edh.local_headquarter == locID,
+            );
+        }
     },
 );
 watch(
     () => squadsStore.squads,
     () => {
-        detachments.value = squadsStore.squads;
+        let educId = educationalsStore.educationals.length
+            ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
+                  ?.id
+            : roleStore.roles.educationalheadquarter_commander?.id;
+        detachments.value = squadsStore.squads.filter(
+            (det) => det.educational_headquarter == educId,
+        );
     },
 );
 
 onMounted(() => {
-    if (!roles.roles.value.centralheadquarter_commander) {
-        let search = '';
-
-        if (roles.roles.value.districtheadquarter_commander) {
-            district.value =
-                roles.roles.value.districtheadquarter_commander.name;
-            search =
-                '?district_headquarter__name=' +
-                roles.roles.value.districtheadquarter_commander.name;
-            levelAccess.value = 1;
-        } else if (roles.roles.value.regionalheadquarter_commander) {
-            reg.value = roles.roles.value.regionalheadquarter_commander.name;
-            search =
-                '?regional_headquarter__name=' +
-                roles.roles.value.regionalheadquarter_commander.name;
-            levelAccess.value = 2;
-        } else if (roles.roles.value.localheadquarter_commander) {
-            local.value = roles.roles.value.localheadquarter_commander.name;
-            search =
-                '?local_headquarter__name=' +
-                roles.roles.value.localheadquarter_commander.name;
-            levelAccess.value = 3;
-        } else if (roles.roles.value.educationalheadquarter_commander) {
-            educ.value =
-                roles.roles.value.educationalheadquarter_commander.name;
-            search =
-                '?educational_headquarter__name=' +
-                roles.roles.value.educationalheadquarter_commander.name;
-            levelAccess.value = 4;
-        } else if (roles.roles.value.detachment_commander) {
-            detachment.value = roles.roles.value.detachment_commander.name;
-            search =
-                '?detachment__name=' +
-                roles.roles.value.detachment_commander.name;
-            levelAccess.value = 5;
-        }
-        viewContributorsData(search);
-    } else {
-        levelAccess.value = 0;
-    }
+    getUsersByRoles();
 });
 </script>
 <style lang="scss">

@@ -184,13 +184,18 @@ const roles = storeToRefs(roleStore);
 const squadsStore = useSquadsStore();
 const localsStore = useLocalsStore();
 const districtsStore = useDistrictsStore();
-const regionsStore = useRegionalsStore();
+const regionalsStore = useRegionalsStore();
 const educationalsStore = useEducationalsStore();
 const districtRef = ref(props.district);
 const localRef = ref(props.local);
 const regRef = ref(props.reg);
 const educRef = ref(props.educ);
 const detachmentRef = ref(props.detachment);
+// const districtsRef = ref(props.districts);
+// const regionalsRef = ref(props.regionals);
+// const localsRef = ref(props.locals);
+// const educHeadRef = ref(props.educHead);
+// const detachmentsRef = ref(props.detachments);
 const levelAccess = ref(7);
 
 const emit = defineEmits([
@@ -203,37 +208,39 @@ const emit = defineEmits([
 
 const updateDistrict = () => {
     emit('updateDistrict', districtRef.value);
-    console.log(districtRef.value);
 };
 const updateReg = () => {
     emit('updateReg', regRef.value);
-    console.log(regRef.value);
 };
 const updateLocal = () => {
     emit('updateLocal', localRef.value);
-    console.log(localRef.value);
 };
 
 const updateEduc = () => {
     emit('updateEduc', educRef.value);
-    console.log(educRef.value);
 };
 
 const updateDetachment = () => {
     emit('updateDetachment', detachmentRef.value);
-    console.log(detachmentRef.value);
 };
 
 watch(
     () => props.district,
     () => {
         districtRef.value = props.district;
+        if (districtRef.value) {
+            regionalsStore.getRegionals();
+        }
     },
 );
 watch(
     () => props.reg,
     () => {
         regRef.value = props.reg;
+        if (regRef.value) {
+            localsStore.getLocals();
+            educationalsStore.getEducationals();
+        }
     },
 );
 
@@ -241,6 +248,9 @@ watch(
     () => props.local,
     () => {
         localRef.value = props.local;
+        if (localRef.value) {
+            educationalsStore.getEducationals();
+        }
     },
 );
 
@@ -248,6 +258,9 @@ watch(
     () => props.educ,
     () => {
         educRef.value = props.educ;
+        if (educRef.value) {
+            squadsStore.getSquads();
+        }
     },
 );
 
@@ -258,12 +271,29 @@ watch(
     },
 );
 
+watch(
+    () => roles.roles.value,
+
+    (newRole, oldRole) => {
+        if(roles.roles.value.centralheadquarter_commander) {
+            districtsStore.getDistricts();
+        }
+    },
+);
+
 onMounted(() => {
-    districtsStore.getDistricts();
-    regionsStore.getRegionals();
-    localsStore.getLocals();
-    educationalsStore.getEducationals();
-    squadsStore.getSquads();
+    if (props.educ) {
+        squadsStore.getSquads();
+    } else if (props.local) {
+        educationalsStore.getEducationals();
+    } else if (props.reg) {
+        localsStore.getLocals();
+        educationalsStore.getEducationals();
+    } else if (props.district) {
+        regionalsStore.getRegionals();
+    } else {
+        districtsStore.getDistricts();
+    }
 });
 </script>
 <style lang="scss">

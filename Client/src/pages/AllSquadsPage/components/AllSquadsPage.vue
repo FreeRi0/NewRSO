@@ -30,6 +30,7 @@
                     id="search"
                     class="squads-search__input"
                     v-model="name"
+                    @keyup="searchDetachments"
                     placeholder="Поищем отряд?"
                 />
                 <svg
@@ -135,6 +136,7 @@
                                     v-model="education"
                                     placeholder="Образовательная организация"
                                     :SortDropdown="true"
+                                    :sorts-boolean="false"
                                 ></educInstitutionDropdown>
                             </div>
                             <div class="sort-select">
@@ -195,6 +197,7 @@ import { squadsList, horizontalList } from '@features/Squads/components';
 import {
     sortByEducation,
     educInstitutionDropdown,
+    districtSearchFilter,
 } from '@shared/components/selects';
 import { ref, computed, onMounted, onActivated } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
@@ -206,8 +209,8 @@ const squadsStore = useSquadsStore();
 const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
 const squads = storeToRefs(squadsStore);
-const isLoading = storeToRefs(squadsStore);
 
+const isLoading = storeToRefs(squadsStore);
 const categories = storeToRefs(squadsStore);
 const name = ref('');
 const timerSearch = ref(null);
@@ -220,45 +223,14 @@ const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
 
-// const searchDetachments = (event) => {
-//     if(name.value ) {
-//         squadsStore.getFilteredSquads(name.value)
-//     }
-//     clearTimeout(timerSearch.value);
-//     timerSearch.value = setTimeout(() => {
-//     }, 400);
-// }
-
-// const searchSquad = async (name) => {
-//     try {
-//         const { data } = await HTTP.get(`/detachments/?search=${name}`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-//         squads.squads.value = data;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
-// const filteredSquad = async (education) => {
-//     try {
-//         const { data } = await HTTP.get(
-//             `/detachments/?educational_institution__name=${education}`,
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//         );
-//         squads.squads.value = data;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
+const searchDetachments = (event) => {
+    if(name.value ) {
+        squadsStore.searchSquads(name.value)
+    }
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+    }, 400);
+}
 
 const squadsVisible = ref(20);
 const step = ref(20);
@@ -281,13 +253,12 @@ const sortOptionss = ref([
         name: 'Алфавиту от А - Я',
     },
     { value: 'founding_date', name: 'Дате создания отряда' },
-    { value: 'members_count', name: 'Количеству участников' },
 ]);
 
 
 const sortedSquads = computed(() => {
-    // TODO добавляем фильтры по округу и региону
-    let tempSquads = squads.squads.value;
+    let tempSquads = [];
+    tempSquads = [...squads.squads.value];
 
     if (SelectedSortRegional.value || SelectedSortDistrict.value) {
         let idRegionals = [];
@@ -318,11 +289,6 @@ const sortedSquads = computed(() => {
             return item.educational_institution.name === education.value;
         });
     }
-    if(name.value) {
-        tempSquads = tempSquads.filter((item) => {
-            return item.name.toLowerCase().indexOf(name.value.toLowerCase()) >= 0;
-        });
-    }
 
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -347,19 +313,12 @@ const sortedSquads = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'members_count') {
-            return a.members - b.members;
         }
     });
 
     if (!ascending.value) {
         tempSquads.reverse();
     }
-
-    // if(!searchSquads.value && !filteredSquadsByEducation.value) {
-    //     return tempSquads;
-    // }
-
     if (!picked.value) {
         return tempSquads.slice(0, squadsVisible.value);
     }
@@ -370,6 +329,8 @@ const sortedSquads = computed(() => {
 });
 
 onMounted(() => {
+    regionalsStore.getRegionals();
+    districtsStore.getDistricts();
     squadsStore.getSquads();
 })
 

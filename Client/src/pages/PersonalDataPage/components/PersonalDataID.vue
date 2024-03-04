@@ -21,7 +21,7 @@
 import { ref, onMounted, watch } from 'vue';
 import { AccordionsPersonal } from '@features/PersonalAccordions/components';
 import { Wall } from '@features/baner/components';
-import {  useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { useRoleStore } from '@layouts/store/role';
