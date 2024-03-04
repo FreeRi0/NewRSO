@@ -78,7 +78,7 @@ export function getQuestion(id: number) {
 }
 //Отправка и изменение организаторов мероприятия
 export function createOrganizator(id: number, data: object) {
-    return HTTP.post(`/events/${id}/organizers`, data, {
+    return HTTP.post(`/events/${id}/organizers/`, data, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -124,6 +124,16 @@ export function putDocuments(id: number, data: object) {
 //Получить участников мероприятия
 export function getParticipants(id: number) {
     return HTTP.get(`/events/${id}/participants`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+}
+
+//Временная функция
+export function getRoles() {
+    return HTTP.get(`/rsousers/me_commander`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

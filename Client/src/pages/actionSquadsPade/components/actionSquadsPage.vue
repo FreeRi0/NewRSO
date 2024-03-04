@@ -287,7 +287,7 @@
                         v-if="!vertical"
                         v-for="action in actionsList"
                         class="postcard-containerline"
-                        :key="ac"
+                        :key="action"
                     >
                         <ActionitemVertical
                             :action="action"
@@ -303,34 +303,30 @@
 //Импорт файлов
 import Button from 'primevue/button';
 import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { sortByEducation } from '@shared/components/selects';
 
-import { getListActionsBySearch } from '@services/ActionService';
+import { getListActionsBySearch, getRoles } from '@services/ActionService';
 import { onActivated } from 'vue';
-import { useRoleStore } from '@layouts/store/role';
 
 let actionsList = ref([]);
-let rolesCount = 0;
-const rolesStore = useRoleStore();
+let rolesCount = ref(0);
 
 onActivated(() => {
     getListActionsBySearch(text.value).then((resp) => {
         actionsList.value = resp.data;
     });
-    watch(
-        () => rolesStore.roles,
-        (newRole) => {
-            Object.entries(newRole).forEach(([obj, value]) => {
-                //console.log(`${obj} + ${value}`);
-                if (value !== null) {
-                    rolesCount = rolesCount + 1;
-                }
-            });
-        },
-    );
+    getRoles().then((resp) => {
+        console.log(resp.data);
+        Object.entries(resp.data).forEach(([key, value]) => {
+            if (value !== null) {
+                console.log(`${key} + ${value}`);
+                rolesCount.value += 1;
+            }
+        });
+    });
 });
 
 //Массив полученных значений
@@ -355,6 +351,19 @@ const ascending = ref(true);
 
 //События нажатия
 function ClearSearchForm() {
+    actionFormSearch.value = {
+        format: {
+            online: null,
+            offline: null,
+        },
+        direction: '',
+        status: {
+            start: null,
+            finish: null,
+        },
+        roads: '',
+        search: '',
+    };
     console.log('Форма очищена');
 }
 
@@ -373,6 +382,7 @@ const actionFormSearch = ref({
     search: '',
 });
 function SendSearchForm() {}
+
 //Изменение расположения блоков
 const showVertical = () => {
     vertical.value = !vertical.value;

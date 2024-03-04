@@ -1,9 +1,9 @@
 <template>
     <div v-if="items.length > 0">
         <registryItem
-            v-for="item in items"
+            v-for="(item, index) in items"
             :item="item"
-            :key="item.id"
+            :key="index"
             :show-info="showInfo"
         ></registryItem>
     </div>

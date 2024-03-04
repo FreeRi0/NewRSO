@@ -9,12 +9,22 @@
             </div>
             <div class="banner_wrap_btn">
                 <Button
+                    v-if="isorganizator === true"
                     class="form-button"
                     type="button"
                     label="Редактировать заявку"
                     variant="text"
                     size="large"
                     @click="EditAction"
+                ></Button>
+                <Button
+                    v-else
+                    class="form-button"
+                    type="button"
+                    label="Оставить заявку"
+                    variant="text"
+                    size="large"
+                    @click="AddParticipant"
                 ></Button>
                 <Button
                     type="button"
@@ -24,6 +34,7 @@
                     size="large"
                 ></Button>
                 <Button
+                    v-if="participant_active === true"
                     type="button"
                     class="form-button form-button--grey"
                     variant="text"
@@ -85,27 +96,68 @@
         <!-- Организаторы -->
         <h2 class="title title--subtitle">Организаторы</h2>
         <div v-if="organizators.length != 0" class="card_wrap">
-            <v-card
+            <div
                 v-for="organizator in organizators"
                 class="event_card_wrap"
                 :key="organizator.id"
             >
-                <v-img width="120"></v-img>
+                <img src="" alt="Аватарка" />
                 <div class="text text--organizer">
                     {{ organizator.organization }}
                 </div>
                 <div class="text text--status">
                     {{ organizator.status }}
                 </div>
-            </v-card>
+            </div>
         </div>
         <!-- Контактные лица -->
         <h2 class="title title--subtitle">Контактные лица</h2>
+        <div v-if="!organizators_filted" class="card_wrap">
+            <div
+                v-for="organizator in organizators_filted"
+                class="event_card_wrap"
+                :key="organizator.id"
+            >
+                <img src="" alt="Аватарка" />
+                <div class="text text--organizer">
+                    {{ organizator.organization }}
+                </div>
+                <div class="text text--status">
+                    {{ organizator.status }}
+                </div>
+            </div>
+        </div>
         <!-- Участники -->
         <h3 class="title title--subtitle">Участники</h3>
         <div class="event_btn_participant">
-            <button class="event_btn event_go">Уже идут</button>
-            <button class="event_btn event_ok">Ожидают одобрения</button>
+            <button
+                v-if="isGetAll"
+                class="event_btn event_go"
+                @click="ParticipantsWait"
+            >
+                Уже идут
+            </button>
+            <button
+                v-if="!isGetAll"
+                class="event_btn event_ok"
+                @click="ParticipantsWait"
+            >
+                Уже идут
+            </button>
+            <button
+                v-if="isGetAll"
+                class="event_btn event_ok"
+                @click="ParticipantsWait"
+            >
+                Ожидают одобрения
+            </button>
+            <button
+                v-if="!isGetAll"
+                class="event_btn event_go"
+                @click="ParticipantsWait"
+            >
+                Ожидают одобрения
+            </button>
         </div>
         <section v-if="participants.length != 0" class="section_wrap">
             <ul class="list_wrap">
@@ -173,20 +225,19 @@
 </template>
 
 <script setup>
-import { ref, onActivated, watch } from 'vue';
+import { ref, onActivated } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { useRoute, useRouter } from 'vue-router';
-import {
-    getAction,
-    getOrganizator,
-    getListActions,
-    getParticipants,
-} from '@services/ActionService';
-import { getRsouserById } from '@services/UserService';
-import { useRoleStore } from '@layouts/store/role';
-const rolesStore = useRoleStore();
+import { getAction, getOrganizator } from '@services/ActionService';
+import { getUser } from '@services/UserService';
 const route = useRoute();
 const router = useRouter();
+const user = ref({});
+
+//Костыли
+const participant_active = ref(false);
+const isorganizator = ref(false);
+const isGetAll = ref(false);
 
 const event = ref({
     id: '',
@@ -215,43 +266,37 @@ const event = ref({
     },
 });
 
-const otherevents = ref({});
-
 onActivated(() => {
-    watch(
-        () => rolesStore.roles,
-        (newRole) => {
-            console.log('Роли пользователя загружены', newRole);
-        },
-    );
     getAction(route.params.id).then((resp) => {
         event.value = resp.data;
         getOrganizator(route.params.id).then((resp) => {
             organizators.value = resp.data;
-            getRsouserById(organizators.value.organizator).then((resp) => {
-                console.log(resp.data);
+            const filted = organizators.value.filter((org) => {
+                org.is_contact_person === true;
             });
+            organizators_filted.value.push(filted);
         });
     });
-    getParticipants(route.params.id)
-        .then((resp) => {
-            participants.value = resp.data;
-        })
-        .catch((e) => {
-            console.log(e);
+    getUser().then((resp) => {
+        console.log(resp.data);
+        organizators.value.forEach((value) => {
+            if (value.organizator == user.value.id) {
+                isorganizator.value = true;
+            }
         });
-    getListActions()
-        .then((resp) => {
-            otherevents.value = resp.data;
-        })
-        .catch((e) => {
-            console.log(e);
-        });
+    });
 });
 function EditAction() {
     router.push({ name: 'editAction', params: { id: route.params.id } });
 }
 
+function AddParticipant() {
+    router.push({ name: 'editAction', params: { id: route.params.id } });
+}
+
+function ParticipantsWait() {
+    isGetAll.value = !isGetAll.value;
+}
 const organizators = ref([
     {
         organizer: '',
@@ -262,6 +307,8 @@ const organizators = ref([
         is_contact_person: false,
     },
 ]);
+
+const organizators_filted = ref([]);
 
 const participants = ref([
     {
@@ -419,10 +466,21 @@ const participants = ref([
 
 .event_card_wrap {
     max-width: 280px;
+    height: 274px;
+    box-shadow: 0px 6px 14px 3px rgba(34, 60, 80, 0.09);
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 24px 22px;
+}
+
+.event_card_wrap img {
+    width: 120px;
+    height: 120px;
+    min-height: 120px;
+    min-width: 120px;
+    border: 0.5px solid black;
+    border-radius: 50px;
 }
 
 .card_wrap {

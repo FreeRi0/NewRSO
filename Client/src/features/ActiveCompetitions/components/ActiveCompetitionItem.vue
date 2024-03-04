@@ -229,4 +229,8 @@ watch(
 .cursor_redirect {
     cursor: pointer;
 }
+.competition__nomination {
+    display: flex;
+    justify-content: center;
+}
 </style>

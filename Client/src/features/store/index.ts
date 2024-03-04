@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', {
         privateUser: {},
         users: [],
         currentUser: {},
+        count: {},
         isLoading: false,
     }),
     actions: {
@@ -23,7 +24,7 @@ export const useUserStore = defineStore('user', {
                                 'Token ' + localStorage.getItem('Token'),
                         },
                     });
-                    if(!Number.isInteger(localStorage.getItem('user'))) {
+                    if (!Number.isInteger(localStorage.getItem('user'))) {
                         localStorage.setItem('user', responseUser.data.id);
                     }
                     this.currentUser = responseUser.data;
@@ -32,6 +33,25 @@ export const useUserStore = defineStore('user', {
             } catch (error) {
                 console.log('an error occured ' + error);
                 this.isLoading = false;
+            }
+        },
+
+        async getCountApp() {
+            if (Object.keys(this.count).length) return;
+            try {
+                const responseCount = await HTTP.get(
+                    'rsousers/me_notifications_count/',
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.count = responseCount.data;
+            } catch (error) {
+                console.log('an error occured ' + error);
             }
         },
 

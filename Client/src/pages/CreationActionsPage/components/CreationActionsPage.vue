@@ -887,7 +887,7 @@
                                         >
                                         <InputText
                                             id="name-hq"
-                                            v-model="organizator.organizer"
+                                            v-model="organizator.organization"
                                             class="form__input form-input-container"
                                             placeholder="Фамилия Имя Отчество"
                                             name="name_hq"
@@ -958,7 +958,7 @@
                                         >
                                         <InputText
                                             id="organization-hq"
-                                            v-model="organizator.organization"
+                                            v-model="organization_stop"
                                             class="form__input form-input-container"
                                             placeholder="Например КузГТУ"
                                             name="organization-hq"
@@ -971,7 +971,7 @@
                                     <div class="form-checkbox">
                                         <input
                                             v-model="
-                                                organizators.is_contact_person
+                                                organizator.is_contact_person
                                             "
                                             type="checkbox"
                                             name="person"
@@ -1094,47 +1094,46 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import {
     createAction,
     putTimeData,
     putDocuments,
+    createOrganizator,
+    getRoles,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import { onActivated, onMounted, watchEffect } from 'vue';
-import { useRoleStore } from '@layouts/store/role';
 import { getUser } from '@services/UserService';
 const router = useRouter();
-const rolesStore = useRoleStore();
 const rules = ref([]);
 
+const organization_stop = ref('');
+
 onActivated(() => {
-    watch(
-        () => rolesStore.roles,
-        (newRole) => {
-            rules.value = newRole;
-            console.log(rules.value);
-            Object.entries(newRole).forEach(([key, value]) => {
-                //Найти более локаничное решение
-                if (value !== null) {
-                    const filted = scale_massive.value.find(
-                        (commander) => commander.value === key,
-                    );
-                    scale_massive_sorted.value.push(filted); //Работает
-                }
-            });
-        },
-    );
+    getRoles().then((resp) => {
+        console.log(resp.data);
+        rules.value = resp.data;
+        Object.entries(resp.data).forEach(([key, value]) => {
+            if (value !== null) {
+                console.log(`${key} + ${value}`);
+                const filted = scale_massive.value.find(
+                    (commander) => commander.value === key,
+                );
+                scale_massive_sorted.value.push(filted); //Работает
+            }
+        });
+    });
     getUser().then((resp) => {
         console.log(resp.data);
         organizators.value.push({
-            organizer: `${resp.data.last_name} ${resp.data.first_name} ${resp.data.patronymic_name}`,
+            organizer: resp.data.id,
             organizer_phone_number: resp.data.phone_number,
             organizer_email: resp.data.email,
-            organization: '',
+            organization: `${resp.data.last_name} ${resp.data.first_name} ${resp.data.patronymic_name}`,
             telegram: resp.data.social_tg,
             is_contact_person: true,
         });
@@ -1154,7 +1153,7 @@ const maininfo = ref({
     participants_number: 0,
     application_type: '',
     available_structural_units: '',
-    org_central_headquarter: 1,
+    org_central_headquarter: '',
     org_district_headquarter: '',
     org_regional_headquarter: '',
     org_local_headquarter: '',
@@ -1206,15 +1205,22 @@ watchEffect(() => {
             break;
         case 'Групповая':
             area_massive.value = [
+                { name: 'Округи' },
+                { name: 'Регионы' },
+                { name: 'Местные штабы' },
                 { name: 'ЛСО' },
-                { name: 'Региональный штаб' },
+                { name: 'Штабы ОО' },
+                { name: 'СО' },
             ];
             break;
         case 'Многоэтапная':
             area_massive.value = [
+                { name: 'Округи' },
+                { name: 'Регионы' },
+                { name: 'Местные штабы' },
                 { name: 'ЛСО' },
-                { name: 'Региональный штаб' },
-                { name: 'Окружной штаб' },
+                { name: 'Штабы ОО' },
+                { name: 'СО' },
             ];
             break;
     }
@@ -1308,17 +1314,12 @@ watchEffect(() => {
         case 'Всероссийское':
             Object.entries(rules.value).forEach(([key, value]) => {
                 if (key === 'centralheadquarter_commander') {
-                    Object.entries(value).forEach(([key, value]) => {
-                        if (key === 'id') {
-                            console.log(value);
-                            maininfo.value.org_central_headquarter = value;
-                            maininfo.value.org_district_headquarter = '';
-                            maininfo.value.org_regional_headquarter = '';
-                            maininfo.value.org_local_headquarter = '';
-                            maininfo.value.org_educational_headquarter = '';
-                            maininfo.value.org_detachment = '';
-                        }
-                    });
+                    maininfo.value.org_central_headquarter = value;
+                    maininfo.value.org_district_headquarter = '';
+                    maininfo.value.org_regional_headquarter = '';
+                    maininfo.value.org_local_headquarter = '';
+                    maininfo.value.org_educational_headquarter = '';
+                    maininfo.value.org_detachment = '';
                 }
             });
             break;
@@ -1367,7 +1368,7 @@ function AddOrganizator() {
     });
 }
 function SubmitEvent() {
-    //Внести все значения в FormData
+    //Внести все значения в FormData главной информации мероприятия
     let fd = new FormData();
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
@@ -1388,6 +1389,15 @@ function SubmitEvent() {
                 .catch((e) => {
                     console.error(e);
                 });
+            organizators.value.forEach((organizator) => {
+                createOrganizator(resp.data.id, organizator)
+                    .then((resp) => {
+                        console.log(resp.data);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            });
             router.push({ name: 'actionSquads' });
         })
         .catch((e) => {

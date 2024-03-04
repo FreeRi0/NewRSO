@@ -546,6 +546,123 @@ const sortedByName = async (name) => {
     console.log(sortedHeadquartersJunior.value);
 };
 
+watch(
+    () => roles.roles.value,
+
+    (newRole, oldRole) => {
+        if (!roles.roles.value.centralheadquarter_commander) {
+            let search = '';
+            let resp = '';
+            let join = false;
+
+            if (roles.roles.value.districtheadquarter_commander) {
+                district.value =
+                    roles.roles.value.districtheadquarter_commander.name;
+                search =
+                    '?district_headquarter__name=' +
+                    roles.roles.value.districtheadquarter_commander.name;
+                resp = '/regionals/';
+                levelAccess.value = 1;
+            } else if (roles.roles.value.regionalheadquarter_commander) {
+                reg.value =
+                    roles.roles.value.regionalheadquarter_commander.name;
+                search =
+                    '?regional_headquarter__name=' +
+                    roles.roles.value.regionalheadquarter_commander.name;
+                resp = '/locals/';
+                join = true;
+                levelAccess.value = 2;
+            } else if (roles.roles.value.localheadquarter_commander) {
+                local.value = roles.roles.value.localheadquarter_commander.name;
+                search =
+                    '?local_headquarter__name=' +
+                    roles.roles.value.localheadquarter_commander.name;
+                resp = '/educationals/';
+                levelAccess.value = 3;
+            } else if (roles.roles.value.educationalheadquarter_commander) {
+                educ.value =
+                    roles.roles.value.educationalheadquarter_commander.name;
+                search =
+                    '?educational_headquarter__name=' +
+                    roles.roles.value.educationalheadquarter_commander.name;
+                resp = '/detachments/';
+                levelAccess.value = 4;
+            } else if (roles.roles.value.detachment_commander) {
+                detachment.value = roles.roles.value.detachment_commander.name;
+                search =
+                    '?detachment__name=' +
+                    roles.roles.value.detachment_commander.name;
+                resp = '/rsousers';
+                levelAccess.value = 5;
+            }
+            viewHeadquartersData(resp, search, join);
+        } else {
+            levelAccess.value = 0;
+        }
+    },
+);
+
+watch(
+    () => regionalsStore.regionals,
+    () => {
+        regionals.value = regionalsStore.regionals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regId,
+        );
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regId,
+        );
+        detachments.value = squadsStore.squads.filter(
+            (squad) => squad.regional_headquarter == regId,
+        );
+    },
+);
+
+watch(
+    () => localsStore.locals,
+    () => {
+        locals.value = localsStore.locals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regId,
+        );
+    },
+);
+
+watch(
+    () => educationalsStore.educationals,
+    () => {
+        educHead.value = educationalsStore.educationals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regId,
+        );
+    },
+);
+
+watch(
+    () => squadsStore.squads,
+    () => {
+        detachments.value = squadsStore.squads;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        // let educId = regionalsStore.educationals.find(
+        //     (ed) => ed.name == educ.value,
+        // )?.id;
+        detachments.value = squadsStore.squads.filter(
+            (squad) => squad.regional_headquarter == regId,
+        );
+    },
+);
+
 const getHeadquartersJunior = async () => {
     try {
         const { data } = await HTTP.get(
@@ -648,6 +765,7 @@ watch(selectedCompetitionsList, () => {
 onMounted(async () => {
     await viewHeadquartersData(search);
     await getHeadquartersJunior();
+    console.log(reg.value);
 });
 </script>
 

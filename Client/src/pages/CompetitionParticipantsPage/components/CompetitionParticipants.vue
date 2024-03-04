@@ -61,6 +61,7 @@
                             clearable
                             v-model="sortBy"
                             :options="sortOptionss"
+                            :sorts-boolean="false"
                         ></sortByEducation>
                     </div> -->
 
@@ -155,7 +156,7 @@ const sortOptionss = ref([
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'founding_date', name: 'Дате создания отряда' },
+    // { value: 'founding_date', name: 'Дате создания отряда' },
     // { value: 'members_count', name: 'Количеству участников' },
     // { value: 'rating', name: 'Место в рейтинге' },
 ]);
@@ -195,23 +196,12 @@ const sortedSquads = computed(() => {
     //             return 1;
     //         }
     //         return 0;
-    //     } else if (sortBy.value == 'founding_date') {
-    //         let fc = a.junior_detachment?.founding_date || a.detachment?.founding_date,
-    //             fn = b.junior_detachment?.founding_date || b.detachment?.founding_date;
-
-    //         if (fc < fn) {
-    //             return -1;
-    //         }
-    //         if (fc > fn) {
-    //             return 1;
-    //         }
-    //         return 0;
     //     }
     // });
 
-    if (!ascending.value) {
-        tempSquads.reverse();
-    }
+    // if (!ascending.value) {
+    //     tempSquads.reverse();
+    // }
 
     if (!picked.value) {
         return tempSquads;
