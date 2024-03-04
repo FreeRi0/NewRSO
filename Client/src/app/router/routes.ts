@@ -522,17 +522,17 @@ const routes: RouteRecordRaw[] = [
                                             requiresAuth: true,
                                         },
                                     },
-                                    // {
-                                    //     path: 'groupsubmit',
-                                    //     name: 'GroupSubmit',
-                                    //     component: () =>
-                                    //         import(
-                                    //             '@pages/GroupRequestPage/components/GroupSubmitPage.vue'
-                                    //         ),
-                                    //     meta: {
-                                    //         requiresAuth: true,
-                                    //     },
-                                    // },
+                                    {
+                                        path: 'groupsubmit',
+                                        name: 'GroupSubmit',
+                                        component: () =>
+                                            import(
+                                                '@pages/GroupRequestPage/components/GroupSubmitPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
                                     {
                                         path: 'multistagesubmit',
                                         name: 'MultiStageSubmit',
