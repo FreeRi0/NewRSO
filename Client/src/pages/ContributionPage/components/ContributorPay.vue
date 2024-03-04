@@ -454,6 +454,7 @@ const ChangeCancelStatus = async (id) => {
     }
 };
 const getUsersByRoles = () => {
+    if (!Object.keys(roleStore.roles).length) return false;
     if (!roles.roles.value.centralheadquarter_commander) {
         let search = '';
         if (roles.roles.value.districtheadquarter_commander) {
@@ -468,6 +469,9 @@ const getUsersByRoles = () => {
             search =
                 '?regional_headquarter__name=' +
                 roles.roles.value.regionalheadquarter_commander.name;
+            locals.value = localsStore.locals.filter(
+                (loc) => loc.regional_headquarter == reg.value,
+            );
             levelAccess.value = 2;
         } else if (roles.roles.value.localheadquarter_commander) {
             local.value = roles.roles.value.localheadquarter_commander.name;
@@ -636,10 +640,8 @@ watch(
 watch(
     () => localsStore.locals,
     () => {
-        locals.value = localsStore.locals;
-        let regId = regionalsStore.regionals.find(
-            (regional) => regional.name == reg.value,
-        )?.id;
+        // locals.value = localsStore.locals;
+        let regId = roles.roles.value?.regional_headquarter?.id
         locals.value = localsStore.locals.filter(
             (loc) => loc.regional_headquarter == regId,
         );
@@ -671,9 +673,9 @@ watch(
     },
 );
 
-// onMounted(() => {
-//     getUsersByRoles();
-// });
+onMounted(() => {
+    getUsersByRoles();
+});
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,

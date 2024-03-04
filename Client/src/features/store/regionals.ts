@@ -54,6 +54,7 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
         async getRegionals() {
+            if(this.regionals.length > 0) return false;
             try {
                 this.isLoading = true;
                 const responseRegionals = await HTTP.get(`/regionals/`, {

@@ -25,6 +25,7 @@ export const useLocalsStore = defineStore('local', {
         },
 
         async getLocals() {
+            if(this.locals.length > 0) return false;
             try {
                 const responseLocals = await HTTP.get(`/locals/`, {
                     headers: {
