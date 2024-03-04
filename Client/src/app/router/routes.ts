@@ -772,17 +772,26 @@ const routes: RouteRecordRaw[] = [
                     },
                     {
                         path: ':id',
-                        meta: {
-                            label: 'Персональные данные пользователя',
-                        },
                         children: [
                             {
-                                path: '',
+                                path: 'personal',
+                                meta: {
+                                    label: 'Персональные данные пользователя',
+                                },
                                 name: 'PersonalDataUser',
                                 component: () =>
                                     import(
                                         '@pages/PersonalDataPage/components/PersonalDataID.vue'
                                     ),
+                            },
+                            {
+                                path: 'detachment',
+                                meta: {
+                                    label: 'Данные отряда',
+                                },
+                                name: 'DetachmentData',
+                                component: () =>
+                                    import('@pages/lsoPage/lsoPage.vue'),
                             },
                         ],
                     },
