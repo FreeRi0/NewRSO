@@ -16,6 +16,7 @@
                     id="search"
                     class="headquarters-search__input"
                     v-model="name"
+                    @keyup="searchLocal"
                     placeholder="Начните вводить название штаба."
                 />
                 <svg
@@ -134,7 +135,7 @@
             <div v-show="vertical" class="mt-10">
                 <LocalHQList
                     :localHeadquarters="sortedLocalHeadquarters"
-                    v-if="!isLocalLoading"
+                    v-if="!localStore.isLoading"
                 ></LocalHQList>
                 <v-progress-circular
                     class="circleLoader"
@@ -146,14 +147,7 @@
             <div class="horizontal" v-show="!vertical">
                 <HorizontalLocalHQs
                     :localHeadquarters="sortedLocalHeadquarters"
-                    v-if="!isLocalLoading"
                 ></HorizontalLocalHQs>
-                <v-progress-circular
-                    class="circleLoader"
-                    v-else
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -190,6 +184,7 @@ const localStore = useLocalsStore();
 
 const localHeadquarters = ref([]);
 
+
 const headquartersVisible = ref(20);
 const isLocalLoading = ref(false);
 const timerSearch = ref(null);
@@ -215,51 +210,14 @@ const selectedSortRegional = ref(
 const districts = ref([]);
 const regionals = ref([]);
 
-const getLocalHeadquarters = async () => {
-    try {
-        isLocalLoading.value = true;
-        setTimeout(async () => {
-            const localsResponse = await HTTP.get(`/locals/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-            localHeadquarters.value = localsResponse.data;
-            isLocalLoading.value = false;
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
+
+const searchLocal = (event) => {
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        localStore.searchLocals(name.value)
+    }, 400);
 };
 
-// const searchLocal = (event) => {
-//     clearTimeout(timerSearch.value);
-//     timerSearch.value = setTimeout(() => {
-//         localStore.searchLocals(name.value)
-//     }, 400);
-// };
-
-const searchLocal = async (name) => {
-    try {
-        const filteredLocals = await HTTP.get(`/locals/?search=${name}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        localHeadquarters.value = filteredLocals.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-const searchLocals = computed(() => {
-    searchLocal(name.value);
-});
-
-// const searchLocals = computed(() => {
-//     return localStore.searchLocals(name.value);
-// });
 
 /*const filtersDistricts = computed(() =>
     selectedSortDistrict.value
@@ -295,8 +253,8 @@ const getRegionalsHeadquartersForFilters = async () => {
 };
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-    getLocalHeadquarters();
     getRegionalsHeadquartersForFilters();
+    localStore.getLocals();
 });
 
 const selectedSort = ref(0);
@@ -313,7 +271,7 @@ const sortOptionss = ref([
 ]);
 
 const sortedLocalHeadquarters = computed(() => {
-    let tempHeadquartes = [...localHeadquarters.value];
+    let tempHeadquartes = [...localStore.locals];
 
     if (selectedSortRegional.value || selectedSortdistrict.value) {
         let idRegionals = [];
@@ -340,7 +298,6 @@ const sortedLocalHeadquarters = computed(() => {
         });
     }
 
-    searchLocals.value;
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {

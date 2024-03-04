@@ -74,7 +74,6 @@
                                 color="white"
                             ></Button>
                         </div> -->
-
                     </div>
                     <registryList
                         v-if="!isLoading"
@@ -402,6 +401,7 @@ const searchItems = (event) => {
 };
 
 const getItemsByRoles = () => {
+    if (!Object.keys(roleStore.roles).length) return false;
     if (!roles.roles.value.centralheadquarter_commander) {
         let search = '';
         let resp = '';
@@ -422,6 +422,9 @@ const getItemsByRoles = () => {
                 roles.roles.value.regionalheadquarter_commander.name;
             resp = '/locals/';
             join = true;
+            locals.value = localsStore.locals.filter(
+                (loc) => loc.regional_headquarter == reg.value,
+            );
             levelAccess.value = 2;
         } else if (roles.roles.value.localheadquarter_commander) {
             local.value = roles.roles.value.localheadquarter_commander.name;
@@ -496,18 +499,13 @@ watch(
 watch(
     () => regionalsStore.regionals,
     () => {
-        regionals.value = regionalsStore.regionals;
-        let regId = regionalsStore.regionals.find(
-            (regional) => regional.name == reg.value,
-        )?.id;
-        locals.value = localsStore.locals.filter(
-            (loc) => loc.regional_headquarter == regId,
-        );
-        educHead.value = educationalsStore.educationals.filter(
-            (edh) => edh.regional_headquarter == regId,
-        );
-        detachments.value = squadsStore.squads.filter(
-            (squad) => squad.regional_headquarter == regId,
+        let districtID = districtsStore.districts.length
+            ? districtsStore.districts.find(
+                  (dis) => (dis.name = district.value),
+              )?.id
+            : roleStore.roles.districtheadquarter_commander?.id;
+        regionals.value = regionalsStore.regionals.filter(
+            (reg) => reg.district_headquarter == district.value,
         );
     },
 );
@@ -515,12 +513,11 @@ watch(
 watch(
     () => localsStore.locals,
     () => {
-        locals.value = localsStore.locals;
-        let regId = regionalsStore.regionals.find(
-            (regional) => regional.name == reg.value,
-        )?.id;
+        let regID = regionalsStore.regionals.length
+            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
+            : roleStore.roles.regionalheadquarter_commander?.id;
         locals.value = localsStore.locals.filter(
-            (loc) => loc.regional_headquarter == regId,
+            (loc) => loc.regional_headquarter == regID,
         );
     },
 );
@@ -528,32 +525,36 @@ watch(
 watch(
     () => educationalsStore.educationals,
     () => {
-        educHead.value = educationalsStore.educationals;
-        let regId = regionalsStore.regionals.find(
-            (regional) => regional.name == reg.value,
-        )?.id;
-        educHead.value = educationalsStore.educationals.filter(
-            (edh) => edh.regional_headquarter == regId,
+        let regID = regionalsStore.regionals.length
+            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
+            : roleStore.roles.regionalheadquarter_commander?.id;
+        let locID = localsStore.locals.length
+            ? localsStore.locals.find((loc) => loc.name == local.value)?.id
+            : roleStore.roles.localheadquarter_commander?.id;
+         educHead.value = educationalsStore.educationals.filter(
+             (edh) => edh.regional_headquarter == regID,
         );
+        if (local.value) {
+            educHead.value = educationalsStore.educationals.filter(
+                (edh) => edh.local_headquarter == locID,
+            );
+        }
     },
 );
 watch(
     () => squadsStore.squads,
     () => {
-        detachments.value = squadsStore.squads;
-        let regId = regionalsStore.regionals.find(
-            (regional) => regional.name == reg.value,
-        )?.id;
-        // let educId = regionalsStore.educationals.find(
-        //     (ed) => ed.name == educ.value,
-        // )?.id;
+        let educId = educationalsStore.educationals.length
+            ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
+                  ?.id
+            : roleStore.roles.educationalheadquarter_commander?.id;
         detachments.value = squadsStore.squads.filter(
-            (squad) => squad.regional_headquarter == regId,
+            (det) => det.educational_headquarter == educId,
         );
     },
 );
 
-// onMounted(() => {
-//     getItemsByRoles();
-// });
+onMounted(() => {
+    getItemsByRoles();
+});
 </script>

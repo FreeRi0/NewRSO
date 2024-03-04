@@ -237,7 +237,6 @@ watch(
     () => props.reg,
     () => {
         regRef.value = props.reg;
-        console.log('reg', props.reg);
         if (regRef.value) {
             localsStore.getLocals();
             educationalsStore.getEducationals();

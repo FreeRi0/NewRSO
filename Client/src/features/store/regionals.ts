@@ -54,7 +54,7 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
         async getRegionals() {
-            if(this.regionals.length > 0) return false;
+            if (this.regionals.length > 0) return false;
             try {
                 this.isLoading = true;
                 const responseRegionals = await HTTP.get(`/regionals/`, {
@@ -108,7 +108,6 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
 
-
         async searchRegions(name: String) {
             const responseSearchRegions = await HTTP.get(
                 `/regions/?search=${name}`,
@@ -138,17 +137,27 @@ export const useRegionalsStore = defineStore('regionals', {
         },
         async searchInstitution(name: String, region: any) {
             let url = `/eduicational_institutions/?search=${name}`;
-            if (region) url += '&region__name='+region;
-            const responseInstitution = await HTTP.get(
-                url,
+            if (region) url += '&region__name=' + region;
+            const responseInstitution = await HTTP.get(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.institutions = responseInstitution.data;
+        },
+
+        async searchRegionalsHead(name: String) {
+            const responseSearchRegionalsHead = await HTTP.get(
+                `/regionals/?search=${name}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                        Authorization: 'Token' + localStorage.getItem('Token'),
                     },
                 },
             );
-            this.institutions = responseInstitution.data;
+            this.regionals = responseSearchRegionalsHead.data;
         },
     },
 });
