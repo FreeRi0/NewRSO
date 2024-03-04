@@ -6,7 +6,7 @@
         <div class="participants__actions">
             <div class="participants__actions-select mr-3">
                 <sortByEducation
-                    placeholder="Выберете действие"
+                    placeholder="Выберите действие"
                     variant="outlined"
                     clearable
                     v-model="action"
@@ -268,4 +268,9 @@ onActivated(async () => {
     await viewDetachments();
 });
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
+}
+</style>

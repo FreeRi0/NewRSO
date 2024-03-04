@@ -6,7 +6,7 @@
         <div class="participants__actions">
             <div class="participants__actions-select mr-3">
                 <sortByEducation
-                    placeholder="Выберете действие"
+                    placeholder="Выберите действие"
                     variant="outlined"
                     clearable
                     v-model="action"
@@ -94,15 +94,15 @@ const actionsList = ref([
 const viewParticipants = async () => {
     try {
         loading.value = true;
-        let id =
-            roles.roles.value.regionalheadquarter_commander?.id ??
-            roles.roles.value.detachment_commander?.id;
+        // let id =
+        //     roles.roles.value.regionalheadquarter_commander?.id ??
+        //     roles.roles.value.detachment_commander?.id;
         const regComReq = ref(null);
         const detComReq = ref(null);
-        setTimeout(async () => {
-            if (roles.roles.value.regionalheadquarter_commander) {
+
+            if (roles.roles.value.regionalheadquarter_commander?.id) {
                 const regComReq = await HTTP.get(
-                    `/regionals/${id}/verifications/`,
+                    `/regionals/${roles.roles.value.regionalheadquarter_commander?.id}/verifications/`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -114,9 +114,9 @@ const viewParticipants = async () => {
                 participantList.value = regComReq.data;
 
                 loading.value = false;
-            } else if (roles.roles.value.detachment_commander) {
+            } else if (roles.roles.value.detachment_commander?.id) {
                 const detComReq = await HTTP.get(
-                    `/detachments/${id}/verifications/`,
+                    `/detachments/${roles.roles.value.detachment_commander?.id}/verifications/`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -128,7 +128,6 @@ const viewParticipants = async () => {
                 participantList.value = detComReq.data;
                 loading.value = false;
             }
-        }, 100);
         selectedParticipantList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);

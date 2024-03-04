@@ -67,24 +67,27 @@
             <nav class="header__nav nav-user">
                 <div
                     class="nav-user__application-count"
-                    v-if="Object.keys(userStore.currentUser).length"
+                    v-if="Object.keys(userStore.currentUser).length && (roles.roles.value.regionalheadquarter_commander || roles.roles.value.detachment_commander) "
                 >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
-                    <!-- <a href="#">
+                    <router-link :to="'active'">
                         <img
                             src="@app/assets/icon/bell-light.svg"
                             width="36"
                             height="36"
                             alt="Иконка уведомления"
                         />
-                    </a> -->
+                    </router-link>
                     <!--Если есть активные заявки (isActive = true), ниже отображается их количество:-->
-                    <!-- <div v-if="isActive" class="nav-user__quantity-box">
-                        <span v-if="quantityIsActive < 100">{{
-                            quantityIsActive
+                    <div
+                        v-if="userStore.count.count"
+                        class="nav-user__quantity-box"
+                    >
+                        <span v-if="userStore.count.count < 100" class="countNum">{{
+                            userStore.count.count
                         }}</span>
                         <span v-else>99+</span>
-                    </div> -->
+                    </div>
                 </div>
 
                 <div
@@ -394,19 +397,17 @@ const userPages = computed(() => [
         show:
             roleStore.roles?.centralheadquarter_commander ||
             roleStore.roles?.districtheadquarter_commander ||
-            roleStore.roles?.regionalheadquarter_commander
+            roleStore.roles?.regionalheadquarter_commander,
     },
     {
         title: 'Членский взнос',
         name: 'contributorPay',
-        show:
-            roleStore.roles?.regionalheadquarter_commander
+        show: roleStore.roles?.regionalheadquarter_commander,
     },
     {
         title: 'Оформление справок',
         name: 'references',
-        show:
-            roleStore.roles?.regionalheadquarter_commander
+        show: roleStore.roles?.regionalheadquarter_commander,
     },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },
@@ -465,12 +466,11 @@ const updateRegion = async () => {
                 },
             },
         );
-        // console.log(updateRegResponse.data)
+
         region.value = updateRegResponse.data.region.id;
 
         show.value = !show.value;
         userStore.currentUser.region = updateRegResponse.data.region;
-        // console.log('reg',updateRegResponse.data.region);
         regionalsStore.searchMyRegionals(updateRegResponse.data.region);
 
         // userStore.getUser();
@@ -490,20 +490,24 @@ watch(
         if (Object.keys(userStore.currentUser).length === 0) {
             return;
         }
-
-        // region.value = regionalsStore.regions.find(
-        //     (region) => region.name === userStore.currentUser.region,
-        // )?.id;
         region.value = userStore.currentUser.region.id;
-
-        // userStore.getUser();
         regionalsStore.searchMyRegionals(userStore.currentUser.region);
     },
 );
 
+watch(
+    () => roleStore.roles,
+    (newRole, oldRole) => {
+        if (Object.keys(roleStore.roles).length === 0) {
+            return;
+        }
+        userStore.getCountApp();
+    },
+);
+
 // onMounted(() => {
-//   roleStore.getRoles();
-// })
+//         userStore.getCountApp();
+// });
 </script>
 
 <style lang="scss">
@@ -546,6 +550,13 @@ watch(
 
     a {
         color: #35383f;
+    }
+    .countNum {
+        font-size: 16px;
+        font-family: 'BertSans', sans-serif;
+        font-weight: 500;
+        margin-left: 14px;
+        margin-top: 9px;
     }
 
     &__logo {

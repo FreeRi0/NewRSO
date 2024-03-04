@@ -1,6 +1,6 @@
 <template>
     <div class="container action">
-        <div class="action-title">Создание мероприятия</div>
+        <div class="action-title">Редактирование мероприятия</div>
         <form @submit.prevent="SubmitEvent">
             <div class="col-auto form-container">
                 <v-expansion-panels variant="accordion">
@@ -716,7 +716,10 @@
                                     <v-container fluid>
                                         <div class="form-checkbox">
                                             <input
-                                                v-model="document_data.passport"
+                                                v-model="
+                                                    maininfo.document_data
+                                                        .passport
+                                                "
                                                 type="checkbox"
                                                 name="passport"
                                             />
@@ -726,7 +729,9 @@
                                         </div>
                                         <div class="form-checkbox">
                                             <input
-                                                v-model="document_data.snils"
+                                                v-model="
+                                                    maininfo.document_data.snils
+                                                "
                                                 type="checkbox"
                                                 name="snils"
                                             />
@@ -734,7 +739,9 @@
                                         </div>
                                         <div class="form-checkbox">
                                             <input
-                                                v-model="document_data.inn"
+                                                v-model="
+                                                    maininfo.document_data.inn
+                                                "
                                                 type="checkbox"
                                                 name="inn"
                                             />
@@ -743,7 +750,8 @@
                                         <div class="form-checkbox">
                                             <input
                                                 v-model="
-                                                    document_data.work_book
+                                                    maininfo.document_data
+                                                        .work_book
                                                 "
                                                 type="checkbox"
                                                 name="workbook"
@@ -755,7 +763,8 @@
                                         <div class="form-checkbox">
                                             <input
                                                 v-model="
-                                                    document_data.military_document
+                                                    maininfo.document_data
+                                                        .military_document
                                                 "
                                                 type="checkbox"
                                                 name="military"
@@ -768,7 +777,8 @@
                                         <div class="form-checkbox">
                                             <input
                                                 v-model="
-                                                    document_data.consent_personal_data
+                                                    maininfo.document_data
+                                                        .consent_personal_data
                                                 "
                                                 type="checkbox"
                                                 name="consert"
@@ -1094,41 +1104,41 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref, onActivated, watch, watchEffect } from 'vue';
+import { ref, onActivated, watchEffect } from 'vue';
 import {
     getAction,
     getOrganizator,
     putAction,
     putOrganizator,
     putTimeData,
+    putDocuments,
+    getRoles,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRoute, useRouter } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
-import { useRoleStore } from '@layouts/store/role';
-const rolesStore = useRoleStore();
 const router = useRouter();
 const route = useRoute();
 const id = route.params.id;
 const rules = ref([]);
 
+const organization_stop = ref('');
+
 onActivated(() => {
-    watch(
-        () => rolesStore.roles,
-        (newRole) => {
-            console.log('Роли пользователя загружены');
-            Object.entries(newRole).forEach(([obj, value], index) => {
-                if (value !== null) {
-                    console.log(`${obj} + ${value} + ${index}`);
-                    const filted = scale_massive.value.find(
-                        (commander) => commander.value === obj,
-                    );
-                    scale_massive_sorted.value.push(filted); //Работает
-                }
-            });
-        },
-    );
+    getRoles().then((resp) => {
+        console.log(resp.data);
+        rules.value = resp.data;
+        Object.entries(resp.data).forEach(([key, value]) => {
+            if (value !== null) {
+                console.log(`${key} + ${value}`);
+                const filted = scale_massive.value.find(
+                    (commander) => commander.value === key,
+                );
+                scale_massive_sorted.value.push(filted); //Работает
+            }
+        });
+    });
     getAction(id)
         .then((resp) => {
             maininfo.value = resp.data;
@@ -1259,17 +1269,12 @@ onActivated(() => {
         case 'Всероссийское':
             Object.entries(rules.value).forEach(([key, value]) => {
                 if (key === 'centralheadquarter_commander') {
-                    Object.entries(value).forEach(([key, value]) => {
-                        if (key === 'id') {
-                            console.log(value);
-                            maininfo.value.org_central_headquarter = value;
-                            maininfo.value.org_district_headquarter = '';
-                            maininfo.value.org_regional_headquarter = '';
-                            maininfo.value.org_local_headquarter = '';
-                            maininfo.value.org_educational_headquarter = '';
-                            maininfo.value.org_detachment = '';
-                        }
-                    });
+                    maininfo.value.org_central_headquarter = value;
+                    maininfo.value.org_district_headquarter = '';
+                    maininfo.value.org_regional_headquarter = '';
+                    maininfo.value.org_local_headquarter = '';
+                    maininfo.value.org_educational_headquarter = '';
+                    maininfo.value.org_detachment = '';
                 }
             });
             break;
@@ -1395,6 +1400,13 @@ function SubmitEvent() {
             putTimeData(resp.data.id, maininfo.value.time_data)
                 .then((resp) => {
                     console.log('Удалось изменить время', resp.data);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+            putDocuments(resp.data.id, maininfo.value.document_data)
+                .then(() => {
+                    console.log('Удалось изменить документы', resp.data);
                 })
                 .catch((e) => {
                     console.log(e);

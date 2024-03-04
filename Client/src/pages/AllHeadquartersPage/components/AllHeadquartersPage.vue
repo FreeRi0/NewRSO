@@ -15,6 +15,7 @@
                     id="search"
                     class="headquarters-search__input"
                     v-model="name"
+                    @keyup="searchEducational"
                     placeholder="Начните вводить название штаба образовательной организации."
                 />
                 <svg
@@ -190,7 +191,7 @@ const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
-
+const timerSearch = ref(null);
 const vertical = ref(true);
 
 const name = ref('');
@@ -234,25 +235,12 @@ const getLocalsHeadquartersForFilters = async () => {
     }
 };
 
-// const searchHeadquarter = async (name) => {
-//     try {
-//         const filteredHeadquarters = await HTTP.get(
-//             `/educationals/?search=${name}`,
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//         );
-//         educationalsStore.educationals = filteredHeadquarters.data;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-// const searchHeadquarters = computed(() => {
-//     searchHeadquarter(name.value);
-// });
+const searchEducational = (event) => {
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        educationalsStore.searchEducationals(name.value);
+    }, 400);
+};
 
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
@@ -267,7 +255,6 @@ const sortOptionss = ref([
         name: 'Алфавиту от А - Я',
     },
     { value: 'founding_date', name: 'Дате создания штаба' },
-    { value: 'members_count', name: 'Количеству участников' },
 ]);
 
 const sortedHeadquarters = computed(() => {
@@ -295,18 +282,8 @@ const sortedHeadquarters = computed(() => {
             ];
         }
 
-        // searchHeadquarters.value;
         tempHeadquartes = tempHeadquartes.filter((item) => {
             return idRegionals.indexOf(item.regional_headquarter) >= 0;
-        });
-    }
-
-    if (name.value) {
-        console.log('name', name.value);
-        tempHeadquartes = tempHeadquartes.filter((item) => {
-            return (
-                item.name.toLowerCase().indexOf(name.value.toLowerCase()) >= 0
-            );
         });
     }
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
@@ -332,9 +309,7 @@ const sortedHeadquarters = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'members_count') {
-            return a.members - b.members;
-        }
+        } 
     });
 
     if (!ascending.value) {

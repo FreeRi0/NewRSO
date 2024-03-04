@@ -7,6 +7,7 @@
             :id="name"
             :placeholder="placeholder"
             :maxlength="maxLength"
+            max="9999-12-31"
             class="mb-2"
             @input="updateValue"
             v-bind="$attrs"

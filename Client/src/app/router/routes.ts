@@ -243,7 +243,7 @@ const routes: RouteRecordRaw[] = [
                                 component: () =>
                                     import(
                                         '@pages/CreationOfLHQ/components/CreationOfLHQ.vue'
-                                        ),
+                                    ),
                                 meta: {
                                     requiresAuth: true,
                                     label: 'Создание местного штаба',
@@ -738,7 +738,7 @@ const routes: RouteRecordRaw[] = [
                                 '@pages/ReferencePage/components/reference.vue'
                             ),
                         meta: {
-                            label: 'Справка о членстве в РСО(для работодателя)',
+                            label: 'Справка о членстве в РСО (для работодателя)',
                         },
                     },
                     {
@@ -749,7 +749,7 @@ const routes: RouteRecordRaw[] = [
                                 '@pages/ReferencePage/components/referenceForYou.vue'
                             ),
                         meta: {
-                            label: 'Справка о членстве в РСО(для личного пользования)',
+                            label: 'Справка о членстве в РСО (для личного пользования)',
                         },
                     },
                 ],
