@@ -50,7 +50,7 @@
             <div class="horizontallso-item__wrapper competitition">
                 <img
                     class="competition__avatar_square"
-                    :src="competition.competition?.banner"
+                    src="@app/assets/competition/tablet-promo.png"
                     alt=""
                 />
 
@@ -160,6 +160,7 @@ const onCheckbox = (e) => {
     height: 38px;
 }
 .competition__avatar_square {
+    object-fit: cover;
     border-radius: 10px;
     width: 52px;
     height: 40px;

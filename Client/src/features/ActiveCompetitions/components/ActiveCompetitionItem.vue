@@ -76,13 +76,11 @@
 
             <div class="horizontallso-item__wrapper competitition">
                 <img
-                    v-if="competition.competition?.banner"
+
                     class="competition__avatar_square"
-                    :src="competition.competition?.banner"
+                    src="@app/assets/competition/tablet-promo.png"
                     alt="banner"
                 />
-
-                <div v-else class="competition__avatar_square blue-bg"></div>
 
                 <div class="containerHorizontal">
                     <p class="cursor_redirect" @click="onCompetition">
@@ -119,6 +117,7 @@ const props = defineProps({
         default: 0,
     },
 });
+
 
 const emit = defineEmits({
     select: null,
@@ -200,6 +199,7 @@ watch(
 }
 
 .competition__avatar_square {
+    object-fit: cover;
     border-radius: 10px;
     width: 52px;
     height: 40px;
