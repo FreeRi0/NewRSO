@@ -144,9 +144,9 @@ const LoginUser = async () => {
 .v-field--no-label {
     --v-field-padding-top: 5px;
 }
-.login_btn {
-    margin-top: 40px;
-}
+// .login_btn {
+//     margin-top: 40px;
+// }
 
 .v-card-title {
     font-size: 40px;
