@@ -123,7 +123,7 @@
                         type="button"
                         class="ascend"
                         @click="ascending = !ascending"
-                        icon="icon"
+                        iconn="iconn"
                         color="white"
                     ></Button>
                 </div>
@@ -309,7 +309,7 @@ const sortedHeadquarters = computed(() => {
                 return 1;
             }
             return 0;
-        } 
+        }
     });
 
     if (!ascending.value) {

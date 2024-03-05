@@ -59,13 +59,14 @@
                                     v-model="sortBy"
                                     :options="sortOptionss"
                                     :sorts-boolean="false"
+                                    class="Sort-alphabet"
                                 ></sortByEducation>
                             </div>
 
                             <Button
                                 type="button"
                                 class="ascend"
-                                icon="switch"
+                                iconn="iconn"
                                 @click="ascending = !ascending"
                                 color="white"
                             ></Button>
@@ -762,5 +763,8 @@ input[type='number']::-webkit-outer-spin-button {
 
 .v-expansion-panel:not(:first-child)::after {
     display: none;
+}
+.Sort-alphabet {
+    margin-right: 8px;
 }
 </style>

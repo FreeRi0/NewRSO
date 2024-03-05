@@ -146,13 +146,14 @@
                                     v-model="sortBy"
                                     :options="sortOptionss"
                                     :sorts-boolean="false"
+                                    class="Sort-alphabet"
                                 ></sortByEducation>
                             </div>
 
                             <Button
                                 type="button"
                                 class="ascend"
-                                icon="switch"
+                                iconn="iconn"
                                 @click="ascending = !ascending"
                                 color="white"
                             ></Button>
@@ -224,17 +225,15 @@ const SelectedSortRegional = ref(
 );
 
 const searchDetachments = (event) => {
-    if(name.value ) {
-        squadsStore.searchSquads(name.value)
+    if (name.value) {
+        squadsStore.searchSquads(name.value);
     }
     clearTimeout(timerSearch.value);
-    timerSearch.value = setTimeout(() => {
-    }, 400);
-}
+    timerSearch.value = setTimeout(() => {}, 400);
+};
 
 const squadsVisible = ref(20);
 const step = ref(20);
-
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -254,7 +253,6 @@ const sortOptionss = ref([
     },
     { value: 'founding_date', name: 'Дате создания отряда' },
 ]);
-
 
 const sortedSquads = computed(() => {
     let tempSquads = [];
@@ -332,7 +330,7 @@ onMounted(() => {
     regionalsStore.getRegionals();
     districtsStore.getDistricts();
     squadsStore.getSquads();
-})
+});
 
 onActivated(() => {
     SelectedSortDistrict.value = JSON.parse(
@@ -527,5 +525,8 @@ onActivated(() => {
 .v-field--variant-outlined .v-field__outline__end,
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
+}
+.Sort-alphabet {
+    margin-right: 8px;
 }
 </style>

@@ -100,7 +100,7 @@
                     <Button
                         class="ascend"
                         @click="ascending = !ascending"
-                        icon="icon"
+                        iconn="iconn"
                         color="white"
                     ></Button>
                 </div>
@@ -160,7 +160,6 @@ const props = defineProps({
 });
 const participants = ref([]);
 const participantsVisible = ref(12);
-
 
 const step = ref(12);
 const picked = ref(true);
