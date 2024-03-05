@@ -108,7 +108,7 @@ const isChecked = ref(true);
 
 const clickDetacment = (id) => {
     router.push({
-        name: 'lso',
+        name: 'DetachmentData',
         params: {
             id: id,
         },
