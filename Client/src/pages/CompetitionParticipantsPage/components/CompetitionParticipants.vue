@@ -166,7 +166,9 @@ const sortOptionss = ref([
 ]);
 
 const searchCompetitions = (event) => {
-    if (name.value) {
+    if (!name.value.length) {
+        squadsStore.searchCompetitionSquads(name.value);
+    } else if (name.value) {
         squadsStore.searchCompetitionSquads(name.value);
     }
     clearTimeout(timerSearch.value);
