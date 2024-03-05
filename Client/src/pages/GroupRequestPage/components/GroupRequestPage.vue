@@ -1,110 +1,158 @@
 <template>
-    <div class="container">
-        <Breadcrumbs :items="pages"></Breadcrumbs>
-        <p class="main_title">Групповая заявка</p>
-        <p class="subtitle">Подал:</p>
-        <div class="horizontallso-item__wrapper">
-            <div class="horizontallso-img">
-                <img
-                    :src="requestHQ.hq.media.photo"
-                    alt="logo"
-                    v-if="requestHQ.hq.media"
-                />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                    v-else
-                />
-            </div>
-            <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full">
-                    {{ requestHQ.hq.name }}
-                </p>
-            </div>
-        </div>
-        <div class="download">
-            <a class="download_text">
-                <img class="download_img" src="/assets/download.svg" />
-                скачать список
-            </a>
-        </div>
-        <div
-            class="horizontallso-item__wrapper"
-            v-for="value in requestUser.user"
-            :key="value.id"
-        >
-            <div class="horizontallso-img">
-                <img :src="value.media.photo" alt="logo" v-if="value.media" />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                    v-else
-                />
-            </div>
-            <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full">
-                    {{ value.first_name }}
-                </p>
-                <div class="horizontallso-item__list-date">
-                    <span
-                        style="
-                            border-left: 2px solid #b6b6b6;
-                            padding-right: 8px;
-                        "
-                    ></span>
-                    <p>{{ value.date_of_birth }}</p>
+    <div class="container" v-if="!loading">
+        <template v-if="applicationsList.length">
+            <p class="main_title">Групповая заявка</p>
+            <p class="subtitle">Подал:</p>
+            <div class="horizontallso-item__wrapper">
+                <div class="horizontallso-img">
+                    <img
+                        class="avatar_circle"
+                        :src="applicationsList[0].headquarter_author.banner"
+                        alt="logo"
+                    />
+                </div>
+                <div class="containerHorizontal">
+                    <p class="horizontallso-item__list-full">
+                        {{ applicationsList[0].headquarter_author.name }}
+                    </p>
                 </div>
             </div>
-        </div>
-        <div class="button">
-            <button type="submit" class="deny_button">Отклонить</button>
-            <button type="submit" class="submit_button">Одобрить</button>
-        </div>
+            <div class="download">
+                <a class="download_text">
+                    <img class="download_img" src="/assets/download.svg" />
+                    скачать список
+                </a>
+            </div>
+            <div
+                class="horizontallso-item__wrapper"
+                v-for="user in applicationsList[0].applicants"
+                :key="user.id"
+            >
+                <div class="horizontallso-img">
+                    <img
+                        class="avatar_circle"
+                        :src="user.user.avatar.photo"
+                        alt="avatar"
+                    />
+                </div>
+                <div class="containerHorizontal">
+                    <p class="horizontallso-item__list-full">
+                        {{ user.user.first_name + ' ' + user.user.last_name }}
+                    </p>
+                    <div class="horizontallso-item__list-date">
+                        <span
+                            style="
+                                border-left: 2px solid #b6b6b6;
+                                padding-right: 8px;
+                            "
+                        ></span>
+                        <p>{{ user.user.date_of_birth }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="button">
+                <button type="submit" class="deny_button" @click="onDeny">
+                    Отклонить
+                </button>
+                <button type="submit" class="submit_button" @click="onSubmit">
+                    Одобрить
+                </button>
+            </div>
+        </template>
+        <p class="subtitle" v-else>Заявок сейчас нет</p>
     </div>
 </template>
 
 <script setup>
-import { Breadcrumbs } from '@shared/components/breadcrumbs';
-import { ref } from 'vue';
-const pages = ref([
-    { pageTitle: 'Мероприятия', href: '#' },
-    { pageTitle: 'Мистер и Мисс РСО | Санкт-пете...', href: '#' },
-    { pageTitle: 'Заявка на участие', href: '#' },
-]);
-const requestUser = ref({
-    id: 1,
-    user: [
-        {
-            media: {
-                photo: '123',
+import { HTTP } from '@app/http';
+import { onMounted, ref } from 'vue';
+
+import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
+
+const loading = ref(true);
+const applicationsList = ref({});
+
+const getApplciatonsList = async () => {
+    try {
+        const { data } = await HTTP.get(
+            `/events/${route.params.id}/group_applications/all/`,
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-            first_name: 'Kolya 1',
-            date_of_birth: '01.01.2001',
-        },
-        {
-            media: {
-                photo: '123',
+        );
+        console.log(data);
+        applicationsList.value = data;
+        loading.value = false;
+    } catch (e) {
+        console.log('getApplciatonsList error', e);
+    }
+};
+
+const onSubmit = async () => {
+    try {
+        await HTTP.post(
+            `/events/${route.params.id}/group_applications/all/${applicationsList.value[0].id}/approve/`,
+            {},
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-            first_name: 'Kolya 2',
-            date_of_birth: '01.01.2002',
-        },
-        {
-            media: {
-                photo: '123',
+        );
+
+        await relocate();
+    } catch (e) {
+        console.log('onSubmit error', e);
+    }
+};
+
+const onDeny = async () => {
+    try {
+        await HTTP.delete(
+            `/events/${route.params.id}/group_applications/all/${applicationsList.value[0].id}/reject/`,
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-            first_name: 'Kolya 3',
-            date_of_birth: '01.01.2003',
-        },
-    ],
-});
-const requestHQ = ref({
-    id: 1,
-    hq: {
-        media: {
-            photo: '123124',
-        },
-        name: 'ССервО "Ромашка"',
-    },
+        );
+
+        await relocate();
+    } catch (e) {
+        console.log('onDeny error', e);
+    }
+};
+
+const relocate = async () => {
+    if (applicationsList.value[1]) {
+        router.push({
+            name: 'GroupRequest',
+            params: {
+                id: applicationsList.value[1].id,
+            },
+        });
+    } else {
+        router.push({
+            name: 'Action',
+            params: {
+                id: applicationsList.value[0].headquarter_author.id,
+            },
+        });
+    }
+};
+
+onMounted(async () => {
+    await getApplciatonsList();
+    console.log(applicationsList.value);
 });
 </script>
 
@@ -151,6 +199,7 @@ const requestHQ = ref({
 .container {
     margin: 0 auto;
     padding: 60px 130px;
+    padding-top: 0px;
 }
 .deny_button {
     border-radius: 10px;
@@ -174,11 +223,12 @@ const requestHQ = ref({
     text-align: center;
 }
 .main_title {
-    margin: 40px 0px;
+    // margin: 40px 0px;
     font-size: 52px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    margin-bottom: 40px;
 }
 .subtitle {
     margin-bottom: 24px;
@@ -241,5 +291,10 @@ const requestHQ = ref({
             align-items: center;
         }
     }
+}
+.avatar_circle {
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
 }
 </style>

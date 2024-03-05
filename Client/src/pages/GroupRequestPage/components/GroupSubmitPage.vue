@@ -3,16 +3,16 @@
         <p class="main_title">Групповая заявка</p>
         <div class="form__field">
             <div class="contributor-search">
-            <input
+                <input
                     type="text"
                     id="search"
                     class="contributor-search__input"
-                    @keyup="searchHeadquarters"
+                    @keyup="searchUsers"
                     v-model="name"
                     placeholder="Начните вводить"
                 />
                 <img src="@app/assets/icon/search.svg" alt="search" />
-                </div>
+            </div>
         </div>
 
         <div id="wrapper">
@@ -66,6 +66,14 @@
                     </a>
 
                     <div class="sort_line">
+                        <div class="sort-select">
+                            <sortByEducation
+                                variant="outlined"
+                                clearable
+                                v-model="sortBy"
+                                :options="sortOptions"
+                            ></sortByEducation>
+                        </div>
                         <Button
                             type="button"
                             class="ascend"
@@ -76,7 +84,7 @@
                     </div>
                 </div>
                 <group-submit-item
-                    v-for="user in usersList"
+                    v-for="user in sortedUsersList"
                     :key="user.id"
                     :user="user"
                     @select="onToggleSelectUser"
@@ -84,24 +92,24 @@
             </div>
         </div>
         <template v-if="selectedUsersList.length">
-        <p class="text_total">Итого: {{ selectedUsersList.length }}</p>
+            <p class="text_total">Итого: {{ selectedUsersList.length }}</p>
 
-        <group-submit-select
-            v-for="user in selectedUsersList"
-            :key="user.id"
-            :user="user"
-            @select="onToggleSelectUser"
-        />
+            <group-submit-select
+                v-for="user in selectedUsersList"
+                :key="user.id"
+                :user="user"
+                @select="onToggleSelectUser"
+            />
 
-        <div class="competitions__btns">
-            <Button
-                class="save"
-                type="button"
-                label="Подать заявку"
-                @click="onAction"
-            ></Button>
-        </div>
-    </template>
+            <div class="competitions__btns">
+                <Button
+                    class="save"
+                    type="button"
+                    label="Подать заявку"
+                    @click="onAction"
+                ></Button>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -110,34 +118,107 @@ import { HTTP } from '@app/http';
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
+import { sortByEducation } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 import GroupSubmitItem from './GroupSubmitItem.vue';
 import GroupSubmitSelect from './GroupSubmitSelect.vue';
 
+const sortBy = ref('alphabetically');
+
 const route = useRoute();
+const router = useRouter();
 
 const files = ref([]);
+const isChecked = ref(false);
 
-const selectedUsersList = ref([])
+const sortedUsersList = ref([]);
+const selectedUsersList = ref([]);
 const usersList = ref([]);
+
 const ascending = ref(true);
+const name = ref('');
+
+const sortOptions = ref([
+    {
+        value: 'alphabetically',
+        name: 'Алфавиту от А - Я',
+    },
+    { value: 'date_of_birth', name: 'По дате вступления в РСО' },
+]);
+
+const timerSearch = ref(null);
+
+const searchUsers = () => {
+    if (!name.value) {
+        sortedUsersList.value = usersList.value;
+    }
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        sortedByName(name.value);
+    }, 400);
+};
+
+const sortedByName = async (name) => {
+    console.log(name);
+    sortedUsersList.value = usersList.value.filter((obj) =>
+        obj.name.includes(name),
+    );
+    console.log(sortedUsersList.value);
+};
 
 const getUsersList = async () => {
-    try{
-        const {data} = await HTTP.get(`/events/${route.params.id}/group_applications`,{
-            headers: {
-                'Content-type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            }
-        })
+    try {
+        const { data } = await HTTP.get(
+            `/events/${route.params.id}/group_applications`,
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
         console.log(data);
-        usersList.value = data;
+        for (const obj of data) {
+            obj.name = obj.first_name + ' ' + obj.last_name;
+            console.log(obj);
+            usersList.value.push(obj);
+        }
+        // usersList.value = data;
+        sortedUsersList.value = usersList.value;
     } catch (e) {
         console.log('getUsersList error', e);
     }
-}
+};
+
+const onAction = async () => {
+    try {
+        let user_ids = [];
+        for (const user of selectedUsersList.value) {
+            user_ids.push(user.id);
+        }
+        await HTTP.post(
+            `/events/${route.params.id}/group_applications/`,
+            { user_ids },
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        router.push({
+            name: 'Action',
+            params: {
+                id: route.params.id,
+            },
+        });
+    } catch (e) {
+        console.log('onAction error', e);
+    }
+};
 
 const onToggleSelectUser = (user, isChecked) => {
     if (isChecked) {
@@ -152,6 +233,20 @@ const onToggleSelectUser = (user, isChecked) => {
     console.log(selectedUsersList.value);
 };
 
+const onCheckbox = async (event) => {
+    if (event.target.checked) {
+        for (const obj of usersList.value) {
+            obj.selected = true;
+            selectedUsersList.value.push(obj);
+        }
+    } else {
+        for (const obj of usersList.value) {
+            obj.selected = false;
+        }
+        selectedUsersList.value = [];
+    }
+};
+
 const onUpload = (file) => {
     files.value.push(file.files[0]);
 };
@@ -160,22 +255,25 @@ const onRemove = (index) => {
     files.value.splice(index, 1);
 };
 
+watch(selectedUsersList, (newSelectedUsersList) => {
+    isChecked.value = newSelectedUsersList.length == usersList.value.length;
+});
+
 watch(ascending, () => {
-    // if (!ascending.value) {
-    //     sortedHeadquartersJunior.value.reverse();
-    // }
-    console.log(123);
+    if (!ascending.value) {
+        sortedUsersList.value.reverse();
+    }
 });
 
 onMounted(async () => {
     await getUsersList();
-})
+});
 </script>
 
 <style scoped lang="scss">
 .container {
     margin: 0 auto;
-    max-width: 1115px;
+    padding: 0px 130px 60px 130px;
 }
 .main_title {
     font-family: Akrobat;
@@ -383,6 +481,14 @@ onMounted(async () => {
     &-col {
         margin-left: 4px;
         margin-top: 36px;
+    }
+}
+.sort-select {
+    &--width {
+        width: 193px;
+    }
+    & > .form__select {
+        margin-bottom: 0px;
     }
 }
 </style>
