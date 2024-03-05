@@ -1,5 +1,5 @@
 <template>
-    <div v-if="squads.length > 0">
+    <div>
         <horizontalSquadItem
             v-for="squad in squads"
             :squad="squad"
@@ -8,7 +8,6 @@
         />
     </div>
 
-    <h2 v-else>Отряд не найден...</h2>
 </template>
 <script setup>
 import { ref } from 'vue';

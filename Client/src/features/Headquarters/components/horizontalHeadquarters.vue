@@ -1,13 +1,11 @@
 <template>
-    <div v-if="headquarters.length > 0">
+    <div>
         <educationItemHorizontal
             v-for="headquarter in headquarters"
             :headquarter="headquarter"
             :key="headquarter.id"
         ></educationItemHorizontal>
     </div>
-
-    <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
 import { educationItemHorizontal } from '@entities/HeadquartersData';

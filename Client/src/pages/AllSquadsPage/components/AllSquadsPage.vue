@@ -107,7 +107,15 @@
                                     placeholder="Окружной штаб"
                                 >
                                     <template #selection="{ item }">
-                                        <pre>{{ item.title }}</pre>
+                                        <pre v-if="!districtsStore.isLoading">{{
+                                            item.title
+                                        }}</pre>
+                                        <v-progress-circular
+                                            class="circleLoader"
+                                            v-else
+                                            indeterminate
+                                            color="blue"
+                                        ></v-progress-circular>
                                     </template>
                                 </v-select>
                             </div>
@@ -124,7 +132,15 @@
                                     placeholder="Региональные штабы"
                                 >
                                     <template #selection="{ item }">
-                                        <pre>{{ item.title }}</pre>
+                                        <pre v-if="!regionalsStore.isLoading">{{
+                                            item.title
+                                        }}</pre>
+                                        <v-progress-circular
+                                            class="circleLoader"
+                                            v-else
+                                            indeterminate
+                                            color="blue"
+                                        ></v-progress-circular>
                                     </template>
                                 </v-select>
                             </div>
@@ -163,20 +179,29 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList
-                    :squads="sortedSquads"
-                    v-if="!isLoading.isLoading.value"
-                ></squadsList>
+                <squadsList :squads="sortedSquads"></squadsList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="squadsStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p v-else-if="!squadsStore.isLoading && !sortedSquads.length">
+                    Ничего не найдено
+                </p>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalList :squads="sortedSquads"></horizontalList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-if="squadsStore.isLoading"
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
+                <p v-else-if="!squadsStore.isLoading && !sortedSquads.length">
+                    Ничего не найдено
+                </p>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -210,8 +235,6 @@ const squadsStore = useSquadsStore();
 const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
 const squads = storeToRefs(squadsStore);
-
-const isLoading = storeToRefs(squadsStore);
 const categories = storeToRefs(squadsStore);
 const name = ref('');
 const timerSearch = ref(null);
@@ -223,14 +246,6 @@ const SelectedSortDistrict = ref(
 const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
-
-const searchDetachments = (event) => {
-    if (name.value) {
-        squadsStore.searchSquads(name.value);
-    }
-    clearTimeout(timerSearch.value);
-    timerSearch.value = setTimeout(() => {}, 400);
-};
 
 const squadsVisible = ref(20);
 const step = ref(20);
@@ -325,6 +340,16 @@ const sortedSquads = computed(() => {
     tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
+
+const searchDetachments = (event) => {
+    if (!name.value.length) {
+        squadsStore.searchSquads(name.value);
+    } else if (name.value) {
+        squadsStore.searchSquads(name.value);
+    }
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {}, 400);
+};
 
 onMounted(() => {
     regionalsStore.getRegionals();

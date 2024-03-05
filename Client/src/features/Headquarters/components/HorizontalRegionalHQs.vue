@@ -1,13 +1,11 @@
 <template>
-    <div v-if="regionalHeadquarters.length > 0">
+    <div>
         <regionalHorizontalItem
             v-for="regionalHeadquarter in regionalHeadquarters"
             :regional-headquarter="regionalHeadquarter"
             :key="regionalHeadquarter.id"
         ></regionalHorizontalItem>
     </div>
-
-    <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
 import { regionalHorizontalItem } from '@entities/HeadquartersData';
@@ -18,6 +16,4 @@ const props = defineProps({
     },
 });
 </script>
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

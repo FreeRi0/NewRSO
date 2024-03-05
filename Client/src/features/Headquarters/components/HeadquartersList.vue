@@ -1,12 +1,11 @@
 <template>
-    <div class="headquarters-wrapper" v-if="headquarters.length > 0">
+    <div class="headquarters-wrapper">
         <educationItem
             v-for="headquarter in headquarters"
             :headquarter="headquarter"
             :key="headquarter.id"
         />
     </div>
-    <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
 import { educationItem } from '@entities/HeadquartersData';
