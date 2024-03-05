@@ -19,7 +19,7 @@
             <div id="left">
                 <!-- Место под фильтры -->
 
-                <!-- <div class="uploads">
+                <div class="uploads">
                     <div
                         class="form-col"
                         v-for="(file, index) in files.length + 1"
@@ -45,7 +45,7 @@
                             ></FileUpload>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
 
             <div id="right">
@@ -75,15 +75,33 @@
                         ></Button>
                     </div>
                 </div>
-
-                <!-- <multi-stage-submit-item
-                    v-for="user in sortedUsersList"
+                <group-submit-item
+                    v-for="user in usersList"
                     :key="user.id"
                     :user="user"
                     @select="onToggleSelectUser"
-                /> -->
+                />
             </div>
         </div>
+        <template v-if="selectedUsersList.length">
+        <p class="text_total">Итого: {{ selectedUsersList.length }}</p>
+
+        <group-submit-select
+            v-for="user in selectedUsersList"
+            :key="user.id"
+            :user="user"
+            @select="onToggleSelectUser"
+        />
+
+        <div class="competitions__btns">
+            <Button
+                class="save"
+                type="button"
+                label="Подать заявку"
+                @click="onAction"
+            ></Button>
+        </div>
+    </template>
     </div>
 </template>
 
@@ -93,17 +111,23 @@ import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { Button } from '@shared/components/buttons';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
+
+import GroupSubmitItem from './GroupSubmitItem.vue';
+import GroupSubmitSelect from './GroupSubmitSelect.vue';
 
 const route = useRoute();
 
-const usersList = ref({});
+const files = ref([]);
+
+const selectedUsersList = ref([])
+const usersList = ref([]);
 const ascending = ref(true);
 
 const getUsersList = async () => {
     try{
-        const {data} = HTTP.get(`/events/${route.params.id}/group_applications`,{
-            header: {
+        const {data} = await HTTP.get(`/events/${route.params.id}/group_applications`,{
+            headers: {
                 'Content-type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             }
@@ -114,6 +138,27 @@ const getUsersList = async () => {
         console.log('getUsersList error', e);
     }
 }
+
+const onToggleSelectUser = (user, isChecked) => {
+    if (isChecked) {
+        user.selected = isChecked;
+        selectedUsersList.value = [...selectedUsersList.value, user];
+    } else {
+        user.selected = isChecked;
+        selectedUsersList.value = selectedUsersList.value.filter(
+            (u) => u.id !== user.id,
+        );
+    }
+    console.log(selectedUsersList.value);
+};
+
+const onUpload = (file) => {
+    files.value.push(file.files[0]);
+};
+
+const onRemove = (index) => {
+    files.value.splice(index, 1);
+};
 
 watch(ascending, () => {
     // if (!ascending.value) {
@@ -285,5 +330,59 @@ onMounted(async () => {
     position: absolute;
     top: 15px;
     left: 16px;
+}
+.text_total {
+    width: 1180px;
+    height: 26px;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    font-family: Bert Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
+}
+.competitions__btns {
+    display: grid;
+    width: 100%;
+    justify-content: center;
+    margin-top: 68px;
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+.form {
+    &-fileupload {
+        display: flex;
+        flex-direction: row;
+        margin-left: 4px;
+        font-family: Bert Sans;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 21px;
+        letter-spacing: 0em;
+        gap: 10px;
+        text-align: left;
+        color: #1f7cc0;
+        & > :deep(.p-) {
+            display: none;
+        }
+
+        & :deep(.p-button-label) {
+            text-decoration: underline;
+        }
+        & :deep(svg) {
+            display: none;
+        }
+    }
+    &-col {
+        margin-left: 4px;
+        margin-top: 36px;
+    }
 }
 </style>
