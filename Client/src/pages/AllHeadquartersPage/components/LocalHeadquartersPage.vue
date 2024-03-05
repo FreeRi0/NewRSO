@@ -5,7 +5,7 @@
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб"
                 name="CreateLHQ"
-                :button="true"
+                :button="false"
                 :educ-com="true"
             ></bannerCreate>
             <!-- :loc-com="true" -->
