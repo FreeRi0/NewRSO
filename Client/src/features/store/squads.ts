@@ -9,8 +9,6 @@ export const useSquadsStore = defineStore('squads', {
         areas: [],
         competitionSquads: [],
         isLoading: false,
-        limit: 20,
-        total: 0,
     }),
     actions: {
         async getSquads() {
@@ -18,17 +16,11 @@ export const useSquadsStore = defineStore('squads', {
             try {
                 this.isLoading = true;
                 const responseSquads = await HTTP.get('/detachments/', {
-                    params: {
-                        _limit: this.limit,
-                    },
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.total = Math.ceil(
-                    responseSquads.headers['x-total-count'] / this.limit,
-                );
                 this.squads = responseSquads.data; // добавить .data
                 this.isLoading = false;
             } catch (error) {
@@ -54,7 +46,7 @@ export const useSquadsStore = defineStore('squads', {
             }
         },
         async getCompetitionSquads() {
-            if(this.competitionSquads.length) return;
+            if (this.competitionSquads.length) return;
             try {
                 this.isLoading = true;
                 const responseCompetitionSquads = await HTTP.get(
@@ -74,6 +66,19 @@ export const useSquadsStore = defineStore('squads', {
                 console.log('an error occured ' + error);
             }
         },
+
+        async searchCompetitionSquads(name: String) {
+            const searchCompSquads = await HTTP.get(
+                `/competitions/1/participants/?search=${name}`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            );
+            this.competitionSquads = searchCompSquads.data;
+        },
+
         async getSquadId(id: String) {
             try {
                 this.isLoading = true;

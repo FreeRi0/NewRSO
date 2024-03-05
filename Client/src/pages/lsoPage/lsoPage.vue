@@ -121,7 +121,6 @@ watch(
 );
 
 onMounted(() => {
-    // getLsoData();
     squadsStore.getSquadId(id);
     squadsStore.getSquadMembers(id);
     replaceTargetObjects([squad.squad.value]);

@@ -109,7 +109,7 @@
                         type="button"
                         class="ascend"
                         @click="ascending = !ascending"
-                        icon="icon"
+                        iconn="iconn"
                         color="white"
                     ></Button>
                 </div>
@@ -118,20 +118,41 @@
             <div class="mt-10" v-show="vertical">
                 <RegionalHQList
                     :regionalHeadquarters="sortedRegionalHeadquarters"
-                    v-if="!isLoading.isLoading.value"
                 ></RegionalHQList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="isLoading.isLoading.value"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !isLoading.isLoading.value &&
+                        !sortedRegionalHeadquarters.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <HorizontalRegionalHQs
                     :regionalHeadquarters="sortedRegionalHeadquarters"
                 ></HorizontalRegionalHQs>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-if="isLoading.isLoading.value"
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !isLoading.isLoading.value &&
+                        !sortedRegionalHeadquarters.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
             <Button
                 @click="headquartersVisible += step"

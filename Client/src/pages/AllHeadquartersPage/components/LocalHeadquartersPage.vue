@@ -127,7 +127,7 @@
                         type="button"
                         class="ascend"
                         @click="ascending = !ascending"
-                        icon="icon"
+                        iconn="iconn"
                         color="white"
                     ></Button>
                 </div>
@@ -135,19 +135,38 @@
             <div v-show="vertical" class="mt-10">
                 <LocalHQList
                     :localHeadquarters="sortedLocalHeadquarters"
-                    v-if="!localStore.isLoading"
                 ></LocalHQList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="localStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !localStore.isLoading && !sortedLocalHeadquarters.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
             <div class="horizontal" v-show="!vertical">
                 <HorizontalLocalHQs
                     :localHeadquarters="sortedLocalHeadquarters"
                 ></HorizontalLocalHQs>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-if="localStore.isLoading"
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !localStore.isLoading && !sortedLocalHeadquarters.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -184,7 +203,6 @@ const localStore = useLocalsStore();
 
 const localHeadquarters = ref([]);
 
-
 const headquartersVisible = ref(20);
 const isLocalLoading = ref(false);
 const timerSearch = ref(null);
@@ -210,14 +228,12 @@ const selectedSortRegional = ref(
 const districts = ref([]);
 const regionals = ref([]);
 
-
 const searchLocal = (event) => {
     clearTimeout(timerSearch.value);
     timerSearch.value = setTimeout(() => {
-        localStore.searchLocals(name.value)
+        localStore.searchLocals(name.value);
     }, 400);
 };
-
 
 /*const filtersDistricts = computed(() =>
     selectedSortDistrict.value
@@ -297,7 +313,6 @@ const sortedLocalHeadquarters = computed(() => {
             return idRegionals.indexOf(item.regional_headquarter) >= 0;
         });
     }
-
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {

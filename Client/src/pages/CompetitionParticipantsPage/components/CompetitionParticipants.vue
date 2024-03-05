@@ -23,6 +23,7 @@
                     type="text"
                     id="search"
                     class="squads-search__input"
+                    @keyup="searchCompetitions"
                     v-model="name"
                     placeholder="Поищем отряд?"
                 />
@@ -55,7 +56,7 @@
                             :SortDropdown="true"
                         ></educInstitutionDropdown>
                     </div> -->
-                    <!-- <div class="sort-select">
+                    <div class="sort-select">
                         <sortByEducation
                             variant="outlined"
                             clearable
@@ -63,15 +64,15 @@
                             :options="sortOptionss"
                             :sorts-boolean="false"
                         ></sortByEducation>
-                    </div> -->
+                    </div>
 
-                    <!-- <Button
+                    <Button
                         type="button"
                         class="ascend"
                         icon="switch"
                         @click="ascending = !ascending"
                         color="white"
-                    ></Button> -->
+                    ></Button>
                 </div>
             </div>
             <div class="d-flex mt-5">
@@ -96,14 +97,20 @@
             <div class="horizontal">
                 <horizontalCompetitionList
                     :members="sortedSquads"
-                    v-if="!isLoading.isLoading.value"
                 ></horizontalCompetitionList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="isLoading.isLoading.value"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !isLoading.isLoading.value && !sortedSquads.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
             <!-- <Button
                 @click="squadsVisible += step"
@@ -148,7 +155,7 @@ const sortBy = ref('alphabetically');
 
 const picked = ref('');
 const switched = ref(true);
-
+const timerSearch = ref(null);
 const selectedSort = ref(null);
 
 const sortOptionss = ref([
@@ -156,10 +163,17 @@ const sortOptionss = ref([
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    // { value: 'founding_date', name: 'Дате создания отряда' },
-    // { value: 'members_count', name: 'Количеству участников' },
-    // { value: 'rating', name: 'Место в рейтинге' },
 ]);
+
+const searchCompetitions = (event) => {
+    if (!name.value.length) {
+        squadsStore.searchCompetitionSquads(name.value);
+    } else if (name.value) {
+        squadsStore.searchCompetitionSquads(name.value);
+    }
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {}, 400);
+};
 
 const sortedSquads = computed(() => {
     let tempSquads = squads.competitionSquads.value;
@@ -168,40 +182,28 @@ const sortedSquads = computed(() => {
     } else {
         tempSquads = tempSquads.filter((item) => !item.detachment);
     }
-    if (name.value) {
-        tempSquads = tempSquads.filter((item) => {
-            return (
-                item.junior_detachment?.name
-                    .toLowerCase()
-                    .indexOf(name.value.toLowerCase()) >= 0 ||
-                item.detachment?.name
-                    .toLowerCase()
-                    .indexOf(name.value.toLowerCase()) >= 0
-            );
-        });
+    tempSquads = tempSquads.sort((a, b) => {
+        if (sortBy.value == 'alphabetically') {
+            let fa =
+                    a.junior_detachment?.name.toLowerCase() ||
+                    a.detachment?.name.toLowerCase(),
+                fb =
+                    b.junior_detachment?.name.toLowerCase() ||
+                    b.detachment?.name.toLowerCase();
+
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        }
+    });
+
+    if (!ascending.value) {
+        tempSquads.reverse();
     }
-    // tempSquads = tempSquads.sort((a, b) => {
-    //     if (sortBy.value == 'alphabetically') {
-    //         let fa =
-    //                 a.junior_detachment?.name.toLowerCase() ||
-    //                 a.detachment?.name.toLowerCase(),
-    //             fb =
-    //                 b.junior_detachment?.toLowerCase() ||
-    //                 b.detachment?.name.toLowerCase();
-
-    //         if (fa < fb) {
-    //             return -1;
-    //         }
-    //         if (fa > fb) {
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
-    // });
-
-    // if (!ascending.value) {
-    //     tempSquads.reverse();
-    // }
 
     if (!picked.value) {
         return tempSquads;

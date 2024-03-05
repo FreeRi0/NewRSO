@@ -1,12 +1,11 @@
 <template>
-    <div v-if="districtHeadquarters.length > 0">
+    <div>
         <districtHorizontalItem
             v-for="districtHeadquarter in districtHeadquarters"
             :district-headquarter="districtHeadquarter"
             :key="districtHeadquarter.id"
         ></districtHorizontalItem>
     </div>
-    <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
 import { districtHorizontalItem } from '@entities/HeadquartersData';

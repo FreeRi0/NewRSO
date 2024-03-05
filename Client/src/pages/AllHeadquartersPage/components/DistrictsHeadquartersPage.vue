@@ -54,20 +54,41 @@
             <div v-show="vertical" class="mt-10">
                 <DistrictHQList
                     :districtHeadquarters="districtStore.districts"
-                    v-if="!districtStore.isLoading"
                 ></DistrictHQList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="districtStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !districtStore.isLoading &&
+                        !districtStore.district.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <HorizontalDistrictHQs
                     :districtHeadquarters="districtStore.districts"
                 ></HorizontalDistrictHQs>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-if="districtStore.isLoading"
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !districtStore.isLoading &&
+                        !districtStore.district.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
         </div>
     </div>
@@ -81,7 +102,7 @@ import {
 } from '@features/Headquarters/components';
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-import {useDistrictsStore} from '@features/store/districts';
+import { useDistrictsStore } from '@features/store/districts';
 
 const districtStore = useDistrictsStore();
 

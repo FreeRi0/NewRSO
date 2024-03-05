@@ -67,7 +67,11 @@
             <nav class="header__nav nav-user">
                 <div
                     class="nav-user__application-count"
-                    v-if="Object.keys(userStore.currentUser).length && (roles.roles.value.regionalheadquarter_commander || roles.roles.value.detachment_commander) "
+                    v-if="
+                        Object.keys(userStore.currentUser).length &&
+                        (roles.roles.value.regionalheadquarter_commander ||
+                            roles.roles.value.detachment_commander)
+                    "
                 >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <router-link :to="'active'">
@@ -83,9 +87,11 @@
                         v-if="userStore.count.count"
                         class="nav-user__quantity-box"
                     >
-                        <span v-if="userStore.count.count < 100" class="countNum">{{
-                            userStore.count.count
-                        }}</span>
+                        <span
+                            v-if="userStore.count.count < 100"
+                            class="countNum"
+                            >{{ userStore.count.count }}</span
+                        >
                         <span v-else>99+</span>
                     </div>
                 </div>
@@ -505,9 +511,9 @@ watch(
     },
 );
 
-// onMounted(() => {
-//         userStore.getCountApp();
-// });
+onMounted(() => {
+    userStore.getCountApp();
+});
 </script>
 
 <style lang="scss">

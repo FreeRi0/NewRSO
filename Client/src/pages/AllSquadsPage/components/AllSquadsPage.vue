@@ -107,7 +107,15 @@
                                     placeholder="Окружной штаб"
                                 >
                                     <template #selection="{ item }">
-                                        <pre>{{ item.title }}</pre>
+                                        <pre v-if="!districtsStore.isLoading">{{
+                                            item.title
+                                        }}</pre>
+                                        <v-progress-circular
+                                            class="circleLoader"
+                                            v-else
+                                            indeterminate
+                                            color="blue"
+                                        ></v-progress-circular>
                                     </template>
                                 </v-select>
                             </div>
@@ -124,7 +132,15 @@
                                     placeholder="Региональные штабы"
                                 >
                                     <template #selection="{ item }">
-                                        <pre>{{ item.title }}</pre>
+                                        <pre v-if="!regionalsStore.isLoading">{{
+                                            item.title
+                                        }}</pre>
+                                        <v-progress-circular
+                                            class="circleLoader"
+                                            v-else
+                                            indeterminate
+                                            color="blue"
+                                        ></v-progress-circular>
                                     </template>
                                 </v-select>
                             </div>
@@ -146,13 +162,14 @@
                                     v-model="sortBy"
                                     :options="sortOptionss"
                                     :sorts-boolean="false"
+                                    class="Sort-alphabet"
                                 ></sortByEducation>
                             </div>
 
                             <Button
                                 type="button"
                                 class="ascend"
-                                icon="switch"
+                                iconn="iconn"
                                 @click="ascending = !ascending"
                                 color="white"
                             ></Button>
@@ -162,20 +179,29 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList
-                    :squads="sortedSquads"
-                    v-if="!isLoading.isLoading.value"
-                ></squadsList>
+                <squadsList :squads="sortedSquads"></squadsList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="squadsStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p v-else-if="!squadsStore.isLoading && !sortedSquads.length">
+                    Ничего не найдено
+                </p>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalList :squads="sortedSquads"></horizontalList>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-if="!squadsStore.isLoading"
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
+                <p v-else-if="squadsStore.isLoading && !sortedSquads.length">
+                    Ничего не найдено
+                </p>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -209,8 +235,6 @@ const squadsStore = useSquadsStore();
 const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
 const squads = storeToRefs(squadsStore);
-
-const isLoading = storeToRefs(squadsStore);
 const categories = storeToRefs(squadsStore);
 const name = ref('');
 const timerSearch = ref(null);
@@ -223,22 +247,12 @@ const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
 
-const searchDetachments = (event) => {
-    if(name.value ) {
-        squadsStore.searchSquads(name.value)
-    }
-    clearTimeout(timerSearch.value);
-    timerSearch.value = setTimeout(() => {
-    }, 400);
-}
-
 const squadsVisible = ref(20);
 const step = ref(20);
 
-
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
-
+console.log(squadsStore.isLoading);
 const picked = ref('');
 
 const vertical = ref(true);
@@ -254,7 +268,6 @@ const sortOptionss = ref([
     },
     { value: 'founding_date', name: 'Дате создания отряда' },
 ]);
-
 
 const sortedSquads = computed(() => {
     let tempSquads = [];
@@ -328,12 +341,20 @@ const sortedSquads = computed(() => {
     return tempSquads;
 });
 
+const searchDetachments = (event) => {
+    if (!name.value.length) {
+        squadsStore.searchSquads(name.value);
+    } else if (name.value) {
+        squadsStore.searchSquads(name.value);
+    }
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {}, 400);
+};
 onMounted(() => {
     regionalsStore.getRegionals();
     districtsStore.getDistricts();
     squadsStore.getSquads();
-})
-
+});
 onActivated(() => {
     SelectedSortDistrict.value = JSON.parse(
         localStorage.getItem('AllHeadquarters_filters'),
@@ -527,5 +548,8 @@ onActivated(() => {
 .v-field--variant-outlined .v-field__outline__end,
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
+}
+.Sort-alphabet {
+    margin-right: 8px;
 }
 </style>

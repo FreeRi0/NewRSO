@@ -1,13 +1,11 @@
 <template>
-    <div v-if="localHeadquarters.length > 0">
+    <div>
         <localItemHorizontal
             v-for="localHeadquarter in localHeadquarters"
             :local-headquarter="localHeadquarter"
             :key="localHeadquarter.id"
         ></localItemHorizontal>
     </div>
-
-    <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
 import { localItemHorizontal } from '@entities/HeadquartersData';

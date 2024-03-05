@@ -1,5 +1,10 @@
 <template>
-    <p v-if="loading">Загрузка...</p>
+    <v-progress-circular
+        class="circleLoader"
+        v-if="loading"
+        indeterminate
+        color="blue"
+    ></v-progress-circular>
     <p v-else-if="!loading && !participantList.length">Список заявок пуст</p>
 
     <template v-else>
@@ -92,42 +97,38 @@ const actionsList = ref([
 ]);
 
 const viewParticipants = async () => {
+    if (participantList.value.length) return;
     try {
         loading.value = true;
-        // let id =
-        //     roles.roles.value.regionalheadquarter_commander?.id ??
-        //     roles.roles.value.detachment_commander?.id;
         const regComReq = ref(null);
         const detComReq = ref(null);
 
-            if (roles.roles.value.regionalheadquarter_commander?.id) {
-                const regComReq = await HTTP.get(
-                    `/regionals/${roles.roles.value.regionalheadquarter_commander?.id}/verifications/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
+        if (roles.roles.value.regionalheadquarter_commander?.id) {
+            const regComReq = await HTTP.get(
+                `/regionals/${roles.roles.value.regionalheadquarter_commander?.id}/verifications/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
-                );
-                participantList.value = regComReq.data;
+                },
+            );
+            participantList.value = regComReq.data;
 
-                loading.value = false;
-            } else if (roles.roles.value.detachment_commander?.id) {
-                const detComReq = await HTTP.get(
-                    `/detachments/${roles.roles.value.detachment_commander?.id}/verifications/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
+            loading.value = false;
+        } else if (roles.roles.value.detachment_commander?.id) {
+            const detComReq = await HTTP.get(
+                `/detachments/${roles.roles.value.detachment_commander?.id}/verifications/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
-                );
-                participantList.value = detComReq.data;
-                loading.value = false;
-            }
+                },
+            );
+            participantList.value = detComReq.data;
+            loading.value = false;
+        }
         selectedParticipantList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
@@ -136,18 +137,13 @@ const viewParticipants = async () => {
 
 const select = (event) => {
     selectedParticipantList.value = [];
-    console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
-        // console.log('fffss', checkboxAll.value, event);
         for (let index in participantList.value) {
-            // console.log('arr', selectedPeoples.value);
-
             participantList.value[index].selected = true;
             selectedParticipantList.value.push(participantList.value[index]);
         }
     } else {
         for (let index in participantList.value) {
-            // console.log('arr', selectedPeoples.value);
             participantList.value[index].selected = false;
         }
     }
@@ -257,18 +253,6 @@ const onAction = async () => {
         console.log('error action', e);
     }
 };
-
-// const select = (event) => {
-//     selectedParticipantList.value = [];
-//     console.log('fffss', checkboxAll.value, event);
-//     if (event.target.checked) {
-//         console.log('fffss',checkboxAll.value, event);
-//         for (let index in  participantList.value) {
-//             console.log('arr', selectedParticipantList.value);
-//             selectedParticipantList.value.push( participantList.value[index]);
-//         }
-//     }
-// };
 
 onMounted(async () => {
     await viewParticipants();
