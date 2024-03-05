@@ -195,11 +195,11 @@
                 <horizontalList :squads="sortedSquads"></horizontalList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="squadsStore.isLoading"
+                    v-if="!squadsStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
-                <p v-else-if="!squadsStore.isLoading && !sortedSquads.length">
+                <p v-else-if="squadsStore.isLoading && !sortedSquads.length">
                     Ничего не найдено
                 </p>
             </div>
@@ -252,7 +252,7 @@ const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
-
+console.log(squadsStore.isLoading);
 const picked = ref('');
 
 const vertical = ref(true);
@@ -350,13 +350,11 @@ const searchDetachments = (event) => {
     clearTimeout(timerSearch.value);
     timerSearch.value = setTimeout(() => {}, 400);
 };
-
 onMounted(() => {
     regionalsStore.getRegionals();
     districtsStore.getDistricts();
     squadsStore.getSquads();
 });
-
 onActivated(() => {
     SelectedSortDistrict.value = JSON.parse(
         localStorage.getItem('AllHeadquarters_filters'),
