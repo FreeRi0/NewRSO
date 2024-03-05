@@ -1,5 +1,5 @@
 <template>
-    <div class="headquarters-wrapper" v-if="regionalHeadquarters.length > 0">
+    <div class="headquarters-wrapper">
         <regionalItem
             v-for="regionalHeadquarter in regionalHeadquarters"
             :regional-headquarter="regionalHeadquarter"
@@ -7,7 +7,6 @@
         />
     </div>
 
-    <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
 import { regionalItem } from '@entities/HeadquartersData/components';

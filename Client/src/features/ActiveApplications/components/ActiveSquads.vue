@@ -1,5 +1,10 @@
 <template>
-    <p v-if="loading">Загрузка...</p>
+    <v-progress-circular
+        class="circleLoader"
+        v-if="loading"
+        indeterminate
+        color="blue"
+    ></v-progress-circular>
     <p v-else-if="!loading && !detachmentList.length">Список заявок пуст</p>
 
     <template v-else>
@@ -13,13 +18,6 @@
                     :options="actionsList"
                 ></sortByEducation>
             </div>
-            <!-- <div class="contributor-sort__all">
-                <input
-                    type="checkbox"
-                    @click="selectSquads"
-                    v-model="checkboxAllSquads"
-                />
-            </div> -->
             <div class="d-flex align-center">
                 <div class="contributor-sort__all">
                     <input
@@ -94,23 +92,22 @@ const actionsList = ref([
     { value: 'Отклонить', name: 'Отклонить' },
 ]);
 const viewDetachments = async () => {
+    if (detachmentList.value.length) return;
     try {
         if (!roles.roles.value.detachment_commander) return;
         loading.value = true;
         let id = roles.roles.value.detachment_commander?.id;
-        setTimeout(async () => {
-            const detComRequest = await HTTP.get(
-                `/detachments/${id}/applications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
+        const detComRequest = await HTTP.get(
+            `/detachments/${id}/applications/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
-            );
-            detachmentList.value = detComRequest.data;
-            loading.value = false;
-        }, 100);
+            },
+        );
+        detachmentList.value = detComRequest.data;
+        loading.value = false;
         selectedDetachmentList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
@@ -121,24 +118,18 @@ const select = (event) => {
     selectedDetachmentList.value = [];
     console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
-        // console.log('fffss', checkboxAll.value, event);
         for (let index in detachmentList.value) {
-            // console.log('arr', selectedPeoples.value);
-
             detachmentList.value[index].selected = true;
             selectedDetachmentList.value.push(detachmentList.value[index]);
         }
     } else {
         for (let index in detachmentList.value) {
-            // console.log('arr', selectedPeoples.value);
             detachmentList.value[index].selected = false;
         }
     }
 };
 
 const onToggleSelectCompetition = (detachment, checked) => {
-    // console.log('participant', participant.selected);
-    // console.log('checked', checked);
     if (checked) {
         detachment.selected = checked;
         selectedDetachmentList.value.push(detachment);
@@ -247,18 +238,6 @@ const onAction = async () => {
         console.log('error action', e);
     }
 };
-
-// const selectSquads = (event) => {
-//     selectedDetachmentList.value = [];
-//     console.log('fffss', checkboxAllSquads.value, event);
-//     if (event.target.checked) {
-//         console.log('fffss', checkboxAllSquads.value, event);
-//         for (let index in detachmentList.value) {
-//             console.log('arr', selectedDetachmentList.value);
-//             selectedDetachmentList.value.push(detachmentList.value[index]);
-//         }
-//     }
-// };
 
 onMounted(async () => {
     await viewDetachments();
