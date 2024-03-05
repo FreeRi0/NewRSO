@@ -228,21 +228,19 @@ watch(
     () => props.district,
     () => {
         districtRef.value = props.district;
-        // if (districtRef.value) {
-        //     districtsStore.getDistricts();
-        //     regionalsStore.getRegionals();
-        // }
+        if (districtRef.value) {
+            regionalsStore.getRegionals();
+        }
     },
 );
 watch(
     () => props.reg,
     () => {
         regRef.value = props.reg;
-        // if (regRef.value) {
-        //     localsStore.getLocals();
-        //     educationalsStore.getEducationals();
-        //     regionalsStore.getRegionals();
-        // }
+        if (regRef.value) {
+            localsStore.getLocals();
+            educationalsStore.getEducationals();
+        }
     },
 );
 
@@ -250,9 +248,9 @@ watch(
     () => props.local,
     () => {
         localRef.value = props.local;
-        // if (localRef.value) {
-        //     educationalsStore.getEducationals();
-        // }
+        if (localRef.value) {
+            educationalsStore.getEducationals();
+        }
     },
 );
 
@@ -260,9 +258,9 @@ watch(
     () => props.educ,
     () => {
         educRef.value = props.educ;
-        // if (educRef.value) {
-        //     squadsStore.getSquads();
-        // }
+        if (educRef.value) {
+            squadsStore.getSquads();
+        }
     },
 );
 
@@ -273,21 +271,29 @@ watch(
     },
 );
 
-// watch(
-//     () => roles.roles.value,
+watch(
+    () => roles.roles.value,
 
-//     (newRole, oldRole) => {
-//         filteredByRoles();
-//     },
-// );
+    (newRole, oldRole) => {
+        if(roles.roles.value.centralheadquarter_commander) {
+            districtsStore.getDistricts();
+        }
+    },
+);
 
 onMounted(() => {
-    districtsStore.getDistricts();
-    regionalsStore.getRegionals();
-    localsStore.getLocals();
-    educationalsStore.getEducationals();
-    squadsStore.getSquads();
-    // filteredByRoles();
+    if (props.educ) {
+        squadsStore.getSquads();
+    } else if (props.local) {
+        educationalsStore.getEducationals();
+    } else if (props.reg) {
+        localsStore.getLocals();
+        educationalsStore.getEducationals();
+    } else if (props.district) {
+        regionalsStore.getRegionals();
+    } else {
+        districtsStore.getDistricts();
+    }
 });
 </script>
 <style lang="scss">

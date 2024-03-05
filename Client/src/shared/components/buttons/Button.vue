@@ -135,7 +135,7 @@ const clickOnButton = () => {
         }
     }
     &_icon {
-        // border-radius: 5px;
+        border-radius: 5px;
         height: 40px;
         width: 40px;
         margin: 0px;
