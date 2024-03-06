@@ -92,7 +92,6 @@ const getVerified = async () => {
     }
 };
 
-console.log('length', isVerified.value.length);
 
 watch(
     () => route.params.id,
