@@ -64,7 +64,7 @@
                 <p
                     v-else-if="
                         !districtStore.isLoading &&
-                        !districtStore.district.length
+                        !districtStore.districts.length
                     "
                 >
                     Ничего не найдено
@@ -84,7 +84,7 @@
                 <p
                     v-else-if="
                         !districtStore.isLoading &&
-                        !districtStore.district.length
+                        !districtStore.districts.length
                     "
                 >
                     Ничего не найдено

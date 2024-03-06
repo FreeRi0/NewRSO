@@ -56,7 +56,7 @@
                         </div>
 
                         <div class="sort-filters">
-                            <div class="sort-select">
+                            <!-- <div class="sort-select">
                                 <sortByEducation
                                     variant="outlined"
                                     clearable
@@ -72,7 +72,7 @@
                                 icon="switch"
                                 @click="ascending = !ascending"
                                 color="white"
-                            ></Button>
+                            ></Button> -->
                         </div>
                     </div>
                     <registryList
@@ -231,10 +231,13 @@ const viewHeadquartersData = async (resp, search, join) => {
                     },
                 },
             );
+            educHead.value = viewHeadquartersResponsetTwo.data;
             response = response.concat(viewHeadquartersResponsetTwo.data);
         }
         sortedVal.value = response;
         isLoading.value = false;
+        console.log('resp', viewHeadquartersResponse.data)
+        return viewHeadquartersResponse.data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -252,15 +255,15 @@ const updateDistrict = (districtVal) => {
     }
 
     if (name.value) search += '&search=' + name.value;
-    viewHeadquartersData(resp, search);
+    regionals.value = viewHeadquartersData(resp, search);
 
-    let districtId = districtsStore.districts.find(
-        (dis) => dis.name == districtVal,
-    )?.id;
-    district.value = districtVal;
-    regionals.value = regionalsStore.regionals.filter(
-        (regional) => regional.district_headquarter == districtId,
-    );
+    // let districtId = districtsStore.districts.find(
+    //     (dis) => dis.name == districtVal,
+    // )?.id;
+    // district.value = districtVal;
+    // regionals.value = regionalsStore.regionals.filter(
+    //     (regional) => regional.district_headquarter == districtId,
+    // );
 };
 
 const updateReg = (regVal) => {
@@ -272,15 +275,15 @@ const updateReg = (regVal) => {
         search = '?district_headquarter__name=' + district.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewHeadquartersData(resp, search);
+    locals.value = viewHeadquartersData(resp, search);
 
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == regVal,
-    )?.id;
-    reg.value = regVal;
-    locals.value = localsStore.locals.filter(
-        (loc) => loc.regional_headquarter == regId,
-    );
+    // let regId = regionalsStore.regionals.find(
+    //     (regional) => regional.name == regVal,
+    // )?.id;
+    // reg.value = regVal;
+    // locals.value = localsStore.locals.filter(
+    //     (loc) => loc.regional_headquarter == regId,
+    // );
 };
 const updateLocal = (localVal) => {
     let search = '';
@@ -293,16 +296,21 @@ const updateLocal = (localVal) => {
     }
     if (name.value) search += '&search=' + name.value;
 
-    viewHeadquartersData(resp, search, !localVal);
+    let data = viewHeadquartersData(resp, search, !localVal);
+    if (localVal) {
+        educHead.value = data;
+    } else {
+        locals.value = data;
+    }
 
-    let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == reg.value,
-    )?.id;
-    local.value = localVal;
-    educHead.value = educationalsStore.educationals.filter(
-        (edh) => locId && edh.local_headquarter == locId,
-    );
+    // let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
+    // let regId = regionalsStore.regionals.find(
+    //     (regional) => regional.name == reg.value,
+    // )?.id;
+    // local.value = localVal;
+    // educHead.value = educationalsStore.educationals.filter(
+    //     (edh) => locId && edh.local_headquarter == locId,
+    // );
 };
 
 const updateEduc = (educVal) => {
@@ -323,18 +331,19 @@ const updateEduc = (educVal) => {
     }
     if (name.value) search += '&search=' + name.value;
 
-    viewHeadquartersData(resp, search);
+    detachments.value = viewHeadquartersData(resp, search);
+    console.log('det', detachments.value);
     // , educVal && !local.value
-    let educId = educationalsStore.educationals.find(
-        (edh) => edh.name == educVal,
-    )?.id;
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == reg.value,
-    )?.id;
-    educ.value = educVal;
-    detachments.value = squadsStore.squads.filter(
-        (squad) => educId && squad.educational_headquarter == educId,
-    );
+    // let educId = educationalsStore.educationals.find(
+    //     (edh) => edh.name == educVal,
+    // )?.id;
+    // let regId = regionalsStore.regionals.find(
+    //     (regional) => regional.name == reg.value,
+    // )?.id;
+    // educ.value = educVal;
+    // detachments.value = squadsStore.squads.filter(
+    //     (squad) => educId && squad.educational_headquarter == educId,
+    // );
 };
 
 const updateDetachment = (detachmentVal) => {
@@ -461,24 +470,24 @@ const sortedHeadquarters = computed(() => {
     let tempHeadquarters = [];
     tempHeadquarters = [...sortedVal.value];
 
-    tempHeadquarters = tempHeadquarters.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a?.name.toLowerCase(),
-                fb = b?.name.toLowerCase()
+    // tempHeadquarters = tempHeadquarters.sort((a, b) => {
+    //     if (sortBy.value == 'alphabetically') {
+    //         let fa = a?.name.toLowerCase(),
+    //             fb = b?.name.toLowerCase()
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        }
-    });
+    //         if (fa < fb) {
+    //             return -1;
+    //         }
+    //         if (fa > fb) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     }
+    // });
 
-    if (!ascending.value) {
-        tempHeadquarters.reverse();
-    }
+    // if (!ascending.value) {
+    //     tempHeadquarters.reverse();
+    // }
     return tempHeadquarters;
 });
 
@@ -532,8 +541,8 @@ watch(
         let locID = localsStore.locals.length
             ? localsStore.locals.find((loc) => loc.name == local.value)?.id
             : roleStore.roles.localheadquarter_commander?.id;
-         educHead.value = educationalsStore.educationals.filter(
-             (edh) => edh.regional_headquarter == regID,
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regID,
         );
         if (local.value) {
             educHead.value = educationalsStore.educationals.filter(
@@ -542,18 +551,18 @@ watch(
         }
     },
 );
-watch(
-    () => squadsStore.squads,
-    () => {
-        let educId = educationalsStore.educationals.length
-            ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
-                  ?.id
-            : roleStore.roles.educationalheadquarter_commander?.id;
-        detachments.value = squadsStore.squads.filter(
-            (det) => det.educational_headquarter == educId,
-        );
-    },
-);
+// watch(
+//     () => squadsStore.squads,
+//     () => {
+//         let educId = educationalsStore.educationals.length
+//             ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
+//                   ?.id
+//             : roleStore.roles.educationalheadquarter_commander?.id;
+//         detachments.value = squadsStore.squads.filter(
+//             (det) => det.educational_headquarter == educId,
+//         );
+//     },
+// );
 
 onMounted(() => {
     getItemsByRoles();
