@@ -182,20 +182,22 @@
                 <squadsList :squads="sortedSquads"></squadsList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="squadsStore.isLoading"
+                    v-if="isLoading.isLoading.value"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
-                <p v-else-if="!squadsStore.isLoading && !sortedSquads.length">
+                <p
+                    v-else-if="
+                        !isLoading.isLoading.value && !sortedSquads.length
+                    "
+                >
                     Ничего не найдено
                 </p>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalList :squads="sortedSquads"></horizontalList>
-                <p v-if="!sortedSquads.length">
-                    Ничего не найдено
-                </p>
+                <p v-if="!sortedSquads.length">Ничего не найдено</p>
             </div>
             <Button
                 @click="squadsVisible += step"
@@ -232,6 +234,7 @@ const squads = storeToRefs(squadsStore);
 const categories = storeToRefs(squadsStore);
 const name = ref('');
 const timerSearch = ref(null);
+const isLoading = storeToRefs(squadsStore);
 const education = ref(null);
 
 const SelectedSortDistrict = ref(

@@ -298,7 +298,7 @@ const updateReg = (regVal) => {
 const updateLocal = (localVal) => {
     let search = '';
     let resp = localVal ? '/educationals/' : '/locals/';
-    console.log('level', levelAccess.value, localVal);
+
     if (localVal) {
         search = '?local_headquarter__name=' + localVal;
     } else if (levelAccess.value < 3) {
@@ -471,8 +471,7 @@ const getItemsByRoles = () => {
 };
 
 const sortedHeadquarters = computed(() => {
-    let tempHeadquarters = [];
-    tempHeadquarters = [...sortedVal.value];
+    let tempHeadquarters = sortedVal.value;
 
     // tempHeadquarters = tempHeadquarters.sort((a, b) => {
     //     if (sortBy.value == 'alphabetically') {

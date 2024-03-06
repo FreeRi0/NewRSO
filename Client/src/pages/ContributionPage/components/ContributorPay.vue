@@ -256,6 +256,18 @@ const viewContributorsData = async (search) => {
         participants.value = viewParticipantsResponse.data;
         isLoading.value = false;
         selectedPeoples.value = [];
+
+        if (search.indexOf('districts') >= 0){
+            districts.value = viewParticipantsResponse.data;
+        }else if (search.indexOf('regionals') >= 0){
+            regionals.value = viewParticipantsResponse.data;
+        }else if (search.indexOf('locals') >= 0){
+            locals.value = viewParticipantsResponse.data;
+        }else if (search.indexOf('educationals') >= 0){
+            educHead.value = viewParticipantsResponse.data;
+        }else if (search.indexOf('detachments') >= 0){
+            detachments.value = viewParticipantsResponse.data;
+        }
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -272,13 +284,13 @@ const updateDistrict = (districtVal) => {
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
 
-    let districtId = districtsStore.districts.find(
-        (dis) => dis.name == districtVal,
-    )?.id;
-    district.value = districtVal;
-    regionals.value = regionalsStore.regionals.filter(
-        (regional) => regional.district_headquarter == districtId,
-    );
+    // let districtId = districtsStore.districts.find(
+    //     (dis) => dis.name == districtVal,
+    // )?.id;
+    // district.value = districtVal;
+    // regionals.value = regionalsStore.regionals.filter(
+    //     (regional) => regional.district_headquarter == districtId,
+    // );
 };
 
 const updateReg = (regVal) => {
@@ -291,13 +303,13 @@ const updateReg = (regVal) => {
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
 
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == regVal,
-    )?.id;
-    reg.value = regVal;
-    locals.value = localsStore.locals.filter(
-        (loc) => loc.regional_headquarter == regId,
-    );
+    // let regId = regionalsStore.regionals.find(
+    //     (regional) => regional.name == regVal,
+    // )?.id;
+    // reg.value = regVal;
+    // locals.value = localsStore.locals.filter(
+    //     (loc) => loc.regional_headquarter == regId,
+    // );
 };
 const updateLocal = (localVal) => {
     let search = '';
@@ -309,14 +321,14 @@ const updateLocal = (localVal) => {
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search, !localVal);
 
-    let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == reg.value,
-    )?.id;
-    local.value = localVal;
-    educHead.value = educationalsStore.educationals.filter(
-        (edh) => locId && edh.local_headquarter == locId,
-    );
+    // let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
+    // let regId = regionalsStore.regionals.find(
+    //     (regional) => regional.name == reg.value,
+    // )?.id;
+    // local.value = localVal;
+    // educHead.value = educationalsStore.educationals.filter(
+    //     (edh) => locId && edh.local_headquarter == locId,
+    // );
 };
 
 const updateEduc = (educVal) => {
@@ -331,17 +343,17 @@ const updateEduc = (educVal) => {
         search = '?local_headquarter__name=' + local.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search, educVal && !local.value);
-    let educId = educationalsStore.educationals.find(
-        (edh) => edh.name == educVal,
-    )?.id;
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == reg.value,
-    )?.id;
-    educ.value = educVal;
-    detachments.value = squadsStore.squads.filter(
-        (squad) => educId && squad.educational_headquarter == educId,
-    );
+    viewContributorsData(search);
+    // let educId = educationalsStore.educationals.find(
+    //     (edh) => edh.name == educVal,
+    // )?.id;
+    // let regId = regionalsStore.regionals.find(
+    //     (regional) => regional.name == reg.value,
+    // )?.id;
+    // educ.value = educVal;
+    // detachments.value = squadsStore.squads.filter(
+    //     (squad) => educId && squad.educational_headquarter == educId,
+    // );
 };
 
 const updateDetachment = (detachmentVal) => {
@@ -667,18 +679,18 @@ watch(
         }
     },
 );
-watch(
-    () => squadsStore.squads,
-    () => {
-        let educId = educationalsStore.educationals.length
-            ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
-                  ?.id
-            : roleStore.roles.educationalheadquarter_commander?.id;
-        detachments.value = squadsStore.squads.filter(
-            (det) => det.educational_headquarter == educId,
-        );
-    },
-);
+// watch(
+//     () => squadsStore.squads,
+//     () => {
+//         let educId = educationalsStore.educationals.length
+//             ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
+//                   ?.id
+//             : roleStore.roles.educationalheadquarter_commander?.id;
+//         detachments.value = squadsStore.squads.filter(
+//             (det) => det.educational_headquarter == educId,
+//         );
+//     },
+// );
 
 onMounted(() => {
     getUsersByRoles();
