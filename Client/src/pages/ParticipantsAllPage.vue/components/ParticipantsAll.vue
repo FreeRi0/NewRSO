@@ -289,6 +289,9 @@ watch(
         await squadsStore.getSquadMembers(newId);
         await aboutVerified();
     },
+    {
+        immediate: true
+    },
 );
 </script>
 <style lang="scss">

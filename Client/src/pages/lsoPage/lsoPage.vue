@@ -114,6 +114,9 @@ watch(
         await replaceTargetObjects([squad.squad.value]);
         await fetchCommander();
     },
+    {
+        immediate: true
+    },
 );
 
 const getEnding = computed(() => {
