@@ -103,9 +103,9 @@ watch(
     },
 );
 
-onMounted(() => {
-    getVerified();
-});
+// onMounted(() => {
+//     getVerified();
+// });
 </script>
 
 <style scoped lang="scss">

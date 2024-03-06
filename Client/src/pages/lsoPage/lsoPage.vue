@@ -120,12 +120,6 @@ watch(
     },
 );
 
-onMounted(() => {
-    squadsStore.getSquadId(id);
-    squadsStore.getSquadMembers(id);
-    replaceTargetObjects([squad.squad.value]);
-    fetchCommander();
-});
 
 const getEnding = computed(() => {
     const count = squadsStore.squad.participants_count;

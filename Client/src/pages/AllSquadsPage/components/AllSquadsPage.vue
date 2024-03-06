@@ -195,11 +195,11 @@
                 <horizontalList :squads="sortedSquads"></horizontalList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="!squadsStore.isLoading"
+                    v-if="squadsStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
-                <p v-else-if="squadsStore.isLoading && !sortedSquads.length">
+                <p v-else-if="!squadsStore.isLoading && !sortedSquads.length">
                     Ничего не найдено
                 </p>
             </div>

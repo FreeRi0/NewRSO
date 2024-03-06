@@ -145,19 +145,17 @@ import {
     VerifiedList,
     VerifiedHorizontal,
 } from '@features/Participants/components';
-import { sortByEducation, Select } from '@shared/components/selects';
+import { sortByEducation} from '@shared/components/selects';
 import { useSquadsStore } from '@features/store/squads';
 import { ref, computed, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-import { usePage } from '@shared';
 
 const participantsVisible = ref(12);
 
 const squadsStore = useSquadsStore();
 const step = ref(12);
 const picked = ref(true);
-const position = ref({});
 const route = useRoute();
 const verified = ref([]);
 const id = route.params.id;
@@ -298,10 +296,6 @@ watch(
         immediate: true,
     },
 );
-onMounted(() => {
-    squadsStore.getSquadMembers(id);
-    aboutVerified();
-});
 </script>
 <style lang="scss">
 .participants {
