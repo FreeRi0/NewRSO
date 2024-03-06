@@ -236,8 +236,18 @@ const viewHeadquartersData = async (resp, search, join) => {
         }
         sortedVal.value = response;
         isLoading.value = false;
-        console.log('resp', viewHeadquartersResponse.data)
-        return viewHeadquartersResponse.data;
+
+        if (resp.indexOf('districts') >= 0){
+            districts.value = viewHeadquartersResponse.data;
+        }else if (resp.indexOf('regionals') >= 0){
+            regionals.value = viewHeadquartersResponse.data;
+        }else if (resp.indexOf('locals') >= 0){
+            locals.value = viewHeadquartersResponse.data;
+        }else if (resp.indexOf('educationals') >= 0){
+            educHead.value = viewHeadquartersResponse.data;
+        }else if (resp.indexOf('detachments') >= 0){
+            detachments.value = viewHeadquartersResponse.data;
+        }
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -255,7 +265,7 @@ const updateDistrict = (districtVal) => {
     }
 
     if (name.value) search += '&search=' + name.value;
-    regionals.value = viewHeadquartersData(resp, search);
+    viewHeadquartersData(resp, search);
 
     // let districtId = districtsStore.districts.find(
     //     (dis) => dis.name == districtVal,
@@ -275,7 +285,7 @@ const updateReg = (regVal) => {
         search = '?district_headquarter__name=' + district.value;
     }
     if (name.value) search += '&search=' + name.value;
-    locals.value = viewHeadquartersData(resp, search);
+    viewHeadquartersData(resp, search);
 
     // let regId = regionalsStore.regionals.find(
     //     (regional) => regional.name == regVal,
@@ -296,12 +306,7 @@ const updateLocal = (localVal) => {
     }
     if (name.value) search += '&search=' + name.value;
 
-    let data = viewHeadquartersData(resp, search, !localVal);
-    if (localVal) {
-        educHead.value = data;
-    } else {
-        locals.value = data;
-    }
+    viewHeadquartersData(resp, search, !localVal);
 
     // let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
     // let regId = regionalsStore.regionals.find(
@@ -331,8 +336,7 @@ const updateEduc = (educVal) => {
     }
     if (name.value) search += '&search=' + name.value;
 
-    detachments.value = viewHeadquartersData(resp, search);
-    console.log('det', detachments.value);
+    viewHeadquartersData(resp, search);
     // , educVal && !local.value
     // let educId = educationalsStore.educationals.find(
     //     (edh) => edh.name == educVal,
