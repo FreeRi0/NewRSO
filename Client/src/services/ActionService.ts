@@ -140,3 +140,12 @@ export function getRoles() {
         },
     });
 }
+
+export function getRsousers() {
+    return HTTP.get(`/rsousers`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+}
