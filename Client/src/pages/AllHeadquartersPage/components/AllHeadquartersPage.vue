@@ -123,7 +123,7 @@
                         type="button"
                         class="ascend"
                         @click="ascending = !ascending"
-                        icon="icon"
+                        iconn="iconn"
                         color="white"
                     ></Button>
                 </div>
@@ -132,14 +132,21 @@
             <div v-show="vertical" class="mt-10">
                 <HeadquartersList
                     :headquarters="sortedHeadquarters"
-                    v-if="!isLoading.isLoading.value"
                 ></HeadquartersList>
+
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="isLoading.isLoading.value"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !isLoading.isLoading.value && !sortedHeadquarters.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
 
             <div class="horizontal" v-show="!vertical">
@@ -309,7 +316,7 @@ const sortedHeadquarters = computed(() => {
                 return 1;
             }
             return 0;
-        } 
+        }
     });
 
     if (!ascending.value) {

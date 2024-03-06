@@ -112,13 +112,14 @@
                                         v-model="sortBy"
                                         :options="sortOptionss"
                                         :sorts-boolean="false"
+                                        class="Sort-alphabet"
                                     ></sortByEducation>
                                 </div>
 
                                 <Button
                                     type="button"
                                     class="ascend"
-                                    icon="switch"
+                                    iconn="iconn"
                                     @click="ascending = !ascending"
                                     color="white"
                                 ></Button>
@@ -900,5 +901,8 @@ p {
 }
 .v-input {
     border: 1px solid #35383f;
+}
+.Sort-alphabet {
+    margin-right: 8px;
 }
 </style>

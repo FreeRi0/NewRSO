@@ -67,7 +67,7 @@
                     <Button
                         type="button"
                         class="ascend"
-                        icon="switch"
+                        iconn="iconn"
                         @click="ascending = !ascending"
                         color="white"
                     ></Button>

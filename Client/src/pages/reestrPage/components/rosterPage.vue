@@ -55,7 +55,7 @@
                             </button>
                         </div>
 
-                        <!-- <div class="sort-filters">
+                        <div class="sort-filters">
                             <div class="sort-select">
                                 <sortByEducation
                                     variant="outlined"
@@ -73,7 +73,7 @@
                                 @click="ascending = !ascending"
                                 color="white"
                             ></Button>
-                        </div> -->
+                        </div>
                     </div>
                     <registryList
                         v-if="!isLoading"
@@ -458,26 +458,27 @@ const getItemsByRoles = () => {
 };
 
 const sortedHeadquarters = computed(() => {
-    let tempHeadquarters = sortedVal.value;
+    let tempHeadquarters = [];
+    tempHeadquarters = [...sortedVal.value];
 
-    // tempHeadquarters = tempHeadquarters.sort((a, b) => {
-    //     if (sortBy.value == 'alphabetically') {
-    //         let fa = a?.name.toLowerCase(),
-    //             fb = b?.name.toLowerCase()
+    tempHeadquarters = tempHeadquarters.sort((a, b) => {
+        if (sortBy.value == 'alphabetically') {
+            let fa = a?.name.toLowerCase(),
+                fb = b?.name.toLowerCase()
 
-    //         if (fa < fb) {
-    //             return -1;
-    //         }
-    //         if (fa > fb) {
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
-    // });
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        }
+    });
 
-    // if (!ascending.value) {
-    //     tempHeadquarters.reverse();
-    // }
+    if (!ascending.value) {
+        tempHeadquarters.reverse();
+    }
     return tempHeadquarters;
 });
 

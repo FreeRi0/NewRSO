@@ -89,12 +89,13 @@
                                 clearable
                                 v-model="sortBy"
                                 :options="sortOptionss"
+                                class="Sort-alphabet"
                             ></sortByEducation>
                         </div>
                         <Button
                             type="button"
                             class="ascend"
-                            icon="switch"
+                            iconn="iconn"
                             @click="ascending = !ascending"
                             color="white"
                         ></Button>
@@ -823,5 +824,8 @@ onMounted(async () => {
     text-align: left;
     color: #35383f;
     margin-bottom: 24px;
+}
+.Sort-alphabet {
+    margin-right: 8px;
 }
 </style>

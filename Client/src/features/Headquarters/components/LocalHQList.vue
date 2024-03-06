@@ -1,5 +1,5 @@
 <template>
-    <div class="headquarters-wrapper" v-if="localHeadquarters.length > 0">
+    <div class="headquarters-wrapper">
         <localItem
             v-for="localHeadquarter in localHeadquarters"
             :local-headquarter="localHeadquarter"
@@ -7,7 +7,6 @@
         />
     </div>
 
-    <h2 v-else>штаб не найден...</h2>
 </template>
 <script setup>
 import { localItem } from '@entities/HeadquartersData/components';

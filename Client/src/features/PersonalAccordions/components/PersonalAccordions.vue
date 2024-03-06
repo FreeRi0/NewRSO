@@ -7,10 +7,10 @@
                 type="radio"
                 :id="answer.id"
                 :label="answer.name"
-                :value="answer.name"
+                :value="answer.value"
                 :name="answer.name"
-                :checked="answer.checked"
-                v-model="selectedAnswer"
+                :checked="props.user.is_rso_member === answer.value"
+                v-model="props.user.is_rso_member"
             />
             <label :for="id">{{ answer.name }}</label>
         </div>
@@ -1485,7 +1485,7 @@
                 value="panelFive"
                 class="no-RSO"
                 v-if="
-                    selectedAnswer == 'Нет' &&
+                    props.user.is_rso_member === false &&
                     props.user.documents?.russian_passport
                 "
             >
@@ -1597,11 +1597,11 @@
                                             />
 
                                             <FileUpload
-                                                mode="basic"
+                                                mode="advanced"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
                                                 :maxFileSize="7000000"
-                                                :customUpload="true"
+                                                invalidFileSizeMessage="Превышен размер загружаемого файла"
                                                 @select="statementUp"
                                                 chooseLabel="Выбрать файл"
                                             />
@@ -1617,11 +1617,11 @@
                                                     props.user.statement
                                                         .statement
                                                 "
+                                                target="_blank"
                                                 >Заявление</a
                                             >
                                         </div>
                                     </div>
-                                    <!-- <pre>{{statement.name}}</pre> -->
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
@@ -1681,6 +1681,7 @@
                                                     props.user.statement
                                                         .consent_personal_data
                                                 "
+                                                target="_blank"
                                                 >Согласие</a
                                             >
                                         </div>
@@ -1752,6 +1753,7 @@
                                                     props.user.statement
                                                         .consent_personal_data_representative
                                                 "
+                                                target="_blank"
                                                 >Согласие несовершеннолетнего</a
                                             >
                                         </div>
@@ -1825,6 +1827,7 @@
                                                     props.user.statement
                                                         .passport
                                                 "
+                                                target="_blank"
                                                 >Паспорт</a
                                             >
                                         </div>
@@ -1889,6 +1892,7 @@
                                                     props.user.statement
                                                         .passport_representative
                                                 "
+                                                target="_blank"
                                                 >Паспорт родителя</a
                                             >
                                         </div>
@@ -1944,6 +1948,7 @@
                                             :href="
                                                 props.user.statement.snils_file
                                             "
+                                            target="_blank"
                                             >СНИЛС</a
                                         >
                                     </div>
@@ -1989,6 +1994,7 @@
                                                 props.user.statement
                                                     .military_document
                                             "
+                                            target="_blank"
                                             >Военный билет</a
                                         >
                                     </div>
@@ -2026,7 +2032,11 @@
                                         class="statement-item"
                                         v-if="props.user.statement.inn_file"
                                     >
-                                        <a :href="props.user.statement.inn_file"
+                                        <a
+                                            :href="
+                                                props.user.statement.inn_file
+                                            "
+                                            target="_blank"
                                             >ИНН</a
                                         >
                                     </div>
@@ -2072,6 +2082,7 @@
                                                 props.user.statement
                                                     .international_passport
                                             "
+                                            target="_blank"
                                             >Загранпаспорт</a
                                         >
                                     </div>
@@ -2117,6 +2128,7 @@
                                                 props.user.statement
                                                     .employment_document
                                             "
+                                            target="_blank"
                                             >Трудовая книжка</a
                                         >
                                     </div>
@@ -2161,7 +2173,7 @@
             <v-expansion-panel
                 class="yes-RSO"
                 v-else-if="
-                    selectedAnswer == 'Да' &&
+                    props.user.is_rso_member === true &&
                     props.user.documents?.russian_passport
                 "
             >
@@ -2269,7 +2281,11 @@
                                         class="statement-item"
                                         v-if="props.user.statement.passport"
                                     >
-                                        <a :href="props.user.statement.passport"
+                                        <a
+                                            :href="
+                                                props.user.statement.passport
+                                            "
+                                            target="_blank"
                                             >Паспорт</a
                                         >
                                     </div>
@@ -2327,6 +2343,7 @@
                                                 props.user.statement
                                                     .passport_representative
                                             "
+                                            target="_blank"
                                             >Паспорт родителя</a
                                         >
                                     </div>
@@ -2375,6 +2392,7 @@
                                             :href="
                                                 props.user.statement.snils_file
                                             "
+                                            target="_blank"
                                             >СНИЛС</a
                                         >
                                     </div>
@@ -2420,6 +2438,7 @@
                                                 props.user.statement
                                                     .military_document
                                             "
+                                            target="_blank"
                                             >Военный билет</a
                                         >
                                     </div>
@@ -2457,7 +2476,11 @@
                                         class="statement-item"
                                         v-if="props.user.statement.inn_file"
                                     >
-                                        <a :href="props.user.statement.inn_file"
+                                        <a
+                                            :href="
+                                                props.user.statement.inn_file
+                                            "
+                                            target="_blank"
                                             >ИНН</a
                                         >
                                     </div>
@@ -2503,6 +2526,7 @@
                                                 props.user.statement
                                                     .international_passport
                                             "
+                                            target="_blank"
                                             >Загранпаспорт</a
                                         >
                                     </div>
@@ -2548,6 +2572,7 @@
                                                 props.user.statement
                                                     .employment_document
                                             "
+                                            target="_blank"
                                             >Трудовая книжка</a
                                         >
                                     </div>
@@ -2581,7 +2606,7 @@
             <v-expansion-panel
                 class="no-RSO-foreign"
                 v-else-if="
-                    selectedAnswer == 'Нет' &&
+                    props.user.is_rso_member === false &&
                     !props.user.documents?.russian_passport
                 "
             >
@@ -2708,6 +2733,7 @@
                                             :href="
                                                 props.user.statement.statement
                                             "
+                                            target="_blank"
                                             >Заявление</a
                                         >
                                     </div>
@@ -2768,6 +2794,7 @@
                                                 props.user.statement
                                                     .consent_personal_data
                                             "
+                                            target="_blank"
                                             >Согласие</a
                                         >
                                     </div>
@@ -2828,7 +2855,11 @@
                                         class="statement-item"
                                         v-if="props.user.statement.passport"
                                     >
-                                        <a :href="props.user.statement.passport"
+                                        <a
+                                            :href="
+                                                props.user.statement.passport
+                                            "
+                                            target="_blank"
                                             >Паспорт</a
                                         >
                                     </div>
@@ -2877,6 +2908,7 @@
                                             :href="
                                                 props.user.statement.snils_file
                                             "
+                                            target="_blank"
                                             >СНИЛС</a
                                         >
                                     </div>
@@ -2914,7 +2946,11 @@
                                         class="statement-item"
                                         v-if="props.user.statement.inn_file"
                                     >
-                                        <a :href="props.user.statement.inn_file"
+                                        <a
+                                            :href="
+                                                props.user.statement.inn_file
+                                            "
+                                            target="_blank"
                                             >ИНН</a
                                         >
                                     </div>
@@ -2960,6 +2996,7 @@
                                                 props.user.statement
                                                     .employment_document
                                             "
+                                            target="_blank"
                                             >Трудовая книжка</a
                                         >
                                     </div>
@@ -3006,7 +3043,7 @@
             <v-expansion-panel
                 class="yes-RSO-foreign"
                 v-else="
-                    selectedAnswer == 'Да' &&
+                    props.user.is_rso_member === true &&
                     !props.user.documents?.russian_passport
                 "
             >
@@ -3114,7 +3151,11 @@
                                         class="statement-item"
                                         v-if="props.user.statement.passport"
                                     >
-                                        <a :href="props.user.statement.passport"
+                                        <a
+                                            :href="
+                                                props.user.statement.passport
+                                            "
+                                            target="_blank"
                                             >Паспорт</a
                                         >
                                     </div>
@@ -3168,6 +3209,7 @@
                                                 props.user.statement
                                                     .passport_representative
                                             "
+                                            target="_blank"
                                             >Паспорт родителя</a
                                         >
                                     </div>
@@ -3216,6 +3258,7 @@
                                             :href="
                                                 props.user.statement.snils_file
                                             "
+                                            target="_blank"
                                             >СНИЛС</a
                                         >
                                     </div>
@@ -3253,7 +3296,11 @@
                                         class="statement-item"
                                         v-if="props.user.statement.inn_file"
                                     >
-                                        <a :href="props.user.statement.inn_file"
+                                        <a
+                                            :href="
+                                                props.user.statement.inn_file
+                                            "
+                                            target="_blank"
                                             >ИНН</a
                                         >
                                     </div>
@@ -3300,6 +3347,7 @@
                                                 props.user.statement
                                                     .employment_document
                                             "
+                                            target="_blank"
                                             >Трудовая книжка</a
                                         >
                                     </div>
@@ -3811,6 +3859,7 @@ const updateData = async () => {
                 phone_number: props.user.phone_number,
                 social_vk: props.user.social_vk,
                 social_tg: props.user.social_tg,
+                is_rso_member: props.user.is_rso_member
             },
             {
                 headers: {
@@ -4006,8 +4055,8 @@ const updateData = async () => {
 };
 
 const answers = ref([
-    { name: 'Да', id: 'f1' },
-    { name: 'Нет', id: 'f2', checked: true },
+    { name: 'Да', value: true, id: 'f1' },
+    { name: 'Нет',value: false, id: 'f2', },
 ]);
 
 const gender = ref([
@@ -4044,10 +4093,6 @@ const passport = ref([
     { name: 'Да', value: true, id: 'Да' },
     { name: 'Нет', value: false, id: 'Нет' },
 ]);
-
-const selectedAnswer = ref('Нет');
-const selectedPassParent = ref('Да');
-const selectedPass = ref('Да');
 
 onMounted(() => {
     getData();
