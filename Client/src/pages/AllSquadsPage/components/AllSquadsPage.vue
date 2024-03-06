@@ -193,13 +193,7 @@
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalList :squads="sortedSquads"></horizontalList>
-                <v-progress-circular
-                    class="circleLoader"
-                    v-if="!squadsStore.isLoading"
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
-                <p v-else-if="squadsStore.isLoading && !sortedSquads.length">
+                <p v-if="!sortedSquads.length">
                     Ничего не найдено
                 </p>
             </div>

@@ -82,7 +82,7 @@ export const useSquadsStore = defineStore('squads', {
         async getSquadId(id: String) {
             try {
                 this.isLoading = true;
-                const responseSquad = await HTTP.get(`/detachments/${id}`, {
+                const responseSquad = await HTTP.get(`/detachments/${id}/`, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),

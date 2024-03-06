@@ -92,7 +92,6 @@ const getVerified = async () => {
     }
 };
 
-console.log('length', isVerified.value.length);
 
 watch(
     () => route.params.id,
@@ -104,9 +103,9 @@ watch(
     },
 );
 
-onMounted(() => {
-    getVerified();
-});
+// onMounted(() => {
+//     getVerified();
+// });
 </script>
 
 <style scoped lang="scss">
