@@ -108,10 +108,7 @@
                     v-if="picked"
                     :participants="sortedParticipants"
                 ></ParticipantsList>
-                <VerifiedList
-                    v-else
-                    :verified="sortedVerified"
-                ></VerifiedList>
+                <VerifiedList v-else :verified="sortedVerified"></VerifiedList>
             </div>
 
             <div class="horizontallso" v-show="!vertical">
@@ -145,7 +142,7 @@ import {
     VerifiedList,
     VerifiedHorizontal,
 } from '@features/Participants/components';
-import { sortByEducation} from '@shared/components/selects';
+import { sortByEducation } from '@shared/components/selects';
 import { useSquadsStore } from '@features/store/squads';
 import { ref, computed, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
@@ -291,9 +288,6 @@ watch(
         if (!newId || route.name !== 'allparticipants') return;
         await squadsStore.getSquadMembers(newId);
         await aboutVerified();
-    },
-    {
-        immediate: true,
     },
 );
 </script>

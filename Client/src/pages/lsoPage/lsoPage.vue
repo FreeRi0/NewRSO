@@ -114,12 +114,7 @@ watch(
         await replaceTargetObjects([squad.squad.value]);
         await fetchCommander();
     },
-    {
-        immediate: true,
-        deep: true
-    },
 );
-
 
 const getEnding = computed(() => {
     const count = squadsStore.squad.participants_count;
