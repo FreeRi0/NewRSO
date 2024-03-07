@@ -257,15 +257,15 @@ const viewContributorsData = async (search) => {
         isLoading.value = false;
         selectedPeoples.value = [];
 
-        if (search.indexOf('districts') >= 0){
+        if (search.indexOf('districts') >= 0) {
             districts.value = viewParticipantsResponse.data;
-        }else if (search.indexOf('regionals') >= 0){
+        } else if (search.indexOf('regionals') >= 0) {
             regionals.value = viewParticipantsResponse.data;
-        }else if (search.indexOf('locals') >= 0){
+        } else if (search.indexOf('locals') >= 0) {
             locals.value = viewParticipantsResponse.data;
-        }else if (search.indexOf('educationals') >= 0){
+        } else if (search.indexOf('educationals') >= 0) {
             educHead.value = viewParticipantsResponse.data;
-        }else if (search.indexOf('detachments') >= 0){
+        } else if (search.indexOf('detachments') >= 0) {
             detachments.value = viewParticipantsResponse.data;
         }
     } catch (error) {
@@ -273,6 +273,32 @@ const viewContributorsData = async (search) => {
     }
 };
 
+const getFiltersData = async (resp, search) => {
+    try {
+        isLoading.value = true;
+        const viewHeadquartersResponse = await HTTP.get(resp + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        isLoading.value = false;
+
+        if (resp.indexOf('districts') >= 0) {
+            districts.value = viewHeadquartersResponse.data;
+        } else if (resp.indexOf('regionals') >= 0) {
+            regionals.value = viewHeadquartersResponse.data;
+        } else if (resp.indexOf('locals') >= 0) {
+            locals.value = viewHeadquartersResponse.data;
+        } else if (resp.indexOf('educationals') >= 0) {
+            educHead.value = viewHeadquartersResponse.data;
+        } else if (resp.indexOf('detachments') >= 0) {
+            detachments.value = viewHeadquartersResponse.data;
+        }
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
 const updateDistrict = (districtVal) => {
     let search = '';
     if (districtVal) {
@@ -283,11 +309,12 @@ const updateDistrict = (districtVal) => {
 
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
+    getFiltersData('/regionals/', search);
 
     // let districtId = districtsStore.districts.find(
     //     (dis) => dis.name == districtVal,
     // )?.id;
-    // district.value = districtVal;
+    district.value = districtVal;
     // regionals.value = regionalsStore.regionals.filter(
     //     (regional) => regional.district_headquarter == districtId,
     // );
@@ -302,11 +329,13 @@ const updateReg = (regVal) => {
     }
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
+    getFiltersData('/locals/', search);
+    getFiltersData('/educationals/', search);
 
     // let regId = regionalsStore.regionals.find(
     //     (regional) => regional.name == regVal,
     // )?.id;
-    // reg.value = regVal;
+    reg.value = regVal;
     // locals.value = localsStore.locals.filter(
     //     (loc) => loc.regional_headquarter == regId,
     // );
@@ -320,12 +349,13 @@ const updateLocal = (localVal) => {
     }
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search, !localVal);
+    getFiltersData('/educationals/', search);
 
     // let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
     // let regId = regionalsStore.regionals.find(
     //     (regional) => regional.name == reg.value,
     // )?.id;
-    // local.value = localVal;
+    local.value = localVal;
     // educHead.value = educationalsStore.educationals.filter(
     //     (edh) => locId && edh.local_headquarter == locId,
     // );
@@ -344,13 +374,14 @@ const updateEduc = (educVal) => {
     }
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
+    getFiltersData('/detachments/', search);
     // let educId = educationalsStore.educationals.find(
     //     (edh) => edh.name == educVal,
     // )?.id;
     // let regId = regionalsStore.regionals.find(
     //     (regional) => regional.name == reg.value,
     // )?.id;
-    // educ.value = educVal;
+    educ.value = educVal;
     // detachments.value = squadsStore.squads.filter(
     //     (squad) => educId && squad.educational_headquarter == educId,
     // );
@@ -477,6 +508,7 @@ const getUsersByRoles = () => {
                 '?district_headquarter__name=' +
                 roles.roles.value.districtheadquarter_commander.name;
             levelAccess.value = 1;
+            getFiltersData('/regionals/', search);
         } else if (roles.roles.value.regionalheadquarter_commander) {
             reg.value = roles.roles.value.regionalheadquarter_commander.name;
             search =
@@ -486,12 +518,15 @@ const getUsersByRoles = () => {
                 (loc) => loc.regional_headquarter == reg.value,
             );
             levelAccess.value = 2;
+            getFiltersData('/educationals/', search);
+            getFiltersData('/locals/', search);
         } else if (roles.roles.value.localheadquarter_commander) {
             local.value = roles.roles.value.localheadquarter_commander.name;
             search =
                 '?local_headquarter__name=' +
                 roles.roles.value.localheadquarter_commander.name;
             levelAccess.value = 3;
+            getFiltersData('/educationals/', search);
         } else if (roles.roles.value.educationalheadquarter_commander) {
             educ.value =
                 roles.roles.value.educationalheadquarter_commander.name;
@@ -499,6 +534,7 @@ const getUsersByRoles = () => {
                 '?educational_headquarter__name=' +
                 roles.roles.value.educationalheadquarter_commander.name;
             levelAccess.value = 4;
+            getFiltersData('/detachments/', search);
         } else if (roles.roles.value.detachment_commander) {
             detachment.value = roles.roles.value.detachment_commander.name;
             search =
@@ -509,6 +545,7 @@ const getUsersByRoles = () => {
         viewContributorsData(search);
     } else {
         levelAccess.value = 0;
+        getFiltersData('/districts/', search);
     }
 };
 
