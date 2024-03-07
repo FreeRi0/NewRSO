@@ -1094,13 +1094,14 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import {
     createAction,
     putTimeData,
     putDocuments,
     createOrganizator,
     getRoles,
+    getRsousers,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
@@ -1108,6 +1109,7 @@ import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import { onActivated, onMounted, watchEffect } from 'vue';
 import { getUser } from '@services/UserService';
+const swal = inject('$swal');
 const router = useRouter();
 const rules = ref([]);
 
@@ -1119,7 +1121,6 @@ onActivated(() => {
         rules.value = resp.data;
         Object.entries(resp.data).forEach(([key, value]) => {
             if (value !== null) {
-                console.log(`${key} + ${value}`);
                 const filted = scale_massive.value.find(
                     (commander) => commander.value === key,
                 );
@@ -1128,7 +1129,6 @@ onActivated(() => {
         });
     });
     getUser().then((resp) => {
-        console.log(resp.data);
         organizators.value.push({
             organizer: resp.data.id,
             organizer_phone_number: resp.data.phone_number,
@@ -1138,9 +1138,12 @@ onActivated(() => {
             is_contact_person: true,
         });
     });
+    getRsousers().then((resp) => {
+        users.value = resp.data;
+    });
 });
 onMounted(() => {});
-
+//@update:value="changeValue"
 const maininfo = ref({
     format: '',
     direction: '',
@@ -1161,6 +1164,7 @@ const maininfo = ref({
     org_detachment: '',
 });
 
+const users = ref([]);
 const urlBanner = ref(null);
 
 const selectBanner = (event) => {
@@ -1230,7 +1234,6 @@ watchEffect(() => {
                 if (key === 'detachment_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
                             maininfo.value.org_central_headquarter = '';
                             maininfo.value.org_district_headquarter = '';
                             maininfo.value.org_regional_headquarter = '';
@@ -1247,7 +1250,6 @@ watchEffect(() => {
                 if (key === 'educationalheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
                             maininfo.value.org_central_headquarter = '';
                             maininfo.value.org_district_headquarter = '';
                             maininfo.value.org_regional_headquarter = '';
@@ -1264,7 +1266,6 @@ watchEffect(() => {
                 if (key === 'localheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
                             maininfo.value.org_central_headquarter = '';
                             maininfo.value.org_district_headquarter = '';
                             maininfo.value.org_regional_headquarter = '';
@@ -1282,7 +1283,6 @@ watchEffect(() => {
                 if (key === 'regionalheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
                             maininfo.value.org_central_headquarter = '';
                             maininfo.value.org_district_headquarter = '';
                             maininfo.value.org_regional_headquarter = value;
@@ -1299,7 +1299,6 @@ watchEffect(() => {
                 if (key === 'districtheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
                             maininfo.value.org_central_headquarter = '';
                             maininfo.value.org_district_headquarter = value;
                             maininfo.value.org_regional_headquarter = '';
@@ -1398,10 +1397,23 @@ function SubmitEvent() {
                         console.log(e);
                     });
             });
+            swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: `Мероприятие создано`,
+                showConfirmButton: false,
+                timer: 1500,
+            });
             router.push({ name: 'actionSquads' });
         })
-        .catch((e) => {
-            console.error(e);
+        .catch(() => {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `Не удалось создать`,
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 }
 

@@ -1394,7 +1394,6 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
-
     putAction(id, fd)
         .then((resp) => {
             putTimeData(resp.data.id, maininfo.value.time_data)

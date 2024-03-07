@@ -57,7 +57,7 @@
                     >
                     </Button>
                     <Button
-                        v-else="!vertical"
+                        v-else
                         type="button"
                         class="dashboardD"
                         icon="icon"
@@ -74,7 +74,7 @@
                         @click="showVertical"
                     ></Button>
                     <Button
-                        v-else="vertical"
+                        v-else
                         type="button"
                         class="menuu"
                         icon="icon"
@@ -105,22 +105,19 @@
 
             <div class="participants-wrapper" v-show="vertical">
                 <ParticipantsList
-                    v-if="picked === true"
+                    v-if="picked"
                     :participants="sortedParticipants"
                 ></ParticipantsList>
-                <VerifiedList
-                    v-else="picked === false"
-                    :verified="sortedVerified"
-                ></VerifiedList>
+                <VerifiedList v-else :verified="sortedVerified"></VerifiedList>
             </div>
 
             <div class="horizontallso" v-show="!vertical">
                 <horizontalParticipantsList
-                    v-if="picked === true"
+                    v-if="picked"
                     :participants="sortedParticipants"
                 ></horizontalParticipantsList>
                 <VerifiedHorizontal
-                    v-else="picked === false"
+                    v-else
                     :verified="sortedVerified"
                 ></VerifiedHorizontal>
             </div>
@@ -145,19 +142,17 @@ import {
     VerifiedList,
     VerifiedHorizontal,
 } from '@features/Participants/components';
-import { sortByEducation, Select } from '@shared/components/selects';
+import { sortByEducation } from '@shared/components/selects';
 import { useSquadsStore } from '@features/store/squads';
 import { ref, computed, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
-import { usePage } from '@shared';
 
 const participantsVisible = ref(12);
 
-
+const squadsStore = useSquadsStore();
 const step = ref(12);
 const picked = ref(true);
-const position = ref({});
 const route = useRoute();
 const verified = ref([]);
 const id = route.params.id;
@@ -292,16 +287,12 @@ watch(
     async (newId, oldId) => {
         if (!newId || route.name !== 'allparticipants') return;
         await squadsStore.getSquadMembers(newId);
-        // await aboutVerified();
+        await aboutVerified();
     },
     {
-        immediate: true,
+        immediate: true
     },
 );
-onMounted(() => {
-    squadsStore.getSquadMembers(id);
-    // aboutVerified();
-});
 </script>
 <style lang="scss">
 .participants {
