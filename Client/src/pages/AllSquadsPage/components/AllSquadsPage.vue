@@ -179,7 +179,7 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
+                <squadsList :squads="squadsStore.squads"></squadsList>
                 <v-progress-circular
                     class="circleLoader"
                     v-if="isLoading.isLoading.value"
@@ -188,7 +188,7 @@
                 ></v-progress-circular>
                 <p
                     v-else-if="
-                        !isLoading.isLoading.value && !sortedSquads.length
+                        !isLoading.isLoading.value && !squadsStore.squads.length
                     "
                 >
                     Ничего не найдено
@@ -196,16 +196,16 @@
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
-                <p v-if="!sortedSquads.length">Ничего не найдено</p>
+                <horizontalList :squads="squadsStore.squads"></horizontalList>
+                <!-- <p v-if="!sortedSquads.length">Ничего не найдено</p> -->
             </div>
             <Button
-                @click="squadsVisible += step"
-                v-if="squadsVisible < squads.squads.value.length"
+                @click="squadsStore.nextSquads"
+                v-if="squadsVisible < squadsStore.totalSquads"
                 label="Показать еще"
             ></Button>
             <Button
-                @click="squadsVisible -= step"
+                @click="squadsStore.prevSquads"
                 v-else
                 label="Свернуть все"
             ></Button>
@@ -244,12 +244,10 @@ const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
 
-const squadsVisible = ref(20);
-const step = ref(20);
+const squadsVisible = ref(squadsStore.SquadsLimit);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
-console.log(squadsStore.isLoading);
 const picked = ref('');
 
 const vertical = ref(true);
@@ -266,77 +264,78 @@ const sortOptionss = ref([
     { value: 'founding_date', name: 'Дате создания отряда' },
 ]);
 
-const sortedSquads = computed(() => {
-    let tempSquads = [];
-    tempSquads = [...squads.squads.value];
 
-    if (SelectedSortRegional.value || SelectedSortDistrict.value) {
-        let idRegionals = [];
-        if (SelectedSortDistrict.value) {
-            let districtId = districtsStore.districts.find(
-                (district) => district.name === SelectedSortDistrict.value,
-            )?.id;
-            idRegionals = regionalsStore.regionals
-                .filter(
-                    (regional) => regional.district_headquarter === districtId,
-                )
-                .map((reg) => reg.id);
-        }
-        if (SelectedSortRegional.value) {
-            idRegionals = [
-                regionalsStore.regionals.find(
-                    (regional) => regional.name === SelectedSortRegional.value,
-                )?.id,
-            ];
-        }
+// const sortedSquads = computed(() => {
+//     let tempSquads = [];
+//     tempSquads = [...squads.squads.value];
 
-        tempSquads = tempSquads.filter((item) => {
-            return idRegionals.indexOf(item.regional_headquarter) >= 0;
-        });
-    }
-    if (education.value) {
-        tempSquads = tempSquads.filter((item) => {
-            return item.educational_institution.name === education.value;
-        });
-    }
+//     if (SelectedSortRegional.value || SelectedSortDistrict.value) {
+//         let idRegionals = [];
+//         if (SelectedSortDistrict.value) {
+//             let districtId = districtsStore.districts.find(
+//                 (district) => district.name === SelectedSortDistrict.value,
+//             )?.id;
+//             idRegionals = regionalsStore.regionals
+//                 .filter(
+//                     (regional) => regional.district_headquarter === districtId,
+//                 )
+//                 .map((reg) => reg.id);
+//         }
+//         if (SelectedSortRegional.value) {
+//             idRegionals = [
+//                 regionalsStore.regionals.find(
+//                     (regional) => regional.name === SelectedSortRegional.value,
+//                 )?.id,
+//             ];
+//         }
 
-    tempSquads = tempSquads.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+//         tempSquads = tempSquads.filter((item) => {
+//             return idRegionals.indexOf(item.regional_headquarter) >= 0;
+//         });
+//     }
+//     if (education.value) {
+//         tempSquads = tempSquads.filter((item) => {
+//             return item.educational_institution.name === education.value;
+//         });
+//     }
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'founding_date') {
-            let fc = a.founding_date,
-                fn = b.founding_date;
+//     tempSquads = tempSquads.sort((a, b) => {
+//         if (sortBy.value == 'alphabetically') {
+//             let fa = a.name.toLowerCase(),
+//                 fb = b.name.toLowerCase();
 
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        }
-    });
+//             if (fa < fb) {
+//                 return -1;
+//             }
+//             if (fa > fb) {
+//                 return 1;
+//             }
+//             return 0;
+//         } else if (sortBy.value == 'founding_date') {
+//             let fc = a.founding_date,
+//                 fn = b.founding_date;
 
-    if (!ascending.value) {
-        tempSquads.reverse();
-    }
-    if (!picked.value) {
-        return tempSquads.slice(0, squadsVisible.value);
-    }
+//             if (fc < fn) {
+//                 return -1;
+//             }
+//             if (fc > fn) {
+//                 return 1;
+//             }
+//             return 0;
+//         }
+//     });
 
-    tempSquads = tempSquads.filter((item) => item.area.name === picked.value);
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
-    return tempSquads;
-});
+//     if (!ascending.value) {
+//         tempSquads.reverse();
+//     }
+//     if (!picked.value) {
+//         return tempSquads.slice(0, squadsVisible.value);
+//     }
+
+//     tempSquads = tempSquads.filter((item) => item.area.name === picked.value);
+//     tempSquads = tempSquads.slice(0, squadsVisible.value);
+//     return tempSquads;
+// });
 
 const searchDetachments = (event) => {
     if (!name.value.length) {
@@ -348,8 +347,8 @@ const searchDetachments = (event) => {
     timerSearch.value = setTimeout(() => {}, 400);
 };
 onMounted(() => {
-    regionalsStore.getRegionals();
-    districtsStore.getDistricts();
+    // regionalsStore.getRegionals();
+    // districtsStore.getDistricts();
     squadsStore.getSquads();
 });
 onActivated(() => {
