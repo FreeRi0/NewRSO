@@ -284,7 +284,7 @@
                         <Actionitem :action="action"></Actionitem>
                     </div>
                     <div
-                        v-if="!vertical"
+                        v-else
                         v-for="action in actionsList"
                         class="postcard-containerline"
                         :key="action"
@@ -303,7 +303,7 @@
 //Импорт файлов
 import Button from 'primevue/button';
 import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { sortByEducation } from '@shared/components/selects';
@@ -389,6 +389,17 @@ const showVertical = () => {
 };
 
 const sortBy = ref('alphabetically');
+
+watchEffect(() => {
+    switch (sortBy.value) {
+        case 'alphabetically':
+            break;
+        case 'founding_date':
+            break;
+        case 'members_count':
+            break;
+    }
+});
 
 const sortOptionss = ref([
     {

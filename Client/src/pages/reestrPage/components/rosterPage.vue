@@ -270,7 +270,7 @@ const updateDistrict = (districtVal) => {
     // let districtId = districtsStore.districts.find(
     //     (dis) => dis.name == districtVal,
     // )?.id;
-    // district.value = districtVal;
+    district.value = districtVal;
     // regionals.value = regionalsStore.regionals.filter(
     //     (regional) => regional.district_headquarter == districtId,
     // );
@@ -290,7 +290,7 @@ const updateReg = (regVal) => {
     // let regId = regionalsStore.regionals.find(
     //     (regional) => regional.name == regVal,
     // )?.id;
-    // reg.value = regVal;
+    reg.value = regVal;
     // locals.value = localsStore.locals.filter(
     //     (loc) => loc.regional_headquarter == regId,
     // );
@@ -298,7 +298,7 @@ const updateReg = (regVal) => {
 const updateLocal = (localVal) => {
     let search = '';
     let resp = localVal ? '/educationals/' : '/locals/';
-    console.log('level', levelAccess.value, localVal);
+
     if (localVal) {
         search = '?local_headquarter__name=' + localVal;
     } else if (levelAccess.value < 3) {
@@ -308,14 +308,8 @@ const updateLocal = (localVal) => {
 
     viewHeadquartersData(resp, search, !localVal);
 
-    // let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
-    // let regId = regionalsStore.regionals.find(
-    //     (regional) => regional.name == reg.value,
-    // )?.id;
-    // local.value = localVal;
-    // educHead.value = educationalsStore.educationals.filter(
-    //     (edh) => locId && edh.local_headquarter == locId,
-    // );
+    local.value = localVal;
+
 };
 
 const updateEduc = (educVal) => {
@@ -344,7 +338,7 @@ const updateEduc = (educVal) => {
     // let regId = regionalsStore.regionals.find(
     //     (regional) => regional.name == reg.value,
     // )?.id;
-    // educ.value = educVal;
+    educ.value = educVal;
     // detachments.value = squadsStore.squads.filter(
     //     (squad) => educId && squad.educational_headquarter == educId,
     // );
@@ -471,8 +465,7 @@ const getItemsByRoles = () => {
 };
 
 const sortedHeadquarters = computed(() => {
-    let tempHeadquarters = [];
-    tempHeadquarters = [...sortedVal.value];
+    let tempHeadquarters = sortedVal.value;
 
     // tempHeadquarters = tempHeadquarters.sort((a, b) => {
     //     if (sortBy.value == 'alphabetically') {
