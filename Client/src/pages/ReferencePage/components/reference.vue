@@ -246,7 +246,7 @@ const viewContributorsData = async (search) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        participants.value = viewParticipantsResponse.data;
+        participants.value = viewParticipantsResponse.data.results;
         isLoading.value = false;
         selectedPeoples.value = [];
     } catch (error) {
@@ -266,15 +266,15 @@ const getFiltersData = async (resp, search) => {
         isLoading.value = false;
 
         if (resp.indexOf('districts') >= 0) {
-            districts.value = viewHeadquartersResponse.data;
+            districts.value = viewHeadquartersResponse.data.results;
         } else if (resp.indexOf('regionals') >= 0) {
-            regionals.value = viewHeadquartersResponse.data;
+            regionals.value = viewHeadquartersResponse.data.results;
         } else if (resp.indexOf('locals') >= 0) {
-            locals.value = viewHeadquartersResponse.data;
+            locals.value = viewHeadquartersResponse.data.results;
         } else if (resp.indexOf('educationals') >= 0) {
-            educHead.value = viewHeadquartersResponse.data;
+            educHead.value = viewHeadquartersResponse.data.results;
         } else if (resp.indexOf('detachments') >= 0) {
-            detachments.value = viewHeadquartersResponse.data;
+            detachments.value = viewHeadquartersResponse.data.results;
         }
     } catch (error) {
         console.log('an error occured ' + error);
@@ -293,13 +293,9 @@ const updateDistrict = (districtVal) => {
     viewContributorsData(search);
     getFiltersData('/regionals/', search);
 
-    // let districtId = districtsStore.districts.find(
-    //     (dis) => dis.name == districtVal,
-    // )?.id;
+
     district.value = districtVal;
-    // regionals.value = regionalsStore.regionals.filter(
-    //     (regional) => regional.district_headquarter == districtId,
-    // );
+
 };
 const updateReg = (regVal) => {
     let search = '';
@@ -313,13 +309,9 @@ const updateReg = (regVal) => {
     getFiltersData('/locals/', search);
     getFiltersData('/educationals/', search);
 
-    // let regId = regionalsStore.regionals.find(
-    //     (regional) => regional.name == regVal,
-    // )?.id;
+
     reg.value = regVal;
-    // locals.value = localsStore.locals.filter(
-    //     (loc) => loc.regional_headquarter == regId,
-    // );
+
 };
 const updateLocal = (localVal) => {
     let search = '';
@@ -332,14 +324,9 @@ const updateLocal = (localVal) => {
     viewContributorsData(search, !localVal);
     getFiltersData('/educationals/', search);
 
-    // let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
-    // let regId = regionalsStore.regionals.find(
-    //     (regional) => regional.name == reg.value,
-    // )?.id;
+
     local.value = localVal;
-    // educHead.value = educationalsStore.educationals.filter(
-    //     (edh) => locId && edh.local_headquarter == locId,
-    // );
+
 };
 
 const updateEduc = (educVal) => {
@@ -356,16 +343,9 @@ const updateEduc = (educVal) => {
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search, educVal && !local.value);
     getFiltersData('/detachments/', search);
-    // let educId = educationalsStore.educationals.find(
-    //     (edh) => edh.name == educVal,
-    // )?.id;
-    // let regId = regionalsStore.regionals.find(
-    //     (regional) => regional.name == reg.value,
-    // )?.id;
+
     educ.value = educVal;
-    // detachments.value = squadsStore.squads.filter(
-    //     (squad) => educId && squad.educational_headquarter == educId,
-    // );
+
 };
 
 const updateDetachment = (detachmentVal) => {
