@@ -50,7 +50,7 @@ export const useSquadsStore = defineStore('squads', {
             try {
                 this.isLoading = true;
 
-                const responseSquads = await HTTP.get(this.nextSquads, {
+                const responseSquads = await HTTP.get(this.nextSquads + "/", {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token' + localStorage.getItem('Token'),
@@ -91,7 +91,6 @@ export const useSquadsStore = defineStore('squads', {
                     {
                         params: {
                             limit: this.CompetitionsLimit,
-                            offset: this.CompetitionsOffset,
                         },
                         headers: {
                             'Content-Type': 'application/json',

@@ -181,7 +181,14 @@
                         РСО</span
                     >
                 </p>
-                <Button class="competition__school_btn" label="Обучение в Корпоративном университете" />
+
+                <router-link :to="{
+                name: 'CorpUniver',
+            }"
+                    ><Button
+                        class="competition__school_btn"
+                        label="Обучение в Корпоративном университете"
+                /></router-link>
             </div>
         </div>
 

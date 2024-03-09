@@ -193,12 +193,14 @@
         Итоговую аттестацию можно пройти с 27 марта по 10 апреля 2024 года (допускается 2 пересдачи) онлайн в профиле Личного кабинета.
         Для прохождения тестирования необходимо набрать не менее 60 баллов. Удачи!
       </p>
-      <v-btn class="corpuniver__documents-btn">Начать тестирование</v-btn>
+      <Button label="Начать тестирование" class="corpuniver__documents-btn"></Button>
     </div>
   </div>
 
 </template>
-<script setup></script>
+<script setup>
+import Button from '@shared/components/buttons/Button.vue';
+</script>
 <style lang="scss" scoped>
 .corpuniver__table {
   margin-bottom: 40px;
