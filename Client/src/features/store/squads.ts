@@ -1,3 +1,4 @@
+
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
 
@@ -9,6 +10,17 @@ export const useSquadsStore = defineStore('squads', {
         areas: [],
         competitionSquads: [],
         isLoading: false,
+        totalSquads: 0,
+        totalMembers: 0,
+        SquadsLimit: 3,
+        SquadsOffset: 3,
+        MembersLimit: 3,
+        MembersOffset: 3,
+        CompetitionsLimit: 3,
+        CompetitionsOffset: 3,
+        nextSquads: '',
+        prevSquads: '',
+        totalCompetitions: 0,
     }),
     actions: {
         async getSquads() {
@@ -16,12 +28,19 @@ export const useSquadsStore = defineStore('squads', {
             try {
                 this.isLoading = true;
                 const responseSquads = await HTTP.get('/detachments/', {
+                    params: {
+                        limit: this.SquadsLimit,
+                        offset: this.SquadsOffset
+                    },
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.squads = responseSquads.data; // добавить .data
+                this.totalSquads = responseSquads.data.count;
+                this.squads = responseSquads.data.results;
+                this.nextSquads = responseSquads.data.next
+                this.prevSquads = responseSquads.data.previous;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
@@ -38,7 +57,7 @@ export const useSquadsStore = defineStore('squads', {
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.areas = responseAreas.data;
+                this.areas = responseAreas.data.results;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
@@ -52,6 +71,11 @@ export const useSquadsStore = defineStore('squads', {
                 const responseCompetitionSquads = await HTTP.get(
                     '/competitions/1/participants/',
                     {
+                        params: {
+                            limit: this.CompetitionsLimit,
+                            offset: this.CompetitionsOffset
+
+                        },
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization:
@@ -59,7 +83,8 @@ export const useSquadsStore = defineStore('squads', {
                         },
                     },
                 );
-                this.competitionSquads = responseCompetitionSquads.data;
+                this.totalCompetitions = responseCompetitionSquads.data.count;
+                this.competitionSquads = responseCompetitionSquads.data.results;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -76,7 +101,7 @@ export const useSquadsStore = defineStore('squads', {
                     },
                 },
             );
-            this.competitionSquads = searchCompSquads.data;
+            this.competitionSquads = searchCompSquads.data.results;
         },
 
         async getSquadId(id: String) {
@@ -113,6 +138,10 @@ export const useSquadsStore = defineStore('squads', {
                 const responseMembers = await HTTP.get(
                     `/detachments/${id}/members/`,
                     {
+                        params: {
+                            limit: this.MembersLimit,
+                            offset: this.MembersOffset,
+                        },
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization:
@@ -120,7 +149,8 @@ export const useSquadsStore = defineStore('squads', {
                         },
                     },
                 );
-                this.members = responseMembers.data;
+                this.totalMembers = responseMembers.data.count;
+                this.members = responseMembers.data.results;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -137,7 +167,7 @@ export const useSquadsStore = defineStore('squads', {
                     },
                 },
             );
-            this.squads = searchSquadsResp.data;
+            this.squads = searchSquadsResp.data.results;
         },
     },
 });
