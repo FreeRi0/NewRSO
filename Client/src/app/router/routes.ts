@@ -630,6 +630,11 @@ const routes: RouteRecordRaw[] = [
                     },
                 ],
             },
+            {
+                path: '/CorpUniver',
+                name: 'CorpUniver',
+                component: () => import('@pages/CorpUniverPage/component/CorpUniverPage.vue')
+            }
             // {
             //     path: '/CompetitionParticipants',
             //     name: 'CompetitionParticipants',
