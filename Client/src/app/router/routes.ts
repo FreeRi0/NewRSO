@@ -630,17 +630,24 @@ const routes: RouteRecordRaw[] = [
                     },
                 ],
             },
-            // {
-            //     path: '/CompetitionParticipants',
-            //     name: 'CompetitionParticipants',
-            //     component: () =>
-            //         import(
-            //             '@pages/CompetitionParticipantsPage/components/CompetitionParticipants.vue'
-            //         ),
-            //     meta: {
-            //         requiresAuth: true,
-            //     },
-            // },
+
+            {
+                path: '/CorpUniver',
+                meta: {
+                    redirectTo: 'CorpUniver',
+                    label: 'Корпоративный университет',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'CorpUniver',
+                        component: () =>
+                            import(
+                                '@pages/CorpUniverPage/component/CorpUniverPage.vue'
+                            ),
+                    },
+                ],
+            },
         ],
     },
     {

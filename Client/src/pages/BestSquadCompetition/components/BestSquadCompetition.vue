@@ -170,6 +170,29 @@
             >
         </div>
 
+        <div class="d-flex mb-12 school-wrapper">
+            <img src="@app/assets/competition/bgSchool.png" alt="bg" />
+            <div class="competition__school">
+                <p>
+                    В рамках конкурса «Лучший студенческий отряд» с 11 марта по
+                    10 апреля состоится
+                    <span
+                        >Школа командных составов линейных студенческих отрядов
+                        РСО</span
+                    >
+                </p>
+
+                <router-link
+                    :to="{
+                        name: 'CorpUniver',
+                    }"
+                    ><Button
+                        class="competition__school_btn"
+                        label="Обучение в Корпоративном университете"
+                /></router-link>
+            </div>
+        </div>
+
         <router-link
             :to="{
                 name: 'CompetitionParticipants',

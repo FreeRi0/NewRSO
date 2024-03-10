@@ -415,6 +415,11 @@ const userPages = computed(() => [
         name: 'references',
         show: roleStore.roles?.regionalheadquarter_commander,
     },
+    {
+        title: 'Корпоративный университет',
+        name: 'CorpUniver',
+        show: true
+    },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },
 ]);
