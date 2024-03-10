@@ -723,6 +723,23 @@ const routes: RouteRecordRaw[] = [
                 },
             },
             {
+                path: '/CorpUniver',
+                meta: {
+                    redirectTo: 'CorpUniver',
+                    label: 'Корпоративный университет',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'CorpUniver',
+                        component: () =>
+                            import(
+                                '@pages/CorpUniverPage/component/CorpUniverPage.vue'
+                            ),
+                    },
+                ],
+            },
+            {
                 path: '/references',
                 meta: {
                     label: 'Оформление справок',

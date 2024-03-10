@@ -1,36 +1,57 @@
 <template>
-
     <div v-if="props.competition === true" class="d-flex">
-        <router-link v-if="member.detachment" :to="{ name: 'lso', params: { id: member.detachment.id } }"
+        <router-link
+            v-if="member.detachment"
+            :to="{ name: 'lso', params: { id: member.detachment.id } }"
             class="horizontal-item"
         >
             <div class="horizontal-img">
-                <img :src="member.detachment?.banner" alt="logo" v-if="member.detachment?.banner" />
+                <img
+                    :src="member.detachment?.banner"
+                    alt="logo"
+                    v-if="member.detachment?.banner"
+                />
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontal-item-title ml-2">{{ member.detachment?.name }}</p>
+                <p class="horizontal-item-title ml-2">
+                    {{ member.detachment?.name }}
+                </p>
                 <div class="rating" v-if="rating">
                     <p>Место в рейтинге: 102</p>
                 </div>
             </div>
         </router-link>
-        <router-link :to="{ name: 'lso', params: { id: member.junior_detachment.id } }"
+        <router-link
+            :to="{ name: 'lso', params: { id: member.junior_detachment.id } }"
             class="horizontal-item ml-3"
         >
             <div class="horizontal-img">
-                <img :src="member.junior_detachment?.banner" alt="logo" v-if="member.junior_detachment?.banner" />
+                <img
+                    :src="member.junior_detachment?.banner"
+                    alt="logo"
+                    v-if="member.junior_detachment?.banner"
+                />
                 <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontal-item-title ml-2">{{ member.junior_detachment?.name }}</p>
+                <p class="horizontal-item-title ml-2">
+                    {{ member.junior_detachment?.name }}
+                </p>
                 <div class="rating" v-if="rating">
                     <p>Место в рейтинге: 102</p>
                 </div>
             </div>
         </router-link>
+        <div
+            class="horizontal-item ml-3"
+            v-if="member?.junior_detachment !== null"
+        >
+            <p class="horizontal-item-title ml-2">
+                {{ member.junior_detachment?.regional_headquarter_name }}
+            </p>
+        </div>
     </div>
-
 
     <div v-else-if="props.competition === false">
         <router-link
