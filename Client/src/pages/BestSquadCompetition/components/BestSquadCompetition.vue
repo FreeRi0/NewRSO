@@ -39,31 +39,29 @@
             </div>
 
             <div class="competition__status-application">
-                <router-link
+                <!-- <router-link
                     v-if="!isAuth"
                     to="/Login"
                     class="btn competition__status-application-button"
                     >Участвовать</router-link
-                >
-                <div v-else>
-                    <Button
+                > -->
+                <div>
+                    <!-- <Button
                         v-if="!userCommander.detachment_commander"
                         label="Участвовать"
                         @click="errorIsNoCommander = !errorIsNoCommander"
                         class="competition__status-application-button"
-                    ></Button>
-
+                    ></Button> -->
+                    <!--
                     <Button
-                        v-else-if="currentStatus.status === 'Еще не участвуете'"
+                        v-if="currentStatus.status === 'Еще не участвуете'"
                         label="Участвовать"
                         class="competition__status-application-button"
                         @click="onSendApplication"
-                    ></Button>
+                    ></Button> -->
 
                     <span
-                        v-else-if="
-                            currentStatus.status === 'Заявка на рассмотрении'
-                        "
+                        v-if="currentStatus.status === 'Заявка на рассмотрении'"
                         class="competition__status-application-info"
                     >
                         Заявка на рассмотрении
@@ -170,7 +168,16 @@
             >
         </div>
 
-        <div class="d-flex mb-12 school-wrapper">
+        <div
+            class="d-flex mb-12 school-wrapper"
+            v-if="
+                roleStore.status.is_commander_detachment ||
+                roleStore.status.is_commissar_detachment ||
+                roleStore.roles?.centralheadquarter_commander ||
+                roleStore.roles.districtheadquarter_commander ||
+                roleStore.roles.regionalheadquarter_commander
+            "
+        >
             <img src="@app/assets/competition/bgSchool.png" alt="bg" />
             <div class="competition__school">
                 <p>
@@ -240,10 +247,11 @@ import { ModalCompetition } from '@features/Competition';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';
 // const route = useRoute();
+import { useRoleStore } from '@layouts/store/role';
 import { usePage } from '@shared';
 
 usePage({ isHidden: true });
-
+const roleStore = useRoleStore();
 const isAuth = ref(!!localStorage.getItem('Token'));
 
 const userCommander = ref({});
