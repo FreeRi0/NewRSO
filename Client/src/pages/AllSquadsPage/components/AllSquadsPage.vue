@@ -200,15 +200,11 @@
                 <p v-if="!sortedSquads.length">Ничего не найдено</p>
             </div>
             <Button
-                @click="squadsVisible += step"
-                v-if="squadsVisible < squads.squads.value.length"
+                @click="next()"
+                v-if="squadsVisible < squadsStore.totalSquads"
                 label="Показать еще"
             ></Button>
-            <Button
-                @click="squadsVisible -= step"
-                v-else
-                label="Свернуть все"
-            ></Button>
+            <Button @click="prev" v-else label="Свернуть все"></Button>
         </div>
     </div>
 </template>
@@ -244,12 +240,14 @@ const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
 
-const squadsVisible = ref(20);
-const step = ref(20);
+const squadsVisible = ref(squadsStore.SquadsLimit);
+
+const next = () => {
+    squadsStore.getNextSquads();
+};
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
-console.log(squadsStore.isLoading);
 const picked = ref('');
 
 const vertical = ref(true);
@@ -330,11 +328,11 @@ const sortedSquads = computed(() => {
         tempSquads.reverse();
     }
     if (!picked.value) {
-        return tempSquads.slice(0, squadsVisible.value);
+        return tempSquads;
     }
 
     tempSquads = tempSquads.filter((item) => item.area.name === picked.value);
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
+    // tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
 

@@ -166,17 +166,6 @@ const changeValue = (event) => {
 };
 
 const items = ref(props.items);
-//  items.value = regions.regions.value;
-
-// const onChangeItem = async () => {
-//     try {
-//         regionalsStore.getRegions();
-//         items.value = regions.regions.value;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
 const onChangeItem = async () => {
     try {
         isLoading.value = true;
@@ -186,7 +175,7 @@ const onChangeItem = async () => {
                     'Content-Type': 'application/json',
                 },
             });
-            items.value = ItemResponse.data;
+            items.value = ItemResponse.data.results;
             isLoading.value = false;
         }, 500);
     } catch (error) {

@@ -254,7 +254,7 @@ const filtersRegionals = computed(() =>
 const getDistrictsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/districts/');
-        districts.value = data;
+        districts.value = data.results;
     } catch (e) {
         console.log('error request districts headquarters');
     }
@@ -262,7 +262,7 @@ const getDistrictsHeadquartersForFilters = async () => {
 const getRegionalsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/regionals/');
-        regionals.value = data;
+        regionals.value = data.results;
     } catch (e) {
         console.log('error request districts headquarters');
     }

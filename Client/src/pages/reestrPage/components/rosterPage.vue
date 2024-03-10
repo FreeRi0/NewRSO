@@ -220,7 +220,7 @@ const viewHeadquartersData = async (resp, search, join) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        let response = viewHeadquartersResponse.data;
+        let response = viewHeadquartersResponse.data.results;
         if (join) {
             const viewHeadquartersResponsetTwo = await HTTP.get(
                 '/educationals/' + search,
@@ -231,22 +231,22 @@ const viewHeadquartersData = async (resp, search, join) => {
                     },
                 },
             );
-            educHead.value = viewHeadquartersResponsetTwo.data;
+            educHead.value = viewHeadquartersResponsetTwo.data.results;
             response = response.concat(viewHeadquartersResponsetTwo.data);
         }
         sortedVal.value = response;
         isLoading.value = false;
 
         if (resp.indexOf('districts') >= 0){
-            districts.value = viewHeadquartersResponse.data;
+            districts.value = viewHeadquartersResponse.data.results;
         }else if (resp.indexOf('regionals') >= 0){
-            regionals.value = viewHeadquartersResponse.data;
+            regionals.value = viewHeadquartersResponse.data.results;
         }else if (resp.indexOf('locals') >= 0){
-            locals.value = viewHeadquartersResponse.data;
+            locals.value = viewHeadquartersResponse.data.results;
         }else if (resp.indexOf('educationals') >= 0){
-            educHead.value = viewHeadquartersResponse.data;
+            educHead.value = viewHeadquartersResponse.data.results;
         }else if (resp.indexOf('detachments') >= 0){
-            detachments.value = viewHeadquartersResponse.data;
+            detachments.value = viewHeadquartersResponse.data.results;
         }
     } catch (error) {
         console.log('an error occured ' + error);
@@ -270,7 +270,7 @@ const updateDistrict = (districtVal) => {
     // let districtId = districtsStore.districts.find(
     //     (dis) => dis.name == districtVal,
     // )?.id;
-    // district.value = districtVal;
+    district.value = districtVal;
     // regionals.value = regionalsStore.regionals.filter(
     //     (regional) => regional.district_headquarter == districtId,
     // );
@@ -287,13 +287,7 @@ const updateReg = (regVal) => {
     if (name.value) search += '&search=' + name.value;
     viewHeadquartersData(resp, search);
 
-    // let regId = regionalsStore.regionals.find(
-    //     (regional) => regional.name == regVal,
-    // )?.id;
-    // reg.value = regVal;
-    // locals.value = localsStore.locals.filter(
-    //     (loc) => loc.regional_headquarter == regId,
-    // );
+    reg.value = regVal;
 };
 const updateLocal = (localVal) => {
     let search = '';
@@ -308,14 +302,8 @@ const updateLocal = (localVal) => {
 
     viewHeadquartersData(resp, search, !localVal);
 
-    // let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
-    // let regId = regionalsStore.regionals.find(
-    //     (regional) => regional.name == reg.value,
-    // )?.id;
-    // local.value = localVal;
-    // educHead.value = educationalsStore.educationals.filter(
-    //     (edh) => locId && edh.local_headquarter == locId,
-    // );
+    local.value = localVal;
+
 };
 
 const updateEduc = (educVal) => {
@@ -337,17 +325,8 @@ const updateEduc = (educVal) => {
     if (name.value) search += '&search=' + name.value;
 
     viewHeadquartersData(resp, search);
-    // , educVal && !local.value
-    // let educId = educationalsStore.educationals.find(
-    //     (edh) => edh.name == educVal,
-    // )?.id;
-    // let regId = regionalsStore.regionals.find(
-    //     (regional) => regional.name == reg.value,
-    // )?.id;
-    // educ.value = educVal;
-    // detachments.value = squadsStore.squads.filter(
-    //     (squad) => educId && squad.educational_headquarter == educId,
-    // );
+
+    educ.value = educVal;
 };
 
 const updateDetachment = (detachmentVal) => {
@@ -554,18 +533,6 @@ watch(
         }
     },
 );
-// watch(
-//     () => squadsStore.squads,
-//     () => {
-//         let educId = educationalsStore.educationals.length
-//             ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
-//                   ?.id
-//             : roleStore.roles.educationalheadquarter_commander?.id;
-//         detachments.value = squadsStore.squads.filter(
-//             (det) => det.educational_headquarter == educId,
-//         );
-//     },
-// );
 
 onMounted(() => {
     getItemsByRoles();

@@ -14,6 +14,7 @@
                     <p>Место в рейтинге: 102</p>
                 </div>
             </div>
+
         </router-link>
         <router-link :to="{ name: 'lso', params: { id: member.junior_detachment.id } }"
             class="horizontal-item ml-3"
@@ -28,7 +29,11 @@
                     <p>Место в рейтинге: 102</p>
                 </div>
             </div>
+
         </router-link>
+        <div class="horizontal-item ml-3" v-if="member?.junior_detachment !== null">
+                <p class="horizontal-item-title ml-2">{{ member.junior_detachment?.regional_headquarter_name }}</p>
+            </div>
     </div>
 
 

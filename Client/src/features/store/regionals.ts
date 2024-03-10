@@ -4,6 +4,7 @@ import { HTTP } from '@app/http';
 export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
+
         regionals: [],
         filteredRegional: [],
         filteredMyRegional: [],
@@ -28,7 +29,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         },
                     },
                 );
-                this.filteredRegional = responseSearchRegionals.data;
+                this.filteredRegional = responseSearchRegionals.data.results;
             } catch (err) {
                 console.log('an error occured ' + err);
             }
@@ -48,7 +49,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         },
                     },
                 );
-                this.filteredMyRegional = responseSearchMyRegionals.data;
+                this.filteredMyRegional = responseSearchMyRegionals.data.results;
             } catch (err) {
                 console.log('an error occured ' + err);
             }
@@ -63,7 +64,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.regionals = responseRegionals.data;
+                this.regionals = responseRegionals.data.results;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -100,7 +101,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         },
                     },
                 );
-                this.members = responseMembers.data;
+                this.members = responseMembers.data.results;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -117,7 +118,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 },
             );
-            this.regions = responseSearchRegions.data;
+            this.regions = responseSearchRegions.data.results;
         },
         async getRegions() {
             if (this.regions.length) return;
@@ -128,7 +129,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         'Content-Type': 'application/json',
                     },
                 });
-                this.regions = responseRegions.data;
+                this.regions = responseRegions.data.results;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
@@ -157,7 +158,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 },
             );
-            this.regionals = responseSearchRegionalsHead.data;
+            this.regionals = responseSearchRegionalsHead.data.results;
         },
     },
 });

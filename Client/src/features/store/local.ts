@@ -21,7 +21,7 @@ export const useLocalsStore = defineStore('local', {
         },
 
         async getLocals() {
-            if(this.locals.length) return;
+            if (this.locals.length) return;
             try {
                 this.isLoading = true;
                 const responseLocals = await HTTP.get(`/locals/`, {
@@ -30,7 +30,7 @@ export const useLocalsStore = defineStore('local', {
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.locals = responseLocals.data;
+                this.locals = responseLocals.data.results;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;

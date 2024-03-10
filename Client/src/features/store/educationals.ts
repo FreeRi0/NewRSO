@@ -18,7 +18,7 @@ export const useEducationalsStore = defineStore('educationals', {
                     },
                 },
             );
-            this.educationals = responseSearchEducationals.data;
+            this.educationals = responseSearchEducationals.data.results;
         },
         async getEducationals() {
             if (this.educationals.length) return;
@@ -30,7 +30,7 @@ export const useEducationalsStore = defineStore('educationals', {
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.educationals = responseEducationals.data;
+                this.educationals = responseEducationals.data.results;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
