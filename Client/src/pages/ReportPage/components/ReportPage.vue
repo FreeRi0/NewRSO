@@ -2769,4 +2769,7 @@ const prizePlaceChoose = ref([{ name: '1' }, { name: '2' }, { name: '3' }]);
 .form__label * {
     color: red;
 }
+.form .v-expansion-panel .v-expansion-panel-title {
+    max-height: none;
+}
 </style>
