@@ -17,7 +17,7 @@
           src="@app/assets/corpuniver/corpuniver.png"
           alt="Логотип конкурса"
       />
-      <a href="https://vk.me/join/iy9ZxZTPoHQCJpAEzVecrr1ipRp0f1XLPlE=" class="corpuniver__vk">
+      <a href="https://vk.com/rso.university" class="corpuniver__vk">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="15" viewBox="0 0 22 15" fill="none">-->
           <path d="M12.0251 14.0534C4.73175 14.0534 0.571782 9.0534 0.398438 0.733398H4.05178C4.17178 6.84005 6.86506 9.42671 8.99837 9.96005V0.733398H12.4385V6.00002C14.5452 5.77337 16.7582 3.3734 17.5049 0.733398H20.945C20.3717 3.98674 17.9717 6.38671 16.265 7.37337C17.9717 8.17337 20.7051 10.2667 21.7451 14.0534H17.9583C17.145 11.5201 15.1185 9.56005 12.4385 9.29337V14.0534H12.0251Z" fill="#35383F"/>
           </svg>
@@ -32,7 +32,7 @@
       </p>
       <p class="text corpuniver__text-about">
         В рамках конкурса «Лучший студенческий отряд» с 11 марта по 10 апреля состоится
-        <span>Школа командных составов линейных студенческих отрядов РСО</span> по <a href="/">Программе обучения</a>.
+        <span>Школа командных составов линейных студенческих отрядов РСО</span> по <a href="#trainingProgram">Программе обучения</a>.
       </p>
       <p class="text corpuniver__text-about">
         Обучение пройдет на платформе <a href="https://vk.me/join/iy9ZxZTPoHQCJpAEzVecrr1ipRp0f1XLPlE=">ВКонтакте</a>,
@@ -41,7 +41,7 @@
       </p>
     </div>
 
-    <h2 class="corpuniver__title-h2">Программа обучения</h2>
+    <h2 id="trainingProgram" class="corpuniver__title-h2">Программа обучения</h2>
 
     <div class="text corpuniver__table">
       <v-table >
@@ -56,7 +56,7 @@
         <tr>
           <td class="corpuniver__table__td corpuniver__table__border-left">11 марта 8:00 - 9:00</td>
           <td class="corpuniver__table__td">Вводное занятие</td>
-          <td class="corpuniver__table__td">О Конкурсе и обучении</td>
+          <td class="corpuniver__table__td"><a href="#video">О Конкурсе и обучении</a></td>
         </tr>
 
         <tr>
