@@ -17,7 +17,7 @@
           src="@app/assets/corpuniver/corpuniver.png"
           alt="Логотип конкурса"
       />
-      <a href="https://vk.com/rso.university" class="corpuniver__vk">
+      <a href="https://vk.com/rso.university" target="_blank" class="corpuniver__vk">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="15" viewBox="0 0 22 15" fill="none">-->
           <path d="M12.0251 14.0534C4.73175 14.0534 0.571782 9.0534 0.398438 0.733398H4.05178C4.17178 6.84005 6.86506 9.42671 8.99837 9.96005V0.733398H12.4385V6.00002C14.5452 5.77337 16.7582 3.3734 17.5049 0.733398H20.945C20.3717 3.98674 17.9717 6.38671 16.265 7.37337C17.9717 8.17337 20.7051 10.2667 21.7451 14.0534H17.9583C17.145 11.5201 15.1185 9.56005 12.4385 9.29337V14.0534H12.0251Z" fill="#35383F"/>
           </svg>
@@ -35,7 +35,7 @@
         <span>Школа командных составов линейных студенческих отрядов РСО</span> по <a href="#trainingProgram">Программе обучения</a>.
       </p>
       <p class="text corpuniver__text-about">
-        Обучение пройдет на платформе <a href="https://vk.me/join/iy9ZxZTPoHQCJpAEzVecrr1ipRp0f1XLPlE=">ВКонтакте</a>,
+        Обучение пройдет на платформе <a href="https://vk.me/join/iy9ZxZTPoHQCJpAEzVecrr1ipRp0f1XLPlE=" target="_blank">ВКонтакте</a>,
         все видео материалы будут доступны <a href="#video">ниже</a>.
         Для прохождения конкурса необходимо набрать не менее 60 баллов <a href="#testing">итогового тестирования</a>.
       </p>
@@ -394,16 +394,11 @@ import Button from '@shared/components/buttons/Button.vue';
   }
 
   &__documents-btn {
-    background-color: #39BFBF;
-    color: #FFFFFF;
     margin-top: 32px;
     margin-bottom: 40px;
     font-family: Bert Sans;
-    font-size: 16px;
     font-weight: 600;
     line-height: 20px;
-    letter-spacing: 0em;
-    border-radius: 10px;
     width: 240px;
     height: 52px;
   }
