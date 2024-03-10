@@ -641,6 +641,13 @@ const routes: RouteRecordRaw[] = [
             //         requiresAuth: true,
             //     },
             // },
+
+            {
+                path: '/report',
+                name: 'Report',
+                component: () =>
+                    import('@pages/ReportPage/components/ReportPage.vue'),
+            },
         ],
     },
     {
