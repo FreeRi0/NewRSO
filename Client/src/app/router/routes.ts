@@ -652,6 +652,16 @@ const routes: RouteRecordRaw[] = [
                                 '@pages/CorpUniverPage/component/CorpUniverPage.vue'
                             ),
                     },
+                    {
+                        path: 'test',
+                        name: 'testPage',
+                        meta: {
+                            redirectTo: 'testPage',
+                            label: 'Тестирование по обучению',
+                        },
+                        component: () =>
+                            import('@pages/TestingPages/components/TestingPages.vue')
+                    },
                 ],
             },
         ],
