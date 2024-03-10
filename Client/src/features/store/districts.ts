@@ -27,4 +27,3 @@ export const useDistrictsStore = defineStore('districts', {
         },
     },
 });
-
