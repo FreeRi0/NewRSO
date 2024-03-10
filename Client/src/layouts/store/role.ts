@@ -7,7 +7,8 @@ export const useRoleStore = defineStore('role', {
         userRoles: {},
         myPositions: {},
         positions: {},
-        isLoadingRoles: false
+        isLoadingRoles: false,
+        status: {}
     }),
     actions: {
         async getRoles() {
@@ -31,6 +32,16 @@ export const useRoleStore = defineStore('role', {
                 },
             });
             this.userRoles = dataUserRoles.data;
+        },
+
+        async getUserParticipantsStatus(competition_pk: string) {
+            const dataUserStatus = await HTTP.get(`/competitions/${competition_pk}/participants/status/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.status = dataUserStatus.data;
         },
 
 

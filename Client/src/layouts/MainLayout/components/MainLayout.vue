@@ -60,6 +60,7 @@ const roleStore = useRoleStore();
 const userStore = useUserStore();
 const regionsStore = useRegionalsStore();
 const positionsStore = usePositionsStore();
+const competition_pk = 1;
 // const districtStore  = useDistrictsStore();
 const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
@@ -71,9 +72,10 @@ onMounted(() => {
         roleStore.getRoles();
         positionsStore.getPositions();
         squadsStore.getAreas();
+        roleStore.getUserParticipantsStatus(competition_pk);
         // districtStore.getDistricts();
     }
-   
+
     regionsStore.getRegions();
 });
 
