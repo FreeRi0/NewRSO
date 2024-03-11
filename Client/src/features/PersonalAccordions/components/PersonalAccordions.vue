@@ -1596,7 +1596,7 @@
                                                 alt="addFile"
                                             />
 
-                                            <FileUpload
+                                            <!-- <FileUpload
                                                 mode="advanced"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
@@ -1604,7 +1604,52 @@
                                                 invalidFileSizeMessage="Превышен размер загружаемого файла"
                                                 @select="statementUp"
                                                 chooseLabel="Выбрать файл"
-                                            />
+                                            /> -->
+                                            <FileUpload
+                                                mode="advanced"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                invalidFileSizeMessage="Превышен размер загружаемого файла"
+                                                @select="statementUp"
+                                                v-if="!statement"
+                                                chooseLabel="Выбрать файл"
+
+                                            >
+                                            <!-- <template
+
+                                                #content="{
+                                                    removeFileCallback,
+                                                }"
+                                            >
+
+                                            </template> -->
+                                            </FileUpload>
+                                            <div v-else-if="statement">
+                                                    <div
+                                                        class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                    >
+                                                        <div
+                                                            class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                        >
+                                                            <span
+                                                                class="font-semibold"
+                                                                >{{
+                                                                    statement.name
+                                                                }}</span
+                                                            >
+                                                            <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
                                         </div>
                                         <div
                                             class="statement-item"
@@ -3394,12 +3439,13 @@
                         !props.user.user_region.reg_town ||
                         !props.user.user_region.reg_region_id ||
                         !props.user.user_region.reg_house ||
-                        !props.user.documents.pass_ser_num ||
-                        !props.user.documents.pass_date ||
-                        !props.user.documents.inn ||
-                        !props.user.documents.snils ||
                         !props.user.education.study_institution ||
-                        !props.user.education.study_year
+                        !props.user.education.study_year ||
+                        (props.user.documents.russian_passport &&
+                            (!props.user.documents.pass_ser_num ||
+                                !props.user.documents.pass_date ||
+                                !props.user.documents.inn ||
+                                !props.user.documents.snils))
                     "
                     :loaded="isLoading"
                     v-if="
@@ -3516,6 +3562,19 @@ const isInnChange = ref(false);
 const isEmployeChange = ref(false);
 const isMilitaryChange = ref(false);
 const isForeignChange = ref(false);
+
+const formatSize = (size) => {
+    if (size > 1024 * 1024 * 1024 * 1024) {
+        return (size / 1024 / 1024 / 1024 / 1024).toFixed(2) + ' TB';
+    } else if (size > 1024 * 1024 * 1024) {
+        return (size / 1024 / 1024 / 1024).toFixed(2) + ' GB';
+    } else if (size > 1024 * 1024) {
+        return (size / 1024 / 1024).toFixed(2) + ' MB';
+    } else if (size > 1024) {
+        return (size / 1024).toFixed(2) + ' KB';
+    }
+    return size.toString() + ' B';
+};
 
 const statementUp = (event) => {
     statement.value = event.files[0];
@@ -3859,7 +3918,7 @@ const updateData = async () => {
                 phone_number: props.user.phone_number,
                 social_vk: props.user.social_vk,
                 social_tg: props.user.social_tg,
-                is_rso_member: props.user.is_rso_member
+                is_rso_member: props.user.is_rso_member,
             },
             {
                 headers: {
@@ -4056,7 +4115,7 @@ const updateData = async () => {
 
 const answers = ref([
     { name: 'Да', value: true, id: 'f1' },
-    { name: 'Нет',value: false, id: 'f2', },
+    { name: 'Нет', value: false, id: 'f2' },
 ]);
 
 const gender = ref([
