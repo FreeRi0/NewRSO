@@ -1614,9 +1614,8 @@
                                                 @select="statementUp"
                                                 v-if="!statement"
                                                 chooseLabel="Выбрать файл"
-
                                             >
-                                            <!-- <template
+                                                <!-- <template
 
                                                 #content="{
                                                     removeFileCallback,
@@ -1626,30 +1625,28 @@
                                             </template> -->
                                             </FileUpload>
                                             <div v-else-if="statement">
+                                                <div
+                                                    class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                >
                                                     <div
-                                                        class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                        class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                     >
-                                                        <div
-                                                            class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                statement.name
+                                                            }}</span
                                                         >
-                                                            <span
-                                                                class="font-semibold"
-                                                                >{{
-                                                                    statement.name
-                                                                }}</span
-                                                            >
-                                                            <!-- <div>
+                                                        <!-- <div>
                                                                 {{
                                                                     formatSize(
                                                                         statement.size,
                                                                     )
                                                                 }}
                                                             </div> -->
-                                                        </div>
                                                     </div>
                                                 </div>
-
-
+                                            </div>
                                         </div>
                                         <div
                                             class="statement-item"
