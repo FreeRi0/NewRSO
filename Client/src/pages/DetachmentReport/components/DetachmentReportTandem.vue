@@ -9,15 +9,15 @@
                 :key="index"
             >
                 <div class="result-container">
-                    <div class="horizontallso-item__wrapper">
+                    <div class="horizontal-item__wrapper">
                         <div class="containerHorizontal">
-                            <p class="horizontallso-item__list-full">
+                            <p class="horizontal-item__list-full">
                                 {{ result }}
                             </p>
                         </div>
                     </div>
-                    <div class="horizontallso-item__result-wrapper">
-                        <p class="horizontallso-item__result">
+                    <div class="horizontal-item__result-wrapper">
+                        <p class="horizontal-item__result">
                             {{ results.place[index] }}
                         </p>
                     </div>
@@ -44,15 +44,15 @@
                 v-for="(indicator, index) in data.indicators"
                 :key="index"
             >
-                <div class="horizontallso-item__wrapper">
+                <div class="horizontal-item__wrapper">
                     <div class="containerHorizontal">
-                        <p class="horizontallso-item__list-full">
+                        <p class="horizontal-item__list-full">
                             {{ indicator }}
                         </p>
                     </div>
                 </div>
-                <div class="horizontallso-item__result-wrapper">
-                    <p class="horizontallso-item__result">
+                <div class="horizontal-item__result-wrapper">
+                    <p class="horizontal-item__result">
                         {{ data.places[index] }}
                     </p>
                 </div>
@@ -63,7 +63,7 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -125,17 +125,21 @@ const onAction = async () => {
         name: 'Report',
     });
 };
+
+onMounted(() => {
+    window.scroll(0, 0);
+});
 </script>
 
 <style scoped lang="scss">
-.horizontallso-item__result-wrapper {
+.horizontal-item__result-wrapper {
     display: grid;
     align-items: center;
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
 }
-.horizontallso-item__result {
+.horizontal-item__result {
     display: grid;
     font-family: Bert Sans;
     font-size: 16px;
@@ -191,7 +195,7 @@ const onAction = async () => {
     letter-spacing: 0em;
     text-align: left;
 }
-.horizontallso-item__wrapper {
+.horizontal-item__wrapper {
     height: 48px;
     display: grid;
     grid-template-columns: auto 1fr;
@@ -206,7 +210,7 @@ const onAction = async () => {
     align-items: center;
     justify-content: space-between;
 }
-.horizontallso-item__list-full {
+.horizontal-item__list-full {
     color: #35383f;
     font-size: 16px;
     font-weight: 400;
