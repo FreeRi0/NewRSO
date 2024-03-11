@@ -107,6 +107,30 @@ const routes: RouteRecordRaw[] = [
                                 },
                                 children: [
                                     {
+                                        path: 'reporting',
+                                        meta: {
+                                            label: 'Отчетность',
+                                        },
+                                        children: [
+                                            {
+                                                path: 'debut',
+                                                name: 'debut',
+                                                component: () =>
+                                                    import(
+                                                        '@pages/DetachmentReport/components/DetachmentReportDebut.vue'
+                                                    ),
+                                            },
+                                            {
+                                                path: 'tandem',
+                                                name: 'tandem',
+                                                component: () =>
+                                                    import(
+                                                        '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
+                                                    ),
+                                            },
+                                        ],
+                                    },
+                                    {
                                         path: '',
                                         name: 'lso',
                                         component: () =>
@@ -522,17 +546,17 @@ const routes: RouteRecordRaw[] = [
                                             requiresAuth: true,
                                         },
                                     },
-                                    // {
-                                    //     path: 'groupsubmit',
-                                    //     name: 'GroupSubmit',
-                                    //     component: () =>
-                                    //         import(
-                                    //             '@pages/GroupRequestPage/components/GroupSubmitPage.vue'
-                                    //         ),
-                                    //     meta: {
-                                    //         requiresAuth: true,
-                                    //     },
-                                    // },
+                                    {
+                                        path: 'groupsubmit',
+                                        name: 'GroupSubmit',
+                                        component: () =>
+                                            import(
+                                                '@pages/GroupRequestPage/components/GroupSubmitPage.vue'
+                                            ),
+                                        meta: {
+                                            requiresAuth: true,
+                                        },
+                                    },
                                     {
                                         path: 'multistagesubmit',
                                         name: 'MultiStageSubmit',
@@ -651,6 +675,16 @@ const routes: RouteRecordRaw[] = [
                             import(
                                 '@pages/CorpUniverPage/component/CorpUniverPage.vue'
                             ),
+                    },
+                    {
+                        path: 'test',
+                        name: 'testPage',
+                        meta: {
+                            redirectTo: 'testPage',
+                            label: 'Тестирование по обучению',
+                        },
+                        component: () =>
+                            import('@pages/TestingPages/components/TestingPages.vue')
                     },
                 ],
             },
@@ -785,17 +819,26 @@ const routes: RouteRecordRaw[] = [
                     },
                     {
                         path: ':id',
-                        meta: {
-                            label: 'Персональные данные пользователя',
-                        },
                         children: [
                             {
-                                path: '',
+                                path: 'personal',
+                                meta: {
+                                    label: 'Персональные данные пользователя',
+                                },
                                 name: 'PersonalDataUser',
                                 component: () =>
                                     import(
                                         '@pages/PersonalDataPage/components/PersonalDataID.vue'
                                     ),
+                            },
+                            {
+                                path: 'detachment',
+                                meta: {
+                                    label: 'Данные отряда',
+                                },
+                                name: 'DetachmentData',
+                                component: () =>
+                                    import('@pages/lsoPage/lsoPage.vue'),
                             },
                         ],
                     },
