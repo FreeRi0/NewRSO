@@ -30,7 +30,7 @@
                 type="button"
                 class="input_data"
                 label="Внести данные"
-                @click="onClick"
+                @click="onAction"
             ></Button>
         </template>
 
@@ -120,9 +120,9 @@ const results = ref({
     place: ['20', '6', '211,75'],
 });
 
-const onClick = async () => {
+const onAction = async () => {
     router.push({
-        name: 'Action',
+        name: 'Report',
     });
 };
 </script>

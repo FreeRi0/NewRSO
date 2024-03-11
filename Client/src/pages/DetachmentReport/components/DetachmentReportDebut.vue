@@ -30,6 +30,7 @@
                 type="button"
                 class="input_data"
                 label="Внести данные"
+                @click="onAction"
             ></Button>
         </template>
 
@@ -63,6 +64,9 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const data = ref({
     indicators: [
@@ -115,6 +119,12 @@ const results = ref({
     data: ['Ваша сумма мест', 'Место в рейтинге'],
     place: ['20', '6'],
 });
+
+const onAction = async () => {
+    router.push({
+        name: 'Report',
+    });
+};
 </script>
 
 <style scoped lang="scss">
