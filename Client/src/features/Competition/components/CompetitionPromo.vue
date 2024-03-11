@@ -85,7 +85,10 @@
 
         <div>
             <router-link
-                to="debut"
+                :to="{
+                    name: 'debut',
+                    params: { id: squad.id },
+                }"
             >
                 <div class="route">Отчетность</div></router-link
             >

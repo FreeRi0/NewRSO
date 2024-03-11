@@ -106,30 +106,7 @@ const routes: RouteRecordRaw[] = [
                                     isObject: true,
                                 },
                                 children: [
-                                    {
-                                        path: 'reporting',
-                                        meta: {
-                                            label: 'Отчетность',
-                                        },
-                                        children: [
-                                            {
-                                                path: 'debut',
-                                                name: 'debut',
-                                                component: () =>
-                                                    import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportDebut.vue'
-                                                    ),
-                                            },
-                                            {
-                                                path: 'tandem',
-                                                name: 'tandem',
-                                                component: () =>
-                                                    import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
-                                                    ),
-                                            },
-                                        ],
-                                    },
+
                                     {
                                         path: '',
                                         name: 'lso',
@@ -180,6 +157,30 @@ const routes: RouteRecordRaw[] = [
                                                     },
                                                 ],
                                             },
+                                        ],
+                                    },
+                                    {
+                                        path: 'reporting',
+                                        meta: {
+                                            label: 'Отчетность',
+                                        },
+                                        children: [
+                                            {
+                                                path: '',
+                                                name: 'debut',
+                                                component: () =>
+                                                    import(
+                                                        '@pages/DetachmentReport/components/DetachmentReportDebut.vue'
+                                                    ),
+                                            },
+                                            // {
+                                            //     path: 'tandem',
+                                            //     name: 'tandem',
+                                            //     component: () =>
+                                            //         import(
+                                            //             '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
+                                            //         ),
+                                            // },
                                         ],
                                     },
                                 ],
