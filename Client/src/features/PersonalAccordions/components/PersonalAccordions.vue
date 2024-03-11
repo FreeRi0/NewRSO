@@ -3384,7 +3384,7 @@
             >
                 <Button
                     :disabled="
-                        isLoading ||
+                    isLoading ||
                         !props.user.first_name ||
                         !props.user.last_name ||
                         !props.user.gender ||
@@ -3394,12 +3394,13 @@
                         !props.user.user_region.reg_town ||
                         !props.user.user_region.reg_region_id ||
                         !props.user.user_region.reg_house ||
-                        !props.user.documents.pass_ser_num ||
-                        !props.user.documents.pass_date ||
-                        !props.user.documents.inn ||
-                        !props.user.documents.snils ||
                         !props.user.education.study_institution ||
-                        !props.user.education.study_year
+                        !props.user.education.study_year ||
+                        (props.user.documents.russian_passport &&
+                            (!props.user.documents.pass_ser_num ||
+                                !props.user.documents.pass_date ||
+                                !props.user.documents.inn ||
+                                !props.user.documents.snils))
                     "
                     :loaded="isLoading"
                     v-if="
