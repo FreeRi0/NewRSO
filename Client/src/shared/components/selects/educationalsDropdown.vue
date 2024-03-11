@@ -168,7 +168,7 @@ const onChangeItem = async () => {
                 'Content-Type': 'application/json',
             },
         });
-        items.value = ItemResponse.data;
+        items.value = ItemResponse.data.results;
         isLoading.value = false;
     } catch (error) {
         console.log('an error occured ' + error);

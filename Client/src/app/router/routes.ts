@@ -654,17 +654,40 @@ const routes: RouteRecordRaw[] = [
                     },
                 ],
             },
-            // {
-            //     path: '/CompetitionParticipants',
-            //     name: 'CompetitionParticipants',
-            //     component: () =>
-            //         import(
-            //             '@pages/CompetitionParticipantsPage/components/CompetitionParticipants.vue'
-            //         ),
-            //     meta: {
-            //         requiresAuth: true,
-            //     },
-            // },
+
+            {
+                path: '/report',
+                name: 'Report',
+                component: () =>
+                    import('@pages/ReportPage/components/ReportPage.vue'),
+            },
+            {
+                path: '/CorpUniver',
+                meta: {
+                    redirectTo: 'CorpUniver',
+                    label: 'Корпоративный университет',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'CorpUniver',
+                        component: () =>
+                            import(
+                                '@pages/CorpUniverPage/component/CorpUniverPage.vue'
+                            ),
+                    },
+                    {
+                        path: 'test',
+                        name: 'testPage',
+                        meta: {
+                            redirectTo: 'testPage',
+                            label: 'Тестирование по обучению',
+                        },
+                        component: () =>
+                            import('@pages/TestingPages/components/TestingPages.vue')
+                    },
+                ],
+            },
         ],
     },
     {
