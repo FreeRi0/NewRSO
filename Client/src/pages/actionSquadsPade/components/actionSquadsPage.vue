@@ -280,11 +280,15 @@
                     </div>
                 </div>
                 <div class="postcard-container">
-                    <div v-if="vertical" v-for="action in actionsList">
+                    <div
+                        v-if="vertical"
+                        v-for="action in actionsList"
+                        :key="action"
+                    >
                         <Actionitem :action="action"></Actionitem>
                     </div>
                     <div
-                        v-else
+                        v-if="!vertical"
                         v-for="action in actionsList"
                         class="postcard-containerline"
                         :key="action"
@@ -319,11 +323,9 @@ onActivated(() => {
         actionsList.value = resp.data;
     });
     getRoles().then((resp) => {
-        console.log(resp.data);
         Object.entries(resp.data).forEach(([key, value]) => {
             if (value !== null) {
-                console.log(`${key} + ${value}`);
-                rolesCount.value += 1;
+                rolesCount.value = rolesCount.value + 1;
             }
         });
     });
@@ -335,13 +337,9 @@ const text = ref('');
 //Поиск нового значения
 function SearchByInput() {
     if (text.value.length <= 4) {
-        getListActionsBySearch('').then((resp) => {
-            actionsList.value = resp.data;
-        });
+        getListActionsBySearch('').then((resp) => {});
     } else {
-        getListActionsBySearch(text.value).then((resp) => {
-            actionsList.value = resp.data;
-        });
+        getListActionsBySearch(text.value).then((resp) => {});
     }
 }
 
