@@ -1429,10 +1429,10 @@
                                 class="input-full"
                                 placeholder="Например, 1 курс, магистратура"
                                 v-model:value="props.user.education.study_year"
-                                :max-length="10"
+                                :max-length="50"
                             />
                             <div class="form__counter">
-                                {{ counterCourse }} / 10
+                                {{ counterCourse }} / 50
                             </div>
                         </div>
                         <p class="error" v-if="isError.study_year">
@@ -1709,7 +1709,35 @@
                                                 :customUpload="true"
                                                 @select="selectPersonal"
                                                 chooseLabel="Выбрать файл"
+                                                v-if="!consent_personal_data"
                                             />
+                                            <div
+                                                v-else-if="
+                                                    consent_personal_data
+                                                "
+                                            >
+                                                <div
+                                                    class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                >
+                                                    <div
+                                                        class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                    >
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                consent_personal_data.name
+                                                            }}</span
+                                                        >
+                                                        <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             class="statement-item"
@@ -1781,7 +1809,37 @@
                                                 :customUpload="true"
                                                 @select="selectParentPersonal"
                                                 chooseLabel="Выбрать файл"
+                                                v-if="
+                                                    !consent_personal_data_representative
+                                                "
                                             />
+                                            <div
+                                                v-else-if="
+                                                    consent_personal_data_representative
+                                                "
+                                            >
+                                                <div
+                                                    class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                >
+                                                    <div
+                                                        class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                    >
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                consent_personal_data_representative.name
+                                                            }}</span
+                                                        >
+                                                        <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             class="statement-item"
@@ -1858,7 +1916,31 @@
                                                 :customUpload="true"
                                                 @select="selectPass"
                                                 chooseLabel="Выбрать файл"
+                                                v-if="!passportUpload"
                                             />
+                                            <div v-else-if="passportUpload">
+                                                <div
+                                                    class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                >
+                                                    <div
+                                                        class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                    >
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                passportUpload.name
+                                                            }}</span
+                                                        >
+                                                        <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             class="statement-item"
@@ -1920,7 +2002,35 @@
                                                     selectParentPersonalPass
                                                 "
                                                 chooseLabel="Выбрать файл"
+                                                v-if="!passport_representative"
                                             />
+                                            <div
+                                                v-else-if="
+                                                    passport_representative
+                                                "
+                                            >
+                                                <div
+                                                    class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                >
+                                                    <div
+                                                        class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                    >
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                passport_representative.name
+                                                            }}</span
+                                                        >
+                                                        <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             class="statement-item"
@@ -1980,7 +2090,31 @@
                                             :customUpload="true"
                                             @select="selectSnils"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!snils_file"
                                         />
+                                        <div v-else-if="snils_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            snils_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2022,7 +2156,31 @@
                                             :customUpload="true"
                                             @select="selectMilitary"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!military_document"
                                         />
+                                        <div v-else-if="military_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            military_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2068,7 +2226,31 @@
                                             :customUpload="true"
                                             @select="selectINN"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!inn_file"
                                         />
+                                        <div v-else-if="inn_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            inn_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2110,7 +2292,31 @@
                                             :customUpload="true"
                                             @select="selectIntPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!international_passport"
                                         />
+                                        <div v-else-if="international_passport">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            international_passport.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2156,7 +2362,31 @@
                                             :customUpload="true"
                                             @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!employment_document"
                                         />
+                                        <div v-else-if="employment_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            employment_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2317,7 +2547,31 @@
                                             :customUpload="true"
                                             @select="selectPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!passportUpload"
                                         />
+                                        <div v-else-if="passportUpload">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            passportUpload.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2371,7 +2625,33 @@
                                             :customUpload="true"
                                             @select="selectParentPersonalPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!passport_representative"
                                         />
+                                        <div
+                                            v-else-if="passport_representative"
+                                        >
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            passport_representative.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2424,7 +2704,31 @@
                                             :customUpload="true"
                                             @select="selectSnils"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!snils_file"
                                         />
+                                        <div v-else-if="snils_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            snils_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2466,7 +2770,31 @@
                                             :customUpload="true"
                                             @select="selectMilitary"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!military_document"
                                         />
+                                        <div v-else-if="military_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            military_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2512,7 +2840,31 @@
                                             :customUpload="true"
                                             @select="selectINN"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!inn_file"
                                         />
+                                        <div v-else-if="inn_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            inn_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2554,7 +2906,31 @@
                                             :customUpload="true"
                                             @select="selectIntPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!international_passport"
                                         />
+                                        <div v-else-if="international_passport">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            international_passport.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2600,7 +2976,32 @@
                                             :customUpload="true"
                                             @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!employment_document"
                                         />
+
+                                        <div v-else-if="employment_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            employment_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2764,8 +3165,32 @@
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="statementUp"
+                                            v-if="!statement"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="statement">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                           statement.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2822,7 +3247,31 @@
                                             :customUpload="true"
                                             @select="selectPersonal"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!consent_personal_data"
                                         />
+                                        <div v-else-if="consent_personal_data">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            consent_personal_data.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2891,7 +3340,31 @@
                                             :customUpload="true"
                                             @select="selectPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!passportUpload"
                                         />
+                                        <div v-else-if="passportUpload">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            passportUpload.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2939,8 +3412,32 @@
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectSnils"
+                                            v-if="!snils_file"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="snils_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            snils_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2981,8 +3478,32 @@
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectINN"
+                                            v-if="!inn_file"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="inn_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            inn_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -3024,7 +3545,31 @@
                                             :customUpload="true"
                                             @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!employment_document"
                                         />
+                                        <div v-else-if="employment_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            employment_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -3187,7 +3732,31 @@
                                             :customUpload="true"
                                             @select="selectPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!passportUpload"
                                         />
+                                        <div v-else-if="passportUpload">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                           passportUpload.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -3237,7 +3806,31 @@
                                             :customUpload="true"
                                             @select="selectParentPersonalPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!passport_representative"
                                         />
+                                        <div v-else-if="passport_representative">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            passport_representative.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -3290,7 +3883,31 @@
                                             :customUpload="true"
                                             @select="selectSnils"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!snils_file"
                                         />
+                                        <div v-else-if="snils_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            snils_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -3331,8 +3948,32 @@
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectINN"
+                                            v-if="!inn_file"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="inn_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            inn_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -3375,7 +4016,31 @@
                                             :customUpload="true"
                                             @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!employment_document"
                                         />
+                                        <div v-else-if="employment_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            employment_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
