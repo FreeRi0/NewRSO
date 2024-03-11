@@ -83,7 +83,16 @@
             </div>
         </div>
 
-        <!-- <a href="#" class="competition__send-report">Отчетность</a> -->
+        <div>
+            <router-link
+                :to="{
+                    name: 'debut',
+                    params: { id: squad.id },
+                }"
+            >
+                <div class="route">Отчетность</div></router-link
+            >
+        </div>
     </section>
 </template>
 
@@ -124,4 +133,11 @@ onUnmounted(() => {
     window.removeEventListener('resize', getSizeImage);
 });
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.route {
+    margin-top: 40px;
+    text-align: center;
+    color: #5e5c5c;
+    text-decoration: underline;
+}
+</style>
