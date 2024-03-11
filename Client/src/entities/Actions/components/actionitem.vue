@@ -46,8 +46,8 @@ const props = defineProps({
         available_structural_units: String,
         participants_number: String,
         time_data: {
-            start_date: String,
-            start_time: String,
+            start_date: Date,
+            start_time: Date,
         },
     },
 });

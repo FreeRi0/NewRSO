@@ -285,12 +285,9 @@ const organizators = ref([
 onActivated(() => {
     getAction(route.params.id).then((resp) => {
         event.value = resp.data;
+        console.log(event.value);
         getOrganizator(route.params.id).then((resp) => {
-            organizators.value = resp.data;
-            const filted = organizators.value.filter((org) => {
-                org.is_contact_person === true;
-            });
-            organizators_filted.value.push(filted);
+            organizators.value = resp.data.results;
         });
     });
     getUser().then((resp) => {

@@ -320,7 +320,7 @@ let rolesCount = ref(0);
 
 onActivated(() => {
     getListActionsBySearch(text.value).then((resp) => {
-        actionsList.value = resp.data;
+        actionsList.value = resp.data.results;
     });
     getRoles().then((resp) => {
         Object.entries(resp.data).forEach(([key, value]) => {
