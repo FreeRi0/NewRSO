@@ -18,7 +18,7 @@
                 <v-btn
                     class="squads-tabs__item"
                     :class="{ active: picked === area.name }"
-                    v-for="area in categories"
+                    v-for="area in categories.areas.value"
                     :key="area"
                     @click="picked = area.name"
                     >{{ area.name }}
@@ -30,6 +30,7 @@
                     id="search"
                     class="squads-search__input"
                     v-model="name"
+                    @keyup="searchDetachments"
                     placeholder="Поищем отряд?"
                 />
                 <svg
@@ -106,7 +107,15 @@
                                     placeholder="Окружной штаб"
                                 >
                                     <template #selection="{ item }">
-                                        <pre>{{ item.title }}</pre>
+                                        <pre v-if="!districtsStore.isLoading">{{
+                                            item.title
+                                        }}</pre>
+                                        <v-progress-circular
+                                            class="circleLoader"
+                                            v-else
+                                            indeterminate
+                                            color="blue"
+                                        ></v-progress-circular>
                                     </template>
                                 </v-select>
                             </div>
@@ -123,7 +132,15 @@
                                     placeholder="Региональные штабы"
                                 >
                                     <template #selection="{ item }">
-                                        <pre>{{ item.title }}</pre>
+                                        <pre v-if="!regionalsStore.isLoading">{{
+                                            item.title
+                                        }}</pre>
+                                        <v-progress-circular
+                                            class="circleLoader"
+                                            v-else
+                                            indeterminate
+                                            color="blue"
+                                        ></v-progress-circular>
                                     </template>
                                 </v-select>
                             </div>
@@ -135,6 +152,7 @@
                                     v-model="education"
                                     placeholder="Образовательная организация"
                                     :SortDropdown="true"
+                                    :sorts-boolean="false"
                                 ></educInstitutionDropdown>
                             </div>
                             <div class="sort-select">
@@ -143,13 +161,15 @@
                                     clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
+                                    :sorts-boolean="false"
+                                    class="Sort-alphabet"
                                 ></sortByEducation>
                             </div>
 
                             <Button
                                 type="button"
                                 class="ascend"
-                                icon="switch"
+                                iconn="iconn"
                                 @click="ascending = !ascending"
                                 color="white"
                             ></Button>
@@ -159,31 +179,32 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList
-                    :squads="sortedSquads"
-                    v-if="!isLoading.isLoading.value"
-                ></squadsList>
+                <squadsList :squads="sortedSquads"></squadsList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="isLoading.isLoading.value"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !isLoading.isLoading.value && !sortedSquads.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <horizontalList :squads="sortedSquads"></horizontalList>
+                <p v-if="!sortedSquads.length">Ничего не найдено</p>
             </div>
             <Button
-                @click="squadsVisible += step"
-                v-if="squadsVisible < squads.squads.value.length"
+                @click="next()"
+                v-if="squadsVisible < squadsStore.totalSquads"
                 label="Показать еще"
             ></Button>
-            <Button
-                @click="squadsVisible -= step"
-                v-else
-                label="Свернуть все"
-            ></Button>
+            <Button @click="prev" v-else label="Свернуть все"></Button>
         </div>
     </div>
 </template>
@@ -194,6 +215,7 @@ import { squadsList, horizontalList } from '@features/Squads/components';
 import {
     sortByEducation,
     educInstitutionDropdown,
+    districtSearchFilter,
 } from '@shared/components/selects';
 import { ref, computed, onMounted, onActivated } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
@@ -205,10 +227,10 @@ const squadsStore = useSquadsStore();
 const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
 const squads = storeToRefs(squadsStore);
-const isLoading = storeToRefs(squadsStore);
-
-const categories = ref([]);
+const categories = storeToRefs(squadsStore);
 const name = ref('');
+const timerSearch = ref(null);
+const isLoading = storeToRefs(squadsStore);
 const education = ref(null);
 
 const SelectedSortDistrict = ref(
@@ -218,57 +240,14 @@ const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
 
-const getCategories = async () => {
-    try {
-        const categoryResponse = await HTTP.get('/areas/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        categories.value = categoryResponse.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+const squadsVisible = ref(squadsStore.SquadsLimit);
 
-const searchSquad = async (name) => {
-    try {
-        const { data } = await HTTP.get(`/detachments/?search=${name}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        squads.squads.value = data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
+const next = () => {
+    squadsStore.getNextSquads();
 };
-
-const filteredSquad = async (education) => {
-    try {
-        const { data } = await HTTP.get(
-            `/detachments/?educational_institution__name=${education}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        squads.squads.value = data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const squadsVisible = ref(20);
-const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
-
 const picked = ref('');
 
 const vertical = ref(true);
@@ -283,23 +262,11 @@ const sortOptionss = ref([
         name: 'Алфавиту от А - Я',
     },
     { value: 'founding_date', name: 'Дате создания отряда' },
-    { value: 'members_count', name: 'Количеству участников' },
 ]);
 
-const searchSquads = computed(() => {
-    return searchSquad(name.value);
-});
-
-const filteredSquadsByEducation = computed(() => {
-    return filteredSquad(education.value ? education.value : '');
-});
-
 const sortedSquads = computed(() => {
-    // TODO добавляем фильтры по округу и региону
-    let tempSquads = squads.squads.value;
-
-    searchSquads.value;
-    filteredSquadsByEducation.value;
+    let tempSquads = [];
+    tempSquads = [...squads.squads.value];
 
     if (SelectedSortRegional.value || SelectedSortDistrict.value) {
         let idRegionals = [];
@@ -323,6 +290,11 @@ const sortedSquads = computed(() => {
 
         tempSquads = tempSquads.filter((item) => {
             return idRegionals.indexOf(item.regional_headquarter) >= 0;
+        });
+    }
+    if (education.value) {
+        tempSquads = tempSquads.filter((item) => {
+            return item.educational_institution.name === education.value;
         });
     }
 
@@ -349,30 +321,34 @@ const sortedSquads = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'members_count') {
-            return a.members - b.members;
         }
     });
 
     if (!ascending.value) {
         tempSquads.reverse();
     }
-
-    // if(!searchSquads.value && !filteredSquadsByEducation.value) {
-    //     return tempSquads;
-    // }
-
     if (!picked.value) {
-        return tempSquads.slice(0, squadsVisible.value);
+        return tempSquads;
     }
 
     tempSquads = tempSquads.filter((item) => item.area.name === picked.value);
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
+    // tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
 
+const searchDetachments = (event) => {
+    if (!name.value.length) {
+        squadsStore.searchSquads(name.value);
+    } else if (name.value) {
+        squadsStore.searchSquads(name.value);
+    }
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {}, 400);
+};
 onMounted(() => {
-    getCategories();
+    regionalsStore.getRegionals();
+    districtsStore.getDistricts();
+    squadsStore.getSquads();
 });
 onActivated(() => {
     SelectedSortDistrict.value = JSON.parse(
@@ -386,7 +362,7 @@ onActivated(() => {
     localStorage.removeItem('AllHeadquarters_filters');
 });
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
@@ -557,5 +533,18 @@ onActivated(() => {
         margin-top: 12px;
     }
 }
+
+.option-select .v-field__input input::placeholder,
+.form__select .v-field__input input::placeholder {
+    color: #35383f;
+    opacity: revert;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
+}
+.Sort-alphabet {
+    margin-right: 8px;
+}
 </style>
-@shared/components/selects/inputs @shared/components/inputs/imagescomp

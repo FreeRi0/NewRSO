@@ -7,10 +7,10 @@
                 type="radio"
                 :id="answer.id"
                 :label="answer.name"
-                :value="answer.name"
+                :value="answer.value"
                 :name="answer.name"
-                :checked="answer.checked"
-                v-model="selectedAnswer"
+                :checked="props.user.is_rso_member === answer.value"
+                v-model="props.user.is_rso_member"
             />
             <label :for="id">{{ answer.name }}</label>
         </div>
@@ -22,12 +22,8 @@
         @submit.prevent="updateData"
     >
         <p class="accordion-title">
-            Для вступления в РСО внесите ниже персональные данные
+            Для вступления в РСО внесите ниже персональные данные.
         </p>
-        <!--
-        <p>{{ selectedAnswer }}</p>
-        <p>{{ documents.russian_passport }}</p>
-        <p>{{ selectedAnswer == 'Нет' && !documents.russian_passport }}</p> -->
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
@@ -94,7 +90,8 @@
                     <div class="data-form">
                         <div class="form-field">
                             <label for="surname"
-                                >Фамилия <span class="valid-red">*</span></label
+                                >Фамилия
+                                <span class="valid-red">&nbsp;*</span></label
                             >
                             <Input
                                 class="input-big"
@@ -108,18 +105,21 @@
                             {{ isError.last_name }}
                         </p>
                         <div class="form-field">
-                            <label for="surname-lat">Фамилия(Латиницей) </label>
+                            <label for="surname-lat"
+                                >Фамилия (Латиницей)
+                            </label>
                             <Input
                                 class="input-big"
                                 clearable
-                                placeholder="familia"
+                                placeholder="Familia"
                                 name="surname-lat"
                                 v-model:value="props.user.last_name_lat"
                             />
                         </div>
                         <div class="form-field">
                             <label for="name"
-                                >Имя <span class="valid-red">*</span></label
+                                >Имя
+                                <span class="valid-red">&nbsp;*</span></label
                             >
                             <Input
                                 class="input-big"
@@ -133,11 +133,11 @@
                             {{ isError.first_name }}
                         </p>
                         <div class="form-field">
-                            <label for="name-lat">Имя(Латиницей)</label>
+                            <label for="name-lat">Имя (Латиницей)</label>
                             <Input
                                 class="input-big"
                                 clearable
-                                placeholder="name"
+                                placeholder="Imia"
                                 name="name-lat"
                                 v-model:value="props.user.first_name_lat"
                             />
@@ -147,26 +147,26 @@
                             <Input
                                 class="input-big"
                                 clearable
-                                placeholder="Отчество"
+                                placeholder="Введите отчество"
                                 name="patronomyc"
                                 v-model:value="props.user.patronymic_name"
                             />
                         </div>
                         <div class="form-field">
                             <label for="patronomyc-lat"
-                                >Отчество(Латиницей)</label
+                                >Отчество (Латиницей)</label
                             >
                             <Input
                                 class="input-big"
                                 clearable
-                                placeholder="patronomyc"
+                                placeholder="Otchestvo"
                                 name="patronomyc-lat"
                                 v-model:value="props.user.patronymic_lat"
                             />
                         </div>
                         <div class="checkbox-wrapper">
                             <p class="checkbox-wrapper__title">
-                                Пол<span class="valid-red">*</span>
+                                Пол<span class="valid-red">&nbsp;*</span>
                             </p>
                             <div
                                 class="checkbox"
@@ -190,7 +190,7 @@
                         <div class="form-field">
                             <label for="date_of_birth"
                                 >Дата рождения<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
                             <Input
@@ -210,7 +210,7 @@
                                 <div class="form-field">
                                     <label for="surname-parent"
                                         >Фамилия<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
@@ -225,7 +225,7 @@
                                 <div class="form-field">
                                     <label for=""
                                         >Кем является<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <sortByEducation
@@ -235,29 +235,30 @@
                                         placeholder="Выберете родителя"
                                         v-model="props.user.parent.relationship"
                                         :options="parents"
+                                        :sorts-boolean="false"
                                     ></sortByEducation>
                                 </div>
 
                                 <!-- <p>{{ user.is_adult }}</p> -->
-
                                 <div class="form-field">
-                                    <label for="patronomyc-parent"
-                                        >Отчество</label
+                                    <label for="name-parent"
+                                        >Имя<span class="valid-red"
+                                            >&nbsp;*</span
+                                        ></label
                                     >
                                     <Input
+                                        name="name-parent"
                                         class="input-big"
-                                        name="patronomyc-parent"
-                                        placeholder="Введите Отчество"
+                                        placeholder="Введите имя"
                                         v-model:value="
-                                            props.user.parent
-                                                .parent_patronymic_name
+                                            props.user.parent.parent_first_name
                                         "
                                     />
                                 </div>
                                 <div class="form-field">
                                     <label for="date-parent"
                                         >Дата рождения<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
@@ -271,17 +272,16 @@
                                     />
                                 </div>
                                 <div class="form-field">
-                                    <label for="name-parent"
-                                        >Имя<span class="valid-red"
-                                            >*</span
-                                        ></label
+                                    <label for="patronomyc-parent"
+                                        >Отчество</label
                                     >
                                     <Input
-                                        name="name-parent"
                                         class="input-big"
-                                        placeholder="Введите имя"
+                                        name="patronomyc-parent"
+                                        placeholder="Введите отчество"
                                         v-model:value="
-                                            props.user.parent.parent_first_name
+                                            props.user.parent
+                                                .parent_patronymic_name
                                         "
                                     />
                                 </div>
@@ -289,21 +289,23 @@
                                 <div class="form-field">
                                     <label for="phone-parent"
                                         >Телефон<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
-                                    <Input
-                                        type="tel"
-                                        vmaska
-                                        maska="+7 ### ###-##-##"
-                                        name="phone-parent"
-                                        class="input-small phone"
-                                        placeholder="+7(__) __ __ _"
-                                        v-model:value="
-                                            props.user.parent
-                                                .parent_phone_number
-                                        "
-                                    />
+                                    <div class="input-small phone">
+                                        <MaskInput
+                                            type="tel"
+                                            placeholder="+7(___) ___ __ __"
+                                            name="phone-parent"
+                                            :value="
+                                                user.parent.parent_phone_number
+                                            "
+                                            v-model="
+                                                user.parent.parent_phone_number
+                                            "
+                                            mask="+7(###) ###-##-##"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div class="how">
@@ -314,7 +316,7 @@
                                     <p class="checkbox-title">
                                         Паспорт гражданина РФ<span
                                             class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         >
                                     </p>
 
@@ -362,32 +364,33 @@
                                 <div class="form-field" id="pass-no-pass-id">
                                     <label for="passInput"
                                         >Номер и серия<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
-                                    <Input
-                                        name="passInput"
-                                        class="input-small"
-                                        vmaska
-                                        maska="####-######"
-                                        placeholder="__ __ ____"
-                                        v-model:value="
-                                            props.user.parent.passport_number
-                                        "
-                                    />
+                                    <div class="input-small passport-number">
+                                        <MaskInput
+                                            name="passInput"
+                                            mask="## ## ######"
+                                            placeholder="__ __ ______"
+                                            :value="user.parent.passport_number"
+                                            v-model="
+                                                user.parent.passport_number
+                                            "
+                                        />
+                                    </div>
                                 </div>
 
                                 <div class="form-field" id="pass-no-reg">
                                     <label for=""
                                         >Регион<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <regionsDropdown
                                         open-on-clear
                                         id="reg"
                                         name="regdrop"
-                                        placeholder="Поиск"
+                                        placeholder="Выберите регион"
                                         v-model="props.user.parent.region"
                                         @update:value="changeValue"
                                         address="/regions/"
@@ -398,13 +401,14 @@
                                 <div class="form-field" id="pass-no-date">
                                     <label for="pass-date-parent"
                                         >Дата выдачи<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
                                         type="date"
                                         name="pass-date-parent"
                                         class="input-small"
+                                        max="9999-12-31"
                                         v-model:value="
                                             props.user.parent.passport_date
                                         "
@@ -414,13 +418,13 @@
                                 <div class="form-field" id="pass-no-locality">
                                     <label for="locality-parent"
                                         >Населенный пункт<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
                                         name="locality-parent"
                                         class="input-big"
-                                        placeholder="Москва"
+                                        placeholder="Например, город Новосибирск"
                                         v-model:value="props.user.parent.city"
                                     />
                                 </div>
@@ -428,13 +432,13 @@
                                 <div class="form-field" id="pass-no-pass">
                                     <label for="pass-id-parent"
                                         >Кем выдан<span class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
                                         name="pass-id-parent"
                                         class="input-big"
-                                        placeholder="Название организации"
+                                        placeholder="Введите полное название организации как в паспорте"
                                         v-model:value="
                                             props.user.parent.passport_authority
                                         "
@@ -445,13 +449,13 @@
                                     <label for="addres-parent"
                                         >Улица, дом, квартира<span
                                             class="valid-red"
-                                            >*</span
+                                            >&nbsp;*</span
                                         ></label
                                     >
                                     <Input
                                         name="addres-parent"
                                         class="input-big"
-                                        placeholder="Москва"
+                                        placeholder="Например, ул. Приморская, дом 10, кв. 255"
                                         v-model:value="
                                             props.user.parent.address
                                         "
@@ -655,32 +659,32 @@
                         </p>
                         <div class="form-field">
                             <label for="phone-contact"
-                                >Телефон<span class="valid-red">*</span></label
+                                >Телефон<span class="valid-red"
+                                    >&nbsp;*</span
+                                ></label
                             >
-                            <Input
-                                type="tel"
-                                name="phone-contact"
-                                class="input-small phone"
-                                placeholder="+7(__) __ __ _"
-                                v-model:value="props.user.phone_number"
-                            />
+                            <div class="input-small phone">
+                                <MaskInput
+                                    type="tel"
+                                    placeholder="+7(___) ___ __ __"
+                                    name="phone-contact"
+                                    :value="user.phone_number"
+                                    v-model="user.phone_number"
+                                    mask="+7(###) ###-##-##"
+                                />
+                            </div>
                         </div>
                         <div class="form-field">
                             <label for=""
-                                >Регион<span class="valid-red">*</span></label
+                                >Регион<span class="valid-red"
+                                    >&nbsp;*</span
+                                ></label
                             >
-                            <!-- <Select
-                                variant="outlined"
-                                clearable
-                                v-model="props.user.user_region.reg_region_id"
-                                placeholder="Например, Карачаево-Черкесск"
-                                address="/regions/"
-                            ></Select> -->
                             <regionsDropdown
                                 open-on-clear
                                 id="reg"
                                 name="regdrop"
-                                placeholder="Поиск"
+                                placeholder="Выберите регион"
                                 v-model="props.user.user_region.reg_region_id"
                                 @update:value="changeValue"
                                 address="/regions/"
@@ -690,7 +694,7 @@
                         <div class="form-field">
                             <label for="email-contact"
                                 >Электронная почта<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
                             <Input
@@ -704,17 +708,22 @@
                         <div class="form-field">
                             <label for="locality-contact"
                                 >Населенный пункт<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
                             <Input
                                 type="text"
                                 name="locality-contact"
                                 class="input-big"
-                                placeholder="Москва"
+                                placeholder="Город"
                                 v-model:value="props.user.user_region.reg_town"
+                                :max-length="40"
                             />
+                            <div class="form__counter">
+                                {{ counterTown }} / 40
+                            </div>
                         </div>
+
                         <div class="scoial-networks">
                             <div class="add">
                                 <div class="form-field">
@@ -722,9 +731,13 @@
                                     <Input
                                         name="socials"
                                         class="input-big mask-vk"
-                                        placeholder="https://vk.com/danya_porg"
+                                        placeholder="https://vk.com/id (или никнейм)"
                                         v-model:value="props.user.social_vk"
+                                        :max-length="50"
                                     />
+                                    <div class="form__counter">
+                                        {{ counterVk }} / 50
+                                    </div>
                                 </div>
                                 <div class="form-field">
                                     <label for="socials"
@@ -733,32 +746,40 @@
                                     <Input
                                         name="socials"
                                         class="input-big mask-tg"
-                                        placeholder="https://t.me/allenom"
+                                        placeholder="https://t.me/username"
                                         v-model:value="props.user.social_tg"
+                                        :max-length="50"
                                     />
+                                    <div class="form__counter">
+                                        {{ counterTg }} / 50
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-field">
                             <label for="addres-contact"
                                 >Улица, дом, квартира<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
                             <Input
                                 type="text"
                                 name="addres-contact"
                                 class="input-big"
-                                placeholder="ул. Комсомольская, д. 42, кв. 56"
+                                placeholder="Например, ул. Приморская, дом 10, кв. 255"
                                 v-model:value="props.user.user_region.reg_house"
+                                :max-length="250"
                             />
+                            <div class="form__counter">
+                                {{ counterHouse }} / 250
+                            </div>
                         </div>
                         <div class="checkbox addr" id="checkbox">
                             <p class="checkbox-title">
                                 Адрес фактического проживания совпадает с
                                 адресом постоянной регистрации<span
                                     class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 >
                             </p>
 
@@ -798,19 +819,11 @@
                             </p>
                             <div class="form-field">
                                 <label for="">Регион</label>
-                                <!-- <Select
-                                    variant="outlined"
-                                    clearable
-                                    v-model="
-                                        props.user.user_region.fact_region_id
-                                    "
-                                    address="/regions/"
-                                ></Select> -->
                                 <regionsDropdown
                                     open-on-clear
                                     id="reg"
                                     name="regdrop"
-                                    placeholder="Поиск"
+                                    placeholder="Выберите регион"
                                     v-model="
                                         props.user.user_region.fact_region_id
                                     "
@@ -826,11 +839,15 @@
                                 <Input
                                     name="locality-fact"
                                     class="input-big"
-                                    placeholder="Москва"
+                                    placeholder="Город"
                                     v-model:value="
                                         props.user.user_region.fact_town
                                     "
+                                    :max-length="40"
                                 />
+                                <div class="form__counter">
+                                    {{ counterFactTown }} / 40
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="addres-fact"
@@ -840,11 +857,15 @@
                                     type="text"
                                     name="addres-fact"
                                     class="input-big"
-                                    placeholder="ул. Комсомольская, д. 42, кв. 56"
+                                    placeholder="Например, ул. Приморская, дом 10, кв. 255"
                                     v-model:value="
                                         props.user.user_region.fact_house
                                     "
+                                    :max-length="250"
                                 />
+                                <div class="form__counter">
+                                    {{ counterFactHouse }} / 250
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -947,7 +968,7 @@
                         <div class="checkbox one">
                             <p class="checkbox-title">
                                 Паспорт гражданина РФ<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 >
                             </p>
                             <div
@@ -981,24 +1002,28 @@
                             <div class="form-field">
                                 <label for="pass-num"
                                     >Номер и серия<span class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     ></label
                                 >
-                                <Input
-                                    name="pass-num "
-                                    type="text"
-                                    class="input-big"
-                                    placeholder="__ __ ____"
-                                    v-model:value="
-                                        props.user.documents.pass_ser_num
-                                    "
-                                />
+                                <div class="input-big">
+                                    <MaskInput
+                                        name="pass-num "
+                                        type="text"
+                                        mask="## ## ######"
+                                        placeholder="__ __ ______"
+                                        :value="user.documents.pass_ser_num"
+                                        v-model="user.documents.pass_ser_num"
+                                    />
+                                </div>
+                                <!-- <div class="form__counter">
+                                    {{ counterPass }} / 20
+                                </div> -->
                             </div>
 
                             <div class="form-field">
                                 <label for="pass-date"
                                     >Дата выдачи<span class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     ></label
                                 >
                                 <Input
@@ -1017,37 +1042,53 @@
                                     name="pass-id"
                                     type="text"
                                     class="input-full"
-                                    placeholder="Название организации"
+                                    placeholder="Например, ОВД Советского района города Новосибирска и может быть длиннее"
                                     v-model:value="
                                         props.user.documents.pass_whom
                                     "
+                                    :max-length="230"
                                 />
+                                <div class="form__counter">
+                                    {{ counterPassWhom }} / 230
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="SNILS-id"
                                     >Номер СНИЛС<span class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     ></label
                                 >
-                                <Input
-                                    name="SNILS-d"
-                                    type="text"
-                                    class="input-big mask-snils"
-                                    placeholder="AA 999999999"
-                                    v-model:value="props.user.documents.snils"
-                                />
+                                <div class="input-big mask-snils">
+                                    <MaskInput
+                                        name="SNILS-d"
+                                        mask="###-###-### ##"
+                                        type="text"
+                                        placeholder="___-___-___ __"
+                                        :value="user.documents.snils"
+                                        v-model="user.documents.snils"
+                                    />
+                                </div>
+
+                                <!-- <div class="form__counter">
+                                    {{ counterSnils }} / 30
+                                </div> -->
                             </div>
                             <div class="form-field">
                                 <label for="INN-id"
-                                    >ИНН<span class="valid-red">*</span></label
+                                    >ИНН<span class="valid-red"
+                                        >&nbsp;*</span
+                                    ></label
                                 >
                                 <Input
                                     name="INN-id"
                                     type="text"
                                     class="input-big mask-inn"
-                                    placeholder="AA 999999999"
                                     v-model:value="props.user.documents.inn"
+                                    :max-length="12"
                                 />
+                                <div class="form__counter">
+                                    {{ counterInn }} / 12
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="work-book">Трудовая книжка </label>
@@ -1057,11 +1098,14 @@
                                     class="input-big mask-workbook"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 999999999"
                                     v-model:value="
                                         props.user.documents.work_book_num
                                     "
+                                    :max-length="30"
                                 />
+                                <div class="form__counter">
+                                    {{ counterWorkbook }} / 30
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="foreign-pass">Загранпаспорт</label>
@@ -1071,11 +1115,15 @@
                                     class="input-big mask-foreign-pass"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 999999999"
                                     v-model:value="
                                         props.user.documents.international_pass
                                     "
+                                    :max-length="30"
                                 />
+
+                                <div class="form__counter">
+                                    {{ counterIntPass }} / 30
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="">Документ воинского учета</label>
@@ -1089,6 +1137,7 @@
                                     "
                                     :options="militaryDocs"
                                     class="select-big"
+                                    :sorts-boolean="false"
                                 ></sortByEducation>
                                 <p
                                     class="error"
@@ -1109,11 +1158,15 @@
                                     class="input-big mask-military"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 999999999"
                                     v-model:value="
                                         props.user.documents.mil_reg_doc_ser_num
                                     "
+                                    :max-length="30"
                                 />
+
+                                <div class="form__counter">
+                                    {{ counterMilitary }} / 30
+                                </div>
                             </div>
                         </div>
                         <div
@@ -1123,20 +1176,26 @@
                             <div class="form-field one">
                                 <label for="pass-num"
                                     >Документ удостоверяющий личность
-                                    <span class="valid-red">*</span></label
+                                    <span class="valid-red"
+                                        >&nbsp;*</span
+                                    ></label
                                 >
                                 <Input
                                     type="text"
                                     class="input-full"
-                                    placeholder="документ"
+                                    placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
                                     v-model:value="foreignDoc.name"
+                                    :max-length="200"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherDoc }} / 200
+                                </div>
                             </div>
 
                             <div class="form-field">
                                 <label for="pass-date"
                                     >Дата выдачи<span class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     ></label
                                 >
                                 <Input
@@ -1148,30 +1207,37 @@
                             </div>
 
                             <div class="form-field">
-                                <label for="pass-id">серия номер</label>
+                                <label for="pass-id">Серия и номер</label>
                                 <Input
                                     type="text"
                                     id="pass-id"
                                     class="input-small pass-masked"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="__ ___ ____"
                                     v-model:value="foreignDoc.foreign_pass_num"
+                                    :max-length="50"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherPassNum }} / 50
+                                </div>
                             </div>
                             <div class="form-field one">
                                 <label for="org-id"
                                     >Кем выдан<span class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     ></label
                                 >
                                 <Input
                                     type="text"
                                     id="org-id"
                                     class="input-full"
-                                    placeholder="оуфмс по моковской обл"
+                                    placeholder="Страна"
                                     v-model:value="foreignDoc.foreign_pass_whom"
+                                    :max-length="230"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherPassWhom }} / 230
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="work-book-foreign"
@@ -1183,9 +1249,12 @@
                                     class="input-big mask-workbook"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 999999999"
                                     v-model:value="foreignDoc.work_book_num"
+                                    :max-length="15"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherWorkbook }} / 15
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="INN-id-foreign">ИНН</label>
@@ -1195,9 +1264,12 @@
                                     class="input-big mask-inn"
                                     vmaska
                                     maska="AA ##########"
-                                    placeholder="AA 999999999"
                                     v-model:value="foreignDoc.inn"
+                                    :max-length="12"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherInn }} / 12
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="snils-id-foreign"
@@ -1209,9 +1281,12 @@
                                     vmaska
                                     maska="AA ##########"
                                     class="input-big mask-snils"
-                                    placeholder="AA 999999999"
                                     v-model:value="foreignDoc.snils"
+                                    :max-length="30"
                                 />
+                                <div class="form__counter">
+                                    {{ counterOtherSnils }} / 30
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1309,7 +1384,7 @@
                             <label for="education-org"
                                 >Образовательная организация<span
                                     class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
 
@@ -1317,7 +1392,7 @@
                                 open-on-clear
                                 id="reg"
                                 name="regdrop"
-                                placeholder="Поиск"
+                                placeholder="Введите название образовательной организации"
                                 v-model="props.user.education.study_institution"
                                 @update:value="changeValue"
                                 address="/eduicational_institutions/"
@@ -1336,23 +1411,33 @@
                                 v-model:value="
                                     props.user.education.study_faculty
                                 "
+                                :max-length="200"
                             />
+                            <div class="form__counter">
+                                {{ counterFacultet }} / 200
+                            </div>
                         </div>
                         <div class="form-field">
                             <label for="course"
                                 >Курс (класс)<span class="valid-red"
-                                    >*</span
+                                    >&nbsp;*</span
                                 ></label
                             >
                             <Input
                                 name="study_year"
                                 type="text"
-                                id="course"
                                 class="input-full"
-                                placeholder="1 курс"
+                                placeholder="Например, 1 курс, магистратура"
                                 v-model:value="props.user.education.study_year"
+                                :max-length="50"
                             />
+                            <div class="form__counter">
+                                {{ counterCourse }} / 50
+                            </div>
                         </div>
+                        <p class="error" v-if="isError.study_year">
+                            {{ '' + isError.study_year }}
+                        </p>
                         <div class="form-field">
                             <label for="speciality">Специальность</label>
                             <Input
@@ -1364,7 +1449,11 @@
                                 v-model:value="
                                     props.user.education.study_specialty
                                 "
+                                :max-length="100"
                             />
+                            <div class="form__counter">
+                                {{ counterSpeciality }} / 100
+                            </div>
                         </div>
                     </div>
                     <v-card-actions class="nav-btn__wrapper">
@@ -1396,7 +1485,7 @@
                 value="panelFive"
                 class="no-RSO"
                 v-if="
-                    selectedAnswer == 'Нет' &&
+                    props.user.is_rso_member === false &&
                     props.user.documents?.russian_passport
                 "
             >
@@ -1472,7 +1561,7 @@
                                 <p class="statement-title">
                                     Заявление на вступление в РСО<span
                                         class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -1507,15 +1596,57 @@
                                                 alt="addFile"
                                             />
 
-                                            <FileUpload
-                                                mode="basic"
+                                            <!-- <FileUpload
+                                                mode="advanced"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
                                                 :maxFileSize="7000000"
-                                                :customUpload="true"
+                                                invalidFileSizeMessage="Превышен размер загружаемого файла"
                                                 @select="statementUp"
                                                 chooseLabel="Выбрать файл"
-                                            />
+                                            /> -->
+                                            <FileUpload
+                                                mode="advanced"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                invalidFileSizeMessage="Превышен размер загружаемого файла"
+                                                @select="statementUp"
+                                                v-if="!statement"
+                                                chooseLabel="Выбрать файл"
+                                            >
+                                                <!-- <template
+
+                                                #content="{
+                                                    removeFileCallback,
+                                                }"
+                                            >
+
+                                            </template> -->
+                                            </FileUpload>
+                                            <div v-else-if="statement">
+                                                <div
+                                                    class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                >
+                                                    <div
+                                                        class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                    >
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                statement.name
+                                                            }}</span
+                                                        >
+                                                        <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             class="statement-item"
@@ -1528,15 +1659,15 @@
                                                     props.user.statement
                                                         .statement
                                                 "
+                                                target="_blank"
                                                 >Заявление</a
                                             >
                                         </div>
                                     </div>
-                                    <!-- <pre>{{statement.name}}</pre> -->
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
-                                    данных<span class="valid-red">*</span>
+                                    данных<span class="valid-red">&nbsp;*</span>
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
@@ -1578,7 +1709,35 @@
                                                 :customUpload="true"
                                                 @select="selectPersonal"
                                                 chooseLabel="Выбрать файл"
+                                                v-if="!consent_personal_data"
                                             />
+                                            <div
+                                                v-else-if="
+                                                    consent_personal_data
+                                                "
+                                            >
+                                                <div
+                                                    class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                >
+                                                    <div
+                                                        class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                    >
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                consent_personal_data.name
+                                                            }}</span
+                                                        >
+                                                        <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             class="statement-item"
@@ -1592,6 +1751,7 @@
                                                     props.user.statement
                                                         .consent_personal_data
                                                 "
+                                                target="_blank"
                                                 >Согласие</a
                                             >
                                         </div>
@@ -1603,8 +1763,8 @@
                                 >
                                     Согласие законного представителя на
                                     обработку персональных данных
-                                    несовершеннолетнего<span class="valid-red"
-                                        >*</span
+                                    несовершеннолетнего<span class="valid-red">
+                                        &nbsp;*</span
                                     >
                                 </p>
                                 <div
@@ -1649,7 +1809,37 @@
                                                 :customUpload="true"
                                                 @select="selectParentPersonal"
                                                 chooseLabel="Выбрать файл"
+                                                v-if="
+                                                    !consent_personal_data_representative
+                                                "
                                             />
+                                            <div
+                                                v-else-if="
+                                                    consent_personal_data_representative
+                                                "
+                                            >
+                                                <div
+                                                    class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                >
+                                                    <div
+                                                        class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                    >
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                consent_personal_data_representative.name
+                                                            }}</span
+                                                        >
+                                                        <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             class="statement-item"
@@ -1663,6 +1853,7 @@
                                                     props.user.statement
                                                         .consent_personal_data_representative
                                                 "
+                                                target="_blank"
                                                 >Согласие несовершеннолетнего</a
                                             >
                                         </div>
@@ -1692,8 +1883,12 @@
                         <div class="pass-details__wrapper">
                             <div class="pass-details__item">
                                 <p class="statement-title">
-                                    Паспорт гражданина РФ<span class="valid-red"
-                                        >*</span
+                                    Паспорт гражданина РФ<span
+                                        class="valid-red sub"
+                                    >
+                                        &nbsp;*&nbsp;<sup
+                                            >для гражданина РФ</sup
+                                        ></span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -1721,7 +1916,31 @@
                                                 :customUpload="true"
                                                 @select="selectPass"
                                                 chooseLabel="Выбрать файл"
+                                                v-if="!passportUpload"
                                             />
+                                            <div v-else-if="passportUpload">
+                                                <div
+                                                    class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                >
+                                                    <div
+                                                        class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                    >
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                passportUpload.name
+                                                            }}</span
+                                                        >
+                                                        <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             class="statement-item"
@@ -1732,6 +1951,7 @@
                                                     props.user.statement
                                                         .passport
                                                 "
+                                                target="_blank"
                                                 >Паспорт</a
                                             >
                                         </div>
@@ -1749,7 +1969,10 @@
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
                                         class="valid-red"
-                                        >*</span
+                                    >
+                                        &nbsp;*&nbsp;<sup
+                                            >для несовершеннолетних</sup
+                                        ></span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -1779,7 +2002,35 @@
                                                     selectParentPersonalPass
                                                 "
                                                 chooseLabel="Выбрать файл"
+                                                v-if="!passport_representative"
                                             />
+                                            <div
+                                                v-else-if="
+                                                    passport_representative
+                                                "
+                                            >
+                                                <div
+                                                    class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                                >
+                                                    <div
+                                                        class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                    >
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                passport_representative.name
+                                                            }}</span
+                                                        >
+                                                        <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             class="statement-item"
@@ -1793,6 +2044,7 @@
                                                     props.user.statement
                                                         .passport_representative
                                                 "
+                                                target="_blank"
                                                 >Паспорт родителя</a
                                             >
                                         </div>
@@ -1838,7 +2090,31 @@
                                             :customUpload="true"
                                             @select="selectSnils"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!snils_file"
                                         />
+                                        <div v-else-if="snils_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            snils_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -1848,6 +2124,7 @@
                                             :href="
                                                 props.user.statement.snils_file
                                             "
+                                            target="_blank"
                                             >СНИЛС</a
                                         >
                                     </div>
@@ -1879,7 +2156,31 @@
                                             :customUpload="true"
                                             @select="selectMilitary"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!military_document"
                                         />
+                                        <div v-else-if="military_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            military_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -1893,6 +2194,7 @@
                                                 props.user.statement
                                                     .military_document
                                             "
+                                            target="_blank"
                                             >Военный билет</a
                                         >
                                     </div>
@@ -1924,13 +2226,41 @@
                                             :customUpload="true"
                                             @select="selectINN"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!inn_file"
                                         />
+                                        <div v-else-if="inn_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            inn_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
                                         v-if="props.user.statement.inn_file"
                                     >
-                                        <a :href="props.user.statement.inn_file"
+                                        <a
+                                            :href="
+                                                props.user.statement.inn_file
+                                            "
+                                            target="_blank"
                                             >ИНН</a
                                         >
                                     </div>
@@ -1962,7 +2292,31 @@
                                             :customUpload="true"
                                             @select="selectIntPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!international_passport"
                                         />
+                                        <div v-else-if="international_passport">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            international_passport.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -1976,6 +2330,7 @@
                                                 props.user.statement
                                                     .international_passport
                                             "
+                                            target="_blank"
                                             >Загранпаспорт</a
                                         >
                                     </div>
@@ -2007,7 +2362,31 @@
                                             :customUpload="true"
                                             @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!employment_document"
                                         />
+                                        <div v-else-if="employment_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            employment_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2021,6 +2400,7 @@
                                                 props.user.statement
                                                     .employment_document
                                             "
+                                            target="_blank"
                                             >Трудовая книжка</a
                                         >
                                     </div>
@@ -2033,7 +2413,7 @@
                         <TextArea
                             class="know"
                             name="know"
-                            placeholder="Напиши что нибудь"
+                            placeholder="Например, на сайте университета"
                             v-model:value="props.user.statement.rso_info_from"
                             :max-length="200"
                         ></TextArea>
@@ -2065,7 +2445,7 @@
             <v-expansion-panel
                 class="yes-RSO"
                 v-else-if="
-                    selectedAnswer == 'Да' &&
+                    props.user.is_rso_member === true &&
                     props.user.documents?.russian_passport
                 "
             >
@@ -2137,8 +2517,10 @@
                         <div class="pass-details__wrapper">
                             <div class="pass-details__item">
                                 <p class="statement-title">
-                                    Паспорт гражданина РФ<span class="valid-red"
-                                        >*</span
+                                    Паспорт гражданина РФ<span
+                                        class="valid-red"
+                                    >
+                                        &nbsp;*</span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -2165,13 +2547,41 @@
                                             :customUpload="true"
                                             @select="selectPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!passportUpload"
                                         />
+                                        <div v-else-if="passportUpload">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            passportUpload.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
                                         v-if="props.user.statement.passport"
                                     >
-                                        <a :href="props.user.statement.passport"
+                                        <a
+                                            :href="
+                                                props.user.statement.passport
+                                            "
+                                            target="_blank"
                                             >Паспорт</a
                                         >
                                     </div>
@@ -2184,7 +2594,8 @@
                                 >
                                     Паспорт законного представителя<span
                                         class="valid-red"
-                                        >*</span
+                                    >
+                                        &nbsp;*</span
                                     >
                                 </p>
                                 <div
@@ -2214,7 +2625,33 @@
                                             :customUpload="true"
                                             @select="selectParentPersonalPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!passport_representative"
                                         />
+                                        <div
+                                            v-else-if="passport_representative"
+                                        >
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            passport_representative.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2228,6 +2665,7 @@
                                                 props.user.statement
                                                     .passport_representative
                                             "
+                                            target="_blank"
                                             >Паспорт родителя</a
                                         >
                                     </div>
@@ -2266,7 +2704,31 @@
                                             :customUpload="true"
                                             @select="selectSnils"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!snils_file"
                                         />
+                                        <div v-else-if="snils_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            snils_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2276,6 +2738,7 @@
                                             :href="
                                                 props.user.statement.snils_file
                                             "
+                                            target="_blank"
                                             >СНИЛС</a
                                         >
                                     </div>
@@ -2307,7 +2770,31 @@
                                             :customUpload="true"
                                             @select="selectMilitary"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!military_document"
                                         />
+                                        <div v-else-if="military_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            military_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2321,6 +2808,7 @@
                                                 props.user.statement
                                                     .military_document
                                             "
+                                            target="_blank"
                                             >Военный билет</a
                                         >
                                     </div>
@@ -2352,13 +2840,41 @@
                                             :customUpload="true"
                                             @select="selectINN"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!inn_file"
                                         />
+                                        <div v-else-if="inn_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            inn_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
                                         v-if="props.user.statement.inn_file"
                                     >
-                                        <a :href="props.user.statement.inn_file"
+                                        <a
+                                            :href="
+                                                props.user.statement.inn_file
+                                            "
+                                            target="_blank"
                                             >ИНН</a
                                         >
                                     </div>
@@ -2390,7 +2906,31 @@
                                             :customUpload="true"
                                             @select="selectIntPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!international_passport"
                                         />
+                                        <div v-else-if="international_passport">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            international_passport.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2404,6 +2944,7 @@
                                                 props.user.statement
                                                     .international_passport
                                             "
+                                            target="_blank"
                                             >Загранпаспорт</a
                                         >
                                     </div>
@@ -2435,7 +2976,32 @@
                                             :customUpload="true"
                                             @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!employment_document"
                                         />
+
+                                        <div v-else-if="employment_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            employment_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2449,6 +3015,7 @@
                                                 props.user.statement
                                                     .employment_document
                                             "
+                                            target="_blank"
                                             >Трудовая книжка</a
                                         >
                                     </div>
@@ -2482,7 +3049,7 @@
             <v-expansion-panel
                 class="no-RSO-foreign"
                 v-else-if="
-                    selectedAnswer == 'Нет' &&
+                    props.user.is_rso_member === false &&
                     !props.user.documents?.russian_passport
                 "
             >
@@ -2558,7 +3125,7 @@
                                 <p class="statement-title">
                                     Заявление на вступление в РСО<span
                                         class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -2598,8 +3165,32 @@
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="statementUp"
+                                            v-if="!statement"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="statement">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                           statement.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2609,13 +3200,14 @@
                                             :href="
                                                 props.user.statement.statement
                                             "
+                                            target="_blank"
                                             >Заявление</a
                                         >
                                     </div>
                                 </div>
                                 <p class="statement-title">
                                     Согласие на обработку персональных
-                                    данных<span class="valid-red">*</span>
+                                    данных<span class="valid-red">&nbsp;*</span>
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
@@ -2655,7 +3247,31 @@
                                             :customUpload="true"
                                             @select="selectPersonal"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!consent_personal_data"
                                         />
+                                        <div v-else-if="consent_personal_data">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            consent_personal_data.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2669,6 +3285,7 @@
                                                 props.user.statement
                                                     .consent_personal_data
                                             "
+                                            target="_blank"
                                             >Согласие</a
                                         >
                                     </div>
@@ -2697,7 +3314,7 @@
                             <div class="pass-details__item">
                                 <p class="statement-title">
                                     Паспорт иностранного гражданина
-                                    <span class="valid-red">*</span>
+                                    <span class="valid-red">&nbsp;*</span>
                                 </p>
                                 <div class="statement-wrapper">
                                     <div class="statement-item">
@@ -2723,13 +3340,41 @@
                                             :customUpload="true"
                                             @select="selectPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!passportUpload"
                                         />
+                                        <div v-else-if="passportUpload">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            passportUpload.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
                                         v-if="props.user.statement.passport"
                                     >
-                                        <a :href="props.user.statement.passport"
+                                        <a
+                                            :href="
+                                                props.user.statement.passport
+                                            "
+                                            target="_blank"
                                             >Паспорт</a
                                         >
                                     </div>
@@ -2767,8 +3412,32 @@
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectSnils"
+                                            v-if="!snils_file"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="snils_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            snils_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2778,6 +3447,7 @@
                                             :href="
                                                 props.user.statement.snils_file
                                             "
+                                            target="_blank"
                                             >СНИЛС</a
                                         >
                                     </div>
@@ -2808,14 +3478,42 @@
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectINN"
+                                            v-if="!inn_file"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="inn_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            inn_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
                                         v-if="props.user.statement.inn_file"
                                     >
-                                        <a :href="props.user.statement.inn_file"
+                                        <a
+                                            :href="
+                                                props.user.statement.inn_file
+                                            "
+                                            target="_blank"
                                             >ИНН</a
                                         >
                                     </div>
@@ -2847,7 +3545,31 @@
                                             :customUpload="true"
                                             @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!employment_document"
                                         />
+                                        <div v-else-if="employment_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            employment_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -2861,6 +3583,7 @@
                                                 props.user.statement
                                                     .employment_document
                                             "
+                                            target="_blank"
                                             >Трудовая книжка</a
                                         >
                                     </div>
@@ -2907,7 +3630,7 @@
             <v-expansion-panel
                 class="yes-RSO-foreign"
                 v-else="
-                    selectedAnswer == 'Да' &&
+                    props.user.is_rso_member === true &&
                     !props.user.documents?.russian_passport
                 "
             >
@@ -2982,7 +3705,7 @@
                                 <p class="statement-title">
                                     Паспорт иностранного гражданина<span
                                         class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -3009,13 +3732,41 @@
                                             :customUpload="true"
                                             @select="selectPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!passportUpload"
                                         />
+                                        <div v-else-if="passportUpload">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                           passportUpload.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
                                         v-if="props.user.statement.passport"
                                     >
-                                        <a :href="props.user.statement.passport"
+                                        <a
+                                            :href="
+                                                props.user.statement.passport
+                                            "
+                                            target="_blank"
                                             >Паспорт</a
                                         >
                                     </div>
@@ -3028,7 +3779,7 @@
                                 <p class="statement-title">
                                     Паспорт законного представителя<span
                                         class="valid-red"
-                                        >*</span
+                                        >&nbsp;*</span
                                     >
                                 </p>
                                 <div class="statement-wrapper">
@@ -3055,7 +3806,31 @@
                                             :customUpload="true"
                                             @select="selectParentPersonalPass"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!passport_representative"
                                         />
+                                        <div v-else-if="passport_representative">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            passport_representative.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -3069,6 +3844,7 @@
                                                 props.user.statement
                                                     .passport_representative
                                             "
+                                            target="_blank"
                                             >Паспорт родителя</a
                                         >
                                     </div>
@@ -3107,7 +3883,31 @@
                                             :customUpload="true"
                                             @select="selectSnils"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!snils_file"
                                         />
+                                        <div v-else-if="snils_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            snils_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -3117,6 +3917,7 @@
                                             :href="
                                                 props.user.statement.snils_file
                                             "
+                                            target="_blank"
                                             >СНИЛС</a
                                         >
                                     </div>
@@ -3147,14 +3948,42 @@
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectINN"
+                                            v-if="!inn_file"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="inn_file">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            inn_file.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
                                         v-if="props.user.statement.inn_file"
                                     >
-                                        <a :href="props.user.statement.inn_file"
+                                        <a
+                                            :href="
+                                                props.user.statement.inn_file
+                                            "
+                                            target="_blank"
                                             >ИНН</a
                                         >
                                     </div>
@@ -3187,7 +4016,31 @@
                                             :customUpload="true"
                                             @select="selectEmployment"
                                             chooseLabel="Выбрать файл"
+                                            v-if="!employment_document"
                                         />
+                                        <div v-else-if="employment_document">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            employment_document.name
+                                                        }}</span
+                                                    >
+                                                    <!-- <div>
+                                                                {{
+                                                                    formatSize(
+                                                                        statement.size,
+                                                                    )
+                                                                }}
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="statement-item"
@@ -3201,6 +4054,7 @@
                                                 props.user.statement
                                                     .employment_document
                                             "
+                                            target="_blank"
                                             >Трудовая книжка</a
                                         >
                                     </div>
@@ -3236,7 +4090,25 @@
                 class="form__button-group d-flex justify-space-between"
             >
                 <Button
-                    :disabled="isLoading"
+                    :disabled="
+                        isLoading ||
+                        !props.user.first_name ||
+                        !props.user.last_name ||
+                        !props.user.gender ||
+                        !props.user.date_of_birth ||
+                        !props.user.email ||
+                        !props.user.phone_number ||
+                        !props.user.user_region.reg_town ||
+                        !props.user.user_region.reg_region_id ||
+                        !props.user.user_region.reg_house ||
+                        !props.user.education.study_institution ||
+                        !props.user.education.study_year ||
+                        (props.user.documents.russian_passport &&
+                            (!props.user.documents.pass_ser_num ||
+                                !props.user.documents.pass_date ||
+                                !props.user.documents.inn ||
+                                !props.user.documents.snils))
+                    "
                     :loaded="isLoading"
                     v-if="
                         props.user.sent_verification === false &&
@@ -3273,7 +4145,7 @@ import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { TextArea } from '@shared/components/inputs';
-
+import { MaskInput } from 'vue-3-mask';
 import { userData } from '@features/userData';
 const props = defineProps({
     button: Boolean,
@@ -3287,6 +4159,7 @@ const emit = defineEmits([
     'updateParentData',
     'updateStatus',
 ]);
+const onNumber = ref('');
 const router = useRouter();
 const userStore = useUserStore();
 // const currentUser = storeToRefs(userStore);
@@ -3352,6 +4225,19 @@ const isEmployeChange = ref(false);
 const isMilitaryChange = ref(false);
 const isForeignChange = ref(false);
 
+const formatSize = (size) => {
+    if (size > 1024 * 1024 * 1024 * 1024) {
+        return (size / 1024 / 1024 / 1024 / 1024).toFixed(2) + ' TB';
+    } else if (size > 1024 * 1024 * 1024) {
+        return (size / 1024 / 1024 / 1024).toFixed(2) + ' GB';
+    } else if (size > 1024 * 1024) {
+        return (size / 1024 / 1024).toFixed(2) + ' MB';
+    } else if (size > 1024) {
+        return (size / 1024).toFixed(2) + ' KB';
+    }
+    return size.toString() + ' B';
+};
+
 const statementUp = (event) => {
     statement.value = event.files[0];
     console.log('файл есть', statement.value);
@@ -3411,10 +4297,100 @@ const selectMilitary = (event) => {
     isMilitaryChange.value = true;
 };
 
-const counterKnow = computed(() => {
-    return props.user.statement.rso_info_from.length || 0;
+const counterCourse = computed(() => {
+    return props.user.education.study_year?.length || 0;
 });
 
+const counterSpeciality = computed(() => {
+    return props.user.education.study_specialty?.length || 0;
+});
+
+const counterFacultet = computed(() => {
+    return props.user.education.study_faculty?.length || 0;
+});
+
+const counterTown = computed(() => {
+    return props.user.user_region.reg_town?.length || 0;
+});
+
+const counterFactTown = computed(() => {
+    return props.user.user_region?.fact_town?.length || 0;
+});
+
+const counterFactHouse = computed(() => {
+    return props.user.user_region?.fact_house?.length || 0;
+});
+
+const counterHouse = computed(() => {
+    return props.user.user_region.reg_house?.length || 0;
+});
+
+const counterVk = computed(() => {
+    return props.user.social_vk?.length || 0;
+});
+
+const counterTg = computed(() => {
+    return props.user.social_tg?.length || 0;
+});
+
+const counterSnils = computed(() => {
+    return props.user.documents.snils?.length || 0;
+});
+
+const counterInn = computed(() => {
+    return props.user.documents.inn?.length || 0;
+});
+
+const counterWorkbook = computed(() => {
+    return props.user.documents.work_book_num?.length || 0;
+});
+const counterMilitary = computed(() => {
+    return props.user.documents.mil_reg_doc_ser_num?.length || 0;
+});
+const counterIntPass = computed(() => {
+    return props.user.documents.international_pass?.length || 0;
+});
+
+const counterPass = computed(() => {
+    return props.user.documents.pass_ser_num?.length || 0;
+});
+
+const counterOtherDoc = computed(() => {
+    return foreignDoc.value.name?.length || 0;
+});
+
+const counterOtherWorkbook = computed(() => {
+    return foreignDoc.value.work_book_num?.length || 0;
+});
+
+const counterOtherPassNum = computed(() => {
+    return foreignDoc.value.foreign_pass_num?.length || 0;
+});
+
+const counterOtherPassWhom = computed(() => {
+    return foreignDoc.value.foreign_pass_whom?.length || 0;
+});
+
+const counterOtherSnils = computed(() => {
+    return foreignDoc.value.snils?.length || 0;
+});
+
+const counterOtherInn = computed(() => {
+    return foreignDoc.value.inn?.length || 0;
+});
+
+const counterPassWhom = computed(() => {
+    return props.user.documents.pass_whom?.length || 0;
+});
+const counterKnow = computed(() => {
+    return props.user.statement.rso_info_from?.length || 0;
+});
+
+// const updateValue = (event) => {
+//     console.log('textt');
+//     emit('update:value', event.target.value);
+//     console.log('textt', event.target.value);
+// };
 const getData = async () => {
     try {
         const responseForeignDocs = await HTTP.get(
@@ -3604,6 +4580,7 @@ const updateData = async () => {
                 phone_number: props.user.phone_number,
                 social_vk: props.user.social_vk,
                 social_tg: props.user.social_tg,
+                is_rso_member: props.user.is_rso_member,
             },
             {
                 headers: {
@@ -3717,7 +4694,11 @@ const updateData = async () => {
             );
         }
 
-        let studyEducationId = Number.isInteger(props.user.education.study_institution)?props.user.education.study_institution:props.user.education.study_institution?.id;
+        let studyEducationId = Number.isInteger(
+            props.user.education.study_institution,
+        )
+            ? props.user.education.study_institution
+            : props.user.education.study_institution?.id;
         const axiosrequest4 = await HTTP.patch(
             '/rsousers/me/education/',
             {
@@ -3769,15 +4750,14 @@ const updateData = async () => {
             timer: 1000,
         });
         console.log('resdp', axiosrequest1.data);
+        isLoading.value = false;
         emit('updateUserData', axiosrequest1.data);
         emit('updateRegionData', axiosrequest2.data);
         emit('updateDocData', axiosrequest3.data);
         emit('updateEducData', axiosrequest4.data);
         emit('updateFileData', axiosrequest5.data);
         emit('updateParentData', axiosrequestParent.value);
-
         emit('updateStatus', axiosrequest6?.data);
-        isLoading.value = false;
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -3796,8 +4776,8 @@ const updateData = async () => {
 };
 
 const answers = ref([
-    { name: 'Да', id: 'f1' },
-    { name: 'Нет', id: 'f2', checked: true },
+    { name: 'Да', value: true, id: 'f1' },
+    { name: 'Нет', value: false, id: 'f2' },
 ]);
 
 const gender = ref([
@@ -3835,10 +4815,6 @@ const passport = ref([
     { name: 'Нет', value: false, id: 'Нет' },
 ]);
 
-const selectedAnswer = ref('Нет');
-const selectedPassParent = ref('Да');
-const selectedPass = ref('Да');
-
 onMounted(() => {
     getData();
 });
@@ -3849,9 +4825,9 @@ onMounted(() => {
     &-title {
         font-size: 20px;
         color: #35383f;
-        font-weight: 700;
+        font-weight: 600;
         margin-bottom: 40px;
-        font-family: BERTSANS;
+        font-family: 'Bert Sans';
     }
     &-form {
         padding-bottom: 40px;
@@ -3920,7 +4896,7 @@ onMounted(() => {
 }
 .form-field label {
     font-size: 16px;
-    font-family: BERTSANS;
+    font-family: 'Bert Sans';
     font-weight: 600;
     margin-bottom: 8px;
 }
@@ -3993,8 +4969,8 @@ onMounted(() => {
             column-gap: 40px;
         }
         @media (max-width: 575px) {
-           display: flex;
-           flex-direction: column;
+            display: flex;
+            flex-direction: column;
         }
     }
     &-wrapper {
@@ -4005,8 +4981,8 @@ onMounted(() => {
             font-size: 24px;
             padding: 40px 40px 0px;
             @media (max-width: 768px) {
-            font-size: 18px;
-        }
+                font-size: 18px;
+            }
         }
     }
 }
@@ -4287,6 +5263,79 @@ onMounted(() => {
     color: #1f7cc0;
     margin-left: 5px;
 }
+
+.valid-red {
+    color: red;
+}
+.statement-title sup {
+    color: #000000de;
+    font-weight: 500;
+}
+
+.accordion-block-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.v-expansion-panel-text__wrapper {
+    padding: 0;
+}
+.v-expansion-panel-title--active {
+    border-bottom: none !important;
+}
+.phone input,
+.passport-number input,
+.input-big input {
+    box-sizing: border-box;
+    border: 2px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 16px 10px 16px;
+    margin-bottom: 20px;
+    font-family: 'Bert Sans';
+    color: #35383f;
+}
+
+// .data-form {
+//     grid-template-columns: 1fr 1fr;
+//     grid-column-gap: 80px;
+// }
+// .docs {
+//     grid-template-columns: 1fr;
+//     column-gap: 40px;
+// }
+// .parents-about {
+//     grid-column-gap: 80px;
+// }
+// #passport-parent-yes {
+//     margin-right: 40px;
+//     @media screen and (max-width: 1215px) {
+//         margin-right: 0;
+//     }
+// }
+// #pass-no-addr {
+//     margin-left: -30px;
+//     @media screen and (max-width: 1215px) {
+//         margin-right: auto;
+//         margin-left: 0;
+//     }
+// }
+// .izm {
+//     display: grid;
+//     grid-template-columns: 1fr 1fr;
+//     @media screen and (max-width: 1024px) {
+//         grid-column-gap: 80px;
+//     }
+// }
+
+@media (max-width: 768px) {
+    .parents-wrapper__title,
+    .accordion-block-title {
+        font-size: 18px;
+    }
+}
+
 // @media (max-width: 1439px) {
 //     a:not([href]):not([class]),
 //     a:not([href]):not([class]):hover {

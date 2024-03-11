@@ -12,14 +12,18 @@
                     </p>
                     <!-- Кнопка с предложением вернуться в ЛК -->
                     <button class="error-404__button">
-                        <a href="">Вернуться в личный кабинет</a>
+                        <a href="/MyPage">Вернуться в личный кабинет</a>
                     </button>
                 </div>
             </div>
         </section>
     </div>
 </template>
-<script setup></script>
+<script setup>
+import { usePage } from '@shared';
+
+usePage({ isHidden: true });
+</script>
 <style scoped lang="scss">
 /* base- потом удалить*/
 * {

@@ -29,18 +29,23 @@
                                         <v-row>
                                             <v-file-input
                                                 @change="selectFile"
+                                                type="file"
                                                 show-size
                                                 prepend-icon="mdi-camera"
                                                 counter
-                                            ></v-file-input>
+                                            />
+                                        </v-row>
+                                        <v-row class="align-center justify-end">
+                                            <v-btn
+                                                v-if="preview"
+                                                class="button-wrapper mt-5"
+                                                @click="cropImage()"
+                                                prepend-icon="crop"
+                                                variant="plain"
+                                            >Обрезать фото</v-btn>
                                         </v-row>
                                         <v-row>
-                                            <v-card class="mt-5 mx-auto">
-                                                <img
-                                                    v-if="preview"
-                                                    :src="preview"
-                                                />
-                                            </v-card>
+                                            <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview" />
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
@@ -105,18 +110,23 @@
                                             <v-row>
                                                 <v-file-input
                                                     @change="selectFile"
+                                                    type="file"
                                                     show-size
                                                     prepend-icon="mdi-camera"
                                                     counter
-                                                ></v-file-input>
+                                                />
+                                            </v-row>
+                                            <v-row class="align-center justify-end">
+                                                <v-btn
+                                                    v-if="preview"
+                                                    class="button-wrapper mt-5"
+                                                    @click="cropImage()"
+                                                    prepend-icon="crop"
+                                                    variant="plain"
+                                                >Обрезать фото</v-btn>
                                             </v-row>
                                             <v-row>
-                                                <v-card class="mt-5 mx-auto">
-                                                    <img
-                                                        v-if="preview"
-                                                        :src="preview"
-                                                    />
-                                                </v-card>
+                                                <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview" />
                                             </v-row>
                                         </v-container>
                                     </v-card-text>
@@ -158,33 +168,47 @@
 <script setup>
 import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
 
 const emit = defineEmits(['uploadUserPic, updateUserPic']);
 
-const uploadUserPic = (userPic) => {
-    console.log('photo', userPic);
-    emit('uploadUserPic', userPic);
-    console.log('uploadUserPic');
-};
-
-const updateUserPic = (userPic) => {
-    console.log('photoUpdate', userPic);
-    emit('updateUserPic', userPic);
-    console.log('updateUserPic');
-};
 const props = defineProps({
     photo: String,
 });
 
 const dialog = ref(false);
 let preview = ref(null);
-const showPhoto = ref(false);
+// const showPhoto = ref(false);
 const isError = ref([]);
 const swal = inject('$swal');
+const cropper = ref();
 
 const userPhotos = ref({
     photo1: null,
 });
+
+// const uploadUserPic = (userPic) => {
+//     console.log('photo', userPic);
+//     emit('uploadUserPic', userPic);
+//     console.log('uploadUserPic');
+// };
+//
+// const updateUserPic = (userPic) => {
+//     console.log('photoUpdate', userPic);
+//     emit('updateUserPic', userPic);
+//     console.log('updateUserPic');
+// };
+
+const cropImage = () => {
+    if (cropper.value) {
+        const { canvas } = cropper.value.getResult();
+        preview.value = canvas.toDataURL('image/jpeg')
+        canvas.toBlob((blob) => {
+            userPhotos.value.photo1 = new File([blob], "photo1.jpg", { type: "image/jpeg" })
+        }, 'image/jpeg');
+    }
+};
 
 const selectFile = (event) => {
     userPhotos.value.photo1 = event.target.files[0];

@@ -15,6 +15,7 @@
                     id="search"
                     class="headquarters-search__input"
                     v-model="name"
+                    @keyup="searchReg"
                     placeholder="Начните вводить название штаба."
                 />
                 <svg
@@ -100,6 +101,7 @@
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
+                            :sorts-boolean="false"
                         ></sortByEducation>
                     </div>
 
@@ -107,7 +109,7 @@
                         type="button"
                         class="ascend"
                         @click="ascending = !ascending"
-                        icon="icon"
+                        iconn="iconn"
                         color="white"
                     ></Button>
                 </div>
@@ -116,20 +118,41 @@
             <div class="mt-10" v-show="vertical">
                 <RegionalHQList
                     :regionalHeadquarters="sortedRegionalHeadquarters"
-                    v-if="!isLoading.isLoading.value"
                 ></RegionalHQList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="isLoading.isLoading.value"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !isLoading.isLoading.value &&
+                        !sortedRegionalHeadquarters.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <HorizontalRegionalHQs
                     :regionalHeadquarters="sortedRegionalHeadquarters"
                 ></HorizontalRegionalHQs>
+                <v-progress-circular
+                    class="circleLoader"
+                    v-if="isLoading.isLoading.value"
+                    indeterminate
+                    color="blue"
+                ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !isLoading.isLoading.value &&
+                        !sortedRegionalHeadquarters.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -179,6 +202,8 @@ const vertical = ref(true);
 
 const name = ref('');
 
+const timerSearch = ref(null);
+
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
@@ -188,18 +213,12 @@ const selectedSortDistrict = ref(
 );
 
 const districts = ref([]);
-const searchRegional = async (name) => {
-    try {
-        const filteredRegional = await HTTP.get(`/regionals/?search=${name}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        regionalHeadquarters.regionals.value = filteredRegional.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
+
+const searchReg = (event) => {
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        regionalsStore.searchRegionalsHead(name.value);
+    }, 400);
 };
 
 const filtersDistricts = computed(() =>
@@ -209,10 +228,6 @@ const filtersDistricts = computed(() =>
           )?.regional_headquarters ?? []
         : regionalHeadquarters.regionals.value,
 );
-
-const searchReg = computed(() => {
-    return searchRegional(name.value);
-});
 
 const getDistrictsHeadquartersForFilters = async () => {
     try {
@@ -236,9 +251,6 @@ const sortOptionss = ref([
 
 const sortedRegionalHeadquarters = computed(() => {
     let tempHeadquarters = [...regionalHeadquarters.regionals.value];
-
-    searchReg.value;
-
     if (selectedSortDistrict.value) {
         let districtId = districts.value.find(
             (district) => district.name === selectedSortDistrict.value,
@@ -470,5 +482,15 @@ pre {
     .sort-select {
         margin-top: 12px;
     }
+}
+.option-select .v-field__input input::placeholder,
+.form__select .v-field__input input::placeholder {
+    color: #35383f;
+    opacity: revert;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
 }
 </style>

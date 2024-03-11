@@ -59,12 +59,11 @@
                     :key="i"
                     class="dropdown__item dropdown__item_not"
                     v-show="
-                        item.show && (
-                            item.button ||
+                        item.show &&
+                        (item.button ||
                             item.link ||
                             !item.hasOwnProperty('params') ||
-                            (item.hasOwnProperty('params') && item.params.id)
-                        )
+                            (item.hasOwnProperty('params') && item.params.id))
                     "
                 >
                     <button
@@ -228,5 +227,10 @@ const LogOut = () => {
 
 .dropdown__item_not::before {
     background-color: inherit;
+}
+
+.dropdown__list,
+.header__nav-list {
+    font-weight: 500 !important;
 }
 </style>

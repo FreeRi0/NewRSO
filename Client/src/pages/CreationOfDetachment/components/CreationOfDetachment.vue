@@ -46,7 +46,7 @@ const detachment = ref({
     region: null,
     city: '',
     educational_institution: null,
-    educational_headquarter:null,
+    educational_headquarter: null,
     commander: null,
     social_vk: '',
     social_tg: '',
@@ -141,13 +141,22 @@ const changeDetachment = async () => {
     formData.append('founding_date', detachment.value.founding_date);
     formData.append('region', detachment.value.region);
     formData.append('city', detachment.value.city);
-    // formData.append('educational_headquarter', detachment.value.educational_headquarter);
-    // if (detachment.value.educational_institution) {
-    //     formData.append(
-    //         'educational_institution',
-    //         detachment.value.educational_institution,
-    //     );
-    // } else formData.append('educational_institution', '');
+    // formData.append(
+    //     'educational_headquarter',
+    //     detachment.value.educational_headquarter,
+    // );
+    if (detachment.value.educational_headquarter) {
+        formData.append(
+            'educational_headquarter',
+            detachment.value.educational_headquarter,
+        );
+    } else formData.append('educational_headquarter', '');
+    if (detachment.value.educational_institution) {
+        formData.append(
+            'educational_institution',
+            detachment.value.educational_institution,
+        );
+    } else formData.append('educational_institution', '');
 
     if (
         roles.roles.value.educationalheadquarter_commander ||

@@ -7,13 +7,14 @@
             { btn_rounded: rounded },
             { btn_outlined: outlined },
             { btn_icon: icon },
+            { btn_iconn: iconn },
             { btn_large: size === 'large' },
         ]"
         :disabled="disabled"
         :loaded="loaded"
         @click="clickOnButton"
     >
-        <span v-if="icon"></span>
+        <span v-if="icon || iconn"></span>
         <span v-else>{{ label }}</span>
     </button>
     <button
@@ -24,6 +25,7 @@
             { btn_rounded: rounded },
             { btn_outlined: outlined },
             { btn_icon: icon },
+            { btn_iconn: iconn },
             { btn_large: size === 'large' },
         ]"
         :disabled="disabled"
@@ -67,6 +69,10 @@ const props = defineProps({
         required: false,
     },
     icon: {
+        type: String,
+        required: false,
+    },
+    iconn: {
         type: String,
         required: false,
     },
@@ -136,6 +142,21 @@ const clickOnButton = () => {
     }
     &_icon {
         border-radius: 5px;
+        height: 40px;
+        width: 40px;
+        margin: 0px;
+        margin-left: 8px;
+        padding: 0;
+    }
+    &_iconn {
+        border-radius: 10px;
+        height: 40px;
+        width: 40px;
+        margin: 0px;
+        padding: 0;
+    }
+    &_switchh {
+        border-radius: 10px;
         height: 40px;
         width: 40px;
         margin: 0px;

@@ -3,10 +3,12 @@
         <div class="headquarters">
             <bannerCreate
                 desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
-                :button="false"
-                :loc-com="true"
                 label="Создать штаб"
+                name="CreateLHQ"
+                :button="false"
+                :educ-com="true"
             ></bannerCreate>
+            <!-- :loc-com="true" -->
             <h2 class="headquarters-title">Местные штабы</h2>
             <div class="headquarters-search">
                 <input
@@ -14,6 +16,7 @@
                     id="search"
                     class="headquarters-search__input"
                     v-model="name"
+                    @keyup="searchLocal"
                     placeholder="Начните вводить название штаба."
                 />
                 <svg
@@ -76,16 +79,6 @@
 
                 <div class="sort-filters">
                     <div class="sort-select">
-                        <!-- <Select
-                            variant="outlined"
-                            clearable
-                            name="select_district"
-                            id="select-district"
-                            v-model="selectedSortDistrict"
-                            class="filter-district"
-                            address="/districts/"
-                            placeholder="Окружные штабы"
-                        ></Select> -->
                         <v-select
                             class="form__select filter-district"
                             :items="districts"
@@ -103,16 +96,6 @@
                         </v-select>
                     </div>
                     <div class="sort-select">
-                        <!-- <Select
-                            variant="outlined"
-                            clearable
-                            name="select_region"
-                            id="select-region"
-                            v-model="selectedSortRegion"
-                            class="filter-region"
-                            address="/regionals/"
-                            placeholder="Региональные штабы"
-                        ></Select> -->
                         <v-select
                             class="form__select filter-district"
                             :items="regionals"
@@ -136,6 +119,7 @@
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
+                            :sorts-boolean="false"
                         ></sortByEducation>
                     </div>
 
@@ -143,7 +127,7 @@
                         type="button"
                         class="ascend"
                         @click="ascending = !ascending"
-                        icon="icon"
+                        iconn="iconn"
                         color="white"
                     ></Button>
                 </div>
@@ -151,26 +135,38 @@
             <div v-show="vertical" class="mt-10">
                 <LocalHQList
                     :localHeadquarters="sortedLocalHeadquarters"
-                    v-if="!isLocalLoading"
                 ></LocalHQList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="localStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !localStore.isLoading && !sortedLocalHeadquarters.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
             <div class="horizontal" v-show="!vertical">
                 <HorizontalLocalHQs
                     :localHeadquarters="sortedLocalHeadquarters"
-                    v-if="!isLocalLoading"
                 ></HorizontalLocalHQs>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="localStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !localStore.isLoading && !sortedLocalHeadquarters.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
             <Button
                 @click="headquartersVisible += step"
@@ -198,15 +194,18 @@ import { ref, computed, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
+import { useLocalsStore } from '@features/store/local';
 import { onActivated } from 'vue';
 
 const crosspageFilters = useCrosspageFilter();
+
+const localStore = useLocalsStore();
 
 const localHeadquarters = ref([]);
 
 const headquartersVisible = ref(20);
 const isLocalLoading = ref(false);
-
+const timerSearch = ref(null);
 const step = ref(20);
 
 const ascending = ref(true);
@@ -229,41 +228,12 @@ const selectedSortRegional = ref(
 const districts = ref([]);
 const regionals = ref([]);
 
-const getLocalHeadquarters = async () => {
-    try {
-        isLocalLoading.value = true;
-        setTimeout(async () => {
-            const localsResponse = await HTTP.get(`/locals/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-            localHeadquarters.value = localsResponse.data;
-            isLocalLoading.value = false;
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
+const searchLocal = (event) => {
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        localStore.searchLocals(name.value);
+    }, 400);
 };
-
-const searchLocal = async (name) => {
-    try {
-        const filteredLocals = await HTTP.get(`/locals/?search=${name}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        localHeadquarters.value = filteredLocals.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const searchLocals = computed(() => {
-    return searchLocal(name.value);
-});
 
 /*const filtersDistricts = computed(() =>
     selectedSortDistrict.value
@@ -272,6 +242,7 @@ const searchLocals = computed(() => {
           )?.local_headquarters ?? []
         : localHeadquarters.value,
 );
+
 const filtersRegionals = computed(() =>
     selectedSortRegional.value
         ? regionals.value.find(
@@ -283,7 +254,7 @@ const filtersRegionals = computed(() =>
 const getDistrictsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/districts/');
-        districts.value = data;
+        districts.value = data.results;
     } catch (e) {
         console.log('error request districts headquarters');
     }
@@ -291,15 +262,15 @@ const getDistrictsHeadquartersForFilters = async () => {
 const getRegionalsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/regionals/');
-        regionals.value = data;
+        regionals.value = data.results;
     } catch (e) {
         console.log('error request districts headquarters');
     }
 };
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-    getLocalHeadquarters();
     getRegionalsHeadquartersForFilters();
+    localStore.getLocals();
 });
 
 const selectedSort = ref(0);
@@ -316,28 +287,32 @@ const sortOptionss = ref([
 ]);
 
 const sortedLocalHeadquarters = computed(() => {
-    let tempHeadquartes = [...localHeadquarters.value];
+    let tempHeadquartes = [...localStore.locals];
 
     if (selectedSortRegional.value || selectedSortdistrict.value) {
         let idRegionals = [];
-        if (selectedSortdistrict.value){
+        if (selectedSortdistrict.value) {
             let districtId = districts.value.find(
                 (district) => district.name === selectedSortdistrict.value,
             )?.id;
-            idRegionals = regionals.value.filter((regional) => regional.district_headquarter === districtId).map((reg) => reg.id);
+            idRegionals = regionals.value
+                .filter(
+                    (regional) => regional.district_headquarter === districtId,
+                )
+                .map((reg) => reg.id);
         }
-        if (selectedSortRegional.value){
-            idRegionals = [regionals.value.find(
-                (regional) => regional.name === selectedSortRegional.value,
-            )?.id];
+        if (selectedSortRegional.value) {
+            idRegionals = [
+                regionals.value.find(
+                    (regional) => regional.name === selectedSortRegional.value,
+                )?.id,
+            ];
         }
 
         tempHeadquartes = tempHeadquartes.filter((item) => {
             return idRegionals.indexOf(item.regional_headquarter) >= 0;
         });
     }
-
-    searchLocals.value;
 
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -568,6 +543,17 @@ pre {
     .sort-select {
         margin-top: 12px;
     }
+}
+
+.option-select .v-field__input input::placeholder,
+.form__select .v-field__input input::placeholder {
+    color: #35383f;
+    opacity: revert;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
 }
 </style>
 @shared/components/inputs/imagescomp

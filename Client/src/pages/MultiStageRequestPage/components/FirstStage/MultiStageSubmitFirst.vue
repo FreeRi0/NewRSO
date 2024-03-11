@@ -1,0 +1,957 @@
+<template>
+    <div v-if="!permissonDeny">
+        <div class="form__field">
+            <div class="contributor-search">
+                <input
+                    type="text"
+                    id="search"
+                    class="contributor-search__input"
+                    @keyup="searchHeadquarters"
+                    v-model="name"
+                    placeholder="Начните вводить"
+                />
+                <img src="@app/assets/icon/search.svg" alt="search" />
+            </div>
+        </div>
+
+        <div id="wrapper">
+            <div id="left">
+                <filters
+                    @update-district="updateDistrict"
+                    @update-reg="updateReg"
+                    @update-local="updateLocal"
+                    @update-educ="updateEduc"
+                    @update-detachment="updateDetachment"
+                    :district="district"
+                    :districts="districts"
+                    :reg="reg"
+                    :regionals="regionals"
+                    :local="local"
+                    :locals="locals"
+                    :educ="educ"
+                    :educ-head="educHead"
+                    :detachment="detachment"
+                    :detachments="detachments"
+                    :roles="roles.roles.value"
+                    :sorted-participants="sortedHeadquarters"
+                />
+
+                <div class="uploads">
+                    <div
+                        class="form-col"
+                        v-for="(file, index) in files.length + 1"
+                        :key="file"
+                    >
+                        <div class="form-fileupload" v-if="index < 6">
+                            <img
+                                class="paper-clip"
+                                src="@app/assets/icon/addFile.svg"
+                                alt="addFile"
+                            />
+
+                            <FileUpload
+                                class="file-upload-text"
+                                mode="basic"
+                                name="demo[]"
+                                accept=".pdf, .jpeg, .png"
+                                :maxFileSize="7000000"
+                                :customUpload="true"
+                                chooseLabel="Выбрать файл"
+                                @select="onUpload"
+                                @clear="onRemove(index)"
+                            ></FileUpload>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="right" v-if="sortedHeadquartersJunior.length">
+                <div class="additional_line">
+                    <div class="horizontallso__confidant">
+                        <input
+                            type="checkbox"
+                            v-model="isChecked"
+                            @change="onCheckbox"
+                        />
+                    </div>
+
+                    <p class="choose_all">Выделить все</p>
+
+                    <a class="download_text" target="_blank">
+                        <img class="download_img" src="/assets/download.svg" />
+                        Cкачать список
+                    </a>
+
+                    <div class="sort_line">
+                        <div class="sort-select">
+                            <sortByEducation
+                                variant="outlined"
+                                clearable
+                                v-model="sortBy"
+                                :options="sortOptionss"
+                                class="Sort-alphabet"
+                            ></sortByEducation>
+                        </div>
+                        <Button
+                            type="button"
+                            class="ascend"
+                            iconn="iconn"
+                            @click="ascending = !ascending"
+                            color="white"
+                        ></Button>
+                    </div>
+                </div>
+
+                <multi-stage-submit-item
+                    v-for="headquarter in sortedHeadquarters"
+                    :key="headquarter"
+                    :headquarter="headquarter"
+                    @select="onToggleSelectCompetition"
+                />
+            </div>
+            <p class="subtitle" v-else>Ничего не найдено.</p>
+        </div>
+
+        <template v-if="selectedCompetitionsList.length">
+            <p class="text_total">
+                Итого: {{ selectedCompetitionsList.length }} ({{ memberCount }}
+                участников)
+            </p>
+            <!-- ({{ selectedCompetitionsList.reduce((sum, el) => sum + el.members_count) }}) -->
+            <multi-stage-submit-select
+                v-for="headquarter in selectedCompetitionsList"
+                :key="headquarter.id"
+                :headquarter="headquarter"
+                @select="onToggleSelectCompetition"
+            />
+        </template>
+        <div class="competitions__btns" v-if="selectedCompetitionsList.length">
+            <Button
+                class="save"
+                type="button"
+                label="Подать заявку"
+                @click="onAction"
+            ></Button>
+        </div>
+    </div>
+    <p class="subtitle" v-else>Вы не можете подавать заявку</p>
+</template>
+
+<script setup>
+import { HTTP } from '@app/http';
+import { ref, watch, onMounted, computed } from 'vue';
+
+import MultiStageSubmitItem from './MultiStageSubmitItem.vue';
+import MultiStageSubmitSelect from './MultiStageSubmitSelect.vue';
+import FileUpload from 'primevue/fileupload';
+
+import { useRouter } from 'vue-router';
+
+import { sortByEducation } from '@shared/components/selects';
+import { Button } from '@shared/components/buttons';
+
+import { filters } from '@features/Contributor/components';
+import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useDistrictsStore } from '@features/store/districts';
+import { useLocalsStore } from '@features/store/local';
+import { useEducationalsStore } from '@features/store/educationals';
+import { useSquadsStore } from '@features/store/squads';
+import { storeToRefs } from 'pinia';
+
+const props = defineProps({
+    me: {
+        type: Object,
+        default: () => ({}),
+    },
+    event: {
+        type: Object,
+        default: () => ({}),
+    },
+    route: {
+        type: Object,
+        default: () => ({}),
+    },
+});
+
+const router = useRouter();
+const sortBy = ref('alphabetically');
+const permissonDeny = ref(false);
+
+const headquartersJunior = ref([]);
+const sortedHeadquartersJunior = ref([]);
+const selectedCompetitionsList = ref([]);
+const isChecked = ref(false);
+
+const memberCount = ref(0);
+const name = ref('');
+const timerSearch = ref(null);
+const ascending = ref(true);
+const files = ref([]);
+
+const sortOptionss = ref([
+    {
+        value: 'alphabetically',
+        name: 'Алфавиту от А - Я',
+    },
+    { value: 'date_of_birth', name: 'По дате вступления в РСО' },
+]);
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+const regionalsStore = useRegionalsStore();
+
+const districtsStore = useDistrictsStore();
+const localsStore = useLocalsStore();
+const educationalsStore = useEducationalsStore();
+const squadsStore = useSquadsStore();
+const regionals = ref([]);
+const districts = ref([]);
+const locals = ref([]);
+const educHead = ref([]);
+const detachments = ref([]);
+const reg = ref(null);
+const detachment = ref(null);
+const district = ref(null);
+const local = ref(null);
+const isLoading = ref(false);
+const educ = ref(null);
+const sortedVal = ref([]);
+const levelAccess = ref(7);
+let search = '';
+
+// Фильтры
+
+const viewHeadquartersData = async (resp, search, join) => {
+    try {
+        isLoading.value = true;
+        const viewHeadquartersResponse = await HTTP.get(resp + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        let response = viewHeadquartersResponse.data;
+        if (join) {
+            const viewHeadquartersResponsetTwo = await HTTP.get(
+                '/educationals/' + search,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            response = response.concat(viewHeadquartersResponsetTwo.data);
+        }
+        sortedVal.value = response;
+        isLoading.value = false;
+        console.log(sortedVal.value);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const updateDistrict = (districtVal) => {
+    let search = '';
+    let resp = '/regionals/';
+    search = '?district_headquarter__name=' + districtVal;
+
+    if (name.value) search += '&search=' + name.value;
+    viewHeadquartersData(resp, search);
+
+    let districtId = districtsStore.districts.find(
+        (dis) => dis.name == districtVal,
+    )?.id;
+    district.value = districtVal;
+    regionals.value = regionalsStore.regionals.filter(
+        (regional) => regional.district_headquarter == districtId,
+    );
+};
+
+const updateReg = (regVal) => {
+    let search = '';
+    let resp = '/locals/';
+    if (regVal) {
+        search = '?regional_headquarter__name=' + regVal;
+    } else if (levelAccess.value < 2) {
+        search = '?district_headquarter__name=' + district.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+    viewHeadquartersData(resp, search);
+
+    let regId = regionalsStore.regionals.find(
+        (regional) => regional.name == regVal,
+    )?.id;
+    reg.value = regVal;
+    locals.value = localsStore.locals.filter(
+        (loc) => loc.regional_headquarter == regId,
+    );
+};
+const updateLocal = (localVal) => {
+    let search = '';
+    let resp = localVal ? '/educationals/' : '/locals/';
+    if (localVal) {
+        search = '?local_headquarter__name=' + localVal;
+    } else if (levelAccess.value < 3) {
+        search = '?regional_headquarter__name=' + reg.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+
+    viewHeadquartersData(resp, search, !localVal);
+
+    let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
+    let regId = regionalsStore.regionals.find(
+        (regional) => regional.name == reg.value,
+    )?.id;
+    local.value = localVal;
+    educHead.value = educationalsStore.educationals.filter(
+        (edh) => locId && edh.local_headquarter == locId,
+    );
+};
+
+const updateEduc = (educVal) => {
+    let search = '';
+    let resp = educVal
+        ? '/detachments/'
+        : local.value
+        ? '/educationals/'
+        : '/locals/';
+    if (educVal) {
+        search = '?educational_headquarter__name=' + educVal;
+    } else if (local.value) {
+        search = '?local_headquarter__name=' + local.value;
+    } else if (levelAccess.value < 3) {
+        search = '?regional_headquarter__name=' + reg.value;
+    } else if (levelAccess.value < 4) {
+        search = '?local_headquarter__name=' + local.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+
+    viewHeadquartersData(resp, search, !educVal && !local.value);
+    let educId = educationalsStore.educationals.find(
+        (edh) => edh.name == educVal,
+    )?.id;
+    let regId = regionalsStore.regionals.find(
+        (regional) => regional.name == reg.value,
+    )?.id;
+    educ.value = educVal;
+    detachments.value = squadsStore.squads.filter(
+        (squad) => educId && squad.educational_headquarter == educId,
+    );
+};
+
+const updateDetachment = (detachmentVal) => {
+    let search = '';
+    let resp = detachmentVal ? '/rsousers' : educ.value ? '/detachments/' : '';
+    if (detachmentVal) {
+        search = '?detachment__name=' + detachmentVal;
+    } else if (levelAccess.value < 5) {
+        search = '?educational_headquarter__name=' + educ.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+
+    viewHeadquartersData(resp, search);
+    detachment.value = detachmentVal;
+};
+
+watch(
+    () => roles.roles.value,
+
+    (newRole, oldRole) => {
+        if (!roles.roles.value.centralheadquarter_commander) {
+            let search = '';
+            let resp = '';
+            let join = false;
+
+            if (roles.roles.value.districtheadquarter_commander) {
+                district.value =
+                    roles.roles.value.districtheadquarter_commander.name;
+                search =
+                    '?district_headquarter__name=' +
+                    roles.roles.value.districtheadquarter_commander.name;
+                resp = '/regionals/';
+                levelAccess.value = 1;
+            } else if (roles.roles.value.regionalheadquarter_commander) {
+                reg.value =
+                    roles.roles.value.regionalheadquarter_commander.name;
+                search =
+                    '?regional_headquarter__name=' +
+                    roles.roles.value.regionalheadquarter_commander.name;
+                resp = '/locals/';
+                join = true;
+                levelAccess.value = 2;
+            } else if (roles.roles.value.localheadquarter_commander) {
+                local.value = roles.roles.value.localheadquarter_commander.name;
+                search =
+                    '?local_headquarter__name=' +
+                    roles.roles.value.localheadquarter_commander.name;
+                resp = '/educationals/';
+                levelAccess.value = 3;
+            } else if (roles.roles.value.educationalheadquarter_commander) {
+                educ.value =
+                    roles.roles.value.educationalheadquarter_commander.name;
+                search =
+                    '?educational_headquarter__name=' +
+                    roles.roles.value.educationalheadquarter_commander.name;
+                resp = '/detachments/';
+                levelAccess.value = 4;
+            } else if (roles.roles.value.detachment_commander) {
+                detachment.value = roles.roles.value.detachment_commander.name;
+                search =
+                    '?detachment__name=' +
+                    roles.roles.value.detachment_commander.name;
+                resp = '/rsousers';
+                levelAccess.value = 5;
+            }
+            viewHeadquartersData(resp, search, join);
+        } else {
+            levelAccess.value = 0;
+        }
+    },
+);
+
+const sortedHeadquarters = computed(() => {
+    let tempHeadquarters = sortedHeadquartersJunior.value;
+
+    tempHeadquarters = tempHeadquarters.sort((a, b) => {
+        if (sortBy.value == 'alphabetically') {
+            let fa = a.name.toLowerCase() || a.last_name.toLowerCase(),
+                fb = b.name.toLowerCase() || b.last_name.toLowerCase();
+
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        }
+    });
+
+    if (!ascending.value) {
+        tempHeadquarters.reverse();
+    }
+    return tempHeadquarters;
+});
+//
+const onUpload = (file) => {
+    files.value.push(file.files[0]);
+};
+
+const onRemove = (index) => {
+    files.value.splice(index, 1);
+};
+
+const onAction = async () => {
+    try {
+        selectedCompetitionsList.value = selectedCompetitionsList.value.map(
+            (item) => {
+                delete item.id;
+                delete item.name;
+                delete item.members_count;
+                delete item.selected;
+                item.participants_count = 1; // item.members_count;
+                return item;
+            },
+        );
+
+        if (files.value.length > 0) {
+            let payload = {};
+            payload.user = props.me;
+            payload.event = props.event.value?.name;
+            for (let file of files.value) {
+                console.log(file);
+                console.log(payload);
+                payload.document = file;
+                await HTTP.post(
+                    `/events/${props.route.params.id}/user_documents/`,
+                    payload,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+            }
+        }
+
+        await HTTP.post(
+            `/events/${props.route.params.id}/multi_applications/`,
+            selectedCompetitionsList.value,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        router.push({
+            name: 'Action',
+            params: {
+                id: props.route.params.id,
+            },
+        });
+    } catch (e) {
+        console.log('onAction error', e);
+    }
+};
+
+const onCheckbox = async (event) => {
+    if (event.target.checked) {
+        for (const obj of sortedHeadquartersJunior.value) {
+            obj.selected = true;
+            selectedCompetitionsList.value.push(obj);
+        }
+    } else {
+        for (const obj of sortedHeadquartersJunior.value) {
+            obj.selected = false;
+        }
+        selectedCompetitionsList.value = [];
+    }
+};
+
+const onToggleSelectCompetition = (competition, isChecked) => {
+    if (isChecked) {
+        competition.selected = isChecked;
+        selectedCompetitionsList.value = [
+            ...selectedCompetitionsList.value,
+            competition,
+        ];
+    } else {
+        competition.selected = isChecked;
+        selectedCompetitionsList.value = selectedCompetitionsList.value.filter(
+            (c) => c.id !== competition.id,
+        );
+    }
+};
+
+const searchHeadquarters = () => {
+    if (!name.value) {
+        sortedHeadquartersJunior.value = headquartersJunior.value;
+    }
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        sortedByName(name.value);
+    }, 400);
+};
+
+const sortedByName = async (name) => {
+    console.log(name);
+    sortedHeadquartersJunior.value = headquartersJunior.value.filter((obj) =>
+        obj.name.includes(name),
+    );
+    console.log(sortedHeadquartersJunior.value);
+};
+
+watch(
+    () => roles.roles.value,
+
+    (newRole, oldRole) => {
+        getItemsByRoles();
+    },
+);
+
+watch(
+    () => regionalsStore.regionals,
+    () => {
+        regionals.value = regionalsStore.regionals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regId,
+        );
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regId,
+        );
+        detachments.value = squadsStore.squads.filter(
+            (squad) => squad.regional_headquarter == regId,
+        );
+    },
+);
+
+watch(
+    () => localsStore.locals,
+    () => {
+        locals.value = localsStore.locals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regId,
+        );
+    },
+);
+
+watch(
+    () => educationalsStore.educationals,
+    () => {
+        educHead.value = educationalsStore.educationals;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regId,
+        );
+    },
+);
+
+watch(
+    () => squadsStore.squads,
+    () => {
+        detachments.value = squadsStore.squads;
+        let regId = regionalsStore.regionals.find(
+            (regional) => regional.name == reg.value,
+        )?.id;
+        // let educId = regionalsStore.educationals.find(
+        //     (ed) => ed.name == educ.value,
+        // )?.id;
+        detachments.value = squadsStore.squads.filter(
+            (squad) => squad.regional_headquarter == regId,
+        );
+    },
+);
+const getItemsByRoles = () => {
+    if (!Object.keys(roleStore.roles).length) return false;
+    if (!roles.roles.value.centralheadquarter_commander) {
+        let search = '';
+        let resp = '';
+        let join = false;
+
+        if (roles.roles.value.districtheadquarter_commander) {
+            district.value =
+                roles.roles.value.districtheadquarter_commander.name;
+            search =
+                '?district_headquarter__name=' +
+                roles.roles.value.districtheadquarter_commander.name;
+            resp = '/regionals/';
+            levelAccess.value = 1;
+        } else if (roles.roles.value.regionalheadquarter_commander) {
+            reg.value = roles.roles.value.regionalheadquarter_commander.name;
+            search =
+                '?regional_headquarter__name=' +
+                roles.roles.value.regionalheadquarter_commander.name;
+            resp = '/locals/';
+            join = true;
+            locals.value = localsStore.locals.filter(
+                (loc) => loc.regional_headquarter == reg.value,
+            );
+            levelAccess.value = 2;
+        } else if (roles.roles.value.localheadquarter_commander) {
+            local.value = roles.roles.value.localheadquarter_commander.name;
+            search =
+                '?local_headquarter__name=' +
+                roles.roles.value.localheadquarter_commander.name;
+            resp = '/educationals/';
+            levelAccess.value = 3;
+        } else if (roles.roles.value.educationalheadquarter_commander) {
+            educ.value =
+                roles.roles.value.educationalheadquarter_commander.name;
+            search =
+                '?educational_headquarter__name=' +
+                roles.roles.value.educationalheadquarter_commander.name;
+            resp = '/detachments/';
+            levelAccess.value = 4;
+        } else if (roles.roles.value.detachment_commander) {
+            detachment.value = roles.roles.value.detachment_commander.name;
+            search =
+                '?detachment__name=' +
+                roles.roles.value.detachment_commander.name;
+            resp = '/rsousers';
+            levelAccess.value = 5;
+        }
+        viewHeadquartersData(resp, search, join);
+    } else {
+        levelAccess.value = 0;
+        let resp = '/districts/';
+        viewHeadquartersData(resp, '');
+    }
+};
+
+const getHeadquartersJunior = async () => {
+    try {
+        const { data } = await HTTP.get(
+            `/events/${props.route.params.id}/multi_applications`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        let i = 0;
+        if (data[0].district_headquarters) {
+            headquartersJunior.value.push(
+                ...data[0].district_headquarters.map((item) => {
+                    delete item?.detachments;
+                    delete item?.educational_headquarters;
+                    item.district_headquarter = item.id;
+                    item.id = i;
+                    i += 1;
+                    return item;
+                }),
+            );
+        }
+        if (data[0].regional_headquarters) {
+            headquartersJunior.value.push(
+                ...data[0].regional_headquarters.map((item) => {
+                    delete item?.detachments;
+                    delete item?.educational_headquarters;
+                    item.regional_headquarter = item.id;
+                    item.id = i;
+                    i += 1;
+                    return item;
+                }),
+            );
+        }
+        if (data[0].local_headquarters) {
+            headquartersJunior.value.push(
+                ...data[0].local_headquarters.map((item) => {
+                    delete item?.detachments;
+                    delete item?.educational_headquarters;
+                    item.local_headquarter = item.id;
+                    item.id = i;
+                    i += 1;
+                    return item;
+                }),
+            );
+        }
+        if (data[0].educational_headquarters) {
+            headquartersJunior.value.push(
+                ...data[0].educational_headquarters.map((item) => {
+                    delete item?.detachments;
+                    delete item?.educational_headquarters;
+                    item.educational_headquarter = item.id;
+                    item.id = i;
+                    i += 1;
+                    return item;
+                }),
+            );
+        }
+        if (data[0].detachments) {
+            delete data[0].detachments?.detachments;
+            headquartersJunior.value.push(
+                ...data[0].detachments.map((item) => {
+                    delete item?.detachments;
+                    delete item?.educational_headquarters;
+                    item.detachment = item.id;
+                    item.id = i;
+                    i += 1;
+                    return item;
+                }),
+            );
+        }
+        sortedHeadquartersJunior.value = headquartersJunior.value;
+    } catch (e) {
+        permissonDeny.value = true;
+        console.log('getApplications error', e);
+    }
+};
+
+watch(selectedCompetitionsList, (newSelectedCompetitionsList) => {
+    isChecked.value =
+        newSelectedCompetitionsList.length == headquartersJunior.value.length;
+});
+
+watch(ascending, () => {
+    if (!ascending.value) {
+        sortedHeadquartersJunior.value.reverse();
+    }
+});
+
+watch(selectedCompetitionsList, () => {
+    memberCount.value = 0;
+    for (const obj of headquartersJunior.value) {
+        if (obj.selected) memberCount.value += obj.members_count;
+        console.log(selectedCompetitionsList.value);
+    }
+});
+
+onMounted(() => {
+    getItemsByRoles();
+    getHeadquartersJunior();
+    console.log(reg.value);
+});
+</script>
+
+<style scoped lang="scss">
+#wrapper {
+    display: flex;
+}
+#left {
+    width: 25%;
+}
+#right {
+    margin-left: 24px;
+    width: 75%;
+}
+.form-input-container {
+    border: 1px solid #b6b6b6;
+    border-radius: 15px;
+    padding-left: 20px;
+    margin-bottom: 40px;
+
+    font-family: Akrobat;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 40px;
+    letter-spacing: 0px;
+    text-align: left;
+}
+.form__field {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 0px;
+}
+
+.text_total {
+    width: 1180px;
+    height: 26px;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    font-family: Bert Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
+}
+.competitions__btns {
+    display: grid;
+    width: 100%;
+    justify-content: center;
+    margin-top: 68px;
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+.horizontallso__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    width: 48px;
+    height: 48px;
+    input {
+        width: 100%;
+        height: 100%;
+    }
+}
+.choose_all {
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
+}
+.additional_line {
+    display: grid;
+    grid-template-columns: 48px 1fr minmax(auto, 150px) minmax(auto, 300px);
+    grid-gap: 12px;
+    align-items: center;
+    margin-bottom: 40px;
+}
+.download_text {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    color: #1f7cc0;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+.download_img {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+}
+.ascend {
+    background-image: url('@app/assets/icon/switch.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.sort-select {
+    &--width {
+        width: 193px;
+    }
+    & > .form__select {
+        margin-bottom: 0px;
+    }
+}
+.sort_line {
+    display: flex;
+    align-items: center;
+}
+.contributor-search__input {
+    width: 100%;
+    padding: 13px 0px 10px 60px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+.contributor-search {
+    position: relative;
+    box-sizing: border-box;
+    margin-bottom: 40px;
+}
+.contributor-search img {
+    position: absolute;
+    top: 15px;
+    left: 16px;
+}
+.form {
+    &-fileupload {
+        display: flex;
+        flex-direction: row;
+        margin-left: 4px;
+        font-family: Bert Sans;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 21px;
+        letter-spacing: 0em;
+        gap: 10px;
+        text-align: left;
+        color: #1f7cc0;
+        & > :deep(.p-) {
+            display: none;
+        }
+
+        & :deep(.p-button-label) {
+            text-decoration: underline;
+        }
+        & :deep(svg) {
+            display: none;
+        }
+    }
+    &-col {
+        margin-left: 4px;
+        margin-top: 36px;
+    }
+}
+.subtitle {
+    font-style: normal;
+    height: 26px;
+    font-family: Bert Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #35383f;
+    margin-bottom: 24px;
+}
+.Sort-alphabet {
+    margin-right: 8px;
+}
+</style>

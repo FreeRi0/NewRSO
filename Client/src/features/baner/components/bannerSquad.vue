@@ -120,6 +120,9 @@
                 <p class="error" v-if="isError.non_field_errors">
                     {{ '' + isError.non_field_errors }}
                 </p>
+                <p class="error" v-if="isError.non_field_errors">
+                    {{ '' + isError.error }}
+                </p>
             </div>
         </div>
     </div>
@@ -372,7 +375,7 @@ const copyL = () => {
     @media screen and (max-width: 575px) {
         grid-template-columns: 125px 125px;
         justify-content: center;
-        margin-left: 40px;
+        margin-left: 64px;
     }
 }
 

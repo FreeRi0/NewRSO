@@ -1,355 +1,158 @@
 <template>
     <div class="container">
-        <h2 class="action-title">Реестр участников</h2>
-        <div class="contributor-search">
-            <input
-                type="text"
-                id="search"
-                class="contributor-search__input"
-                @keyup="searchContributors"
-                v-model="name"
-                placeholder="Начинавйте ввод?"
-            />
-            <img src="@app/assets/icon/search.svg" alt="search" />
-        </div>
-
-        <!-- <div class="row-cols-2 action-slides">
-            <div class="col" style="width: 100%">
-                <div class="sort-container">
-                    <div class="sort-layout sort-types">
-                        <Button
-                            v-if="vertical"
-                            type="button"
-                            class="dashboard sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
-                        </Button>
-                        <Button
-                            v-else="!vertical"
-                            type="button"
-                            class="dashboardD sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
-                        </Button>
-                        <Button
-                            v-if="!vertical"
-                            type="button"
-                            class="menuuA sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        ></Button>
-                        <Button
-                            v-else="vertical"
-                            type="button"
-                            class="menuu sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        ></Button>
-                    </div>
-                    <div class="sort-alphabet">
-                        <sortByEducation
-                            variant="outlined"
-                            v-model="sortBy"
-                            :options="sortOptionss"
-                            class="sort-select select"
-                        ></sortByEducation>
-                        <Button
-                            type="button"
-                            class="ascend sort-button"
-                            icon="switch"
-                            @click="ascending = !ascending"
-                            color="white"
-                        ></Button>
-                    </div>
-                </div>
-                <div class="sort-container">
-                    <div class="postcard-container">
-                        <div v-if="vertical" v-for="element in SelectList">
-                            <ParticipantsCard
-                                :action="element"
-                            ></ParticipantsCard>
-                        </div>
-                        <div
-                            v-if="!vertical"
-                            v-for="element in SelectList"
-                        ></div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        <div class="contributor-container">
-            <div class="filters">
-                <filters
-                    @update-district="updateDistrict"
-                    @update-reg="updateReg"
-                    @update-local="updateLocal"
-                    @update-educ="updateEduc"
-                    @update-detachment="updateDetachment"
-                    :level-search="true"
-                    :district="district"
-                    :districts="districts"
-                    :reg="reg"
-                    :regionals="regionals"
-                    :local="local"
-                    :locals="locals"
-                    :educ="educ"
-                    :educ-head="educHead"
-                    :detachment="detachment"
-                    :detachments="detachments"
-                    :roles="roles.roles.value"
+        <div class="contributor">
+            <h2 class="contributor-title">Реестр участников</h2>
+            <div class="contributor-search">
+                <input
+                    type="text"
+                    id="search"
+                    class="contributor-search__input mb-10"
+                    @keyup="searchItems"
+                    v-model="name"
+                    placeholder="Начинайте ввод?"
                 />
+                <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
-            <div class="contributor-items">
-                <div class="contributor-sort">
-                    <div class="sort-layout sort-types">
-                        <Button
-                            v-if="vertical"
-                            type="button"
-                            class="dashboard sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
-                        </Button>
-                        <Button
-                            v-else="!vertical"
-                            type="button"
-                            class="dashboardD sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
-                        </Button>
-                        <Button
-                            v-if="!vertical"
-                            type="button"
-                            class="menuuA sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        ></Button>
-                        <Button
-                            v-else="vertical"
-                            type="button"
-                            class="menuu sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        ></Button>
-                    </div>
+            <div class="contributor-container">
+                <div class="filters">
+                    <filters
+                        @update-district="updateDistrict"
+                        @update-reg="updateReg"
+                        @update-local="updateLocal"
+                        @update-educ="updateEduc"
+                        @update-detachment="updateDetachment"
+                        :district="district"
+                        :districts="districts"
+                        :reg="reg"
+                        :regionals="regionals"
+                        :local="local"
+                        :locals="locals"
+                        :educ="educ"
+                        :educ-head="educHead"
+                        :detachment="detachment"
+                        :detachments="detachments"
+                        :roles="roles.roles.value"
+                        :sorted-participants="sortedHeadquarters"
+                    />
+                </div>
+                <div class="contributor-items">
+                    <div class="contributor-sort">
+                        <div class="sort-layout">
+                            <button
+                                class="showInfoBtn mr-4"
+                                v-if="!showInfo"
+                                @click="showInfo = !showInfo"
+                            >
+                                Показать статистику
+                            </button>
 
-                    <div class="sort-filters">
-                        <div class="sort-select">
-                            <sortByEducation
-                                variant="outlined"
-                                clearable
-                                v-model="sortBy"
-                                :options="sortOptionss"
-                            ></sortByEducation>
+                            <button
+                                class="showInfoBtn mr-4"
+                                v-else-if="showInfo"
+                                @click="showInfo = !showInfo"
+                            >
+                                Скрыть статистику
+                            </button>
                         </div>
 
-                        <Button
-                            type="button"
-                            class="ascend"
-                            icon="switch"
-                            @click="ascending = !ascending"
-                            color="white"
-                        ></Button>
+                        <div class="sort-filters">
+                            <!-- <div class="sort-select">
+                                <sortByEducation
+                                    variant="outlined"
+                                    clearable
+                                    v-model="sortBy"
+                                    :options="sortOptionss"
+                                    :sorts-boolean="false"
+                                ></sortByEducation>
+                            </div>
+
+                            <Button
+                                type="button"
+                                class="ascend mb-2"
+                                icon="switch"
+                                @click="ascending = !ascending"
+                                color="white"
+                            ></Button> -->
+                        </div>
                     </div>
+                    <registryList
+                        v-if="!isLoading"
+                        :items="sortedHeadquarters"
+                        :show-info="showInfo"
+                    ></registryList>
+                    <v-progress-circular
+                        class="circleLoader"
+                        v-else
+                        indeterminate
+                        color="blue"
+                    ></v-progress-circular>
                 </div>
-                <!-- <div class="contributor-wrapper">
-                    <template
-                        v-for="participant in sortedParticipants"
-                        :key="participant.id"
-                    >
-                        <contributionAccessItem :participant="participant" />
-                    </template>
-                </div> -->
             </div>
         </div>
     </div>
 </template>
 
-<style lang="scss">
-//Общий стиль компонента
-.action {
+<style lang="scss" scoped>
+.contributor {
+    padding: 0px 0px 60px 0px;
     &-title {
-        height: 116px;
         font-size: 52px;
-        @media screen and (max-width: 575px) {
-            font-size: 32px;
-        }
     }
-    &-slides {
-        display: flex;
-        flex-direction: row;
-        margin-bottom: 20px;
-    }
-}
-//Стили аккордеонов
-.settings {
-    &-container {
-        width: 320px;
-        margin-right: 16px;
-        margin-bottom: 20px;
-    }
-    &-text {
-        align-items: baseline;
-    }
-    &-buttoms {
-        width: 100%;
-        margin-top: 40px;
-        height: 40px;
-        display: flex;
-        justify-content: space-around;
-    }
-    &-select {
-        padding-right: 5px;
-    }
-    &-btm {
-        width: 114px;
-        border-radius: 10px;
-        background-color: #39bfbf;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    &-btminv {
-        width: 114px;
-        border-radius: 10px;
-        border: 2px solid #35383f;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    &-body {
-        display: flex;
-        flex-direction: column;
-    }
-}
-//Стиль карточки
-.postcard {
-    &-container {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    &-containerline {
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-    }
-}
-//Стиль сортировки
-.sort {
-    &-container {
-        width: 100%;
-        height: 50px;
-        display: flex;
-        justify-content: space-between;
-    }
-    &-select {
-        margin-right: 8px;
-    }
-    &-types {
-        height: 50px;
-    }
-    &-button {
-        margin-right: 5px;
-        border: 1px solid black;
-        border-radius: 5px;
-        width: 25px;
-        height: 25px;
-    }
-    &-alphabet {
-        width: 320px;
+    &-sort {
         display: flex;
         justify-content: flex-end;
-    }
-    &-select {
-        height: 50px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-    }
-    &-radio {
-    }
-    .education {
-        width: 305px;
-        @media screen and (max-width: 768px) {
-            width: 100%;
+        align-items: flex-end;
+        margin-bottom: 32px;
+        @media (max-width: 1024px) {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 60px;
         }
     }
-}
-.dashboard {
-    background-image: url('@app/assets/icon/darhboard-active.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
+    &-container {
+        display: grid;
+        grid-template-columns: 0.5fr 1.5fr;
+        align-items: baseline;
+        grid-column-gap: 36px;
+    }
+    &-search {
+        position: relative;
+        box-sizing: border-box;
+        margin: 60px 0px 0px 0px;
+        img {
+            position: absolute;
+            top: 15px;
+            left: 16px;
+        }
+        &__input {
+            width: 100%;
+            padding: 13px 0px 10px 60px;
+            border-radius: 10px;
+            border: 1px solid black;
+        }
+    }
+    &-info {
+        font-size: 18px;
+        font-weight: 400;
+        margin-top: 60px;
+    }
+    &-wrapper {
+        padding-top: 40px;
+    }
 }
 
-.dashboardD {
-    background-image: url('@app/assets/icon/darhboard-disable.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
+.showInfoBtn {
+    padding: 6px 16px;
+    border: 1px solid #35383f;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    height: 40px;
 }
 
-.menuuA {
-    background-image: url('@app/assets/icon/MenuA.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.menuu {
-    background-image: url('@app/assets/icon/Menu.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
 .ascend {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
     background-position: center;
-}
-//Стиль карточки
-.postcard {
-    &-container {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    &-containerline {
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-    }
-}
-//Стиль поисковика
-.searcher {
-    width: 100%;
-    height: 50px;
-    margin-bottom: 40px;
-}
-.squads-search {
-    position: relative;
-    box-sizing: border-box;
-
-    svg {
-        position: absolute;
-        top: 10px;
-        left: 16px;
-    }
-
-    &__input {
-        width: 100%;
-        padding: 13px 0px 10px 60px;
-        border-radius: 10px;
-        border: 1px solid black;
-    }
 }
 </style>
 
@@ -357,6 +160,7 @@
 import { ref, computed, watch, inject, onMounted, onActivated } from 'vue';
 import { sortByEducation } from '@shared/components/selects';
 import { filters } from '@features/Contributor/components';
+import { Button } from '@shared/components/buttons';
 import { useUserStore } from '@features/store/index';
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
@@ -366,6 +170,7 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
+import { registryList } from '@features/registry/components';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
@@ -387,9 +192,10 @@ const timerSearch = ref(null);
 const district = ref(null);
 const local = ref(null);
 const isLoading = ref(false);
+const showInfo = ref(false);
 const educ = ref(null);
+const sortedVal = ref([]);
 //Сортировк
-const vertical = ref(true);
 const ascending = ref(true);
 const levelAccess = ref(7);
 const name = ref('');
@@ -401,110 +207,179 @@ const sortOptionss = ref([
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'founding_date', name: 'Дате создания штаба' },
-    { value: 'members_count', name: 'Количеству участников' },
+    // { value: 'founding_date', name: 'Дате создания штаба' },
+    // { value: 'members_count', name: 'Количеству участников' },
 ]);
 
-//Изменение расположения блоков
-const showVertical = () => {
-    vertical.value = !vertical.value;
+const viewHeadquartersData = async (resp, search, join) => {
+    try {
+        isLoading.value = true;
+        const viewHeadquartersResponse = await HTTP.get(resp + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        let response = viewHeadquartersResponse.data.results;
+        if (join) {
+            const viewHeadquartersResponsetTwo = await HTTP.get(
+                '/educationals/' + search,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            educHead.value = viewHeadquartersResponsetTwo.data.results;
+            response = response.concat(viewHeadquartersResponsetTwo.data);
+        }
+        sortedVal.value = response;
+        isLoading.value = false;
+
+        if (resp.indexOf('districts') >= 0){
+            districts.value = viewHeadquartersResponse.data.results;
+        }else if (resp.indexOf('regionals') >= 0){
+            regionals.value = viewHeadquartersResponse.data.results;
+        }else if (resp.indexOf('locals') >= 0){
+            locals.value = viewHeadquartersResponse.data.results;
+        }else if (resp.indexOf('educationals') >= 0){
+            educHead.value = viewHeadquartersResponse.data.results;
+        }else if (resp.indexOf('detachments') >= 0){
+            detachments.value = viewHeadquartersResponse.data.results;
+        }
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const updateDistrict = (districtVal) => {
     let search = '';
-    search = '?district_headquarter__name=' + districtVal;
+    let resp = '/regionals/';
+
+    if (districtVal) {
+        search = '?district_headquarter__name=' + districtVal;
+    } else {
+        search = '';
+        resp = '/districts/';
+    }
 
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    viewHeadquartersData(resp, search);
 
-    let districtId = districtsStore.districts.find(
-        (dis) => dis.name == districtVal,
-    )?.id;
+    // let districtId = districtsStore.districts.find(
+    //     (dis) => dis.name == districtVal,
+    // )?.id;
     district.value = districtVal;
-    regionals.value = regionalsStore.regionals.filter(
-        (regional) => regional.district_headquarter == districtId,
-    );
+    // regionals.value = regionalsStore.regionals.filter(
+    //     (regional) => regional.district_headquarter == districtId,
+    // );
 };
 
 const updateReg = (regVal) => {
     let search = '';
+    let resp = '/locals/';
     if (regVal) {
         search = '?regional_headquarter__name=' + regVal;
     } else if (levelAccess.value < 2) {
         search = '?district_headquarter__name=' + district.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    viewHeadquartersData(resp, search);
 
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == regVal,
-    )?.id;
     reg.value = regVal;
-    locals.value = localsStore.locals.filter(
-        (loc) => loc.regional_headquarter == regId,
-    );
 };
 const updateLocal = (localVal) => {
     let search = '';
+    let resp = localVal ? '/educationals/' : '/locals/';
+
     if (localVal) {
         search = '?local_headquarter__name=' + localVal;
     } else if (levelAccess.value < 3) {
         search = '?regional_headquarter__name=' + reg.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
 
-    let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
+    viewHeadquartersData(resp, search, !localVal);
+
     local.value = localVal;
-    educHead.value = educationalsStore.educationals.filter(
-        (edh) => edh.local_headquarter == locId,
-    );
+
 };
 
 const updateEduc = (educVal) => {
     let search = '';
+    let resp = educVal
+        ? '/detachments/'
+        : local.value
+        ? '/educationals/'
+        : '/locals/';
     if (educVal) {
         search = '?educational_headquarter__name=' + educVal;
+    } else if (local.value) {
+        search = '?local_headquarter__name=' + local.value;
+    } else if (levelAccess.value < 3) {
+        search = '?regional_headquarter__name=' + reg.value;
     } else if (levelAccess.value < 4) {
         search = '?local_headquarter__name=' + local.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
-    let educId = educationalsStore.educationals.find(
-        (edh) => edh.name == educVal,
-    )?.id;
+
+    viewHeadquartersData(resp, search);
+
     educ.value = educVal;
-    detachments.value = squadsStore.squads.filter(
-        (squad) => squad.educational_headquarter == educId,
-    );
 };
 
 const updateDetachment = (detachmentVal) => {
     let search = '';
+    let resp = detachmentVal ? '/rsousers' : educ.value ? '/detachments/' : '';
     if (detachmentVal) {
         search = '?detachment__name=' + detachmentVal;
     } else if (levelAccess.value < 5) {
         search = '?educational_headquarter__name=' + educ.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+
+    viewHeadquartersData(resp, search);
     detachment.value = detachmentVal;
 };
 
-const searchContributors = (event) => {
+const searchItems = (event) => {
     let search = '';
+    let resp = '';
     if (!name.value && roles.roles.value.centralheadquarter_commander) {
-        return [];
+        resp = '/districts/';
+    } else if (name.value && roles.roles.value.centralheadquarter_commander) {
+        resp = '/districts/';
+        search = '?search' + name.value;
     }
     if (district.value) {
+        resp = '/regionals/';
+        // search = '?regional_headquarter__name=' + reg.value;
         search = '?district_headquarter__name=' + district.value;
-    } else if (reg.value) {
+    }
+    if (reg.value) {
+        resp = '/locals/';
+        // search = '?local_headquarter__name=' + local.value;
         search = '?regional_headquarter__name=' + reg.value;
-    } else if (local.value) {
+    }
+    if (local.value) {
+        resp = local.value ? '/educationals/' : '/locals/';
+
+        // search = '?educational_headquarter_name=' + educ.value;
         search = '?local_headquarter__name=' + local.value;
-    } else if (educ.value) {
+    }
+    if (educ.value) {
+        resp = educ.value
+            ? '/detachments/'
+            : local.value
+            ? '/educationals/'
+            : '/locals/';
+        search = '?detachment__name=' + detachment.value;
+
         search = '?educational_headquarter__name=' + educ.value;
-    } else if (detachment.value) {
+    }
+    if (detachment.value) {
+        resp = '/rsousers';
         search = '?detachment__name=' + detachment.value;
     }
     if (search) {
@@ -513,83 +388,153 @@ const searchContributors = (event) => {
 
     clearTimeout(timerSearch.value);
     timerSearch.value = setTimeout(() => {
-        viewContributorsData(search);
+        viewHeadquartersData(resp, search);
     }, 400);
 };
+
+const getItemsByRoles = () => {
+    if (!Object.keys(roleStore.roles).length) return false;
+    if (!roles.roles.value.centralheadquarter_commander) {
+        let search = '';
+        let resp = '';
+        let join = false;
+
+        if (roles.roles.value.districtheadquarter_commander) {
+            district.value =
+                roles.roles.value.districtheadquarter_commander.name;
+            search =
+                '?district_headquarter__name=' +
+                roles.roles.value.districtheadquarter_commander.name;
+            resp = '/regionals/';
+            levelAccess.value = 1;
+        } else if (roles.roles.value.regionalheadquarter_commander) {
+            reg.value = roles.roles.value.regionalheadquarter_commander.name;
+            search =
+                '?regional_headquarter__name=' +
+                roles.roles.value.regionalheadquarter_commander.name;
+            resp = '/locals/';
+            join = true;
+            locals.value = localsStore.locals.filter(
+                (loc) => loc.regional_headquarter == reg.value,
+            );
+            levelAccess.value = 2;
+        } else if (roles.roles.value.localheadquarter_commander) {
+            local.value = roles.roles.value.localheadquarter_commander.name;
+            search =
+                '?local_headquarter__name=' +
+                roles.roles.value.localheadquarter_commander.name;
+            resp = '/educationals/';
+            levelAccess.value = 3;
+        } else if (roles.roles.value.educationalheadquarter_commander) {
+            educ.value =
+                roles.roles.value.educationalheadquarter_commander.name;
+            search =
+                '?educational_headquarter__name=' +
+                roles.roles.value.educationalheadquarter_commander.name;
+            resp = '/detachments/';
+            levelAccess.value = 4;
+        } else if (roles.roles.value.detachment_commander) {
+            detachment.value = roles.roles.value.detachment_commander.name;
+            search =
+                '?detachment__name=' +
+                roles.roles.value.detachment_commander.name;
+            resp = '/rsousers';
+            levelAccess.value = 5;
+        }
+        viewHeadquartersData(resp, search, join);
+    } else {
+        levelAccess.value = 0;
+        let resp = '/districts/';
+        viewHeadquartersData(resp, '');
+    }
+};
+
+const sortedHeadquarters = computed(() => {
+    let tempHeadquarters = sortedVal.value;
+
+    // tempHeadquarters = tempHeadquarters.sort((a, b) => {
+    //     if (sortBy.value == 'alphabetically') {
+    //         let fa = a?.name.toLowerCase(),
+    //             fb = b?.name.toLowerCase()
+
+    //         if (fa < fb) {
+    //             return -1;
+    //         }
+    //         if (fa > fb) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     }
+    // });
+
+    // if (!ascending.value) {
+    //     tempHeadquarters.reverse();
+    // }
+    return tempHeadquarters;
+});
 
 watch(
     () => roles.roles.value,
 
     (newRole, oldRole) => {
-        if (!roles.roles.value.centralheadquarter_commander) {
-            let search = '';
+        getItemsByRoles();
+    },
+);
 
-            if (roles.roles.value.districtheadquarter_commander) {
-                district.value =
-                    roles.roles.value.districtheadquarter_commander.name;
-                search =
-                    '?district_headquarter__name=' +
-                    roles.roles.value.districtheadquarter_commander.name;
-                levelAccess.value = 1;
-            } else if (roles.roles.value.regionalheadquarter_commander) {
-                reg.value =
-                    roles.roles.value.regionalheadquarter_commander.name;
-                search =
-                    '?regional_headquarter__name=' +
-                    roles.roles.value.regionalheadquarter_commander.name;
-                levelAccess.value = 2;
-            } else if (roles.roles.value.localheadquarter_commander) {
-                local.value = roles.roles.value.localheadquarter_commander.name;
-                search =
-                    '?local_headquarter__name=' +
-                    roles.roles.value.localheadquarter_commander.name;
-                levelAccess.value = 3;
-            } else if (roles.roles.value.educationalheadquarter_commander) {
-                educ.value =
-                    roles.roles.value.educationalheadquarter_commander.name;
-                search =
-                    '?educational_headquarter__name=' +
-                    roles.roles.value.educationalheadquarter_commander.name;
-                levelAccess.value = 4;
-            } else if (roles.roles.value.detachment_commander) {
-                detachment.value = roles.roles.value.detachment_commander.name;
-                search =
-                    '?detachment__name=' +
-                    roles.roles.value.detachment_commander.name;
-                levelAccess.value = 5;
-            }
-            viewContributorsData(search);
-        } else {
-            levelAccess.value = 0;
-        }
+watch(
+    () => districtsStore.districts,
+    () => {
+        districts.value = districtsStore.districts;
     },
 );
 
 watch(
     () => regionalsStore.regionals,
     () => {
-        regionals.value = regionalsStore.regionals;
+        let districtID = districtsStore.districts.length
+            ? districtsStore.districts.find(
+                  (dis) => (dis.name = district.value),
+              )?.id
+            : roleStore.roles.districtheadquarter_commander?.id;
+        regionals.value = regionalsStore.regionals.filter(
+            (reg) => reg.district_headquarter == district.value,
+        );
     },
 );
 
 watch(
     () => localsStore.locals,
     () => {
-        locals.value = localsStore.locals;
+        let regID = regionalsStore.regionals.length
+            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
+            : roleStore.roles.regionalheadquarter_commander?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regID,
+        );
     },
 );
 
 watch(
     () => educationalsStore.educationals,
     () => {
-        educHead.value = educationalsStore.educationals;
-    },
-);
-watch(
-    () => squadsStore.squads,
-    () => {
-        detachments.value = squadsStore.squads;
+        let regID = regionalsStore.regionals.length
+            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
+            : roleStore.roles.regionalheadquarter_commander?.id;
+        let locID = localsStore.locals.length
+            ? localsStore.locals.find((loc) => loc.name == local.value)?.id
+            : roleStore.roles.localheadquarter_commander?.id;
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regID,
+        );
+        if (local.value) {
+            educHead.value = educationalsStore.educationals.filter(
+                (edh) => edh.local_headquarter == locID,
+            );
+        }
     },
 );
 
+onMounted(() => {
+    getItemsByRoles();
+});
 </script>

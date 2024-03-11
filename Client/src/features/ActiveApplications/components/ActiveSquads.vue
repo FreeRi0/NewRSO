@@ -1,25 +1,34 @@
 <template>
-    <p v-if="loading">Загрузка...</p>
+    <v-progress-circular
+        class="circleLoader"
+        v-if="loading"
+        indeterminate
+        color="blue"
+    ></v-progress-circular>
     <p v-else-if="!loading && !detachmentList.length">Список заявок пуст</p>
 
     <template v-else>
         <div class="participants__actions">
             <div class="participants__actions-select mr-3">
                 <sortByEducation
-                    placeholder="Выберете действие"
+                    placeholder="Выберите действие"
                     variant="outlined"
                     clearable
                     v-model="action"
                     :options="actionsList"
                 ></sortByEducation>
             </div>
-            <!-- <div class="contributor-sort__all">
-                <input
-                    type="checkbox"
-                    @click="selectSquads"
-                    v-model="checkboxAllSquads"
-                />
-            </div> -->
+            <div class="d-flex align-center">
+                <div class="contributor-sort__all">
+                    <input
+                        type="checkbox"
+                        @click="select"
+                        placeholder="Выбрать все"
+                        v-model="checkboxAll"
+                    />
+                </div>
+                <div class="ml-3">Выбрать всё</div>
+            </div>
         </div>
         <div class="participants__list">
             <template v-for="detachment in detachmentList" :key="detachment.id">
@@ -49,6 +58,7 @@
                 type="button"
                 label="Сохранить"
                 @click="onAction"
+                :disabled="!action"
             ></Button>
         </div>
         <div class="clear_select" v-else></div>
@@ -68,7 +78,7 @@ const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 const detachmentList = ref([]);
 const selectedDetachmentList = ref([]);
-const checkboxAllSquads = ref(false);
+const checkboxAll = ref(false);
 const isError = ref([]);
 const swal = inject('$swal');
 const loading = ref(false);
@@ -82,32 +92,44 @@ const actionsList = ref([
     { value: 'Отклонить', name: 'Отклонить' },
 ]);
 const viewDetachments = async () => {
+    if (detachmentList.value.length) return;
     try {
         if (!roles.roles.value.detachment_commander) return;
         loading.value = true;
         let id = roles.roles.value.detachment_commander?.id;
-        setTimeout(async () => {
-            const detComRequest = await HTTP.get(
-                `/detachments/${id}/applications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
+        const detComRequest = await HTTP.get(
+            `/detachments/${id}/applications/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
-            );
-            detachmentList.value = detComRequest.data;
-            loading.value = false;
-        }, 100);
+            },
+        );
+        detachmentList.value = detComRequest.data;
+        loading.value = false;
         selectedDetachmentList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
+const select = (event) => {
+    selectedDetachmentList.value = [];
+    console.log('fffss', checkboxAll.value, event);
+    if (event.target.checked) {
+        for (let index in detachmentList.value) {
+            detachmentList.value[index].selected = true;
+            selectedDetachmentList.value.push(detachmentList.value[index]);
+        }
+    } else {
+        for (let index in detachmentList.value) {
+            detachmentList.value[index].selected = false;
+        }
+    }
+};
+
 const onToggleSelectCompetition = (detachment, checked) => {
-    // console.log('participant', participant.selected);
-    // console.log('checked', checked);
     if (checked) {
         detachment.selected = checked;
         selectedDetachmentList.value.push(detachment);
@@ -217,18 +239,6 @@ const onAction = async () => {
     }
 };
 
-// const selectSquads = (event) => {
-//     selectedDetachmentList.value = [];
-//     console.log('fffss', checkboxAllSquads.value, event);
-//     if (event.target.checked) {
-//         console.log('fffss', checkboxAllSquads.value, event);
-//         for (let index in detachmentList.value) {
-//             console.log('arr', selectedDetachmentList.value);
-//             selectedDetachmentList.value.push(detachmentList.value[index]);
-//         }
-//     }
-// };
-
 onMounted(async () => {
     await viewDetachments();
 });
@@ -237,4 +247,9 @@ onActivated(async () => {
     await viewDetachments();
 });
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
+}
+</style>

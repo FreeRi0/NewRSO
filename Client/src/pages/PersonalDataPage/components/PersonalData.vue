@@ -195,4 +195,7 @@ const pages = ref([
     background-color: #1c5c94;
     color: white;
 }
+.v-icon {
+    color: white;
+}
 </style>

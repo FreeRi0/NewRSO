@@ -237,6 +237,12 @@ const changeDetachment = async () => {
     formData.append('founding_date', detachment.value.founding_date);
     formData.append('region', detachment.value.region);
     formData.append('city', detachment.value.city);
+    if (detachment.value.educational_headquarter) {
+        formData.append(
+            'educational_headquarter',
+            detachment.value.educational_headquarter,
+        );
+    } else formData.append('educational_headquarter', '');
     if (detachment.value.educational_institution) {
         formData.append(
             'educational_institution',

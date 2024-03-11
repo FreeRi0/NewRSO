@@ -15,6 +15,7 @@
                     id="search"
                     class="headquarters-search__input"
                     v-model="name"
+                    @keyup="searchEducational"
                     placeholder="Начните вводить название штаба образовательной организации."
                 />
                 <svg
@@ -114,6 +115,7 @@
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
+                            :sorts-boolean="false"
                         ></sortByEducation>
                     </div>
 
@@ -121,7 +123,7 @@
                         type="button"
                         class="ascend"
                         @click="ascending = !ascending"
-                        icon="icon"
+                        iconn="iconn"
                         color="white"
                     ></Button>
                 </div>
@@ -130,14 +132,21 @@
             <div v-show="vertical" class="mt-10">
                 <HeadquartersList
                     :headquarters="sortedHeadquarters"
-                    v-if="!isLoading.isLoading.value"
                 ></HeadquartersList>
+
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="isLoading.isLoading.value"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !isLoading.isLoading.value && !sortedHeadquarters.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
 
             <div class="horizontal" v-show="!vertical">
@@ -189,7 +198,7 @@ const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
-
+const timerSearch = ref(null);
 const vertical = ref(true);
 
 const name = ref('');
@@ -232,9 +241,17 @@ const getLocalsHeadquartersForFilters = async () => {
         console.log('error request districts headquarters');
     }
 };
+
+const searchEducational = (event) => {
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        educationalsStore.searchEducationals(name.value);
+    }, 400);
+};
+
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-
+    educationalsStore.getEducationals();
     getRegionalsHeadquartersForFilters();
     getLocalsHeadquartersForFilters();
 });
@@ -245,7 +262,6 @@ const sortOptionss = ref([
         name: 'Алфавиту от А - Я',
     },
     { value: 'founding_date', name: 'Дате создания штаба' },
-    { value: 'members_count', name: 'Количеству участников' },
 ]);
 
 const sortedHeadquarters = computed(() => {
@@ -277,7 +293,6 @@ const sortedHeadquarters = computed(() => {
             return idRegionals.indexOf(item.regional_headquarter) >= 0;
         });
     }
-
     tempHeadquartes = tempHeadquartes.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
             let fa = a.name.toLowerCase(),
@@ -301,8 +316,6 @@ const sortedHeadquarters = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'members_count') {
-            return a.members - b.members;
         }
     });
 
@@ -501,6 +514,17 @@ pre {
     .sort-select {
         margin-top: 12px;
     }
+}
+
+.option-select .v-field__input input::placeholder,
+.form__select .v-field__input input::placeholder {
+    color: #35383f;
+    opacity: revert;
+}
+
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+    border: none;
 }
 </style>
 @shared/components/selects/inputs @shared/components/inputs/imagescomp

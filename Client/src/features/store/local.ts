@@ -1,12 +1,8 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-// import usePage from '@shared/composables/usePage';
-
-// const { replaceTargetObjects } = usePage();
 export const useLocalsStore = defineStore('local', {
     state: () => ({
         locals: [],
-        members: [],
         local: {},
         isLoading: false,
     }),
@@ -25,15 +21,19 @@ export const useLocalsStore = defineStore('local', {
         },
 
         async getLocals() {
+            if (this.locals.length) return;
             try {
+                this.isLoading = true;
                 const responseLocals = await HTTP.get(`/locals/`, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.locals = responseLocals.data;
+                this.locals = responseLocals.data.results;
+                this.isLoading = false;
             } catch (error) {
+                this.isLoading = false;
                 console.log('an error occured ' + error);
             }
         },

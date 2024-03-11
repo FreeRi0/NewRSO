@@ -2,9 +2,6 @@
     <div class="container">
         <div class="participants">
             <h2 class="participants-title">Участники ЛСО</h2>
-            <h2 class="participants-title" v-if="event">
-                Участники Мероприятия
-            </h2>
             <div class="participants-tabs">
                 <div class="d-flex">
                     <Button
@@ -60,7 +57,7 @@
                     >
                     </Button>
                     <Button
-                        v-else="!vertical"
+                        v-else
                         type="button"
                         class="dashboardD"
                         icon="icon"
@@ -77,7 +74,7 @@
                         @click="showVertical"
                     ></Button>
                     <Button
-                        v-else="vertical"
+                        v-else
                         type="button"
                         class="menuu"
                         icon="icon"
@@ -93,13 +90,14 @@
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
+                            :sorts-boolean="false"
                         ></sortByEducation>
                     </div>
 
                     <Button
                         class="ascend"
                         @click="ascending = !ascending"
-                        icon="icon"
+                        iconn="iconn"
                         color="white"
                     ></Button>
                 </div>
@@ -107,28 +105,25 @@
 
             <div class="participants-wrapper" v-show="vertical">
                 <ParticipantsList
-                    v-if="picked === true"
+                    v-if="picked"
                     :participants="sortedParticipants"
                 ></ParticipantsList>
-                <VerifiedList
-                    v-else="picked === false"
-                    :verified="sortedVerified"
-                ></VerifiedList>
+                <VerifiedList v-else :verified="sortedVerified"></VerifiedList>
             </div>
 
             <div class="horizontallso" v-show="!vertical">
                 <horizontalParticipantsList
-                    v-if="picked === true"
+                    v-if="picked"
                     :participants="sortedParticipants"
                 ></horizontalParticipantsList>
                 <VerifiedHorizontal
-                    v-else="picked === false"
+                    v-else
                     :verified="sortedVerified"
                 ></VerifiedHorizontal>
             </div>
             <Button
                 @click="participantsVisible += step"
-                v-if="participantsVisible < participants.length"
+                v-if="participantsVisible < squadsStore.members.length"
                 label="Показать еще"
             ></Button>
             <Button
@@ -147,93 +142,39 @@ import {
     VerifiedList,
     VerifiedHorizontal,
 } from '@features/Participants/components';
-import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { sortByEducation } from '@shared/components/selects';
+import { useSquadsStore } from '@features/store/squads';
+import { ref, computed, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
-const props = defineProps({
-    event: {
-        type: Boolean,
-    },
-});
-const participants = ref([]);
 const participantsVisible = ref(12);
 
-
+const squadsStore = useSquadsStore();
 const step = ref(12);
 const picked = ref(true);
-const position = ref({});
 const route = useRoute();
 const verified = ref([]);
 const id = route.params.id;
 
-if (props.event) {
-    const eventMembers = async () => {
-        await HTTP.get(`/events/${id}/participants/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
+const aboutVerified = async () => {
+    await HTTP.get(`/detachments/${id}/applications/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    })
+        .then((response) => {
+            verified.value = response.data;
+            console.log(response);
         })
-            .then((response) => {
-                participants.value = response.data;
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log('an error occured ' + error);
-            });
-    };
-    onMounted(() => {
-        eventMembers();
-    });
-} else {
-    const aboutMembers = async () => {
-        await HTTP.get(`/detachments/${id}/members/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-            .then((response) => {
-                participants.value = response.data;
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log('an error occured ' + error);
-            });
-    };
-    const aboutVerified = async () => {
-        await HTTP.get(`/detachments/${id}/applications/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
-            .then((response) => {
-                verified.value = response.data;
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log('an error occured ' + error);
-            });
-    };
-    onMounted(() => {
-        aboutMembers();
-        aboutVerified();
-    });
-}
-
-const pages = [
-    { pageTitle: 'Структура', href: '/UserPage' },
-    { pageTitle: 'ЛСО', href: '/AllSquads' },
-    { pageTitle: 'Отряд', href: '/lso/:id' },
-    { pageTitle: 'Участники отряда', href: '#' },
-];
+        .catch(function (error) {
+            console.log('an error occured ' + error);
+        });
+};
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
-
 const vertical = ref(true);
 
 const searchParticipants = ref('');
@@ -252,9 +193,7 @@ const sortOptionss = ref([
 ]);
 
 const sortedParticipants = computed(() => {
-    let tempParticipants = participants.value;
-
-    tempParticipants = tempParticipants.slice(0, participantsVisible.value);
+    let tempParticipants = squadsStore.members;
 
     tempParticipants = tempParticipants.filter((item) => {
         return item.user.last_name
@@ -290,12 +229,15 @@ const sortedParticipants = computed(() => {
         }
     });
 
+    if (!ascending.value) {
+        tempParticipants.reverse();
+    }
+    tempParticipants = tempParticipants.slice(0, participantsVisible.value);
     return tempParticipants;
 });
 
 const sortedVerified = computed(() => {
     let tempVerified = verified.value;
-    tempVerified = tempVerified.slice(0, participantsVisible.value);
 
     tempVerified = tempVerified.filter((item) => {
         return item.user.last_name
@@ -332,14 +274,25 @@ const sortedVerified = computed(() => {
     });
 
     if (!ascending.value) {
-        tempParticipants.reverse();
-    }
-    if (!ascending.value) {
         tempVerified.reverse();
     }
 
+    tempVerified = tempVerified.slice(0, participantsVisible.value);
     return tempVerified;
 });
+
+watch(
+    () => route.params.id,
+
+    async (newId, oldId) => {
+        if (!newId || route.name !== 'allparticipants') return;
+        await squadsStore.getSquadMembers(newId);
+        await aboutVerified();
+    },
+    {
+        immediate: true
+    },
+);
 </script>
 <style lang="scss">
 .participants {

@@ -96,8 +96,7 @@
                                 v-if="user.region && !isLoading.isLoading.value"
                             >
                                 <div
-                                    v-for="item in regionals.filteredRegional
-                                        .value"
+                                    v-for="item in regionals.filteredMyRegional.value"
                                 >
                                     <p>{{ item.name }}</p>
                                 </div>
@@ -296,7 +295,7 @@ watch(
         }
         // getUserData();
         // getEducData();
-        regionalsStore.searchRegionals(props.user.region);
+        regionalsStore.searchMyRegionals(props.user.region);
     },
 );
 

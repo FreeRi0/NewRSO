@@ -1,7 +1,7 @@
 <template>
     <div class="AuthWrapper">
         <div class="container">
-            <div class="d-flex">
+            <div class="d-flex justify-end">
                 <v-card class="px-14 py-15">
                     <img
                         src="@/app/assets/icon/cross.svg"
@@ -111,9 +111,6 @@ const onBack = () => {
 .px-14 {
     padding-right: 98px !important;
     padding-left: 98px !important;
-}
-.d-flex {
-    justify-content: end;
 }
 .card_cross {
     position: absolute;

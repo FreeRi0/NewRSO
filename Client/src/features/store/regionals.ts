@@ -4,6 +4,7 @@ import { HTTP } from '@app/http';
 export const useRegionalsStore = defineStore('regionals', {
     state: () => ({
         regions: [],
+
         regionals: [],
         filteredRegional: [],
         filteredMyRegional: [],
@@ -28,7 +29,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         },
                     },
                 );
-                this.filteredRegional = responseSearchRegionals.data;
+                this.filteredRegional = responseSearchRegionals.data.results;
             } catch (err) {
                 console.log('an error occured ' + err);
             }
@@ -48,12 +49,13 @@ export const useRegionalsStore = defineStore('regionals', {
                         },
                     },
                 );
-                this.filteredMyRegional = responseSearchMyRegionals.data;
+                this.filteredMyRegional = responseSearchMyRegionals.data.results;
             } catch (err) {
                 console.log('an error occured ' + err);
             }
         },
         async getRegionals() {
+            if (this.regionals.length > 0) return false;
             try {
                 this.isLoading = true;
                 const responseRegionals = await HTTP.get(`/regionals/`, {
@@ -62,7 +64,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.regionals = responseRegionals.data;
+                this.regionals = responseRegionals.data.results;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -99,14 +101,13 @@ export const useRegionalsStore = defineStore('regionals', {
                         },
                     },
                 );
-                this.members = responseMembers.data;
+                this.members = responseMembers.data.results;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
                 console.log('an error occured ' + error);
             }
         },
-
 
         async searchRegions(name: String) {
             const responseSearchRegions = await HTTP.get(
@@ -117,7 +118,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     },
                 },
             );
-            this.regions = responseSearchRegions.data;
+            this.regions = responseSearchRegions.data.results;
         },
         async getRegions() {
             if (this.regions.length) return;
@@ -128,7 +129,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         'Content-Type': 'application/json',
                     },
                 });
-                this.regions = responseRegions.data;
+                this.regions = responseRegions.data.results;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
@@ -137,17 +138,27 @@ export const useRegionalsStore = defineStore('regionals', {
         },
         async searchInstitution(name: String, region: any) {
             let url = `/eduicational_institutions/?search=${name}`;
-            if (region) url += '&region__name='+region;
-            const responseInstitution = await HTTP.get(
-                url,
+            if (region) url += '&region__name=' + region;
+            const responseInstitution = await HTTP.get(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.institutions = responseInstitution.data;
+        },
+
+        async searchRegionalsHead(name: String) {
+            const responseSearchRegionalsHead = await HTTP.get(
+                `/regionals/?search=${name}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                        Authorization: 'Token' + localStorage.getItem('Token'),
                     },
                 },
             );
-            this.institutions = responseInstitution.data;
+            this.regionals = responseSearchRegionalsHead.data.results;
         },
     },
 });

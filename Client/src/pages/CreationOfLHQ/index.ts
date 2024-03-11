@@ -1,0 +1,1 @@
+export { default as CreationOfLHQ } from './components/CreationOfLHQ.vue';

@@ -134,8 +134,7 @@ const getCompetitionsJunior = async () => {
 };
 
 const getCompetitions = async () => {
-    console.log(commanderIds.value.regionalheadquarter_commander?.id);
-    for (const competitionId of allCompetition.value) {
+    for (const competitionId of allCompetition.value.results) {
         try {
             loading.value = true;
             const { data } = await HTTP.get(
@@ -147,8 +146,7 @@ const getCompetitions = async () => {
                     },
                 },
             );
-
-            competitionsList.value = data.filter(
+            competitionsList.value = data.results.filter(
                 (c) => c.is_confirmed_by_junior || !c.detachment,
             );
         } catch (e) {
@@ -276,15 +274,26 @@ onActivated(async () => {
     //width: 224px;
     height: 48px;
     padding: 4px, 16px, 4px, 16px;
-    border-radius: 10px;
-    border: 1px;
     gap: 10px;
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 
 .competitions__actions-select {
     background-color: inherit;
     min-width: 224px;
     border-radius: 10px;
+    border: 1px solid #b6b6b6;
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 :deep(.v-field) {
     border-radius: 10px;
@@ -312,5 +321,13 @@ onActivated(async () => {
     letter-spacing: 0em;
     text-align: left;
     color: #35383f;
+}
+:deep(.v-select__selection-text) {
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 </style>

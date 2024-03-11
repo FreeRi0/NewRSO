@@ -58,13 +58,15 @@
                                     clearable
                                     v-model="sortBy"
                                     :options="sortOptionss"
+                                    :sorts-boolean="false"
+                                    class="Sort-alphabet"
                                 ></sortByEducation>
                             </div>
 
                             <Button
                                 type="button"
                                 class="ascend"
-                                icon="switch"
+                                iconn="iconn"
                                 @click="ascending = !ascending"
                                 color="white"
                             ></Button>
@@ -72,10 +74,17 @@
                     </div>
                     <div class="references-wrapper">
                         <referencesList
+                            v-if="!isLoading"
                             :participants="sortedParticipants"
                             :selected-peoples="selectedPeoples"
                             @change="changePeoples"
                         ></referencesList>
+                        <v-progress-circular
+                            class="circleLoader"
+                            v-else
+                            indeterminate
+                            color="blue"
+                        ></v-progress-circular>
                     </div>
                     <Button
                         @click="participantsVisible += step"
@@ -177,7 +186,7 @@ import {
     checkedReference,
 } from '@features/references/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, inject, watch } from 'vue';
+import { ref, computed, inject, watch, onMounted } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
 import { useDistrictsStore } from '@features/store/districts';
@@ -212,6 +221,7 @@ const district = ref(null);
 const local = ref(null);
 const isLoading = ref(false);
 const educ = ref(null);
+let search = '';
 
 const checkboxAll = ref(false);
 const name = ref('');
@@ -225,8 +235,6 @@ const arr = computed(() => {
     tempPeoples = tempPeoples.map((item) => item.id);
     return tempPeoples;
 });
-
-console.log('idssSss', arr);
 
 const refData = ref({
     cert_start_date: '',
@@ -245,7 +253,7 @@ const viewContributorsData = async (search) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        participants.value = viewParticipantsResponse.data;
+        participants.value = viewParticipantsResponse.data.results;
         isLoading.value = false;
         selectedPeoples.value = [];
     } catch (error) {
@@ -253,20 +261,47 @@ const viewContributorsData = async (search) => {
     }
 };
 
+const getFiltersData = async (resp, search) => {
+    try {
+        isLoading.value = true;
+        const viewHeadquartersResponse = await HTTP.get(resp + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        isLoading.value = false;
+
+        if (resp.indexOf('districts') >= 0) {
+            districts.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('regionals') >= 0) {
+            regionals.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('locals') >= 0) {
+            locals.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('educationals') >= 0) {
+            educHead.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('detachments') >= 0) {
+            detachments.value = viewHeadquartersResponse.data.results;
+        }
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
 const updateDistrict = (districtVal) => {
     let search = '';
-    search = '?district_headquarter__name=' + districtVal;
+    if (districtVal) {
+        search = '?district_headquarter__name=' + districtVal;
+    } else {
+        search = '';
+    }
 
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
+    getFiltersData('/regionals/', search);
 
-    let districtId = districtsStore.districts.find(
-        (dis) => dis.name == districtVal,
-    )?.id;
     district.value = districtVal;
-    regionals.value = regionalsStore.regionals.filter(
-        (regional) => regional.district_headquarter == districtId,
-    );
+
 };
 
 const updateReg = (regVal) => {
@@ -278,14 +313,11 @@ const updateReg = (regVal) => {
     }
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
+    getFiltersData('/locals/', search);
+    getFiltersData('/educationals/', search);
 
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == regVal,
-    )?.id;
     reg.value = regVal;
-    locals.value = localsStore.locals.filter(
-        (loc) => loc.regional_headquarter == regId,
-    );
+
 };
 const updateLocal = (localVal) => {
     let search = '';
@@ -295,31 +327,30 @@ const updateLocal = (localVal) => {
         search = '?regional_headquarter__name=' + reg.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
+    viewContributorsData(search, !localVal);
+    getFiltersData('/educationals/', search);
 
-    let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
     local.value = localVal;
-    educHead.value = educationalsStore.educationals.filter(
-        (edh) => edh.local_headquarter == locId,
-    );
+
 };
 
 const updateEduc = (educVal) => {
     let search = '';
     if (educVal) {
         search = '?educational_headquarter__name=' + educVal;
+    } else if (local.value) {
+        search = '?local_headquarter__name=' + local.value;
+    } else if (levelAccess.value < 3) {
+        search = '?regional_headquarter__name=' + reg.value;
     } else if (levelAccess.value < 4) {
         search = '?local_headquarter__name=' + local.value;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
-    let educId = educationalsStore.educationals.find(
-        (edh) => edh.name == educVal,
-    )?.id;
+    viewContributorsData(search, educVal && !local.value);
+    getFiltersData('/detachments/', search);
+
     educ.value = educVal;
-    detachments.value = squadsStore.squads.filter(
-        (squad) => squad.educational_headquarter == educId,
-    );
+   
 };
 
 const updateDetachment = (detachmentVal) => {
@@ -356,8 +387,6 @@ const SendReference = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            console.log(response, 'success');
-            console.log(response);
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -374,19 +403,15 @@ const SendReference = async () => {
 
 const select = (event) => {
     selectedPeoples.value = [];
-    console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
-        console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.value) {
-            console.log('arr', selectedPeoples.value);
-            selectedPeoples.value.push(participants.value[index]);
+        for (let index in sortedParticipants.value) {
+            selectedPeoples.value.push(sortedParticipants.value[index]);
         }
     }
 };
 
 const changePeoples = (CheckedUser, UserId) => {
     let participant = {};
-    console.log('fff', CheckedUser, UserId);
     if (CheckedUser) {
         participant = participants.value.find((item) => item.id == UserId);
         selectedPeoples.value.push(participant);
@@ -412,13 +437,17 @@ const searchContributors = (event) => {
     }
     if (district.value) {
         search = '?district_headquarter__name=' + district.value;
-    } else if (reg.value) {
+    }
+    if (reg.value) {
         search = '?regional_headquarter__name=' + reg.value;
-    } else if (local.value) {
+    }
+    if (local.value) {
         search = '?local_headquarter__name=' + local.value;
-    } else if (educ.value) {
+    }
+    if (educ.value) {
         search = '?educational_headquarter__name=' + educ.value;
-    } else if (detachment.value) {
+    }
+    if (detachment.value) {
         search = '?detachment__name=' + detachment.value;
     }
     if (search) {
@@ -429,6 +458,58 @@ const searchContributors = (event) => {
     timerSearch.value = setTimeout(() => {
         viewContributorsData(search);
     }, 400);
+};
+
+const getUsersByRoles = () => {
+    if (!Object.keys(roleStore.roles).length) return false;
+    if (!roles.roles.value.centralheadquarter_commander) {
+        let search = '';
+        if (roles.roles.value.districtheadquarter_commander) {
+            district.value =
+                roles.roles.value.districtheadquarter_commander.name;
+            search =
+                '?district_headquarter__name=' +
+                roles.roles.value.districtheadquarter_commander.name;
+            levelAccess.value = 1;
+            getFiltersData('/regionals/', search);
+        } else if (roles.roles.value.regionalheadquarter_commander) {
+            reg.value = roles.roles.value.regionalheadquarter_commander.name;
+            search =
+                '?regional_headquarter__name=' +
+                roles.roles.value.regionalheadquarter_commander.name;
+            locals.value = localsStore.locals.filter(
+                (loc) => loc.regional_headquarter == reg.value,
+            );
+            levelAccess.value = 2;
+            getFiltersData('/educationals/', search);
+            getFiltersData('/locals/', search);
+        } else if (roles.roles.value.localheadquarter_commander) {
+            local.value = roles.roles.value.localheadquarter_commander.name;
+            search =
+                '?local_headquarter__name=' +
+                roles.roles.value.localheadquarter_commander.name;
+            levelAccess.value = 3;
+            getFiltersData('/educationals/', search);
+        } else if (roles.roles.value.educationalheadquarter_commander) {
+            educ.value =
+                roles.roles.value.educationalheadquarter_commander.name;
+            search =
+                '?educational_headquarter__name=' +
+                roles.roles.value.educationalheadquarter_commander.name;
+            levelAccess.value = 4;
+            getFiltersData('/detachments/', search);
+        } else if (roles.roles.value.detachment_commander) {
+            detachment.value = roles.roles.value.detachment_commander.name;
+            search =
+                '?detachment__name=' +
+                roles.roles.value.detachment_commander.name;
+            levelAccess.value = 5;
+        }
+        viewContributorsData(search);
+    } else {
+        levelAccess.value = 0;
+        getFiltersData('/districts/', search);
+    }
 };
 
 const sortedParticipants = computed(() => {
@@ -473,76 +554,77 @@ watch(
     () => roles.roles.value,
 
     (newRole, oldRole) => {
-        if (!roles.roles.value.centralheadquarter_commander) {
-            let search = '';
-
-            if (roles.roles.value.districtheadquarter_commander) {
-                district.value =
-                    roles.roles.value.districtheadquarter_commander.name;
-                search =
-                    '?district_headquarter__name=' +
-                    roles.roles.value.districtheadquarter_commander.name;
-                levelAccess.value = 1;
-            } else if (roles.roles.value.regionalheadquarter_commander) {
-                reg.value =
-                    roles.roles.value.regionalheadquarter_commander.name;
-                search =
-                    '?regional_headquarter__name=' +
-                    roles.roles.value.regionalheadquarter_commander.name;
-                levelAccess.value = 2;
-            } else if (roles.roles.value.localheadquarter_commander) {
-                local.value = roles.roles.value.localheadquarter_commander.name;
-                search =
-                    '?local_headquarter__name=' +
-                    roles.roles.value.localheadquarter_commander.name;
-                levelAccess.value = 3;
-            } else if (roles.roles.value.educationalheadquarter_commander) {
-                educ.value =
-                    roles.roles.value.educationalheadquarter_commander.name;
-                search =
-                    '?educational_headquarter__name=' +
-                    roles.roles.value.educationalheadquarter_commander.name;
-                levelAccess.value = 4;
-            } else if (roles.roles.value.detachment_commander) {
-                detachment.value = roles.roles.value.detachment_commander.name;
-                search =
-                    '?detachment__name=' +
-                    roles.roles.value.detachment_commander.name;
-                levelAccess.value = 5;
-            }
-            viewContributorsData(search);
-        } else {
-            levelAccess.value = 0;
-        }
+        getUsersByRoles();
+    },
+);
+watch(
+    () => districtsStore.districts,
+    () => {
+        districts.value = districtsStore.districts;
     },
 );
 
 watch(
     () => regionalsStore.regionals,
     () => {
-        regionals.value = regionalsStore.regionals;
+        let districtID = districtsStore.districts.length
+            ? districtsStore.districts.find(
+                  (dis) => (dis.name = district.value),
+              )?.id
+            : roleStore.roles.districtheadquarter_commander?.id;
+        regionals.value = regionalsStore.regionals.filter(
+            (reg) => reg.district_headquarter == district.value,
+        );
     },
 );
 
 watch(
     () => localsStore.locals,
     () => {
-        locals.value = localsStore.locals;
+        let regID = regionalsStore.regionals.length
+            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
+            : roleStore.roles.regionalheadquarter_commander?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regID,
+        );
     },
 );
 
 watch(
     () => educationalsStore.educationals,
     () => {
-        educHead.value = educationalsStore.educationals;
+        let regID = regionalsStore.regionals.length
+            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
+            : roleStore.roles.regionalheadquarter_commander?.id;
+        let locID = localsStore.locals.length
+            ? localsStore.locals.find((loc) => loc.name == local.value)?.id
+            : roleStore.roles.localheadquarter_commander?.id;
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regID,
+        );
+        if (local.value) {
+            educHead.value = educationalsStore.educationals.filter(
+                (edh) => edh.local_headquarter == locID,
+            );
+        }
     },
 );
 watch(
     () => squadsStore.squads,
     () => {
-        detachments.value = squadsStore.squads;
+        let educId = educationalsStore.educationals.length
+            ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
+                  ?.id
+            : roleStore.roles.educationalheadquarter_commander?.id;
+        detachments.value = squadsStore.squads.filter(
+            (det) => det.educational_headquarter == educId,
+        );
     },
 );
+
+onMounted(() => {
+    getUsersByRoles();
+});
 </script>
 <style lang="scss">
 input[type='number']::-webkit-inner-spin-button,
@@ -697,5 +779,7 @@ input[type='number']::-webkit-outer-spin-button {
 .v-expansion-panel:not(:first-child)::after {
     display: none;
 }
+.Sort-alphabet {
+    margin-right: 8px;
+}
 </style>
-@shared/components/selects/inputs

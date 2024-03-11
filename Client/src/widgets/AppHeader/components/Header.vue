@@ -42,15 +42,11 @@
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
                         </li>
-                        <li class="header__nav-item disable">
-                            <a
-                                class="header__nav-link"
-                                @click.prevent
-                                href="/actionSquads"
-                            >
+                        <!-- <li class="header__nav-item disable">
+                            <a class="header__nav-link" href="/actionSquads">
                                 Мероприятия
                             </a>
-                        </li>
+                        </li> -->
                         <li class="header__nav-item competition__nav-item">
                             <a
                                 class="header__nav-link competition__link"
@@ -71,24 +67,33 @@
             <nav class="header__nav nav-user">
                 <div
                     class="nav-user__application-count"
-                    v-if="Object.keys(userStore.currentUser).length"
+                    v-if="
+                        Object.keys(userStore.currentUser).length &&
+                        (roles.roles.value.regionalheadquarter_commander ||
+                            roles.roles.value.detachment_commander)
+                    "
                 >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
-                    <!-- <a href="#">
+                    <router-link :to="'active'">
                         <img
                             src="@app/assets/icon/bell-light.svg"
                             width="36"
                             height="36"
                             alt="Иконка уведомления"
                         />
-                    </a> -->
+                    </router-link>
                     <!--Если есть активные заявки (isActive = true), ниже отображается их количество:-->
-                    <!-- <div v-if="isActive" class="nav-user__quantity-box">
-                        <span v-if="quantityIsActive < 100">{{
-                            quantityIsActive
-                        }}</span>
+                    <div
+                        v-if="userStore.count.count"
+                        class="nav-user__quantity-box"
+                    >
+                        <span
+                            v-if="userStore.count.count < 100"
+                            class="countNum"
+                            >{{ userStore.count.count }}</span
+                        >
                         <span v-else>99+</span>
-                    </div> -->
+                    </div>
                 </div>
 
                 <div
@@ -114,7 +119,7 @@
                             "
                         >
                             <div
-                                v-for="item in regionals.filteredRegional.value"
+                                v-for="item in regionalsStore.filteredMyRegional"
                             >
                                 <p>{{ item.name }}</p>
                             </div>
@@ -165,7 +170,56 @@
                         </div>
                     </div>
                 </div>
+                <div
+                    class="nav-user__location"
+                    v-if="!Object.keys(userStore.currentUser).length"
+                >
+                    <button class="nav-user__button" @click="show = !show">
+                        <span v-if="regionAction">
+                            {{ regionAction }}
+                        </span>
+                        <span v-else>Выберите региональное отделение</span>
+                    </button>
 
+                    <div
+                        class="header__overlay"
+                        @click="show = !show"
+                        v-if="show"
+                    ></div>
+
+                    <div class="nav-user__location-container" v-if="show">
+                        <button
+                            type="button"
+                            @click="show = !show"
+                            class="nav-user__location-close"
+                        >
+                            x
+                        </button>
+                        <label for="your-region">Ваш регион</label>
+                        <regionsDropdown
+                            open-on-clear
+                            id="reg"
+                            name="regdrop"
+                            placeholder="Выберите регион обучения"
+                            v-model="regionAction"
+                            @update:value="changeValue"
+                            class="mb-2 region-input"
+                            address="/regions/"
+                            :value-change="true"
+                        ></regionsDropdown>
+
+                        <div>
+                            <Button
+                                type="submit"
+                                class="nav-user__button-agree mt-2 mx-auto"
+                                label="Да, все верно"
+                                color="primary"
+                                size="large"
+                                @click="close()"
+                            ></Button>
+                        </div>
+                    </div>
+                </div>
                 <div
                     class="nav-user__menu user-menu"
                     v-if="
@@ -188,8 +242,6 @@
                         @updateUser="userUpdate"
                     />
                 </div>
-
-                <!-- <p>{{ regionals.filteredRegional.value.name }}</p> -->
             </nav>
         </header>
     </div>
@@ -221,6 +273,8 @@ const props = defineProps({
     },
 });
 
+const emit = defineEmits(['changeReg']);
+
 const roleStore = useRoleStore();
 const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
@@ -228,13 +282,13 @@ const roles = storeToRefs(roleStore);
 
 const isLoading = storeToRefs(regionalsStore);
 
-const regionals = storeToRefs(regionalsStore);
-
 const quantityIsActive = ref(props.quantityActive);
 
 const router = useRouter();
 
 const region = ref('');
+
+const regionAction = ref(null);
 
 const userUpdate = (userData) => {
     userStore.currentUser = userData;
@@ -259,18 +313,26 @@ const userPages = computed(() => [
         title: 'Мой отряд',
         name: 'lso',
         params: {
-            id: userStore.currentUser?.detachment_id,
+            id: userStore.currentUser?.detachment_id
+                ? userStore.currentUser?.detachment_id
+                : roleStore.roles?.detachment_commander?.id,
         },
-        show: userStore.currentUser?.detachment_id,
+        show:
+            userStore.currentUser?.detachment_id ||
+            roleStore.roles?.detachment_commander,
     },
     {
         title: 'Штаб СО ОО',
         name: 'HQ',
         path: 'regionals',
         params: {
-            id: userStore.currentUser?.educational_headquarter_id,
+            id: userStore.currentUser?.educational_headquarter_id
+                ? userStore.currentUser?.educational_headquarter_id
+                : roleStore.roles?.educationalheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.educational_headquarter_id,
+        show:
+            userStore.currentUser?.educational_headquarter_id ||
+            roleStore.roles?.educationalheadquarter_commander,
     },
     {
         title: 'Местный штаб',
@@ -278,10 +340,15 @@ const userPages = computed(() => [
         path: 'locals',
         params: {
             id:
-                userStore.currentUser?.local_headquarter_id ??
-                headquartersIds.value.find((hq) => hq.path === 'locals')?.id,
+                /*userStore.currentUser?.local_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'locals')?.id,*/
+                userStore.currentUser?.local_headquarter_id
+                    ? userStore.currentUser?.local_headquarter_id
+                    : roleStore.roles?.localheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.local_headquarter_id,
+        show:
+            userStore.currentUser?.local_headquarter_id ||
+            roleStore.roles?.localheadquarter_commander,
     },
     {
         title: 'Региональный штаб',
@@ -289,10 +356,15 @@ const userPages = computed(() => [
         path: 'regionals',
         params: {
             id:
-                userStore.currentUser?.regional_headquarter_id ??
-                headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,
+                /*userStore.currentUser?.regional_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'regionals')?.id,*/
+                userStore.currentUser?.regional_headquarter_id
+                    ? userStore.currentUser?.regional_headquarter_id
+                    : roleStore.roles?.regionalheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.regional_headquarter_id,
+        show:
+            userStore.currentUser?.regional_headquarter_id ||
+            roleStore.roles?.regionalheadquarter_commander,
     },
     {
         title: 'Окружной штаб',
@@ -300,10 +372,15 @@ const userPages = computed(() => [
         path: 'districts',
         params: {
             id:
-                userStore.currentUser?.district_headquarter_id ??
-                headquartersIds.value.find((hq) => hq.path === 'districts')?.id,
+                /*userStore.currentUser?.district_headquarter_id ??
+                headquartersIds.value.find((hq) => hq.path === 'districts')?.id,*/
+                userStore.currentUser?.district_headquarter_id
+                    ? userStore.currentUser?.district_headquarter_id
+                    : roleStore.roles?.districtheadquarter_commander?.id,
         },
-        show: userStore.currentUser?.district_headquarter_id,
+        show:
+            userStore.currentUser?.district_headquarter_id ||
+            roleStore.roles?.districtheadquarter_commander,
     },
     {
         title: 'Центральный штаб',
@@ -313,17 +390,37 @@ const userPages = computed(() => [
         },
         show: true,
     },
-    { title: 'Активные заявки', name: 'active', show: true },
-    // { title: 'Поиск участников', link: '#', show: (userStore.currentUser?.central_headquarter_id ||
-    // userStore.currentUser?.district_headquarter_id || userStore.currentUser?.regional_headquarter_id) },
-    { title: 'Членский взнос', name: 'contributorPay', show: true },
+    {
+        title: 'Активные заявки',
+        name: 'active',
+        show:
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.detachment_commander,
+    },
+    {
+        title: 'Поиск участников',
+        link: 'roster',
+        show:
+            roleStore.roles?.centralheadquarter_commander ||
+            roleStore.roles?.districtheadquarter_commander ||
+            roleStore.roles?.regionalheadquarter_commander,
+    },
+    {
+        title: 'Членский взнос',
+        name: 'contributorPay',
+        show: roleStore.roles?.regionalheadquarter_commander,
+    },
     {
         title: 'Оформление справок',
         name: 'references',
+        show: roleStore.roles?.regionalheadquarter_commander,
+    },
+    {
+        title: 'Корпоративный университет',
+        name: 'CorpUniver',
         show:
-            userStore.currentUser?.central_headquarter_id ||
-            userStore.currentUser?.district_headquarter_id ||
-            userStore.currentUser?.regional_headquarter_id,
+            roleStore.status.is_commander_detachment ||
+            roleStore.status.is_commissar_detachment,
     },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },
@@ -382,13 +479,22 @@ const updateRegion = async () => {
                 },
             },
         );
-        region.value = updateRegResponse.data.region;
+
+        region.value = updateRegResponse.data.region.id;
+
         show.value = !show.value;
-        // regionalsStore.searchRegionals(region.value);
-        userStore.getUser();
+        userStore.currentUser.region = updateRegResponse.data.region;
+        regionalsStore.searchMyRegionals(updateRegResponse.data.region);
+
+        // userStore.getUser();
     } catch (error) {
         console.log('an error occured ' + error);
     }
+};
+
+const close = () => {
+    // regionAction.value = regionAction;
+    show.value = !show.value;
 };
 
 watch(
@@ -397,13 +503,24 @@ watch(
         if (Object.keys(userStore.currentUser).length === 0) {
             return;
         }
-
-        region.value = regionalsStore.regions.find(
-            (region) => region.name === userStore.currentUser.region,
-        )?.id;
-        regionalsStore.searchRegionals(userStore.currentUser.region);
+        region.value = userStore.currentUser.region.id;
+        regionalsStore.searchMyRegionals(userStore.currentUser.region);
     },
 );
+
+watch(
+    () => roleStore.roles,
+    (newRole, oldRole) => {
+        if (Object.keys(roleStore.roles).length === 0) {
+            return;
+        }
+        userStore.getCountApp();
+    },
+);
+
+onMounted(() => {
+    userStore.getCountApp();
+});
 </script>
 
 <style lang="scss">
@@ -446,6 +563,13 @@ watch(
 
     a {
         color: #35383f;
+    }
+    .countNum {
+        font-size: 16px;
+        font-family: 'BertSans', sans-serif;
+        font-weight: 500;
+        margin-left: 14px;
+        margin-top: 9px;
     }
 
     &__logo {

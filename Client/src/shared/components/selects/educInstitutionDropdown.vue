@@ -10,7 +10,7 @@
         item-title="name"
         item-value="value"
         v-bind="$attrs"
-        @keyup="searchEducInstitution"
+
         @update:value="changeValue"
         :address="addressRef"
         :no-data-text="noDataText"
@@ -175,7 +175,7 @@ const onChangeItem = async () => {
                 'Content-Type': 'application/json',
             },
         });
-        items.value = ItemResponse.data;
+        items.value = ItemResponse.data.results;
         isLoading.value = false;
     } catch (error) {
         console.log('an error occured ' + error);

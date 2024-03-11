@@ -14,7 +14,7 @@
                         roles.roles.value.educationalheadquarter_commander ||
                         roles.roles.value.districtheadquarter_commander ||
                         roles.roles.value.centralheadquarter_commander)) ||
-                props.user.privacy?.privacy_photo === 'Все'
+                props.user.privacy?.privacy_photo === 'Все' || 'all'
             "
             :banner="user.media?.banner"
             @upload-wall="uploadWall"
@@ -45,7 +45,7 @@
                         roles.roles.value.educationalheadquarter_commander ||
                         roles.roles.value.districtheadquarter_commander ||
                         roles.roles.value.centralheadquarter_commander)) ||
-                props.user.privacy?.privacy_photo === 'Все'
+                props.user.privacy?.privacy_photo === 'Все' || 'all'
             "
             :avatar="user.media?.photo"
             @upload="uploadAva"
@@ -191,7 +191,7 @@
                                         .districtheadquarter_commander ||
                                     roles.roles.value
                                         .centralheadquarter_commander)) ||
-                            props.user.privacy?.privacy_social === 'Все'
+                            props.user.privacy?.privacy_social === 'Все' || 'all'
                         "
                     >
                         <div class="user-data__link-vk mr-2">
@@ -251,7 +251,7 @@
                                             .districtheadquarter_commander ||
                                         roles.roles.value
                                             .centralheadquarter_commander)) ||
-                                props.user.privacy?.privacy_telephone === 'Все'
+                                props.user.privacy?.privacy_telephone === 'Все' || 'all'
                             "
                         >
                             <img
@@ -284,7 +284,7 @@
                                             .districtheadquarter_commander ||
                                         roles.roles.value
                                             .centralheadquarter_commander)) ||
-                                props.user.privacy?.privacy_email === 'Все'
+                                props.user.privacy?.privacy_email === 'Все' || 'all'
                             "
                         >
                             <img src="@/app/assets/icon/mail.svg" alt="mail" />
@@ -420,12 +420,12 @@ watch(
             return;
         }
         // getUserData();
-        // regionalsStore.searchRegionals(props.user.region);
+        regionalsStore.searchRegionals(props.user.region);
     },
 );
 
 onMounted(() => {
-    // regionalsStore.searchRegionals(props.user.region);
+    regionalsStore.searchRegionals(props.user.region);
     getUserData();
 });
 

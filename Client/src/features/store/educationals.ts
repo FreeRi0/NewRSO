@@ -1,9 +1,5 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-// import usePage from '@shared/composables/usePage';
-
-
-// const { replaceTargetObjects } = usePage();
 export const useEducationalsStore = defineStore('educationals', {
     state: () => ({
         educationals: [],
@@ -22,9 +18,10 @@ export const useEducationalsStore = defineStore('educationals', {
                     },
                 },
             );
-            this.educationals = responseSearchEducationals.data;
+            this.educationals = responseSearchEducationals.data.results;
         },
         async getEducationals() {
+            if (this.educationals.length) return;
             try {
                 this.isLoading = true;
                 const responseEducationals = await HTTP.get(`/educationals/`, {
@@ -33,7 +30,7 @@ export const useEducationalsStore = defineStore('educationals', {
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.educationals = responseEducationals.data;
+                this.educationals = responseEducationals.data.results;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
@@ -54,7 +51,6 @@ export const useEducationalsStore = defineStore('educationals', {
                     },
                 );
                 this.educational = responseEducational.data;
-                // replaceTargetObjects([this.educational]);
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);

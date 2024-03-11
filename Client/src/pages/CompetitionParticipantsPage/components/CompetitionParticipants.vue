@@ -12,7 +12,7 @@
                 <v-btn
                     class="squads-tabs__item"
                     :class="{ active: picked === area }"
-                    v-for="area in categories"
+                    v-for="area in categories.areas.value"
                     :key="area"
                     @click="picked = area"
                     >{{ area.name }}
@@ -23,6 +23,7 @@
                     type="text"
                     id="search"
                     class="squads-search__input"
+                    @keyup="searchCompetitions"
                     v-model="name"
                     placeholder="Поищем отряд?"
                 />
@@ -44,21 +45,16 @@
             </div>
 
             <div class="squads-sort">
-                <p class="countParticipants">
-                    Всего участников:
-                    {{ sortedSquads.length }}
-                </p>
                 <div class="sort-filters">
                     <!-- <div class="sort-select">
-                        <Select
-                            variant="outlined"
-                            clearable
+                        <educInstitutionDropdown
+                            class="form__select filter-district sortedEducation"
                             name="select_education"
                             id="select-education"
-                            v-model="selectedSort"
-                            address="/eduicational_institutions/"
+                            v-model="education"
                             placeholder="Образовательная организация"
-                        ></Select>
+                            :SortDropdown="true"
+                        ></educInstitutionDropdown>
                     </div> -->
                     <div class="sort-select">
                         <sortByEducation
@@ -66,6 +62,7 @@
                             clearable
                             v-model="sortBy"
                             :options="sortOptionss"
+                            :sorts-boolean="false"
                         ></sortByEducation>
                     </div>
 
@@ -78,11 +75,11 @@
                     ></Button>
                 </div>
             </div>
-            <!-- <div class="d-flex mt-5">
+            <div class="d-flex mt-5">
                 <button
                     type="button"
                     class="contributorBtn"
-                    :class="{ active: switched === true }"
+                    :class="{ active: switched == true }"
                     @click="switched = true"
                 >
                     Тандем
@@ -91,34 +88,40 @@
                 <button
                     type="button"
                     class="contributorBtn ml-2"
-                    :class="{ active: switched === false }"
+                    :class="{ active: switched == false }"
                     @click="switched = false"
                 >
                     Дебют
                 </button>
-            </div> -->
+            </div>
             <div class="horizontal">
                 <horizontalCompetitionList
                     :members="sortedSquads"
-                    v-if="!isLoading.isLoading.value"
                 ></horizontalCompetitionList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="isLoading.isLoading.value"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !isLoading.isLoading.value && !sortedSquads.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
-            <Button
+            <!-- <Button
                 @click="squadsVisible += step"
-                v-if="squadsVisible < sortedSquads.length"
+                v-if="squadsVisible < squads.competitionSquads.value.length"
                 label="Показать еще"
             ></Button>
             <Button
                 @click="squadsVisible -= step"
                 v-else
                 label="Свернуть все"
-            ></Button>
+            ></Button> -->
         </div>
     </div>
 </template>
@@ -128,7 +131,10 @@ import {
     competitionList,
     horizontalCompetitionList,
 } from '@features/Squads/components';
-import { sortByEducation, Select } from '@shared/components/selects';
+import {
+    sortByEducation,
+    educInstitutionDropdown,
+} from '@shared/components/selects';
 import { ref, computed, onMounted } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
@@ -137,19 +143,19 @@ import { HTTP } from '@app/http';
 const squadsStore = useSquadsStore();
 const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
-const categories = ref([]);
+const categories = storeToRefs(squadsStore);
 const name = ref('');
 
-const squadsVisible = ref(20);
-
-const step = ref(20);
+// const squadsVisible = ref(20);
+const education = ref(null);
+// const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 
 const picked = ref('');
 const switched = ref(true);
-
+const timerSearch = ref(null);
 const selectedSort = ref(null);
 
 const sortOptionss = ref([
@@ -157,62 +163,33 @@ const sortOptionss = ref([
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'founding_date', name: 'Дате создания отряда' },
-    // { value: 'members_count', name: 'Количеству участников' },
-    // { value: 'rating', name: 'Место в рейтинге' },
 ]);
 
-const getCategories = async () => {
-    try {
-        const categoryResponse = await HTTP.get('/areas/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        categories.value = categoryResponse.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
+const searchCompetitions = (event) => {
+    if (!name.value.length) {
+        squadsStore.searchCompetitionSquads(name.value);
+    } else if (name.value) {
+        squadsStore.searchCompetitionSquads(name.value);
     }
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {}, 400);
 };
-
-const searchCompetitionParticipants = async (name) => {
-    try {
-        const responseSearchCompetitionSquads = await HTTP.get(
-            `/competitions/1/participants/?search=${name}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        squads.competitionSquads.value =
-            responseSearchCompetitionSquads.data.reduce((acc, member) => {
-                if (member.detachment) acc.push(member.detachment);
-                acc.push(member.junior_detachment);
-                // console.log('acc', acc);
-                return acc;
-            }, []);
-        // this.competitionSquads = responseCompetitionSquads
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const searchSquads = computed(() => {
-    return searchCompetitionParticipants(name.value);
-});
 
 const sortedSquads = computed(() => {
     let tempSquads = squads.competitionSquads.value;
-
-    searchSquads.value;
-
+    if (switched.value) {
+        tempSquads = tempSquads.filter((item) => item.detachment);
+    } else {
+        tempSquads = tempSquads.filter((item) => !item.detachment);
+    }
     tempSquads = tempSquads.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
+            let fa =
+                    a.junior_detachment?.name.toLowerCase() ||
+                    a.detachment?.name.toLowerCase(),
+                fb =
+                    b.junior_detachment?.name.toLowerCase() ||
+                    b.detachment?.name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -221,19 +198,6 @@ const sortedSquads = computed(() => {
                 return 1;
             }
             return 0;
-        } else if (sortBy.value == 'founding_date') {
-            let fc = a.founding_date,
-                fn = b.founding_date;
-
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'members_count') {
-            return a.members - b.members;
         }
     });
 
@@ -242,15 +206,18 @@ const sortedSquads = computed(() => {
     }
 
     if (!picked.value) {
-        return tempSquads.slice(0, squadsVisible.value);
+        return tempSquads;
     }
-    tempSquads = tempSquads.filter((item) => item.area === picked.value.name);
-    tempSquads = tempSquads.slice(0, squadsVisible.value);
+    tempSquads = tempSquads.filter(
+        (item) =>
+            item.junior_detachment?.area === picked.value.name ||
+            item.detachment?.area === picked.value.name,
+    );
+    // tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
 
 onMounted(() => {
-    getCategories();
     squadsStore.getCompetitionSquads();
 });
 </script>
@@ -317,7 +284,7 @@ onMounted(() => {
 
     &-sort {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: flex-end;
     }
 
@@ -355,12 +322,6 @@ onMounted(() => {
     margin-top: 40px;
 }
 
-.active {
-    background-color: #1c5c94;
-    color: white;
-    border: 1px solid #1c5c94;
-}
-
 .contributorBtn {
     border-radius: 30px;
     background-color: white;
@@ -368,6 +329,12 @@ onMounted(() => {
     border: 1px solid #1c5c94;
     margin: 0px;
     padding: 10px 24px;
+}
+
+.active {
+    background-color: #1c5c94;
+    color: white;
+    border: 1px solid #1c5c94;
 }
 
 .squads-search {

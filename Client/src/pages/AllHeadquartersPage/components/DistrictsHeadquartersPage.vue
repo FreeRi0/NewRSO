@@ -53,28 +53,42 @@
 
             <div v-show="vertical" class="mt-10">
                 <DistrictHQList
-                    :districtHeadquarters="districtHeadquarters"
-                    v-if="!isDistrictLoading"
+                    :districtHeadquarters="districtStore.districts"
                 ></DistrictHQList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="districtStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !districtStore.isLoading &&
+                        !districtStore.districts.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
 
             <div class="horizontal" v-show="!vertical">
                 <HorizontalDistrictHQs
-                    :districtHeadquarters="districtHeadquarters"
-                    v-if="!isDistrictLoading"
+                    :districtHeadquarters="districtStore.districts"
                 ></HorizontalDistrictHQs>
                 <v-progress-circular
                     class="circleLoader"
-                    v-else
+                    v-if="districtStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
+                <p
+                    v-else-if="
+                        !districtStore.isLoading &&
+                        !districtStore.districts.length
+                    "
+                >
+                    Ничего не найдено
+                </p>
             </div>
         </div>
     </div>
@@ -86,40 +100,20 @@ import {
     DistrictHQList,
     HorizontalDistrictHQs,
 } from '@features/Headquarters/components';
-import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
-// import headquarters from '@entities/HeadquartersData/headquarters';
+import { useDistrictsStore } from '@features/store/districts';
 
-const districtHeadquarters = ref([]);
+const districtStore = useDistrictsStore();
 
 const vertical = ref(true);
 
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
-const isDistrictLoading = ref(false);
-
-const getDistrictHeadquarters = async () => {
-    try {
-        isDistrictLoading.value = true;
-        setTimeout(async () => {
-            const DistrictResponse = await HTTP.get('/districts/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
-            districtHeadquarters.value = DistrictResponse.data;
-            isDistrictLoading.value = false;
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
 
 onMounted(() => {
-    getDistrictHeadquarters();
+    districtStore.getDistricts();
 });
 </script>
 <style lang="scss">

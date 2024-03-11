@@ -13,6 +13,9 @@
                     {{ member?.name }}
                 </p>
             </div>
+            <div>
+                <p class="squads-wrapper__item-title normal-title">{{ member?.regional_headquarter_name }}</p>
+            </div>
             <div class="container-squad" v-if="rating">
                 <p class="squads-wrapper__item-title normal-title">
                     Место в рейтинге: 102
@@ -33,6 +36,9 @@
                 <p class="squads-wrapper__item-title normal-title">
                     {{ member?.name }}
                 </p>
+            </div>
+            <div>
+                <p class="squads-wrapper__item-title normal-title">{{ member?.regional_headquarter_name }}</p>
             </div>
             <div class="container-squad" v-if="rating">
                 <p class="squads-wrapper__item-title normal-title">

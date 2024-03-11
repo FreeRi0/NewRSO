@@ -26,14 +26,14 @@
                 <div class="squad__wrapper-container">
                     <ParticipantsList
                         v-if="picked === true"
-                        :participants="member"
+                        :participants="member.slice(0, 6)"
                     />
                     <VerifiedList
                         v-else="picked === false"
-                        :verified="isVerified"
+                        :verified="isVerified.slice(0, 6)"
                     ></VerifiedList>
                 </div>
-                <div v-if="props.member.length && isVerified.length > 6">
+                <div v-if="props.member.length > 6 || isVerified.length > 6">
                     <router-link
                         :to="{
                             name: 'allparticipants',
@@ -92,7 +92,6 @@ const getVerified = async () => {
     }
 };
 
-console.log('length', isVerified.value.length);
 
 watch(
     () => route.params.id,
@@ -104,9 +103,9 @@ watch(
     },
 );
 
-onMounted(() => {
-    getVerified();
-});
+// onMounted(() => {
+//     getVerified();
+// });
 </script>
 
 <style scoped lang="scss">
@@ -115,6 +114,7 @@ onMounted(() => {
 .squad__navigation {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     margin-top: 60px;
 }
 

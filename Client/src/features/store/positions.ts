@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
 
 export const usePositionsStore = defineStore('positions', {
-    //    const { replaceTargetObjects } = usePage();
     state: () => ({
         positions: [],
         isLoading: false,
