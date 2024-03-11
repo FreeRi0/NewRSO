@@ -466,7 +466,11 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top">
+                            <div
+                                class="form__field-group-top"
+                                v-for="(block, index) in blocks"
+                                :key="index"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label"
@@ -483,7 +487,10 @@
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <div class="form__field">
+                                    <div
+                                        class="form__field add-block"
+                                        @click="addNewBlock"
+                                    >
                                         + добавить участника
                                     </div>
                                 </div>
@@ -2683,7 +2690,7 @@
 import Dropdown from 'primevue/dropdown';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 const regionalSchool = ref();
 const Choose = ref([{ name: 'Да' }, { name: 'Нет' }]);
@@ -2716,6 +2723,12 @@ const prizePlaceChoose = ref([{ name: '1' }, { name: '2' }, { name: '3' }]);
 // const counterReport = computed(() => {
 //     return .value?.length || 0;
 // });
+
+const blocks = ref([{ value: '' }]);
+
+const addNewBlock = () => {
+    blocks.value.push({ value: '' });
+};
 </script>
 <style>
 .form__inner-content {
@@ -2771,5 +2784,9 @@ const prizePlaceChoose = ref([{ name: '1' }, { name: '2' }, { name: '3' }]);
 }
 .form .v-expansion-panel .v-expansion-panel-title {
     max-height: none;
+}
+.add-block {
+    max-width: fit-content;
+    border-bottom: 1px solid #35383f;
 }
 </style>
