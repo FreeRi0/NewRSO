@@ -167,8 +167,9 @@
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Ссылка на публикацию о прохождении
-                                            школы командного состава командиром
+                                            >Ссылка на публикацию из группы
+                                            отряда о прохождении школы
+                                            командного состава командиром
                                             отряда<span>&nbsp;*</span></label
                                         >
                                         <Input
@@ -197,8 +198,9 @@
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Ссылка на публикацию о прохождении
-                                            школы командного состава комиссаром
+                                            >Ссылка на публикацию из группы
+                                            отряда о прохождении школы
+                                            командного состава комиссаром
                                             отряда<span>&nbsp;*</span></label
                                         >
                                         <Input
@@ -493,9 +495,9 @@
                                 <div class="form__field-group-right">
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Региональная школа командного
-                                            состава пройдена комиссаром
-                                            отряда<span>&nbsp;*</span></label
+                                            >Документ, подтверждающий
+                                            прохождение профессионального
+                                            обучения<span>&nbsp;*</span></label
                                         >
                                         <FileUpload
                                             mode="basic"
@@ -2613,8 +2615,7 @@
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Ссылка на изображение
-                                            эмблемы</label
+                                            >Ссылка на макет эмблемы</label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
@@ -2638,7 +2639,7 @@
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Ссылка на изображение флага</label
+                                            >Ссылка на макет флага</label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
@@ -2662,8 +2663,7 @@
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Ссылка на изображение
-                                            знамени</label
+                                            >Ссылка на макет знамени</label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
