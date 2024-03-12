@@ -526,7 +526,6 @@
                                         >
                                         <InputText
                                             id="action-start-hq"
-                                            v-model="time_data.start_date"
                                             class="form__input form-input-container"
                                             placeholder="Например 26.06.2024"
                                             name="action-start-hq"
@@ -541,7 +540,6 @@
                                         >
                                         <InputText
                                             id="action-end-hq"
-                                            v-model="time_data.end_date"
                                             class="form__input form-input-container"
                                             placeholder="Например 27.06.2024"
                                             name="action-end-hq"
@@ -557,9 +555,7 @@
                                         <InputText
                                             id="end-registration-hq"
                                             class="form__input form-input-container"
-                                            v-model="
-                                                time_data.registration_end_date
-                                            "
+
                                             placeholder="Например, 15.05.2023"
                                             name="end-registration-hq"
                                             type="date"
@@ -576,7 +572,7 @@
                                         <InputText
                                             id="action-hours-start-hq"
                                             class="form__input form-input-container"
-                                            v-model="time_data.start_time"
+
                                             placeholder="Например 7:30"
                                             name="action-hours-start-hq"
                                             type="time"
@@ -592,7 +588,7 @@
                                         <InputText
                                             id="action-hours-end-hq"
                                             class="form__input form-input-container"
-                                            v-model="time_data.end_time"
+
                                             placeholder="Например 18:30"
                                             name="action-hours-end-hq"
                                             type="time"
@@ -623,9 +619,7 @@
                                             <InputText
                                                 id="action-hours-end-hq"
                                                 class="form__input form-input-container"
-                                                v-model="
-                                                    time_data.registration_end_time
-                                                "
+
                                                 placeholder="Например 18:30"
                                                 name="action-hours-end-hq"
                                                 type="time"
@@ -1115,13 +1109,16 @@ import {
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRoute, useRouter } from 'vue-router';
+import { useRoleStore } from '@layouts/store/role';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 const router = useRouter();
 const route = useRoute();
 const id = route.params.id;
 const rules = ref([]);
+
 const swal = inject('$swal');
+
 
 const organization_stop = ref('');
 
@@ -1145,7 +1142,7 @@ onActivated(() => {
             maininfo.value.banner = null;
             getOrganizator(id)
                 .then((resp) => {
-                    organizators.value = resp.data;
+                    organizators.value = resp.data.results;
                 })
                 .catch((e) => {
                     console.log(e);
@@ -1186,11 +1183,11 @@ onActivated(() => {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
                             console.log(value);
-                            maininfo.value.org_central_headquarter = '';
-                            maininfo.value.org_district_headquarter = '';
-                            maininfo.value.org_regional_headquarter = '';
-                            maininfo.value.org_local_headquarter = '';
-                            maininfo.value.org_educational_headquarter = '';
+                            maininfo.value.org_central_headquarter = null;
+                            maininfo.value.org_district_headquarter = null;
+                            maininfo.value.org_regional_headquarter = null;
+                            maininfo.value.org_local_headquarter = null;
+                            maininfo.value.org_educational_headquarter = null;
                             maininfo.value.org_detachment = value;
                         }
                     });
@@ -1203,12 +1200,12 @@ onActivated(() => {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
                             console.log(value);
-                            maininfo.value.org_central_headquarter = '';
-                            maininfo.value.org_district_headquarter = '';
-                            maininfo.value.org_regional_headquarter = '';
-                            maininfo.value.org_local_headquarter = '';
+                            maininfo.value.org_central_headquarter = null;
+                            maininfo.value.org_district_headquarter = null;
+                            maininfo.value.org_regional_headquarter = null;
+                            maininfo.value.org_local_headquarter = null;
                             maininfo.value.org_educational_headquarter = value;
-                            maininfo.value.org_detachment = '';
+                            maininfo.value.org_detachment = null;
                         }
                     });
                 }
@@ -1220,12 +1217,12 @@ onActivated(() => {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
                             console.log(value);
-                            maininfo.value.org_central_headquarter = '';
-                            maininfo.value.org_district_headquarter = '';
-                            maininfo.value.org_regional_headquarter = '';
+                            maininfo.value.org_central_headquarter = null;
+                            maininfo.value.org_district_headquarter = null;
+                            maininfo.value.org_regional_headquarter = null;
                             maininfo.value.org_local_headquarter = value;
-                            maininfo.value.org_educational_headquarter = '';
-                            maininfo.value.org_detachment = '';
+                            maininfo.value.org_educational_headquarter = null;
+                            maininfo.value.org_detachment = null;
                         }
                     });
                 }
@@ -1238,12 +1235,12 @@ onActivated(() => {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
                             console.log(value);
-                            maininfo.value.org_central_headquarter = '';
-                            maininfo.value.org_district_headquarter = '';
+                            maininfo.value.org_central_headquarter = null;
+                            maininfo.value.org_district_headquarter = null;
                             maininfo.value.org_regional_headquarter = value;
-                            maininfo.value.org_local_headquarter = '';
-                            maininfo.value.org_educational_headquarter = '';
-                            maininfo.value.org_detachment = '';
+                            maininfo.value.org_local_headquarter = null;
+                            maininfo.value.org_educational_headquarter = null;
+                            maininfo.value.org_detachment = null;
                         }
                     });
                 }
@@ -1255,12 +1252,12 @@ onActivated(() => {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
                             console.log(value);
-                            maininfo.value.org_central_headquarter = '';
+                            maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = value;
-                            maininfo.value.org_regional_headquarter = '';
-                            maininfo.value.org_local_headquarter = '';
-                            maininfo.value.org_educational_headquarter = '';
-                            maininfo.value.org_detachment = '';
+                            maininfo.value.org_regional_headquarter = null;
+                            maininfo.value.org_local_headquarter = null;
+                            maininfo.value.org_educational_headquarter = null;
+                            maininfo.value.org_detachment = null;
                         }
                     });
                 }
@@ -1270,11 +1267,11 @@ onActivated(() => {
             Object.entries(rules.value).forEach(([key, value]) => {
                 if (key === 'centralheadquarter_commander') {
                     maininfo.value.org_central_headquarter = value;
-                    maininfo.value.org_district_headquarter = '';
-                    maininfo.value.org_regional_headquarter = '';
-                    maininfo.value.org_local_headquarter = '';
-                    maininfo.value.org_educational_headquarter = '';
-                    maininfo.value.org_detachment = '';
+                    maininfo.value.org_district_headquarter = null;
+                    maininfo.value.org_regional_headquarter = null;
+                    maininfo.value.org_local_headquarter = null;
+                    maininfo.value.org_educational_headquarter = null;
+                    maininfo.value.org_detachment = null;
                 }
             });
             break;
@@ -1286,7 +1283,7 @@ watchEffect(() => {});
 const scale_massive_sorted = ref([]);
 
 const scale_massive = ref([
-    { name: 'Отрядное', value: 'detachment_commander' },
+    { name: 'Отрядное', value: 'detachment_commander'  },
     { name: 'Образовательное', value: 'educationalheadquarter_commander' },
     { name: 'Городское', value: 'localheadquarter_commander' },
     { name: 'Региональное', value: 'regionalheadquarter_commander' },
@@ -1320,6 +1317,7 @@ const maininfo = ref({
     org_local_headquarter: 0,
     org_educational_headquarter: 0,
     org_detachment: 0,
+
     time_data: {
         event_duration_type: '',
         start_date: '',

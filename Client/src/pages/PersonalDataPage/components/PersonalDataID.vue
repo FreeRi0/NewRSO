@@ -6,6 +6,7 @@
                 :user="privateUser.privateUser.value"
                 :education="education"
                 :user_region="region"
+                :disabled="disabled"
                 :position="roles.positions.value"
                 :commander="roles.userRoles.value"
                 class="mt-3"
@@ -13,6 +14,7 @@
             <AccordionsPersonal
                 :button="false"
                 :user="privateUser.privateUser.value"
+            
             ></AccordionsPersonal>
         </div>
     </div>

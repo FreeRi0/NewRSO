@@ -62,7 +62,7 @@ export const useRoleStore = defineStore('role', {
                     Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
             });
-            this.positions = dataPositions.data.results;
+            this.positions = dataPositions.data;
         },
     },
 });

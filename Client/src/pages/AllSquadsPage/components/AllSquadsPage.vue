@@ -201,10 +201,10 @@
             </div>
             <Button
                 @click="next()"
-                v-if="squadsVisible < squadsStore.totalSquads"
+                v-if="squadsStore.nextSquads !== null"
                 label="Показать еще"
             ></Button>
-            <Button @click="prev" v-else label="Свернуть все"></Button>
+            <Button @click="prev()" v-else label="Свернуть все"></Button>
         </div>
     </div>
 </template>
@@ -246,6 +246,9 @@ const next = () => {
     squadsStore.getNextSquads();
 };
 
+const prev = () => {
+     squadsStore.getPrevSquads();
+}
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 const picked = ref('');

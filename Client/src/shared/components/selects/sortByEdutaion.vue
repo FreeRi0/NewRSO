@@ -24,7 +24,7 @@
         :items="options"
         :placeholder="placeholder"
         item-title="name"
-        item-value="value"
+        item-value="id"
         v-else
     >
         <template #selection="{ item }">

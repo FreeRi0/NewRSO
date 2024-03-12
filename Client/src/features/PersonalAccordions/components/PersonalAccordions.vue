@@ -99,6 +99,7 @@
                                 placeholder="Введите фамилию"
                                 name="surname"
                                 v-model:value="props.user.last_name"
+
                             />
                         </div>
                         <p class="error" v-if="isError.last_name">
@@ -114,6 +115,7 @@
                                 placeholder="Familia"
                                 name="surname-lat"
                                 v-model:value="props.user.last_name_lat"
+
                             />
                         </div>
                         <div class="form-field">
@@ -127,6 +129,7 @@
                                 placeholder="Введите имя"
                                 name="name"
                                 v-model:value="props.user.first_name"
+                               
                             />
                         </div>
                         <p class="error" v-if="isError.first_name">
@@ -3178,7 +3181,7 @@
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                           statement.name
+                                                            statement.name
                                                         }}</span
                                                     >
                                                     <!-- <div>
@@ -3744,7 +3747,7 @@
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                           passportUpload.name
+                                                            passportUpload.name
                                                         }}</span
                                                     >
                                                     <!-- <div>
@@ -3808,7 +3811,9 @@
                                             chooseLabel="Выбрать файл"
                                             v-if="!passport_representative"
                                         />
-                                        <div v-else-if="passport_representative">
+                                        <div
+                                            v-else-if="passport_representative"
+                                        >
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -4107,7 +4112,19 @@
                             (!props.user.documents.pass_ser_num ||
                                 !props.user.documents.pass_date ||
                                 !props.user.documents.inn ||
-                                !props.user.documents.snils))
+                                !props.user.documents.snils)) ||
+                        (props.user.is_adult &&
+                            (!props.user.parent.parent_first_name ||
+                                !props.user.parent.parent_last_name ||
+                                !props.user.parent.parent_date_of_birth ||
+                                !props.user.parent_relationship ||
+                                !props.user.parent.parent_phone_number ||
+                                !props.user.parent.passport_number ||
+                                !props.user.parent.passport_date ||
+                                !props.user.parent.passport_authority ||
+                                !props.user.parent.region ||
+                                !props.user.parent.city ||
+                                !props.user.parent.address))
                     "
                     :loaded="isLoading"
                     v-if="
@@ -4150,6 +4167,7 @@ import { userData } from '@features/userData';
 const props = defineProps({
     button: Boolean,
     user: Object,
+    disabled: Boolean,
 });
 const emit = defineEmits([
     'updateUserData',
