@@ -344,6 +344,9 @@
         <h2 class="corpuniver__title-h2">
             Занятие 11 марта «О конкурсе и обучении»
         </h2>
+        <p class="corpuniver__text-subtitle">
+            Спикеры: Михаил Киселёв, Дмитрий Парамонов, Мария Корнилова
+        </p>
 
         <div id="video" class="corpuniver__video">
             <iframe
