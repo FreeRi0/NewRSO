@@ -19,7 +19,6 @@
                     viewBox="0 0 22 15"
                     fill="none"
                 >
-                    
                     <path
                         d="M12.0251 14.0534C4.73175 14.0534 0.571782 9.0534 0.398438 0.733398H4.05178C4.17178 6.84005 6.86506 9.42671 8.99837 9.96005V0.733398H12.4385V6.00002C14.5452 5.77337 16.7582 3.3734 17.5049 0.733398H20.945C20.3717 3.98674 17.9717 6.38671 16.265 7.37337C17.9717 8.17337 20.7051 10.2667 21.7451 14.0534H17.9583C17.145 11.5201 15.1185 9.56005 12.4385 9.29337V14.0534H12.0251Z"
                         fill="#35383F"
@@ -347,11 +346,14 @@
         </h2>
 
         <div id="video" class="corpuniver__video">
-            <img
-                class="corpuniver__preview"
-                src="@app/assets/corpuniver/preview.png"
-                alt="preview"
-            />
+            <iframe
+                class="corpuniver__iframe"
+                src="https://vk.com/video_ext.php?oid=-223571150&id=456239049&hd=2"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;"
+                frameborder="0"
+                allowfullscreen
+            >
+            </iframe>
         </div>
 
         <div id="testing" class="corpuniver__documents-test">
