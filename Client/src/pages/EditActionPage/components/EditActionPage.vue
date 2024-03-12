@@ -116,7 +116,6 @@
                                                 :options="scale_massive_sorted"
                                                 placeholder="Например, ЛСО"
                                                 v-model="maininfo.scale"
-                                                :sorts-boolean="true"
                                             >
                                             </sortByEducation>
                                         </div>
@@ -1104,7 +1103,7 @@
 
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { ref, onActivated, watchEffect } from 'vue';
+import { ref, onActivated, watchEffect, inject } from 'vue';
 import {
     getAction,
     getOrganizator,
@@ -1122,6 +1121,7 @@ const router = useRouter();
 const route = useRoute();
 const id = route.params.id;
 const rules = ref([]);
+const swal = inject('$swal');
 
 const organization_stop = ref('');
 
@@ -1314,12 +1314,12 @@ const maininfo = ref({
     participants_number: Number,
     application_type: '',
     available_structural_units: '',
-    org_central_headquarter: '',
-    org_district_headquarter: '',
-    org_regional_headquarter: '',
-    org_local_headquarter: '',
-    org_educational_headquarter: '',
-    org_detachment: '',
+    org_central_headquarter: 0,
+    org_district_headquarter: 0,
+    org_regional_headquarter: 0,
+    org_local_headquarter: 0,
+    org_educational_headquarter: 0,
+    org_detachment: 0,
     time_data: {
         event_duration_type: '',
         start_date: '',
@@ -1421,8 +1421,14 @@ function SubmitEvent() {
             });
             router.push({ name: 'actionSquads' });
         })
-        .catch((e) => {
-            console.log(e);
+        .catch(() => {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `Не удалось отредактировать`,
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
 }
 
