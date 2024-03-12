@@ -183,9 +183,14 @@
     </div>
 
     <h2 class="corpuniver__title-h2">Занятие 11 марта «О конкурсе и обучении»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Михаил Киселёв, Дмитрий Парамонов, Мария Корнилова</p>
 
     <div id="video" class="corpuniver__video">
-      <img class="corpuniver__preview" src="@app/assets/corpuniver/preview.png" alt="preview">
+      <iframe class="corpuniver__iframe"
+              src="https://vk.com/video_ext.php?oid=-223571150&id=456239049&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+              allowfullscreen>
+      </iframe>
     </div>
 
     <div id="testing" class="corpuniver__documents-test">
@@ -274,7 +279,7 @@ import Button from '@shared/components/buttons/Button.vue';
     line-height: 38px;
     color: #35383F;
     margin-top: 36px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 
     @media (max-width: 768px) {
       font-size: 20px;
@@ -403,9 +408,28 @@ import Button from '@shared/components/buttons/Button.vue';
     height: 52px;
   }
 
+  &__text-subtitle {
+    margin-bottom: 40px;
+    font-family: Bert Sans;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #35383F;
+  }
+
   &__video {
-    //min-height: 600px;
-    //object-fit: cover;
+    position:relative;
+    padding: 0 0 56.25% 0;
+    height:0;
+    overflow:hidden;
+  }
+
+  &__iframe{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
   }
 
   &__preview {
