@@ -220,7 +220,7 @@ const regionals = ref([]);
 const getDistrictsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/districts/');
-        districts.value = data;
+        districts.value = data.results;
     } catch (e) {
         console.log('error request districts headquarters');
     }
@@ -228,7 +228,7 @@ const getDistrictsHeadquartersForFilters = async () => {
 const getRegionalsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/regionals/');
-        regionals.value = data;
+        regionals.value = data.results;
     } catch (e) {
         console.log('error request districts headquarters');
     }
@@ -236,7 +236,7 @@ const getRegionalsHeadquartersForFilters = async () => {
 const getLocalsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/locals/');
-        locals.value = data;
+        locals.value = data.results;
     } catch (e) {
         console.log('error request districts headquarters');
     }

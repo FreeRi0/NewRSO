@@ -232,7 +232,7 @@ const filtersDistricts = computed(() =>
 const getDistrictsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/districts/');
-        districts.value = data;
+        districts.value = data.results;
     } catch (e) {
         console.log('error request districts headquarters');
     }

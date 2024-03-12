@@ -17,7 +17,7 @@ export const useLocalsStore = defineStore('local', {
                     },
                 },
             );
-            this.locals = responseSearchLocals.data;
+            this.locals = responseSearchLocals.data.results;
         },
 
         async getLocals() {
