@@ -578,6 +578,15 @@ import Button from '@shared/components/buttons/Button.vue';
         height: 52px;
     }
 
+    &__text-subtitle {
+        margin-bottom: 40px;
+        font-family: Bert Sans;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 24px;
+        color: #35383f;
+    }
+
     &__video {
         position: relative;
         padding: 0 0 56.25% 0;
