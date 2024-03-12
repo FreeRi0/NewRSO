@@ -208,7 +208,7 @@
                 <!-- <h2 v-else>Участников не найдено...</h2> -->
             </ul>
             <div class="squad-participants__link">
-                <p @click="">Показать всех</p>
+                <p @click="ShowAll">Показать всех</p>
             </div>
         </section>
         <!-- Другие мероприятия -->
@@ -298,9 +298,11 @@ onActivated(() => {
         });
     });
     getParticipants(route.params.id).then((resp) => {
-        participants.value = resp.data;
+        participants.value = resp.data.results;
     });
 });
+
+function ShowAll() {}
 function EditAction() {
     router.push({ name: 'editAction', params: { id: route.params.id } });
 }
