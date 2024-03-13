@@ -63,10 +63,7 @@ export const useEducationalsStore = defineStore('educationals', {
                         },
                     },
                 );
-                this.educationals = [
-                    ...this.educationals,
-                    ...responseEducNext.data.results,
-                ];
+                this.educationals = this.educationals.concat(responseEducNext.data.results);
                 this.nextEducationals = responseEducNext.data.next;
                 this.isLoading = false;
             } catch (error) {

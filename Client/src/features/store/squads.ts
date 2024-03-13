@@ -56,10 +56,11 @@ export const useSquadsStore = defineStore('squads', {
                     },
                 );
 
-                this.squads = [
-                    ...this.squads,
-                    ...responseSquadsNext.data.results,
-                ];
+                // this.squads = [
+                //     ...this.squads,
+                //     ...responseSquadsNext.data.results,
+                // ];
+                this.squads = this.squads.concat(responseSquadsNext.data.results);
                 this.nextSquads = responseSquadsNext.data.next;
                 this.isLoading = false;
             } catch (error) {
@@ -124,10 +125,8 @@ export const useSquadsStore = defineStore('squads', {
                         },
                     },
                 );
-                this.competitionSquads = [
-                    ...this.competitionSquads,
-                    ...responseSquadsNext.data.results,
-                ];
+
+                this.competitionSquads = this.competitionSquads.concat(responseSquadsNext.data.results);
                 this.nextSquads = responseSquadsNext.data.next;
                 this.isLoading = false;
             } catch (error) {
@@ -219,10 +218,7 @@ export const useSquadsStore = defineStore('squads', {
                         },
                     },
                 );
-                this.members = [
-                    ...this.members,
-                    ...responseMembersNext.data.results,
-                ];
+                this.members = this.members.concat(responseMembersNext.data.results);
                 this.nextSquads = responseMembersNext.data.next;
                 this.isLoading = false;
             } catch (error) {
