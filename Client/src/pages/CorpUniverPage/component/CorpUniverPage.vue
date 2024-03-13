@@ -36,7 +36,7 @@
       </p>
       <p class="text corpuniver__text-about">
         Обучение пройдет на платформе <a href="https://vk.me/join/iy9ZxZTPoHQCJpAEzVecrr1ipRp0f1XLPlE=" target="_blank">ВКонтакте</a>,
-        все видео материалы будут доступны <a href="#video">ниже</a>.
+        все видео материалы будут доступны <a href="#video_1">ниже</a>.
         Для прохождения конкурса необходимо набрать не менее 60 баллов <a href="#testing">итогового тестирования</a>.
       </p>
     </div>
@@ -56,23 +56,23 @@
         <tr>
           <td class="corpuniver__table__td corpuniver__table__border-left">11 марта 8:00 - 9:00</td>
           <td class="corpuniver__table__td">Вводное занятие</td>
-          <td class="corpuniver__table__td"><a href="#video">О Конкурсе и обучении</a></td>
+          <td class="corpuniver__table__td"><a href="#video_1">О Конкурсе и обучении</a></td>
         </tr>
 
         <tr>
           <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">13 марта 14:00 - 16:00</td>
         </tr>
         <tr>
-          <td rowspan="4" class="corpuniver__table__td">Знакомство с РСО</td>
+          <td rowspan="4" class="corpuniver__table__td"><a href="#video_2">Знакомство с РСО</a></td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Цели и задачи организации</td>
+          <td class="corpuniver__table__td"><a href="#video_2">Цели и задачи организации</a></td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Все что тебе важно, есть в РСО</td>
+          <td class="corpuniver__table__td"><a href="#video_2">Все что тебе важно, есть в РСО</a></td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">История и планы на Юбилейный год РСО</td>
+          <td class="corpuniver__table__td"><a href="#video_2">История и планы на Юбилейный год РСО</a></td>
         </tr>
 
         <tr>
@@ -185,9 +185,20 @@
     <h2 class="corpuniver__title-h2">Занятие 11 марта «О конкурсе и обучении»</h2>
     <p class="corpuniver__text-subtitle">Спикеры: Михаил Киселёв, Дмитрий Парамонов, Мария Корнилова</p>
 
-    <div id="video" class="corpuniver__video">
+    <div id="video_1" class="corpuniver__video">
       <iframe class="corpuniver__iframe"
               src="https://vk.com/video_ext.php?oid=-223571150&id=456239049&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+              allowfullscreen>
+      </iframe>
+    </div>
+
+    <h2 class="corpuniver__title-h2">Занятие 13 марта «Знакомство с РСО»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Дмитрий Парамонов, Мария Корнилова</p>
+
+    <div id="video_2" class="corpuniver__video">
+      <iframe class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239054"
               allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
               allowfullscreen>
       </iframe>
