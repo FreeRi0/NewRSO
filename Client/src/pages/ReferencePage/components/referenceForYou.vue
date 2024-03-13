@@ -253,7 +253,7 @@ const viewContributorsData = async (search) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        participants.value = viewParticipantsResponse.data.results;
+        participants.value = viewParticipantsResponse.data;
         isLoading.value = false;
         selectedPeoples.value = [];
     } catch (error) {
@@ -350,7 +350,7 @@ const updateEduc = (educVal) => {
     getFiltersData('/detachments/', search);
 
     educ.value = educVal;
-   
+
 };
 
 const updateDetachment = (detachmentVal) => {

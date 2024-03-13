@@ -99,7 +99,6 @@
                                 placeholder="Введите фамилию"
                                 name="surname"
                                 v-model:value="props.user.last_name"
-
                             />
                         </div>
                         <p class="error" v-if="isError.last_name">
@@ -115,7 +114,6 @@
                                 placeholder="Familia"
                                 name="surname-lat"
                                 v-model:value="props.user.last_name_lat"
-
                             />
                         </div>
                         <div class="form-field">
@@ -129,7 +127,6 @@
                                 placeholder="Введите имя"
                                 name="name"
                                 v-model:value="props.user.first_name"
-                               
                             />
                         </div>
                         <p class="error" v-if="isError.first_name">
@@ -4113,11 +4110,11 @@
                                 !props.user.documents.pass_date ||
                                 !props.user.documents.inn ||
                                 !props.user.documents.snils)) ||
-                        (props.user.is_adult &&
+                        (props.user.is_adult === false &&
                             (!props.user.parent.parent_first_name ||
                                 !props.user.parent.parent_last_name ||
                                 !props.user.parent.parent_date_of_birth ||
-                                !props.user.parent_relationship ||
+                                !props.user.parent.relationship ||
                                 !props.user.parent.parent_phone_number ||
                                 !props.user.parent.passport_number ||
                                 !props.user.parent.passport_date ||

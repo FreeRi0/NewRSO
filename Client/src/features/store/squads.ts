@@ -9,7 +9,7 @@ export const useSquadsStore = defineStore('squads', {
         areas: [],
         competitionSquads: [],
         isLoading: false,
-        totalSquads: 0,
+        totalPages: 0,
         totalMembers: 0,
         SquadsLimit: 3,
         MembersLimit: 3,
@@ -32,13 +32,16 @@ export const useSquadsStore = defineStore('squads', {
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.totalSquads = responseSquads.data.count;
+                this.totalPages = Math.ceil(responseSquads.data.count / this.SquadsLimit);
                 this.squads = responseSquads.data.results;
+
+                console.log('prev', this.prevSquads)
                 this.nextSquads = responseSquads.data.next;
-                this.prevSquads = responseSquads.data.previous;
+
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
+                console.log('prev', this.prevSquads)
                 this.isLoading = false;
             }
         },
@@ -47,7 +50,7 @@ export const useSquadsStore = defineStore('squads', {
             try {
                 this.isLoading = true;
 
-                const responseSquads = await HTTP.get(
+                const responseSquadsNext = await HTTP.get(
                     this.nextSquads.replace('http', 'https'),
                     {
                         headers: {
@@ -57,9 +60,11 @@ export const useSquadsStore = defineStore('squads', {
                         },
                     },
                 );
-                this.totalSquads = responseSquads.data.count;
-                this.squads = responseSquads.data.results;
-                this.nextSquads = responseSquads.data.next;
+
+                this.prevSquads = responseSquadsNext.data.previous;
+                this.squads = responseSquadsNext.data.results;
+                this.nextSquads = responseSquadsNext.data.next;
+                console.log('prev', this.prevSquads)
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured' + error);
@@ -71,7 +76,7 @@ export const useSquadsStore = defineStore('squads', {
             try {
                 this.isLoading = true;
 
-                const responseSquads = await HTTP.get(
+                const responseSquadsPrev = await HTTP.get(
                     this.prevSquads.replace('http', 'https'),
                     {
                         headers: {
@@ -81,12 +86,14 @@ export const useSquadsStore = defineStore('squads', {
                         },
                     },
                 );
-                this.totalSquads = responseSquads.data.count;
-                this.squads = responseSquads.data.results;
-                this.prevSquads = responseSquads.data.previous;
+
+                this.squads = responseSquadsPrev.data.results;
+                this.prevSquads = responseSquadsPrev.data.previous;
+                console.log('prev', this.prevSquads)
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured' + error);
+                console.log('prev', this.prevSquads)
                 this.isLoading = false;
             }
         },

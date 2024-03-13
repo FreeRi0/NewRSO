@@ -199,12 +199,17 @@
                 <horizontalList :squads="sortedSquads"></horizontalList>
                 <p v-if="!sortedSquads.length">Ничего не найдено</p>
             </div>
+            <!-- <div class="page_wrapper">
+                <div v-for="page in squadsStore.totalPages" :key="page" class="page mr-2">
+                    {{ page }}
+                </div>
+            </div> -->
             <Button
                 @click="next()"
-                v-if="squadsStore.nextSquads !== null"
+                v-if="squadsStore.nextSquads != null"
                 label="Показать еще"
             ></Button>
-            <Button @click="prev()" v-else label="Свернуть все"></Button>
+            <Button @click="prev()" v-else-if="squadsStore.prevSquads != null" label="Свернуть все"></Button>
         </div>
     </div>
 </template>
@@ -247,8 +252,8 @@ const next = () => {
 };
 
 const prev = () => {
-     squadsStore.getPrevSquads();
-}
+    squadsStore.getPrevSquads();
+};
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 const picked = ref('');
@@ -403,6 +408,21 @@ onActivated(() => {
         text-overflow: ellipsis;
     }
 }
+
+.page_wrapper {
+    display: flex;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.page {
+    border: 1px solid black;
+    padding: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
 
 .squads {
     padding: 0px 0px 60px 0px;
