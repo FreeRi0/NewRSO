@@ -6,12 +6,19 @@ export const useEducationalsStore = defineStore('educationals', {
         members: [],
         educational: {},
         isLoading: false,
+        totalEducationals: 0,
+        EducationalsLimit: 4,
+        nextEducationals: '',
     }),
     actions: {
         async searchEducationals(name: String) {
             const responseSearchEducationals = await HTTP.get(
                 `/educationals/?search=${name}`,
+
                 {
+                    params: {
+                        limit: this.EducationalsLimit,
+                    },
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -21,19 +28,49 @@ export const useEducationalsStore = defineStore('educationals', {
             this.educationals = responseSearchEducationals.data.results;
         },
         async getEducationals() {
-            if (this.educationals.length) return;
             try {
                 this.isLoading = true;
                 const responseEducationals = await HTTP.get(`/educationals/`, {
+                    params: {
+                        limit: this.EducationalsLimit,
+                    },
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
+                this.totalEducationals = responseEducationals.data.count;
+                this.nextEducationals = responseEducationals.data.next;
                 this.educationals = responseEducationals.data.results;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
+                this.isLoading = false;
+            }
+        },
+
+        async getNextEducationals() {
+            try {
+                this.isLoading = true;
+
+                const responseEducNext = await HTTP.get(
+                    this.nextEducationals.replace('http', 'https'),
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.educationals = [
+                    ...this.educationals,
+                    ...responseEducNext.data.results,
+                ];
+                this.nextEducationals = responseEducNext.data.next;
+                this.isLoading = false;
+            } catch (error) {
+                console.log('an error occured' + error);
                 this.isLoading = false;
             }
         },

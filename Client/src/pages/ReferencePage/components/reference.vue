@@ -246,7 +246,7 @@ const viewContributorsData = async (search) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        participants.value = viewParticipantsResponse.data;
+        participants.value = viewParticipantsResponse.data.results;
         isLoading.value = false;
         selectedPeoples.value = [];
     } catch (error) {

@@ -155,17 +155,14 @@
                 ></horizontalHeadquarters>
             </div>
             <Button
-                @click="headquartersVisible += step"
+                @click="next"
                 v-if="
-                    headquartersVisible < headquarters.educationals.value.length
+                    educationalsStore.educationals.length <
+                    educationalsStore.totalEducationals
                 "
                 label="Показать еще"
             ></Button>
-            <Button
-                @click="headquartersVisible -= step"
-                v-else
-                label="Свернуть все"
-            ></Button>
+            <Button @click="prev" v-else label="Свернуть все"></Button>
         </div>
     </div>
 </template>
@@ -191,10 +188,15 @@ const crosspageFilters = useCrosspageFilter();
 
 const headquarters = storeToRefs(educationalsStore);
 
-const headquartersVisible = ref(20);
 const isLoading = storeToRefs(educationalsStore);
 
-const step = ref(20);
+const next = () => {
+    educationalsStore.getNextEducationals();
+};
+
+const prev = () => {
+    educationalsStore.getEducationals();
+};
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -322,8 +324,6 @@ const sortedHeadquarters = computed(() => {
     if (!ascending.value) {
         tempHeadquartes.reverse();
     }
-
-    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
     return tempHeadquartes;
 });
 
