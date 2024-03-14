@@ -36,7 +36,7 @@
       </p>
       <p class="text corpuniver__text-about">
         Обучение пройдет на платформе <a href="https://vk.me/join/iy9ZxZTPoHQCJpAEzVecrr1ipRp0f1XLPlE=" target="_blank">ВКонтакте</a>,
-        все видео материалы будут доступны <a href="#video">ниже</a>.
+        все видео материалы будут доступны <a href="#video_1">ниже</a>.
         Для прохождения конкурса необходимо набрать не менее 60 баллов <a href="#testing">итогового тестирования</a>.
       </p>
     </div>
@@ -56,23 +56,23 @@
         <tr>
           <td class="corpuniver__table__td corpuniver__table__border-left">11 марта 8:00 - 9:00</td>
           <td class="corpuniver__table__td">Вводное занятие</td>
-          <td class="corpuniver__table__td"><a href="#video">О Конкурсе и обучении</a></td>
+          <td class="corpuniver__table__td"><a href="#video_1">О Конкурсе и обучении</a></td>
         </tr>
 
         <tr>
           <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">13 марта 14:00 - 16:00</td>
         </tr>
         <tr>
-          <td rowspan="4" class="corpuniver__table__td">Знакомство с РСО</td>
+          <td rowspan="4" class="corpuniver__table__td"><a href="#video_2">Знакомство с РСО</a></td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Цели и задачи организации</td>
+          <td class="corpuniver__table__td"><a href="#video_2">Цели и задачи организации</a></td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Все что тебе важно, есть в РСО</td>
+          <td class="corpuniver__table__td"><a href="#video_2">Все что тебе важно, есть в РСО</a></td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">История и планы на Юбилейный год РСО</td>
+          <td class="corpuniver__table__td"><a href="#video_2">История и планы на Юбилейный год РСО</a></td>
         </tr>
 
         <tr>
@@ -183,9 +183,25 @@
     </div>
 
     <h2 class="corpuniver__title-h2">Занятие 11 марта «О конкурсе и обучении»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Михаил Киселёв, Дмитрий Парамонов, Мария Корнилова</p>
 
-    <div id="video" class="corpuniver__video">
-      <img class="corpuniver__preview" src="@app/assets/corpuniver/preview.png" alt="preview">
+    <div id="video_1" class="corpuniver__video">
+      <iframe class="corpuniver__iframe"
+              src="https://vk.com/video_ext.php?oid=-223571150&id=456239049&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+              allowfullscreen>
+      </iframe>
+    </div>
+
+    <h2 class="corpuniver__title-h2">Занятие 13 марта «Знакомство с РСО»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Дмитрий Парамонов, Мария Корнилова</p>
+
+    <div id="video_2" class="corpuniver__video">
+      <iframe class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239054"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+              allowfullscreen>
+      </iframe>
     </div>
 
     <div id="testing" class="corpuniver__documents-test">
@@ -274,7 +290,7 @@ import Button from '@shared/components/buttons/Button.vue';
     line-height: 38px;
     color: #35383F;
     margin-top: 36px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 
     @media (max-width: 768px) {
       font-size: 20px;
@@ -403,9 +419,28 @@ import Button from '@shared/components/buttons/Button.vue';
     height: 52px;
   }
 
+  &__text-subtitle {
+    margin-bottom: 40px;
+    font-family: Bert Sans;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #35383F;
+  }
+
   &__video {
-    //min-height: 600px;
-    //object-fit: cover;
+    position:relative;
+    padding: 0 0 56.25% 0;
+    height:0;
+    overflow:hidden;
+  }
+
+  &__iframe{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
   }
 
   &__preview {

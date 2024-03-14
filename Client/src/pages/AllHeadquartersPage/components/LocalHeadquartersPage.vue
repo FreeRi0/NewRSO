@@ -169,15 +169,11 @@
                 </p>
             </div>
             <Button
-                @click="headquartersVisible += step"
-                v-if="headquartersVisible < localHeadquarters.length"
+                @click="next"
+                v-if="localStore.locals.length < localStore.totalLocals"
                 label="Показать еще"
             ></Button>
-            <Button
-                @click="headquartersVisible -= step"
-                v-else
-                label="Свернуть все"
-            ></Button>
+            <Button @click="prev" v-else label="Свернуть все"></Button>
         </div>
     </div>
 </template>
@@ -203,10 +199,8 @@ const localStore = useLocalsStore();
 
 const localHeadquarters = ref([]);
 
-const headquartersVisible = ref(20);
 const isLocalLoading = ref(false);
 const timerSearch = ref(null);
-const step = ref(20);
 
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
@@ -214,6 +208,14 @@ const sortBy = ref('alphabetically');
 const vertical = ref(true);
 
 const name = ref('');
+
+const next = () => {
+    localStore.getNextLocals();
+};
+
+const prev = () => {
+    localStore.getLocals();
+};
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -345,8 +347,6 @@ const sortedLocalHeadquarters = computed(() => {
     if (!ascending.value) {
         tempHeadquartes.reverse();
     }
-
-    tempHeadquartes = tempHeadquartes.slice(0, headquartersVisible.value);
 
     return tempHeadquartes;
 });

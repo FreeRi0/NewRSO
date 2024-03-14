@@ -112,16 +112,12 @@
                     Ничего не найдено
                 </p>
             </div>
-            <!-- <Button
-                @click="squadsVisible += step"
-                v-if="squadsVisible < squads.competitionSquads.value.length"
+            <Button
+                @click="next"
+                v-if="squads.competitionSquads.value.length < squadsStore.totalCompetitions"
                 label="Показать еще"
             ></Button>
-            <Button
-                @click="squadsVisible -= step"
-                v-else
-                label="Свернуть все"
-            ></Button> -->
+            <Button @click="prev" v-else label="Свернуть все"></Button>
         </div>
     </div>
 </template>
@@ -145,11 +141,13 @@ const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
 const categories = storeToRefs(squadsStore);
 const name = ref('');
-
-// const squadsVisible = ref(20);
 const education = ref(null);
-// const step = ref(20);
-
+const next = () => {
+    squadsStore.getNextCompetitionSquads();
+};
+const prev = () => {
+    squadsStore.getCompetitionSquads();
+};
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 

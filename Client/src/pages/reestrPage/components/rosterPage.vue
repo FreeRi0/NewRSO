@@ -232,7 +232,7 @@ const viewHeadquartersData = async (resp, search, join) => {
                 },
             );
             educHead.value = viewHeadquartersResponsetTwo.data.results;
-            response = response.concat(viewHeadquartersResponsetTwo.data);
+            response = response.concat(viewHeadquartersResponsetTwo.data.results);
         }
         sortedVal.value = response;
         isLoading.value = false;
@@ -267,13 +267,7 @@ const updateDistrict = (districtVal) => {
     if (name.value) search += '&search=' + name.value;
     viewHeadquartersData(resp, search);
 
-    // let districtId = districtsStore.districts.find(
-    //     (dis) => dis.name == districtVal,
-    // )?.id;
     district.value = districtVal;
-    // regionals.value = regionalsStore.regionals.filter(
-    //     (regional) => regional.district_headquarter == districtId,
-    // );
 };
 
 const updateReg = (regVal) => {

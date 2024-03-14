@@ -134,8 +134,7 @@ const getCompetitionsJunior = async () => {
 };
 
 const getCompetitions = async () => {
-    console.log(commanderIds.value.regionalheadquarter_commander?.id);
-    for (const competitionId of allCompetition.value) {
+    for (const competitionId of allCompetition.value.results) {
         try {
             loading.value = true;
             const { data } = await HTTP.get(
@@ -147,8 +146,7 @@ const getCompetitions = async () => {
                     },
                 },
             );
-
-            competitionsList.value = data.filter(
+            competitionsList.value = data.results.filter(
                 (c) => c.is_confirmed_by_junior || !c.detachment,
             );
         } catch (e) {

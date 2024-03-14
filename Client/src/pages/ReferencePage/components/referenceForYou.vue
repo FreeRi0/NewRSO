@@ -350,7 +350,7 @@ const updateEduc = (educVal) => {
     getFiltersData('/detachments/', search);
 
     educ.value = educVal;
-   
+
 };
 
 const updateDetachment = (detachmentVal) => {

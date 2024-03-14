@@ -199,9 +199,10 @@
                 <horizontalList :squads="sortedSquads"></horizontalList>
                 <p v-if="!sortedSquads.length">Ничего не найдено</p>
             </div>
+
             <Button
-                @click="next()"
-                v-if="squadsVisible < squadsStore.totalSquads"
+                @click="next"
+                v-if="squads.squads.value.length < squadsStore.totalSquads"
                 label="Показать еще"
             ></Button>
             <Button @click="prev" v-else label="Свернуть все"></Button>
@@ -240,12 +241,14 @@ const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
 
-const squadsVisible = ref(squadsStore.SquadsLimit);
 
 const next = () => {
     squadsStore.getNextSquads();
 };
 
+const prev = () => {
+    squadsStore.getSquads();
+};
 const ascending = ref(true);
 const sortBy = ref('alphabetically');
 const picked = ref('');
