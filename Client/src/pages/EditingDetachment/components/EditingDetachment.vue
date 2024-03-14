@@ -50,7 +50,6 @@ const roles = storeToRefs(roleStore);
 const meRoles = roles.roles.value;
 console.log(meRoles);
 
-
 const educComId = roles.roles.value.educationalheadquarter_commander?.id;
 const regionComId = roles.roles.value.regionalheadquarter_commander?.id;
 const districtComId = roles.roles.value.districtheadquarter_commander?.id;
@@ -148,10 +147,11 @@ onMounted(() => {
 });
 
 const onUpdateMember = (event, id) => {
-    const memberIndex = members.value.findIndex(member => member.id === id)
+    const memberIndex = members.value.findIndex((member) => member.id === id);
     const firstkey = Object.keys(event)[0];
     members.value[memberIndex].change = true;
-    if (firstkey == 'position') members.value[memberIndex].position.id = event[firstkey];
+    if (firstkey == 'position')
+        members.value[memberIndex].position.id = event[firstkey];
     else members.value[memberIndex][firstkey] = event[firstkey];
 };
 
@@ -267,7 +267,7 @@ const changeDetachment = async () => {
     formData.append('slogan', detachment.value.slogan);
     formData.append('about', detachment.value.about);
 
-    for (let member of members.value) {
+    for (let member of members.value.results) {
         if (member.change) {
             await HTTP.patch(
                 `/detachments/${id}/members/${member.id}/`,
@@ -281,22 +281,24 @@ const changeDetachment = async () => {
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 },
-            ).then((response) => {
-                member.position = response.data.position
-                member.is_trusted = response.is_trusted
-                member.change = false
-            }).catch(({ response }) => {
-                isErrorMembers.value = response.data;
-                console.error('There was an error!', response.data);
-                console.log('Ошибки отправки формы', isErrorMembers.value);
-                swal.fire({
-                    position: 'center',
-                    icon: 'error',
-                    title: `ошибка - ${isErrorMembers.value.non_field_errors}`,
-                    showConfirmButton: false,
-                    timer: 2500,
+            )
+                .then((response) => {
+                    member.position = response.data.position;
+                    member.is_trusted = response.is_trusted;
+                    member.change = false;
+                })
+                .catch(({ response }) => {
+                    isErrorMembers.value = response.data;
+                    console.error('There was an error!', response.data);
+                    console.log('Ошибки отправки формы', isErrorMembers.value);
+                    swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: `ошибка - ${isErrorMembers.value.non_field_errors}`,
+                        showConfirmButton: false,
+                        timer: 2500,
+                    });
                 });
-            });
         }
     }
 
