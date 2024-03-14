@@ -170,7 +170,15 @@
             >
         </div>
 
-        <div class="d-flex mb-12 school-wrapper">
+        <div
+            class="d-flex mb-12 school-wrapper"
+            v-if="
+                roleStore.status.is_commander_detachment ||
+                roleStore.status.is_commissar_detachment ||
+                roleStore.roles.regionalheadquarter_commander ||
+                roleStore.roles.centralheadquarter_commander
+            "
+        >
             <img src="@app/assets/competition/bgSchool.png" alt="bg" />
             <div class="competition__school">
                 <p>
@@ -182,9 +190,10 @@
                     >
                 </p>
 
-                <router-link :to="{
-                name: 'CorpUniver',
-            }"
+                <router-link
+                    :to="{
+                        name: 'CorpUniver',
+                    }"
                     ><Button
                         class="competition__school_btn"
                         label="Обучение в Корпоративном университете"

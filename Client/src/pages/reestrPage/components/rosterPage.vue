@@ -195,6 +195,7 @@ const isLoading = ref(false);
 const showInfo = ref(false);
 const educ = ref(null);
 const sortedVal = ref([]);
+
 //Сортировк
 const ascending = ref(true);
 const levelAccess = ref(7);
@@ -214,13 +215,31 @@ const sortOptionss = ref([
 const viewHeadquartersData = async (resp, search, join) => {
     try {
         isLoading.value = true;
+        let routeName = 'DistrictHQ';
+        if (resp.indexOf('districts') >= 0) {
+            routeName = 'DistrictHQ';
+        } else if (resp.indexOf('regionals') >= 0) {
+            routeName = 'RegionalHQ';
+        } else if (resp.indexOf('locals') >= 0) {
+            routeName = 'LocalHQ';
+        } else if (resp.indexOf('educationals') >= 0) {
+            routeName = 'HQ';
+        } else if (resp.indexOf('detachments') >= 0) {
+            routeName = 'lso';
+        } else if (resp.indexOf('rsousers') >= 0) {
+            routeName = 'userpage'
+        }
         const viewHeadquartersResponse = await HTTP.get(resp + search, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+
         let response = viewHeadquartersResponse.data.results;
+        for (let i in response) {
+            response[i]['route'] = routeName;
+        }
         if (join) {
             const viewHeadquartersResponsetTwo = await HTTP.get(
                 '/educationals/' + search,
@@ -232,20 +251,26 @@ const viewHeadquartersData = async (resp, search, join) => {
                 },
             );
             educHead.value = viewHeadquartersResponsetTwo.data.results;
-            response = response.concat(viewHeadquartersResponsetTwo.data.results);
+            let response2 = viewHeadquartersResponsetTwo.data.results;
+            for (let i in response2) {
+                response2[i]['route'] = 'HQ';
+            }
+            response = response.concat(
+                response2,
+            );
         }
         sortedVal.value = response;
         isLoading.value = false;
 
-        if (resp.indexOf('districts') >= 0){
+        if (resp.indexOf('districts') >= 0) {
             districts.value = viewHeadquartersResponse.data.results;
-        }else if (resp.indexOf('regionals') >= 0){
+        } else if (resp.indexOf('regionals') >= 0) {
             regionals.value = viewHeadquartersResponse.data.results;
-        }else if (resp.indexOf('locals') >= 0){
+        } else if (resp.indexOf('locals') >= 0) {
             locals.value = viewHeadquartersResponse.data.results;
-        }else if (resp.indexOf('educationals') >= 0){
+        } else if (resp.indexOf('educationals') >= 0) {
             educHead.value = viewHeadquartersResponse.data.results;
-        }else if (resp.indexOf('detachments') >= 0){
+        } else if (resp.indexOf('detachments') >= 0) {
             detachments.value = viewHeadquartersResponse.data.results;
         }
     } catch (error) {
@@ -297,7 +322,6 @@ const updateLocal = (localVal) => {
     viewHeadquartersData(resp, search, !localVal);
 
     local.value = localVal;
-
 };
 
 const updateEduc = (educVal) => {

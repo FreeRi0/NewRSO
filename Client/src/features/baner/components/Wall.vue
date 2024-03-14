@@ -5,16 +5,19 @@
                 (props.user.privacy?.privacy_photo === 'Члены отряда' &&
                     props.user.detachment_id ===
                         currentUser.currentUser.value.detachment_id) ||
-                (props.user.privacy?.privacy_photo === 'Руководство' &&
-                    (roles.roles.value.detachment_commander.id ===
-                        squad.squad.value.id ||
-                        roles.roles.value.regionalheadquarter_commander ===
-                            regionalHeadquarter.regional.value.id ||
-                        roles.roles.value.localheadquarter_commander ||
-                        roles.roles.value.educationalheadquarter_commander ||
-                        roles.roles.value.districtheadquarter_commander ||
-                        roles.roles.value.centralheadquarter_commander)) ||
-                props.user.privacy?.privacy_photo === 'Все' || 'all'
+                (props.user.privacy?.privacy_email === 'Руководство' &&
+                    ((roleStore.roles.detachment_commander &&
+                        roleStore.roles.detachment_commander?.id ===
+                            props.user.detachment_id) ||
+                        (roleStore.roles.regionalheadquarter_commander &&
+                            roleStore.roles.regionalheadquarter_commander
+                                ?.id === props.user.regional_headquarter_id) ||
+                        roleStore.roles.localheadquarter_commander ||
+                        roleStore.roles.educationalheadquarter_commander ||
+                        roleStore.roles.districtheadquarter_commander ||
+                        roleStore.roles.centralheadquarter_commander)) ||
+                props.user.privacy?.privacy_email === 'Все' ||
+                props.user.privacy?.privacy_email === 'all'
             "
             :banner="user.media?.banner"
             @upload-wall="uploadWall"
@@ -36,16 +39,19 @@
                 (props.user.privacy?.privacy_photo === 'Члены отряда' &&
                     props.user.detachment_id ===
                         currentUser.currentUser.value.detachment_id) ||
-                (props.user.privacy?.privacy_photo === 'Руководство' &&
-                    (roles.roles.value.detachment_commander.id ===
-                        squad.squad.value.id ||
-                        roles.roles.value.regionalheadquarter_commander ===
-                            regionalHeadquarter.regional.value.id ||
-                        roles.roles.value.localheadquarter_commander ||
-                        roles.roles.value.educationalheadquarter_commander ||
-                        roles.roles.value.districtheadquarter_commander ||
-                        roles.roles.value.centralheadquarter_commander)) ||
-                props.user.privacy?.privacy_photo === 'Все' || 'all'
+                (props.user.privacy?.privacy_email === 'Руководство' &&
+                    ((roleStore.roles.detachment_commander &&
+                        roleStore.roles.detachment_commander?.id ===
+                           props.user.detachment_id) ||
+                        (roleStore.roles.regionalheadquarter_commander &&
+                            roleStore.roles.regionalheadquarter_commander
+                                ?.id === props.user.regional_headquarter_id) ||
+                        roleStore.roles.localheadquarter_commander ||
+                        roleStore.roles.educationalheadquarter_commander ||
+                        roleStore.roles.districtheadquarter_commander ||
+                        roleStore.roles.centralheadquarter_commander)) ||
+                props.user.privacy?.privacy_email === 'Все' ||
+                props.user.privacy?.privacy_email === 'all'
             "
             :avatar="user.media?.photo"
             @upload="uploadAva"
@@ -178,20 +184,24 @@
                                         .detachment_id) ||
                             (props.user.privacy?.privacy_social ===
                                 'Руководство' &&
-                                (roles.roles.value.detachment_commander.id ===
-                                    squad.squad.value.id ||
-                                    roles.roles.value
-                                        .regionalheadquarter_commander ===
-                                        regionalHeadquarter.regional.value.id ||
-                                    roles.roles.value
+                                ((roleStore.roles.detachment_commander &&
+                                    roleStore.roles.detachment_commander?.id ===
+                                        props.user.detachment_id) ||
+                                    (roleStore.roles
+                                        .regionalheadquarter_commander &&
+                                        roleStore.roles
+                                            .regionalheadquarter_commander
+                                            ?.id === props.user.regional_headquarter_id) ||
+                                    roleStore.roles
                                         .localheadquarter_commander ||
-                                    roles.roles.value
+                                    roleStore.roles
                                         .educationalheadquarter_commander ||
-                                    roles.roles.value
+                                    roleStore.roles
                                         .districtheadquarter_commander ||
-                                    roles.roles.value
+                                    roleStore.roles
                                         .centralheadquarter_commander)) ||
-                            props.user.privacy?.privacy_social === 'Все' || 'all'
+                            props.user.privacy?.privacy_social === 'Все' || props.user.privacy?.privacy_social === 'all'
+
                         "
                     >
                         <div class="user-data__link-vk mr-2">
@@ -237,21 +247,23 @@
                                             .detachment_id) ||
                                 (props.user.privacy?.privacy_telephone ===
                                     'Руководство' &&
-                                    (roles.roles.value.detachment_commander
-                                        .id === squad.squad.value.id ||
-                                        roles.roles.value
-                                            .regionalheadquarter_commander ===
-                                            regionalHeadquarter.regional.value
-                                                .id ||
-                                        roles.roles.value
+                                    ((roleStore.roles.detachment_commander &&
+                                        roleStore.roles.detachment_commander
+                                            ?.id === props.user.detachment_id) ||
+                                        (roleStore.roles
+                                            .regionalheadquarter_commander &&
+                                            roleStore.roles
+                                                .regionalheadquarter_commander
+                                                ?.id === props.user.regional_headquarter_id) ||
+                                        roleStore.roles
                                             .localheadquarter_commander ||
-                                        roles.roles.value
+                                        roleStore.roles
                                             .educationalheadquarter_commander ||
-                                        roles.roles.value
+                                        roleStore.roles
                                             .districtheadquarter_commander ||
-                                        roles.roles.value
+                                        roleStore.roles
                                             .centralheadquarter_commander)) ||
-                                props.user.privacy?.privacy_telephone === 'Все' || 'all'
+                                props.user.privacy?.privacy_telephone === 'Все' || props.user.privacy?.privacy_telephone === 'all'
                             "
                         >
                             <img
@@ -266,25 +278,28 @@
                                 (props.user.privacy?.privacy_email ===
                                     'Члены отряда' &&
                                     props.user.detachment_id ===
-                                        currentUser.currentUser.value
-                                            .detachment_id) ||
+                                        userStore.currentUser.detachment_id) ||
                                 (props.user.privacy?.privacy_email ===
                                     'Руководство' &&
-                                    (roles.roles.value.detachment_commander
-                                        .id === squad.squad.value.id ||
-                                        roles.roles.value
-                                            .regionalheadquarter_commander ===
-                                            regionalHeadquarter.regional.value
-                                                .id ||
-                                        roles.roles.value
+                                    ((roleStore.roles.detachment_commander &&
+                                        roleStore.roles.detachment_commander
+                                            ?.id === props.user.detachment_id) ||
+                                        (roleStore.roles
+                                            .regionalheadquarter_commander &&
+                                            roleStore.roles
+                                                .regionalheadquarter_commander
+                                                ?.id ===
+                                                props.user.regional_headquarter_id) ||
+                                        roleStore.roles
                                             .localheadquarter_commander ||
-                                        roles.roles.value
+                                        roleStore.roles
                                             .educationalheadquarter_commander ||
-                                        roles.roles.value
+                                        roleStore.roles
                                             .districtheadquarter_commander ||
-                                        roles.roles.value
+                                        roleStore.roles
                                             .centralheadquarter_commander)) ||
-                                props.user.privacy?.privacy_email === 'Все' || 'all'
+                                props.user.privacy?.privacy_email === 'Все' || props.user.privacy?.privacy_email === 'all'
+
                             "
                         >
                             <img src="@/app/assets/icon/mail.svg" alt="mail" />
@@ -378,7 +393,6 @@ const regionals = storeToRefs(regionalsStore);
 const regionalHeadquarter = storeToRefs(regionalsStore);
 const detachment = ref({});
 const educationalHeadquarter = ref({});
-
 const getUserData = async () => {
     try {
         if (props.user.detachment_id) {

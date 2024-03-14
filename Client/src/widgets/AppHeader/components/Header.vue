@@ -399,7 +399,7 @@ const userPages = computed(() => [
     },
     {
         title: 'Поиск участников',
-        link: 'roster',
+        link: '/roster',
         show:
             roleStore.roles?.centralheadquarter_commander ||
             roleStore.roles?.districtheadquarter_commander ||
@@ -420,7 +420,9 @@ const userPages = computed(() => [
         name: 'CorpUniver',
         show:
             roleStore.status.is_commander_detachment ||
-            roleStore.status.is_commissar_detachment,
+            roleStore.status.is_commissar_detachment ||
+            roleStore.roles.regionalheadquarter_commander ||
+            roleStore.roles.centralheadquarter_commander,
     },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },

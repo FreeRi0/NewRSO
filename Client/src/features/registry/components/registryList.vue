@@ -5,6 +5,7 @@
             :item="item"
             :key="index"
             :show-info="showInfo"
+
         ></registryItem>
     </div>
 
