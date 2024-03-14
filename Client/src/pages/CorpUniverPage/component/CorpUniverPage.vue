@@ -50,8 +50,9 @@
                     href="https://vk.me/join/iy9ZxZTPoHQCJpAEzVecrr1ipRp0f1XLPlE="
                     target="_blank"
                     >ВКонтакте</a
-                >, все видео материалы будут доступны <a href="#video">ниже</a>.
-                Для прохождения конкурса необходимо набрать не менее 60 баллов
+                >, все видео материалы будут доступны
+                <a href="#video_1">ниже</a>. Для прохождения конкурса необходимо
+                набрать не менее 60 баллов
                 <a href="#testing">итогового тестирования</a>.
             </p>
         </div>
@@ -86,7 +87,7 @@
                         </td>
                         <td class="corpuniver__table__td">Вводное занятие</td>
                         <td class="corpuniver__table__td">
-                            <a href="#video">О Конкурсе и обучении</a>
+                            <a href="#video_1">О Конкурсе и обучении</a>
                         </td>
                     </tr>
 
@@ -100,7 +101,7 @@
                     </tr>
                     <tr>
                         <td rowspan="4" class="corpuniver__table__td">
-                            Знакомство с РСО
+                            <a href="#video_2">Знакомство с РСО</a>
                         </td>
                     </tr>
                     <tr>
@@ -347,11 +348,28 @@
         <p class="corpuniver__text-subtitle">
             Спикеры: Михаил Киселёв, Дмитрий Парамонов, Мария Корнилова
         </p>
-
-        <div id="video" class="corpuniver__video">
+        <div id="video_1" class="corpuniver__video">
             <iframe
                 class="corpuniver__iframe"
                 src="https://vk.com/video_ext.php?oid=-223571150&id=456239049&hd=2"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;"
+                frameborder="0"
+                allowfullscreen
+            >
+            </iframe>
+        </div>
+
+        <h2 class="corpuniver__title-h2">
+            Занятие 13 марта «Знакомство с РСО»
+        </h2>
+        <p class="corpuniver__text-subtitle">
+            Спикеры: Дмитрий Парамонов, Мария Корнилова
+        </p>
+
+        <div id="video_2" class="corpuniver__video">
+            <iframe
+                class="corpuniver__iframe"
+                src="https://vk.com/video_ext.php?oid=-223571150&id=456239054"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;"
                 frameborder="0"
                 allowfullscreen
