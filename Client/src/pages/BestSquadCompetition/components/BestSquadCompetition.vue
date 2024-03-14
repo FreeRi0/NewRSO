@@ -245,6 +245,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { ModalCompetition } from '@features/Competition';
+import { useRoleStore } from '@layouts/store/role';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';
 // const route = useRoute();
@@ -252,6 +253,7 @@ import { usePage } from '@shared';
 
 usePage({ isHidden: true });
 
+const roleStore = useRoleStore();
 const isAuth = ref(!!localStorage.getItem('Token'));
 
 const userCommander = ref({});
