@@ -211,7 +211,7 @@
                                 :href="user.social_vk"
                                 target="_blank"
                                 v-if="
-                                    user.social_vk && user.social_vk != 'null'
+                                    user.social_vk && user.social_vk !== 'https://vk.com/'
                                 "
                             >
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -219,7 +219,7 @@
                         </div>
                         <div
                             class="user-data__link-telegram mr-2"
-                            v-if="user.social_tg && user.social_tg != 'null'"
+                            v-if="user.social_tg && user.social_tg !== 'https://t.me/'"
                         >
                             <a :href="user.social_tg">
                                 <img
