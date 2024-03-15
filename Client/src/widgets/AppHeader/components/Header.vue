@@ -74,7 +74,7 @@
                     "
                 >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
-                    <router-link :to="'active'">
+                    <router-link :to="'/active'">
                         <img
                             src="@app/assets/icon/bell-light.svg"
                             width="36"
@@ -403,7 +403,8 @@ const userPages = computed(() => [
         show:
             roleStore.roles?.centralheadquarter_commander ||
             roleStore.roles?.districtheadquarter_commander ||
-            roleStore.roles?.regionalheadquarter_commander,
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.detachment_commander,
     },
     {
         title: 'Членский взнос',

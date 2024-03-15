@@ -227,7 +227,7 @@ const viewHeadquartersData = async (resp, search, join) => {
         } else if (resp.indexOf('detachments') >= 0) {
             routeName = 'lso';
         } else if (resp.indexOf('rsousers') >= 0) {
-            routeName = 'userpage'
+            routeName = 'userpage';
         }
         const viewHeadquartersResponse = await HTTP.get(resp + search, {
             headers: {
@@ -255,9 +255,7 @@ const viewHeadquartersData = async (resp, search, join) => {
             for (let i in response2) {
                 response2[i]['route'] = 'HQ';
             }
-            response = response.concat(
-                response2,
-            );
+            response = response.concat(response2);
         }
         sortedVal.value = response;
         isLoading.value = false;
@@ -505,6 +503,7 @@ watch(
         districts.value = districtsStore.districts;
     },
 );
+
 
 watch(
     () => regionalsStore.regionals,

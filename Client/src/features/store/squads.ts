@@ -56,10 +56,6 @@ export const useSquadsStore = defineStore('squads', {
                     },
                 );
 
-                // this.squads = [
-                //     ...this.squads,
-                //     ...responseSquadsNext.data.results,
-                // ];
                 this.squads = this.squads.concat(responseSquadsNext.data.results);
                 this.nextSquads = responseSquadsNext.data.next;
                 this.isLoading = false;
