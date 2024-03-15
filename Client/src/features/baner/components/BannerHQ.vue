@@ -8,7 +8,13 @@
                     <h4>{{ headquarter.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p>{{ headquarter.slogan }}</p>
+                    <p
+                        v-if="
+                            headquarter.slogan && headquarter.slogan != 'null'
+                        "
+                    >
+                        {{ headquarter.slogan }}
+                    </p>
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list">
@@ -38,7 +44,10 @@
                         <div class="hq-data__social-network">
                             <div
                                 class="hq-data__link-vk"
-                                v-if="headquarter.social_vk"
+                                v-if="
+                                    headquarter.social_vk &&
+                                    headquarter.social_vk != 'null'
+                                "
                             >
                                 <a
                                     :href="headquarter.social_vk"
@@ -49,7 +58,10 @@
                             </div>
                             <div
                                 class="hq-data__link-telegram"
-                                v-if="headquarter.social_tg"
+                                v-if="
+                                    headquarter.social_tg &&
+                                    headquarter.social_tg != 'null'
+                                "
                             >
                                 <a
                                     :href="headquarter.social_tg"
@@ -109,7 +121,14 @@
                     <h4>{{ localHeadquarter.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p>{{ localHeadquarter.slogan }}</p>
+                    <p
+                        v-if="
+                            localHeadquarter.slogan &&
+                            localHeadquarter.slogan != 'null'
+                        "
+                    >
+                        {{ localHeadquarter.slogan }}
+                    </p>
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list-Local">
@@ -138,7 +157,10 @@
                         <div class="hq-data__social-network-Reg">
                             <div
                                 class="hq-data__link-vk"
-                                v-if="localHeadquarter.social_vk"
+                                v-if="
+                                    localHeadquarter.social_vk &&
+                                    localHeadquarter.social_vk != 'null'
+                                "
                             >
                                 <a
                                     :href="localHeadquarter.social_vk"
@@ -149,7 +171,10 @@
                             </div>
                             <div
                                 class="hq-data__link-telegram"
-                                v-if="localHeadquarter.social_tg"
+                                v-if="
+                                    localHeadquarter.social_tg &&
+                                    localHeadquarter.social_tg != 'null'
+                                "
                             >
                                 <a
                                     :href="localHeadquarter.social_tg"
@@ -205,7 +230,14 @@
                     <h4>{{ districtHeadquarter.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p>{{ districtHeadquarter.slogan }}</p>
+                    <p
+                        v-if="
+                            districtHeadquarter.slogan &&
+                            districtHeadquarter.slogan != 'null'
+                        "
+                    >
+                        {{ districtHeadquarter.slogan }}
+                    </p>
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list-Reg">
@@ -234,7 +266,10 @@
                         <div class="hq-data__social-network-Reg">
                             <div
                                 class="hq-data__link-vk"
-                                v-if="districtHeadquarter.social_vk"
+                                v-if="
+                                    districtHeadquarter.social_vk &&
+                                    districtHeadquarter.social_vk != 'null'
+                                "
                             >
                                 <a
                                     :href="districtHeadquarter.social_vk"
@@ -245,7 +280,10 @@
                             </div>
                             <div
                                 class="hq-data__link-telegram"
-                                v-if="districtHeadquarter.social_tg"
+                                v-if="
+                                    districtHeadquarter.social_tg &&
+                                    districtHeadquarter.social_tg != 'null'
+                                "
                             >
                                 <a
                                     :href="districtHeadquarter.social_tg"
@@ -298,7 +336,14 @@
                     <h4>{{ regionalHeadquarter.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p>{{ regionalHeadquarter.slogan }}</p>
+                    <p
+                        v-if="
+                            regionalHeadquarter.slogan &&
+                            regionalHeadquarter.slogan != 'null'
+                        "
+                    >
+                        {{ regionalHeadquarter.slogan }}
+                    </p>
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list-Reg">
@@ -327,7 +372,10 @@
                         <div class="hq-data__social-network-Reg">
                             <div
                                 class="hq-data__link-vk"
-                                v-if="regionalHeadquarter.social_vk"
+                                v-if="
+                                    regionalHeadquarter.social_vk &&
+                                    regionalHeadquarter.social_vk != 'null'
+                                "
                             >
                                 <a
                                     :href="regionalHeadquarter.social_vk"
@@ -338,7 +386,10 @@
                             </div>
                             <div
                                 class="hq-data__link-telegram"
-                                v-if="regionalHeadquarter.social_tg"
+                                v-if="
+                                    regionalHeadquarter.social_tg &&
+                                    regionalHeadquarter.social_tg != 'null'
+                                "
                             >
                                 <a
                                     :href="regionalHeadquarter.social_tg"
@@ -394,7 +445,14 @@
                     <h4>{{ centralHeadquarter.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p>{{ centralHeadquarter.slogan }}</p>
+                    <p
+                        v-if="
+                            centralHeadquarter.slogan &&
+                            centralHeadquarter.slogan != 'null'
+                        "
+                    >
+                        {{ centralHeadquarter.slogan }}
+                    </p>
                 </div>
                 <div class="working_slogan">
                     <p>
@@ -431,7 +489,10 @@
                         <div class="hq-data__social-network-central">
                             <div
                                 class="hq-data__link-vk"
-                                v-if="centralHeadquarter.social_vk"
+                                v-if="
+                                    centralHeadquarter.social_vk &&
+                                    centralHeadquarter.social_vk != 'null'
+                                "
                             >
                                 <a
                                     :href="centralHeadquarter.social_vk"
@@ -442,7 +503,10 @@
                             </div>
                             <div
                                 class="hq-data__link-telegram"
-                                v-if="centralHeadquarter.social_tg"
+                                v-if="
+                                    centralHeadquarter.social_tg &&
+                                    centralHeadquarter.social_tg != 'null'
+                                "
                             >
                                 <a
                                     :href="centralHeadquarter.social_tg"

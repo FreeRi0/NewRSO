@@ -7,7 +7,12 @@
                 :member="member.members.value"
                 :getEnding="getEnding"
             ></BannerSquad>
-            <section class="about-squad">
+            <section
+                class="about-squad"
+                v-if="
+                    squad.squad.value.about && squad.squad.value.about != 'null'
+                "
+            >
                 <h3>Об отряде</h3>
                 <p>
                     {{ squad.squad.value.about }}
@@ -115,7 +120,7 @@ watch(
         await fetchCommander();
     },
     {
-        immediate: true
+        immediate: true,
     },
 );
 
