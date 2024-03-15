@@ -32,7 +32,7 @@
                     :squad-photos="squad.squad.value.photo3"
                 ></squadPhotos>
                 <squadPhotos
-                    class="photo-item"
+                    class="photo-item photo-item-last"
                     :squad-photos="squad.squad.value.photo4"
                 ></squadPhotos>
             </div>
@@ -230,13 +230,16 @@ section.about-squad {
     line-height: normal;
 }
 .photo-item {
-    width: 260px;
+    width: 280px;
     margin-right: 20px;
     @media screen and (max-width: 575px) {
         height: 373px;
         width: 280px;
         margin-right: 0;
     }
+}
+.photo-item-last {
+    margin-right: 0;
 }
 .photoWrapper {
     display: flex;

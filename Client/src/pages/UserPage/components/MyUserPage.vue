@@ -58,7 +58,7 @@
                     :add="false"
                 ></userPhoto3>
                 <userPhoto4
-                    class="photo-item"
+                    class="photo-item photo-item-last"
                     :photo="currentUser.currentUser.value.media?.photo4"
                     :add="false"
                 ></userPhoto4>
@@ -178,13 +178,16 @@ const deleteWall = (imageWall) => {
 }
 
 .photo-item {
-    width: 260px;
+    width: 280px;
     margin-right: 20px;
     @media screen and (max-width: 575px) {
         height: 373px;
         width: 280px;
         margin-right: 0;
     }
+}
+.photo-item-last {
+    margin-right: 0;
 }
 
 .btn {

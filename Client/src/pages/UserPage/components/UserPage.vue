@@ -28,16 +28,17 @@
                     (user.user.value.privacy?.privacy_about === 'Руководство' &&
                         ((roleStore.roles.detachment_commander &&
                             roleStore.roles.detachment_commander?.id ===
-                            user.user.value.detachment_id) ||
+                                user.user.value.detachment_id) ||
                             (roleStore.roles.regionalheadquarter_commander &&
                                 roleStore.roles.regionalheadquarter_commander
-                                    ?.id ===   user.user.value.regional_headquarter_id) ||
+                                    ?.id ===
+                                    user.user.value.regional_headquarter_id) ||
                             roleStore.roles.localheadquarter_commander ||
                             roleStore.roles.educationalheadquarter_commander ||
                             roleStore.roles.districtheadquarter_commander ||
                             roleStore.roles.centralheadquarter_commander)) ||
-                    user.user.value.privacy?.privacy_about === 'Все' || user.user.value.privacy?.privacy_about === 'all'
-
+                    user.user.value.privacy?.privacy_about === 'Все' ||
+                    user.user.value.privacy?.privacy_about === 'all'
                 "
             >
                 {{ user.user.value.bio }}
@@ -52,16 +53,17 @@
                     (user.user.value.privacy?.privacy_photo === 'Руководство' &&
                         ((roleStore.roles.detachment_commander &&
                             roleStore.roles.detachment_commander?.id ===
-                               user.user.value.detachment_id) ||
+                                user.user.value.detachment_id) ||
                             (roleStore.roles.regionalheadquarter_commander &&
                                 roleStore.roles.regionalheadquarter_commander
-                                    ?.id === user.user.value.regional_headquarter_id) ||
+                                    ?.id ===
+                                    user.user.value.regional_headquarter_id) ||
                             roleStore.roles.localheadquarter_commander ||
                             roleStore.roles.educationalheadquarter_commander ||
                             roleStore.roles.districtheadquarter_commander ||
                             roleStore.roles.centralheadquarter_commander)) ||
-                    user.user.value.privacy?.privacy_photo === 'Все' || user.user.value.privacy?.privacy_photo === 'all'
-
+                    user.user.value.privacy?.privacy_photo === 'Все' ||
+                    user.user.value.privacy?.privacy_photo === 'all'
                 "
             >
                 <userPhoto
@@ -82,7 +84,7 @@
                     :add="false"
                 ></userPhoto3>
                 <userPhoto4
-                    class="photo-item"
+                    class="photo-item photo-item-last"
                     :photo="user.user.value.media?.photo4"
                     :add="false"
                 ></userPhoto4>
@@ -262,13 +264,16 @@ onMounted(() => {
 }
 
 .photo-item {
-    width: 260px;
+    width: 280px;
     margin-right: 20px;
     @media screen and (max-width: 575px) {
         height: 373px;
         width: 280px;
         margin-right: 0;
     }
+}
+.photo-item-last {
+    margin-right: 0;
 }
 
 .btn {

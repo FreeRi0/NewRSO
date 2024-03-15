@@ -100,7 +100,7 @@ const getMembers = async (name) => {
         },
     })
         .then((response) => {
-            members.value = response.data;
+            members.value = response.data.results;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
