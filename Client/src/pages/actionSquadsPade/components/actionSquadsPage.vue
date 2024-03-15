@@ -95,6 +95,7 @@
                                 <div class="settings-radio">
                                     <input
                                         v-model="actionFormSearch.roads"
+                                        class="settings-radio"
                                         type="radio"
                                         value="Все"
                                     />
@@ -280,23 +281,19 @@
                     </div>
                 </div>
                 <div class="postcard-container">
-                    <div
+                    <Actionitem
                         v-if="vertical"
                         v-for="action in actionsList"
                         :key="action"
-                    >
-                        <Actionitem :action="action"></Actionitem>
-                    </div>
-                    <div
+                        :action="action"
+                    ></Actionitem>
+                    <ActionitemVertical
                         v-if="!vertical"
                         v-for="action in actionsList"
                         class="postcard-containerline"
                         :key="action"
-                    >
-                        <ActionitemVertical
-                            :action="action"
-                        ></ActionitemVertical>
-                    </div>
+                        :action="action"
+                    ></ActionitemVertical>
                 </div>
             </div>
         </div>
@@ -448,7 +445,6 @@ const sortOptionss = ref([
         display: flex;
         flex-direction: row;
         align-items: center;
-        margin-left: 10px;
     }
     &-radio input {
         width: 15px;
