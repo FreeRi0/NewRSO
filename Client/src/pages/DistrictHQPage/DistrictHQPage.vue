@@ -30,10 +30,15 @@
             :centralHeadquarter="centralHeadquarter"
             :member="member"
         ></BannerHQ>
-        <section class="about-hq">
+        <section
+            class="about-hq"
+            v-if="
+                districtHeadquarter.about && districtHeadquarter.about != 'null'
+            "
+        >
             <h3>Описание окружного штаба</h3>
             <p v-if="showHQ">
-                {{ localHeadquarter.about }}
+                {{ headquarter.about }}
             </p>
             <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
             <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
@@ -161,7 +166,7 @@ watch(
     },
     {
         immediate: true,
-        deep: true
+        deep: true,
     },
 );
 

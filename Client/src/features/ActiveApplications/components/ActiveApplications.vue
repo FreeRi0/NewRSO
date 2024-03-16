@@ -97,7 +97,6 @@ const actionsList = ref([
 ]);
 
 const viewParticipants = async () => {
-    if (participantList.value.length) return;
     try {
         loading.value = true;
         const regComReq = ref(null);
@@ -114,7 +113,6 @@ const viewParticipants = async () => {
                 },
             );
             participantList.value = regComReq.data;
-
             loading.value = false;
         } else if (roles.roles.value.detachment_commander?.id) {
             const detComReq = await HTTP.get(
@@ -258,9 +256,9 @@ onMounted(async () => {
     await viewParticipants();
 });
 
-onActivated(async () => {
-    await viewParticipants();
-});
+// onActivated(async () => {
+//     await viewParticipants();
+// });
 </script>
 
 <style lang="scss">

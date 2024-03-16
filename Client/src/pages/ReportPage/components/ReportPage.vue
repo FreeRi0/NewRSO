@@ -155,9 +155,7 @@
                                         <label class="form__label"
                                             >Региональная школа командного
                                             состава пройдена командиром
-                                            отряда<span
-                                                ><span>&nbsp;*</span></span
-                                            ></label
+                                            отряда<span>&nbsp;*</span></label
                                         >
                                         <Dropdown
                                             placeholder="Например, да"
@@ -169,9 +167,10 @@
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Ссылка на публикацию о прохождении
-                                            школы командного состава командиром
-                                            отряда</label
+                                            >Ссылка на публикацию из группы
+                                            отряда о прохождении школы
+                                            командного состава командиром
+                                            отряда<span>&nbsp;*</span></label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
@@ -187,9 +186,7 @@
                                         <label class="form__label"
                                             >Региональная школа командного
                                             состава пройдена комиссаром
-                                            отряда<span
-                                                ><span>&nbsp;*</span></span
-                                            ></label
+                                            отряда<span>&nbsp;*</span></label
                                         >
                                         <Dropdown
                                             placeholder="Например, да"
@@ -201,9 +198,10 @@
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Ссылка на публикацию о прохождении
-                                            школы командного состава комиссаром
-                                            отряда</label
+                                            >Ссылка на публикацию из группы
+                                            отряда о прохождении школы
+                                            командного состава комиссаром
+                                            отряда<span>&nbsp;*</span></label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
@@ -466,13 +464,17 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top">
+                            <div
+                                class="form__field-group-top"
+                                v-for="(block, index) in blocks"
+                                :key="index"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label"
                                             >ФИО участника, прошедшего
                                             профессиональное обучение<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -483,18 +485,19 @@
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <div class="form__field">
+                                    <div
+                                        class="form__field add-block"
+                                        @click="addNewBlock"
+                                    >
                                         + добавить участника
                                     </div>
                                 </div>
                                 <div class="form__field-group-right">
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Региональная школа командного
-                                            состава пройдена комиссаром
-                                            отряда<span
-                                                ><span>&nbsp;*</span></span
-                                            ></label
+                                            >Документ, подтверждающий
+                                            прохождение профессионального
+                                            обучения<span>&nbsp;*</span></label
                                         >
                                         <FileUpload
                                             mode="basic"
@@ -594,7 +597,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Участие в Творческом фестивале<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Dropdown
@@ -609,7 +612,7 @@
                                         <label class="form__label"
                                             >Участие в Конкурсе
                                             профессионального мастерства<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Dropdown
@@ -623,9 +626,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Участие в Открытии трудового
-                                            семестра<span
-                                                ><span>&nbsp;*</span></span
-                                            ></label
+                                            семестра<span>&nbsp;*</span></label
                                         >
                                         <Dropdown
                                             placeholder="Например, да"
@@ -639,10 +640,11 @@
                                         <label class="form__label"
                                             >Количество участников мероприятия
                                             Открытие трудового семестра<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
+                                            type="number"
                                             placeholder="Например, 10"
                                             max-length="100"
                                         />
@@ -653,7 +655,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Участие в Неделе охраны труда<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Dropdown
@@ -670,9 +672,7 @@
                                         <label class="form__label"
                                             >Участие в Спартакиаде студенческих
                                             отрядов и комплексе мероприятий
-                                            РСО-спорт<span
-                                                ><span>&nbsp;*</span></span
-                                            ></label
+                                            РСО-спорт<span>&nbsp;*</span></label
                                         >
                                         <Dropdown
                                             placeholder="Например, да"
@@ -686,9 +686,7 @@
                                         <label class="form__label"
                                             >Участие в Школе подготовки
                                             командиров и комиссаров студенческих
-                                            отрядов<span
-                                                ><span>&nbsp;*</span></span
-                                            ></label
+                                            отрядов<span>&nbsp;*</span></label
                                         >
                                         <Dropdown
                                             placeholder="Например, да"
@@ -703,7 +701,7 @@
                                             >Участие во всероссийской
                                             патриотической акции «Поклонимся
                                             великим тем годам»<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Dropdown
@@ -719,10 +717,11 @@
                                             >Количество участников всероссийской
                                             патриотической акции «Поклонимся
                                             великим тем годам»<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
+                                            type="number"
                                             placeholder="Например, 10"
                                             max-length="100"
                                         />
@@ -733,7 +732,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Участие в Демонстрации 1 мая<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Dropdown
@@ -748,11 +747,10 @@
                                         <label class="form__label"
                                             >Количество участников мероприятия
                                             Демонстрация 1 мая
-                                            <span
-                                                ><span>&nbsp;*</span></span
-                                            ></label
+                                            <span>&nbsp;*</span></label
                                         >
                                         <Input
+                                            type="number"
                                             placeholder="Например, 10"
                                             max-length="100"
                                         />
@@ -850,7 +848,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Наименование мероприятия<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -864,10 +862,11 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Количество человек<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
+                                            type="number"
                                             placeholder="Например, 5"
                                             max-length="100"
                                         />
@@ -881,7 +880,7 @@
                                             с фотоотчетом с наименованием
                                             мероприятия и наименованием ЛСО,
                                             принявшем в нем участие<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -891,12 +890,14 @@
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
                                         </div>
-                                        <p>+ добавить ссылку</p>
+                                        <div class="form__field add-block">
+                                            <p>+ добавить ссылку</p>
+                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Скан грамот (при наличии)<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <FileUpload
@@ -908,8 +909,9 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
-
-                                    <p>+ Добавить мероприятие</p>
+                                    <div class="form__field add-block">
+                                        <p>+ Добавить мероприятие</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -1000,7 +1002,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Наименование мероприятия<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -1018,6 +1020,7 @@
                                             ></label
                                         >
                                         <Input
+                                            type="number"
                                             placeholder="Например, 5"
                                             max-length="100"
                                         />
@@ -1041,7 +1044,9 @@
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
                                         </div>
-                                        <p>+ добавить ссылку</p>
+                                        <div class="form__field add-block">
+                                            <p>+ добавить ссылку</p>
+                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -1058,8 +1063,9 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
-
-                                    <p>+ Добавить мероприятие</p>
+                                    <div class="form__field add-block">
+                                        <p>+ Добавить мероприятие</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -1191,8 +1197,11 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
-
-                                    <p>+ Добавить мероприятие или конкурс</p>
+                                    <div class="form__field add-block">
+                                        <p>
+                                            + Добавить мероприятие или конкурс
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -1324,8 +1333,11 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
-
-                                    <p>+ Добавить мероприятие или конкурс</p>
+                                    <div class="form__field add-block">
+                                        <p>
+                                            + Добавить мероприятие или конкурс
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -1458,8 +1470,9 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
-
-                                    <p>+ добавить проект</p>
+                                    <div class="form__field add-block">
+                                        <p>+ добавить проект</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -1592,8 +1605,9 @@
                                             chooseLabel="Выбрать файл"
                                         />
                                     </div>
-
-                                    <p>+ добавить проект</p>
+                                    <div class="form__field add-block">
+                                        <p>+ добавить проект</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -1683,7 +1697,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Выберите тип мероприятия<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Dropdown
@@ -1697,7 +1711,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Ссылка на публикацию<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -1708,7 +1722,9 @@
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <p>+ добавить мероприятие</p>
+                                    <div class="form__field add-block">
+                                        <p>+ добавить мероприятие</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -1800,7 +1816,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Наименование трудового проекта<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -1815,10 +1831,11 @@
                                         <label class="form__label"
                                             >Количество бойцов, отработавших
                                             в летнем трудовом семестре<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
+                                            type="number"
                                             placeholder="Например, 5"
                                             max-length="100"
                                         />
@@ -1826,7 +1843,9 @@
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <p>+ добавить проект</p>
+                                    <div class="form__field add-block">
+                                        <p>+ добавить проект</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -1919,9 +1938,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Полное название грантового
-                                            проекта<span
-                                                ><span>&nbsp;*</span></span
-                                            ></label
+                                            проекта<span>&nbsp;*</span></label
                                         >
                                         <Input
                                             placeholder="Например, Всероссийский конкурс молодёжных проектов среди физических лиц Федерального агентства по делам молодежи"
@@ -1934,7 +1951,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Статус конкурса<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Dropdown
@@ -1948,7 +1965,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Автор проекта<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -1962,7 +1979,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Ссылка на конкурс<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -1977,7 +1994,7 @@
                                         <label class="form__label"
                                             >Ссылка на новостной источник
                                             с упоминанием победы<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -1988,7 +2005,9 @@
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <p>+ добавить проект</p>
+                                    <div class="form__field add-block">
+                                        <p>+ добавить проект</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -2084,7 +2103,7 @@
                                         <label class="form__label"
                                             >Ссылка на личную страницу ВКонтакте
                                             командира отряда<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -2099,7 +2118,7 @@
                                         <label class="form__label"
                                             >Ссылка на личную страницу ВКонтакте
                                             комиссара отряда<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -2120,10 +2139,11 @@
                                             >Количество членов отряда,
                                             подписанных на официальную страницу
                                             РСО ВКонтакте<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
+                                            type="number"
                                             placeholder="Например, 5"
                                             max-length="100"
                                         />
@@ -2138,9 +2158,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Ссылка на группу отряда
-                                            ВКонтакте<span
-                                                ><span>&nbsp;*</span></span
-                                            ></label
+                                            ВКонтакте<span>&nbsp;*</span></label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
@@ -2158,7 +2176,7 @@
                                         <label class="form__label"
                                             >Укажите количество подписчиков
                                             группы отряда ВКонтакте<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             ></label
                                         >
                                         <Input
@@ -2260,7 +2278,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Наименование источника<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             >
                                         </label>
                                         <Input
@@ -2276,7 +2294,7 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Ссылка на публикацию<span
-                                                ><span>&nbsp;*</span></span
+                                                >&nbsp;*</span
                                             >
                                         </label>
                                         <Input
@@ -2287,7 +2305,9 @@
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <p>+ добавить источник</p>
+                                    <div class="form__field add-block">
+                                        <p>+ добавить источник</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -2379,11 +2399,10 @@
                                         <label class="form__label"
                                             >Количество бойцов, принявших
                                             участие во Всероссийском дне
-                                            ударного труда<span
-                                                ><span>&nbsp;*</span></span
-                                            >
+                                            ударного труда<span>&nbsp;*</span>
                                         </label>
                                         <Input
+                                            type="number"
                                             placeholder="Например, 10"
                                             max-length="100"
                                         />
@@ -2484,9 +2503,7 @@
                                             >Нарушения техники безопасности,
                                             охраны труда и противопожарной
                                             безопасности в трудовом
-                                            семестре<span
-                                                ><span>&nbsp;*</span></span
-                                            ></label
+                                            семестре<span>&nbsp;*</span></label
                                         >
                                         <Dropdown
                                             placeholder="Например, отсутствуют"
@@ -2598,8 +2615,7 @@
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Ссылка на изображение
-                                            эмблемы</label
+                                            >Ссылка на макет эмблемы</label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
@@ -2623,7 +2639,7 @@
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Ссылка на изображение флага</label
+                                            >Ссылка на макет флага</label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
@@ -2647,8 +2663,7 @@
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Ссылка на изображение
-                                            знамени</label
+                                            >Ссылка на макет знамени</label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
@@ -2683,7 +2698,7 @@
 import Dropdown from 'primevue/dropdown';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 const regionalSchool = ref();
 const Choose = ref([{ name: 'Да' }, { name: 'Нет' }]);
@@ -2716,8 +2731,20 @@ const prizePlaceChoose = ref([{ name: '1' }, { name: '2' }, { name: '3' }]);
 // const counterReport = computed(() => {
 //     return .value?.length || 0;
 // });
+
+const blocks = ref([{ value: '' }]);
+
+const addNewBlock = () => {
+    blocks.value.push({ value: '' });
+};
 </script>
 <style>
+.v-expansion-panels {
+    margin-bottom: 60px;
+}
+.form .v-expansion-panel .v-expansion-panel-title {
+    font-weight: 500;
+}
 .form__inner-content {
     margin-bottom: 40px;
     border-bottom: none;
@@ -2727,6 +2754,9 @@ const prizePlaceChoose = ref([{ name: '1' }, { name: '2' }, { name: '3' }]);
 }
 .p-placeholder {
     color: #b6b6b6;
+}
+.invents-select {
+    border: 2px solid #b6b6b6;
 }
 
 .p-dropdown-items {
@@ -2771,5 +2801,10 @@ const prizePlaceChoose = ref([{ name: '1' }, { name: '2' }, { name: '3' }]);
 }
 .form .v-expansion-panel .v-expansion-panel-title {
     max-height: none;
+}
+.add-block {
+    cursor: pointer;
+    max-width: fit-content;
+    border-bottom: 1px solid #35383f;
 }
 </style>

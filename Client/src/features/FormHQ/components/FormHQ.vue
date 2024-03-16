@@ -618,9 +618,9 @@
                                     <v-dialog v-model="dialogLogo" width="1024">
                                         <v-card>
                                             <v-card-title>
-                                            <span class="text-h5">
-                                                Загрузите ваше фото
-                                            </span>
+                                                <span class="text-h5">
+                                                    Загрузите ваше фото
+                                                </span>
                                             </v-card-title>
                                             <v-card-text>
                                                 <v-container>
@@ -633,17 +633,29 @@
                                                             counter
                                                         />
                                                     </v-row>
-                                                    <v-row class="align-center justify-end">
+                                                    <v-row
+                                                        class="align-center justify-end"
+                                                    >
                                                         <v-btn
                                                             v-if="logoPreview"
                                                             class="button-wrapper mt-5"
-                                                            @click="cropImage('logo')"
+                                                            @click="
+                                                                cropImage(
+                                                                    'logo',
+                                                                )
+                                                            "
                                                             prepend-icon="crop"
                                                             variant="plain"
-                                                        >Обрезать фото</v-btn>
+                                                            >Обрезать
+                                                            фото</v-btn
+                                                        >
                                                     </v-row>
                                                     <v-row>
-                                                        <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="logoPreview" />
+                                                        <Cropper
+                                                            ref="cropper"
+                                                            class="cropper mt-5 mx-auto"
+                                                            :src="logoPreview"
+                                                        />
                                                     </v-row>
                                                 </v-container>
                                             </v-card-text>
@@ -666,7 +678,10 @@
                                                     Загрузить
                                                 </v-btn>
                                             </v-card-actions>
-                                            <p class="error" v-if="isError.detail">
+                                            <p
+                                                class="error"
+                                                v-if="isError.detail"
+                                            >
                                                 {{ isError.detail }}
                                             </p>
                                         </v-card>
@@ -802,35 +817,52 @@
                                         @change="selectBanner"
                                         @click.prevent
                                     />
-                                    <v-dialog v-model="dialogBanner" width="1024">
+                                    <v-dialog
+                                        v-model="dialogBanner"
+                                        width="1024"
+                                    >
                                         <v-card>
                                             <v-card-title>
-                                            <span class="text-h5">
-                                                Загрузите ваше фото
-                                            </span>
+                                                <span class="text-h5">
+                                                    Загрузите ваше фото
+                                                </span>
                                             </v-card-title>
                                             <v-card-text>
                                                 <v-container>
                                                     <v-row>
                                                         <v-file-input
-                                                            @change="selectBanner"
+                                                            @change="
+                                                                selectBanner
+                                                            "
                                                             type="file"
                                                             show-size
                                                             prepend-icon="mdi-camera"
                                                             counter
                                                         />
                                                     </v-row>
-                                                    <v-row class="align-center justify-end">
+                                                    <v-row
+                                                        class="align-center justify-end"
+                                                    >
                                                         <v-btn
                                                             v-if="bannerPreview"
                                                             class="button-wrapper mt-5"
-                                                            @click="cropImage('banner')"
+                                                            @click="
+                                                                cropImage(
+                                                                    'banner',
+                                                                )
+                                                            "
                                                             prepend-icon="crop"
                                                             variant="plain"
-                                                        >Обрезать фото</v-btn>
+                                                            >Обрезать
+                                                            фото</v-btn
+                                                        >
                                                     </v-row>
                                                     <v-row>
-                                                        <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="bannerPreview" />
+                                                        <Cropper
+                                                            ref="cropper"
+                                                            class="cropper mt-5 mx-auto"
+                                                            :src="bannerPreview"
+                                                        />
                                                     </v-row>
                                                 </v-container>
                                             </v-card-text>
@@ -839,7 +871,9 @@
                                                 <v-btn
                                                     color="blue-darken-1"
                                                     variant="text"
-                                                    @click="dialogBanner = false"
+                                                    @click="
+                                                        dialogBanner = false
+                                                    "
                                                 >
                                                     Закрыть
                                                 </v-btn>
@@ -848,12 +882,17 @@
                                                     color="blue-darken-1"
                                                     variant="text"
                                                     type="submit"
-                                                    @click="uploadPhoto('banner')"
+                                                    @click="
+                                                        uploadPhoto('banner')
+                                                    "
                                                 >
                                                     Загрузить
                                                 </v-btn>
                                             </v-card-actions>
-                                            <p class="error" v-if="isError.detail">
+                                            <p
+                                                class="error"
+                                                v-if="isError.detail"
+                                            >
                                                 {{ isError.detail }}
                                             </p>
                                         </v-card>
@@ -1110,37 +1149,41 @@ let logoPreview = ref(null);
 let bannerPreview = ref(null);
 
 const cropImage = (type) => {
-    if (cropper.value && type === "logo") {
+    if (cropper.value && type === 'logo') {
         const { canvas } = cropper.value.getResult();
-        logoPreview.value = canvas.toDataURL('image/jpeg')
+        logoPreview.value = canvas.toDataURL('image/jpeg');
         canvas.toBlob((blob) => {
-            fileEmblem.value = new File([blob], "logo.jpg", { type: "image/jpeg" })
+            fileEmblem.value = new File([blob], 'logo.jpg', {
+                type: 'image/jpeg',
+            });
         }, 'image/jpeg');
     }
-    if (cropper.value && type === "banner") {
+    if (cropper.value && type === 'banner') {
         const { canvas } = cropper.value.getResult();
-        bannerPreview.value = canvas.toDataURL('image/jpeg')
+        bannerPreview.value = canvas.toDataURL('image/jpeg');
         canvas.toBlob((blob) => {
-            fileBanner.value = new File([blob], "banner.jpg", { type: "image/jpeg" })
+            fileBanner.value = new File([blob], 'banner.jpg', {
+                type: 'image/jpeg',
+            });
         }, 'image/jpeg');
     }
-}
+};
 const uploadPhoto = (type) => {
-    if (type === "logo") {
+    if (type === 'logo') {
         headquarter.value.emblem = null;
         urlEmblem.value = URL.createObjectURL(fileEmblem.value);
         //   console.log("значение emblem после изм - ", detachment.value.emblem);
         emit('selectFile', fileEmblem.value);
         dialogLogo.value = false;
     }
-    if (type === "banner") {
+    if (type === 'banner') {
         headquarter.value.banner = null;
         urlBanner.value = URL.createObjectURL(fileBanner.value);
 
         emit('selectBanner', fileBanner.value);
         dialogBanner.value = false;
     }
-}
+};
 //--Добавление логотипа-----------------------------------------------------------------------------
 
 const fileEmblem = ref(props.fileEmblem);

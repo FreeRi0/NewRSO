@@ -208,7 +208,7 @@
                 <!-- <h2 v-else>Участников не найдено...</h2> -->
             </ul>
             <div class="squad-participants__link">
-                <p @click="">Показать всех</p>
+                <p @click="ShowAll">Показать всех</p>
             </div>
         </section>
         <!-- Другие мероприятия -->
@@ -285,12 +285,9 @@ const organizators = ref([
 onActivated(() => {
     getAction(route.params.id).then((resp) => {
         event.value = resp.data;
+        console.log(event.value);
         getOrganizator(route.params.id).then((resp) => {
-            organizators.value = resp.data;
-            const filted = organizators.value.filter((org) => {
-                org.is_contact_person === true;
-            });
-            organizators_filted.value.push(filted);
+            organizators.value = resp.data.results;
         });
     });
     getUser().then((resp) => {
@@ -301,9 +298,11 @@ onActivated(() => {
         });
     });
     getParticipants(route.params.id).then((resp) => {
-        participants.value = resp.data;
+        participants.value = resp.data.results;
     });
 });
+
+function ShowAll() {}
 function EditAction() {
     router.push({ name: 'editAction', params: { id: route.params.id } });
 }

@@ -7,7 +7,12 @@
             :getEnding="getEnding"
             :getEndingMembers="getEndingMembers"
         ></BannerHQ>
-        <section class="about-hq">
+        <section
+            class="about-hq"
+            v-if="
+                centralHeadquarter.about && centralHeadquarter.about != 'null'
+            "
+        >
             <h3>Описание центрального штаба</h3>
 
             <p>{{ centralHeadquarter.about }}</p>
@@ -63,10 +68,9 @@ watch(
     },
     {
         immediate: true,
-        deep: true
+        deep: true,
     },
 );
-
 
 const getEnding = computed(() => {
     const count = centralHeadquarter.value.participants_count;

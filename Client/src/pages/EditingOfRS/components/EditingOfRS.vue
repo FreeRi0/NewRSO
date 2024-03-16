@@ -159,10 +159,11 @@ onMounted(() => {
 });
 
 const onUpdateMember = (event, id) => {
-    const memberIndex = members.value.findIndex(member => member.id === id)
+    const memberIndex = members.value.findIndex((member) => member.id === id);
     const firstkey = Object.keys(event)[0];
     members.value[memberIndex].change = true;
-    if (firstkey == 'position') members.value[memberIndex].position.id = event[firstkey];
+    if (firstkey == 'position')
+        members.value[memberIndex].position.id = event[firstkey];
     else members.value[memberIndex][firstkey] = event[firstkey];
 };
 
@@ -242,7 +243,7 @@ const changeHeadquarter = async () => {
         formData.append('slogan', headquarter.value.slogan);
         formData.append('about', headquarter.value.about);
 
-        for (let member of members.value) {
+        for (let member of members.value.results) {
             if (member.change) {
                 await HTTP.patch(
                     `/regionals/${id}/members/${member.id}/`,
@@ -253,14 +254,16 @@ const changeHeadquarter = async () => {
                     {
                         headers: {
                             'Content-Type': 'application/json',
-                            Authorization: 'Token ' + localStorage.getItem('Token'),
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
                         },
                     },
-                ).then((response) => {
-                    member.position = response.data.position
-                    member.is_trusted = response.is_trusted
-                    member.change = false
-                })
+                )
+                    .then((response) => {
+                        member.position = response.data.position;
+                        member.is_trusted = response.is_trusted;
+                        member.change = false;
+                    })
                     .catch(function (error) {
                         console.log('an error occured ' + error);
                     });

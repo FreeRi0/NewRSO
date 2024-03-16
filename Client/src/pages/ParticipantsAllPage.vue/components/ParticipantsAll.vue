@@ -122,15 +122,11 @@
                 ></VerifiedHorizontal>
             </div>
             <Button
-                @click="participantsVisible += step"
-                v-if="participantsVisible < squadsStore.members.length"
+                @click="next"
+                v-if="squadsStore.members.length < squadsStore.totalMembers"
                 label="Показать еще"
             ></Button>
-            <Button
-                @click="participantsVisible -= step"
-                v-else
-                label="Свернуть все"
-            ></Button>
+            <Button @click="prev" v-else label="Свернуть все"></Button>
         </div>
     </div>
 </template>
@@ -181,6 +177,14 @@ const searchParticipants = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
+};
+
+const next = () => {
+    squadsStore.getNextMembers();
+};
+
+const prev = () => {
+    squadsStore.getSquadMembers();
 };
 
 const sortOptionss = ref([
@@ -290,7 +294,7 @@ watch(
         await aboutVerified();
     },
     {
-        immediate: true
+        immediate: true,
     },
 );
 </script>
