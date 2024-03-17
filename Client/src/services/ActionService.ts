@@ -10,7 +10,7 @@ export function getListActions() {
     });
 }
 export function getListActionsBySearch(text: string) {
-    return HTTP.get(`/events/?search=${text}`, {
+    return HTTP.get(`/events/${text}`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

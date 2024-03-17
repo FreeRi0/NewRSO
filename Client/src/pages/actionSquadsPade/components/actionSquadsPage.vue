@@ -388,10 +388,13 @@ const sortBy = ref('alphabetically');
 watchEffect(() => {
     switch (sortBy.value) {
         case 'alphabetically':
+            sortByAlphabet(actionsList.value);
             break;
         case 'founding_date':
+            sortByDate(actionsList.value);
             break;
         case 'members_count':
+            sortByCount(actionsList.value);
             break;
     }
 });
@@ -404,6 +407,13 @@ const sortOptionss = ref([
     { value: 'founding_date', name: 'Дате создания штаба' },
     { value: 'members_count', name: 'Количеству участников' },
 ]);
+function sortByAlphabet(list) {
+    return list.sort((a, b) => {
+        return a.name - b.name;
+    });
+}
+function sortByDate(list) {}
+function sortByCount(list) {}
 
 //Получить полный список мероприятий
 </script>
