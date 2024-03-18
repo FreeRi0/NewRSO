@@ -85,6 +85,7 @@
                         <li class="user-data__title" v-if="detachment?.name">
                             <p>{{ detachment?.name }}</p>
                         </li>
+               
                         <li
                             class="user-data__title"
                             v-if="educationalHeadquarter?.name"
@@ -107,9 +108,7 @@
                         </li>
 
                         <li
-                            v-if="
-                                user.education?.study_institution?.short_name
-                            "
+                            v-if="user.education?.study_institution?.short_name"
                         >
                             <p>
                                 {{
@@ -136,7 +135,10 @@
                     <div class="user-data__social-network">
                         <div
                             class="user-data__link-vk mr-2"
-                            v-if="user.social_vk && user.social_vk !== 'https://vk.com/'"
+                            v-if="
+                                user.social_vk &&
+                                user.social_vk !== 'https://vk.com/'
+                            "
                         >
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -144,7 +146,10 @@
                         </div>
                         <div
                             class="user-data__link-telegram mr-2"
-                            v-if="user.social_tg && user.social_tg !== 'https://t.me/'"
+                            v-if="
+                                user.social_tg &&
+                                user.social_tg !== 'https://t.me/'
+                            "
                         >
                             <a :href="user.social_tg">
                                 <img
