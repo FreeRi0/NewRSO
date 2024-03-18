@@ -53,8 +53,8 @@
             </v-expansion-panel-text>
             <p v-if="regRef">Выбрано: {{ regRef }}</p>
         </v-expansion-panel>
-        <v-expansion-panel v-if="regRef">
-            <v-expansion-panel-title>
+        <v-expansion-panel >
+            <v-expansion-panel-title v-if="regRef">
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -78,8 +78,8 @@
             </v-expansion-panel-text>
             <p v-if="localRef">Выбрано: {{ localRef }}</p>
         </v-expansion-panel>
-        <v-expansion-panel v-if="localRef !== null || regRef">
-            <v-expansion-panel-title>
+        <v-expansion-panel >
+            <v-expansion-panel-title v-if="localRef !== null || regRef">
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -103,8 +103,8 @@
             </v-expansion-panel-text>
             <p v-if="educRef">Выбрано: {{ educRef }}</p>
         </v-expansion-panel>
-        <v-expansion-panel v-if="educRef !== null || detachmentRef" >
-            <v-expansion-panel-title>
+        <v-expansion-panel >
+            <v-expansion-panel-title v-if="educRef !== null" >
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
@@ -113,7 +113,7 @@
                     </v-row>
                 </template>
             </v-expansion-panel-title>
-            <v-expansion-panel-text>
+            <v-expansion-panel-text  >
                 <lsoSerachFilter
                     open-on-clear
                     id="reg"
@@ -123,7 +123,7 @@
                     @update:value="updateDetachment"
                     class="mb-2 region-input"
                     :items="detachments"
-                    :SortDropdown="true"
+                    :SortDropdown="false"
                 ></lsoSerachFilter>
             </v-expansion-panel-text>
             <p v-if="detachmentRef">Выбрано: {{ detachmentRef }}</p>

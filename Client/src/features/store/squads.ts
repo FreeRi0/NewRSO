@@ -107,6 +107,22 @@ export const useSquadsStore = defineStore('squads', {
             }
         },
 
+        async sortedSquads(name: String) {
+            const sortSquadsResp = await HTTP.get(
+                `/detachments/?ordering=${name}`,
+
+                {
+                    params: {
+                        limit: this.SquadsLimit,
+                    },
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            );
+            this.squads = sortSquadsResp.data.results;
+        },
+
         async getNextCompetitionSquads() {
             try {
                 this.isLoading = true;
