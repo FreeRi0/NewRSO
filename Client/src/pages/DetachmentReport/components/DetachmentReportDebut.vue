@@ -127,7 +127,6 @@ const onAction = async () => {
 };
 
 onMounted(() => {
-    console.log('1234');
     window.scroll(0, 0);
 });
 </script>
@@ -197,7 +196,7 @@ onMounted(() => {
     text-align: left;
 }
 .horizontal-item__wrapper {
-    height: 48px;
+    min-height: 48px;
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
@@ -264,6 +263,7 @@ onMounted(() => {
 }
 .indicators {
     display: grid;
+    grid-template-rows: repeat(auto-fill, minmax(48px, 1fr));
     padding-top: 80px;
 }
 .inline-container {
