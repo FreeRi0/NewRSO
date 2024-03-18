@@ -231,7 +231,8 @@
       </iframe>
     </div>
 
-    <h2 id="video_2" class="corpuniver__title-h2">Занятие 15 марта "МЫ ЛСО"</h2>
+    <h2 id="video_2" class="corpuniver__title-h2">Занятие 15 марта «МЫ ЛСО»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Дмитрий Парамонов, Мария Корнилова, Валентина Бродягина</p>
 
     <div id="video_3" class="corpuniver__video">
       <iframe
@@ -242,7 +243,8 @@
       </iframe>
     </div>
 
-    <h2 id="video_4" class="corpuniver__title-h2">Занятие 15 марта "Информационная кампания и набор"</h2>
+    <h2 id="video_4" class="corpuniver__title-h2">Занятие 15 марта «Информационная кампания и набор»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Божена Колачевская, Анастасия Шабанова, Владислав Езин, Анастасия Гориченко</p>
 
     <div class="corpuniver__video">
       <iframe
