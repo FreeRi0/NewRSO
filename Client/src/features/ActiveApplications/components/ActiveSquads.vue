@@ -92,7 +92,6 @@ const actionsList = ref([
     { value: 'Отклонить', name: 'Отклонить' },
 ]);
 const viewDetachments = async () => {
-    if (detachmentList.value.length) return;
     try {
         if (!roles.roles.value.detachment_commander) return;
         loading.value = true;
@@ -243,9 +242,9 @@ onMounted(async () => {
     await viewDetachments();
 });
 
-onActivated(async () => {
-    await viewDetachments();
-});
+// onActivated(async () => {
+//     await viewDetachments();
+// });
 </script>
 <style lang="scss">
 .v-field--variant-outlined .v-field__outline__end,

@@ -150,7 +150,7 @@ const onChangeItem = async () => {
 
         .then((res) => {
             // console.log(props.address);
-            items.value = res.data;
+            items.value = res.data.results;
             console.log(res.data);
         })
         .catch(function (error) {

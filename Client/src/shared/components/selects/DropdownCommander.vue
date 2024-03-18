@@ -145,7 +145,7 @@ const onChangeItem = async () => {
         },
     })
         .then((res) => {
-            items.value = res.data;
+            items.value = res.data.results;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);

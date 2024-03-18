@@ -92,7 +92,7 @@ onBeforeRouteUpdate(async (to, from) => {
 const isMembersLoading = ref(false);
 
 const getMembers = async (name) => {
-    isMembersLoading.value = true
+    isMembersLoading.value = true;
     HTTP.get(`/centrals/${id}/members/?search=${name}`, {
         headers: {
             'Content-Type': 'application/json',
@@ -100,13 +100,13 @@ const getMembers = async (name) => {
         },
     })
         .then((response) => {
-            members.value = response.data;
+            members.value = response.data.results;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         })
         .finally(() => {
-            isMembersLoading.value = false
+            isMembersLoading.value = false;
         });
 };
 
@@ -121,16 +121,17 @@ const onUpdateSearchMember = (event) => {
         if (searchMemberString.value == event.target.value) return;
         else searchMemberString.value = event.target.value;
 
-        if (event.target.value) getMembers(event.target.value)
+        if (event.target.value) getMembers(event.target.value);
         else members.value = [];
     }, 400);
 };
 
 const onUpdateMember = (event, id) => {
-    const memberIndex = members.value.findIndex(member => member.id === id)
+    const memberIndex = members.value.findIndex((member) => member.id === id);
     const firstkey = Object.keys(event)[0];
     members.value[memberIndex].change = true;
-    if (firstkey == 'position') members.value[memberIndex].position.id = event[firstkey];
+    if (firstkey == 'position')
+        members.value[memberIndex].position.id = event[firstkey];
     else members.value[memberIndex][firstkey] = event[firstkey];
 };
 
@@ -217,17 +218,19 @@ const changeHeadquarter = async () => {
                     {
                         headers: {
                             'Content-Type': 'application/json',
-                            Authorization: 'Token ' + localStorage.getItem('Token'),
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
                         },
                     },
-                ).then((response) => {
-                    member.position = response.data.position
-                    member.is_trusted = response.is_trusted
-                    member.change = false
-                })
-                .catch(function (error) {
-                    console.log('an error occured ' + error);
-                });
+                )
+                    .then((response) => {
+                        member.position = response.data.position;
+                        member.is_trusted = response.is_trusted;
+                        member.change = false;
+                    })
+                    .catch(function (error) {
+                        console.log('an error occured ' + error);
+                    });
             }
         }
 
