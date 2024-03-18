@@ -81,7 +81,7 @@
         <tr>
           <td rowspan="3" class="corpuniver__table__td corpuniver__table__border-left">3</td>
           <td rowspan="3" class="corpuniver__table__td"><b>15 марта</b><br/>14.00-14.50</td>
-          <td rowspan="3" class="corpuniver__table__td">МЫ ЛСО</td>
+          <td rowspan="3" class="corpuniver__table__td"><a href="#video_3">МЫ ЛСО</a></td>
           <td class="corpuniver__table__td">Нормативная база РСО</td>
         </tr>
         <tr>
@@ -93,7 +93,7 @@
         <tr>
           <td rowspan="3" class="corpuniver__table__td corpuniver__table__border-left">4</td>
           <td rowspan="3" class="corpuniver__table__td"><b>15 марта</b><br/>15.00-17.00</td>
-          <td rowspan="3" class="corpuniver__table__td">Информационная кампания и набор </td>
+          <td rowspan="3" class="corpuniver__table__td"><a href="#video_4">Информационная кампания и набор</a></td>
           <td class="corpuniver__table__td">Планирование</td>
         </tr>
         <tr>
@@ -226,6 +226,28 @@
     <div class="corpuniver__video">
       <iframe class="corpuniver__iframe"
           src="https://vk.com/video_ext.php?oid=-223571150&id=456239054"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+              allowfullscreen>
+      </iframe>
+    </div>
+
+    <h2 id="video_2" class="corpuniver__title-h2">Занятие 15 марта "МЫ ЛСО"</h2>
+
+    <div id="video_3" class="corpuniver__video">
+      <iframe
+          class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239059&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+              allowfullscreen>
+      </iframe>
+    </div>
+
+    <h2 id="video_4" class="corpuniver__title-h2">Занятие 15 марта "Информационная кампания и набор"</h2>
+
+    <div class="corpuniver__video">
+      <iframe
+          class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239060&hd=2"
               allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
               allowfullscreen>
       </iframe>
