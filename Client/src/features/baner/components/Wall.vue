@@ -159,6 +159,19 @@
                                 </div>
                             </div>
                         </li>
+
+                        <li
+                            v-if="
+                                user.education?.study_institution?.short_name
+                            "
+                        >
+                            <p>
+                                {{
+                                    user.education?.study_institution
+                                        ?.short_name
+                                }}
+                            </p>
+                        </li>
                         <li v-if="user?.education?.study_faculty">
                             <p>{{ user?.education?.study_faculty }}</p>
                         </li>
