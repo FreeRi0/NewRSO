@@ -7,7 +7,7 @@ export const useEducationalsStore = defineStore('educationals', {
         educational: {},
         isLoading: false,
         totalEducationals: 0,
-        EducationalsLimit: 4,
+        EducationalsLimit: 20,
         nextEducationals: '',
     }),
     actions: {
