@@ -79,6 +79,24 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
 
+        async getRegionalsForFilters() {
+            try {
+                this.isLoading = true;
+                const responseRegionals = await HTTP.get(`/regionals/`, {
+
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                });
+                this.regionals = responseRegionals.data.results;
+                this.isLoading = false;
+            } catch (error) {
+                this.isLoading = false;
+                console.log('an error occured ' + error);
+            }
+        },
+
         async getNextRegionals() {
             try {
                 this.isLoading = true;

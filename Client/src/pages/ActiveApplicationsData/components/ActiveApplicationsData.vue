@@ -39,14 +39,8 @@ import { Button } from '@shared/components/buttons';
 import { activeApplications } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
 import { ActiveCompetitions } from '@features/ActiveCompetitions';
-import { useRoleStore } from '@layouts/store/role';
 import { ActiveEventsApp } from '@features/ActiveApplications/components';
-import { storeToRefs } from 'pinia';
 
-const roleStore = useRoleStore();
-const roles = storeToRefs(roleStore);
-
-// const isLoading = ref(false);
 const picked = ref('Верификация аккаунтов');
 const tabs = ref([
     {
@@ -72,15 +66,6 @@ const pages = ref([
     { pageTitle: 'Активные заявки', href: '#' },
 ]);
 
-watch(
-    () => roles.roles.value,
-
-    (newRole) => {
-        if (Object.keys(roles.roles.value).length === 0) {
-            return;
-        }
-    },
-);
 </script>
 
 <style lang="scss" scoped>
