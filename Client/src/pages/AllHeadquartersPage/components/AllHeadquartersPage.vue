@@ -112,10 +112,12 @@
                     <div class="sort-select">
                         <sortByEducation
                             variant="outlined"
+                            clearable
                             v-model="sortBy"
                             :options="sortOptionss"
                             class="sort-alphabet"
                             :sorts-boolean="false"
+                            placeholder="Выберите фильтр"
                         ></sortByEducation>
                     </div>
 
@@ -199,7 +201,7 @@ const prev = () => {
 };
 
 const ascending = ref(true);
-const sortBy = ref('alphabetically');
+const sortBy = ref();
 const timerSearch = ref(null);
 const vertical = ref(true);
 
