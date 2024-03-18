@@ -96,7 +96,8 @@
                                 v-if="user.region && !isLoading.isLoading.value"
                             >
                                 <div
-                                    v-for="item in regionals.filteredMyRegional.value"
+                                    v-for="item in regionals.filteredMyRegional
+                                        .value"
                                 >
                                     <p>{{ item.name }}</p>
                                 </div>
@@ -107,27 +108,27 @@
 
                         <li
                             v-if="
-                                user?.education?.study_institution?.short_name
+                                user.education?.study_institution?.short_name
                             "
                         >
                             <p>
                                 {{
-                                    user?.education?.study_institution
+                                    user.education?.study_institution
                                         ?.short_name
                                 }}
                             </p>
                         </li>
 
-                        <li v-if="user?.education?.study_faculty">
-                            <p>{{ user?.education?.study_faculty }}</p>
+                        <li v-if="user.education?.study_faculty">
+                            <p>{{ user.education?.study_faculty }}</p>
                         </li>
 
-                        <li v-if="user?.education?.study_specialty">
-                            <p>{{ user?.education?.study_specialty }}</p>
+                        <li v-if="user.education?.study_specialty">
+                            <p>{{ user.education?.study_specialty }}</p>
                         </li>
 
-                        <li v-if="user?.education?.study_year">
-                            <p>Курс {{ user?.education?.study_year }}</p>
+                        <li v-if="user.education?.study_year">
+                            <p>Курс {{ user.education?.study_year }}</p>
                         </li>
                     </ul>
                 </div>
@@ -135,7 +136,7 @@
                     <div class="user-data__social-network">
                         <div
                             class="user-data__link-vk mr-2"
-                            v-if="user.social_vk"
+                            v-if="user.social_vk && user.social_vk !== 'https://vk.com/'"
                         >
                             <a :href="user.social_vk" target="_blank">
                                 <img src="@/app/assets/icon/vk-blue.svg" />
@@ -143,7 +144,7 @@
                         </div>
                         <div
                             class="user-data__link-telegram mr-2"
-                            v-if="user.social_tg"
+                            v-if="user.social_tg && user.social_tg !== 'https://t.me/'"
                         >
                             <a :href="user.social_tg">
                                 <img

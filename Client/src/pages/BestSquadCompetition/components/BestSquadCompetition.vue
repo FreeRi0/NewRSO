@@ -173,9 +173,8 @@
             v-if="
                 roleStore.status.is_commander_detachment ||
                 roleStore.status.is_commissar_detachment ||
-                roleStore.roles?.centralheadquarter_commander ||
-                roleStore.roles.districtheadquarter_commander ||
-                roleStore.roles.regionalheadquarter_commander
+                roleStore.roles.regionalheadquarter_commander ||
+                roleStore.roles.centralheadquarter_commander
             "
         >
             <img src="@app/assets/competition/bgSchool.png" alt="bg" />
@@ -244,6 +243,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { ModalCompetition } from '@features/Competition';
+import { useRoleStore } from '@layouts/store/role';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';
 // const route = useRoute();

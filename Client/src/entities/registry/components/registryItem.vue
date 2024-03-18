@@ -1,5 +1,6 @@
 <template>
-    <div
+    <router-link
+        :to="{ name: item.route, params: { id: item.id } }"
         class="horizontal-item"
     >
         <div class="horizontal-img">
@@ -17,6 +18,7 @@
                 v-if="item.name"
             >
                 {{ item.name }}
+
             </p>
             <div
                 class="d-flex"
@@ -44,16 +46,20 @@
                 <p>{{ item.date_of_birth }}</p>
             </div>
         </div>
-    </div>
+    </router-link>
     <div class="horizontal-info d-flex" v-if="showInfo">
-        <p v-if="item.events_count">Проведённые мероприятия: {{ item.events_count }}</p>
+        <p v-if="item.events_count">
+            Проведённые мероприятия: {{ item.events_count }}
+        </p>
         <div class="d-flex">
             <!-- <p v-if="item?.local_headquarter" class="mr-7">МШ:</p>
             <p v-if="item?.educational_headquarter" class="mr-7">ШОО:</p>
             <p v-if="item?.detachment" class="mr-7">ЛСО:</p> -->
             <p v-if="item.membership_fee === true">Членский Взнос: Оплачен</p>
-            <p v-else-if="item.membership_fee === false">Членский Взнос: Неоплачен</p>
-            <div class="d-flex"  v-if="item.participants_count">
+            <p v-else-if="item.membership_fee === false">
+                Членский Взнос: Неоплачен
+            </p>
+            <div class="d-flex" v-if="item.participants_count">
                 <img src="@app/assets/icon/people.svg" alt="people" />
                 <p class="ml-3">{{ item.participants_count }}</p>
             </div>
@@ -83,17 +89,17 @@ const props = defineProps({
         // padding: 4px 20px;
 
         display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: baseline;
-    align-items: center;
+        grid-template-columns: auto 1fr auto;
+        align-items: baseline;
+        align-items: center;
 
-    padding: 4px 20px;
+        padding: 4px 20px;
 
-    border-radius: 10px;
-    border: 1px solid #b6b6b6;
-    background: #fff;
-    margin-bottom: 12px;
-    width: 100%;
+        border-radius: 10px;
+        border: 1px solid #b6b6b6;
+        background: #fff;
+        margin-bottom: 12px;
+        width: 100%;
     }
     &-info {
         border: 1px solid grey;
@@ -150,5 +156,4 @@ const props = defineProps({
     font-size: 16px;
     font-weight: 400;
 }
-
 </style>

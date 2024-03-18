@@ -56,7 +56,7 @@
                         </div>
 
                         <div class="sort-filters">
-                            <div class="sort-select">
+                            <!-- <div class="sort-select">
                                 <sortByEducation
                                     variant="outlined"
                                     clearable
@@ -72,7 +72,7 @@
                                 icon="switch"
                                 @click="ascending = !ascending"
                                 color="white"
-                            ></Button>
+                            ></Button> -->
                         </div>
                     </div>
                     <registryList
@@ -195,6 +195,7 @@ const isLoading = ref(false);
 const showInfo = ref(false);
 const educ = ref(null);
 const sortedVal = ref([]);
+
 //Сортировк
 const ascending = ref(true);
 const levelAccess = ref(7);
@@ -214,13 +215,31 @@ const sortOptionss = ref([
 const viewHeadquartersData = async (resp, search, join) => {
     try {
         isLoading.value = true;
+        let routeName = 'DistrictHQ';
+        if (resp.indexOf('districts') >= 0) {
+            routeName = 'DistrictHQ';
+        } else if (resp.indexOf('regionals') >= 0) {
+            routeName = 'RegionalHQ';
+        } else if (resp.indexOf('locals') >= 0) {
+            routeName = 'LocalHQ';
+        } else if (resp.indexOf('educationals') >= 0) {
+            routeName = 'HQ';
+        } else if (resp.indexOf('detachments') >= 0) {
+            routeName = 'lso';
+        } else if (resp.indexOf('rsousers') >= 0) {
+            routeName = 'userpage';
+        }
         const viewHeadquartersResponse = await HTTP.get(resp + search, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        let response = viewHeadquartersResponse.data;
+
+        let response = viewHeadquartersResponse.data.results;
+        for (let i in response) {
+            response[i]['route'] = routeName;
+        }
         if (join) {
             const viewHeadquartersResponsetTwo = await HTTP.get(
                 '/educationals/' + search,
@@ -231,10 +250,27 @@ const viewHeadquartersData = async (resp, search, join) => {
                     },
                 },
             );
-            response = response.concat(viewHeadquartersResponsetTwo.data);
+            educHead.value = viewHeadquartersResponsetTwo.data.results;
+            let response2 = viewHeadquartersResponsetTwo.data.results;
+            for (let i in response2) {
+                response2[i]['route'] = 'HQ';
+            }
+            response = response.concat(response2);
         }
         sortedVal.value = response;
         isLoading.value = false;
+
+        if (resp.indexOf('districts') >= 0) {
+            districts.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('regionals') >= 0) {
+            regionals.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('locals') >= 0) {
+            locals.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('educationals') >= 0) {
+            educHead.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('detachments') >= 0) {
+            detachments.value = viewHeadquartersResponse.data.results;
+        }
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -254,13 +290,7 @@ const updateDistrict = (districtVal) => {
     if (name.value) search += '&search=' + name.value;
     viewHeadquartersData(resp, search);
 
-    let districtId = districtsStore.districts.find(
-        (dis) => dis.name == districtVal,
-    )?.id;
     district.value = districtVal;
-    regionals.value = regionalsStore.regionals.filter(
-        (regional) => regional.district_headquarter == districtId,
-    );
 };
 
 const updateReg = (regVal) => {
@@ -274,18 +304,12 @@ const updateReg = (regVal) => {
     if (name.value) search += '&search=' + name.value;
     viewHeadquartersData(resp, search);
 
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == regVal,
-    )?.id;
     reg.value = regVal;
-    locals.value = localsStore.locals.filter(
-        (loc) => loc.regional_headquarter == regId,
-    );
 };
 const updateLocal = (localVal) => {
     let search = '';
     let resp = localVal ? '/educationals/' : '/locals/';
-    console.log('level', levelAccess.value, localVal);
+
     if (localVal) {
         search = '?local_headquarter__name=' + localVal;
     } else if (levelAccess.value < 3) {
@@ -295,14 +319,7 @@ const updateLocal = (localVal) => {
 
     viewHeadquartersData(resp, search, !localVal);
 
-    let locId = localsStore.locals.find((loc) => loc.name == localVal)?.id;
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == reg.value,
-    )?.id;
     local.value = localVal;
-    educHead.value = educationalsStore.educationals.filter(
-        (edh) => locId && edh.local_headquarter == locId,
-    );
 };
 
 const updateEduc = (educVal) => {
@@ -324,17 +341,8 @@ const updateEduc = (educVal) => {
     if (name.value) search += '&search=' + name.value;
 
     viewHeadquartersData(resp, search);
-    // , educVal && !local.value
-    let educId = educationalsStore.educationals.find(
-        (edh) => edh.name == educVal,
-    )?.id;
-    let regId = regionalsStore.regionals.find(
-        (regional) => regional.name == reg.value,
-    )?.id;
+
     educ.value = educVal;
-    detachments.value = squadsStore.squads.filter(
-        (squad) => educId && squad.educational_headquarter == educId,
-    );
 };
 
 const updateDetachment = (detachmentVal) => {
@@ -458,27 +466,26 @@ const getItemsByRoles = () => {
 };
 
 const sortedHeadquarters = computed(() => {
-    let tempHeadquarters = [];
-    tempHeadquarters = [...sortedVal.value];
+    let tempHeadquarters = sortedVal.value;
 
-    tempHeadquarters = tempHeadquarters.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a?.name.toLowerCase(),
-                fb = b?.name.toLowerCase()
+    // tempHeadquarters = tempHeadquarters.sort((a, b) => {
+    //     if (sortBy.value == 'alphabetically') {
+    //         let fa = a?.name.toLowerCase(),
+    //             fb = b?.name.toLowerCase()
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        }
-    });
+    //         if (fa < fb) {
+    //             return -1;
+    //         }
+    //         if (fa > fb) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     }
+    // });
 
-    if (!ascending.value) {
-        tempHeadquarters.reverse();
-    }
+    // if (!ascending.value) {
+    //     tempHeadquarters.reverse();
+    // }
     return tempHeadquarters;
 });
 
@@ -496,6 +503,7 @@ watch(
         districts.value = districtsStore.districts;
     },
 );
+
 
 watch(
     () => regionalsStore.regionals,
@@ -532,8 +540,8 @@ watch(
         let locID = localsStore.locals.length
             ? localsStore.locals.find((loc) => loc.name == local.value)?.id
             : roleStore.roles.localheadquarter_commander?.id;
-         educHead.value = educationalsStore.educationals.filter(
-             (edh) => edh.regional_headquarter == regID,
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regID,
         );
         if (local.value) {
             educHead.value = educationalsStore.educationals.filter(
@@ -542,16 +550,11 @@ watch(
         }
     },
 );
+
 watch(
     () => squadsStore.squads,
     () => {
-        let educId = educationalsStore.educationals.length
-            ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
-                  ?.id
-            : roleStore.roles.educationalheadquarter_commander?.id;
-        detachments.value = squadsStore.squads.filter(
-            (det) => det.educational_headquarter == educId,
-        );
+        detachments.value = squadsStore.squads;
     },
 );
 

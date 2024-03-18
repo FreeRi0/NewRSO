@@ -102,6 +102,7 @@
                             :options="sortOptionss"
                             class="sort-alphabet"
                             :sorts-boolean="false"
+                            placeholder="Выберите фильтр"
                         ></sortByEducation>
                     </div>
 
@@ -155,18 +156,14 @@
                 </p>
             </div>
             <Button
-                @click="headquartersVisible += step"
+                @click="next"
                 v-if="
-                    headquartersVisible <
-                    regionalHeadquarters.regionals.value.length
+                    regionalsStore.regionals.length <
+                    regionalsStore.totalRegionals
                 "
                 label="Показать еще"
             ></Button>
-            <Button
-                @click="headquartersVisible -= step"
-                v-else
-                label="Свернуть все"
-            ></Button>
+            <Button @click="prev" v-else label="Свернуть все"></Button>
         </div>
     </div>
 </template>
@@ -191,18 +188,23 @@ const crosspageFilters = useCrosspageFilter();
 
 const regionalHeadquarters = storeToRefs(regionalsStore);
 const isLoading = storeToRefs(regionalsStore);
-const headquartersVisible = ref(20);
-
-const step = ref(20);
 
 const ascending = ref(true);
-const sortBy = ref('alphabetically');
+const sortBy = ref();
 
 const vertical = ref(true);
 
 const name = ref('');
 
 const timerSearch = ref(null);
+
+const next = () => {
+    regionalsStore.getNextRegionals();
+};
+
+const prev = () => {
+    regionalsStore.getRegionals();
+};
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -232,7 +234,7 @@ const filtersDistricts = computed(() =>
 const getDistrictsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get('/districts/');
-        districts.value = data;
+        districts.value = data.results;
     } catch (e) {
         console.log('error request districts headquarters');
     }
@@ -285,7 +287,6 @@ const sortedRegionalHeadquarters = computed(() => {
         tempHeadquarters.reverse();
     }
 
-    tempHeadquarters = tempHeadquarters.slice(0, headquartersVisible.value);
     return tempHeadquarters;
 });
 

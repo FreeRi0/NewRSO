@@ -8,7 +8,7 @@ export const useRoleStore = defineStore('role', {
         myPositions: {},
         positions: {},
         isLoadingRoles: false,
-        status: {},
+        status: {}
     }),
     actions: {
         async getRoles() {
@@ -34,15 +34,16 @@ export const useRoleStore = defineStore('role', {
             this.userRoles = dataUserRoles.data;
         },
 
-        // async getUserRoles(id: String) {
-        //     const dataUserRoles = await HTTP.get(`/rsousers/${id}/commander/`, {
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             Authorization: 'Token ' + localStorage.getItem('Token'),
-        //         },
-        //     });
-        //     this.userRoles = dataUserRoles.data;
-        // },
+        async getUserParticipantsStatus(competition_pk: string) {
+            const dataUserStatus = await HTTP.get(`/competitions/${competition_pk}/participants/status/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.status = dataUserStatus.data;
+        },
+
 
         async getMyPositions() {
             const dataMyPositions = await HTTP.get('/rsousers/me_positions/', {

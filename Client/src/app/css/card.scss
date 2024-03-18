@@ -6,10 +6,18 @@
     border-radius: 5px;
 
     &-container {
-        display: flex;
-        flex-direction: row;
-        flex-shrink: 2;
-        flex-wrap: wrap;
+        display: grid;
+        max-height: 980px;
+        grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+        overflow: auto;
+        scrollbar-width: 4px;
+    }
+    &-container::-webkit-scrollbar {
+        width: 10px;
+        background-color: #f9f9fd;
+    }
+    &-container::-webkit-scrollbar-thumb {
+        background-color: #a3a3a3;
     }
     &-containerline {
         display: flex;
@@ -21,6 +29,11 @@
         border-radius: 5px;
     }
     &-title {
+    }
+    &-subtitle {
+        height: 30px;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
     &-counts {
         display: flex;

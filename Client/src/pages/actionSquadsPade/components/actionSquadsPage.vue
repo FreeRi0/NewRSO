@@ -280,7 +280,11 @@
                     </div>
                 </div>
                 <div class="postcard-container">
-                    <div v-if="vertical" v-for="action in actionsList">
+                    <div
+                        v-if="vertical"
+                        v-for="action in actionsList"
+                        :key="action"
+                    >
                         <Actionitem :action="action"></Actionitem>
                     </div>
                     <div
@@ -303,7 +307,7 @@
 //Импорт файлов
 import Button from 'primevue/button';
 import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
 import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
 import { sortByEducation } from '@shared/components/selects';
@@ -316,14 +320,12 @@ let rolesCount = ref(0);
 
 onActivated(() => {
     getListActionsBySearch(text.value).then((resp) => {
-        actionsList.value = resp.data;
+        actionsList.value = resp.data.results;
     });
     getRoles().then((resp) => {
-        console.log(resp.data);
         Object.entries(resp.data).forEach(([key, value]) => {
             if (value !== null) {
-                console.log(`${key} + ${value}`);
-                rolesCount.value += 1;
+                rolesCount.value = rolesCount.value + 1;
             }
         });
     });
@@ -335,13 +337,9 @@ const text = ref('');
 //Поиск нового значения
 function SearchByInput() {
     if (text.value.length <= 4) {
-        getListActionsBySearch('').then((resp) => {
-            actionsList.value = resp.data;
-        });
+        getListActionsBySearch('').then((resp) => {});
     } else {
-        getListActionsBySearch(text.value).then((resp) => {
-            actionsList.value = resp.data;
-        });
+        getListActionsBySearch(text.value).then((resp) => {});
     }
 }
 
@@ -389,6 +387,17 @@ const showVertical = () => {
 };
 
 const sortBy = ref('alphabetically');
+
+watchEffect(() => {
+    switch (sortBy.value) {
+        case 'alphabetically':
+            break;
+        case 'founding_date':
+            break;
+        case 'members_count':
+            break;
+    }
+});
 
 const sortOptionss = ref([
     {

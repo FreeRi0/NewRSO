@@ -95,7 +95,7 @@
         </div>
         <!-- Организаторы -->
         <h2 class="title title--subtitle">Организаторы</h2>
-        <div v-if="organizators.length != 0" class="card_wrap">
+        <div v-if="organizators" class="card_wrap">
             <div
                 v-for="organizator in organizators"
                 class="event_card_wrap"
@@ -112,9 +112,9 @@
         </div>
         <!-- Контактные лица -->
         <h2 class="title title--subtitle">Контактные лица</h2>
-        <div v-if="!organizators_filted" class="card_wrap">
+        <div v-if="organizators" class="card_wrap">
             <div
-                v-for="organizator in organizators_filted"
+                v-for="organizator in organizators"
                 class="event_card_wrap"
                 :key="organizator.id"
             >
@@ -208,7 +208,7 @@
                 <!-- <h2 v-else>Участников не найдено...</h2> -->
             </ul>
             <div class="squad-participants__link">
-                <p @click="">Показать всех</p>
+                <p @click="ShowAll">Показать всех</p>
             </div>
         </section>
         <!-- Другие мероприятия -->
@@ -228,7 +228,11 @@
 import { ref, onActivated } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { useRoute, useRouter } from 'vue-router';
-import { getAction, getOrganizator } from '@services/ActionService';
+import {
+    getAction,
+    getOrganizator,
+    getParticipants,
+} from '@services/ActionService';
 import { getUser } from '@services/UserService';
 const route = useRoute();
 const router = useRouter();
@@ -266,37 +270,7 @@ const event = ref({
     },
 });
 
-onActivated(() => {
-    getAction(route.params.id).then((resp) => {
-        event.value = resp.data;
-        getOrganizator(route.params.id).then((resp) => {
-            organizators.value = resp.data;
-            const filted = organizators.value.filter((org) => {
-                org.is_contact_person === true;
-            });
-            organizators_filted.value.push(filted);
-        });
-    });
-    getUser().then((resp) => {
-        console.log(resp.data);
-        organizators.value.forEach((value) => {
-            if (value.organizator == user.value.id) {
-                isorganizator.value = true;
-            }
-        });
-    });
-});
-function EditAction() {
-    router.push({ name: 'editAction', params: { id: route.params.id } });
-}
-
-function AddParticipant() {
-    router.push({ name: 'editAction', params: { id: route.params.id } });
-}
-
-function ParticipantsWait() {
-    isGetAll.value = !isGetAll.value;
-}
+const participants = ref([]);
 const organizators = ref([
     {
         organizer: '',
@@ -308,16 +282,52 @@ const organizators = ref([
     },
 ]);
 
-const organizators_filted = ref([]);
+onActivated(() => {
+    getAction(route.params.id).then((resp) => {
+        event.value = resp.data;
+        console.log(event.value);
+        getOrganizator(route.params.id).then((resp) => {
+            organizators.value = resp.data.results;
+        });
+    });
+    getUser().then((resp) => {
+        organizators.value.forEach((value) => {
+            if (value.organizator == user.value.id) {
+                isorganizator.value = true;
+            }
+        });
+    });
+    getParticipants(route.params.id).then((resp) => {
+        participants.value = resp.data.results;
+    });
+});
 
-const participants = ref([
-    {
-        name: '',
-        status: '',
-        image: '',
-        category: Number,
-    },
-]);
+function ShowAll() {}
+function EditAction() {
+    router.push({ name: 'editAction', params: { id: route.params.id } });
+}
+
+function AddParticipant() {
+    let link = '';
+    switch (event.value.application_type) {
+        case 'Персональная':
+            link = 'submit/individualsubmit';
+            break;
+        case 'Групповая':
+            link = 'submit/multistagesubmit';
+            break;
+        case 'Мультиэтапная':
+            link = 'submit/individualsubmit';
+            break;
+    }
+    router.push({ name: `${link}`, params: { id: route.params.id } });
+}
+
+function ParticipantsWait() {
+    isGetAll.value = !isGetAll.value;
+}
+
+const organizators_filted = ref([]);
 
 // member.value = member.value.sort((a, b) => a.is_trusted - b.is_trusted);
 // const lastCategoryIndex = member.value.findIndex(

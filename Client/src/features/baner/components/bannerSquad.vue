@@ -8,7 +8,9 @@
                     <h4>{{ squad.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p>{{ squad.slogan }}</p>
+                    <p v-if="squad.slogan && squad.slogan != 'null'">
+                        {{ squad.slogan }}
+                    </p>
                 </div>
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
@@ -43,7 +45,9 @@
                         <div class="squad-data__social-network">
                             <div
                                 class="squad-data__link-vk"
-                                v-if="squad.social_vk"
+                                v-if="
+                                    squad.social_vk && squad.social_vk != 'null'
+                                "
                             >
                                 <a :href="squad.social_vk" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
@@ -51,7 +55,9 @@
                             </div>
                             <div
                                 class="squad-data__link-telegram"
-                                v-if="squad.social_tg"
+                                v-if="
+                                    squad.social_tg && squad.social_tg != 'null'
+                                "
                             >
                                 <a :href="squad.social_tg" target="_blank">
                                     <img

@@ -18,7 +18,7 @@ export const useDistrictsStore = defineStore('districts', {
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.districts = responseDistricts.data;
+                this.districts = responseDistricts.data.results;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -27,4 +27,3 @@ export const useDistrictsStore = defineStore('districts', {
         },
     },
 });
-
