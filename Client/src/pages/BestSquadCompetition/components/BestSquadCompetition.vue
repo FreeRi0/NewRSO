@@ -247,7 +247,6 @@ import { useRoleStore } from '@layouts/store/role';
 import { HTTP } from '@app/http';
 // import { useRoute } from 'vue-router';
 // const route = useRoute();
-import { useRoleStore } from '@layouts/store/role';
 import { usePage } from '@shared';
 
 usePage({ isHidden: true });
