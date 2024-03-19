@@ -2,7 +2,7 @@
     <div class="competition__item">
         <div class="competition__content">
             <div class="competition__detachments">
-                <div class="horizontallso-item__wrapper">
+                <div class="horizontal-item__wrapper">
                     <img
                         class="competition__avatar_circle"
                         :src="user?.avatar"
@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <div class="horizontallso__confidant">
+            <div class="horizontal__confidant">
                 <input
                     type="checkbox"
                     v-model="isChecked"
@@ -49,11 +49,10 @@ const onCheckbox = (e) => {
 </script>
 
 <style scoped lang="scss">
-.horizontallso__confidant {
+.horizontal__confidant {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
-    margin-bottom: 12px;
     input {
         width: 100%;
         height: 100%;
@@ -63,6 +62,7 @@ const onCheckbox = (e) => {
     display: grid;
     grid-gap: 12px;
     grid-template-columns: auto 48px;
+    margin-bottom: 12px;
 }
 
 .competition__detachments {
@@ -88,7 +88,7 @@ const onCheckbox = (e) => {
     height: 40px;
 }
 
-.horizontallso-item__wrapper {
+.horizontal-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: baseline;
@@ -100,7 +100,6 @@ const onCheckbox = (e) => {
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
-    margin-bottom: 12px;
     width: 100%;
 }
 

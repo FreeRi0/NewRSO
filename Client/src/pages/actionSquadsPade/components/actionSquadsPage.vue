@@ -1,11 +1,12 @@
 <template>
     <div class="container">
         <bannerCreate
+            v-if="rolesCount !== 0"
             desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
             label="Создать мероприятие"
             name="createAction"
             :button="true"
-            v-if="rolesCount !== 0"
+            :target="'_blank'"
         ></bannerCreate>
 
         <h2 class="action-title">Мероприятия</h2>
@@ -36,14 +37,14 @@
                 </svg>
             </div>
         </div>
-        <div class="row-cols-2 action-slides">
-            <div class="col settings-container">
-                <v-expansion-panels class="settings-header" variant="accordion">
+        <div class="action-slides">
+            <div class="settings-container">
+                <v-expansion-panels >
                     <v-expansion-panel
                         class="settings-body"
                         title="Тип мероприятия"
                     >
-                        <v-expansion-panel-text>
+                    <v-expansion-panel-text>
                             <div class="settings-checkbox">
                                 <input
                                     v-model="actionFormSearch.format.online"
@@ -62,7 +63,7 @@
                                 />
                                 <label for="offline">Оффлайн</label>
                             </div>
-                        </v-expansion-panel-text>
+                    </v-expansion-panel-text>
                     </v-expansion-panel>
                     <v-expansion-panel
                         class="settings-body"
@@ -207,76 +208,67 @@
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
-                <div class="settings-buttoms">
-                    <Button
-                        class="settings-btminv"
-                        type="button"
-                        @click="ClearSearchForm"
-                        >Сбросить</Button
-                    >
-                    <Button
-                        class="settings-btm"
-                        type="button"
-                        @click="SendSearchForm"
-                        >Сохранить</Button
-                    >
-                </div>
             </div>
-            <!--Привет) Страницы мероприятий писал и подключал Modestra -->
-            <!--Я в поисках работы, если вам требуется Frontend разработчик, пишите сюда -->
-            <!--https://t.me/Modestra -->
+
             <div class="col" style="width: 100%">
                 <div class="sort-container">
-                    <div class="sort-layout sort-types">
-                        <Button
-                            v-if="vertical"
-                            type="button"
-                            class="dashboard sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
-                        </Button>
-                        <Button
-                            v-else="!vertical"
-                            type="button"
-                            class="dashboardD sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
-                        </Button>
-                        <Button
-                            v-if="!vertical"
-                            type="button"
-                            class="menuuA sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        ></Button>
-                        <Button
-                            v-else="vertical"
-                            type="button"
-                            class="menuu sort-button"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        ></Button>
+                  <div class="sort-layout">
+                    <div>
+                      <Button
+                          v-if="vertical"
+                          type="button"
+                          class="dashboard events__sort-button"
+                          icon="icon"
+                          color="white"
+                          @click="showVertical"
+                      >
+                      </Button>
+                      <Button
+                          v-else
+                          type="button"
+                          class="dashboardD events__sort-button"
+                          icon="icon"
+                          color="white"
+                          @click="showVertical"
+                      >
+                      </Button>
                     </div>
+                    <div>
+                      <Button
+                          v-if="!vertical"
+                          type="button"
+                          class="menuuA events__sort-button"
+                          icon="icon"
+                          color="white"
+                          @click="showVertical"
+                      ></Button>
+                      <Button
+                          v-else
+                          type="button"
+                          class="menuu events__sort-button"
+                          icon="icon"
+                          color="white"
+                          @click="showVertical"
+                      ></Button>
+                    </div>
+
+                  </div>
                     <div class="sort-alphabet">
-                        <sortByEducation
-                            variant="outlined"
-                            v-model="sortBy"
-                            :options="sortOptionss"
-                            class="sort-select select"
-                        ></sortByEducation>
-                        <Button
-                            type="button"
-                            class="ascend sort-button"
-                            icon="switch"
-                            @click="ascending = !ascending"
-                            color="white"
-                        ></Button>
+                      <v-select
+                          class="events__sort-select"
+                          item-title="text"
+                          item-value="value"
+                          :items="sortOptionss"
+                          variant="outlined"
+                          placeholder="Выберите фильтр"
+                      ></v-select>
+                      <Button
+                          type="button"
+                          class="ascend events__sort-buttonDirection"
+                          icon="switch"
+                          @click="ascending = !ascending"
+                          color="white"
+                      ></Button>
                     </div>
                 </div>
                 <div class="postcard-container">
@@ -305,7 +297,7 @@
 
 <script setup>
 //Импорт файлов
-import Button from 'primevue/button';
+import { Button } from '@shared/components/buttons';
 import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
 import { ref, watchEffect } from 'vue';
 import Actionitem from '@entities/Actions/components/actionitem.vue';
@@ -339,7 +331,8 @@ function SearchByInput() {
     if (text.value.length <= 4) {
         getListActionsBySearch('').then((resp) => {});
     } else {
-        getListActionsBySearch(text.value).then((resp) => {});
+        getListActionsBySearch(text.value).then((resp) => {
+          console.log('resp:', resp)});
     }
 }
 
@@ -400,16 +393,78 @@ watchEffect(() => {
 });
 
 const sortOptionss = ref([
-    {
-        value: 'alphabetically',
-        name: 'Алфавиту от А - Я',
-    },
-    { value: 'founding_date', name: 'Дате создания штаба' },
-    { value: 'members_count', name: 'Количеству участников' },
+  {
+    text: 'Алфавиту от А - Я',
+    value: 'alphabetically',
+
+  },
+  { value: 'founding_date', text: 'Дате создания штаба' },
+  { value: 'members_count', text: 'Количеству участников' },
 ]);
 
 //Получить полный список мероприятий
 </script>
+
+<style>
+.v-input__control {
+  width: 232px;
+}
+.v-expansion-panels {
+  width: 284px;
+}
+.v-field__outline {
+  border-radius: 10px;
+}
+.v-field__input {
+  min-height: 32px;
+  /*max-width: 232px;*/
+  padding: 4px 16px 4px 16px;
+}
+.v-select__selection-text {
+  font-family: Bert Sans;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #35383F;
+}
+.v-select__selection {
+  margin-top: 0 !important;
+}
+.v-field--variant-outlined .v-field__outline__end,
+.v-field--variant-outlined .v-field__outline__start {
+  border: none;
+}
+.v-expansion-panel-title {
+  font-family: Bert Sans;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 26px;
+  letter-spacing: 0em;
+  text-align: left;
+  padding-left: 0;
+}
+.v-expansion-panel__shadow {
+  border: none;
+  box-shadow: none;
+}
+.settings-checkbox,
+.settings-radio {
+  font-family: Bert Sans;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-bottom: 16px;
+}
+.v-expansion-panel-text__wrapper {
+  padding-left: 0;
+}
+.v-expansion-panel-title__overlay {
+  background-color: initial;
+}
+</style>
 
 <style lang="scss" scoped>
 //Общий стиль компонента
@@ -430,9 +485,9 @@ const sortOptionss = ref([
 //Стили аккордеонов
 .settings {
     &-container {
-        width: 320px;
+        //width: 320px;
         margin-right: 16px;
-        margin-bottom: 20px;
+        margin-bottom: 80px;
     }
     &-text {
         align-items: baseline;
@@ -496,6 +551,31 @@ const sortOptionss = ref([
     }
 }
 //Стиль сортировки
+.events {
+  &__sort {
+    &__select {
+      max-height: 32px;
+      margin-right: 4px;
+    }
+    &-select {
+      max-height: 32px;
+      margin-right: 4px;
+      border: 1px solid #B6B6B6;
+      border-radius: 10px;
+    }
+    &-button {
+      width: 32px;
+      height: 32px;
+    }
+    &-buttonDirection {
+      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      margin-left: 0;
+      border: 1px solid #B6B6B6 !important;
+    }
+  }
+}
 .sort {
     &-container {
         width: 100%;
@@ -503,29 +583,16 @@ const sortOptionss = ref([
         display: flex;
         justify-content: space-between;
     }
-    &-select {
-        margin-right: 8px;
-    }
-    &-types {
-        height: 50px;
-    }
-    &-button {
-        margin-right: 5px;
-        border: 1px solid black;
-        border-radius: 5px;
-        width: 25px;
-        height: 25px;
-    }
     &-alphabet {
-        width: 320px;
+        //width: 320px;
         display: flex;
         justify-content: flex-end;
     }
     &-select {
-        height: 50px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
+        //height: 50px;
+        //position: relative;
+        //display: flex;
+        //flex-direction: column;
     }
     .education {
         width: 305px;
@@ -539,13 +606,11 @@ const sortOptionss = ref([
     background-repeat: no-repeat;
     background-size: cover;
 }
-
 .dashboardD {
     background-image: url('@app/assets/icon/darhboard-disable.svg');
     background-repeat: no-repeat;
     background-size: cover;
 }
-
 .menuuA {
     background-image: url('@app/assets/icon/MenuA.svg');
     background-repeat: no-repeat;
@@ -582,9 +647,7 @@ input {
 }
 //Сброс стилей аккордиона
 .v-expansion-panel {
-    &__shadow {
-        box-shadow: none;
-    }
+
 
     &--active,
     &--after-active {

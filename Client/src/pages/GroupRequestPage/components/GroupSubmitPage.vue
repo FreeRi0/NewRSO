@@ -17,7 +17,11 @@
 
         <div id="wrapper">
             <div id="left">
-                <!-- Место под фильтры -->
+                <group-filters @update-filter="onUpdateFilter" />
+
+                <p class="count">
+                    Объектов выбрано: {{ sortedUsersList.length }}
+                </p>
 
                 <div class="uploads">
                     <div
@@ -69,9 +73,9 @@
                         <div class="sort-select">
                             <sortByEducation
                                 variant="outlined"
-                                clearable
                                 v-model="sortBy"
                                 :options="sortOptions"
+                                selected="sortBy"
                             ></sortByEducation>
                         </div>
                         <Button
@@ -122,6 +126,7 @@ import { sortByEducation } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
 import { useRouter } from 'vue-router';
 
+import GroupFilters from './GroupFilters.vue';
 import GroupSubmitItem from './GroupSubmitItem.vue';
 import GroupSubmitSelect from './GroupSubmitSelect.vue';
 
@@ -143,12 +148,49 @@ const name = ref('');
 const sortOptions = ref([
     {
         value: 'alphabetically',
-        name: 'Алфавиту от А - Я',
+        name: 'По алфавиту: от А - Я',
     },
-    { value: 'date_of_birth', name: 'По дате вступления в РСО' },
+    { value: 'date_of_birth', name: 'По дате рождения' },
 ]);
 
 const timerSearch = ref(null);
+
+const onUpdateFilter = (filterData) => {
+    console.log(filterData);
+    console.log(filterData.toAge == null);
+    console.log(filterData.toAge == '');
+
+    let search = '?';
+
+    if (filterData.gender == 'man') {
+        search += 'gender=male&';
+    } else if (filterData.gender == 'woman') {
+        search += 'gender=female&';
+    }
+
+    if (filterData.fee == 'paid') {
+        search += 'membership_fee=True&';
+    } else if (filterData.fee == 'notPaid') {
+        search += 'membership_fee=False&';
+    }
+
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    if (filterData.toAge != null && filterData.toAge != '') {
+        const formattedDate = `${year - filterData.toAge}-${month}-${day}`;
+        search += `birth_date_to=${formattedDate}`;
+    }
+    if (filterData.fromAge != null && filterData.fromAge != '') {
+        const formattedDate = `${year - filterData.fromAge}-${month}-${day}`;
+        search += `birth_date_from=${formattedDate}`;
+    }
+
+    console.log(search);
+
+    getUsersList(search);
+};
 
 const searchUsers = () => {
     if (!name.value) {
@@ -161,17 +203,15 @@ const searchUsers = () => {
 };
 
 const sortedByName = async (name) => {
-    console.log(name);
     sortedUsersList.value = usersList.value.filter((obj) =>
         obj.name.includes(name),
     );
-    console.log(sortedUsersList.value);
 };
 
-const getUsersList = async () => {
+const getUsersList = async (search) => {
     try {
         const { data } = await HTTP.get(
-            `/events/${route.params.id}/group_applications`,
+            `/events/${route.params.id}/group_applications/${search}`,
             {
                 headers: {
                     'Content-type': 'application/json',
@@ -180,6 +220,7 @@ const getUsersList = async () => {
             },
         );
         console.log(data);
+        usersList.value = [];
         for (const obj of data) {
             obj.name = obj.first_name + ' ' + obj.last_name;
             console.log(obj);
@@ -259,6 +300,19 @@ watch(selectedUsersList, (newSelectedUsersList) => {
     isChecked.value = newSelectedUsersList.length == usersList.value.length;
 });
 
+watch(sortBy, () => {
+    console.log(sortedUsersList.value);
+    if (sortBy.value == 'По алфавиту: от А - Я')
+        sortedUsersList.value.sort((a, b) => a.name.localeCompare(b.name));
+    if (sortBy.value == 'По дате рождения') {
+        sortedUsersList.value.sort((a, b) => {
+            if (a.date_of_birth > b.date_of_birth) return 1;
+            if (a.date_of_birth == b.date_of_birth) return 0;
+            if (a.date_of_birth < b.date_of_birth) return -1;
+        });
+    }
+});
+
 watch(ascending, () => {
     if (!ascending.value) {
         sortedUsersList.value.reverse();
@@ -266,7 +320,7 @@ watch(ascending, () => {
 });
 
 onMounted(async () => {
-    await getUsersList();
+    await getUsersList('');
 });
 </script>
 
@@ -490,5 +544,13 @@ onMounted(async () => {
     & > .form__select {
         margin-bottom: 0px;
     }
+}
+.count {
+    margin-top: 36px;
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21.1px;
+    color: #898989;
 }
 </style>

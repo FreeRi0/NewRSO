@@ -274,10 +274,6 @@ onMounted(async () => {
         color: #b6b6b6;
     }
 }
-.container {
-    margin: 0 auto;
-    max-width: 1115px;
-}
 .main_title {
     font-family: Akrobat;
     font-size: 52px;

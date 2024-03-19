@@ -15,7 +15,25 @@
 
     <div id="wrapper">
         <div id="left">
-            <!-- Место под фильтры -->
+            <filters
+                @update-district="updateDistrict"
+                @update-reg="updateReg"
+                @update-local="updateLocal"
+                @update-educ="updateEduc"
+                @update-detachment="updateDetachment"
+                :district="district"
+                :districts="districts"
+                :reg="reg"
+                :regionals="regionals"
+                :local="local"
+                :locals="locals"
+                :educ="educ"
+                :educ-head="educHead"
+                :detachment="detachment"
+                :detachments="detachments"
+                :roles="roles.roles.value"
+                :sorted-participants="sortedParticipants"
+            />
 
             <!-- <div class="uploads">
                 <div
@@ -75,11 +93,14 @@
             </div>
 
             <multi-stage-submit-item
-                v-for="user in sortedUsersList"
+                v-for="user in sortedParticipants"
                 :key="user.id"
                 :user="user"
                 @select="onToggleSelectUser"
             />
+            <p class="subtitle" v-if="!sortedParticipants.length">
+                Ничего не найдено
+            </p>
         </div>
     </div>
 
@@ -106,13 +127,21 @@
 
 <script setup>
 import { HTTP } from '@app/http';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 
 import MultiStageSubmitItem from './MultiStageSubmitItem.vue';
 import MultiStageSubmitSelect from './MultiStageSubmitSelect.vue';
 
 import { Button } from '@shared/components/buttons';
 import { useRouter } from 'vue-router';
+import { filters } from '@features/Contributor/components';
+
+import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useDistrictsStore } from '@features/store/districts';
+import { useLocalsStore } from '@features/store/local';
+import { useEducationalsStore } from '@features/store/educationals';
+import { storeToRefs } from 'pinia';
 
 const usersList = ref([]);
 const selectedUsersList = ref([]);
@@ -169,12 +198,12 @@ const onToggleSelectUser = (user, isChecked) => {
 
 const onCheckbox = async (event) => {
     if (event.target.checked) {
-        for (const obj of sortedUsersList.value) {
+        for (const obj of sortedParticipants.value) {
             obj.selected = true;
             selectedUsersList.value.push(obj);
         }
     } else {
-        for (const obj of sortedUsersList.value) {
+        for (const obj of sortedParticipants.value) {
             obj.selected = false;
         }
         selectedUsersList.value = [];
@@ -227,17 +256,331 @@ const onAction = async () => {
     }
 };
 
+// Фильтры
+
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
+const regionalsStore = useRegionalsStore();
+
+const districtsStore = useDistrictsStore();
+const localsStore = useLocalsStore();
+const educationalsStore = useEducationalsStore();
+const participants = ref([]);
+const participantsVisible = ref(10);
+
+const regionals = ref([]);
+const districts = ref([]);
+const locals = ref([]);
+const educHead = ref([]);
+const detachments = ref([]);
+const reg = ref(null);
+const detachment = ref(null);
+const district = ref(null);
+const local = ref(null);
+const isLoading = ref(false);
+const educ = ref(null);
+const levelAccess = ref(7);
+const selectedPeoples = ref([]);
+const sortBy = ref('alphabetically');
+
+const viewContributorsData = async (search) => {
+    try {
+        isLoading.value = true;
+        const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        participants.value = viewParticipantsResponse.data.results;
+        isLoading.value = false;
+        selectedPeoples.value = [];
+
+        if (search.indexOf('districts') >= 0) {
+            districts.value = viewParticipantsResponse.data.results;
+        } else if (search.indexOf('regionals') >= 0) {
+            regionals.value = viewParticipantsResponse.data.results;
+        } else if (search.indexOf('locals') >= 0) {
+            locals.value = viewParticipantsResponse.data.results;
+        } else if (search.indexOf('educationals') >= 0) {
+            educHead.value = viewParticipantsResponse.data.results;
+        } else if (search.indexOf('detachments') >= 0) {
+            detachments.value = viewParticipantsResponse.data.results;
+        }
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+
+const getFiltersData = async (resp, search) => {
+    try {
+        isLoading.value = true;
+        const viewHeadquartersResponse = await HTTP.get(resp + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        isLoading.value = false;
+
+        if (resp.indexOf('districts') >= 0) {
+            districts.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('regionals') >= 0) {
+            regionals.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('locals') >= 0) {
+            locals.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('educationals') >= 0) {
+            educHead.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('detachments') >= 0) {
+            detachments.value = viewHeadquartersResponse.data.results;
+        }
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+const updateDistrict = (districtVal) => {
+    let search = '';
+    if (districtVal) {
+        search = '?district_headquarter__name=' + districtVal;
+    } else {
+        search = '';
+    }
+
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search);
+    getFiltersData('/regionals/', search);
+
+    // let districtId = districtsStore.districts.find(
+    //     (dis) => dis.name == districtVal,
+    // )?.id;
+    district.value = districtVal;
+};
+
+const updateReg = (regVal) => {
+    let search = '';
+    if (regVal) {
+        search = '?regional_headquarter__name=' + regVal;
+    } else if (levelAccess.value < 2) {
+        search = '?district_headquarter__name=' + district.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search);
+    getFiltersData('/locals/', search);
+    getFiltersData('/educationals/', search);
+
+    reg.value = regVal;
+};
+const updateLocal = (localVal) => {
+    let search = '';
+    if (localVal) {
+        search = '?local_headquarter__name=' + localVal;
+    } else if (levelAccess.value < 3) {
+        search = '?regional_headquarter__name=' + reg.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search, !localVal);
+    getFiltersData('/educationals/', search);
+
+    local.value = localVal;
+};
+
+const updateEduc = (educVal) => {
+    let search = '';
+    if (educVal) {
+        search = '?educational_headquarter__name=' + educVal;
+    } else if (local.value) {
+        search = '?local_headquarter__name=' + local.value;
+    } else if (levelAccess.value < 3) {
+        search = '?regional_headquarter__name=' + reg.value;
+    } else if (levelAccess.value < 4) {
+        search = '?local_headquarter__name=' + local.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search);
+    getFiltersData('/detachments/', search);
+
+    educ.value = educVal;
+};
+
+const updateDetachment = (detachmentVal) => {
+    let search = '';
+    if (detachmentVal) {
+        search = '?detachment__name=' + detachmentVal;
+    } else if (levelAccess.value < 5) {
+        search = '?educational_headquarter__name=' + educ.value;
+    }
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search);
+    detachment.value = detachmentVal;
+};
+
+const getUsersByRoles = () => {
+    if (!Object.keys(roleStore.roles).length) return false;
+    if (!roles.roles.value.centralheadquarter_commander) {
+        let search = '';
+        if (roles.roles.value.districtheadquarter_commander) {
+            district.value =
+                roles.roles.value.districtheadquarter_commander.name;
+            search =
+                '?district_headquarter__name=' +
+                roles.roles.value.districtheadquarter_commander.name;
+            levelAccess.value = 1;
+            getFiltersData('/regionals/', search);
+        } else if (roles.roles.value.regionalheadquarter_commander) {
+            reg.value = roles.roles.value.regionalheadquarter_commander.name;
+            search =
+                '?regional_headquarter__name=' +
+                roles.roles.value.regionalheadquarter_commander.name;
+            locals.value = localsStore.locals.filter(
+                (loc) => loc.regional_headquarter == reg.value,
+            );
+            levelAccess.value = 2;
+            getFiltersData('/educationals/', search);
+            getFiltersData('/locals/', search);
+        } else if (roles.roles.value.localheadquarter_commander) {
+            local.value = roles.roles.value.localheadquarter_commander.name;
+            search =
+                '?local_headquarter__name=' +
+                roles.roles.value.localheadquarter_commander.name;
+            levelAccess.value = 3;
+            getFiltersData('/educationals/', search);
+        } else if (roles.roles.value.educationalheadquarter_commander) {
+            educ.value =
+                roles.roles.value.educationalheadquarter_commander.name;
+            search =
+                '?educational_headquarter__name=' +
+                roles.roles.value.educationalheadquarter_commander.name;
+            levelAccess.value = 4;
+            getFiltersData('/detachments/', search);
+        } else if (roles.roles.value.detachment_commander) {
+            detachment.value = roles.roles.value.detachment_commander.name;
+            search =
+                '?detachment__name=' +
+                roles.roles.value.detachment_commander.name;
+            levelAccess.value = 5;
+        }
+        viewContributorsData(search);
+    } else {
+        levelAccess.value = 0;
+        getFiltersData('/districts/', search);
+    }
+};
+
+const sortedParticipants = computed(() => {
+    //let tempParticipants = participants.value;
+
+    let tempParticipants = [];
+
+    for (const participant of participants.value) {
+        const exists = sortedUsersList.value.some(
+            (obj) => obj.id === participant.id,
+        );
+        if (exists) tempParticipants.push(participant);
+    }
+
+    tempParticipants = tempParticipants.sort((a, b) => {
+        if (sortBy.value == 'alphabetically') {
+            let fa = a.first_name.toLowerCase(),
+                fb = b.first_name.toLowerCase();
+
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        } else if (sortBy.value == 'date_of_birth') {
+            let fc = a.date_of_birth,
+                fn = b.date_of_birth;
+
+            if (fc < fn) {
+                return -1;
+            }
+            if (fc > fn) {
+                return 1;
+            }
+            return 0;
+        }
+    });
+
+    if (!ascending.value) {
+        tempParticipants.reverse();
+    }
+
+    tempParticipants = tempParticipants.slice(0, participantsVisible.value);
+    return tempParticipants;
+});
+
+watch(
+    () => roles.roles.value,
+
+    () => {
+        getUsersByRoles();
+    },
+);
+
+watch(
+    () => districtsStore.districts,
+    () => {
+        districts.value = districtsStore.districts;
+    },
+);
+
+watch(
+    () => regionalsStore.regionals,
+    () => {
+        let districtID = districtsStore.districts.length
+            ? districtsStore.districts.find(
+                  (dis) => (dis.name = district.value),
+              )?.id
+            : roleStore.roles.districtheadquarter_commander?.id;
+        regionals.value = regionalsStore.regionals.filter(
+            (reg) => reg.district_headquarter == district.value,
+        );
+    },
+);
+
+watch(
+    () => localsStore.locals,
+    () => {
+        let regID = regionalsStore.regionals.length
+            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
+            : roleStore.roles.regionalheadquarter_commander?.id;
+        locals.value = localsStore.locals.filter(
+            (loc) => loc.regional_headquarter == regID,
+        );
+    },
+);
+
+watch(
+    () => educationalsStore.educationals,
+    () => {
+        let regID = regionalsStore.regionals.length
+            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
+            : roleStore.roles.regionalheadquarter_commander?.id;
+        let locID = localsStore.locals.length
+            ? localsStore.locals.find((loc) => loc.name == local.value)?.id
+            : roleStore.roles.localheadquarter_commander?.id;
+        educHead.value = educationalsStore.educationals.filter(
+            (edh) => edh.regional_headquarter == regID,
+        );
+        if (local.value) {
+            educHead.value = educationalsStore.educationals.filter(
+                (edh) => edh.local_headquarter == locID,
+            );
+        }
+    },
+);
+
+//
+
 watch(selectedUsersList, (newSelectedUserrsList) => {
     isChecked.value = newSelectedUserrsList.length == usersList.value.length;
 });
 
-watch(ascending, () => {
-    if (!ascending.value) {
-        sortedUsersList.value.reverse();
-    }
-});
-
 onMounted(async () => {
+    getUsersByRoles();
     await getCompileList();
 });
 </script>
