@@ -118,6 +118,7 @@
                             class="sort-alphabet"
                             :sorts-boolean="false"
                             placeholder="Выберите фильтр"
+                            @update:modelValue="sortEduc"
                         ></sortByEducation>
                     </div>
 
@@ -197,11 +198,11 @@ const next = () => {
 };
 
 const prev = () => {
-    educationalsStore.getEducationals();
+    educationalsStore.getEducationals(sortBy.value);
 };
 
 const ascending = ref(true);
-const sortBy = ref();
+const sortBy = ref('name');
 const timerSearch = ref(null);
 const vertical = ref(true);
 
@@ -220,6 +221,16 @@ const SelectedSortRegional = ref(
 const locals = ref([]);
 const districts = ref([]);
 const regionals = ref([]);
+
+// if (sortBy.value == 'name') {
+//     educationalsStore.getEducationals(sortBy.value);
+// } else if (sortBy.value == 'founding_date') {
+//     educationalsStore.getEducationals(sortBy.value);
+// }
+
+const sortEduc = () => {
+    educationalsStore.getEducationals(sortBy.value);
+}
 
 const getDistrictsHeadquartersForFilters = async () => {
     try {
@@ -255,14 +266,14 @@ const searchEducational = (event) => {
 
 onMounted(() => {
     getDistrictsHeadquartersForFilters();
-    educationalsStore.getEducationals();
+    educationalsStore.getEducationals(sortBy.value);
     getRegionalsHeadquartersForFilters();
     getLocalsHeadquartersForFilters();
 });
 
 const sortOptionss = ref([
     {
-        value: 'alphabetically',
+        value: 'name',
         name: 'Алфавиту от А - Я',
     },
     { value: 'founding_date', name: 'Дате создания штаба' },
@@ -297,31 +308,6 @@ const sortedHeadquarters = computed(() => {
             return idRegionals.indexOf(item.regional_headquarter) >= 0;
         });
     }
-    tempHeadquartes = tempHeadquartes.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'founding_date') {
-            let fc = a.founding_date,
-                fn = b.founding_date;
-
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        }
-    });
 
     if (!ascending.value) {
         tempHeadquartes.reverse();

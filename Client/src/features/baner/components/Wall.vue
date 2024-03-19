@@ -121,9 +121,9 @@
                             </p>
                         </li>
                         <li class="user-data__title" v-else><p>Кандитат</p></li>
-                        <!-- <li class="user-data__title" v-if="detachment?.name">
+                        <li class="user-data__title" v-if="detachment?.name">
                             <p>{{ detachment?.name }}</p>
-                        </li> -->
+                        </li>
                         <li
                             class="user-data__title"
                             v-if="

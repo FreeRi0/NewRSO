@@ -1,13 +1,5 @@
 <template>
   <div class="container corpuniver">
-    <div class="corpuniver__documents">
-      <p class="text corpuniver__documents-description">
-        Всем участникам Конкурса необходимо верифицироваться до 10 марта 2024 года.<br/>
-        Для прохождения верификации перейдите на страницу «Настройки профиля» — «Персональные данные». Заполните все обязательные поля, нажмите на кнопку «Отправить данные на верификацию».
-        Далее ожидайте одобрения заявки командиром РШ либо командиром ЛСО, если вы состоите в отряде.
-      </p>
-    </div>
-
     <h1 class="title title--mb">
       Корпоративный университет
     </h1>
@@ -264,6 +256,7 @@
     </div>
   </div>
 
+
 </template>
 <script setup>
 import Button from '@shared/components/buttons/Button.vue';
@@ -501,3 +494,4 @@ import Button from '@shared/components/buttons/Button.vue';
   }
 }
 </style>
+

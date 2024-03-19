@@ -3,6 +3,24 @@
         position: relative;
         margin-bottom: 40px;
     }
+    
+    &__school {
+        padding: 47px 111px 47px 60px;
+        p {
+            width: 386px;
+            font-size: 20px;
+            font-family: 'Akrobat', sans-serif;
+            font-weight: 500;
+            margin-bottom: 46px;
+            span {
+                font-weight: 700;
+            }
+        }
+        &_btn {
+            margin: 0px;
+        }
+    }
+
 
     &__school {
         padding: 47px 111px 47px 60px;

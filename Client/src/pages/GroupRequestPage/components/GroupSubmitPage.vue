@@ -73,9 +73,9 @@
                         <div class="sort-select">
                             <sortByEducation
                                 variant="outlined"
-                                clearable
                                 v-model="sortBy"
                                 :options="sortOptions"
+                                selected="sortBy"
                             ></sortByEducation>
                         </div>
                         <Button
@@ -149,9 +149,9 @@ const name = ref('');
 const sortOptions = ref([
     {
         value: 'alphabetically',
-        name: 'Алфавиту от А - Я',
+        name: 'По алфавиту: от А - Я',
     },
-    { value: 'date_of_birth', name: 'По дате вступления в РСО' },
+    { value: 'date_of_birth', name: 'По дате рождения' },
 ]);
 
 const timerSearch = ref(null);
@@ -299,6 +299,19 @@ const onRemove = (index) => {
 
 watch(selectedUsersList, (newSelectedUsersList) => {
     isChecked.value = newSelectedUsersList.length == usersList.value.length;
+});
+
+watch(sortBy, () => {
+    console.log(sortedUsersList.value);
+    if (sortBy.value == 'По алфавиту: от А - Я')
+        sortedUsersList.value.sort((a, b) => a.name.localeCompare(b.name));
+    if (sortBy.value == 'По дате рождения') {
+        sortedUsersList.value.sort((a, b) => {
+            if (a.date_of_birth > b.date_of_birth) return 1;
+            if (a.date_of_birth == b.date_of_birth) return 0;
+            if (a.date_of_birth < b.date_of_birth) return -1;
+        });
+    }
 });
 
 watch(ascending, () => {
@@ -532,5 +545,13 @@ onMounted(async () => {
     & > .form__select {
         margin-bottom: 0px;
     }
+}
+.count {
+    margin-top: 36px;
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21.1px;
+    color: #898989;
 }
 </style>

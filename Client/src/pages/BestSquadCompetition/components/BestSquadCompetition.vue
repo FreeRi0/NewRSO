@@ -39,31 +39,29 @@
             </div>
 
             <div class="competition__status-application">
-                <router-link
+                <!-- <router-link
                     v-if="!isAuth"
                     to="/Login"
                     class="btn competition__status-application-button"
                     >Участвовать</router-link
-                >
-                <div v-else>
-                    <Button
+                > -->
+                <div>
+                    <!-- <Button
                         v-if="!userCommander.detachment_commander"
                         label="Участвовать"
                         @click="errorIsNoCommander = !errorIsNoCommander"
                         class="competition__status-application-button"
-                    ></Button>
-
+                    ></Button> -->
+                    <!--
                     <Button
-                        v-else-if="currentStatus.status === 'Еще не участвуете'"
+                        v-if="currentStatus.status === 'Еще не участвуете'"
                         label="Участвовать"
                         class="competition__status-application-button"
                         @click="onSendApplication"
-                    ></Button>
+                    ></Button> -->
 
                     <span
-                        v-else-if="
-                            currentStatus.status === 'Заявка на рассмотрении'
-                        "
+                        v-if="currentStatus.status === 'Заявка на рассмотрении'"
                         class="competition__status-application-info"
                     >
                         Заявка на рассмотрении
@@ -252,7 +250,6 @@ import { HTTP } from '@app/http';
 import { usePage } from '@shared';
 
 usePage({ isHidden: true });
-
 const roleStore = useRoleStore();
 const isAuth = ref(!!localStorage.getItem('Token'));
 

@@ -72,6 +72,7 @@ const isError = ref([]);
 const swal = inject('$swal');
 const loading = ref(false);
 const action = ref('Одобрить');
+
 // const actionsList = ref(['Одобрить', 'Отклонить']);
 const actionsList = ref([
     {
@@ -93,7 +94,7 @@ const viewEvents = async () => {
                 },
             },
         );
-        eventsList.value = eventsRequest.dataж;
+        eventsList.value = eventsRequest.data.results;
     } catch (error) {
         console.log('an error occured ' + error);
     }
