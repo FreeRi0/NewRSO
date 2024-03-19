@@ -30,7 +30,6 @@
                     id="search"
                     class="squads-search__input"
                     v-model="name"
-                    @keyup="searchDetachments"
                     placeholder="Поищем отряд?"
                 />
                 <svg
@@ -164,6 +163,7 @@
                                     :sorts-boolean="false"
                                     class="sort-alphabet"
                                     placeholder="Выберите фильтр"
+                                    @change="sortSquads"
                                 ></sortByEducation>
                             </div>
 
@@ -245,6 +245,10 @@ const next = () => {
 const prev = () => {
     squadsStore.getSquads();
 };
+
+const sortSquads = () => {
+    squadsStore.sortedSquads();
+}
 const ascending = ref(true);
 const sortBy = ref();
 const picked = ref('');

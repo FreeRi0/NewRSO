@@ -1395,7 +1395,6 @@
                                 placeholder="Введите название образовательной организации"
                                 v-model="props.user.education.study_institution"
                                 @update:value="changeValue"
-                                address="/eduicational_institutions/"
                                 class="mb-2"
                                 :SortDropdown="false"
                             ></educInstitutionDropdown>
