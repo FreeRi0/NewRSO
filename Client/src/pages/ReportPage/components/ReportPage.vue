@@ -485,12 +485,6 @@
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <div
-                                        class="form__field add-block"
-                                        @click="addNewBlock"
-                                    >
-                                        + добавить участника
-                                    </div>
                                 </div>
                                 <div class="form__field-group-right">
                                     <div class="form__field">
@@ -509,6 +503,12 @@
                                         />
                                     </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="addNewBlock"
+                            >
+                                + добавить участника
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -592,41 +592,15 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Участие в Творческом фестивале<span
+                                            >Участие в Демонстрации 1 мая<span
                                                 >&nbsp;*</span
                                             ></label
-                                        >
-                                        <Dropdown
-                                            placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
-                                            optionLabel="name"
-                                            class="invents-block invents-select"
-                                        />
-                                    </div>
-                                    <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Конкурсе
-                                            профессионального мастерства<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Dropdown
-                                            placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
-                                            optionLabel="name"
-                                            class="invents-block invents-select"
-                                        />
-                                    </div>
-                                    <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Открытии трудового
-                                            семестра<span>&nbsp;*</span></label
                                         >
                                         <Dropdown
                                             placeholder="Например, да"
@@ -639,9 +613,8 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Количество участников мероприятия
-                                            Открытие трудового семестра<span
-                                                >&nbsp;*</span
-                                            ></label
+                                            Демонстрация 1 мая
+                                            <span>&nbsp;*</span></label
                                         >
                                         <Input
                                             type="number"
@@ -652,50 +625,28 @@
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Неделе охраны труда<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Dropdown
-                                            placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
-                                            optionLabel="name"
-                                            class="invents-block invents-select"
-                                        />
-                                    </div>
                                 </div>
-                                <div class="form__field-group-right">
-                                    <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Спартакиаде студенческих
-                                            отрядов и комплексе мероприятий
-                                            РСО-спорт<span>&nbsp;*</span></label
-                                        >
-                                        <Dropdown
-                                            placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
-                                            optionLabel="name"
-                                            class="invents-block invents-select"
-                                        />
-                                    </div>
-                                    <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Школе подготовки
-                                            командиров и комиссаров студенческих
-                                            отрядов<span>&nbsp;*</span></label
-                                        >
-                                        <Dropdown
-                                            placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
-                                            optionLabel="name"
-                                            class="invents-block invents-select"
-                                        />
-                                    </div>
+                            </div>
+                            <div class="form__field-group-bottom">
+                                <Button
+                                    type="button"
+                                    class="form__button"
+                                    label="Отправить данные на верификацию"
+                                    size="large"
+                                />
+                                <p>
+                                    Срок предоставления отчетности по показателю
+                                    по 31 мая 2024 года включительно.
+                                </p>
+                            </div>
+                        </div>
+                    </v-expansion-panel-text>
+                    <v-expansion-panel-text class="form__inner-content">
+                        <div class="form__field-group">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
+                                <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Участие во всероссийской
@@ -729,11 +680,104 @@
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="form__field-group-bottom">
+                                <Button
+                                    type="button"
+                                    class="form__button"
+                                    label="Отправить данные на верификацию"
+                                    size="large"
+                                />
+                                <p>
+                                    Срок предоставления отчетности по показателю
+                                    по 31 мая 2024 года включительно.
+                                </p>
+                            </div>
+                        </div>
+                    </v-expansion-panel-text>
+                    <v-expansion-panel-text class="form__inner-content">
+                        <div class="form__field-group">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
+                                <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Участие в Демонстрации 1 мая<span
+                                            >Участие в Неделе охраны труда<span
                                                 >&nbsp;*</span
                                             ></label
+                                        >
+                                        <Dropdown
+                                            placeholder="Например, да"
+                                            v-model="regionalSchoolCommander"
+                                            :options="CommanderChoose"
+                                            optionLabel="name"
+                                            class="invents-block invents-select"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form__field-group-bottom">
+                                <Button
+                                    type="button"
+                                    class="form__button"
+                                    label="Отправить данные на верификацию"
+                                    size="large"
+                                />
+                                <p>
+                                    Срок предоставления отчетности по показателю
+                                    по 31 мая 2024 года включительно.
+                                </p>
+                            </div>
+                        </div>
+                    </v-expansion-panel-text>
+                    <v-expansion-panel-text class="form__inner-content">
+                        <div class="form__field-group">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
+                                <div class="form__field-group-left">
+                                    <div class="form__field">
+                                        <label class="form__label"
+                                            >Участие в Школе подготовки
+                                            командиров и комиссаров студенческих
+                                            отрядов<span>&nbsp;*</span></label
+                                        >
+                                        <Dropdown
+                                            placeholder="Например, да"
+                                            v-model="regionalSchoolCommander"
+                                            :options="CommanderChoose"
+                                            optionLabel="name"
+                                            class="invents-block invents-select"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form__field-group-bottom">
+                                <Button
+                                    type="button"
+                                    class="form__button"
+                                    label="Отправить данные на верификацию"
+                                    size="large"
+                                />
+                                <p>
+                                    Срок предоставления отчетности по показателю
+                                    по 31 мая 2024 года включительно.
+                                </p>
+                            </div>
+                        </div>
+                    </v-expansion-panel-text>
+                    <v-expansion-panel-text class="form__inner-content">
+                        <div class="form__field-group">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
+                                <div class="form__field-group-left">
+                                    <div class="form__field">
+                                        <label class="form__label"
+                                            >Участие в Открытии трудового
+                                            семестра<span>&nbsp;*</span></label
                                         >
                                         <Dropdown
                                             placeholder="Например, да"
@@ -746,8 +790,9 @@
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Количество участников мероприятия
-                                            Демонстрация 1 мая
-                                            <span>&nbsp;*</span></label
+                                            Открытие трудового семестра<span
+                                                >&nbsp;*</span
+                                            ></label
                                         >
                                         <Input
                                             type="number"
@@ -757,6 +802,115 @@
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form__field-group-bottom">
+                                <Button
+                                    type="button"
+                                    class="form__button"
+                                    label="Отправить данные на верификацию"
+                                    size="large"
+                                />
+                                <p>
+                                    Срок предоставления отчетности по показателю
+                                    по 30 июня 2024 года включительно.
+                                </p>
+                            </div>
+                        </div>
+                    </v-expansion-panel-text>
+                    <v-expansion-panel-text class="form__inner-content">
+                        <div class="form__field-group">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
+                                <div class="form__field-group-left">
+                                    <div class="form__field">
+                                        <label class="form__label"
+                                            >Участие в Творческом фестивале<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Dropdown
+                                            placeholder="Например, да"
+                                            v-model="regionalSchoolCommander"
+                                            :options="CommanderChoose"
+                                            optionLabel="name"
+                                            class="invents-block invents-select"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form__field-group-bottom">
+                                <Button
+                                    type="button"
+                                    class="form__button"
+                                    label="Отправить данные на верификацию"
+                                    size="large"
+                                />
+                                <p>
+                                    Срок предоставления отчетности по показателю
+                                    по 15 октября 2024 года включительно.
+                                </p>
+                            </div>
+                        </div>
+                    </v-expansion-panel-text>
+                    <v-expansion-panel-text class="form__inner-content">
+                        <div class="form__field-group">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
+                                <div class="form__field-group-left">
+                                    <div class="form__field">
+                                        <label class="form__label"
+                                            >Участие в Спартакиаде студенческих
+                                            отрядов и комплексе мероприятий
+                                            РСО-спорт<span>&nbsp;*</span></label
+                                        >
+                                        <Dropdown
+                                            placeholder="Например, да"
+                                            v-model="regionalSchoolCommander"
+                                            :options="CommanderChoose"
+                                            optionLabel="name"
+                                            class="invents-block invents-select"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form__field-group-bottom">
+                                <Button
+                                    type="button"
+                                    class="form__button"
+                                    label="Отправить данные на верификацию"
+                                    size="large"
+                                />
+                                <p>
+                                    Срок предоставления отчетности по показателю
+                                    по 15 октября 2024 года включительно.
+                                </p>
+                            </div>
+                        </div>
+                    </v-expansion-panel-text>
+                    <v-expansion-panel-text class="form__inner-content">
+                        <div class="form__field-group">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
+                                <div class="form__field-group-left">
+                                    <div class="form__field">
+                                        <label class="form__label"
+                                            >Участие в Конкурсе
+                                            профессионального мастерства<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Dropdown
+                                            placeholder="Например, да"
+                                            v-model="regionalSchoolCommander"
+                                            :options="CommanderChoose"
+                                            optionLabel="name"
+                                            class="invents-block invents-select"
+                                        />
                                     </div>
                                 </div>
                             </div>

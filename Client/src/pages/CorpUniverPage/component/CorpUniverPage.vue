@@ -1,13 +1,5 @@
 <template>
   <div class="container corpuniver">
-    <div class="corpuniver__documents">
-      <p class="text corpuniver__documents-description">
-        Всем участникам Конкурса необходимо верифицироваться до 10 марта 2024 года.<br/>
-        Для прохождения верификации перейдите на страницу «Настройки профиля» — «Персональные данные». Заполните все обязательные поля, нажмите на кнопку «Отправить данные на верификацию».
-        Далее ожидайте одобрения заявки командиром РШ либо командиром ЛСО, если вы состоите в отряде.
-      </p>
-    </div>
-
     <h1 class="title title--mb">
       Корпоративный университет
     </h1>
@@ -105,7 +97,7 @@
         <tr>
           <td rowspan="4" class="corpuniver__table__td corpuniver__table__border-left">5</td>
           <td rowspan="4" class="corpuniver__table__td"><b>18 марта</b><br/>14.00-16.10</td>
-          <td rowspan="4" class="corpuniver__table__td">Вовлечение в деятельность отряда</td>
+          <td rowspan="4" class="corpuniver__table__td"><a href="#video_5">Вовлечение в деятельность отряда</a></td>
           <td class="corpuniver__table__td">Обработка контактов</td>
         </tr>
         <tr>
@@ -120,7 +112,7 @@
         <tr>
           <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">6</td>
           <td rowspan="5" class="corpuniver__table__td"><b>19 марта</b><br/>09.00-11.00</td>
-          <td rowspan="9" class="corpuniver__table__td">Создание и работа команды мечты</td>
+          <td rowspan="9" class="corpuniver__table__td"><a href="#video_6">Создание и работа команды мечты</a></td>
           <td class="corpuniver__table__td">Цели отряда и план деятельности</td>
         </tr>
         <tr>
@@ -255,6 +247,32 @@
       </iframe>
     </div>
 
+
+    <h2 id="video_5" class="corpuniver__title-h2">Занятие 18 марта «Вовлечение в деятельность отряда»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Анастасия Гориченко, Елена Писарева, Ирина Зубарева, Павел Руднев, Юлия Позднякова</p>
+
+    <div class="corpuniver__video">
+      <iframe
+          class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239064&hd=2"
+          allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+          allowfullscreen>
+      </iframe>
+    </div>
+
+    <h2 id="video_6" class="corpuniver__title-h2">Занятие 19 марта «Создание и работа команды мечты»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Дмитрий Парамонов, Ксения Пискарева, Анна Яблокова</p>
+
+    <div class="corpuniver__video">
+
+      <iframe
+          class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239065&hd=2"
+          allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+          allowfullscreen>
+      </iframe>
+    </div>
+
     <div id="testing" class="corpuniver__documents-test">
       <p class="text corpuniver__documents-description-test">
         Итоговую аттестацию можно пройти с 27 марта по 10 апреля 2024 года (допускается 2 пересдачи) онлайн в профиле Личного кабинета.
@@ -263,6 +281,7 @@
       <Button label="Начать тестирование" class="corpuniver__documents-btn"></Button>
     </div>
   </div>
+
 
 </template>
 <script setup>
@@ -501,3 +520,4 @@ import Button from '@shared/components/buttons/Button.vue';
   }
 }
 </style>
+

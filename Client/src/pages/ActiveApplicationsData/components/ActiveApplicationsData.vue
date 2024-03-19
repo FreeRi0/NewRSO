@@ -61,10 +61,6 @@ const tabs = ref([
     },
 ]);
 
-const pages = ref([
-    { pageTitle: 'Личный кабинет', href: '#' },
-    { pageTitle: 'Активные заявки', href: '#' },
-]);
 
 </script>
 

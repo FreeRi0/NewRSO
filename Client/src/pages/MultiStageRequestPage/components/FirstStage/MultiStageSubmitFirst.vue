@@ -111,6 +111,9 @@
                 <p class="subtitle" v-if="!sortedParticipants.length">
                     Ничего не найдено
                 </p>
+                <p class="subtitle" v-if="!sortedParticipants.length">
+                    Ничего не найдено
+                </p>
             </div>
             <p class="subtitle" v-else>Ничего не найдено.</p>
         </div>
@@ -240,6 +243,20 @@ const viewHeadquartersData = async (resp, search, join) => {
         } else if (resp.indexOf('rsousers') >= 0) {
             routeName = 'userpage';
         }
+        let routeName = 'DistrictHQ';
+        if (resp.indexOf('districts') >= 0) {
+            routeName = 'DistrictHQ';
+        } else if (resp.indexOf('regionals') >= 0) {
+            routeName = 'RegionalHQ';
+        } else if (resp.indexOf('locals') >= 0) {
+            routeName = 'LocalHQ';
+        } else if (resp.indexOf('educationals') >= 0) {
+            routeName = 'HQ';
+        } else if (resp.indexOf('detachments') >= 0) {
+            routeName = 'lso';
+        } else if (resp.indexOf('rsousers') >= 0) {
+            routeName = 'userpage';
+        }
         const viewHeadquartersResponse = await HTTP.get(resp + search, {
             headers: {
                 'Content-Type': 'application/json',
@@ -248,6 +265,9 @@ const viewHeadquartersData = async (resp, search, join) => {
         });
 
         let response = viewHeadquartersResponse.data.results;
+        for (let i in response) {
+            response[i]['route'] = routeName;
+        }
         for (let i in response) {
             response[i]['route'] = routeName;
         }
@@ -261,6 +281,12 @@ const viewHeadquartersData = async (resp, search, join) => {
                     },
                 },
             );
+            educHead.value = viewHeadquartersResponsetTwo.data.results;
+            let response2 = viewHeadquartersResponsetTwo.data.results;
+            for (let i in response2) {
+                response2[i]['route'] = 'HQ';
+            }
+            response = response.concat(response2);
             educHead.value = viewHeadquartersResponsetTwo.data.results;
             let response2 = viewHeadquartersResponsetTwo.data.results;
             for (let i in response2) {
@@ -282,6 +308,18 @@ const viewHeadquartersData = async (resp, search, join) => {
         } else if (resp.indexOf('detachments') >= 0) {
             detachments.value = viewHeadquartersResponse.data.results;
         }
+
+        if (resp.indexOf('districts') >= 0) {
+            districts.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('regionals') >= 0) {
+            regionals.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('locals') >= 0) {
+            locals.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('educationals') >= 0) {
+            educHead.value = viewHeadquartersResponse.data.results;
+        } else if (resp.indexOf('detachments') >= 0) {
+            detachments.value = viewHeadquartersResponse.data.results;
+        }
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -290,6 +328,13 @@ const viewHeadquartersData = async (resp, search, join) => {
 const updateDistrict = (districtVal) => {
     let search = '';
     let resp = '/regionals/';
+
+    if (districtVal) {
+        search = '?district_headquarter__name=' + districtVal;
+    } else {
+        search = '';
+        resp = '/districts/';
+    }
 
     if (districtVal) {
         search = '?district_headquarter__name=' + districtVal;
@@ -350,6 +395,8 @@ const updateEduc = (educVal) => {
         search = '?local_headquarter__name=' + local.value;
     }
     if (name.value) search += '&search=' + name.value;
+
+    viewHeadquartersData(resp, search);
 
     viewHeadquartersData(resp, search);
 
@@ -707,6 +754,7 @@ const getHeadquartersJunior = async () => {
             );
         }
         sortedHeadquartersJunior.value = headquartersJunior.value;
+        console.log(headquartersJunior.value);
         console.log(headquartersJunior.value);
     } catch (e) {
         permissonDeny.value = true;

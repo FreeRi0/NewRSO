@@ -1395,7 +1395,6 @@
                                 placeholder="Введите название образовательной организации"
                                 v-model="props.user.education.study_institution"
                                 @update:value="changeValue"
-                                address="/eduicational_institutions/"
                                 class="mb-2"
                                 :SortDropdown="false"
                             ></educInstitutionDropdown>
@@ -4093,7 +4092,7 @@
             >
                 <Button
                     :disabled="
-                        isLoading ||
+                    isLoading ||
                         !props.user.first_name ||
                         !props.user.last_name ||
                         !props.user.gender ||
@@ -4109,7 +4108,7 @@
                             (!props.user.documents.pass_ser_num ||
                                 !props.user.documents.pass_date ||
                                 !props.user.documents.inn ||
-                                !props.user.documents.snils)) ||
+                             !props.user.documents.snils)) ||
                         (props.user.is_adult === false &&
                             (!props.user.parent.parent_first_name ||
                                 !props.user.parent.parent_last_name ||

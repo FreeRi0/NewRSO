@@ -22,8 +22,9 @@
                 class="required_verification"
             >
                 <p>
-                    Всем участникам Конкурса необходимо верифицироваться
-                    до 10 марта 2024 года.<br />
+                    Обращаем внимание, что срок формирования отрядов-
+                    участников заканчивается 30 марта 2024 года.
+                    Всем участникам Конкурса необходимо обратиться для верификации в свой РШ.<br />
                     Для прохождения верификации перейдите на страницу «Настройки
                     профиля» — «Персональные данные». Заполните все обязательные
                     поля, нажмите на кнопку «Отправить данные на верификацию».
@@ -62,6 +63,7 @@ const regionsStore = useRegionalsStore();
 const positionsStore = usePositionsStore();
 const competition_pk = 1;
 // const districtStore  = useDistrictsStore();
+
 const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
 const isAuth = ref(!!localStorage.getItem('Token'));
@@ -73,7 +75,6 @@ onMounted(() => {
         positionsStore.getPositions();
         squadsStore.getAreas();
         roleStore.getUserParticipantsStatus(competition_pk);
-        // districtStore.getDistricts();
     }
 
     regionsStore.getRegions();

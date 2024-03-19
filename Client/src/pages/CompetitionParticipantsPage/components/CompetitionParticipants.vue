@@ -63,6 +63,8 @@
                             v-model="sortBy"
                             :options="sortOptionss"
                             :sorts-boolean="false"
+                            class="sort-alphabet"
+                            placeholder="Выберите фильтр"
                         ></sortByEducation>
                     </div>
 
@@ -114,7 +116,10 @@
             </div>
             <Button
                 @click="next"
-                v-if="squads.competitionSquads.value.length < squadsStore.totalCompetitions"
+                v-if="
+                    squads.competitionSquads.value.length <
+                    squadsStore.totalCompetitions
+                "
                 label="Показать еще"
             ></Button>
             <Button @click="prev" v-else label="Свернуть все"></Button>
@@ -149,7 +154,7 @@ const prev = () => {
     squadsStore.getCompetitionSquads();
 };
 const ascending = ref(true);
-const sortBy = ref('alphabetically');
+const sortBy = ref();
 
 const picked = ref('');
 const switched = ref(true);
