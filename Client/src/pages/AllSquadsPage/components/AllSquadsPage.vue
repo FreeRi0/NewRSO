@@ -144,16 +144,40 @@
                                     </template>
                                 </v-select>
                             </div>
-                            <div class="sort-select sort-select--width">
-                                <educInstitutionDropdown
+
+                            <div class="sort-select sort-select--width" v-if='SelectedSortRegional'>
+                                <v-select
+                                    class="form__select filter-district"
+                                    :items="locals"
+                                    clearable
+                                    variant="outlined"
+                                    name="select_local"
+                                    id="select-local"
+                                    v-model="SelectedSortLocal"
+                                    item-title="name"
+                                    placeholder="Местные штабы"
+                                >
+                                    <template #selection="{ item }">
+                                        <pre>{{ item.title }}</pre>
+                                    </template>
+                                </v-select>
+                            </div>
+                            <div class="sort-select sort-select--width" v-if='SelectedSortRegional'>
+                                <v-select
                                     class="form__select filter-district sortedEducation"
-                                    name="select_education"
-                                    id="select-education"
+                                    :items="educationals"
+                                    clearable
+                                    variant="outlined"
+                                    name="select_local"
+                                    id="select-local"
                                     v-model="education"
+                                    item-title="name"
                                     placeholder="Образовательная организация"
-                                    :SortDropdown="true"
-                                    :sorts-boolean="false"
-                                ></educInstitutionDropdown>
+                                >
+                                    <template #selection="{ item }">
+                                        <pre>{{ item.title }}</pre>
+                                    </template>
+                                </v-select>
                             </div>
                             <div class="sort-select">
                                 <sortByEducation
@@ -183,11 +207,11 @@
                 <squadsList :squads="sortedSquads"></squadsList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="squadsStore.isLoading"
+                    v-if="isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
-                <p v-else-if="!squadsStore.isLoading && !sortedSquads.length">
+                <p v-else-if="!isLoading && !sortedSquads.length">
                     Ничего не найдено
                 </p>
             </div>
@@ -197,12 +221,17 @@
                 <p v-if="!sortedSquads.length">Ничего не найдено</p>
             </div>
 
-            <Button
-                @click="next"
-                v-if="squads.squads.value.length < squadsStore.totalSquads"
-                label="Показать еще"
-            ></Button>
-            <Button @click="prev" v-else label="Свернуть все"></Button>
+            <template v-if='detachments.count && detachments.count > limit'>
+                <Button
+                    @click="next"
+                    v-if="
+                      sortedSquads.length <
+                      detachments.count
+                  "
+                    label="Показать еще"
+                ></Button>
+                <Button @click="prev" v-else label="Свернуть все"></Button>
+            </template>
         </div>
     </div>
 </template>
@@ -212,10 +241,8 @@ import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import {
     sortByEducation,
-    educInstitutionDropdown,
-    districtSearchFilter,
 } from '@shared/components/selects';
-import { ref, computed, onMounted, onActivated } from 'vue';
+import { ref, onMounted, onActivated, watch } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
@@ -228,8 +255,12 @@ const squads = storeToRefs(squadsStore);
 const categories = storeToRefs(squadsStore);
 const name = ref('');
 const timerSearch = ref(null);
-const isLoading = storeToRefs(squadsStore);
 const education = ref(null);
+
+
+const isLoading = ref(false);
+const detachments = ref({});
+const limit = 4;
 
 const SelectedSortDistrict = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName,
@@ -237,19 +268,25 @@ const SelectedSortDistrict = ref(
 const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
+const SelectedSortLocal = ref(
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName,
+);
 
 const next = () => {
-    squadsStore.getNextSquads();
+    getDetachments('next')
 };
 
 const prev = () => {
-    squadsStore.getSquads();
+    getDetachments()
 };
 const ascending = ref(true);
-const sortBy = ref();
+const sortBy = ref('name');
 const picked = ref('');
 
 const vertical = ref(true);
+const locals = ref([]);
+const educationals = ref([]);
+const sortedSquads = ref([]);
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -257,112 +294,136 @@ const showVertical = () => {
 
 const sortOptionss = ref([
     {
-        value: 'alphabetically',
+        value: 'name',
         name: 'Алфавиту от А - Я',
     },
 
     { value: 'founding_date', name: 'Дате создания отряда' },
 ]);
 
-const sortedSquads = computed(() => {
-    let tempSquads = [];
-    tempSquads = [...squadsStore.squads];
+const getLocalsHeadquartersForFilters = async () => {
+    if (!SelectedSortRegional.value){
+        locals.value = [];
+        SelectedSortLocal.value = '';
+        return false;
+    }
+    try {
+        const { data } = await HTTP.get('/locals/?regional_headquarter__name=' + SelectedSortRegional.value);
+        locals.value = data.results;
+    } catch (e) {
+        console.log('error request locals headquarters');
+    }
+};
 
-    if (SelectedSortRegional.value || SelectedSortDistrict.value) {
-        let idRegionals = [];
-        if (SelectedSortDistrict.value) {
-            let districtId = districtsStore.districts.find(
-                (district) => district.name === SelectedSortDistrict.value,
-            )?.id;
-            idRegionals = regionalsStore.regionals
-                .filter(
-                    (regional) => regional.district_headquarter === districtId,
-                )
-                .map((reg) => reg.id);
-        }
-        if (SelectedSortRegional.value) {
-            idRegionals = [
-                regionalsStore.regionals.find(
-                    (regional) => regional.name === SelectedSortRegional.value,
-                )?.id,
-            ];
-        }
-
-        tempSquads = tempSquads.filter((item) => {
-            return idRegionals.indexOf(item.regional_headquarter) >= 0;
+const getEducationalsHeadquartersForFilters = async () => {
+    if (!SelectedSortRegional.value){
+        educationals.value = [];
+        education.value = '';
+        return false;
+    }
+    let params = ['regional_headquarter__name=' + SelectedSortRegional.value];
+    if (SelectedSortLocal.value) params.push('local_headquarter__name='+SelectedSortLocal.value);
+    try {
+        const { data } = await HTTP.get('/educationals/?' + params.join('&'));
+        educationals.value = data.results;
+    } catch (e) {
+        console.log('error request educationals headquarters');
+    }
+};
+const getDetachments = async (pagination) => {
+    if (isLoading.value) return false;
+    try {
+        isLoading.value = true;
+        let data = [];
+        let url = '/detachments/?';
+        if (!pagination) data.push('limit='+limit);
+        else if (pagination == 'next') url = detachments.value.next.replace('http','https');
+        if (name.value) data.push('search='+name.value)
+        if (SelectedSortDistrict.value) data.push('district_headquarter__name='+SelectedSortDistrict.value)
+        if (SelectedSortRegional.value) data.push('regional_headquarter__name='+SelectedSortRegional.value)
+        if (SelectedSortLocal.value) data.push('local_headquarter__name='+SelectedSortLocal.value)
+        if (education.value) data.push('educational_headquarter__name='+education.value)
+        if (picked.value) data.push('area__name='+picked.value)
+        if (sortBy.value) data.push('ordering='+(ascending.value?'':'-')+sortBy.value)
+        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
-    }
-    if (education.value) {
-        tempSquads = tempSquads.filter((item) => {
-            return item.educational_institution.name === education.value;
-        });
-    }
+        isLoading.value = false;
 
-    tempSquads = tempSquads.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-            // squadsStore.sortedSquads(name);
-        } else if (sortBy.value == 'founding_date') {
-            let fc = a.founding_date,
-                fn = b.founding_date;
-
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
+        let response = viewHeadquartersResponse.data;
+        if (pagination){
+            response.results = [...detachments.value.results, ...response.results];
         }
-    });
-
-    if (!ascending.value) {
-        tempSquads.reverse();
+        detachments.value = response;
+        sortedSquads.value = response.results
+    } catch (error) {
+        console.log('an error occured ' + error);
     }
-    if (!picked.value) {
-        return tempSquads;
-    }
+};
 
-    tempSquads = tempSquads.filter((item) => item.area.name === picked.value);
-    // tempSquads = tempSquads.slice(0, squadsVisible.value);
-    return tempSquads;
-});
-
-
-const searchDetachments = (event) => {
-    if (!name.value.length) {
-        squadsStore.searchSquads(name.value);
-    } else if (name.value) {
-        squadsStore.searchSquads(name.value);
-    }
+const searchDetachments = () => {
     clearTimeout(timerSearch.value);
-    timerSearch.value = setTimeout(() => {}, 400);
+    timerSearch.value = setTimeout(() => {
+        getDetachments();
+    }, 400);
 };
 onMounted(() => {
     regionalsStore.getRegionalsForFilters();
     districtsStore.getDistricts();
-    squadsStore.getSquads();
+    getDetachments();
 });
 onActivated(() => {
-    SelectedSortDistrict.value = JSON.parse(
-        localStorage.getItem('AllHeadquarters_filters'),
-    )?.districtName;
-
-    SelectedSortRegional.value = JSON.parse(
-        localStorage.getItem('AllHeadquarters_filters'),
-    )?.regionalName;
-
     localStorage.removeItem('AllHeadquarters_filters');
 });
+
+watch(
+    () => SelectedSortDistrict.value,
+    () => {
+        getDetachments();
+    },
+);
+watch(
+    () => SelectedSortRegional.value,
+    () => {
+        getLocalsHeadquartersForFilters();
+        getEducationalsHeadquartersForFilters();
+        getDetachments();
+    },
+);
+watch(
+    () => SelectedSortLocal.value,
+    () => {
+        getEducationalsHeadquartersForFilters();
+        getDetachments();
+    },
+);
+watch(
+    () => education.value,
+    () => {
+        getDetachments();
+    },
+);
+watch(
+    () => picked.value,
+    () => {
+        getDetachments();
+    },
+);
+watch(
+    () => sortBy.value,
+    () => {
+        getDetachments();
+    },
+);
+watch(
+    () => ascending.value,
+    () => {
+        getDetachments();
+    },
+);
 </script>
 <style lang="scss">
 .dashboard {

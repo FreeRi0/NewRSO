@@ -78,7 +78,7 @@
                     <div class="sort-select">
                         <v-select
                             class="form__select filter-district"
-                            :items="districts"
+                            :items="districtsStore.districts"
                             clearable
                             variant="outlined"
                             name="select_district"
@@ -88,14 +88,22 @@
                             placeholder="Окружной штаб"
                         >
                             <template #selection="{ item }">
-                                <pre>{{ item.title }}</pre>
+                                        <pre v-if="!districtsStore.isLoading">{{
+                                                item.title
+                                            }}</pre>
+                                <v-progress-circular
+                                    class="circleLoader"
+                                    v-else
+                                    indeterminate
+                                    color="blue"
+                                ></v-progress-circular>
                             </template>
                         </v-select>
                     </div>
                     <div class="sort-select">
                         <v-select
                             class="form__select filter-district"
-                            :items="regionals"
+                            :items="regionalsStore.regionals"
                             clearable
                             variant="outlined"
                             name="select_region"
@@ -105,7 +113,15 @@
                             placeholder="Региональные штабы"
                         >
                             <template #selection="{ item }">
-                                <pre>{{ item.title }}</pre>
+                                        <pre v-if="!regionalsStore.isLoading">{{
+                                                item.title
+                                            }}</pre>
+                                <v-progress-circular
+                                    class="circleLoader"
+                                    v-else
+                                    indeterminate
+                                    color="blue"
+                                ></v-progress-circular>
                             </template>
                         </v-select>
                     </div>
@@ -160,7 +176,7 @@
                     color="blue"
                 ></v-progress-circular>
                 <p
-                    v-else-if="!sortedHeadquarters.length"
+                    v-else-if="!isLoading && !sortedHeadquarters.length"
                 >
                     Ничего не найдено
                 </p>
@@ -193,13 +209,18 @@ import {
     horizontalHeadquarters,
 } from '@features/Headquarters/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { onActivated } from 'vue';
+import { useDistrictsStore } from '@features/store/districts';
+import { useRegionalsStore } from '@features/store/regionals';
 
 const crosspageFilters = useCrosspageFilter();
+
+const districtsStore = useDistrictsStore();
+const regionalsStore = useRegionalsStore();
 
 const next = () => {
     getEducationals('next')
@@ -233,26 +254,8 @@ const SelectedSortLocal = ref(
 );
 
 const locals = ref([]);
-const districts = ref([]);
-const regionals = ref([]);
 const sortedHeadquarters = ref([]);
 
-const getDistrictsHeadquartersForFilters = async () => {
-    try {
-        const { data } = await HTTP.get('/districts/');
-        districts.value = data.results;
-    } catch (e) {
-        console.log('error request districts headquarters');
-    }
-};
-const getRegionalsHeadquartersForFilters = async () => {
-    try {
-        const { data } = await HTTP.get('/regionals/');
-        regionals.value = data.results;
-    } catch (e) {
-        console.log('error request districts headquarters');
-    }
-};
 const getLocalsHeadquartersForFilters = async () => {
     if (!SelectedSortRegional.value){
         locals.value = [];
@@ -262,7 +265,7 @@ const getLocalsHeadquartersForFilters = async () => {
         const { data } = await HTTP.get('/locals/?regional_headquarter__name=' + SelectedSortRegional.value);
         locals.value = data.results;
     } catch (e) {
-        console.log('error request districts headquarters');
+        console.log('error request locals headquarters');
     }
 };
 const getEducationals = async (pagination) => {
@@ -304,8 +307,8 @@ const searchEducational = () => {
 };
 
 onMounted(() => {
-    getDistrictsHeadquartersForFilters();
-    getRegionalsHeadquartersForFilters();
+    regionalsStore.getRegionalsForFilters();
+    districtsStore.getDistricts();
     getEducationals();
 });
 
@@ -316,14 +319,6 @@ const sortOptionss = ref([
     },
     { value: 'founding_date', name: 'Дате создания штаба' },
 ]);
-
-/*const sortedHeadquarters = computed(() => {
-    let tempHeadquartes = [];
-    if (!Object.keys(educationals.value).length) return tempHeadquartes
-    tempHeadquartes = [...educationals.value.results];
-
-    return tempHeadquartes;
-});*/
 
 onBeforeRouteLeave(async (to, from) => {
     const pageName = 'AllHeadquarters';
@@ -336,17 +331,6 @@ onBeforeRouteLeave(async (to, from) => {
     crosspageFilters.removeFilters(pageName, filtersPropertiesToRemove);
 });
 onActivated(() => {
-    /*SelectedSortDistrict.value = JSON.parse(
-        localStorage.getItem('AllHeadquarters_filters'),
-    )?.districtName;
-
-    SelectedSortRegional.value = JSON.parse(
-        localStorage.getItem('AllHeadquarters_filters'),
-    )?.regionalName;
-
-    SelectedSortLocal.value = JSON.parse(
-        localStorage.getItem('AllHeadquarters_filters'),
-    )?.localName;*/
     localStorage.removeItem('AllHeadquarters_filters');
 });
 watch(
