@@ -129,7 +129,6 @@ import { useRouter } from 'vue-router';
 import GroupFilters from './GroupFilters.vue';
 import GroupSubmitItem from './GroupSubmitItem.vue';
 import GroupSubmitSelect from './GroupSubmitSelect.vue';
-import search from '@shared/components/inputs/search.vue';
 
 const sortBy = ref('alphabetically');
 
