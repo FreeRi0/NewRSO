@@ -108,15 +108,9 @@
                     :headquarter="headquarter"
                     @select="onToggleSelectCompetition"
                 />
-                <p>
-                    ______________________________________________________________________
+                <p class="subtitle" v-if="!sortedParticipants.length">
+                    Ничего не найдено
                 </p>
-                <multi-stage-submit-item
-                    v-for="headquarter in sortedHeadquartersJunior"
-                    :key="headquarter"
-                    :headquarter="headquarter"
-                    @select="onToggleSelectCompetition"
-                />
             </div>
             <p class="subtitle" v-else>Ничего не найдено.</p>
         </div>

@@ -98,13 +98,9 @@
                 :user="user"
                 @select="onToggleSelectUser"
             />
-            <p>__________________________________________________</p>
-            <multi-stage-submit-item
-                v-for="user in sortedUsersList"
-                :key="user.id"
-                :user="user"
-                @select="onToggleSelectUser"
-            />
+            <p class="subtitle" v-if="!sortedParticipants.length">
+                Ничего не найдено
+            </p>
         </div>
     </div>
 
@@ -202,12 +198,12 @@ const onToggleSelectUser = (user, isChecked) => {
 
 const onCheckbox = async (event) => {
     if (event.target.checked) {
-        for (const obj of sortedUsersList.value) {
+        for (const obj of sortedParticipants.value) {
             obj.selected = true;
             selectedUsersList.value.push(obj);
         }
     } else {
-        for (const obj of sortedUsersList.value) {
+        for (const obj of sortedParticipants.value) {
             obj.selected = false;
         }
         selectedUsersList.value = [];
@@ -471,7 +467,16 @@ const getUsersByRoles = () => {
 };
 
 const sortedParticipants = computed(() => {
-    let tempParticipants = participants.value;
+    //let tempParticipants = participants.value;
+
+    let tempParticipants = [];
+
+    for (const participant of participants.value) {
+        const exists = sortedUsersList.value.some(
+            (obj) => obj.id === participant.id,
+        );
+        if (exists) tempParticipants.push(participant);
+    }
 
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
@@ -572,12 +577,6 @@ watch(
 
 watch(selectedUsersList, (newSelectedUserrsList) => {
     isChecked.value = newSelectedUserrsList.length == usersList.value.length;
-});
-
-watch(ascending, () => {
-    if (!ascending.value) {
-        sortedUsersList.value.reverse();
-    }
 });
 
 onMounted(async () => {
