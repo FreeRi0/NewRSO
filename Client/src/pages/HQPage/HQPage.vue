@@ -5,7 +5,7 @@
             v-if="showHQ"
             :headquarter="headquarter.educational.value"
             :edict="edict"
-            :member="member.members.value"
+            :member="member"
             :getEnding="getEnding"
         ></BannerHQ>
         <BannerHQ
@@ -77,7 +77,7 @@ const showRegionalHQ = ref(false);
 const commander = ref({});
 const position = ref({});
 const headquarter = storeToRefs(educationalsStore);
-const member = storeToRefs(educationalsStore);
+const member = educationalsStore.members;
 const edict = ref({});
 const route = useRoute();
 

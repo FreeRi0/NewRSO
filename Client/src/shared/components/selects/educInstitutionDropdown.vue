@@ -153,6 +153,7 @@ const props = defineProps({
 const name = ref('');
 const addressRef = ref('/eduicational_institutions/');
 
+
 const selected = ref(null);
 const isLoading = ref(false);
 const changeValue = (event) => {
@@ -186,7 +187,6 @@ const searchEducInstitution = (val) => {
     clearTimeout(timer.value);
 
     timer.value = setTimeout(() => {
-        // regionalsStore.searchInstitution(name.value, (addressRef.value));
         onChangeItem(name.value);
     }, 200);
 };
@@ -200,7 +200,8 @@ const searchEducInstitution = (val) => {
 // );
 
 onMounted(() => {
-    if (addressRef) onChangeItem();
+
+    if (addressRef.value) onChangeItem();
 });
 </script>
 

@@ -12,7 +12,7 @@ export const useRegionalsStore = defineStore('regionals', {
         institutions: [],
         isLoading: false,
         totalRegionals: 0,
-        regionalsLimit: 20,
+        regionalsLimit: 4,
         nextRegionals: '',
     }),
     actions: {
@@ -57,18 +57,22 @@ export const useRegionalsStore = defineStore('regionals', {
                 console.log('an error occured ' + err);
             }
         },
-        async getRegionals() {
+        async getRegionals(name: String) {
             try {
                 this.isLoading = true;
-                const responseRegionals = await HTTP.get(`/regionals/`, {
-                    params: {
-                        limit: this.regionalsLimit,
+                const responseRegionals = await HTTP.get(
+                    `/regionals/?ordering=${name}`,
+                    {
+                        params: {
+                            limit: this.regionalsLimit,
+                        },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
                     },
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                });
+                );
                 this.totalRegionals = responseRegionals.data.count;
                 this.regionals = responseRegionals.data.results;
                 this.nextRegionals = responseRegionals.data.next;
@@ -83,7 +87,6 @@ export const useRegionalsStore = defineStore('regionals', {
             try {
                 this.isLoading = true;
                 const responseRegionals = await HTTP.get(`/regionals/`, {
-
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -138,6 +141,7 @@ export const useRegionalsStore = defineStore('regionals', {
                 console.log('an error occured ' + error);
             }
         },
+
         async getRegionalsMembers(id: String) {
             try {
                 this.isLoading = true;

@@ -7,7 +7,7 @@ export const useEducationalsStore = defineStore('educationals', {
         educational: {},
         isLoading: false,
         totalEducationals: 0,
-        EducationalsLimit: 20,
+        EducationalsLimit: 4,
         nextEducationals: '',
     }),
     actions: {
@@ -27,10 +27,10 @@ export const useEducationalsStore = defineStore('educationals', {
             );
             this.educationals = responseSearchEducationals.data.results;
         },
-        async getEducationals() {
+        async getEducationals(name: String) {
             try {
                 this.isLoading = true;
-                const responseEducationals = await HTTP.get(`/educationals/`, {
+                const responseEducationals = await HTTP.get(`/educationals/?ordering=${name}`, {
                     params: {
                         limit: this.EducationalsLimit,
                     },
@@ -63,7 +63,9 @@ export const useEducationalsStore = defineStore('educationals', {
                         },
                     },
                 );
-                this.educationals = this.educationals.concat(responseEducNext.data.results);
+                this.educationals = this.educationals.concat(
+                    responseEducNext.data.results,
+                );
                 this.nextEducationals = responseEducNext.data.next;
                 this.isLoading = false;
             } catch (error) {
@@ -91,6 +93,24 @@ export const useEducationalsStore = defineStore('educationals', {
                 this.isLoading = false;
             }
         },
+
+        // async sortedEducationals(name: String) {
+        //     const sortEducResp = await HTTP.get(
+        //         `/educationals/?ordering=${name}`,
+
+        //         {
+        //             params: {
+        //                 limit: this.EducationalsLimit,
+        //             },
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //         },
+        //     );
+        //     this.totalEducationals = sortEducResp.data.count;
+        //     this.nextEducationals = sortEducResp.data.next;
+        //     this.educationals = sortEducResp.data.results;
+        // },
         async getEducationalsMembers(id: String) {
             try {
                 this.isLoading = true;

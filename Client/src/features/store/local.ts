@@ -7,7 +7,7 @@ export const useLocalsStore = defineStore('local', {
         isLoading: false,
         totalLocals: 0,
         nextLocals: '',
-        localsLimit: 20,
+        localsLimit: 4,
     }),
     actions: {
         async searchLocals(name: String) {
@@ -26,10 +26,10 @@ export const useLocalsStore = defineStore('local', {
             this.locals = responseSearchLocals.data.results;
         },
 
-        async getLocals() {
+        async getLocals(name: String) {
             try {
                 this.isLoading = true;
-                const responseLocals = await HTTP.get(`/locals/`, {
+                const responseLocals = await HTTP.get(`/locals/?ordering=${name}`, {
                     params: {
                         limit: this.localsLimit,
                     },
@@ -47,6 +47,8 @@ export const useLocalsStore = defineStore('local', {
                 console.log('an error occured ' + error);
             }
         },
+
+
 
         async getNextLocals() {
             try {

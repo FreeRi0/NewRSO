@@ -10,18 +10,18 @@ export const useSquadsStore = defineStore('squads', {
         competitionSquads: [],
         isLoading: false,
         totalMembers: 0,
-        SquadsLimit: 20,
-        MembersLimit: 10,
+        SquadsLimit: 4,
+        MembersLimit: 2,
         totalSquads: 0,
-        CompetitionsLimit: 20,
+        CompetitionsLimit: 4,
         nextSquads: '',
         totalCompetitions: 0,
     }),
     actions: {
-        async getSquads() {
+        async getSquads(name: String) {
             try {
                 this.isLoading = true;
-                const responseSquads = await HTTP.get('/detachments/', {
+                const responseSquads = await HTTP.get(`/detachments/?ordering=${name}`, {
                     params: {
                         limit: this.SquadsLimit,
                     },
@@ -33,7 +33,6 @@ export const useSquadsStore = defineStore('squads', {
                 this.totalSquads = responseSquads.data.count;
                 this.squads = responseSquads.data.results;
                 this.nextSquads = responseSquads.data.next;
-
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
@@ -107,21 +106,21 @@ export const useSquadsStore = defineStore('squads', {
             }
         },
 
-        async sortedSquads(name: String) {
-            const sortSquadsResp = await HTTP.get(
-                `/detachments/?ordering=${name}`,
+        // async sortedSquads(name: String) {
+        //     const sortSquadsResp = await HTTP.get(
+        //         `/detachments/?ordering=${name}`,
 
-                {
-                    params: {
-                        limit: this.SquadsLimit,
-                    },
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                },
-            );
-            this.squads = sortSquadsResp.data.results;
-        },
+        //         {
+        //             params: {
+        //                 limit: this.SquadsLimit,
+        //             },
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //         },
+        //     );
+        //     this.squads = sortSquadsResp.data.results;
+        // },
 
         async getNextCompetitionSquads() {
             try {

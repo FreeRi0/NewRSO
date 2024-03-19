@@ -238,26 +238,27 @@ const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
 
+const ascending = ref(true);
+const sortBy = ref('name');
+const picked = ref('');
 const next = () => {
     squadsStore.getNextSquads();
 };
 
 const prev = () => {
-    squadsStore.getSquads();
+    squadsStore.getSquads(sortBy.value);
 };
 
 const sortSquads = () => {
     squadsStore.sortedSquads(sortBy.value);
 };
-const ascending = ref(true);
-const sortBy = ref('name');
-const picked = ref('');
 
 const vertical = ref(true);
 
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
+
 
 const sortOptionss = ref([
     {
@@ -303,9 +304,7 @@ const sortedSquads = computed(() => {
     }
 
     if (!ascending.value) {
-        const sortSquads = () => {
-            squadsStore.sortedSquads(-sortBy.value);
-        };
+       tempSquads.reverse();
     }
     if (!picked.value) {
         return tempSquads;
@@ -328,7 +327,7 @@ const searchDetachments = (event) => {
 onMounted(() => {
     regionalsStore.getRegionalsForFilters();
     districtsStore.getDistricts();
-    squadsStore.sortedSquads(sortBy.value);
+    squadsStore.getSquads(sortBy.value);
 });
 onActivated(() => {
     SelectedSortDistrict.value = JSON.parse(
