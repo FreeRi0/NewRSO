@@ -551,6 +551,13 @@ watch(
     },
 );
 
+watch(
+    () => squadsStore.squads,
+    () => {
+        detachments.value = squadsStore.squads;
+    },
+);
+
 onMounted(() => {
     getItemsByRoles();
 });

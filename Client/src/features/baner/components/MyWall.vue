@@ -108,27 +108,27 @@
 
                         <li
                             v-if="
-                                user?.education?.study_institution?.short_name
+                                user.education?.study_institution?.short_name
                             "
                         >
                             <p>
                                 {{
-                                    user?.education?.study_institution
+                                    user.education?.study_institution
                                         ?.short_name
                                 }}
                             </p>
                         </li>
 
-                        <li v-if="user?.education?.study_faculty">
-                            <p>{{ user?.education?.study_faculty }}</p>
+                        <li v-if="user.education?.study_faculty">
+                            <p>{{ user.education?.study_faculty }}</p>
                         </li>
 
-                        <li v-if="user?.education?.study_specialty">
-                            <p>{{ user?.education?.study_specialty }}</p>
+                        <li v-if="user.education?.study_specialty">
+                            <p>{{ user.education?.study_specialty }}</p>
                         </li>
 
-                        <li v-if="user?.education?.study_year">
-                            <p>Курс {{ user?.education?.study_year }}</p>
+                        <li v-if="user.education?.study_year">
+                            <p>Курс {{ user.education?.study_year }}</p>
                         </li>
                     </ul>
                 </div>

@@ -120,6 +120,7 @@
                             :options="sortOptionss"
                             class="sort-alphabet"
                             :sorts-boolean="false"
+                            placeholder="Выберите фильтр"
                         ></sortByEducation>
                     </div>
 
@@ -203,7 +204,7 @@ const isLocalLoading = ref(false);
 const timerSearch = ref(null);
 
 const ascending = ref(true);
-const sortBy = ref('alphabetically');
+const sortBy = ref();
 
 const vertical = ref(true);
 

@@ -10,6 +10,7 @@
                 roles.roles.value.centralComId 
             "
             :to="{ name: name }"
+            :target="target"
             ><p v-if="button"  class="create">{{ label }}</p></router-link
         >
         <router-link
@@ -81,6 +82,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    target: {
+      type: String,
+      default: ''
+    }
 });
 
 // watch(
