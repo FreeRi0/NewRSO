@@ -211,6 +211,7 @@ const regionals = ref([]);
 const districts = ref([]);
 const locals = ref([]);
 const educHead = ref([]);
+const educ = ref(null);
 const detachments = ref([]);
 const reg = ref(null);
 const detachment = ref(null);
@@ -453,7 +454,7 @@ const sortedHeadquarters = computed(() => {
 watch(
     () => roles.roles.value,
 
-    (newRole, oldRole) => {
+    () => {
         getItemsByRoles();
     },
 );

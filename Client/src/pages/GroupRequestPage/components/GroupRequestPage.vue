@@ -87,8 +87,7 @@ const getApplciatonsList = async () => {
                 },
             },
         );
-        console.log(data);
-        applicationsList.value = data;
+        applicationsList.value = data.results;
         loading.value = false;
     } catch (e) {
         console.log('getApplciatonsList error', e);
@@ -198,7 +197,7 @@ onMounted(async () => {
 }
 .container {
     margin: 0 auto;
-    padding: 60px 130px;
+    padding-bottom: 60px;
     padding-top: 0px;
 }
 .deny_button {
