@@ -15,12 +15,13 @@
                 <input
                     type="text"
                     id="search"
-                    class="squads-search__input"
+                    class="squads-search__input events__input"
                     placeholder="Найти мероприятие"
                     v-model="text"
                     @input="SearchByInput"
                 />
                 <svg
+                    class="events_magnifier"
                     width="28"
                     height="28"
                     viewBox="0 0 28 28"
@@ -271,24 +272,68 @@
                       ></Button>
                     </div>
                 </div>
-                <div class="postcard-container">
-                    <div
-                        v-if="vertical"
-                        v-for="action in actionsList"
-                        :key="action"
+                <div class="cardsContainer">
+                  <v-row v-if="vertical" align="start" justify="center">
+                    <v-col
+                        v-for="(variant, i) in actionsList"
+                        :key="i"
+                        cols="auto"
                     >
-                        <Actionitem :action="action"></Actionitem>
-                    </div>
-                    <div
-                        v-if="!vertical"
-                        v-for="action in actionsList"
-                        class="postcard-containerline"
-                        :key="action"
-                    >
-                        <ActionitemVertical
-                            :action="action"
-                        ></ActionitemVertical>
-                    </div>
+                      <v-card
+                          :variant="variant"
+                          class="mx-auto"
+                          min-width="280"
+                          height="210"
+                          :image="variant.banner"
+                          @click="goToEvent"
+                          :id="variant.id"
+                      >
+                        <div class="cardClock">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                              <ellipse cx="9.99967" cy="11.6667" rx="6.66667" ry="6.66667" stroke="#35383F"/>
+                              <path d="M10 11.6641L10 9.16406" stroke="#35383F" stroke-linecap="round"/>
+                              <path d="M14.583 6.25L15.833 5" stroke="#35383F" stroke-linecap="round"/>
+                              <path d="M8.39045 1.97289C8.48541 1.88429 8.69465 1.806 8.98572 1.75017C9.2768 1.69433 9.63343 1.66406 10.0003 1.66406C10.3672 1.66406 10.7239 1.69433 11.0149 1.75017C11.306 1.806 11.5152 1.88429 11.6102 1.97289" stroke="#35383F" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                      </v-card>
+                      <div class="text-caption textCaption">
+                        {{ variant.name }}
+                      </div>
+                      <div class="cardTimeQuantity">
+                        <div class="cardTime">
+                          {{new Date(variant.time_data.start_date).toLocaleDateString(undefined,
+                            {year: 'numeric', month: 'long', day: 'numeric',})}}</div>
+                        <div class="cardQuantity">
+                          <div style="padding-bottom: 2px;">{{variant.participants_number}}</div>
+                          <div>
+                            <svg
+                                class="quantitySvg"
+                                xmlns="http://www.w3.org/2000/svg"  fill="none">
+                              <circle cx="12" cy="8" r="2.5" stroke="#35383F" stroke-linecap="round"/>
+                              <path d="M13.7679 6.5C13.9657 6.15743 14.2607 5.88121 14.6154 5.70625C14.9702 5.5313 15.3689 5.46548 15.7611 5.51711C16.1532 5.56874 16.5213 5.73551 16.8187 5.99632C17.1161 6.25713 17.3295 6.60028 17.4319 6.98236C17.5342 7.36445 17.521 7.76831 17.3939 8.14288C17.2667 8.51745 17.0313 8.8459 16.7175 9.08671C16.4037 9.32751 16.0255 9.46985 15.6308 9.49572C15.2361 9.52159 14.8426 9.42983 14.5 9.23205" stroke="#35383F"/>
+                              <path d="M10.2321 6.5C10.0343 6.15743 9.73935 5.88121 9.38458 5.70625C9.02981 5.5313 8.63113 5.46548 8.23895 5.51711C7.84677 5.56874 7.47871 5.73551 7.18131 5.99632C6.88391 6.25713 6.67053 6.60028 6.56815 6.98236C6.46577 7.36445 6.47899 7.76831 6.60614 8.14288C6.73329 8.51745 6.96866 8.8459 7.28248 9.08671C7.5963 9.32751 7.97448 9.46985 8.36919 9.49572C8.76391 9.52159 9.15743 9.42983 9.5 9.23205" stroke="#35383F"/>
+                              <path d="M12 12.5C16.0802 12.5 17.1335 15.8022 17.4054 17.507C17.4924 18.0524 17.0523 18.5 16.5 18.5H7.5C6.94771 18.5 6.50763 18.0524 6.59461 17.507C6.86649 15.8022 7.91976 12.5 12 12.5Z" stroke="#35383F" stroke-linecap="round"/>
+                              <path d="M19.2964 15.4162L18.8113 15.5377L19.2964 15.4162ZM13.0869 12.5859L12.7177 12.2488L12.0972 12.9283L13.0049 13.0791L13.0869 12.5859ZM17.1811 16.5L16.7008 16.639L16.8053 17H17.1811V16.5ZM15.4998 12C16.5275 12 17.2493 12.5027 17.7781 13.2069C18.3175 13.9253 18.6343 14.8306 18.8113 15.5377L19.7814 15.2948C19.5902 14.5315 19.2327 13.4787 18.5778 12.6065C17.9124 11.7203 16.92 11 15.4998 11V12ZM13.4562 12.923C13.9565 12.375 14.6105 12 15.4998 12V11C14.2826 11 13.3734 11.5306 12.7177 12.2488L13.4562 12.923ZM13.0049 13.0791C15.3055 13.4614 16.2788 15.1801 16.7008 16.639L17.6614 16.361C17.1903 14.7326 16.0188 12.5663 13.1689 12.0927L13.0049 13.0791ZM18.3948 16H17.1811V17H18.3948V16ZM18.8113 15.5377C18.8651 15.7526 18.7073 16 18.3948 16V17C19.2655 17 20.015 16.2277 19.7814 15.2948L18.8113 15.5377Z" fill="#35383F"/>
+                              <path d="M10.913 12.5859L10.995 13.0791L11.9027 12.9283L11.2823 12.2488L10.913 12.5859ZM4.70355 15.4162L5.18857 15.5377L4.70355 15.4162ZM6.8188 16.5V17H7.19465L7.29911 16.639L6.8188 16.5ZM8.50011 12C9.38944 12 10.0434 12.375 10.5438 12.923L11.2823 12.2488C10.6266 11.5306 9.71735 11 8.50011 11V12ZM5.18857 15.5377C5.36566 14.8306 5.6824 13.9253 6.22179 13.2069C6.7506 12.5027 7.47238 12 8.50011 12V11C7.07993 11 6.08755 11.7203 5.42211 12.6065C4.76725 13.4787 4.40968 14.5315 4.21853 15.2948L5.18857 15.5377ZM5.6051 16C5.29259 16 5.13477 15.7526 5.18857 15.5377L4.21853 15.2948C3.9849 16.2277 4.73436 17 5.6051 17V16ZM6.8188 16H5.6051V17H6.8188V16ZM7.29911 16.639C7.72116 15.1801 8.69448 13.4614 10.995 13.0791L10.831 12.0927C7.98113 12.5663 6.80962 14.7326 6.3385 16.361L7.29911 16.639Z" fill="#35383F"/>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="cardType">
+                        <div class="eventsScale">
+                          <div>
+                            {{ variant.scale }}
+                          </div>
+                        </div>
+                        <div class="eventsScale">
+                          {{ variant.application_type }}
+                        </div>
+                      </div>
+
+                    </v-col>
+                  </v-row>
+                  <HorizontalLocalHQs v-else :localHeadquarters="actionsList"></HorizontalLocalHQs>
                 </div>
             </div>
         </div>
@@ -300,12 +345,20 @@
 import { Button } from '@shared/components/buttons';
 import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
 import { ref, watchEffect } from 'vue';
-import Actionitem from '@entities/Actions/components/actionitem.vue';
-import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
-import { sortByEducation } from '@shared/components/selects';
+// import Actionitem from '@entities/Actions/components/actionitem.vue';
+// import ActionitemVertical from '@entities/Actions/components/actionitemVertical.vue';
+// import { sortByEducation } from '@shared/components/selects';
+// import { localItemHorizontal } from '@entities/HeadquartersData';
 
 import { getListActionsBySearch, getRoles } from '@services/ActionService';
 import { onActivated } from 'vue';
+import {
+  // LocalHQList,
+  HorizontalLocalHQs,
+} from '@features/Headquarters/components';
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 let actionsList = ref([]);
 let rolesCount = ref(0);
@@ -328,35 +381,34 @@ const text = ref('');
 
 //Поиск нового значения
 function SearchByInput() {
-    if (text.value.length <= 4) {
-        getListActionsBySearch('').then((resp) => {});
-    } else {
-        getListActionsBySearch(text.value).then((resp) => {
-          console.log('resp:', resp)});
-    }
+  getListActionsBySearch(text.value).then((resp) => {
+    actionsList.value = resp.data.results;
+  });
 }
-
+const goToEvent = (event) => {
+  router.push({ name: 'Action', params: { id: event.target.offsetParent.offsetParent.offsetParent.id } })
+}
 //Сортировка
 const vertical = ref(true);
 const ascending = ref(true);
 
 //События нажатия
-function ClearSearchForm() {
-    actionFormSearch.value = {
-        format: {
-            online: null,
-            offline: null,
-        },
-        direction: '',
-        status: {
-            start: null,
-            finish: null,
-        },
-        roads: '',
-        search: '',
-    };
-    console.log('Форма очищена');
-}
+// function ClearSearchForm() {
+//     actionFormSearch.value = {
+//         format: {
+//             online: null,
+//             offline: null,
+//         },
+//         direction: '',
+//         status: {
+//             start: null,
+//             finish: null,
+//         },
+//         roads: '',
+//         search: '',
+//     };
+//     console.log('Форма очищена');
+// }
 
 //До лучших времен...
 const actionFormSearch = ref({
@@ -372,7 +424,7 @@ const actionFormSearch = ref({
     roads: '',
     search: '',
 });
-function SendSearchForm() {}
+// function SendSearchForm() {}
 
 //Изменение расположения блоков
 const showVertical = () => {
@@ -393,11 +445,7 @@ watchEffect(() => {
 });
 
 const sortOptionss = ref([
-  {
-    text: 'Алфавиту от А - Я',
-    value: 'alphabetically',
-
-  },
+  { text: 'По алфавиту: А - Я', value: 'alphabetically' },
   { value: 'founding_date', text: 'Дате создания штаба' },
   { value: 'members_count', text: 'Количеству участников' },
 ]);
@@ -467,6 +515,73 @@ const sortOptionss = ref([
 </style>
 
 <style lang="scss" scoped>
+.cardsContainer {
+  max-width: 880px;
+  margin-bottom: 80px;
+}
+.textCaption {
+  max-width: 280px;
+  font-family: Bert Sans;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18.46px;
+  text-align: left;
+  margin-top: 12px;
+}
+.cardTimeQuantity {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Bert Sans;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18.46px;
+  text-align: left;
+  margin-top: 18px;
+}
+.cardQuantity {
+  display: flex;
+  align-items: center;
+}
+.quantitySvg {
+  width: 24px;
+  height: 24px;
+}
+.cardType {
+  display: flex;
+  align-items: center;
+  //justify-content: space-between;
+  font-family: Bert Sans;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18.46px;
+  text-align: center;
+  margin-top: 10px;
+}
+.eventsScale {
+  border: 1px solid #35383F;
+  border-radius: 18px;
+  max-width: 121px;
+  min-height: 26px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+}
+.eventsScale:first-child {
+  margin-right: 12px;
+}
+.cardClock {
+  position: relative;
+  width:24px;
+  height: 24px;
+  top: 12px;
+  left: 12px;
+  padding: 2px;
+  gap: 10px;
+  border-radius: 6px;
+  background-color: #FFFFFFCC;
+}
+
 //Общий стиль компонента
 .action {
     &-title {
@@ -632,13 +747,11 @@ const sortOptionss = ref([
     height: 50px;
     margin-bottom: 40px;
 }
-
-svg {
-    position: absolute;
-    top: 10px;
+.events_magnifier {
+    position: relative;
+    top: -38px;
     left: 16px;
 }
-
 input {
     width: 100%;
     padding: 13px 0px 10px 60px;
@@ -647,8 +760,6 @@ input {
 }
 //Сброс стилей аккордиона
 .v-expansion-panel {
-
-
     &--active,
     &--after-active {
         margin: 0;
