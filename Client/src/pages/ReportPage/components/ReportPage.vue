@@ -485,12 +485,6 @@
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <div
-                                        class="form__field add-block"
-                                        @click="addNewBlock"
-                                    >
-                                        + добавить участника
-                                    </div>
                                 </div>
                                 <div class="form__field-group-right">
                                     <div class="form__field">
@@ -509,6 +503,12 @@
                                         />
                                     </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="addNewBlock"
+                            >
+                                + добавить участника
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
