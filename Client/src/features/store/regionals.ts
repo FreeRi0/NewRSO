@@ -186,16 +186,16 @@ export const useRegionalsStore = defineStore('regionals', {
                 this.isLoading = false;
             }
         },
-        async searchInstitution(name: String, region: any) {
+        async searchInstitution(name: String) {
             let url = `/eduicational_institutions/?search=${name}`;
-            if (region) url += '&region__name=' + region;
+            // if (region) url += '&region__name=' + region;
             const responseInstitution = await HTTP.get(url, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
             });
-            this.institutions = responseInstitution.data;
+            this.institutions = responseInstitution.data.results;
         },
 
         async searchRegionalsHead(name: String) {

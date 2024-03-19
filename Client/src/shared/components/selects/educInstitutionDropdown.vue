@@ -10,7 +10,6 @@
         item-title="name"
         item-value="value"
         v-bind="$attrs"
-
         @update:value="changeValue"
         :address="addressRef"
         :no-data-text="noDataText"
@@ -67,7 +66,7 @@
         item-title="name"
         item-value="id"
         v-bind="$attrs"
- 
+        @keyup="searchEducInstitution"
         @update:value="changeValue"
         :address="addressRef"
         :no-data-text="noDataText"
@@ -152,7 +151,7 @@ const props = defineProps({
     },
 });
 const name = ref('');
-const addressRef = ref('/eduicational_institutions/?region__name=')
+const addressRef = ref('/eduicational_institutions/');
 
 const selected = ref(null);
 const isLoading = ref(false);
@@ -163,14 +162,17 @@ const changeValue = (event) => {
 
 const items = ref(props.items);
 
-const onChangeItem = async () => {
+const onChangeItem = async (name) => {
     try {
         isLoading.value = true;
-        const ItemResponse = await HTTP.get(addressRef.value +user?.currentUser?.value?.region?.name,  {
-            headers: {
-                'Content-Type': 'application/json',
+        const ItemResponse = await HTTP.get(
+            addressRef.value + (name ? '?search=' + name : ''),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             },
-        });
+        );
         items.value = ItemResponse.data.results;
         isLoading.value = false;
     } catch (error) {
@@ -180,13 +182,14 @@ const onChangeItem = async () => {
 
 const timer = ref(null);
 
-// const searchEducInstitution = (val) => {
-//     clearTimeout(timer.value);
+const searchEducInstitution = (val) => {
+    clearTimeout(timer.value);
 
-//     timer.value = setTimeout(() => {
-//         regionalsStore.searchInstitution(name.value, (addressRef.value?'':user?.currentUser?.value?.region?.name));
-//     }, 200);
-// };
+    timer.value = setTimeout(() => {
+        // regionalsStore.searchInstitution(name.value, (addressRef.value));
+        onChangeItem(name.value);
+    }, 200);
+};
 
 // watch(
 //     () => user.currentUser.value,

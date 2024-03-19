@@ -247,10 +247,10 @@ const prev = () => {
 };
 
 const sortSquads = () => {
-    squadsStore.sortedSquads();
-}
+    squadsStore.sortedSquads(sortBy.value);
+};
 const ascending = ref(true);
-const sortBy = ref();
+const sortBy = ref('name');
 const picked = ref('');
 
 const vertical = ref(true);
@@ -261,7 +261,7 @@ const showVertical = () => {
 
 const sortOptionss = ref([
     {
-        value: 'alphabetically',
+        value: 'name',
         name: 'Алфавиту от А - Я',
     },
 
@@ -302,35 +302,10 @@ const sortedSquads = computed(() => {
         });
     }
 
-    tempSquads = tempSquads.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-            // squadsStore.sortedSquads(name);
-        } else if (sortBy.value == 'founding_date') {
-            let fc = a.founding_date,
-                fn = b.founding_date;
-
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        }
-    });
-
     if (!ascending.value) {
-        tempSquads.reverse();
+        const sortSquads = () => {
+            squadsStore.sortedSquads(-sortBy.value);
+        };
     }
     if (!picked.value) {
         return tempSquads;
@@ -340,7 +315,6 @@ const sortedSquads = computed(() => {
     // tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
-
 
 const searchDetachments = (event) => {
     if (!name.value.length) {
@@ -354,7 +328,7 @@ const searchDetachments = (event) => {
 onMounted(() => {
     regionalsStore.getRegionalsForFilters();
     districtsStore.getDistricts();
-    squadsStore.getSquads();
+    squadsStore.sortedSquads(sortBy.value);
 });
 onActivated(() => {
     SelectedSortDistrict.value = JSON.parse(
