@@ -209,7 +209,7 @@ const educationalsStore = useEducationalsStore();
 const squadsStore = useSquadsStore();
 const action = ref('Оплачен');
 const participants = ref([]);
-const participantsVisible = ref(12);
+const participantsVisible = ref(10);
 const pages = ref([
     { pageTitle: 'Личный кабинет', href: '#' },
     { pageTitle: 'Членский взнос', href: '/contributorPay' },

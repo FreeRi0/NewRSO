@@ -28,7 +28,13 @@
             :centralHeadquarter="centralHeadquarter"
             :member="member"
         ></BannerHQ>
-        <section class="about-hq">
+        <section
+            class="about-hq"
+            v-if="
+                headquarter.educational.value.about &&
+                headquarter.educational.value.about != 'null'
+            "
+        >
             <h3>Описание штаба</h3>
             <p v-if="showHQ">
                 {{ headquarter.educational.value.about }}
@@ -110,7 +116,7 @@ watch(
     },
     {
         immediate: true,
-        deep: true
+        deep: true,
     },
 );
 

@@ -162,7 +162,8 @@
                                     v-model="sortBy"
                                     :options="sortOptionss"
                                     :sorts-boolean="false"
-                                    class="Sort-alphabet"
+                                    class="sort-alphabet"
+                                    placeholder="Выберите фильтр"
                                 ></sortByEducation>
                             </div>
 
@@ -182,15 +183,11 @@
                 <squadsList :squads="sortedSquads"></squadsList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="isLoading.isLoading.value"
+                    v-if="squadsStore.isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
-                <p
-                    v-else-if="
-                        !isLoading.isLoading.value && !sortedSquads.length
-                    "
-                >
+                <p v-else-if="!squadsStore.isLoading && !sortedSquads.length">
                     Ничего не найдено
                 </p>
             </div>
@@ -199,9 +196,10 @@
                 <horizontalList :squads="sortedSquads"></horizontalList>
                 <p v-if="!sortedSquads.length">Ничего не найдено</p>
             </div>
+
             <Button
-                @click="next()"
-                v-if="squadsVisible < squadsStore.totalSquads"
+                @click="next"
+                v-if="squads.squads.value.length < squadsStore.totalSquads"
                 label="Показать еще"
             ></Button>
             <Button @click="prev" v-else label="Свернуть все"></Button>
@@ -240,14 +238,15 @@ const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
 
-const squadsVisible = ref(squadsStore.SquadsLimit);
-
 const next = () => {
     squadsStore.getNextSquads();
 };
 
+const prev = () => {
+    squadsStore.getSquads();
+};
 const ascending = ref(true);
-const sortBy = ref('alphabetically');
+const sortBy = ref();
 const picked = ref('');
 
 const vertical = ref(true);
@@ -261,12 +260,13 @@ const sortOptionss = ref([
         value: 'alphabetically',
         name: 'Алфавиту от А - Я',
     },
+
     { value: 'founding_date', name: 'Дате создания отряда' },
 ]);
 
 const sortedSquads = computed(() => {
     let tempSquads = [];
-    tempSquads = [...squads.squads.value];
+    tempSquads = [...squadsStore.squads];
 
     if (SelectedSortRegional.value || SelectedSortDistrict.value) {
         let idRegionals = [];
@@ -310,6 +310,7 @@ const sortedSquads = computed(() => {
                 return 1;
             }
             return 0;
+            // squadsStore.sortedSquads(name);
         } else if (sortBy.value == 'founding_date') {
             let fc = a.founding_date,
                 fn = b.founding_date;
@@ -336,6 +337,7 @@ const sortedSquads = computed(() => {
     return tempSquads;
 });
 
+
 const searchDetachments = (event) => {
     if (!name.value.length) {
         squadsStore.searchSquads(name.value);
@@ -346,7 +348,7 @@ const searchDetachments = (event) => {
     timerSearch.value = setTimeout(() => {}, 400);
 };
 onMounted(() => {
-    regionalsStore.getRegionals();
+    regionalsStore.getRegionalsForFilters();
     districtsStore.getDistricts();
     squadsStore.getSquads();
 });

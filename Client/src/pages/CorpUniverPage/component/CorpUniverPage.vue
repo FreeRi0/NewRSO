@@ -36,7 +36,7 @@
       </p>
       <p class="text corpuniver__text-about">
         Обучение пройдет на платформе <a href="https://vk.me/join/iy9ZxZTPoHQCJpAEzVecrr1ipRp0f1XLPlE=" target="_blank">ВКонтакте</a>,
-        все видео материалы будут доступны <a href="#video">ниже</a>.
+        все видео материалы будут доступны <a href="#video_1">ниже</a>.
         Для прохождения конкурса необходимо набрать не менее 60 баллов <a href="#testing">итогового тестирования</a>.
       </p>
     </div>
@@ -47,147 +47,209 @@
       <v-table >
         <thead class="corpuniver__table__thread">
           <tr class="corpuniver__table__tr">
-            <td class="corpuniver__table__th corpuniver__table__th__br-left">Дата, время (мск)</td>
+            <td class="corpuniver__table__th corpuniver__table__th__br-left">№</td>
+            <td class="corpuniver__table__th">Дата, время (мск)</td>
             <td class="corpuniver__table__th">Блок</td>
             <td class="corpuniver__table__th corpuniver__table__th__br-right">Тема</td>
           </tr>
         </thead>
         <tbody>
         <tr>
-          <td class="corpuniver__table__td corpuniver__table__border-left">11 марта 8:00 - 9:00</td>
-          <td class="corpuniver__table__td">Вводное занятие</td>
-          <td class="corpuniver__table__td"><a href="#video">О Конкурсе и обучении</a></td>
-        </tr>
-
-        <tr>
-          <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">13 марта 14:00 - 16:00</td>
+          <td class="corpuniver__table__td corpuniver__table__border-left">1</td>
+          <td class="corpuniver__table__td"><b>11 марта</b><br/>08.00 - 09.00</td>
+          <td class="corpuniver__table__td"><a href="#video_1">Вводное занятие</a></td>
+          <td class="corpuniver__table__td">Цели и задачи Конкурса и обучения</td>
         </tr>
         <tr>
-          <td rowspan="4" class="corpuniver__table__td">Знакомство с РСО</td>
-        </tr>
-        <tr>
+          <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">2</td>
+          <td rowspan="5" class="corpuniver__table__td"><b>13 марта</b><br/>14.00-16.00</td>
+          <td rowspan="5" class="corpuniver__table__td"><a href="#video_2">Знакомство с РСО</a></td>
           <td class="corpuniver__table__td">Цели и задачи организации</td>
         </tr>
         <tr>
           <td class="corpuniver__table__td">Все что тебе важно, есть в РСО</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">История и планы на Юбилейный год РСО</td>
-        </tr>
-
-        <tr>
-          <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">15 марта 14:00 - 14:50</td>
+          <td class="corpuniver__table__td">История РСО</td>
         </tr>
         <tr>
-          <td rowspan="4" class="corpuniver__table__td">МЫ ЛСО</td>
+          <td class="corpuniver__table__td">Ценности и принципы РСО</td>
         </tr>
         <tr>
+          <td class="corpuniver__table__td">Всегда 20: Юбилейный год РСО</td>
+        </tr>
+        <tr>
+          <td rowspan="3" class="corpuniver__table__td corpuniver__table__border-left">3</td>
+          <td rowspan="3" class="corpuniver__table__td"><b>15 марта</b><br/>14.00-14.50</td>
+          <td rowspan="3" class="corpuniver__table__td"><a href="#video_3">МЫ ЛСО</a></td>
           <td class="corpuniver__table__td">Нормативная база РСО</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">План деятельности отряда</td>
+          <td class="corpuniver__table__td">План деятельности отряда по подготовке к трудовому семестру</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Гайд по Личному кабинету бойца</td>
-        </tr>
-
-        <tr>
-          <td rowspan="4" class="corpuniver__table__td corpuniver__table__border-left">15 марта 15:00 - 17:00</td>
+          <td class="corpuniver__table__td">Адаптация к Личному кабинету</td>
         </tr>
         <tr>
-          <td rowspan="3" class="corpuniver__table__td">Информационная кампания и набор</td>
+          <td rowspan="3" class="corpuniver__table__td corpuniver__table__border-left">4</td>
+          <td rowspan="3" class="corpuniver__table__td"><b>15 марта</b><br/>15.00-17.00</td>
+          <td rowspan="3" class="corpuniver__table__td"><a href="#video_4">Информационная кампания и набор</a></td>
+          <td class="corpuniver__table__td">Планирование</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Планирование информационной кампании и современные методы привлечения в студенческий отряд</td>
+          <td class="corpuniver__table__td">Публичное выступление</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Публичное выступление и сбор контактов</td>
-        </tr>
-
-        <tr>
-          <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">18 марта 14:00 - 16:10</td>
+          <td class="corpuniver__table__td">Сбор контактов, сайт РСО</td>
         </tr>
         <tr>
+          <td rowspan="4" class="corpuniver__table__td corpuniver__table__border-left">5</td>
+          <td rowspan="4" class="corpuniver__table__td"><b>18 марта</b><br/>14.00-16.10</td>
           <td rowspan="4" class="corpuniver__table__td">Вовлечение в деятельность отряда</td>
+          <td class="corpuniver__table__td">Обработка контактов</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Обработка контактов, обратная связь и работа с возражениями</td>
+          <td class="corpuniver__table__td">Обратная связь и работа с возражениями</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Организационное и информационное сопровождение отряда</td>
+          <td class="corpuniver__table__td">Организационное и информационное сопровождение</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Мероприятия для знакомства и адаптации отряда</td>
-        </tr>
-
-        <tr>
-          <td rowspan="2" class="corpuniver__table__td corpuniver__table__border-left">20 марта 14:00 - 16:00</td>
-          <td rowspan="4" class="corpuniver__table__td">Создание и работа команды мечты</td>
-          <td class="corpuniver__table__td">Создание и работа команды</td>
+          <td class="corpuniver__table__td">Вовлекающие события</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Мероприятия для вовлечения в отрядную деятельность</td>
+          <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">6</td>
+          <td rowspan="5" class="corpuniver__table__td"><b>19 марта</b><br/>09.00-11.00</td>
+          <td rowspan="9" class="corpuniver__table__td">Создание и работа команды мечты</td>
+          <td class="corpuniver__table__td">Цели отряда и план деятельности</td>
         </tr>
         <tr>
-          <td rowspan="2" class="corpuniver__table__td corpuniver__table__border-left">22 марта 14:00 - 16:00</td>
-          <td class="corpuniver__table__td">Введение по технике безопасности труда</td>
+          <td class="corpuniver__table__td">Планирование подготовительного сезона</td>
+        </tr>
+        <tr>
+          <td class="corpuniver__table__td">Профессиональное обучение</td>
         </tr>
         <tr>
           <td class="corpuniver__table__td">Мои документы РСО</td>
         </tr>
-
         <tr>
-          <td class="corpuniver__table__td corpuniver__table__border-left">25 марта 14:00 - 16:00</td>
-          <td rowspan="3" class="corpuniver__table__td ">Лето с пользой</td>
+          <td class="corpuniver__table__td">Погружающие события</td>
+        </tr>
+        <tr>
+          <td rowspan="4" class="corpuniver__table__td corpuniver__table__border-left">7</td>
+          <td rowspan="4" class="corpuniver__table__td"><b>20 марта</b><br/>14.00-16.00</td>
+        </tr>
+        <tr>
+          <td class="corpuniver__table__td">Введение в безопасность труда, безопасность подготовительного периода </td>
+        </tr>
+        <tr>
+          <td class="corpuniver__table__td">Работа в команде</td>
+        </tr>
+        <tr>
+          <td class="corpuniver__table__td">Презентация мечты</td>
+        </tr>
+        <tr>
+          <td rowspan="3" class="corpuniver__table__td corpuniver__table__border-left">8</td>
+          <td rowspan="3" class="corpuniver__table__td"><b>25 марта</b><br/>14.00-16.00</td>
+          <td rowspan="7" class="corpuniver__table__td">Лето с пользой</td>
           <td class="corpuniver__table__td">Целеполагание и планирование деятельности во время трудового семестра</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td corpuniver__table__border-left">27 марта 14:00 - 15:40</td>
-          <td class="corpuniver__table__td">Создание отрядных событий</td>
+          <td class="corpuniver__table__td">Работа на трудовом объекте</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td corpuniver__table__border-left">29 марта 14:00 - 15:30</td>
+          <td class="corpuniver__table__td">Система мероприятий в трудовом семестре</td>
+        </tr>
+        <tr>
+          <td rowspan="4" class="corpuniver__table__td corpuniver__table__border-left">9</td>
+          <td rowspan="2" class="corpuniver__table__td"><b>27 марта</b><br/>14.00-15.40</td>
+          <td class="corpuniver__table__td">Посвящение</td>
+        </tr>
+        <tr>
+          <td class="corpuniver__table__td">Подготовка к участию в мероприятиях на трудовом проекте</td>
+        </tr>
+        <tr>
+          <td rowspan="2" class="corpuniver__table__td"><b>29 марта</b><br/>14.00-15.20</td>
           <td class="corpuniver__table__td">Управление командой во время трудового семестра</td>
         </tr>
-
         <tr>
-          <td rowspan="2" class="corpuniver__table__td corpuniver__table__border-left">1 апреля 14:00 - 15:30</td>
-          <td rowspan="5" class="corpuniver__table__td">Подведение итогов трудового семестра и&nbsp;планирование следующего года</td>
+          <td class="corpuniver__table__td">Решение конфликтных ситуаций на проекте</td>
+        </tr>
+        <tr>
+          <td rowspan="3" class="corpuniver__table__td corpuniver__table__border-left">10</td>
+          <td rowspan="3" class="corpuniver__table__td"><b>1 апреля</b><br/>14.00-15.30</td>
+          <td rowspan="5" class="corpuniver__table__td">Подведение итогов трудового семестра и планирование следующего года</td>
           <td class="corpuniver__table__td">Анализ работы, подведение итогов 2024 года</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Целеполагание и планирование деятельности после трудового семестра, на 2025 год</td>
+          <td class="corpuniver__table__td">Целеполагание и планирование деятельности после трудового семестра, на 2025 г.</td>
         </tr>
         <tr>
-          <td rowspan="3" class="corpuniver__table__td corpuniver__table__border-left">3 апреля 14:00 - 15:30</td>
-          <td class="corpuniver__table__td">Система мероприятий после трудового семестра</td>
+          <td class="corpuniver__table__td">Система мероприятий</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Психологические аспекты деятельности руководителей</td>
+          <td rowspan="2" class="corpuniver__table__td corpuniver__table__border-left">11</td>
+          <td rowspan="2" class="corpuniver__table__td"><b>3 апреля</b><br/>14.00-15.30</td>
+          <td class="corpuniver__table__td">Психологические аспекты деятельности руководителей </td>
         </tr>
         <tr>
           <td class="corpuniver__table__td">Наставничество</td>
         </tr>
-
         <tr>
-          <td class="corpuniver__table__td corpuniver__table__border-left">с 27 марта по 10 апреля</td>
+          <td class="corpuniver__table__td corpuniver__table__border-left">12</td>
+          <td class="corpuniver__table__td"><b>27 марта по 10 апреля</b></td>
           <td colspan="2" class="corpuniver__table__td">Проведение практических мероприятий</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td corpuniver__table__border-left corpuniver__table__td__br-left">с 27 марта по 10 апреля</td>
+          <td class="corpuniver__table__td corpuniver__table__border-left corpuniver__table__td__br-left">13</td>
+          <td class="corpuniver__table__td" style="border-bottom: #ECEFF4 solid 1px"><b>27 марта по 10 апреля</b></td>
           <td colspan="2" class="corpuniver__table__td corpuniver__table__td__br-right">Тестирование на платформе сайта</td>
         </tr>
-
         </tbody>
       </v-table>
     </div>
 
-    <h2 class="corpuniver__title-h2">Занятие 11 марта «О конкурсе и обучении»</h2>
+    <h2 id="video_1" class="corpuniver__title-h2">Занятие 11 марта «Цели и задачи Конкурса и обучения»</h2>
     <p class="corpuniver__text-subtitle">Спикеры: Михаил Киселёв, Дмитрий Парамонов, Мария Корнилова</p>
 
-    <div id="video" class="corpuniver__video">
+    <div class="corpuniver__video">
       <iframe class="corpuniver__iframe"
               src="https://vk.com/video_ext.php?oid=-223571150&id=456239049&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+              allowfullscreen>
+      </iframe>
+    </div>
+
+    <h2 id="video_2" class="corpuniver__title-h2">Занятие 13 марта «Знакомство с РСО»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Дмитрий Парамонов, Мария Корнилова</p>
+
+    <div class="corpuniver__video">
+      <iframe class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239054"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+              allowfullscreen>
+      </iframe>
+    </div>
+
+    <h2 id="video_2" class="corpuniver__title-h2">Занятие 15 марта «МЫ ЛСО»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Дмитрий Парамонов, Мария Корнилова, Валентина Бродягина</p>
+
+    <div id="video_3" class="corpuniver__video">
+      <iframe
+          class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239059&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+              allowfullscreen>
+      </iframe>
+    </div>
+
+    <h2 id="video_4" class="corpuniver__title-h2">Занятие 15 марта «Информационная кампания и набор»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Божена Колачевская, Анастасия Шабанова, Владислав Езин, Анастасия Гориченко</p>
+
+    <div class="corpuniver__video">
+      <iframe
+          class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239060&hd=2"
               allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
               allowfullscreen>
       </iframe>
@@ -220,11 +282,12 @@ import Button from '@shared/components/buttons/Button.vue';
     font-weight: 600;
     line-height: 29px;
     letter-spacing: 0em;
-    padding: 20px;
+    padding: 10px 16px !important;
 
     @media (max-width: 768px) {
       font-size: 16px;
       line-height: 19.2px;
+      padding: 2px 4px !important;
     }
 
     &__br-left {
@@ -244,15 +307,14 @@ import Button from '@shared/components/buttons/Button.vue';
     line-height: 24px;
     letter-spacing: 0em;
     border-right: #ECEFF4 solid 1px;
-    //padding-bottom: 18px;
-    //padding-top: 18px;
-    height: 60px;
+    padding: 10px 16px !important;
 
     @media (max-width: 768px) {
       font-family: Bert Sans;
       font-size: 12px;
       font-weight: 400;
       line-height: 16px;
+      padding: 2px 4px !important;
     }
 
     &__br-left {
