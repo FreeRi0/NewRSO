@@ -321,10 +321,10 @@ const getEducationalsHeadquartersForFilters = async () => {
     let params = ['regional_headquarter__name=' + SelectedSortRegional.value];
     if (SelectedSortLocal.value) params.push('local_headquarter__name='+SelectedSortLocal.value);
     try {
-        const { data } = await HTTP.get('/educationals/?' + params.join('&'));
+        const { data } = await HTTP.get('/eduicational_institutions/?' + params.join('&'));
         educationals.value = data.results;
     } catch (e) {
-        console.log('error request educationals headquarters');
+        console.log('error request educationals');
     }
 };
 const getDetachments = async (pagination) => {
@@ -339,7 +339,7 @@ const getDetachments = async (pagination) => {
         if (SelectedSortDistrict.value) data.push('district_headquarter__name='+SelectedSortDistrict.value)
         if (SelectedSortRegional.value) data.push('regional_headquarter__name='+SelectedSortRegional.value)
         if (SelectedSortLocal.value) data.push('local_headquarter__name='+SelectedSortLocal.value)
-        if (education.value) data.push('educational_headquarter__name='+education.value)
+        if (education.value) data.push('educational_institution__name='+education.value)
         if (picked.value) data.push('area__name='+picked.value)
         if (sortBy.value) data.push('ordering='+(ascending.value?'':'-')+sortBy.value)
         const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
