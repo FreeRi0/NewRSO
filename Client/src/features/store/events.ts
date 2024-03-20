@@ -37,7 +37,7 @@ export const useEventsStore = defineStore('events', {
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization:
-                                'Token' + localStorage.getItem('Token'),
+                                'Token ' + localStorage.getItem('Token'),
                         },
                     },
                 );

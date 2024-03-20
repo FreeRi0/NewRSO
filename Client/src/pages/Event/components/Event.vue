@@ -7,9 +7,16 @@
             <div class="banner_wrap">
                 <div>
                     <img
+                        v-if="eventsStore.event.banner"
                         :src="eventsStore.event.banner"
                         alt="Баннер мероприятия"
                     />
+                    <v-progress-circular
+                        class="circleLoader"
+                        v-else
+                        indeterminate
+                        color="blue"
+                    ></v-progress-circular>
                 </div>
                 <div class="banner_wrap_btn">
                     <Button
@@ -22,7 +29,7 @@
                         size="large"
                     ></Button>
                     <Button
-                        v-else-if="IsMember"
+                        v-else-if="UserApplication"
                         type="button"
                         class="form-button form-button--grey"
                         variant="text"
@@ -151,9 +158,6 @@
                         />
                     </div>
                     <div class="text text--organizer">
-                        <!-- {{ organizator.organizer?.last_name }}
-                    {{ organizator.organizer?.first_name }}
-                    {{ organizator.organizer?.patronymic_name }} -->
                         {{ organizator.organization }}
                     </div>
                     <!-- <div class="text text--status">
@@ -412,23 +416,26 @@ const picked = ref(true);
 const swal = inject('$swal');
 const eventsStore = useEventsStore();
 const userStore = useUserStore();
-const isorganizator = ref(false);
 const isContact = ref([]);
-// const isMember = ref([])
-// const isApp = ref([]);
 let userId = computed(() => {
     return userStore.currentUser.id;
 });
 
+console.log('id', userId.value);
+
 const UserApplication = computed(() => {
-    return eventsStore.applications.find((item) => item.user.id === userId);
+    return eventsStore.applications.find(
+        (item) => item.user.id === userId.value,
+    );
 });
+
+console.log('app', UserApplication.value);
 
 const IsMember = computed(() => {
-    return eventsStore.members.find((item) => item.user.id === userId);
+    return eventsStore.members.find((item) => item.user.id === userId.value);
 });
 
-// console.log('aaaa', IsMember, UserApplication, userId);
+console.log('mem', IsMember.value);
 
 const AddApplication = async () => {
     try {
@@ -465,6 +472,7 @@ watch(
         await eventsStore.getEventId(newId);
         await eventsStore.getEventMembers(newId);
         await eventsStore.getEventOrganizators(newId);
+        await eventsStore.getAppEvents(newId);
         await replaceTargetObjects([eventsStore.event]);
     },
     {
@@ -488,7 +496,6 @@ watch(
     () => eventsStore.event,
     () => {
         eventsStore.getFilteredEvents(eventsStore.event.scale);
-        eventsStore.getFilteredDirectionEvents(eventsStore.event.direction);
     },
 );
 </script>
@@ -602,17 +609,12 @@ watch(
     margin: 0px;
 }
 .form-button {
-    // min-height: 52px;
     margin: 0;
     padding: 12px 32px;
     font-family: 'Bert Sans';
     font-size: 16px;
     line-height: 20px;
     max-width: 265px;
-    // text-transform: none;
-    // display: flex;
-    // justify-content: center;
-    // margin-left: 20px;
 
     &--grey {
         color: white;
@@ -838,6 +840,8 @@ watch(
 
 .participant_img {
     margin: 0 auto;
+    width: 120px;
+    height: 120px;
 }
 
 .squad-participants__link {
@@ -857,6 +861,20 @@ watch(
     display: flex;
     justify-content: flex-end;
     margin-bottom: 30px;
+}
+
+.user-data__link {
+    border-radius: 10px;
+    background: #39bfbf;
+    align-self: end;
+    text-align: center;
+    font-family: 'Bert Sans';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    color: white;
+    padding: 16px 32px;
 }
 
 .other_events_wrap {
