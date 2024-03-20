@@ -92,7 +92,7 @@ const clickOnButton = () => {
 .btn {
     display: block;
     margin: 20px auto;
-    padding: 16px 32px;
+    padding: 12px 32px;
     // height: 52px;
     color: white;
     box-shadow: none;

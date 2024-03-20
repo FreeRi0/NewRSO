@@ -122,7 +122,7 @@ const aboutMembers = async () => {
             },
         });
 
-        member.value = response.data;
+        member.value = response.data.results;
         console.log(response);
     } catch (error) {
         console.log('an error occured ' + error);

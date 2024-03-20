@@ -681,6 +681,7 @@ const routes: RouteRecordRaw[] = [
             },
 
             {
+
                 path: '/report',
                 name: 'Report',
                 component: () =>
@@ -701,6 +702,7 @@ const routes: RouteRecordRaw[] = [
                                 '@pages/CorpUniverPage/component/CorpUniverPage.vue'
                             ),
                     },
+
                     {
                         path: 'test',
                         name: 'testPage',
@@ -786,6 +788,23 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     label: 'Реестр участников',
                 },
+            },
+            {
+                path: '/CorpUniver',
+                meta: {
+                    redirectTo: 'CorpUniver',
+                    label: 'Корпоративный университет',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'CorpUniver',
+                        component: () =>
+                            import(
+                                '@pages/CorpUniverPage/component/CorpUniverPage.vue'
+                            ),
+                    },
+                ],
             },
             {
                 path: '/references',

@@ -10,7 +10,6 @@
         item-title="name"
         item-value="value"
         v-bind="$attrs"
-
         @update:value="changeValue"
         :address="addressRef"
         :no-data-text="noDataText"
@@ -138,10 +137,6 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    address: {
-        type: String,
-        default: '',
-    },
     noDataText: {
         type: String,
         default: 'Ничего не найдено...',
@@ -156,7 +151,8 @@ const props = defineProps({
     },
 });
 const name = ref('');
-const addressRef = ref(props.address)
+const addressRef = ref('/eduicational_institutions/');
+
 
 const selected = ref(null);
 const isLoading = ref(false);
@@ -167,14 +163,17 @@ const changeValue = (event) => {
 
 const items = ref(props.items);
 
-const onChangeItem = async () => {
+const onChangeItem = async (name) => {
     try {
         isLoading.value = true;
-        const ItemResponse = await HTTP.get(addressRef.value, {
-            headers: {
-                'Content-Type': 'application/json',
+        const ItemResponse = await HTTP.get(
+            addressRef.value + (name ? '?search=' + name : ''),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             },
-        });
+        );
         items.value = ItemResponse.data.results;
         isLoading.value = false;
     } catch (error) {
@@ -188,20 +187,21 @@ const searchEducInstitution = (val) => {
     clearTimeout(timer.value);
 
     timer.value = setTimeout(() => {
-        regionalsStore.searchInstitution(name.value, (props.address?'':user?.currentUser?.value?.region?.name));
+        onChangeItem(name.value);
     }, 200);
 };
 
-watch(
-    () => user.currentUser.value,
-    (newUser, oldUser) => {
-        if (!addressRef.value) addressRef.value = '/eduicational_institutions/?region__name='+user?.currentUser?.value?.region?.name;
-        onChangeItem();
-    },
-);
+// watch(
+//     () => user.currentUser.value,
+//     (newUser, oldUser) => {
+//         if (!addressRef.value) addressRef.value = '/eduicational_institutions/?region__name='+user?.currentUser?.value?.region?.name;
+//         onChangeItem();
+//     },
+// );
 
 onMounted(() => {
-    if (props.address) onChangeItem();
+
+    if (addressRef.value) onChangeItem();
 });
 </script>
 

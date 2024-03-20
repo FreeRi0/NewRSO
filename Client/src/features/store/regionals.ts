@@ -57,18 +57,22 @@ export const useRegionalsStore = defineStore('regionals', {
                 console.log('an error occured ' + err);
             }
         },
-        async getRegionals() {
+        async getRegionals(name: String) {
             try {
                 this.isLoading = true;
-                const responseRegionals = await HTTP.get(`/regionals/`, {
-                    params: {
-                        limit: this.regionalsLimit,
+                const responseRegionals = await HTTP.get(
+                    `/regionals/?ordering=${name}`,
+                    {
+                        params: {
+                            limit: this.regionalsLimit,
+                        },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
                     },
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                });
+                );
                 this.totalRegionals = responseRegionals.data.count;
                 this.regionals = responseRegionals.data.results;
                 this.nextRegionals = responseRegionals.data.next;
@@ -83,7 +87,6 @@ export const useRegionalsStore = defineStore('regionals', {
             try {
                 this.isLoading = true;
                 const responseRegionals = await HTTP.get(`/regionals/`, {
-
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -138,6 +141,7 @@ export const useRegionalsStore = defineStore('regionals', {
                 console.log('an error occured ' + error);
             }
         },
+
         async getRegionalsMembers(id: String) {
             try {
                 this.isLoading = true;
@@ -186,16 +190,16 @@ export const useRegionalsStore = defineStore('regionals', {
                 this.isLoading = false;
             }
         },
-        async searchInstitution(name: String, region: any) {
+        async searchInstitution(name: String) {
             let url = `/eduicational_institutions/?search=${name}`;
-            if (region) url += '&region__name=' + region;
+            // if (region) url += '&region__name=' + region;
             const responseInstitution = await HTTP.get(url, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
             });
-            this.institutions = responseInstitution.data;
+            this.institutions = responseInstitution.data.results;
         },
 
         async searchRegionalsHead(name: String) {

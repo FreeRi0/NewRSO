@@ -103,6 +103,7 @@
                             class="sort-alphabet"
                             :sorts-boolean="false"
                             placeholder="Выберите фильтр"
+                            @update:modelValue="sortRegionals"
                         ></sortByEducation>
                     </div>
 
@@ -190,7 +191,7 @@ const regionalHeadquarters = storeToRefs(regionalsStore);
 const isLoading = storeToRefs(regionalsStore);
 
 const ascending = ref(true);
-const sortBy = ref();
+const sortBy = ref('name');
 
 const vertical = ref(true);
 
@@ -203,7 +204,7 @@ const next = () => {
 };
 
 const prev = () => {
-    regionalsStore.getRegionals();
+    regionalsStore.getRegionals(sortBy.value);
 };
 
 const showVertical = () => {
@@ -215,6 +216,10 @@ const selectedSortDistrict = ref(
 );
 
 const districts = ref([]);
+
+const sortRegionals = () => {
+    regionalsStore.getRegionals(sortBy.value);
+};
 
 const searchReg = (event) => {
     clearTimeout(timerSearch.value);
@@ -244,7 +249,7 @@ const selectedSort = ref(0);
 
 const sortOptionss = ref([
     {
-        value: 'alphabetically',
+        value: 'name',
         name: 'Алфавиту от А - Я',
     },
     { value: 'founding_date', name: 'Дате создания штаба' },
@@ -308,7 +313,7 @@ onActivated(() => {
 });
 
 onMounted(() => {
-    regionalsStore.getRegionals();
+    regionalsStore.getRegionals(sortBy.value);
     getDistrictsHeadquartersForFilters();
 });
 </script>
