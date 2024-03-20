@@ -111,6 +111,9 @@
                 <p class="subtitle" v-if="!sortedParticipants.length">
                     Ничего не найдено
                 </p>
+                <p class="subtitle" v-if="!sortedParticipants.length">
+                    Ничего не найдено
+                </p>
             </div>
             <p class="subtitle" v-else>Ничего не найдено.</p>
         </div>
@@ -211,6 +214,7 @@ const regionals = ref([]);
 const districts = ref([]);
 const locals = ref([]);
 const educHead = ref([]);
+const educ = ref(null);
 const detachments = ref([]);
 const reg = ref(null);
 const detachment = ref(null);
@@ -297,6 +301,13 @@ const updateDistrict = (districtVal) => {
         resp = '/districts/';
     }
 
+    if (districtVal) {
+        search = '?district_headquarter__name=' + districtVal;
+    } else {
+        search = '';
+        resp = '/districts/';
+    }
+
     if (name.value) search += '&search=' + name.value;
     viewHeadquartersData(resp, search);
 
@@ -349,6 +360,8 @@ const updateEduc = (educVal) => {
         search = '?local_headquarter__name=' + local.value;
     }
     if (name.value) search += '&search=' + name.value;
+
+    viewHeadquartersData(resp, search);
 
     viewHeadquartersData(resp, search);
 
@@ -453,7 +466,7 @@ const sortedHeadquarters = computed(() => {
 watch(
     () => roles.roles.value,
 
-    (newRole, oldRole) => {
+    () => {
         getItemsByRoles();
     },
 );
@@ -706,6 +719,7 @@ const getHeadquartersJunior = async () => {
             );
         }
         sortedHeadquartersJunior.value = headquartersJunior.value;
+        console.log(headquartersJunior.value);
         console.log(headquartersJunior.value);
     } catch (e) {
         permissonDeny.value = true;

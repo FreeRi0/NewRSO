@@ -16,7 +16,7 @@
         </div>
 
         <div id="wrapper">
-            <div id="left">
+            <div id="left" v-if="width > 768">
                 <group-filters @update-filter="onUpdateFilter" />
 
                 <p class="count">
@@ -131,6 +131,8 @@ import GroupSubmitItem from './GroupSubmitItem.vue';
 import GroupSubmitSelect from './GroupSubmitSelect.vue';
 
 const sortBy = ref('alphabetically');
+
+const width = ref(0);
 
 const route = useRoute();
 const router = useRouter();
@@ -296,6 +298,11 @@ const onRemove = (index) => {
     files.value.splice(index, 1);
 };
 
+const onResize = () => {
+    width.value = window.innerWidth;
+    console.log(width.value);
+};
+
 watch(selectedUsersList, (newSelectedUsersList) => {
     isChecked.value = newSelectedUsersList.length == usersList.value.length;
 });
@@ -320,6 +327,8 @@ watch(ascending, () => {
 });
 
 onMounted(async () => {
+    onResize();
+    window.addEventListener('resize', onResize);
     await getUsersList('');
 });
 </script>
@@ -327,7 +336,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .container {
     margin: 0 auto;
-    padding: 0px 130px 60px 130px;
+    padding-bottom: 60px;
 }
 .main_title {
     font-family: Akrobat;
