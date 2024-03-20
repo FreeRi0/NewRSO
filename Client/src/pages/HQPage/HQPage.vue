@@ -49,7 +49,7 @@
             :member="member"
             head="Руководство штаба"
             :position="position"
-            :leadership="headquarter.educational.leadership"
+            :leadership="educationalsStore.educational.leadership"
         ></ManagementHQ>
         <DetachmentsHQ
             :items="educationalsStore.educational?.detachments"

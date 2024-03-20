@@ -18,7 +18,7 @@
                 <v-btn
                     class="squads-tabs__item"
                     :class="{ active: picked === area.name }"
-                    v-for="area in categories.areas.value"
+                    v-for="area in squadsStore.areas"
                     :key="area"
                     @click="picked = area.name"
                     >{{ area.name }}
@@ -244,15 +244,12 @@ import {
 } from '@shared/components/selects';
 import { ref, onMounted, onActivated, watch } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
-import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
 import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
 const squadsStore = useSquadsStore();
 const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
-const squads = storeToRefs(squadsStore);
-const categories = storeToRefs(squadsStore);
 const name = ref('');
 const timerSearch = ref(null);
 const education = ref(null);

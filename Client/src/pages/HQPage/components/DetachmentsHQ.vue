@@ -18,7 +18,7 @@ defineProps({
     items: {
         type: Array,
         default: () => []
-    },
+    }
 });
 </script>
 

@@ -320,7 +320,7 @@ const sortOptionss = ref([
     { value: 'founding_date', name: 'Дате создания штаба' },
 ]);
 
-onBeforeRouteLeave(async (to, from) => {
+onBeforeRouteLeave(async () => {
     const pageName = 'AllHeadquarters';
     const filtersPropertiesToRemove = [
         'districtName',
@@ -365,6 +365,7 @@ watch(
     },
 );
 </script>
+
 <style lang="scss">
 .headquarters {
     padding-bottom: 60px;
