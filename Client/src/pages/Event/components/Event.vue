@@ -1,160 +1,140 @@
 <template>
-    <div class="container">
-        <h1 class="title title--lso">
-            {{ eventsStore.event.name }}
-        </h1>
-        <div class="banner_wrap">
-            <div>
-                <img :src="eventsStore.event.banner" alt="Баннер мероприятия" />
-            </div>
-            <div class="banner_wrap_btn">
-                <Button
-                    v-if="!IsMember && !UserApplication"
-                    class="form-button"
-                    type="button"
-                    @click="AddApplication()"
-                    label="Подать заявку"
-                    variant="text"
-                    size="large"
-                ></Button>
-                <Button
-                    v-else-if="IsMember"
-                    type="button"
-                    class="form-button form-button--grey"
-                    variant="text"
-                    label="Заявка на рассмотрении"
-                    size="large"
-                ></Button>
-
-                <div v-else-if="IsMember" class="user-data__link">
-                    Вы участник
+    <div class="eventt">
+        <div class="container">
+            <h1 class="title title--lso">
+                {{ eventsStore.event.name }}
+            </h1>
+            <div class="banner_wrap">
+                <div>
+                    <img
+                        :src="eventsStore.event.banner"
+                        alt="Баннер мероприятия"
+                    />
                 </div>
-                <!-- <Button
+                <div class="banner_wrap_btn">
+                    <Button
+                        v-if="!IsMember && !UserApplication"
+                        class="form-button"
+                        type="button"
+                        @click="AddApplication()"
+                        label="Подать заявку"
+                        variant="text"
+                        size="large"
+                    ></Button>
+                    <Button
+                        v-else-if="IsMember"
+                        type="button"
+                        class="form-button form-button--grey"
+                        variant="text"
+                        label="Заявка на рассмотрении"
+                        size="large"
+                    ></Button>
+
+                    <div v-else-if="IsMember" class="user-data__link">
+                        Вы участник
+                    </div>
+                    <!-- <Button
                     type="button"
                     class="form-button form-button--white"
                     variant="text"
                     label="Отказаться от участия"
                     size="large"
                 ></Button> -->
+                </div>
             </div>
-        </div>
-        <h2 class="title event_about">О мероприятии</h2>
-        <div class="category">{{ eventsStore.event.direction }}</div>
-        <p class="text event_type_wrap">
-            {{ eventsStore.event.description }}
-        </p>
+            <h2 class="title event_about">О мероприятии</h2>
+            <div class="category">{{ eventsStore.event.direction }}</div>
+            <p class="text event_type_wrap">
+                {{ eventsStore.event.description }}
+            </p>
 
-        <div class="event">
-            <div class="event-cols-2">
-                <img
-                    src="@app/assets/icon_items/list.svg"
-                    class="mr-3"
-                    alt=""
-                />
-                Форма заявки: {{ eventsStore.event.application_type }}
-            </div>
-            <div class="event-cols-2">
-                <img
-                    src="@app/assets/icon_items/clock.svg"
-                    class="mr-3"
-                    alt=""
-                />
-                Начало мероприятия:
-                {{ eventsStore.event.time_data?.start_date }},
-                {{ eventsStore.event.time_data?.start_time }}
-            </div>
-        </div>
-        <div class="event">
-            <div class="event-cols-2">
-                <img src="@app/assets/icon_items/map.svg" class="mr-3" alt="" />
-                Маштаб мероприятия: {{ eventsStore.event.scale }}
-            </div>
-            <div class="event-cols-2">
-                <img
-                    src="@app/assets/icon_items/clock.svg"
-                    class="mr-3"
-                    alt="g"
-                />
-                Окончание мероприятия:
-                {{ eventsStore.event.time_data?.end_date }},
-                {{ eventsStore.event.time_data?.end_time }}
-            </div>
-        </div>
-        <div class="event">
-            <div class="event-cols-2">
-                <img
-                    src="@app/assets/icon_items/group.svg"
-                    class="mr-3"
-                    alt=""
-                />
-                Планируемое число участников:
-                {{ eventsStore.event.participants_number }}
-            </div>
-            <div class="event-cols-2">
-                <img
-                    src="@app/assets/icon_items/clock.svg"
-                    class="mr-3"
-                    alt=""
-                />
-                Начало регистрации:
-                {{ eventsStore.event.time_data?.start_date }},
-                {{ eventsStore.event.time_data?.start_time }}
-            </div>
-        </div>
-        <div class="event">
-            <div class="event-cols-2">
-                <img
-                    src="@app/assets/icon_items/label.svg"
-                    class="mr-3"
-                    alt=""
-                />
-                Адрес: {{ eventsStore.event.address }}
-            </div>
-            <div class="event-cols-2">
-                <img
-                    src="@app/assets/icon_items/clock.svg"
-                    class="mr-3"
-                    alt=""
-                />
-                Окончание регистрации:
-                {{ eventsStore.event.time_data?.registration_end_date }},
-                {{ eventsStore.event.time_data?.registration_end_time }}
-            </div>
-        </div>
-
-        <!-- Организаторы -->
-        <h2 class="title event_org">Организаторы</h2>
-        <div v-if="eventsStore.organizators" class="card_wrap">
-            <div
-                v-for="organizator in eventsStore.organizators"
-                class="event_card_wrap"
-                :key="organizator.id"
-            >
-                <div class="round-img">
+            <div class="event">
+                <div class="event-cols-2">
                     <img
-                        :src="organizator.organizer?.avatar.photo"
-                        alt="photo"
-                        v-if="organizator.organizer?.avatar.photo"
+                        src="@app/assets/icon_items/list.svg"
+                        class="mr-3"
+                        alt=""
                     />
-                    <img src="@app/assets/user-avatar.png" alt="photo" v-else />
+                    Форма заявки: {{ eventsStore.event.application_type }}
                 </div>
-                <div class="text text--organizer">
-                    <!-- {{ organizator.organizer?.last_name }}
-                    {{ organizator.organizer?.first_name }}
-                    {{ organizator.organizer?.patronymic_name }} -->
-                    {{ organizator.organization }}
+                <div class="event-cols-2">
+                    <img
+                        src="@app/assets/icon_items/clock.svg"
+                        class="mr-3"
+                        alt=""
+                    />
+                    Начало мероприятия:
+                    {{ eventsStore.event.time_data?.start_date }},
+                    {{ eventsStore.event.time_data?.start_time }}
                 </div>
-                <!-- <div class="text text--status">
-                    {{ organizator.status }}
-                </div> -->
             </div>
-        </div>
-        <!-- Контактные лица -->
-        <template v-if="isContact.length">
-            <h2 class="title event_contact">Контактные лица</h2>
-            <div class="card_wrap">
+            <div class="event">
+                <div class="event-cols-2">
+                    <img
+                        src="@app/assets/icon_items/map.svg"
+                        class="mr-3"
+                        alt=""
+                    />
+                    Маштаб мероприятия: {{ eventsStore.event.scale }}
+                </div>
+                <div class="event-cols-2">
+                    <img
+                        src="@app/assets/icon_items/clock.svg"
+                        class="mr-3"
+                        alt="g"
+                    />
+                    Окончание мероприятия:
+                    {{ eventsStore.event.time_data?.end_date }},
+                    {{ eventsStore.event.time_data?.end_time }}
+                </div>
+            </div>
+            <div class="event">
+                <div class="event-cols-2">
+                    <img
+                        src="@app/assets/icon_items/group.svg"
+                        class="mr-3"
+                        alt=""
+                    />
+                    Планируемое число участников:
+                    {{ eventsStore.event.participants_number }}
+                </div>
+                <div class="event-cols-2">
+                    <img
+                        src="@app/assets/icon_items/clock.svg"
+                        class="mr-3"
+                        alt=""
+                    />
+                    Начало регистрации:
+                    {{ eventsStore.event.time_data?.start_date }},
+                    {{ eventsStore.event.time_data?.start_time }}
+                </div>
+            </div>
+            <div class="event">
+                <div class="event-cols-2">
+                    <img
+                        src="@app/assets/icon_items/label.svg"
+                        class="mr-3"
+                        alt=""
+                    />
+                    Адрес: {{ eventsStore.event.address }}
+                </div>
+                <div class="event-cols-2">
+                    <img
+                        src="@app/assets/icon_items/clock.svg"
+                        class="mr-3"
+                        alt=""
+                    />
+                    Окончание регистрации:
+                    {{ eventsStore.event.time_data?.registration_end_date }},
+                    {{ eventsStore.event.time_data?.registration_end_time }}
+                </div>
+            </div>
+
+            <!-- Организаторы -->
+            <h2 class="title event_org">Организаторы</h2>
+            <div v-if="eventsStore.organizators" class="card_wrap">
                 <div
-                    v-for="organizator in isContact"
+                    v-for="organizator in eventsStore.organizators"
                     class="event_card_wrap"
                     :key="organizator.id"
                 >
@@ -171,62 +151,150 @@
                         />
                     </div>
                     <div class="text text--organizer">
+                        <!-- {{ organizator.organizer?.last_name }}
+                    {{ organizator.organizer?.first_name }}
+                    {{ organizator.organizer?.patronymic_name }} -->
                         {{ organizator.organization }}
                     </div>
                     <!-- <div class="text text--status">
-                        {{ organizator.status }}
-                    </div> -->
+                    {{ organizator.status }}
+                </div> -->
                 </div>
             </div>
-        </template>
+            <!-- Контактные лица -->
+            <template v-if="isContact.length">
+                <h2 class="title event_contact">Контактные лица</h2>
+                <div class="card_wrap">
+                    <div
+                        v-for="organizator in isContact"
+                        class="event_card_wrap"
+                        :key="organizator.id"
+                    >
+                        <div class="round-img">
+                            <img
+                                :src="organizator.organizer?.avatar.photo"
+                                alt="photo"
+                                v-if="organizator.organizer?.avatar.photo"
+                            />
+                            <img
+                                src="@app/assets/user-avatar.png"
+                                alt="photo"
+                                v-else
+                            />
+                        </div>
+                        <div class="text text--organizer">
+                            {{ organizator.organization }}
+                        </div>
+                        <!-- <div class="text text--status">
+                        {{ organizator.status }}
+                    </div> -->
+                    </div>
+                </div>
+            </template>
 
-        <!-- Участники -->
-        <div class="event__nav">
-            <h3 class="title event_members">Участники</h3>
-            <div class="d-flex">
-                <Button
-                    type="button"
-                    label="Уже идут"
-                    class="memberBtn mr-2"
-                    :class="{ active: picked === true }"
-                    @click="picked = true"
-                ></Button>
+            <!-- Участники -->
+            <div class="event__nav">
+                <h3 class="title event_members">Участники</h3>
+                <div class="d-flex">
+                    <Button
+                        type="button"
+                        label="Уже идут"
+                        class="memberBtn mr-2"
+                        :class="{ active: picked === true }"
+                        @click="picked = true"
+                    ></Button>
 
-                <Button
-                    type="button"
-                    label="Ожидают одобрения"
-                    class="memberBtn"
-                    :class="{ active: picked === false }"
-                    @click="picked = false"
-                ></Button>
+                    <Button
+                        type="button"
+                        label="Ожидают одобрения"
+                        class="memberBtn"
+                        :class="{ active: picked === false }"
+                        @click="picked = false"
+                    ></Button>
+                </div>
             </div>
-        </div>
 
-        <section class="section_wrap" v-if="picked === true">
-            <ul class="list_wrap" v-if="eventsStore.members.length">
-                <li
-                    v-for="participant in eventsStore.members.slice(0, 6)"
-                    :key="participant"
-                >
-                    <div>
-                        <img
-                            class="participant_img"
-                            :src="participant.image"
-                            alt="avatar"
-                        />
-                        <h5 class="text text--participant_name">
-                            {{ participant.name }}
-                        </h5>
-                        <!-- <p class="text text--status">
+            <section class="section_wrap" v-if="picked === true">
+                <ul class="list_wrap" v-if="eventsStore.members.length">
+                    <li
+                        v-for="participant in eventsStore.members.slice(0, 6)"
+                        :key="participant"
+                    >
+                        <div>
+                            <img
+                                class="participant_img"
+                                :src="participant.user?.avatar?.photo"
+                                v-if="participant.user?.avatar?.photo"
+                                alt="avatar"
+                            />
+                            <img
+                                class="participant_img"
+                                src="@app/assets/user-avatar.png"
+                                v-else
+                                alt="avatar"
+                            />
+                            <div class="text text--participant_name mt-7">
+                                {{ participant.user.first_name }}
+                            </div>
+                            <!-- <p class="text text--status">
                             {{ participant.status }}
                         </p> -->
+                        </div>
+                    </li>
+                </ul>
+                <p v-else>Участников не найдено..</p>
+                <div class="squad-participants__link">
+                    <div
+                        v-if="eventsStore.members.length > 6"
+                        class="squad-participants__link"
+                    >
+                        <router-link
+                            :to="{
+                                name: 'allparticipants',
+                                params: { id: eventsStore.event.id },
+                            }"
+                        >
+                            <div class="squad__wrapper-route">
+                                Показать всех
+                            </div></router-link
+                        >
                     </div>
-                </li>
-            </ul>
-            <p v-else>Участников не найдено..</p>
-            <div class="squad-participants__link">
+                </div>
+            </section>
+            <section class="section_wrap" v-else="picked === false">
+                <ul class="list_wrap" v-if="eventsStore.applications.length">
+                    <li
+                        v-for="participant in eventsStore.applications.slice(
+                            0,
+                            6,
+                        )"
+                        :key="participant"
+                    >
+                        <div>
+                            <img
+                                class="participant_img"
+                                :src="participant.user?.avatar?.photo"
+                                v-if="participant.user?.avatar?.photo"
+                                alt="avatar"
+                            />
+                            <img
+                                class="participant_img"
+                                src="@app/assets/user-avatar.png"
+                                v-else
+                                alt="avatar"
+                            />
+                            <div class="text text--participant_name mt-7">
+                                {{ participant.user.first_name }}
+                            </div>
+                            <!-- <p class="text text--status">
+                            {{ participant.status }}
+                        </p> -->
+                        </div>
+                    </li>
+                </ul>
+                <p v-else>Участников не найдено...</p>
                 <div
-                    v-if="eventsStore.members.length > 6"
+                    v-if="eventsStore.applications.length > 6"
                     class="squad-participants__link"
                 >
                     <router-link
@@ -240,129 +308,91 @@
                         </div></router-link
                     >
                 </div>
-            </div>
-        </section>
-        <section class="section_wrap" v-else="picked === false">
-            <ul class="list_wrap" v-if="eventsStore.applications.length">
-                <li
-                    v-for="participant in eventsStore.applications.slice(0, 6)"
-                    :key="participant"
-                >
-                    <div>
-                        <img
-                            class="participant_img"
-                            :src="participant.image"
-                            alt="avatar"
-                        />
-                        <h5 class="text text--participant_name">
-                            {{ participant.name }}
-                        </h5>
-                        <!-- <p class="text text--status">
-                            {{ participant.status }}
-                        </p> -->
-                    </div>
-                </li>
-            </ul>
-            <p v-else>Участников не найдено...</p>
-            <div
-                v-if="eventsStore.applications.length > 6"
-                class="squad-participants__link"
-            >
+            </section>
+            <!-- Другие мероприятия -->
+            <h2 class="title event_others event_border">Другие мероприятия</h2>
+            <div class="other_events_wrap">
                 <router-link
-                    :to="{
-                        name: 'allparticipants',
-                        params: { id: eventsStore.event.id },
-                    }"
+                    :to="{ name: 'Action', params: { id: items.id } }"
+                    class="event_item"
+                    v-for="items in [...new Set(eventsStore.events)]"
                 >
-                    <div class="squad__wrapper-route">
-                        Показать всех
-                    </div></router-link
-                >
+                    <img
+                        :src="items.banner"
+                        alt="banner"
+                        class="event_item_banner"
+                    />
+                    <p class="event_item_title">{{ items.name }}</p>
+                    <div class="d-flex justify-space-between mb-3">
+                        <p class="event_item_date">
+                            {{
+                                new Date(
+                                    items.time_data.start_date,
+                                ).toLocaleDateString(undefined, {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                })
+                            }}
+                        </p>
+                        <div class="d-flex align-center event_item_count">
+                            {{ items.participants_number }}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="8"
+                                    r="2.5"
+                                    stroke="#35383F"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M13.7679 6.5C13.9657 6.15743 14.2607 5.88121 14.6154 5.70625C14.9702 5.5313 15.3689 5.46548 15.7611 5.51711C16.1532 5.56874 16.5213 5.73551 16.8187 5.99632C17.1161 6.25713 17.3295 6.60028 17.4319 6.98236C17.5342 7.36445 17.521 7.76831 17.3939 8.14288C17.2667 8.51745 17.0313 8.8459 16.7175 9.08671C16.4037 9.32751 16.0255 9.46985 15.6308 9.49572C15.2361 9.52159 14.8426 9.42983 14.5 9.23205"
+                                    stroke="#35383F"
+                                />
+                                <path
+                                    d="M10.2321 6.5C10.0343 6.15743 9.73935 5.88121 9.38458 5.70625C9.02981 5.5313 8.63113 5.46548 8.23895 5.51711C7.84677 5.56874 7.47871 5.73551 7.18131 5.99632C6.88391 6.25713 6.67053 6.60028 6.56815 6.98236C6.46577 7.36445 6.47899 7.76831 6.60614 8.14288C6.73329 8.51745 6.96866 8.8459 7.28248 9.08671C7.5963 9.32751 7.97448 9.46985 8.36919 9.49572C8.76391 9.52159 9.15743 9.42983 9.5 9.23205"
+                                    stroke="#35383F"
+                                />
+                                <path
+                                    d="M12 12.5C16.0802 12.5 17.1335 15.8022 17.4054 17.507C17.4924 18.0524 17.0523 18.5 16.5 18.5H7.5C6.94771 18.5 6.50763 18.0524 6.59461 17.507C6.86649 15.8022 7.91976 12.5 12 12.5Z"
+                                    stroke="#35383F"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M19.2964 15.4162L18.8113 15.5377L19.2964 15.4162ZM13.0869 12.5859L12.7177 12.2488L12.0972 12.9283L13.0049 13.0791L13.0869 12.5859ZM17.1811 16.5L16.7008 16.639L16.8053 17H17.1811V16.5ZM15.4998 12C16.5275 12 17.2493 12.5027 17.7781 13.2069C18.3175 13.9253 18.6343 14.8306 18.8113 15.5377L19.7814 15.2948C19.5902 14.5315 19.2327 13.4787 18.5778 12.6065C17.9124 11.7203 16.92 11 15.4998 11V12ZM13.4562 12.923C13.9565 12.375 14.6105 12 15.4998 12V11C14.2826 11 13.3734 11.5306 12.7177 12.2488L13.4562 12.923ZM13.0049 13.0791C15.3055 13.4614 16.2788 15.1801 16.7008 16.639L17.6614 16.361C17.1903 14.7326 16.0188 12.5663 13.1689 12.0927L13.0049 13.0791ZM18.3948 16H17.1811V17H18.3948V16ZM18.8113 15.5377C18.8651 15.7526 18.7073 16 18.3948 16V17C19.2655 17 20.015 16.2277 19.7814 15.2948L18.8113 15.5377Z"
+                                    fill="#35383F"
+                                />
+                                <path
+                                    d="M10.913 12.5859L10.995 13.0791L11.9027 12.9283L11.2823 12.2488L10.913 12.5859ZM4.70355 15.4162L5.18857 15.5377L4.70355 15.4162ZM6.8188 16.5V17H7.19465L7.29911 16.639L6.8188 16.5ZM8.50011 12C9.38944 12 10.0434 12.375 10.5438 12.923L11.2823 12.2488C10.6266 11.5306 9.71735 11 8.50011 11V12ZM5.18857 15.5377C5.36566 14.8306 5.6824 13.9253 6.22179 13.2069C6.7506 12.5027 7.47238 12 8.50011 12V11C7.07993 11 6.08755 11.7203 5.42211 12.6065C4.76725 13.4787 4.40968 14.5315 4.21853 15.2948L5.18857 15.5377ZM5.6051 16C5.29259 16 5.13477 15.7526 5.18857 15.5377L4.21853 15.2948C3.9849 16.2277 4.73436 17 5.6051 17V16ZM6.8188 16H5.6051V17H6.8188V16ZM7.29911 16.639C7.72116 15.1801 8.69448 13.4614 10.995 13.0791L10.831 12.0927C7.98113 12.5663 6.80962 14.7326 6.3385 16.361L7.29911 16.639Z"
+                                    fill="#35383F"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-space-between">
+                        <div class="eventsScale">
+                            {{ items.scale }}
+                        </div>
+                        <div class="eventsScale">
+                            {{ items.direction }}
+                        </div>
+                    </div>
+                </router-link>
             </div>
-        </section>
-        <!-- Другие мероприятия -->
-        <h2 class="title event_others event_border">Другие мероприятия</h2>
-        <div class="other_events_wrap">
-            <router-link
-                :to="{ name: 'Action', params: { id: items.id } }"
-                class="event_item"
-                v-for="items in [...new Set(eventsStore.events)]"
-            >
-                <img
-                    :src="items.banner"
-                    alt="banner"
-                    class="event_item_banner"
-                />
-                <p class="event_item_title">{{ items.name }}</p>
-                <div class="d-flex justify-space-between mb-3">
-                    <p class="event_item_date">
-                        {{
-                            new Date(
-                                items.time_data.start_date,
-                            ).toLocaleDateString(undefined, {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                            })
-                        }}
-                    </p>
-                    <div class="d-flex align-center event_item_count">
-                        {{ items.participants_number }}
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            fill="none"
-                        >
-                            <circle
-                                cx="12"
-                                cy="8"
-                                r="2.5"
-                                stroke="#35383F"
-                                stroke-linecap="round"
-                            />
-                            <path
-                                d="M13.7679 6.5C13.9657 6.15743 14.2607 5.88121 14.6154 5.70625C14.9702 5.5313 15.3689 5.46548 15.7611 5.51711C16.1532 5.56874 16.5213 5.73551 16.8187 5.99632C17.1161 6.25713 17.3295 6.60028 17.4319 6.98236C17.5342 7.36445 17.521 7.76831 17.3939 8.14288C17.2667 8.51745 17.0313 8.8459 16.7175 9.08671C16.4037 9.32751 16.0255 9.46985 15.6308 9.49572C15.2361 9.52159 14.8426 9.42983 14.5 9.23205"
-                                stroke="#35383F"
-                            />
-                            <path
-                                d="M10.2321 6.5C10.0343 6.15743 9.73935 5.88121 9.38458 5.70625C9.02981 5.5313 8.63113 5.46548 8.23895 5.51711C7.84677 5.56874 7.47871 5.73551 7.18131 5.99632C6.88391 6.25713 6.67053 6.60028 6.56815 6.98236C6.46577 7.36445 6.47899 7.76831 6.60614 8.14288C6.73329 8.51745 6.96866 8.8459 7.28248 9.08671C7.5963 9.32751 7.97448 9.46985 8.36919 9.49572C8.76391 9.52159 9.15743 9.42983 9.5 9.23205"
-                                stroke="#35383F"
-                            />
-                            <path
-                                d="M12 12.5C16.0802 12.5 17.1335 15.8022 17.4054 17.507C17.4924 18.0524 17.0523 18.5 16.5 18.5H7.5C6.94771 18.5 6.50763 18.0524 6.59461 17.507C6.86649 15.8022 7.91976 12.5 12 12.5Z"
-                                stroke="#35383F"
-                                stroke-linecap="round"
-                            />
-                            <path
-                                d="M19.2964 15.4162L18.8113 15.5377L19.2964 15.4162ZM13.0869 12.5859L12.7177 12.2488L12.0972 12.9283L13.0049 13.0791L13.0869 12.5859ZM17.1811 16.5L16.7008 16.639L16.8053 17H17.1811V16.5ZM15.4998 12C16.5275 12 17.2493 12.5027 17.7781 13.2069C18.3175 13.9253 18.6343 14.8306 18.8113 15.5377L19.7814 15.2948C19.5902 14.5315 19.2327 13.4787 18.5778 12.6065C17.9124 11.7203 16.92 11 15.4998 11V12ZM13.4562 12.923C13.9565 12.375 14.6105 12 15.4998 12V11C14.2826 11 13.3734 11.5306 12.7177 12.2488L13.4562 12.923ZM13.0049 13.0791C15.3055 13.4614 16.2788 15.1801 16.7008 16.639L17.6614 16.361C17.1903 14.7326 16.0188 12.5663 13.1689 12.0927L13.0049 13.0791ZM18.3948 16H17.1811V17H18.3948V16ZM18.8113 15.5377C18.8651 15.7526 18.7073 16 18.3948 16V17C19.2655 17 20.015 16.2277 19.7814 15.2948L18.8113 15.5377Z"
-                                fill="#35383F"
-                            />
-                            <path
-                                d="M10.913 12.5859L10.995 13.0791L11.9027 12.9283L11.2823 12.2488L10.913 12.5859ZM4.70355 15.4162L5.18857 15.5377L4.70355 15.4162ZM6.8188 16.5V17H7.19465L7.29911 16.639L6.8188 16.5ZM8.50011 12C9.38944 12 10.0434 12.375 10.5438 12.923L11.2823 12.2488C10.6266 11.5306 9.71735 11 8.50011 11V12ZM5.18857 15.5377C5.36566 14.8306 5.6824 13.9253 6.22179 13.2069C6.7506 12.5027 7.47238 12 8.50011 12V11C7.07993 11 6.08755 11.7203 5.42211 12.6065C4.76725 13.4787 4.40968 14.5315 4.21853 15.2948L5.18857 15.5377ZM5.6051 16C5.29259 16 5.13477 15.7526 5.18857 15.5377L4.21853 15.2948C3.9849 16.2277 4.73436 17 5.6051 17V16ZM6.8188 16H5.6051V17H6.8188V16ZM7.29911 16.639C7.72116 15.1801 8.69448 13.4614 10.995 13.0791L10.831 12.0927C7.98113 12.5663 6.80962 14.7326 6.3385 16.361L7.29911 16.639Z"
-                                fill="#35383F"
-                            />
-                        </svg>
-                    </div>
-                </div>
-                <div class="d-flex justify-space-between">
-                    <div class="eventsScale">
-                        {{ items.scale }}
-                    </div>
-                    <div class="eventsScale">
-                        {{ items.direction }}
-                    </div>
-                </div>
-            </router-link>
+            <Button
+                v-if="eventsStore.events.length > 4"
+                class="form-button btn_wrap"
+                type="button"
+                label="Показать еще"
+                variant="text"
+                size="large"
+            ></Button>
         </div>
-        <Button
-            v-if="eventsStore.events.length > 4"
-            class="form-button btn_wrap"
-            type="button"
-            label="Показать еще"
-            variant="text"
-            size="large"
-        ></Button>
     </div>
 </template>
 
@@ -479,6 +509,7 @@ watch(
         &_banner {
             border-radius: 10px;
             height: 210px;
+            width: 100%;
         }
         &_title {
             font-size: 14px;
@@ -557,10 +588,14 @@ watch(
     margin-bottom: 40px;
 }
 
+.eventt {
+    padding-bottom: 80px;
+}
+
 .eventsScale {
     border: 1px solid #35383f;
     border-radius: 18px;
-    padding: 2px 7px;
+    padding: 2px 6px;
 }
 .text--organizer {
     line-height: normal;
@@ -775,7 +810,6 @@ watch(
 .btn_wrap {
     margin: 0 auto;
     margin-top: 60px;
-    margin-bottom: 80px;
 }
 
 .section_wrap {
