@@ -10,7 +10,7 @@
           alt="Логотип конкурса"
       />
       <a href="https://vk.com/rso.university" target="_blank" class="corpuniver__vk">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="15" viewBox="0 0 22 15" fill="none">-->
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="15" viewBox="0 0 22 15" fill="none">
           <path d="M12.0251 14.0534C4.73175 14.0534 0.571782 9.0534 0.398438 0.733398H4.05178C4.17178 6.84005 6.86506 9.42671 8.99837 9.96005V0.733398H12.4385V6.00002C14.5452 5.77337 16.7582 3.3734 17.5049 0.733398H20.945C20.3717 3.98674 17.9717 6.38671 16.265 7.37337C17.9717 8.17337 20.7051 10.2667 21.7451 14.0534H17.9583C17.145 11.5201 15.1185 9.56005 12.4385 9.29337V14.0534H12.0251Z" fill="#35383F"/>
           </svg>
       </a>
@@ -264,13 +264,126 @@
     <p class="corpuniver__text-subtitle">Спикеры: Дмитрий Парамонов, Ксения Пискарева, Анна Яблокова</p>
 
     <div class="corpuniver__video">
-
       <iframe
           class="corpuniver__iframe"
           src="https://vk.com/video_ext.php?oid=-223571150&id=456239065&hd=2"
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
           allowfullscreen>
       </iframe>
+    </div>
+
+    <div class="videoType">
+      <v-btn
+          class="constructionBtn videoTypeBtn"
+          :class="{active: toggleBtn.construction }"
+          variant="outlined"
+          @click="toggle"
+      >
+        Строительные
+      </v-btn>
+      <v-btn
+          class="pedagogicalBtn videoTypeBtn"
+          :class="{active: toggleBtn.pedagogical }"
+          variant="outlined"
+          @click="toggle"
+      >
+        Педагогические
+      </v-btn>
+      <v-btn
+          class="serviceBtn videoTypeBtn"
+          :class="{active: toggleBtn.service }"
+          variant="outlined"
+          @click="toggle"
+      >
+        Сервисные
+      </v-btn>
+      <v-btn
+          class="agriculturalBtn videoTypeBtn"
+          :class="{active: toggleBtn.agricultural }"
+          variant="outlined"
+          @click="toggle"
+      >
+        Сельскохозяйственные
+      </v-btn>
+      <v-btn
+          class="conductorBtn videoTypeBtn"
+          :class="{active: toggleBtn.conductor }"
+          variant="outlined"
+          @click="toggle"
+      >
+        Проводников
+      </v-btn>
+    </div>
+
+    <div v-if="toggleBtn.construction">
+      <h2 id="video_6" class="corpuniver__title-h2">Видео для отрядов направление «Строительное»</h2>
+      <p class="corpuniver__text-subtitle">Спикеры:</p>
+
+      <div class="corpuniver__video">
+        <img src="@app/assets/corpuniver/default.png">
+      </div>
+    </div>
+    <div v-else-if="toggleBtn.pedagogical">
+      <h2 id="video_6" class="corpuniver__title-h2">Видео для отрядов направление «Педагогическое»</h2>
+      <p class="corpuniver__text-subtitle">Спикеры:</p>
+
+      <div class="corpuniver__video">
+        <iframe
+            class="corpuniver__iframe"
+            src="https://vk.com/video_ext.php?oid=-223571150&id=456239071&hd=2"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+            allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div v-else-if="toggleBtn.service">
+      <h2 id="video_6" class="corpuniver__title-h2">Видео для отрядов направление «Сервисное»</h2>
+      <p class="corpuniver__text-subtitle">Спикеры:</p>
+
+      <div class="corpuniver__video">
+        <iframe
+            class="corpuniver__iframe"
+            src="https://vk.com/video_ext.php?oid=-223571150&id=456239067&hd=2"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+            allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div v-else-if="toggleBtn.agricultural">
+      <h2 id="video_6" class="corpuniver__title-h2">Видео для отрядов направление «Сельскохозяйственное»</h2>
+      <p class="corpuniver__text-subtitle">Спикеры:</p>
+
+      <div class="corpuniver__video">
+        <iframe
+            class="corpuniver__iframe"
+            src="https://vk.com/video_ext.php?oid=-223571150&id=456239075"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+            allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div v-else-if="toggleBtn.conductor">
+      <h2 id="video_6" class="corpuniver__title-h2">Видео для отрядов направление «Проводников»</h2>
+      <p class="corpuniver__text-subtitle">Спикеры:</p>
+
+      <div class="corpuniver__video">
+        <iframe
+            class="corpuniver__iframe"
+            src="https://vk.com/video_ext.php?oid=-223571150&id=456239066&hd=2"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+            allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <h2 id="video_6" class="corpuniver__title-h2">Занятие 20 марта «Создание и работа команды мечты»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Варвара Пасенкова, Елена Писарева, Влад Езин, Валентина Бродягина, Анастасия Гориченко</p>
+
+    <div class="corpuniver__video">
+      <iframe
+          class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239074&hd=2"
+          allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+          allowfullscreen></iframe>
     </div>
 
     <div id="testing" class="corpuniver__documents-test">
@@ -285,16 +398,79 @@
 
 </template>
 <script setup>
+import { ref } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
+
+let toggleBtn = ref({
+  construction: true,
+  pedagogical: false,
+  service: false,
+  agricultural: false,
+  conductor: false,
+})
+
+const toggle = (e) => {
+  e.target.offsetParent.classList.forEach((c) => {
+   if (c === 'constructionBtn')  {
+     toggleBtn.value.construction = true
+     toggleBtn.value.pedagogical = false
+     toggleBtn.value.service = false
+     toggleBtn.value.agricultural = false
+     toggleBtn.value.conductor = false
+   } else if (c === 'pedagogicalBtn') {
+     toggleBtn.value.construction = false
+     toggleBtn.value.pedagogical = true
+     toggleBtn.value.service = false
+     toggleBtn.value.agricultural = false
+     toggleBtn.value.conductor = false
+   } else if (c === 'serviceBtn') {
+     toggleBtn.value.construction = false
+     toggleBtn.value.pedagogical = false
+     toggleBtn.value.service = true
+     toggleBtn.value.agricultural = false
+     toggleBtn.value.conductor = false
+   } else if (c === 'agriculturalBtn') {
+     toggleBtn.value.construction = false
+     toggleBtn.value.pedagogical = false
+     toggleBtn.value.service = false
+     toggleBtn.value.agricultural = true
+     toggleBtn.value.conductor = false
+   } else if (c === 'conductorBtn') {
+     toggleBtn.value.construction = false
+     toggleBtn.value.pedagogical = false
+     toggleBtn.value.service = false
+     toggleBtn.value.agricultural = false
+     toggleBtn.value.conductor = true
+   }
+  })
+}
 </script>
 <style lang="scss" scoped>
+.videoType {
+  margin-top: 80px;
+  padding-bottom: 24px;
+}
+.videoTypeBtn {
+  border-radius: 30px;
+  border: 2px solid #35383F;
+  margin-right: 20px;
+  font-family: Bert Sans;
+
+  @media (max-width: 1180px) {
+    margin-bottom: 10px;
+  }
+}
+.active {
+  background-color: #1C5C94;
+  color: #FFFFFF;
+  border: none;
+}
 .corpuniver__table {
   margin-bottom: 40px;
   &__tr {
       background-color: #ECEFF4;
       text-align: center;
   }
-
   &__th {
     font-family: Akrobat;
     font-size: 24px;
