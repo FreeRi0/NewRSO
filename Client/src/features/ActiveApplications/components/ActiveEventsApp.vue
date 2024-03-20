@@ -65,6 +65,7 @@ import { ref, onMounted, onActivated, inject } from 'vue';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
+const ev = ref([]);
 const eventsList = ref([]);
 const selectedEventList = ref([]);
 const checkboxAllEvents = ref(false);
@@ -73,7 +74,6 @@ const swal = inject('$swal');
 const loading = ref(false);
 const action = ref('Одобрить');
 
-// const actionsList = ref(['Одобрить', 'Отклонить']);
 const actionsList = ref([
     {
         value: 'Одобрить',
@@ -82,9 +82,8 @@ const actionsList = ref([
     { value: 'Отклонить', name: 'Отклонить' },
 ]);
 
-const viewEvents = async () => {
+const viewEvents = async (event_pk) => {
     try {
-        let event_pk = 4;
         const eventsRequest = await HTTP.get(
             `/events/${event_pk}/applications/`,
             {
@@ -94,15 +93,30 @@ const viewEvents = async () => {
                 },
             },
         );
-        eventsList.value = eventsRequest.data.results;
+        eventsList.value = [...eventsList.value, ...eventsRequest.data.results];
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
+const events = async () => {
+    try {
+        const eventsRequest = await HTTP.get(`/events/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token' + localStorage.getItem('Token'),
+            },
+        });
+        ev.value = eventsRequest.data.results;
+        for (let i in eventsRequest.data.results) {
+            viewEvents(eventsRequest.data.results[i].id);
+        }
+    } catch (error) {
+        console.log('an error occured' + error);
+    }
+};
+
 const onToggleSelectCompetition = (event, checked) => {
-    // console.log('participant', participant.selected);
-    // console.log('checked', checked);
     if (checked) {
         event.selected = checked;
         selectedEventList.value.push(event);
@@ -190,12 +204,12 @@ const onAction = async () => {
             if (action.value === 'Одобрить') {
                 console.log('app', application.id, application);
                 await confirmApplication(
-                    roles.roles.value.detachment_commander?.id,
+                   eventsRequest.data.results[i].id,
                     application.id,
                 );
             } else {
                 await cancelApplication(
-                    roles.roles.value.detachment_commander?.id,
+                    eventsRequest.data.results[i].id,
                     application.id,
                 );
             }
@@ -213,10 +227,10 @@ const onAction = async () => {
 };
 
 onMounted(async () => {
-    await viewEvents();
+    await events();
 });
 
-onActivated(async () => {
-    await viewEvents();
-});
+// onActivated(async () => {
+//     await events();
+// });
 </script>

@@ -8,7 +8,8 @@
                     v-if="event?.user?.avatar?.photo"
                 />
                 <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                v-else
+                    src="@app/assets/user-avatar.png"
                     alt="photo"
                 />
             </div>
@@ -55,7 +56,7 @@
             </div>
         </div>
         <div class="d-flex">
-            <div class="horizontalSquad-item__wrapper">{{ action }}</div>
+            <div class="actionVal">{{ action }}</div>
 
             <div class="horizontalSquad__confidant ml-3">
                 <input
@@ -71,45 +72,28 @@
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
-import { storeToRefs } from 'pinia';
 
 const props = defineProps({
     event: {
         type: Object,
         required: true,
     },
-    selectedEvents: {
-        type: Array,
-        default: () => [],
-    },
+    action: {
+        type: String,
+        default: '',
+    }
 });
+
+const checked = ref(true);
 
 const emit = defineEmits({
     select: null,
 });
 
-const roleStore = useRoleStore();
-roleStore.getRoles();
-const roles = storeToRefs(roleStore);
-
 const updateCheckEvents = (e) => {
     emit('select', props.event, e.target.checked);
 };
 
-// const selectedEvent = ref(props.selectedCompetitions);
-
-// watch(
-//     () => props.selectedCompetitions,
-//     (newChecked) => {
-//         if (!newChecked) return;
-//         selectedEvent.value = newChecked;
-//         const checkedItem = newChecked.find(
-//             (item) => item.id == props.event.id,
-//         );
-//         if (!checkedItem) checked.value = false;
-//         else checked.value = true;
-//     },
-// );
 </script>
 <style lang="scss" scoped>
 .horizontallso {
@@ -156,6 +140,15 @@ const updateCheckEvents = (e) => {
     margin-bottom: 12px;
     width: 100%;
 }
+
+.actionVal {
+    border-radius: 10px;
+    border: 1px solid #b6b6b6;
+    padding: 12px 70px;
+    height: 48px;
+    margin-left: 12px;
+}
+
 
 .containerHorizontal {
     display: flex;
@@ -207,7 +200,7 @@ const updateCheckEvents = (e) => {
     font-weight: 400;
 }
 
-.horizontallso__confidant {
+.horizontalSquad__confidant {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;

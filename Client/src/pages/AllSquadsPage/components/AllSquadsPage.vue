@@ -188,12 +188,14 @@
                                     :sorts-boolean="false"
                                     class="sort-alphabet"
                                     placeholder="Выберите фильтр"
+                                    @update:modelValue="sortSquads"
+
                                 ></sortByEducation>
                             </div>
 
                             <Button
                                 type="button"
-                                class="ascend"
+                                class="ascend ml-2"
                                 iconn="iconn"
                                 @click="ascending = !ascending"
                                 color="white"
@@ -275,6 +277,13 @@ const next = () => {
 
 const prev = () => {
     getDetachments()
+
+    // squadsStore.getSquads(sortBy.value);
+};
+
+const sortSquads = () => {
+    squadsStore.getSquads(sortBy.value);
+
 };
 const ascending = ref(true);
 const sortBy = ref('name');

@@ -65,6 +65,7 @@
                             :sorts-boolean="false"
                             class="sort-alphabet"
                             placeholder="Выберите фильтр"
+                            @update:modelValue="sortSquads"
                         ></sortByEducation>
                     </div>
 
@@ -146,26 +147,30 @@ const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
 const categories = storeToRefs(squadsStore);
 const name = ref('');
+const sortBy = ref('name');
 const education = ref(null);
 const next = () => {
-    squadsStore.getNextCompetitionSquads();
+    squadsStore.getNextCompetitionSquads(sortBy.value);
 };
 const prev = () => {
-    squadsStore.getCompetitionSquads();
+    squadsStore.getCompetitionSquads(sortBy.value);
 };
 const ascending = ref(true);
-const sortBy = ref();
-
 const picked = ref('');
 const switched = ref(true);
 const timerSearch = ref(null);
 const selectedSort = ref(null);
 
+const sortSquads = () => {
+    squadsStore.getCompetitionSquads(sortBy.value);
+};
+
 const sortOptionss = ref([
     {
-        value: 'alphabetically',
+        value: 'name',
         name: 'Алфавиту от А - Я',
     },
+    { value: 'founding_date', name: 'Дате создания отряда' },
 ]);
 
 const searchCompetitions = (event) => {
@@ -185,24 +190,6 @@ const sortedSquads = computed(() => {
     } else {
         tempSquads = tempSquads.filter((item) => !item.detachment);
     }
-    tempSquads = tempSquads.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa =
-                    a.junior_detachment?.name.toLowerCase() ||
-                    a.detachment?.name.toLowerCase(),
-                fb =
-                    b.junior_detachment?.name.toLowerCase() ||
-                    b.detachment?.name.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        }
-    });
 
     if (!ascending.value) {
         tempSquads.reverse();
@@ -216,12 +203,11 @@ const sortedSquads = computed(() => {
             item.junior_detachment?.area === picked.value.name ||
             item.detachment?.area === picked.value.name,
     );
-    // tempSquads = tempSquads.slice(0, squadsVisible.value);
     return tempSquads;
 });
 
 onMounted(() => {
-    squadsStore.getCompetitionSquads();
+    squadsStore.getCompetitionSquads(sortBy.value);
 });
 </script>
 <style lang="scss" scoped>

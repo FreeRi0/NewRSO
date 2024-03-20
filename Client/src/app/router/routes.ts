@@ -494,7 +494,8 @@ const routes: RouteRecordRaw[] = [
                         meta: {
                             requiresAuth: true,
                             redirectTo: 'Action',
-                            label: 'Мероприятие',
+                            label: 'event.name',
+                            isObject: true,
                         },
                         children: [
                             {

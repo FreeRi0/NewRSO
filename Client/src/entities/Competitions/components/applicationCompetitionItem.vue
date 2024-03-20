@@ -16,7 +16,8 @@
                     v-if="event?.user?.avatar?.photo"
                 />
                 <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                   v-else
+                    src="@app/assets/user-avatar.png"
                     alt="photo"
                 />
             </div>
@@ -78,10 +79,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    position: {
-        type: Number,
-        default: 0,
-    },
+    // position: {
+    //     type: Number,
+    //     default: 0,
+    // },
 });
 
 const emit = defineEmits({
@@ -90,7 +91,6 @@ const emit = defineEmits({
 const checked = ref(false);
 
 const updateCheckEvents = (e) => {
-    console.log('ddddddSquad', checked.value);
     emit('select', props.event, e.target.checked);
 };
 
