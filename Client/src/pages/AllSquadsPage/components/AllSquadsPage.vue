@@ -145,7 +145,7 @@
                                 </v-select>
                             </div>
 
-                            <div class="sort-select sort-select--width" v-if='SelectedSortRegional'>
+                            <div class="sort-select sort-select--width" v-if='SelectedSortRegional || SelectedSortLocal'>
                                 <v-select
                                     class="form__select filter-district"
                                     :items="locals"
@@ -162,7 +162,7 @@
                                     </template>
                                 </v-select>
                             </div>
-                            <div class="sort-select sort-select--width" v-if='SelectedSortRegional'>
+                            <div class="sort-select sort-select--width" v-if='SelectedSortRegional || SelectedSortLocal'>
                                 <v-select
                                     class="form__select filter-district sortedEducation"
                                     :items="educationals"

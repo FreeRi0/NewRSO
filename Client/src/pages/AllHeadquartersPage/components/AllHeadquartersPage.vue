@@ -125,7 +125,7 @@
                             </template>
                         </v-select>
                     </div>
-                    <div class="sort-select" v-if='SelectedSortRegional'>
+                    <div class="sort-select" v-if='SelectedSortRegional || SelectedSortLocal'>
                         <v-select
                             class="form__select filter-district"
                             :items="locals"

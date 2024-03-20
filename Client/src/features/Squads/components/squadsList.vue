@@ -6,7 +6,7 @@
 </template>
 <script setup>
 import { squadItem } from '@entities/Squads';
-const props = defineProps({
+defineProps({
     squads: {
         type: Array,
         required: true,
