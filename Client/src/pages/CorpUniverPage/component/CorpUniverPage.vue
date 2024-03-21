@@ -402,8 +402,8 @@ import { ref } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
 
 let toggleBtn = ref({
-  construction: true,
-  pedagogical: false,
+  construction: false,
+  pedagogical: true,
   service: false,
   agricultural: false,
   conductor: false,

@@ -69,12 +69,6 @@ watch(
     () => props.participant.selected,
     (newSelected) => {
         checked.value = newSelected;
-        // const checkedItem = newSelected.find(
-        //     (item) => item.id == props.participant.id,
-        // );
-        // console.log('checkedItem', checkedItem);
-        // if (!checkedItem) checked.value = false;
-        // else checked.value = true;
     },
 );
 </script>
