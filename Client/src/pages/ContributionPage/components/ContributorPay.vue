@@ -422,13 +422,7 @@ const ChangeStatus = async (id) => {
                 },
             },
         );
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'успешно',
-            showConfirmButton: false,
-            timer: 1500,
-        });
+
     } catch (error) {
         isError.value = error.response.data;
         console.error('There was an error!', error);
@@ -456,13 +450,7 @@ const ChangeCancelStatus = async (id) => {
             },
             {},
         );
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'успешно',
-            showConfirmButton: false,
-            timer: 1500,
-        });
+   
     } catch (error) {
         isError.value = error.response.data;
         console.error('There was an error!', error);

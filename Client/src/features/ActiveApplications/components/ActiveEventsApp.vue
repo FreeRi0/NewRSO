@@ -12,13 +12,17 @@
                     :options="actionsList"
                 ></sortByEducation>
             </div>
-            <!-- <div class="contributor-sort__all">
-                <input
-                    type="checkbox"
-                    @click="selectSquads"
-                    v-model="checkboxAllSquads"
-                />
-            </div> -->
+            <div class="d-flex align-center">
+                <div class="contributor-sort__all">
+                    <input
+                        type="checkbox"
+                        @click="select"
+                        placeholder="Выбрать все"
+                        v-model="checkboxAll"
+                    />
+                </div>
+                <div class="ml-3">Выбрать всё</div>
+            </div>
         </div>
         <div class="participants__list">
             <template v-for="event in eventsList" :key="event.id">
@@ -65,15 +69,15 @@ import { ref, onMounted, onActivated, inject } from 'vue';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
+const ev = ref([]);
 const eventsList = ref([]);
 const selectedEventList = ref([]);
-const checkboxAllEvents = ref(false);
+const checkboxAll = ref(false);
 const isError = ref([]);
 const swal = inject('$swal');
 const loading = ref(false);
 const action = ref('Одобрить');
 
-// const actionsList = ref(['Одобрить', 'Отклонить']);
 const actionsList = ref([
     {
         value: 'Одобрить',
@@ -82,9 +86,8 @@ const actionsList = ref([
     { value: 'Отклонить', name: 'Отклонить' },
 ]);
 
-const viewEvents = async () => {
+const viewEvents = async (event_pk) => {
     try {
-        let event_pk = 4;
         const eventsRequest = await HTTP.get(
             `/events/${event_pk}/applications/`,
             {
@@ -94,15 +97,46 @@ const viewEvents = async () => {
                 },
             },
         );
-        eventsList.value = eventsRequest.data.results;
+        eventsList.value = [...eventsList.value, ...eventsRequest.data.results];
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
+
+
+const events = async () => {
+    try {
+        const eventsRequest = await HTTP.get(`/events/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token' + localStorage.getItem('Token'),
+            },
+        });
+        ev.value = eventsRequest.data.results;
+        for (let i in eventsRequest.data.results) {
+            viewEvents(eventsRequest.data.results[i].id);
+        }
+    } catch (error) {
+        console.log('an error occured' + error);
+    }
+};
+
+const select = (event) => {
+    selectedEventList.value = [];
+    if (event.target.checked) {
+        for (let index in eventsList.value) {
+            eventsList.value[index].selected = true;
+            selectedEventList.value.push(eventsList.value[index]);
+        }
+    } else {
+        for (let index in eventsList.value) {
+            eventsList.value[index].selected = false;
+        }
+    }
+};
+
 const onToggleSelectCompetition = (event, checked) => {
-    // console.log('participant', participant.selected);
-    // console.log('checked', checked);
     if (checked) {
         event.selected = checked;
         selectedEventList.value.push(event);
@@ -114,7 +148,7 @@ const onToggleSelectCompetition = (event, checked) => {
     }
 };
 
-const confirmApplication = async (id, event_pk) => {
+const confirmApplication = async (event_pk, id) => {
     try {
         const approveReq = await HTTP.post(
             `/events/${event_pk}/applications/${id}/confirm/`,
@@ -149,7 +183,7 @@ const confirmApplication = async (id, event_pk) => {
     }
 };
 
-const cancelApplication = async (id, event_pk) => {
+const cancelApplication = async (event_pk, id) => {
     try {
         const rejectReq = await HTTP.delete(
             `/events/${event_pk}/applications/${id}/`,
@@ -189,15 +223,9 @@ const onAction = async () => {
         for (const application of selectedEventList.value) {
             if (action.value === 'Одобрить') {
                 console.log('app', application.id, application);
-                await confirmApplication(
-                    roles.roles.value.detachment_commander?.id,
-                    application.id,
-                );
+                await confirmApplication(application.event.id, application.id);
             } else {
-                await cancelApplication(
-                    roles.roles.value.detachment_commander?.id,
-                    application.id,
-                );
+                await cancelApplication(application.event.id, application.id);
             }
             eventsList.value = eventsList.value.filter(
                 (event) => event.id != application.id,
@@ -213,10 +241,10 @@ const onAction = async () => {
 };
 
 onMounted(async () => {
-    await viewEvents();
+    await events();
 });
 
-onActivated(async () => {
-    await viewEvents();
-});
+// onActivated(async () => {
+//     await events();
+// });
 </script>
