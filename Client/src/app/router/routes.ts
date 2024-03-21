@@ -106,7 +106,6 @@ const routes: RouteRecordRaw[] = [
                                     isObject: true,
                                 },
                                 children: [
-
                                     {
                                         path: 'reporting',
                                         meta: {
@@ -682,7 +681,6 @@ const routes: RouteRecordRaw[] = [
             },
 
             {
-
                 path: '/report',
                 name: 'Report',
                 component: () =>
@@ -712,7 +710,9 @@ const routes: RouteRecordRaw[] = [
                             label: 'Тестирование по обучению',
                         },
                         component: () =>
-                            import('@pages/TestingPages/components/TestingPages.vue')
+                            import(
+                                '@pages/TestingPages/components/TestingPages.vue'
+                            ),
                     },
                 ],
             },
@@ -771,14 +771,37 @@ const routes: RouteRecordRaw[] = [
 
             {
                 path: '/contributorPay',
-                name: 'contributorPay',
-                component: () =>
-                    import(
-                        '@pages/ContributionPage/components/ContributorPay.vue'
-                    ),
                 meta: {
                     label: 'Членский взнос',
+                    redirectTo: 'contributorPay',
                 },
+                children: [
+                    {
+                        path: '',
+                        name: 'contributorPay',
+                        meta: {},
+                        component: () =>
+                            import(
+                                '@pages/ContributionPage/components/ContributorPay.vue'
+                            ),
+                    },
+                    {
+                        path: ':id',
+                        children: [
+                            {
+                                path: 'personal',
+                                meta: {
+                                    label: 'Персональные данные пользователя',
+                                },
+                                name: 'PersonalDataUser',
+                                component: () =>
+                                    import(
+                                        '@pages/PersonalDataPage/components/PersonalDataID.vue'
+                                    ),
+                            },
+                        ],
+                    },
+                ],
             },
 
             {

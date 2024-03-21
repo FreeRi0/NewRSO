@@ -188,7 +188,7 @@
                                     :sorts-boolean="false"
                                     class="sort-alphabet"
                                     placeholder="Выберите фильтр"
-                                    @update:modelValue="sortSquads"
+                            
 
                                 ></sortByEducation>
                             </div>
@@ -281,10 +281,10 @@ const prev = () => {
     // squadsStore.getSquads(sortBy.value);
 };
 
-const sortSquads = () => {
-    squadsStore.getSquads(sortBy.value);
+// const sortSquads = () => {
+//     squadsStore.getSquads(sortBy.value);
 
-};
+// };
 const ascending = ref(true);
 const sortBy = ref('name');
 const picked = ref('');
@@ -336,13 +336,14 @@ const getEducationalsHeadquartersForFilters = async () => {
         console.log('error request educationals');
     }
 };
-const getDetachments = async (pagination) => {
+const getDetachments = async (pagination, orderLimit) => {
     if (isLoading.value) return false;
     try {
         isLoading.value = true;
         let data = [];
         let url = '/detachments/?';
-        if (!pagination) data.push('limit='+limit);
+        if (orderLimit) data.push('limit='+orderLimit);
+        else if (!pagination ) data.push('limit='+limit);
         else if (pagination == 'next') url = detachments.value.next.replace('http','https');
         if (name.value) data.push('search='+name.value)
         if (SelectedSortDistrict.value) data.push('district_headquarter__name='+SelectedSortDistrict.value)
@@ -350,7 +351,7 @@ const getDetachments = async (pagination) => {
         if (SelectedSortLocal.value) data.push('local_headquarter__name='+SelectedSortLocal.value)
         if (education.value) data.push('educational_institution__name='+education.value)
         if (picked.value) data.push('area__name='+picked.value)
-        if (sortBy.value) data.push('ordering='+(ascending.value?'':'-')+sortBy.value)
+        if (sortBy.value && !pagination) data.push('ordering='+(ascending.value?'':'-')+sortBy.value)
         const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
             headers: {
                 'Content-Type': 'application/json',
@@ -421,13 +422,13 @@ watch(
 watch(
     () => sortBy.value,
     () => {
-        getDetachments();
+        getDetachments('', sortedSquads.value.length);
     },
 );
 watch(
     () => ascending.value,
     () => {
-        getDetachments();
+        getDetachments('', sortedSquads.value.length);
     },
 );
 </script>

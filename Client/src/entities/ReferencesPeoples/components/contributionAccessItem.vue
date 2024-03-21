@@ -7,7 +7,9 @@
                 @change="updateMembership"
             />
         </div>
-        <div class="horizontallso-item__wrapper">
+        <div
+            class="horizontallso-item__wrapper"
+        >
             <div class="horizontallso-img">
                 <img
                     :src="participant.media?.photo"
