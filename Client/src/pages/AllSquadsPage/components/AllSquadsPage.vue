@@ -188,7 +188,7 @@
                                     :sorts-boolean="false"
                                     class="sort-alphabet"
                                     placeholder="Выберите фильтр"
-                            
+
 
                                 ></sortByEducation>
                             </div>
@@ -259,7 +259,7 @@ const education = ref(null);
 
 const isLoading = ref(false);
 const detachments = ref({});
-const limit = 4;
+const limit = 20;
 
 const SelectedSortDistrict = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName,

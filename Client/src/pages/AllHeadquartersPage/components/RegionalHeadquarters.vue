@@ -194,7 +194,7 @@ const isLoading = ref(false);
 
 const ascending = ref(true);
 const sortBy = ref('name');
-const limit = 4;
+const limit = 20;
 
 const vertical = ref(true);
 

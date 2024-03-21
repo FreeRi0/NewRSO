@@ -11,7 +11,7 @@ export const useSquadsStore = defineStore('squads', {
         isLoading: false,
         totalMembers: 0,
         SquadsLimit: 20,
-        MembersLimit: 6,
+        MembersLimit: 10,
         totalSquads: 0,
         CompetitionsLimit: 20,
         nextSquads: '',
