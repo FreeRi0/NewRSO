@@ -128,7 +128,7 @@
                                 v-for="participant in sortedParticipants"
                                 :key="participant.id"
                             >
-                            <p>{{ participant.membership_fee }}</p>
+                  
                                 <contributionAccessItem
                                     :participant="participant"
                                     @select="onToggleSelectCompetition"
@@ -452,6 +452,7 @@ const ChangeCancelStatus = async (id) => {
             },
             {},
         );
+
         checkboxAll.value = false;
 
     } catch (error) {
@@ -532,6 +533,7 @@ const onAction = async () => {
 
             }
             application.selected = false;
+
             selectedPeoples.value = selectedPeoples.value.filter(
                 (participant) => participant.id != application.id,
             );
