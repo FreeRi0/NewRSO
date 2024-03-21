@@ -75,7 +75,9 @@
                                 variant="outlined"
                                 v-model="sortBy"
                                 :options="sortOptions"
+                                :sorts-boolean="false"
                                 selected="sortBy"
+                                placeholder="Выберите фильтр"
                             ></sortByEducation>
                         </div>
                         <Button
@@ -87,6 +89,7 @@
                         ></Button>
                     </div>
                 </div>
+
                 <group-submit-item
                     v-for="user in sortedUsersList"
                     :key="user.id"
@@ -230,6 +233,7 @@ const getUsersList = async (search) => {
         }
         // usersList.value = data;
         sortedUsersList.value = usersList.value;
+        sortedUsersList.value.sort((a, b) => a.name.localeCompare(b.name));
     } catch (e) {
         console.log('getUsersList error', e);
     }
@@ -308,10 +312,9 @@ watch(selectedUsersList, (newSelectedUsersList) => {
 });
 
 watch(sortBy, () => {
-    console.log(sortedUsersList.value);
-    if (sortBy.value == 'По алфавиту: от А - Я')
+    if (sortBy.value == 'alphabetically')
         sortedUsersList.value.sort((a, b) => a.name.localeCompare(b.name));
-    if (sortBy.value == 'По дате рождения') {
+    if (sortBy.value == 'date_of_birth') {
         sortedUsersList.value.sort((a, b) => {
             if (a.date_of_birth > b.date_of_birth) return 1;
             if (a.date_of_birth == b.date_of_birth) return 0;
@@ -475,6 +478,10 @@ onMounted(async () => {
 .sort_line {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+}
+:deep(.btn_icon) {
+    border-radius: 10px;
 }
 .contributor-search__input {
     width: 100%;
@@ -491,31 +498,6 @@ onMounted(async () => {
     position: absolute;
     top: 15px;
     left: 16px;
-}
-.text_total {
-    width: 1180px;
-    height: 26px;
-    margin-top: 60px;
-    margin-bottom: 40px;
-    font-family: Bert Sans;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 26px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #35383f;
-}
-.competitions__btns {
-    display: grid;
-    width: 100%;
-    justify-content: center;
-    margin-top: 68px;
-    font-family: Bert Sans;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 21px;
-    letter-spacing: 0em;
-    text-align: left;
 }
 .form {
     &-fileupload {
@@ -546,14 +528,6 @@ onMounted(async () => {
         margin-top: 36px;
     }
 }
-.sort-select {
-    &--width {
-        width: 193px;
-    }
-    & > .form__select {
-        margin-bottom: 0px;
-    }
-}
 .count {
     margin-top: 36px;
     font-family: Bert Sans;
@@ -561,5 +535,15 @@ onMounted(async () => {
     font-weight: 500;
     line-height: 21.1px;
     color: #898989;
+}
+:deep(.v-field__outline__start) {
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-inline-start-width: 0px;
+}
+:deep(.v-field__outline__end) {
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-inline-end-width: 0px;
 }
 </style>
