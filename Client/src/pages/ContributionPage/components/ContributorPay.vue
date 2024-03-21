@@ -128,7 +128,7 @@
                                 v-for="participant in sortedParticipants"
                                 :key="participant.id"
                             >
-                  
+
                                 <contributionAccessItem
                                     :participant="participant"
                                     @select="onToggleSelectCompetition"
@@ -527,10 +527,8 @@ const onAction = async () => {
             if (action.value === 'Оплачен') {
                 console.log('app', application);
                 await ChangeStatus(application.id);
-
             } else {
                 await ChangeCancelStatus(application.id);
-
             }
             application.selected = false;
 
