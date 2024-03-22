@@ -316,16 +316,14 @@
     </div>
 
     <div v-if="toggleBtn.construction">
-      <h2 id="video_6" class="corpuniver__title-h2">Видео для отрядов направление «Строительное»</h2>
-      <p class="corpuniver__text-subtitle">Спикеры:</p>
+      <h2 id="video_6" class="corpuniver__title-h2">Мои документы | строительное направление </h2>
 
       <div class="corpuniver__video">
         <img src="@app/assets/corpuniver/default.png">
       </div>
     </div>
     <div v-else-if="toggleBtn.pedagogical">
-      <h2 id="video_6" class="corpuniver__title-h2">Видео для отрядов направление «Педагогическое»</h2>
-      <p class="corpuniver__text-subtitle">Спикеры:</p>
+      <h2 id="video_6" class="corpuniver__title-h2">Мои документы | педагогическое направление</h2>
 
       <div class="corpuniver__video">
         <iframe
@@ -337,8 +335,7 @@
     </div>
 
     <div v-else-if="toggleBtn.service">
-      <h2 id="video_6" class="corpuniver__title-h2">Видео для отрядов направление «Сервисное»</h2>
-      <p class="corpuniver__text-subtitle">Спикеры:</p>
+      <h2 id="video_6" class="corpuniver__title-h2">Мои документы | сервисное направление</h2>
 
       <div class="corpuniver__video">
         <iframe
@@ -350,8 +347,7 @@
     </div>
 
     <div v-else-if="toggleBtn.agricultural">
-      <h2 id="video_6" class="corpuniver__title-h2">Видео для отрядов направление «Сельскохозяйственное»</h2>
-      <p class="corpuniver__text-subtitle">Спикеры:</p>
+      <h2 id="video_6" class="corpuniver__title-h2">Мои документы | сельскохозяйственное направление</h2>
 
       <div class="corpuniver__video">
         <iframe
@@ -363,8 +359,7 @@
     </div>
 
     <div v-else-if="toggleBtn.conductor">
-      <h2 id="video_6" class="corpuniver__title-h2">Видео для отрядов направление «Проводников»</h2>
-      <p class="corpuniver__text-subtitle">Спикеры:</p>
+      <h2 id="video_6" class="corpuniver__title-h2">Мои документы | направление проводников</h2>
 
       <div class="corpuniver__video">
         <iframe
@@ -402,8 +397,8 @@ import { ref } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
 
 let toggleBtn = ref({
-  construction: true,
-  pedagogical: false,
+  construction: false,
+  pedagogical: true,
   service: false,
   agricultural: false,
   conductor: false,
@@ -445,6 +440,11 @@ const toggle = (e) => {
   })
 }
 </script>
+<style>
+.v-btn__content {
+  padding: 6px;
+}
+</style>
 <style lang="scss" scoped>
 .videoType {
   margin-top: 80px;
