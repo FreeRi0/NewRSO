@@ -313,6 +313,14 @@
       >
         Проводников
       </v-btn>
+      <v-btn
+          class="medicalBtn videoTypeBtn"
+          :class="{active: toggleBtn.medical }"
+          variant="outlined"
+          @click="toggle"
+      >
+        Медицинское
+      </v-btn>
     </div>
 
     <div v-if="toggleBtn.construction">
@@ -370,6 +378,18 @@
       </div>
     </div>
 
+    <div v-else-if="toggleBtn.medical">
+      <h2 id="video_6" class="corpuniver__title-h2">Мои документы | медицинское направление</h2>
+
+      <div class="corpuniver__video">
+        <iframe
+            class="corpuniver__iframe"
+            src="https://vk.com/video_ext.php?oid=-223571150&id=456239079"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+                allowfullscreen></iframe>
+      </div>
+    </div>
+
     <h2 id="video_6" class="corpuniver__title-h2">Занятие 20 марта «Создание и работа команды мечты»</h2>
     <p class="corpuniver__text-subtitle">Спикеры: Варвара Пасенкова, Елена Писарева, Влад Езин, Валентина Бродягина, Анастасия Гориченко</p>
 
@@ -402,6 +422,7 @@ let toggleBtn = ref({
   service: false,
   agricultural: false,
   conductor: false,
+  medical: false
 })
 
 const toggle = (e) => {
@@ -412,30 +433,42 @@ const toggle = (e) => {
      toggleBtn.value.service = false
      toggleBtn.value.agricultural = false
      toggleBtn.value.conductor = false
+     toggleBtn.value.medical = false
    } else if (c === 'pedagogicalBtn') {
      toggleBtn.value.construction = false
      toggleBtn.value.pedagogical = true
      toggleBtn.value.service = false
      toggleBtn.value.agricultural = false
      toggleBtn.value.conductor = false
+     toggleBtn.value.medical = false
    } else if (c === 'serviceBtn') {
      toggleBtn.value.construction = false
      toggleBtn.value.pedagogical = false
      toggleBtn.value.service = true
      toggleBtn.value.agricultural = false
      toggleBtn.value.conductor = false
+     toggleBtn.value.medical = false
    } else if (c === 'agriculturalBtn') {
      toggleBtn.value.construction = false
      toggleBtn.value.pedagogical = false
      toggleBtn.value.service = false
      toggleBtn.value.agricultural = true
      toggleBtn.value.conductor = false
+     toggleBtn.value.medical = false
    } else if (c === 'conductorBtn') {
      toggleBtn.value.construction = false
      toggleBtn.value.pedagogical = false
      toggleBtn.value.service = false
      toggleBtn.value.agricultural = false
      toggleBtn.value.conductor = true
+     toggleBtn.value.medical = false
+   } else if (c === 'medicalBtn') {
+     toggleBtn.value.construction = false
+     toggleBtn.value.pedagogical = false
+     toggleBtn.value.service = false
+     toggleBtn.value.agricultural = false
+     toggleBtn.value.conductor = false
+     toggleBtn.value.medical = true
    }
   })
 }
@@ -455,10 +488,8 @@ const toggle = (e) => {
   border: 2px solid #35383F;
   margin-right: 20px;
   font-family: Bert Sans;
-
-  @media (max-width: 1180px) {
     margin-bottom: 10px;
-  }
+
 }
 .active {
   background-color: #1C5C94;
