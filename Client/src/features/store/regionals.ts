@@ -83,10 +83,10 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
 
-        async getRegionalsForFilters() {
+        async getRegionalsForFilters(name: String) {
             try {
                 this.isLoading = true;
-                const responseRegionals = await HTTP.get(`/regionals/`, {
+                const responseRegionals = await HTTP.get(`/regionals/?ordering=${name}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
