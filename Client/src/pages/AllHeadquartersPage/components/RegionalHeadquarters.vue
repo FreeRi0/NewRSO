@@ -123,13 +123,13 @@
                 ></RegionalHQList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="isLoading.isLoading.value"
+                    v-if="isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
                 <p
                     v-else-if="
-                        !isLoading.isLoading.value &&
+                        !isLoading &&
                         !sortedRegionalHeadquarters.length
                     "
                 >
@@ -143,13 +143,13 @@
                 ></HorizontalRegionalHQs>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="isLoading.isLoading.value"
+                    v-if="isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
                 <p
                     v-else-if="
-                        !isLoading.isLoading.value &&
+                        !isLoading &&
                         !sortedRegionalHeadquarters.length
                     "
                 >
