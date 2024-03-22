@@ -376,7 +376,8 @@ const SendReference = async () => {
                 timer: 1500,
             });
             refData.value = response.data;
-            const url = new Blob([response.data], { type: 'application/zip' });
+            // const url = new Blob([response.data], { type: 'application/zip' });
+            const url = window.URL.createObjectURL(new Blob([response.data]));;
             const link = document.createElement('a');
             link.href = url;
             link.setAttribute('download', 'external.zip');
