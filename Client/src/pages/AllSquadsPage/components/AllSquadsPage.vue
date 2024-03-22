@@ -145,7 +145,10 @@
                                 </v-select>
                             </div>
 
-                            <div class="sort-select sort-select--width" v-if='SelectedSortRegional || SelectedSortLocal'>
+                            <div
+                                class="sort-select sort-select--width"
+                                v-if="SelectedSortRegional || SelectedSortLocal"
+                            >
                                 <v-select
                                     class="form__select filter-district"
                                     :items="locals"
@@ -162,7 +165,10 @@
                                     </template>
                                 </v-select>
                             </div>
-                            <div class="sort-select sort-select--width" v-if='SelectedSortRegional || SelectedSortLocal'>
+                            <div
+                                class="sort-select sort-select--width"
+                                v-if="SelectedSortRegional || SelectedSortLocal"
+                            >
                                 <v-select
                                     class="form__select filter-district sortedEducation"
                                     :items="educationals"
@@ -188,8 +194,6 @@
                                     :sorts-boolean="false"
                                     class="sort-alphabet"
                                     placeholder="Выберите фильтр"
-
-
                                 ></sortByEducation>
                             </div>
 
@@ -223,13 +227,10 @@
                 <p v-if="!sortedSquads.length">Ничего не найдено</p>
             </div>
 
-            <template v-if='detachments.count && detachments.count > limit'>
+            <template v-if="detachments.count && detachments.count > limit">
                 <Button
                     @click="next"
-                    v-if="
-                      sortedSquads.length <
-                      detachments.count
-                  "
+                    v-if="sortedSquads.length < detachments.count"
                     label="Показать еще"
                 ></Button>
                 <Button @click="prev" v-else label="Свернуть все"></Button>
@@ -241,9 +242,7 @@
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
-import {
-    sortByEducation,
-} from '@shared/components/selects';
+import { sortByEducation } from '@shared/components/selects';
 import { ref, onMounted, onActivated, watch } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { HTTP } from '@app/http';
@@ -255,7 +254,6 @@ const regionalsStore = useRegionalsStore();
 const name = ref('');
 const timerSearch = ref(null);
 const education = ref(null);
-
 
 const isLoading = ref(false);
 const detachments = ref({});
@@ -272,19 +270,14 @@ const SelectedSortLocal = ref(
 );
 
 const next = () => {
-    getDetachments('next')
+    getDetachments('next');
 };
 
 const prev = () => {
-    getDetachments()
+    getDetachments();
 
-    // squadsStore.getSquads(sortBy.value);
 };
 
-// const sortSquads = () => {
-//     squadsStore.getSquads(sortBy.value);
-
-// };
 const ascending = ref(true);
 const sortBy = ref('name');
 const picked = ref('');
@@ -308,13 +301,18 @@ const sortOptionss = ref([
 ]);
 
 const getLocalsHeadquartersForFilters = async () => {
-    if (!SelectedSortRegional.value){
+    if (!SelectedSortRegional.value) {
         locals.value = [];
         SelectedSortLocal.value = '';
         return false;
     }
     try {
-        const { data } = await HTTP.get('/locals/?regional_headquarter__name=' + SelectedSortRegional.value);
+        const { data } = await HTTP.get(
+            '/locals/?ordering=' +
+                sortBy.value +
+                '&regional_headquarter__name=' +
+                SelectedSortRegional.value,
+        );
         locals.value = data.results;
     } catch (e) {
         console.log('error request locals headquarters');
@@ -322,15 +320,18 @@ const getLocalsHeadquartersForFilters = async () => {
 };
 
 const getEducationalsHeadquartersForFilters = async () => {
-    if (!SelectedSortRegional.value){
+    if (!SelectedSortRegional.value) {
         educationals.value = [];
         education.value = '';
         return false;
     }
     let params = ['regional_headquarter__name=' + SelectedSortRegional.value];
-    if (SelectedSortLocal.value) params.push('local_headquarter__name='+SelectedSortLocal.value);
+    if (SelectedSortLocal.value)
+        params.push('local_headquarter__name=' + SelectedSortLocal.value);
     try {
-        const { data } = await HTTP.get('/eduicational_institutions/?' + params.join('&'));
+        const { data } = await HTTP.get(
+            '/eduicational_institutions/?' + params.join('&'),
+        );
         educationals.value = data.results;
     } catch (e) {
         console.log('error request educationals');
@@ -342,16 +343,28 @@ const getDetachments = async (pagination, orderLimit) => {
         isLoading.value = true;
         let data = [];
         let url = '/detachments/?';
-        if (orderLimit) data.push('limit='+orderLimit);
-        else if (!pagination ) data.push('limit='+limit);
-        else if (pagination == 'next') url = detachments.value.next.replace('http','https');
-        if (name.value) data.push('search='+name.value)
-        if (SelectedSortDistrict.value) data.push('district_headquarter__name='+SelectedSortDistrict.value)
-        if (SelectedSortRegional.value) data.push('regional_headquarter__name='+SelectedSortRegional.value)
-        if (SelectedSortLocal.value) data.push('local_headquarter__name='+SelectedSortLocal.value)
-        if (education.value) data.push('educational_institution__name='+education.value)
-        if (picked.value) data.push('area__name='+picked.value)
-        if (sortBy.value && !pagination) data.push('ordering='+(ascending.value?'':'-')+sortBy.value)
+        if (orderLimit) data.push('limit=' + orderLimit);
+        else if (!pagination) data.push('limit=' + limit);
+        else if (pagination == 'next')
+            url = detachments.value.next.replace('http', 'https');
+        if (name.value) data.push('search=' + name.value);
+        if (SelectedSortDistrict.value)
+            data.push(
+                'district_headquarter__name=' + SelectedSortDistrict.value,
+            );
+        if (SelectedSortRegional.value)
+            data.push(
+                'regional_headquarter__name=' + SelectedSortRegional.value,
+            );
+        if (SelectedSortLocal.value)
+            data.push('local_headquarter__name=' + SelectedSortLocal.value);
+        if (education.value)
+            data.push('educational_institution__name=' + education.value);
+        if (picked.value) data.push('area__name=' + picked.value);
+        if (sortBy.value && !pagination)
+            data.push(
+                'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
+            );
         const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
             headers: {
                 'Content-Type': 'application/json',
@@ -361,11 +374,14 @@ const getDetachments = async (pagination, orderLimit) => {
         isLoading.value = false;
 
         let response = viewHeadquartersResponse.data;
-        if (pagination){
-            response.results = [...detachments.value.results, ...response.results];
+        if (pagination) {
+            response.results = [
+                ...detachments.value.results,
+                ...response.results,
+            ];
         }
         detachments.value = response;
-        sortedSquads.value = response.results
+        sortedSquads.value = response.results;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -378,7 +394,7 @@ const searchDetachments = () => {
     }, 400);
 };
 onMounted(() => {
-    regionalsStore.getRegionalsForFilters();
+    regionalsStore.getRegionalsForFilters(sortBy.value);
     districtsStore.getDistricts();
     getDetachments();
 });
