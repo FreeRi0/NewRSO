@@ -262,7 +262,8 @@ const getLocalsHeadquartersForFilters = async () => {
         return false;
     }
     try {
-        const { data } = await HTTP.get('/locals/?regional_headquarter__name=' + SelectedSortRegional.value);
+        const { data } = await HTTP.get('/locals/??ordering=' +
+                sortBy.value + 'regional_headquarter__name=' + SelectedSortRegional.value);
         locals.value = data.results;
     } catch (e) {
         console.log('error request locals headquarters');
@@ -308,7 +309,7 @@ const searchEducational = () => {
 };
 
 onMounted(() => {
-    regionalsStore.getRegionalsForFilters();
+    regionalsStore.getRegionalsForFilters(sortBy.value);
     districtsStore.getDistricts();
     getEducationals();
 });

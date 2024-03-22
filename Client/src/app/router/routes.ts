@@ -793,7 +793,7 @@ const routes: RouteRecordRaw[] = [
                                 meta: {
                                     label: 'Персональные данные пользователя',
                                 },
-                                name: 'PersonalDataUser',
+                                name: 'PersonalDataUserContributor',
                                 component: () =>
                                     import(
                                         '@pages/PersonalDataPage/components/PersonalDataID.vue'

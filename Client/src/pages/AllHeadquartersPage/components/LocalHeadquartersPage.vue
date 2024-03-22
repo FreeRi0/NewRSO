@@ -275,7 +275,7 @@ const getLocals = async (pagination, orderLimit) => {
 
 onMounted(() => {
     districtsStore.getDistricts();
-    regionalsStore.getRegionals();
+    regionalsStore.getRegionals(sortBy.value);
     getLocals();
 });
 
