@@ -679,7 +679,7 @@ p {
 
 .refer {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: 1fr 1fr;
     column-gap: 140px;
     margin-top: 60px;
     @media screen and (max-width: 768px) {

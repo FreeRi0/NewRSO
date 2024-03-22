@@ -7,7 +7,9 @@
                 @change="updateMembership"
             />
         </div>
-        <div class="horizontallso-item__wrapper">
+        <div
+            class="horizontallso-item__wrapper"
+        >
             <div class="horizontallso-img">
                 <img
                     :src="participant.media?.photo"
@@ -69,12 +71,6 @@ watch(
     () => props.participant.selected,
     (newSelected) => {
         checked.value = newSelected;
-        // const checkedItem = newSelected.find(
-        //     (item) => item.id == props.participant.id,
-        // );
-        // console.log('checkedItem', checkedItem);
-        // if (!checkedItem) checked.value = false;
-        // else checked.value = true;
     },
 );
 </script>

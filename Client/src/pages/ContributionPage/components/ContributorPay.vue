@@ -90,8 +90,6 @@
                                 </div>
                                 <div class="ml-3">Выбрать всё</div>
                             </div>
-
-                            <!-- <p>Выбрать все</p> -->
                             <div class="participants__actions">
                                 <div class="participants__actions-select mr-3">
                                     <sortByEducation
@@ -130,6 +128,7 @@
                                 v-for="participant in sortedParticipants"
                                 :key="participant.id"
                             >
+                  
                                 <contributionAccessItem
                                     :participant="participant"
                                     @select="onToggleSelectCompetition"
@@ -422,6 +421,9 @@ const ChangeStatus = async (id) => {
                 },
             },
         );
+        checkboxAll.value = false;
+
+
 
     } catch (error) {
         isError.value = error.response.data;
@@ -450,7 +452,9 @@ const ChangeCancelStatus = async (id) => {
             },
             {},
         );
-   
+
+        checkboxAll.value = false;
+
     } catch (error) {
         isError.value = error.response.data;
         console.error('There was an error!', error);
@@ -523,10 +527,13 @@ const onAction = async () => {
             if (action.value === 'Оплачен') {
                 console.log('app', application);
                 await ChangeStatus(application.id);
+
             } else {
                 await ChangeCancelStatus(application.id);
+
             }
             application.selected = false;
+
             selectedPeoples.value = selectedPeoples.value.filter(
                 (participant) => participant.id != application.id,
             );
