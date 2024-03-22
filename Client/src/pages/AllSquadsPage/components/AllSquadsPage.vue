@@ -276,13 +276,8 @@ const next = () => {
 const prev = () => {
     getDetachments();
 
-    // squadsStore.getSquads(sortBy.value);
 };
 
-// const sortSquads = () => {
-//     squadsStore.getSquads(sortBy.value);
-
-// };
 const ascending = ref(true);
 const sortBy = ref('name');
 const picked = ref('');
