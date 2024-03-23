@@ -1,10 +1,10 @@
 <template>
-    <div class="container action">
-        <div class="action-title">Создание мероприятия</div>
-        <form @submit.prevent="SubmitEvent">
-            <div class="col-auto form-container">
-                <v-expansion-panels variant="accordion">
-                    <v-expansion-panel>
+    <div class="container">
+        <h1 class="title title--mb">Создание мероприятия</h1>
+        <form @submit.prevent="SubmitEvent" class="form">
+
+                <v-expansion-panels variant="accordion" v-model="panel">
+                    <v-expansion-panel value="panelOne">
                         <v-expansion-panel-title>
                             <template v-slot="{ expanded }">
                                 <v-row no-gutters>
@@ -70,384 +70,379 @@
                                 </v-icon>
                             </template>
                         </v-expansion-panel-title>
-                        <v-expansion-panel-text>
+                        <v-expansion-panel-text class="form__inner-content">
+                          <div class="form__field-group">
                             <div class="form-container">
-                                <div class="form-col-100">
-                                    <label class="form-label"
-                                        >Выберете формат мероприятия</label
-                                    >
-                                    <div
-                                        class="flex align-items-center"
-                                        style="display: flex"
-                                    >
-                                        <div class="flex align-items-center">
-                                            <input
-                                                v-model="maininfo.format"
-                                                type="radio"
-                                                value="Оффлайн"
-                                                class="form-radio"
-                                            />
-                                            <label class="ml-2 form-label"
-                                                >Оффлайн</label
-                                            >
-                                        </div>
-                                        <div class="flex align-items-center">
-                                            <input
-                                                v-model="maininfo.format"
-                                                type="radio"
-                                                value="Онлайн"
-                                                class="form-radio"
-                                            />
-                                            <label class="ml-2 form-label"
-                                                >Онлайн</label
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="form-col-100">
-                                        <div class="form__field">
-                                            <label class="form-label"
-                                                >Выберите маcштаб
-                                                мероприятия<sup
-                                                    class="valid-red"
-                                                    >*</sup
-                                                ></label
-                                            >
-                                            <sortByEducation
-                                                :options="scale_massive_sorted"
-                                                placeholder="Например, ЛСО"
-                                                v-model="maininfo.scale"
-                                                :sorts-boolean="true"
-                                            >
-                                            </sortByEducation>
-                                        </div>
-                                    </div>
+                              <div class="form-col-100">
+                                <label class="form__label">Выберете формат мероприятия</label>
+                                <div style="display: flex; margin-top: 8px; margin-bottom: 16px;">
+                                  <div style="display: flex; align-items: center">
+                                    <input
+                                        id="offlineBtn"
+                                        v-model="maininfo.format"
+                                        type="radio"
+                                        value="Оффлайн"
+                                    />
+                                    <label for="offlineBtn" class="ml-3 form-label">Оффлайн</label>
+                                  </div>
+                                  <div style="display: flex; align-items: center">
+                                    <input
+                                        id="onlineBtn"
+                                        v-model="maininfo.format"
+                                        type="radio"
+                                        value="Онлайн"
+                                        class="form-radioR"
+                                    />
+                                    <label for="onlineBtn" class="ml-3 form-label">Онлайн</label>
+                                  </div>
                                 </div>
+                                <div class="form-col-100">
+                                  <div class="form__field">
+                                    <label class="form__label"
+                                    >Выберите маcштаб мероприятия
+                                      <sup class="valid-red"
+                                      >*</sup></label>
+                                    <sortByEducation
+                                        :options="scale_massive_sorted"
+                                        placeholder="Например, ЛСО"
+                                        v-model="maininfo.scale"
+                                        :sorts-boolean="true"
+                                    >
+                                    </sortByEducation>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                             <div class="form-container">
-                                <div class="form-col">
-                                    <div class="form__field">
-                                        <label class="form-label" for="name-hq"
-                                            >Название мероприятия<sup
-                                                class="valid-red"
-                                                >*</sup
-                                            ></label
-                                        >
-                                        <InputText
-                                            id="name-hq"
-                                            v-model="maininfo.name"
-                                            class="form__input form-input-container"
-                                            placeholder="Название мероприятия"
-                                            name="name_hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter">
-                                            {{ maininfo.name.length }}/100
-                                        </div>
-                                    </div>
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="telegram-owner-hq"
-                                            >Ссылка на конференцию</label
-                                        >
-                                        <InputText
-                                            id="telegram-owner-hq"
-                                            v-model="maininfo.conference_link"
-                                            class="form__input form-input-container"
-                                            placeholder="https://discord.gg/s44UfkVJ"
-                                            name="telegram-owner-hq"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                    <div class="form__field">
-                                        <div class="form__field photo-add">
-                                            <p class="form__label">
-                                                Добавьте баннер
-                                            </p>
-                                            <div
-                                                class="photo-add__box photo-add__box--banner"
-                                            >
-                                                <div
-                                                    class="photo-add__img photo-add__img--banner"
-                                                >
-                                                    <img
-                                                        v-if="
+                              <div class="form-col">
+                                <div class="form__field">
+                                  <label class="form__label" for="name-hq"
+                                  >Название мероприятия<sup
+                                      class="valid-red"
+                                  >*</sup
+                                  ></label>
+                                  <InputText
+                                      id="name-hq"
+                                      v-model="maininfo.name"
+                                      class="form__input form-input-container"
+                                      placeholder="Название мероприятия"
+                                      name="name_hq"
+                                      :maxlength="100"
+                                  />
+                                  <div class="form__counter">
+                                    {{ maininfo.name.length }}/100
+                                  </div>
+                                </div>
+                                <div class="form__field">
+                                  <label
+                                      class="form__label"
+                                      for="telegram-owner-hq"
+                                  >Ссылка на конференцию</label>
+                                  <InputText
+                                      id="telegram-owner-hq"
+                                      v-model="maininfo.conference_link"
+                                      class="form__input form-input-container"
+                                      placeholder="https://discord.gg/s44UfkVJ"
+                                      name="telegram-owner-hq"
+                                  />
+                                  <div class="form__counter"></div>
+                                </div>
+                                <div class="form__field">
+                                  <div class="form__field photo-add">
+                                    <p class="form__label">
+                                      Добавьте баннер
+                                    </p>
+                                    <div
+                                        class="photo-add__box photo-add__box--banner"
+                                    >
+                                      <div
+                                          class="photo-add__img photo-add__img--banner"
+                                      >
+                                        <img
+                                            v-if="
                                                             maininfo.banner ??
                                                             urlBanner
                                                         "
-                                                        class="photo-add__image"
-                                                        :src="
+                                            class="photo-add__image"
+                                            :src="
                                                             maininfo.banner ??
                                                             urlBanner
                                                         "
-                                                    />
-                                                    <img
-                                                        v-else
-                                                        src="@app/assets/banner-stub.png"
-                                                        alt="Баннер отряда(пусто)"
-                                                    />
-                                                </div>
+                                        />
+                                        <img
+                                            v-else
+                                            src="@app/assets/banner-stub.png"
+                                            alt="Баннер отряда(пусто)"
+                                        />
+                                      </div>
 
-                                                <div class="photo-add__input">
-                                                    <label
-                                                        class="photo-add__label"
-                                                        for="upload-banner"
-                                                        v-if="
+                                      <div class="photo-add__input">
+                                        <label
+                                            class="photo-add__label"
+                                            for="upload-banner"
+                                            v-if="
                                                             !maininfo.banner &&
                                                             !urlBanner
                                                         "
-                                                    >
-                                                        <svg
-                                                            class=""
-                                                            aria-hidden="true"
-                                                            focusable="false"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="48"
-                                                            height="48"
-                                                            viewBox="0 0 48 48"
-                                                            fill="none"
-                                                        >
-                                                            <g
-                                                                filter="url(#filter0_b_2686_15482)"
-                                                            >
-                                                                <circle
-                                                                    cx="24"
-                                                                    cy="24"
-                                                                    r="24"
-                                                                    fill="black"
-                                                                    fill-opacity="0.4"
-                                                                />
-                                                                <circle
-                                                                    cx="24"
-                                                                    cy="24"
-                                                                    r="23"
-                                                                    stroke="white"
-                                                                    stroke-width="2"
-                                                                />
-                                                            </g>
-                                                            <path
-                                                                d="M24.1328 15.1328L24.1328 33.1328"
-                                                                stroke="white"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                            />
-                                                            <path
-                                                                d="M15.1328 24.1328H33.1328"
-                                                                stroke="white"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                            />
-                                                            <defs>
-                                                                <filter
-                                                                    id="filter0_b_2686_15482"
-                                                                    x="-36.9643"
-                                                                    y="-36.9643"
-                                                                    width="121.929"
-                                                                    height="121.929"
-                                                                    filterUnits="userSpaceOnUse"
-                                                                    color-interpolation-filters="sRGB"
-                                                                >
-                                                                    <feFlood
-                                                                        flood-opacity="0"
-                                                                        result="BackgroundImageFix"
-                                                                    />
-                                                                    <feGaussianBlur
-                                                                        in="BackgroundImageFix"
-                                                                        stdDeviation="18.4821"
-                                                                    />
-                                                                    <feComposite
-                                                                        in2="SourceAlpha"
-                                                                        operator="in"
-                                                                        result="effect1_backgroundBlur_2686_15482"
-                                                                    />
-                                                                    <feBlend
-                                                                        mode="normal"
-                                                                        in="SourceGraphic"
-                                                                        in2="effect1_backgroundBlur_2686_15482"
-                                                                        result="shape"
-                                                                    />
-                                                                </filter>
-                                                            </defs>
-                                                        </svg>
-                                                    </label>
-                                                    <div
-                                                        class="photo-add__edit-group"
-                                                        v-else
-                                                    >
-                                                        <label
-                                                            class="photo-add__label-edit"
-                                                            for="upload-banner"
-                                                        >
+                                        >
+                                          <svg
+                                              class=""
+                                              aria-hidden="true"
+                                              focusable="false"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="48"
+                                              height="48"
+                                              viewBox="0 0 48 48"
+                                              fill="none"
+                                          >
+                                            <g
+                                                filter="url(#filter0_b_2686_15482)"
+                                            >
+                                              <circle
+                                                  cx="24"
+                                                  cy="24"
+                                                  r="24"
+                                                  fill="black"
+                                                  fill-opacity="0.4"
+                                              />
+                                              <circle
+                                                  cx="24"
+                                                  cy="24"
+                                                  r="23"
+                                                  stroke="white"
+                                                  stroke-width="2"
+                                              />
+                                            </g>
+                                            <path
+                                                d="M24.1328 15.1328L24.1328 33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <path
+                                                d="M15.1328 24.1328H33.1328"
+                                                stroke="white"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                            />
+                                            <defs>
+                                              <filter
+                                                  id="filter0_b_2686_15482"
+                                                  x="-36.9643"
+                                                  y="-36.9643"
+                                                  width="121.929"
+                                                  height="121.929"
+                                                  filterUnits="userSpaceOnUse"
+                                                  color-interpolation-filters="sRGB"
+                                              >
+                                                <feFlood
+                                                    flood-opacity="0"
+                                                    result="BackgroundImageFix"
+                                                />
+                                                <feGaussianBlur
+                                                    in="BackgroundImageFix"
+                                                    stdDeviation="18.4821"
+                                                />
+                                                <feComposite
+                                                    in2="SourceAlpha"
+                                                    operator="in"
+                                                    result="effect1_backgroundBlur_2686_15482"
+                                                />
+                                                <feBlend
+                                                    mode="normal"
+                                                    in="SourceGraphic"
+                                                    in2="effect1_backgroundBlur_2686_15482"
+                                                    result="shape"
+                                                />
+                                              </filter>
+                                            </defs>
+                                          </svg>
+                                        </label>
+                                        <div
+                                            class="photo-add__edit-group"
+                                            v-else
+                                        >
+                                          <label
+                                              class="photo-add__label-edit"
+                                              for="upload-banner"
+                                          >
                                                             <span
                                                                 class="photo-add__label-text"
-                                                                >Изменить
+                                                            >Изменить
                                                                 фото</span
                                                             >
-                                                        </label>
-                                                        <button
-                                                            class="photo-add__button-clear"
-                                                            type="reset"
-                                                            @click="resetBanner"
-                                                        >
-                                                            Удалить фото
-                                                        </button>
-                                                    </div>
-                                                    <input
-                                                        type="file"
-                                                        accept="image/png, image/jpeg"
-                                                        id="upload-banner"
-                                                        name="squad-banner"
-                                                        hidden
-                                                        @change="selectBanner"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <span class="form__footnote"
-                                                >Рекомендуемый размер
-                                                1920х768</span
-                                            >
+                                          </label>
+                                          <button
+                                              class="photo-add__button-clear"
+                                              type="reset"
+                                              @click="resetBanner"
+                                          >
+                                            Удалить фото
+                                          </button>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="form-col">
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="address-hq"
-                                            >Адрес проведения (Оффлайн)<sup
-                                                class="valid-red"
-                                                >*</sup
-                                            ></label
-                                        >
-                                        <InputText
-                                            id="address-hq"
-                                            v-model="maininfo.address"
-                                            class="form__input form-input-container"
-                                            placeholder="Например, Москва, Гагарина 40"
-                                            name="address_hq"
-                                            :maxlength="100"
+                                        <input
+                                            type="file"
+                                            accept="image/png, image/jpeg"
+                                            id="upload-banner"
+                                            name="squad-banner"
+                                            hidden
+                                            @change="selectBanner"
                                         />
-                                        <div class="form__counter">
-                                            {{ maininfo.address.length }}/100
-                                        </div>
+                                      </div>
                                     </div>
-                                    <div class="form__field">
-                                        <label class="form-label" for="group-hq"
-                                            >Количество участников</label
-                                        >
-                                        <InputText
-                                            v-model="
+                                    <span class="form__footnote"
+                                    >Рекомендуемый размер
+                                                1920х768</span
+                                    >
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-col">
+                                <div class="form__field">
+                                  <label
+                                      class="form__label"
+                                      for="address-hq"
+                                  >Адрес проведения (Оффлайн)<sup
+                                      class="valid-red"
+                                  >*</sup
+                                  ></label>
+                                  <InputText
+                                      id="address-hq"
+                                      v-model="maininfo.address"
+                                      class="form__input form-input-container"
+                                      placeholder="Например, Москва, Гагарина 40"
+                                      name="address_hq"
+                                      :maxlength="100"
+                                  />
+                                  <div class="form__counter">
+                                    {{ maininfo.address.length }}/100
+                                  </div>
+                                </div>
+                                <div class="form__field">
+                                  <label class="form__label" for="group-hq"
+                                  >Количество участников</label>
+                                  <InputText
+                                      v-model="
                                                 maininfo.participants_number
                                             "
-                                            id="group-hq"
-                                            type="number"
-                                            class="form__input form-input-container"
-                                            placeholder="Например, 100"
-                                            name="group-hq"
-                                        />
-                                    </div>
-                                    <div class="form__field">
-                                        <label class="form-label"
-                                            >О мероприятии</label
-                                        >
-                                        <textarea
-                                            class="form__textarea"
-                                            v-model="maininfo.description"
-                                        />
-                                    </div>
+                                      id="group-hq"
+                                      type="number"
+                                      class="form__input form-input-container"
+                                      placeholder="Например, 100"
+                                      name="group-hq"
+                                  />
                                 </div>
+                                <div class="form__field">
+                                  <label class="form__label"
+                                  >О мероприятии</label>
+                                  <textarea
+                                      class="form__textarea"
+                                      v-model="maininfo.description"
+                                  />
+                                </div>
+                              </div>
                             </div>
                             <div class="form-container">
-                                <div class="form-col-100">
-                                    <div class="form__field">
-                                        <label class="form-label" for="road-hq"
-                                            >Добавьте направление<sup
-                                                class="valid-red"
-                                                >*</sup
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            id="road-hq"
-                                            :options="direction_massive"
-                                            optionLabel="name"
-                                            placeholder="Например, ЛСО"
-                                            v-model="maininfo.direction"
-                                        ></sortByEducation>
-                                    </div>
+                              <div class="form-col-100">
+                                <div class="form__field">
+                                  <label class="form__label" for="road-hq"
+                                  >Добавьте направление<sup
+                                      class="valid-red"
+                                  >*</sup
+                                  ></label>
+                                  <sortByEducation
+                                      id="road-hq"
+                                      :options="direction_massive"
+                                      optionLabel="name"
+                                      placeholder="Например, ЛСО"
+                                      v-model="maininfo.direction"
+                                  ></sortByEducation>
                                 </div>
+                              </div>
                             </div>
                             <div class="form-container">
-                                <div class="form-col">
-                                    <label class="form-label"
-                                        >Выберите вид принимаемых к подаче на
-                                        мероприятие заявок</label
+                              <div class="form-col">
+                                <label class="form__label"
+                                >Выберите вид принимаемых к подаче на
+                                  мероприятие заявок</label>
+                                <label
+                                    class="flex align-items-center"
+                                    style="display: flex"
+                                >
+                                  <div class="flex align-items-center">
+                                    <input
+                                        v-model="
+                                                    maininfo.application_type
+                                                "
+                                        value="Персональная"
+                                        type="radio"
+                                        class="form-radio"
+                                    />
+                                    <label class="ml-2 form-label"
+                                    >Персональная</label
                                     >
-                                    <label
-                                        class="flex align-items-center"
-                                        style="display: flex"
+                                  </div>
+                                  <div class="flex align-items-center">
+                                    <input
+                                        v-model="
+                                                    maininfo.application_type
+                                                "
+                                        value="Групповая"
+                                        type="radio"
+                                        class="form-radio"
+                                    />
+                                    <label class="ml-2 form-label"
+                                    >Групповая</label
                                     >
-                                        <div class="flex align-items-center">
-                                            <input
-                                                v-model="
+                                  </div>
+                                  <div class="flex align-items-center">
+                                    <input
+                                        v-model="
                                                     maininfo.application_type
                                                 "
-                                                value="Персональная"
-                                                type="radio"
-                                                class="form-radio"
-                                            />
-                                            <label class="ml-2 form-label"
-                                                >Персональная</label
-                                            >
-                                        </div>
-                                        <div class="flex align-items-center">
-                                            <input
-                                                v-model="
-                                                    maininfo.application_type
-                                                "
-                                                value="Групповая"
-                                                type="radio"
-                                                class="form-radio"
-                                            />
-                                            <label class="ml-2 form-label"
-                                                >Групповая</label
-                                            >
-                                        </div>
-                                        <div class="flex align-items-center">
-                                            <input
-                                                v-model="
-                                                    maininfo.application_type
-                                                "
-                                                value="Многоэтапная"
-                                                type="radio"
-                                                class="form-radio"
-                                            />
-                                            <label class="ml-2 form-label"
-                                                >Многоэтапная</label
-                                            >
-                                        </div>
-                                    </label>
-                                </div>
-                                <div
-                                    class="form-col"
-                                    v-if="
+                                        value="Многоэтапная"
+                                        type="radio"
+                                        class="form-radio"
+                                    />
+                                    <label class="ml-2 form-label"
+                                    >Многоэтапная</label
+                                    >
+                                  </div>
+                                </label>
+                              </div>
+                              <div
+                                  class="form-col"
+                                  v-if="
                                         maininfo.application_type !==
                                         'Персональная'
                                     "
-                                >
-                                    <label class="form-label"
-                                        >Какие объекты могут формировать
-                                        групповые заявки</label
-                                    >
-                                    <sortByEducation
-                                        v-model="area"
-                                        :options="area_massive"
-                                        placeholder="Например, ЛСО"
-                                    ></sortByEducation>
-                                </div>
+                              >
+                                <label class="form__label"
+                                >Какие объекты могут формировать
+                                  групповые заявки</label>
+                                <sortByEducation
+                                    v-model="area"
+                                    :options="area_massive"
+                                    placeholder="Например, ЛСО"
+                                ></sortByEducation>
+                              </div>
                             </div>
+                          </div>
+
+                          <v-card-actions class="form__button-group">
+                            <Button
+                                variant="text"
+                                type="button"
+                                class="form-button form-button--next"
+                                label="Далее"
+                                size="large"
+                                @click="openPanelTwo"
+                            ></Button>
+                          </v-card-actions>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
-                    <v-expansion-panel>
+
+                    <v-expansion-panel value="panelTwo">
                         <v-expansion-panel-title>
                             <template v-slot="{ expanded }">
                                 <v-row no-gutters>
@@ -1084,7 +1079,7 @@
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
-            </div>
+
             <div class="form-col-100">
                 <Button type="submit" label="Сохранить"></Button>
             </div>
@@ -1114,6 +1109,23 @@ const router = useRouter();
 const rules = ref([]);
 
 const organization_stop = ref('');
+
+//------------------------------------------------------------------------------------------------
+const panel = ref();
+
+const openPanelOne = () => {
+  panel.value = 'panelOne';
+};
+
+const openPanelTwo = () => {
+  panel.value = 'panelTwo';
+};
+
+const openPanelThree = () => {
+  panel.value = 'panelThree';
+};
+
+//-------------------------------------------------------------------------------------
 
 onActivated(() => {
     getRoles().then((resp) => {
@@ -1454,14 +1466,15 @@ function AddQuestion() {
 .form {
     &-container {
         display: flex;
-        margin-right: 16px;
-        margin-bottom: 20px;
-        margin-top: 20px;
+        //margin-right: 16px;
+        margin-bottom: 8px;
+        //margin-top: 20px;
+        gap: 80px;
     }
     &-col {
         width: 50%;
-        padding-left: 15px;
-        padding-right: 15px;
+        //padding-left: 15px;
+        //padding-right: 15px;
     }
     &-input {
         width: 100%;
@@ -1482,15 +1495,15 @@ function AddQuestion() {
         display: flex;
         flex-direction: row;
     }
-    &-radio {
-        margin-left: 10px;
+    &-radioR {
+        margin-left: 16px;
     }
     &-radio input {
         width: 20px;
         height: 20px;
     }
     &-input-container {
-        border: 1px solid black;
+        border: 1px solid #B6B6B6;
         border-radius: 15px;
         padding-left: 15px;
     }
@@ -1520,13 +1533,12 @@ function AddQuestion() {
         margin-bottom: 3px;
     }
     &-label {
-        font-family: Bert Sans;
-        font-size: 0.9vw;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 24px;
-        margin-top: 5px;
-        margin-bottom: 10px;
+      font-family: Bert Sans;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 21.1px;
+      text-align: left;
+      color: #35383F;
     }
     &-add-block:hover {
         cursor: pointer;
@@ -1571,37 +1583,60 @@ function AddQuestion() {
         border-radius: 50%;
     }
 }
-.v-expansion-panel {
-    &__shadow {
-        box-shadow: none;
-    }
 
-    &--active,
-    &--after-active {
-        margin: 0;
-    }
+.form-button {
+  width: 132px;
+  min-height: 52px;
+  margin: 0 10px;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bert Sans';
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  text-transform: none;
 
-    &--active:not(:first-child) {
-        margin: 0;
-    }
-
-    &--active + .v-expansion-panel {
-        margin: 0;
-    }
-
-    .v-expansion-panel-title {
-        max-height: 60px;
-        font-family: 'Akrobat';
-        font-size: 24px;
-        font-weight: 600;
-        background-color: transparent;
-        border-bottom: 1px solid #939393;
-        color: #35383f;
-        padding: 16px 0px;
-
-        &__overlay {
-            display: none;
-        }
-    }
+  &--next,
+  &--prev {
+    width: 131px;
+    color: #35383f;
+    border: 2px solid #35383f;
+    background-color: #ffffff;
+  }
 }
+//.v-expansion-panel {
+//    &__shadow {
+//        box-shadow: none;
+//    }
+//
+//    &--active,
+//    &--after-active {
+//        margin: 0;
+//    }
+//
+//    &--active:not(:first-child) {
+//        margin: 0;
+//    }
+//
+//    &--active + .v-expansion-panel {
+//        margin: 0;
+//    }
+//
+//    .v-expansion-panel-title {
+//        max-height: 60px;
+//        font-family: 'Akrobat';
+//        font-size: 24px;
+//        font-weight: 600;
+//        background-color: transparent;
+//        border-bottom: 1px solid #939393;
+//        color: #35383f;
+//        padding: 16px 0px;
+//
+//        &__overlay {
+//            display: none;
+//        }
+//    }
+//}
 </style>
