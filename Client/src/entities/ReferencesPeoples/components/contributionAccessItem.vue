@@ -7,7 +7,11 @@
                 @change="updateMembership"
             />
         </div>
-        <div
+        <router-link
+            :to="{
+                name: 'PersonalDataUserContributor',
+                params: { id: participant.id },
+            }"
             class="horizontallso-item__wrapper"
         >
             <div class="horizontallso-img">
@@ -40,7 +44,7 @@
                     <p>{{ participant.date_of_birth }}</p>
                 </div>
             </div>
-        </div>
+        </router-link>
 
         <div class="horizontallso-info">
             <p v-if="participant.membership_fee">Оплачен</p>

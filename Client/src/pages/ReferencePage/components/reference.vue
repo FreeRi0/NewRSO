@@ -366,6 +366,7 @@ const SendReference = async () => {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
+        responseType: 'blob'
     })
         .then((response) => {
             swal.fire({
@@ -376,7 +377,7 @@ const SendReference = async () => {
                 timer: 1500,
             });
             refData.value = response.data;
-            const url = new Blob([response.data], { type: 'application/zip' });
+            const url = window.URL.createObjectURL(new Blob([response.data], response.headers));;
             const link = document.createElement('a');
             link.href = url;
             link.setAttribute('download', 'external.zip');
