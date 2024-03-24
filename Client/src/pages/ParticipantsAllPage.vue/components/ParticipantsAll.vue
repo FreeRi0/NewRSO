@@ -203,10 +203,7 @@ const sortOptionss = ref([
 ]);
 
 const getMembers = async (pagination, orderLimit) => {
-    if (isLoading.value) return false;
     try {
-
-        isLoading.value = true;
         let data = [];
         let url = `/detachments/${id}/members/?`;
         if (orderLimit) data.push('limit=' + orderLimit);
@@ -224,7 +221,7 @@ const getMembers = async (pagination, orderLimit) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        isLoading.value = false;
+
 
         let response = viewHeadquartersResponse.data;
         if (pagination) {
@@ -244,7 +241,21 @@ const searchMembers = () => {
     }, 400);
 };
 
+watch(
+    () => route.params.id,
 
+    async (newId) => {
+        console.log('id', newId);
+        if (!newId || route.name !== 'allparticipants') return;
+
+        await getMembers();
+        await aboutVerified();
+        console.log('yeahhh!')
+    },
+    {
+        immediate: true,
+    },
+);
 
 watch(
     () => sortBy.value,
@@ -259,25 +270,12 @@ watch(
     },
 );
 
-watch(
-    () => route.params.id,
 
-    async (newId) => {
-        console.log('id', newId);
-        if (!newId || route.name !== 'allparticipants') return;
 
-        await getMembers();
-        await aboutVerified();
-    },
-    {
-        immediate: true,
-    },
-);
-
-onMounted(() => {
-    getMembers();
-    aboutVerified();
-});
+// onMounted(() => {
+//     // getMembers();
+//     aboutVerified();
+// });
 </script>
 <style lang="scss">
 .participants {

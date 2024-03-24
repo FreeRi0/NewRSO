@@ -319,7 +319,7 @@
                 <router-link
                     :to="{ name: 'Action', params: { id: items.id } }"
                     class="event_item"
-                    v-for="items in [...new Set(eventsStore.events)]"
+                    v-for="items in eventsStore.events"
                 >
                     <img
                         :src="items.banner"
@@ -495,7 +495,7 @@ watch(
 watch(
     () => eventsStore.event,
     () => {
-        eventsStore.getFilteredEvents(eventsStore.event.scale);
+        eventsStore.getFilteredEvents(eventsStore.event.scale, eventsStore.event.direction);
     },
 );
 </script>

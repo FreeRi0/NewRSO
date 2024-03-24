@@ -71,10 +71,10 @@ export const useEventsStore = defineStore('events', {
                 console.log('an error occured ' + error);
             }
         },
-        async getFilteredEvents(scale: String) {
+        async getFilteredEvents(scale: String, direction: String) {
             try {
                 const responseFilteredEvents = await HTTP.get(
-                    `/events/?scale=${scale}`,
+                    `/events/?scale_or_direction=scale=${scale}|direction=${direction}`,
                     {
                         headers: {
                             'Content-Type': 'application/json',

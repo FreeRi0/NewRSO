@@ -80,11 +80,11 @@ export const useSquadsStore = defineStore('squads', {
                 this.isLoading = false;
             }
         },
-        async getCompetitionSquads(name: String) {
+        async getCompetitionSquads(name: String, isTandem: String) {
             try {
                 this.isLoading = true;
                 const responseCompetitionSquads = await HTTP.get(
-                    `/competitions/1/participants/?ordering=${name}`,
+                    `/competitions/1/participants/?ordering=${name}&isTandem=${isTandem}`,
                     {
                         params: {
                             limit: this.CompetitionsLimit,

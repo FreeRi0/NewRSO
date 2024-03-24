@@ -147,6 +147,7 @@ const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
 const categories = storeToRefs(squadsStore);
 const name = ref('');
+const isTandem = ref(true);
 const sortBy = ref('name');
 const education = ref(null);
 const next = () => {
@@ -186,9 +187,14 @@ const searchCompetitions = (event) => {
 const sortedSquads = computed(() => {
     let tempSquads = squads.competitionSquads.value;
     if (switched.value) {
-        tempSquads = tempSquads.filter((item) => item.detachment);
+         tempSquads = tempSquads.filter((item) => item.detachment);
+        // squadsStore.getCompetitionSquads(sortBy.value, isTandem.value);
+        // isTandem.value = true;
     } else {
-        tempSquads = tempSquads.filter((item) => !item.detachment);
+        isTandem.value = false;
+         tempSquads = tempSquads.filter((item) => !item.detachment);
+        // squadsStore.getCompetitionSquads(sortBy.value, isTandem.value);
+
     }
 
     if (!ascending.value) {
@@ -207,7 +213,7 @@ const sortedSquads = computed(() => {
 });
 
 onMounted(() => {
-    squadsStore.getCompetitionSquads(sortBy.value);
+    squadsStore.getCompetitionSquads(sortBy.value, isTandem.value);
 });
 </script>
 <style lang="scss" scoped>
