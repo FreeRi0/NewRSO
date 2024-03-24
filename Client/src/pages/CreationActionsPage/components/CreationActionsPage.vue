@@ -74,7 +74,7 @@
                           <div class="form__field-group">
                             <div class="form-container">
                               <div class="form-col-100">
-                                <label class="form__label">Выберете формат мероприятия</label>
+                                <label class="form__label">Выберите формат мероприятия</label>
                                 <div style="display: flex; margin-top: 8px; margin-bottom: 16px;">
                                   <div style="display: flex; align-items: center">
                                     <input
@@ -99,9 +99,7 @@
                                 <div class="form-col-100">
                                   <div class="form__field">
                                     <label class="form__label"
-                                    >Выберите маcштаб мероприятия
-                                      <sup class="valid-red"
-                                      >*</sup></label>
+                                    >Выберите маcштаб мероприятия <sup class="valid-red">*</sup></label>
                                     <sortByEducation
                                         :options="scale_massive_sorted"
                                         placeholder="Например, ЛСО"
@@ -117,10 +115,7 @@
                               <div class="form-col">
                                 <div class="form__field">
                                   <label class="form__label" for="name-hq"
-                                  >Название мероприятия<sup
-                                      class="valid-red"
-                                  >*</sup
-                                  ></label>
+                                  >Название мероприятия <sup class="valid-red">*</sup></label>
                                   <InputText
                                       id="name-hq"
                                       v-model="maininfo.name"
@@ -130,14 +125,14 @@
                                       :maxlength="100"
                                   />
                                   <div class="form__counter">
-                                    {{ maininfo.name.length }}/100
+                                    {{ maininfo.name.length }}/60
                                   </div>
                                 </div>
                                 <div class="form__field">
                                   <label
                                       class="form__label"
                                       for="telegram-owner-hq"
-                                  >Ссылка на конференцию</label>
+                                  >Ссылка на конференцию <sup class="valid-red">*</sup></label>
                                   <InputText
                                       id="telegram-owner-hq"
                                       v-model="maininfo.conference_link"
@@ -145,34 +140,19 @@
                                       placeholder="https://discord.gg/s44UfkVJ"
                                       name="telegram-owner-hq"
                                   />
-                                  <div class="form__counter"></div>
+                                  <div class="form__counter">{{ maininfo.conference_link.length }}/60</div>
                                 </div>
                                 <div class="form__field">
                                   <div class="form__field photo-add">
                                     <p class="form__label">
-                                      Добавьте баннер
+                                      Добавьте баннер <sup class="valid-red">*</sup>
                                     </p>
-                                    <div
-                                        class="photo-add__box photo-add__box--banner"
-                                    >
-                                      <div
-                                          class="photo-add__img photo-add__img--banner"
-                                      >
+                                    <div style="width: 237px; border: 1px solid #939393; border-radius: 16px" class="photo-add__box photo-add__box--banner">
+                                      <div class="photo-add__img photo-add__img--banner">
                                         <img
-                                            v-if="
-                                                            maininfo.banner ??
-                                                            urlBanner
-                                                        "
+                                            v-if="maininfo.banner ?? urlBanner"
                                             class="photo-add__image"
-                                            :src="
-                                                            maininfo.banner ??
-                                                            urlBanner
-                                                        "
-                                        />
-                                        <img
-                                            v-else
-                                            src="@app/assets/banner-stub.png"
-                                            alt="Баннер отряда(пусто)"
+                                            :src="maininfo.banner ?? urlBanner"
                                         />
                                       </div>
 
@@ -180,11 +160,7 @@
                                         <label
                                             class="photo-add__label"
                                             for="upload-banner"
-                                            v-if="
-                                                            !maininfo.banner &&
-                                                            !urlBanner
-                                                        "
-                                        >
+                                            v-if="!maininfo.banner && !urlBanner">
                                           <svg
                                               class=""
                                               aria-hidden="true"
@@ -265,12 +241,7 @@
                                           <label
                                               class="photo-add__label-edit"
                                               for="upload-banner"
-                                          >
-                                                            <span
-                                                                class="photo-add__label-text"
-                                                            >Изменить
-                                                                фото</span
-                                                            >
+                                          ><span class="photo-add__label-text">Изменить фото</span>
                                           </label>
                                           <button
                                               class="photo-add__button-clear"
@@ -290,10 +261,9 @@
                                         />
                                       </div>
                                     </div>
-                                    <span class="form__footnote"
-                                    >Рекомендуемый размер
-                                                1920х768</span
-                                    >
+                                    <span
+                                        style="margin-bottom: 16px; margin-top: 8px;" class="form__footnote"
+                                    >Рекомендуемый размер 1920х768</span>
                                   </div>
                                 </div>
                               </div>
@@ -302,10 +272,7 @@
                                   <label
                                       class="form__label"
                                       for="address-hq"
-                                  >Адрес проведения (Оффлайн)<sup
-                                      class="valid-red"
-                                  >*</sup
-                                  ></label>
+                                  >Адрес проведения (если мероприятияе формата офлайн) <sup class="valid-red">*</sup></label>
                                   <InputText
                                       id="address-hq"
                                       v-model="maininfo.address"
@@ -315,30 +282,34 @@
                                       :maxlength="100"
                                   />
                                   <div class="form__counter">
-                                    {{ maininfo.address.length }}/100
+                                    {{ maininfo.address.length }}/60
                                   </div>
                                 </div>
                                 <div class="form__field">
                                   <label class="form__label" for="group-hq"
-                                  >Количество участников</label>
+                                  >Количество участников <sup class="valid-red">*</sup></label>
                                   <InputText
-                                      v-model="
-                                                maininfo.participants_number
-                                            "
+                                      v-model="maininfo.participants_number"
                                       id="group-hq"
-                                      type="number"
+                                      type="text"
                                       class="form__input form-input-container"
-                                      placeholder="Например, 100"
+                                      placeholder="Например, 150"
                                       name="group-hq"
                                   />
+                                  <div class="form__counter">
+                                    {{ maininfo.participants_number.length }}/4
+                                  </div>
                                 </div>
                                 <div class="form__field">
-                                  <label class="form__label"
-                                  >О мероприятии</label>
+                                  <label class="form__label">О мероприятии <sup class="valid-red">*</sup></label>
                                   <textarea
                                       class="form__textarea"
                                       v-model="maininfo.description"
+                                      placeholder="Расскажите об отряде"
                                   />
+                                  <div class="form__counter">
+                                    {{ maininfo.description.length }}/300
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -346,10 +317,7 @@
                               <div class="form-col-100">
                                 <div class="form__field">
                                   <label class="form__label" for="road-hq"
-                                  >Добавьте направление<sup
-                                      class="valid-red"
-                                  >*</sup
-                                  ></label>
+                                  >Добавьте направление <sup class="valid-red">*</sup></label>
                                   <sortByEducation
                                       id="road-hq"
                                       :options="direction_massive"
@@ -363,67 +331,54 @@
                             <div class="form-container">
                               <div class="form-col">
                                 <label class="form__label"
-                                >Выберите вид принимаемых к подаче на
-                                  мероприятие заявок</label>
-                                <label
-                                    class="flex align-items-center"
-                                    style="display: flex"
-                                >
-                                  <div class="flex align-items-center">
+                                >Выберите вид принимаемых к подаче на мероприятие заявок: <sup class="valid-red">*</sup></label>
+                                <label class="eventType">
+                                  <div class="eventType__personalBtn">
                                     <input
-                                        v-model="
-                                                    maininfo.application_type
-                                                "
+                                        id="personalBtn"
+                                        v-model="maininfo.application_type"
                                         value="Персональная"
                                         type="radio"
                                         class="form-radio"
                                     />
-                                    <label class="ml-2 form-label"
-                                    >Персональная</label
-                                    >
+                                    <label for="personalBtn" class="ml-3 form-label"
+                                    >Персональная</label>
                                   </div>
-                                  <div class="flex align-items-center">
+                                  <div class="eventType__groupBtn">
                                     <input
-                                        v-model="
-                                                    maininfo.application_type
-                                                "
+                                        id="groupBtn"
+                                        v-model="maininfo.application_type"
                                         value="Групповая"
                                         type="radio"
                                         class="form-radio"
                                     />
-                                    <label class="ml-2 form-label"
-                                    >Групповая</label
-                                    >
+                                    <label for="groupBtn" class="ml-3 form-label"
+                                    >Групповая</label>
                                   </div>
-                                  <div class="flex align-items-center">
+                                  <div class="eventType__multistageBtn">
                                     <input
-                                        v-model="
-                                                    maininfo.application_type
-                                                "
+                                        id="multistageBtn"
+                                        v-model="maininfo.application_type"
                                         value="Многоэтапная"
                                         type="radio"
                                         class="form-radio"
                                     />
-                                    <label class="ml-2 form-label"
-                                    >Многоэтапная</label
-                                    >
+                                    <label for="multistageBtn" class="ml-3 form-label"
+                                    >Многоэтапная</label>
                                   </div>
                                 </label>
                               </div>
                               <div
                                   class="form-col"
-                                  v-if="
-                                        maininfo.application_type !==
-                                        'Персональная'
-                                    "
+                                  v-if="maininfo.application_type !== 'Персональная'"
                               >
                                 <label class="form__label"
-                                >Какие объекты могут формировать
-                                  групповые заявки</label>
+                                >Какие объекты могут формировать групповые заявки <sup class="valid-red">*</sup></label>
                                 <sortByEducation
                                     v-model="area"
                                     :options="area_massive"
                                     placeholder="Например, ЛСО"
+                                    style="margin-top: 8px;"
                                 ></sortByEducation>
                               </div>
                             </div>
@@ -508,132 +463,142 @@
                                 </v-icon>
                             </template>
                         </v-expansion-panel-title>
-                        <v-expansion-panel-text>
+                        <v-expansion-panel-text class="form__inner-content">
+                          <div class="form__field-group">
                             <div class="form-container">
-                                <div class="form-col">
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="action-start-hq"
-                                            >Начало мероприятия<sup
-                                                class="valid-red"
-                                                >*</sup
-                                            ></label
-                                        >
-                                        <InputText
-                                            id="action-start-hq"
-                                            v-model="time_data.start_date"
-                                            class="form__input form-input-container"
-                                            placeholder="Например 26.06.2024"
-                                            name="action-start-hq"
-                                            type="date"
-                                        />
-                                    </div>
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="action-end-hq"
-                                            >Окончание мероприятия</label
-                                        >
-                                        <InputText
-                                            id="action-end-hq"
-                                            v-model="time_data.end_date"
-                                            class="form__input form-input-container"
-                                            placeholder="Например 27.06.2024"
-                                            name="action-end-hq"
-                                            type="date"
-                                        />
-                                    </div>
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="end-registration-hq"
-                                            >Окончение регистрации</label
-                                        >
-                                        <InputText
-                                            id="end-registration-hq"
-                                            class="form__input form-input-container"
-                                            v-model="
+                              <div class="form-col">
+                                <div class="form__field">
+                                  <label
+                                      class="form-label"
+                                      for="action-start-hq"
+                                  >Начало мероприятия <sup class="valid-red">*</sup></label>
+                                  <InputText
+                                      id="action-start-hq"
+                                      v-model="time_data.start_date"
+                                      class="form__input form-input-container"
+                                      placeholder="Например 26.06.2024"
+                                      name="action-start-hq"
+                                      type="date"
+                                  />
+                                </div>
+                                <div class="form__field">
+                                  <label
+                                      class="form-label"
+                                      for="action-end-hq"
+                                  >Окончание мероприятия</label
+                                  >
+                                  <InputText
+                                      id="action-end-hq"
+                                      v-model="time_data.end_date"
+                                      class="form__input form-input-container"
+                                      placeholder="Например 27.06.2024"
+                                      name="action-end-hq"
+                                      type="date"
+                                  />
+                                </div>
+                                <div class="form__field">
+                                  <label
+                                      class="form-label"
+                                      for="end-registration-hq"
+                                  >Окончение регистрации</label
+                                  >
+                                  <InputText
+                                      id="end-registration-hq"
+                                      class="form__input form-input-container"
+                                      v-model="
                                                 time_data.registration_end_date
                                             "
-                                            placeholder="Например, 15.05.2023"
-                                            name="end-registration-hq"
-                                            type="date"
-                                        />
-                                    </div>
+                                      placeholder="Например, 15.05.2023"
+                                      name="end-registration-hq"
+                                      type="date"
+                                  />
                                 </div>
-                                <div class="form-col">
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="action-hours-start-hq"
-                                            >Время в часах</label
-                                        >
-                                        <InputText
-                                            id="action-hours-start-hq"
-                                            class="form__input form-input-container"
-                                            v-model="time_data.start_time"
-                                            placeholder="Например 7:30"
-                                            name="action-hours-start-hq"
-                                            type="time"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="action-hours-end-hq"
-                                            >Время в часах</label
-                                        >
-                                        <InputText
-                                            id="action-hours-end-hq"
-                                            class="form__input form-input-container"
-                                            v-model="time_data.end_time"
-                                            placeholder="Например 18:30"
-                                            name="action-hours-end-hq"
-                                            type="time"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                    <div class="form__field">
-                                        <!----<label class='flex align-items-center' style='display: flex'>
-                                            <div class="flex align-items-center">
-                                                <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
-                                                <label for="hours1" class="ml-2">За час</label>
-                                            </div>
-                                            <div class="flex align-items-center">
-                                                <input v-model='timeData.hour' value="2" name="hours2" type='radio' class='form-radio'/>
-                                                <label for="hours2" class="ml-2">За 2 часа</label>
-                                            </div>
-                                            <div class="flex align-items-center">
-                                                <input v-model='timeData.hour' value="3" name="hours3" type='radio' class='form-radio'/>
-                                                <label for="hours3" class="ml-2">За 3 часа</label>
-                                            </div>
-                                        </label> -->
-                                        <div class="form__field">
-                                            <label
-                                                class="form-label"
-                                                for="action-hours-end-hq"
-                                                >Время в часах</label
-                                            >
-                                            <InputText
-                                                id="action-hours-end-hq"
-                                                class="form__input form-input-container"
-                                                v-model="
+                              </div>
+                              <div class="form-col">
+                                <div class="form__field">
+                                  <label
+                                      class="form-label"
+                                      for="action-hours-start-hq"
+                                  >Время в часах</label
+                                  >
+                                  <InputText
+                                      id="action-hours-start-hq"
+                                      class="form__input form-input-container"
+                                      v-model="time_data.start_time"
+                                      placeholder="Например 7:30"
+                                      name="action-hours-start-hq"
+                                      type="time"
+                                  />
+                                  <div class="form__counter"></div>
+                                </div>
+                                <div class="form__field">
+                                  <label
+                                      class="form-label"
+                                      for="action-hours-end-hq"
+                                  >Время в часах</label
+                                  >
+                                  <InputText
+                                      id="action-hours-end-hq"
+                                      class="form__input form-input-container"
+                                      v-model="time_data.end_time"
+                                      placeholder="Например 18:30"
+                                      name="action-hours-end-hq"
+                                      type="time"
+                                  />
+                                  <div class="form__counter"></div>
+                                </div>
+                                <div class="form__field">
+                                  <!----<label class='flex align-items-center' style='display: flex'>
+                                      <div class="flex align-items-center">
+                                          <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
+                                          <label for="hours1" class="ml-2">За час</label>
+                                      </div>
+                                      <div class="flex align-items-center">
+                                          <input v-model='timeData.hour' value="2" name="hours2" type='radio' class='form-radio'/>
+                                          <label for="hours2" class="ml-2">За 2 часа</label>
+                                      </div>
+                                      <div class="flex align-items-center">
+                                          <input v-model='timeData.hour' value="3" name="hours3" type='radio' class='form-radio'/>
+                                          <label for="hours3" class="ml-2">За 3 часа</label>
+                                      </div>
+                                  </label> -->
+                                  <div class="form__field">
+                                    <label
+                                        class="form-label"
+                                        for="action-hours-end-hq"
+                                    >Время в часах</label
+                                    >
+                                    <InputText
+                                        id="action-hours-end-hq"
+                                        class="form__input form-input-container"
+                                        v-model="
                                                     time_data.registration_end_time
                                                 "
-                                                placeholder="Например 18:30"
-                                                name="action-hours-end-hq"
-                                                type="time"
-                                            />
-                                            <div class="form__counter"></div>
-                                        </div>
-                                    </div>
+                                        placeholder="Например 18:30"
+                                        name="action-hours-end-hq"
+                                        type="time"
+                                    />
+                                    <div class="form__counter"></div>
+                                  </div>
                                 </div>
+                              </div>
                             </div>
+                          </div>
+
+                          <v-card-actions class="form__button-group">
+                            <Button
+                                variant="text"
+                                type="button"
+                                class="form-button form-button--next"
+                                label="Далее"
+                                size="large"
+                                @click="openPanelThree"
+                            ></Button>
+                          </v-card-actions>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
-                    <v-expansion-panel>
+
+                    <v-expansion-panel value="panelThree">
                         <v-expansion-panel-title>
                             <template v-slot="{ expanded }">
                                 <v-row no-gutters>
@@ -1165,7 +1130,7 @@ const maininfo = ref({
     conference_link: '',
     address: '',
     description: '',
-    participants_number: 0,
+    participants_number: '',
     application_type: '',
     available_structural_units: '',
     org_central_headquarter: '',
@@ -1438,6 +1403,33 @@ function AddQuestion() {
 </script>
 
 <style lang="scss" scoped>
+.eventType {
+  display: flex;
+  margin-top: 13px;
+  @media (max-width: 768px) {
+    display: initial;
+  }
+  &__personalBtn {
+    display: flex;
+    align-items: center;
+  }
+  &__groupBtn {
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+    @media (max-width: 768px) {
+      margin-left: initial;
+    }
+  }
+  &__multistageBtn {
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+    @media (max-width: 768px) {
+      margin-left: initial;
+    }
+  }
+}
 .action {
     margin-top: 60px;
     &-title {
@@ -1470,11 +1462,17 @@ function AddQuestion() {
         margin-bottom: 8px;
         //margin-top: 20px;
         gap: 80px;
+        @media (max-width: 768px) {
+          display: initial;
+        }
     }
     &-col {
         width: 50%;
         //padding-left: 15px;
         //padding-right: 15px;
+      @media (max-width: 768px) {
+        width: initial;
+      }
     }
     &-input {
         width: 100%;
@@ -1506,6 +1504,7 @@ function AddQuestion() {
         border: 1px solid #B6B6B6;
         border-radius: 15px;
         padding-left: 15px;
+        margin-bottom: 3px;
     }
     &-title {
         font-family: Bert Sans;
