@@ -297,6 +297,7 @@
                 <div class="cardsContainer">
                   <v-row v-if="vertical" align="start" justify="center">
                     <v-col
+                        class="pa-2"
                         v-for="(variant, i) in actionsList"
                         :key="i"
                         cols="auto"

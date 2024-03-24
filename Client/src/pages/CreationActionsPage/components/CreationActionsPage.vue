@@ -1,8 +1,7 @@
 <template>
     <div class="container">
         <h1 class="title title--mb">Создание мероприятия</h1>
-        <form @submit.prevent="SubmitEvent" class="form">
-
+        <form @submit.prevent="SubmitEvent" class="form" style="margin-bottom: 118px;">
                 <v-expansion-panels variant="accordion" v-model="panel">
                     <v-expansion-panel value="panelOne">
                         <v-expansion-panel-title>
@@ -788,9 +787,6 @@
                                   </div>
                                 </div>
                               </div>
-<!--                              <div class="form-container">-->
-<!--                                <div class="form-border"></div>-->
-<!--                              </div>-->
                             </div>
                           </div>
 
@@ -881,124 +877,133 @@
                                 </v-icon>
                             </template>
                         </v-expansion-panel-title>
-                        <v-expansion-panel-text>
+                        <v-expansion-panel-text class="form__inner-content">
+                          <div class="form__field-group">
                             <div
                                 v-for="organizator in organizators"
-                                class="form-container"
                                 :key="organizator"
+                                style="margin-bottom: 30px;"
                             >
+                              <div class="form-container">
                                 <div class="form-col">
-                                    <div class="form__field">
-                                        <label class="form-label" for="name-hq"
-                                            >ФИО организатора<sup
-                                                class="valid-red"
-                                                >*</sup
-                                            ></label
-                                        >
-                                        <InputText
-                                            id="name-hq"
-                                            v-model="organizator.organization"
-                                            class="form__input form-input-container"
-                                            placeholder="Фамилия Имя Отчество"
-                                            name="name_hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="telegram-owner-hq"
-                                            >Telegram</label
-                                        >
-                                        <InputText
-                                            id="telegram-owner-hq"
-                                            v-model="organizator.telegram"
-                                            class="form__input form-input-container"
-                                            placeholder="@modestra"
-                                            name="telegram-owner-hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="telegram-squad-hq"
-                                            >Телефон</label
-                                        >
-                                        <InputText
-                                            id="telegram-squad-hq"
-                                            v-model="
-                                                organizator.organizer_phone_number
-                                            "
-                                            class="form__input form-input-container"
-                                            placeholder="@Invar"
-                                            name="telegram-squad-hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
+                                  <div class="form__field">
+                                    <label class="form__label" for="name-hq"
+                                    >ФИО организатора <sup class="valid-red">*</sup
+                                    ></label>
+                                    <InputText
+                                        id="name-hq"
+                                        v-model="organizator.organization"
+                                        class="form__input form-input-container"
+                                        placeholder="Фамилия Имя Отчество"
+                                        name="name_hq"
+                                        :maxlength="100"
+                                    />
+                                    <div class="form__counter"></div>
+                                  </div>
+                                  <div class="form__field">
+                                    <label
+                                        class="form__label"
+                                        for="telegram-owner-hq">Telegram</label>
+                                    <InputText
+                                        id="telegram-owner-hq"
+                                        v-model="organizator.telegram"
+                                        class="form__input form-input-container"
+                                        placeholder="@nickname"
+                                        name="telegram-owner-hq"
+                                        :maxlength="100"
+                                    />
+                                    <div class="form__counter"></div>
+                                  </div>
+                                  <div class="form__field">
+                                    <label
+                                        class="form__label"
+                                        for="telegram-squad-hq"
+                                    >Телефон</label>
+                                    <InputText
+                                        id="telegram-squad-hq"
+                                        v-model="organizator.organizer_phone_number"
+                                        class="form__input form-input-container"
+                                        placeholder="@Invar"
+                                        name="telegram-squad-hq"
+                                        :maxlength="100"
+                                    />
+                                    <div class="form__counter"></div>
+                                  </div>
                                 </div>
                                 <div class="form-col">
-                                    <div class="form__field">
-                                        <label class="form-label" for="email-hq"
-                                            >Email организатора<sup
-                                                class="valid-red"
-                                                >*</sup
-                                            ></label
-                                        >
-                                        <InputText
-                                            id="email-hq"
-                                            v-model="
-                                                organizator.organizer_email
-                                            "
-                                            class="form__input form-input-container"
-                                            placeholder="email@gmail.com"
-                                            name="email_hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="organization-hq"
-                                            >Организация</label
-                                        >
-                                        <InputText
-                                            id="organization-hq"
-                                            v-model="organization_stop"
-                                            class="form__input form-input-container"
-                                            placeholder="Например КузГТУ"
-                                            name="organization-hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                </div>
-                                <div class="form__field">
+                                  <div class="form__field">
+                                    <label class="form__label" for="email-hq"
+                                    >Email организатора <sup class="valid-red">*</sup></label
+                                    >
+                                    <InputText
+                                        id="email-hq"
+                                        v-model="organizator.organizer_email"
+                                        class="form__input form-input-container"
+                                        placeholder="email@gmail.com"
+                                        name="email_hq"
+                                        :maxlength="100"
+                                    />
+                                    <div class="form__counter"></div>
+                                  </div>
+                                  <div class="form__field">
+                                    <label
+                                        class="form__label"
+                                        for="organization-hq"
+                                    >Организация</label>
+                                    <InputText
+                                        id="organization-hq"
+                                        v-model="organization_stop"
+                                        class="form__input form-input-container"
+                                        placeholder="Например КузГТУ"
+                                        name="organization-hq"
+                                        :maxlength="100"
+                                    />
+                                    <div class="form__counter"></div>
+                                  </div>
+                                  <div class="form__field">
                                     <div class="form-checkbox">
-                                        <input
-                                            v-model="
-                                                organizator.is_contact_person
-                                            "
-                                            type="checkbox"
-                                            name="person"
-                                        />
-                                        <label for="person"
-                                            >Сделать контактным лицом</label
-                                        >
+                                      <input
+                                          v-model="organizator.is_contact_person"
+                                          type="checkbox"
+                                          name="person"
+                                      />
+                                      <label for="person"
+                                      >Сделать контактным лицом</label
+                                      >
                                     </div>
+                                  </div>
                                 </div>
+                              </div>
+                              <div style="border: 1px solid #939393; width: 100%; margin-top: 40px; margin-bottom: 30px;"/>
                             </div>
+
                             <div class="form-add" @click="AddOrganizator">
-                                + Добавить организатора
+                              + Добавить организатора
                             </div>
+                          </div>
+
+                          <v-card-actions class="form__button-group">
+                            <Button
+                                class="form-button form-button--prev"
+                                variant="text"
+                                type="button"
+                                label="Назад"
+                                size="large"
+                                @click="openPanelThree"
+                            ></Button>
+                            <Button
+                                variant="text"
+                                type="button"
+                                class="form-button form-button--next"
+                                label="Далее"
+                                size="large"
+                                @click="openPanelFive"
+                            ></Button>
+                          </v-card-actions>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
 
-                    <v-expansion-panel>
+                    <v-expansion-panel value="panelFive">
                         <v-expansion-panel-title>
                             <template v-slot="{ expanded }">
                                 <v-row no-gutters>
@@ -1064,41 +1069,42 @@
                                 </v-icon>
                             </template>
                         </v-expansion-panel-title>
-                        <v-expansion-panel-text>
+                        <v-expansion-panel-text class="form__inner-content">
+                          <div class="form__field-group">
                             <div
                                 v-for="answer in answers"
                                 class="form-container"
                                 :key="answer"
                             >
-                                <div class="form-col">
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="sub-questions-hq"
-                                            >Задайте интересующие вопросы
-                                            участникам мероприятия</label
-                                        >
-                                        <InputText
-                                            id="sub-questions-hq"
-                                            v-model="answer.question"
-                                            class="form__input form-input-container"
-                                            placeholder="Например: Какой у вас размер футболки"
-                                            name="name_hq"
-                                            :maxlength="100"
-                                        />
-                                    </div>
+                              <div class="form-col" style="width: 100%;">
+                                <div class="form__field">
+                                  <label
+                                      class="form__label"
+                                      for="sub-questions-hq"
+                                  >Задайте интересующие вопросы
+                                    участникам мероприятия</label>
+                                  <InputText
+                                      id="sub-questions-hq"
+                                      v-model="answer.question"
+                                      class="form__input form-input-container"
+                                      placeholder="Например: Какой у вас размер футболки"
+                                      name="name_hq"
+                                      :maxlength="100"
+                                  />
                                 </div>
+                              </div>
                             </div>
                             <div class="form-add" @click="AddQuestion">
-                                + Добавить вопрос
+                              + Добавить вопрос
                             </div>
+                          </div>
+
+                          <div class="form-col-100" style="margin-top: 40px;">
+                            <Button type="submit" label="Создать"></Button>
+                          </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
-
-            <div class="form-col-100">
-                <Button type="submit" label="Сохранить"></Button>
-            </div>
         </form>
     </div>
 </template>
@@ -1144,6 +1150,10 @@ const openPanelThree = () => {
 
 const openPanelFour = () => {
   panel.value = 'panelFour';
+}
+
+const openPanelFive = () => {
+  panel.value = 'panelFive';
 }
 
 //-------------------------------------------------------------------------------------
@@ -1405,8 +1415,6 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
-  console.log(time_data.value)
-  return;
     createAction(fd)
         .then((resp) => {
             console.log('Форма передалась успешно', resp.data);
@@ -1461,6 +1469,9 @@ function AddQuestion() {
 </script>
 
 <style lang="scss" scoped>
+.form__inner-content {
+  border-bottom: none;
+}
 .eventType {
   display: flex;
   margin-top: 13px;
@@ -1624,6 +1635,12 @@ function AddQuestion() {
     &-add {
         margin-top: 10px;
         text-decoration: underline;
+        font-family: Bert Sans;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 24px;
+        text-align: left;
+        color: #35383F;
     }
     &-add:hover {
         cursor: pointer;
