@@ -67,7 +67,7 @@
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.format_type"
-                                    value="Оффлайн"
+                                    value="Офлайн"
                                     type="radio"
                                     name="offline"
                                 />
