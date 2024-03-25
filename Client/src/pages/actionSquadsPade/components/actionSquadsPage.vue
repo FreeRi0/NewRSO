@@ -46,20 +46,29 @@
                         title="Тип мероприятия"
                     >
                     <v-expansion-panel-text>
-                            <div class="settings-checkbox">
+                      <div class="settings-radio">
+                        <input
+                            id="format_typeAll"
+                            v-model="actionFormSearch.format_type"
+                            value=""
+                            type="radio"
+                        />
+                        <label for="format_typeAll">Все</label>
+                      </div>
+                            <div class="settings-radio">
                                 <input
-                                    v-model="actionFormSearch.format.online"
+                                    v-model="actionFormSearch.format_type"
                                     value="Онлайн"
-                                    type="checkbox"
+                                    type="radio"
                                     name="online"
                                 />
                                 <label for="online">Онлайн</label>
                             </div>
-                            <div class="settings-checkbox">
+                            <div class="settings-radio">
                                 <input
-                                    v-model="actionFormSearch.format.offline"
+                                    v-model="actionFormSearch.format_type"
                                     value="Оффлайн"
-                                    type="checkbox"
+                                    type="radio"
                                     name="offline"
                                 />
                                 <label for="offline">Оффлайн</label>
@@ -71,20 +80,29 @@
                         title="Статус мероприятия"
                     >
                         <v-expansion-panel-text>
-                            <div class="settings-checkbox">
+                          <div class="settings-radio">
+                            <input
+                                id="statusAll"
+                                v-model="actionFormSearch.status"
+                                value=""
+                                type="radio"
+                            />
+                            <label for="statusAll">Все</label>
+                          </div>
+                            <div class="settings-radio">
                                 <input
-                                    v-model="actionFormSearch.status.start"
+                                    v-model="actionFormSearch.status"
                                     value="Незавершен"
-                                    type="checkbox"
+                                    type="radio"
                                     name="open"
                                 />
                                 <label for="open">Незавершен</label>
                             </div>
-                            <div class="settings-checkbox">
+                            <div class="settings-radio">
                                 <input
-                                    v-model="actionFormSearch.status.finish"
+                                    v-model="actionFormSearch.status"
                                     value="Завершен"
-                                    type="checkbox"
+                                    type="radio"
                                     name="close"
                                 />
                                 <label for="close">Завершен</label>
@@ -96,15 +114,15 @@
                             <div class="flex align-items-center">
                                 <div class="settings-radio">
                                     <input
-                                        v-model="actionFormSearch.roads"
+                                        v-model="actionFormSearch.scale"
                                         type="radio"
-                                        value="Все"
+                                        value=""
                                     />
                                     <label class="ml-2">Все</label>
                                 </div>
                                 <div class="settings-radio">
                                     <input
-                                        v-model="actionFormSearch.roads"
+                                        v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Всероссийское"
                                     />
@@ -112,7 +130,7 @@
                                 </div>
                                 <div class="settings-radio">
                                     <input
-                                        v-model="actionFormSearch.roads"
+                                        v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Окружное"
                                     />
@@ -120,7 +138,7 @@
                                 </div>
                                 <div class="settings-radio">
                                     <input
-                                        v-model="actionFormSearch.roads"
+                                        v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Региональное"
                                     />
@@ -128,7 +146,7 @@
                                 </div>
                                 <div class="settings-radio">
                                     <input
-                                        v-model="actionFormSearch.roads"
+                                        v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Городское"
                                     />
@@ -136,7 +154,7 @@
                                 </div>
                                 <div class="settings-radio">
                                     <input
-                                        v-model="actionFormSearch.roads"
+                                        v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Мероприятие ОО"
                                     />
@@ -144,7 +162,7 @@
                                 </div>
                                 <div class="settings-radio">
                                     <input
-                                        v-model="actionFormSearch.roads"
+                                        v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Отрядное"
                                     />
@@ -160,11 +178,12 @@
                         <v-expansion-panel-text>
                             <div class="settings-radio">
                                 <input
+                                    id="directionAll"
                                     v-model="actionFormSearch.direction"
                                     type="radio"
-                                    value="Все"
+                                    value=""
                                 />
-                                <label class="ml-2">Все</label>
+                                <label for="directionAll" class="ml-2">Все</label>
                             </div>
                             <div class="settings-radio">
                                 <input
@@ -194,7 +213,7 @@
                                 <input
                                     v-model="actionFormSearch.direction"
                                     type="radio"
-                                    value="Патриотическое"
+                                    value="Спортивное"
                                 />
                                 <label class="ml-2">Спортивное</label>
                             </div>
@@ -209,6 +228,7 @@
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
+              <p class="totalEvents">Мероприятий найдено: {{ actionsList.length }}</p>
             </div>
 
             <div class="col" style="width: 100%">
@@ -267,8 +287,9 @@
                       <Button
                           type="button"
                           class="ascend events__sort-buttonDirection"
+                          :class="{reverseBtnActive: reverseListActive}"
                           icon="switch"
-                          @click="ascending = !ascending"
+                          @click="reverseList"
                           color="white"
                       ></Button>
                     </div>
@@ -276,6 +297,7 @@
                 <div class="cardsContainer">
                   <v-row v-if="vertical" align="start" justify="center">
                     <v-col
+                        class="pa-2"
                         v-for="(variant, i) in actionsList"
                         :key="i"
                         cols="auto"
@@ -390,8 +412,8 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
-import { ref } from 'vue';
-import { getListActionsBySearch, getRoles } from '@services/ActionService';
+import { ref, watch } from 'vue';
+import { getListActionsByFilter, getListActionsBySearch, getRoles} from '@services/ActionService';
 import { onActivated } from 'vue';
 import { useRouter } from "vue-router";
 
@@ -399,9 +421,9 @@ const router = useRouter();
 
 let actionsList = ref([]);
 let rolesCount = ref(0);
-//Сортировка
+const text = ref('');
 const vertical = ref(true);
-const ascending = ref(true);
+const reverseListActive = ref(false);
 
 onActivated(() => {
     getListActionsBySearch(text.value).then((resp) => {
@@ -450,9 +472,11 @@ const sortItems = (e) => {
     });
   }
 }
-//Массив полученных значений
-const text = ref('');
 
+const reverseList = () => {
+  reverseListActive.value = !reverseListActive.value;
+  actionsList.value = actionsList.value.reverse();
+}
 //Поиск нового значения
 function SearchByInput() {
   getListActionsBySearch(text.value).then((resp) => {
@@ -466,47 +490,37 @@ const goToEventList = (event) => {
   router.push({ name: 'Action', params: { id: event.target.id } })
 }
 
-//До лучших времен...
 const actionFormSearch = ref({
-    format: {
-        online: null,
-        offline: null,
-    },
+    format_type: '',
     direction: '',
-    status: {
-        start: null,
-        finish: null,
-    },
-    roads: '',
+    status: '',
+    scale: '',
     search: '',
 });
-// function SendSearchForm() {}
+
+watch(actionFormSearch, async () => {
+  let params = ''
+  for (let value in actionFormSearch.value) {
+    if(actionFormSearch.value[value]) {
+      params += value + '=' + actionFormSearch.value[value] + '&'
+    }
+  }
+  const res = await getListActionsByFilter(`?${params}`)
+  actionsList.value = res.data.results;
+}, {
+  deep: true
+})
 
 //Изменение расположения блоков
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
 
-// const sortBy = ref('alphabetically');
-//
-// watchEffect(() => {
-//     switch (sortBy.value) {
-//         case 'alphabetically':
-//             break;
-//         case 'founding_date':
-//             break;
-//         case 'members_count':
-//             break;
-//     }
-// });
-
 const sortOptions = ref([
   { text: 'По алфавиту: А - Я', value: 'alphabetically' },
   { value: 'founding_date', text: 'По дате проведения' },
   { value: 'members_count', text: 'Количеству участников' },
 ]);
-
-//Получить полный список мероприятий
 </script>
 
 <style>
@@ -571,6 +585,20 @@ const sortOptions = ref([
 </style>
 
 <style lang="scss" scoped>
+.settings-container {
+  @media (max-width: 768px) {
+    //display: none;
+  }
+}
+.totalEvents {
+  font-family: Bert Sans;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 21.1px;
+  text-align: left;
+  color: #898989;
+  margin-top: 36px;
+}
 .v-img__img--cover {
   object-fit: fill;
 }
@@ -583,12 +611,12 @@ const sortOptions = ref([
   margin-bottom: 12px;
   height: 48px;
   cursor: pointer;
+  max-width: 880px;
 }
 .vertical_list-itemLeft,
 .vertical_list-itemRight {
   display: flex;
   align-items: center;
-  margin-right: 25px;
 }
 .vertical_list-itemLeft{
   margin: 4px 0 4px 32px;
@@ -599,14 +627,37 @@ const sortOptions = ref([
   text-align: left;
   color: #35383F;
 
+  @media (max-width: 768px) {
+    margin: 4px 0 4px 12px;
+    font-family: Bert Sans;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 15.83px;
+    text-align: left;
+  }
+
 }
+
 .vertical_list-itemRight {
   font-family: Bert Sans;
   font-size: 14px;
   font-weight: 400;
   line-height: 18.46px;
   color: #35383F;
-
+  justify-content: space-between;
+  min-width: 199px;
+  margin-right: 25px;
+  @media (max-width: 1440px) {
+    width: 199px;
+  }
+  @media (max-width: 768px) {
+    font-family: Bert Sans;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15.83px;
+    text-align: left;
+    margin-right: 5px;
+  }
 }
 .vertical_list-img {
   width: 52px;
@@ -632,14 +683,24 @@ const sortOptions = ref([
     object-fit: fill;
   }
 }
+.vertical_list-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 282px;
+
+  @media (max-width: 1024px) {
+    max-width: 143px;
+  }
+  @media (max-width: 450px) {
+    max-width: 97px;
+  }
+}
 .vertical_list-time {
   margin-bottom: 3px;
-  margin-left: 15px;
 }
 .vertical_list-quantity {
-  margin-left: 24px;
   margin-bottom: 3px;
-  margin-right: 5px;
 }
 // -------------------tile-------------------
 .cardsContainer {
@@ -722,6 +783,9 @@ const sortOptions = ref([
         display: flex;
         flex-direction: row;
         margin-bottom: 20px;
+      @media (max-width: 768px) {
+        display: initial;
+      }
     }
 }
 //Стили аккордеонов
@@ -817,6 +881,9 @@ const sortOptions = ref([
       border: 1px solid #B6B6B6 !important;
     }
   }
+}
+.reverseBtnActive {
+  border: 2px solid #35383F !important;
 }
 .sort {
     &-container {

@@ -9,7 +9,10 @@ export const useEventsStore = defineStore('events', {
         event: {},
         applications: [],
         isLoading: false,
+        totalEvents: 0,
         MembersLimit: 6,
+        eventsLimit: 4,
+        nextEvents: '',
     }),
     actions: {
         async getEventId(id: String) {
@@ -71,11 +74,14 @@ export const useEventsStore = defineStore('events', {
                 console.log('an error occured ' + error);
             }
         },
-        async getFilteredEvents(scale: String) {
+        async getFilteredEvents(scale: String, direction: String) {
             try {
                 const responseFilteredEvents = await HTTP.get(
-                    `/events/?scale=${scale}`,
+                    `/events/?scale_or_direction=scale=${scale}|direction=${direction}`,
                     {
+                        params: {
+                            limit: this.eventsLimit,
+                        },
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization:
@@ -83,30 +89,37 @@ export const useEventsStore = defineStore('events', {
                         },
                     },
                 );
+                this.totalEvents = responseFilteredEvents.data.count;
                 this.events = responseFilteredEvents.data.results;
+                this.nextEvents = responseFilteredEvents.data.next;
             } catch (error) {
                 console.log('an error occured ' + error);
             }
         },
 
-        async getFilteredDirectionEvents( direction: String) {
-          try {
-              const responseFilteredDirectionEvents = await HTTP.get(
-                  `/events/?direction=${direction}`,
-                  {
-                      headers: {
-                          'Content-Type': 'application/json',
-                          Authorization:
-                              'Token ' + localStorage.getItem('Token'),
-                      },
-                  },
-              );
-              this.events = this.events.concat(responseFilteredDirectionEvents.data.results)
+        async getNextFilteredEvents() {
+            try {
+                this.isLoading = true;
 
-          } catch (error) {
-              console.log('an error occured ' + error);
-          }
-      },
+                const responseFilteredEventsNext = await HTTP.get(
+                    this.nextEvents.replace('http', 'https'),
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+
+                this.events = this.events.concat(
+                    responseFilteredEventsNext.data.results,
+                );
+                this.nextEvents = responseFilteredEventsNext.data.next;
+            } catch (error) {
+                console.log('an error occured' + error);
+            }
+        },
         async getEventOrganizators(id: String) {
             try {
                 this.isLoading = true;

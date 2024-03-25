@@ -1,4 +1,5 @@
 <template>
+    <keep-alive>
     <div class="container">
         <div class="participants">
             <h2 class="participants-title">Участники ЛСО</h2>
@@ -132,6 +133,7 @@
             </template>
         </div>
     </div>
+    </keep-alive>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
@@ -143,7 +145,7 @@ import {
 } from '@features/Participants/components';
 import { sortByEducation } from '@shared/components/selects';
 import { useSquadsStore } from '@features/store/squads';
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, onActivated } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
@@ -203,10 +205,7 @@ const sortOptionss = ref([
 ]);
 
 const getMembers = async (pagination, orderLimit) => {
-    if (isLoading.value) return false;
     try {
-
-        isLoading.value = true;
         let data = [];
         let url = `/detachments/${id}/members/?`;
         if (orderLimit) data.push('limit=' + orderLimit);
@@ -224,7 +223,6 @@ const getMembers = async (pagination, orderLimit) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        isLoading.value = false;
 
         let response = viewHeadquartersResponse.data;
         if (pagination) {
@@ -244,8 +242,6 @@ const searchMembers = () => {
     }, 400);
 };
 
-
-
 watch(
     () => sortBy.value,
     () => {
@@ -258,26 +254,11 @@ watch(
         getMembers('', sortedParticipants.value.length);
     },
 );
-
-watch(
-    () => route.params.id,
-
-    async (newId) => {
-        console.log('id', newId);
-        if (!newId || route.name !== 'allparticipants') return;
-
-        await getMembers();
-        await aboutVerified();
-    },
-    {
-        immediate: true,
-    },
-);
-
-onMounted(() => {
-    getMembers();
-    aboutVerified();
-});
+onActivated(async () => {
+    id = route.params.id;
+    await getMembers();
+    await aboutVerified();
+})
 </script>
 <style lang="scss">
 .participants {
