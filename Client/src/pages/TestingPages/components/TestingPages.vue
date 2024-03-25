@@ -6,13 +6,25 @@
 
                 <p class="curr_question">{{ indexQuestion }}/20</p>                
             </div>
-            <p class="question_text">{{ currQuestion.question }}</p>
-            <div class="radio_field" v-for="(answ, index) in currQuestion.answerOptions" :key="index">
+            <p class="question_text">{{ questions[indexQuestion].title }}</p>
+            <template v-if="questions[indexQuestion].image != null">
+                <img :src="questions[indexQuestion].image" alt="question photo"/>
+            </template>
+            <template v-if="questions[indexQuestion].answer_options[0].image !=null">
+                <div class="radio_field" v-for="(answ, index) in questions[indexQuestion].answer_options" :key="index">
+                    <div>
+                        <input class="radio_button" type="radio" :id="index" :value="index" name="answers" v-model="choosenAnswer"/>
+
+                    </div>
+                    <img :for="index" :src="answ.image" alt="answer photo"/>
+                </div>
+            </template>
+            <div class="radio_field" v-for="(answ, index) in questions[indexQuestion].answer_options" :key="index">
                 <div>
                     <input class="radio_button" type="radio" :id="index" :value="index" name="answers" v-model="choosenAnswer"/>
 
                 </div>
-                <label :for="index" class="answer_text">{{ answ }}</label>
+                <label :for="index" class="answer_text">{{ answ.text }}</label>
             </div>
             <!-- <p class="answer_text" v-for="answ in currQuestion.answerOptions" :key="answ">{{ answ }}</p> -->
 
@@ -26,7 +38,7 @@
 
         <div v-else-if="solved">
             <p class="main_title">Тестирование по обучению</p>
-            <p class="subtitle">Вы уже прошли тест<br>Результат</p>
+            <p class="subtitle">Вы уже прошли тест<br>Результат {{ result }}</p>
             <div class="button">
                 <button @click="onRestart" class="submit_button">
                     Начать заново
@@ -48,80 +60,137 @@
 </template>
 
 <script setup>
+    import { HTTP } from '@app/http'
+
     import { ref } from 'vue';
 
-    const arrOfQuestion = [
-        'Когда учреждено МООД «РСО»?', 
-        'Какой год принято считать официальным началом движения студенческих отрядов в СССР?', 
-        'На базе какого высшего учебного заведения были образованы первые студенческие отряды?',
-        'Выберите наиболее неподходящее решение кейса: вы находитесь на трудовом проекте, и к вам поступает жалоба о нарушении сухого закона во время работы на проекте. Жалобу подал один из членов другого отряда, который является непосредственным свидетелем нарушения (Сухой закон строго запрещает употребление алкоголя и других запрещённых веществ во время работы на проекте, чтобы гарантировать безопасность и эффективность выполнения задач). ',
-    ];
-    const arrOfAnswers = [
-        ['17 февраля','12 июня 2010','1 июля 1959','3 марта 1993'], 
-        ['1949','1984','1959','1974'],
-        ['Всесоюзный юридический заочный институт','Московский государственный университет имени М. В. Ломоносова ','Всесоюзный заочный институт советской торговли Наркомторга СССР','Московский лесотехнический институт'],
-        [
-            'Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении. Провести личную беседу с бойцом, о котором поступила жалоба. Запросить его версию событий и объяснить, что жалоба была получена. Провести расследование, включающее беседу с другими свидетелями, если таковые имеются, и проверку фото- или видеоматериалов. После сбора всех необходимых доказательств принять решение о нарушении сухого закона. ',
-            'В случае подтверждения нарушения, применить соответствующие меры в соответствии с правилами отряда и регионального отделения, такие как предупреждение, штраф или другие дисциплинарные меры.',
-            'Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении и попросить написать жалобу выше. Организовать общее собрание отряда, сообщить о решении выгнать бойца из отряда, как порочащего честь отряда без проведения дополнительных разбирательств.',
-            'Организовать общее собрание отряда, для принятия общего решения о сложившиеся ситуации в случае подтверждения нарушения.',
-        ]
-    ];
+    const questions = ref([{
+        id: 2,
+        title: "Когда учреждено МООД «РСО»?",
+        image: null,
+        answer_options: [{
+            id:1,
+            text: "17 февраля"
+        },{
+            id:2,
+            text: "12 июня 2010"
+        },{
+            id:3,
+            text: "1 июля 1959"
+        },{
+            id:4,
+            text: "3 марта 1993"
+        }]
+    },{
+        id: 4,
+        title: "Какой год принято считать официальным началом движения студенческих отрядов в СССР?",
+        image: null,
+        answer_options: [{
+            id:1,
+            text: "1949"
+        },{
+            id:2,
+            text: "1984"
+        },{
+            id:3,
+            text: "1959"
+        },{
+            id:4,
+            text: "1974"
+        }]
+    },{
+        id: 1,
+        title: "На базе какого высшего учебного заведения были образованы первые студенческие отряды?",
+        image: null,
+        answer_options: [{
+            id:1,
+            text: "Всесоюзный юридический заочный институт"
+        },{
+            id:2,
+            text: "Московский государственный университет имени М. В. Ломоносова "
+        },{
+            id:3,
+            text: "Всесоюзный заочный институт советской торговли Наркомторга СССР"
+        },{
+            id:4,
+            text: "Московский лесотехнический институт"
+        }]
+    },{
+        id: 8,
+        title: "Выберите наиболее неподходящее решение кейса: вы находитесь на трудовом проекте, и к вам поступает жалоба о нарушении сухого закона во время работы на проекте. Жалобу подал один из членов другого отряда, который является непосредственным свидетелем нарушения (Сухой закон строго запрещает употребление алкоголя и других запрещённых веществ во время работы на проекте, чтобы гарантировать безопасность и эффективность выполнения задач).",
+        image: null,
+        answer_options: [{
+            id:1,
+            text: "Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении. Провести личную беседу с бойцом, о котором поступила жалоба. Запросить его версию событий и объяснить, что жалоба была получена. Провести расследование, включающее беседу с другими свидетелями, если таковые имеются, и проверку фото- или видеоматериалов. После сбора всех необходимых доказательств принять решение о нарушении сухого закона."
+        },{
+            id:2,
+            text: "В случае подтверждения нарушения, применить соответствующие меры в соответствии с правилами отряда и регионального отделения, такие как предупреждение, штраф или другие дисциплинарные меры."
+        },{
+            id:3,
+            text: "Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении и попросить написать жалобу выше. Организовать общее собрание отряда, сообщить о решении выгнать бойца из отряда, как порочащего честь отряда без проведения дополнительных разбирательств."
+        },{
+            id:4,
+            text: "Организовать общее собрание отряда, для принятия общего решения о сложившиеся ситуации в случае подтверждения нарушения."
+        }]
+    }])
+    const answers = ref([]);
 
-    const currQuestion = ref({
-        question: '',
-        answerOptions: [],
-    });
+    const result = ref();
 
-    const solvedQuestion = ref({
-        questions: [],
-        answers: [],
-    });
-
-    const started = ref(false);
-    const solved = ref(false);
     let indexQuestion = ref(1);
     const choosenAnswer = ref();
-
-    const shuffle = async (array, answ) => {
-        for (let i = array.length - 1; i > 0; i--){
-            let j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-            [answ[i], answ[j]] = [answ[j], answ[i]];
-        }
-    }
-    
-    const onRestart = async () => {
-        solved.value = false;
-        indexQuestion.value = 1;
-        solvedQuestion.value.questions = [];
-        solvedQuestion.value.answers = [];
-    }
+    const started = ref(false);
+    const solved = ref(false);
 
     const onStart = async () => {
-        started.value = true;
-        await shuffle(arrOfQuestion, arrOfAnswers);
-        currQuestion.value.question = arrOfQuestion[0];
-        currQuestion.value.answerOptions = arrOfAnswers[0];
+        started.value=true;
+        // try{
+        //     const { data } = await HTTP.get(`/questions/`,{
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             Authorization: 'Token ' + localStorage.getItem('Token'),
+        //         },
+        //     });
+        //     questions.value = data.value;
+        // } catch(e) {
+        //     console.log('error onStart', e);
+        // }
+    }
+
+    const onRestart = async () => {
+        solved.value = false;
     }
 
     const onAction = async () => {
-        if (indexQuestion.value < 2) {
-            solvedQuestion.value.questions.push(currQuestion.value.question);
-            solvedQuestion.value.answers.push(choosenAnswer.value + 1);
-            choosenAnswer.value = null;
-            currQuestion.value.question = arrOfQuestion[indexQuestion.value];
-            currQuestion.value.answerOptions = arrOfAnswers[indexQuestion.value];
-            indexQuestion.value++;
-        } else {
-            solvedQuestion.value.questions.push(currQuestion.value.question);
-            solvedQuestion.value.answers.push(choosenAnswer.value + 1);
-            choosenAnswer.value = null;
-            console.log(solvedQuestion.value);
-            solved.value = true;
-            started.value = false;
+        const temp = {
+            question_id: questions.value[indexQuestion.value].id,
+            answer_option_id: choosenAnswer.value + 1,
         }
+        answers.value.push(temp)
+        if (indexQuestion.value == 2){
+            started.value = false;
+            solved.value = true;
+            indexQuestion.value = 0;
+            // submitAnswers();
+        }
+        indexQuestion.value += 1;
+        choosenAnswer.value = null;
     }
+
+    // const submitAnswers = async ()=>{
+    //     try{
+    //         const { data } = await HTTP.post(`submit_answers/`, { answers },
+    //         {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Authorization: 'Token ' + localStorage.getItem('Token'),
+    //             },
+    //         });
+    //         result.value = data.value;
+    //     } catch(e) {
+    //         console.log('error submitAnswers', e);
+    //     }
+    // }
 </script>
     
 <styel scoped lang="scss">
