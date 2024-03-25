@@ -102,6 +102,7 @@ const viewEvents = async (event_pk) => {
             },
         );
         eventsList.value = [...eventsList.value, ...eventsRequest.data.results];
+        selectedEventList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -229,12 +230,13 @@ const onAction = async () => {
             } else {
                 await cancelApplication(application.event.id, application.id);
             }
-            eventsList.value = eventsList.value.filter(
-                (event) => event.id != application.id,
-            );
-            selectedEventList.value = selectedEventList.value.filter(
-                (event) => event.id != application.id,
-            );
+
+                eventsList.value = eventsList.value.filter(
+                    (event) => event.id != application.id,
+                );
+                selectedEventList.value = selectedEventList.value.filter(
+                    (event) => event.id != application.id,
+                );
         }
         await viewEvents();
     } catch (e) {
@@ -244,6 +246,7 @@ const onAction = async () => {
 
 onMounted(async () => {
     await events();
+    await viewEvents();
 });
 
 // onActivated(async () => {

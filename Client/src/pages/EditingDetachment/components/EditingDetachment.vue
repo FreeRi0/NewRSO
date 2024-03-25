@@ -128,7 +128,7 @@ const getMembers = async () => {
                 },
             );
 
-            members.value = membersResponse.data;
+            members.value = membersResponse.data.results;
             /*if (members.value.length) {
                 members.value.forEach((member) => {
                     member.position = member.position?.id;
