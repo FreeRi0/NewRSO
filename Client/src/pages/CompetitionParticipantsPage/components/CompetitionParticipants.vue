@@ -56,7 +56,7 @@
                             :SortDropdown="true"
                         ></educInstitutionDropdown>
                     </div> -->
-                    <div class="sort-select">
+                    <!-- <div class="sort-select">
                         <sortByEducation
                             variant="outlined"
                             clearable
@@ -67,7 +67,7 @@
                             placeholder="Выберите фильтр"
                             @update:modelValue="sortSquads"
                         ></sortByEducation>
-                    </div>
+                    </div> -->
 
                     <Button
                         type="button"
@@ -115,15 +115,17 @@
                     Ничего не найдено
                 </p>
             </div>
-            <Button
-                @click="next"
-                v-if="
-                    squads.competitionSquads.value.length <
-                    squadsStore.totalCompetitions
-                "
-                label="Показать еще"
-            ></Button>
-            <Button @click="prev" v-else label="Свернуть все"></Button>
+            <template v-if="squadsStore.totalCompetitions && squadsStore.totalCompetitions > squadsStore.CompetitionsLimit">
+                <Button
+                    @click="next"
+                    v-if="
+                       sortedSquads.length <
+                        squadsStore.totalCompetitions
+                    "
+                    label="Показать еще"
+                ></Button>
+                <Button @click="prev" v-else label="Свернуть все"></Button>
+            </template>
         </div>
     </div>
 </template>
@@ -137,7 +139,7 @@ import {
     sortByEducation,
     educInstitutionDropdown,
 } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
@@ -147,13 +149,14 @@ const squads = storeToRefs(squadsStore);
 const isLoading = storeToRefs(squadsStore);
 const categories = storeToRefs(squadsStore);
 const name = ref('');
+const isTandem = ref(true);
 const sortBy = ref('name');
 const education = ref(null);
 const next = () => {
-    squadsStore.getNextCompetitionSquads(sortBy.value);
+    squadsStore.getNextCompetitionSquads();
 };
 const prev = () => {
-    squadsStore.getCompetitionSquads(sortBy.value);
+    squadsStore.getCompetitionSquads();
 };
 const ascending = ref(true);
 const picked = ref('');
@@ -161,9 +164,9 @@ const switched = ref(true);
 const timerSearch = ref(null);
 const selectedSort = ref(null);
 
-const sortSquads = () => {
-    squadsStore.getCompetitionSquads(sortBy.value);
-};
+// const sortSquads = () => {
+//     squadsStore.getCompetitionSquads(sortBy.value);
+// };
 
 const sortOptionss = ref([
     {
@@ -186,9 +189,9 @@ const searchCompetitions = (event) => {
 const sortedSquads = computed(() => {
     let tempSquads = squads.competitionSquads.value;
     if (switched.value) {
-        tempSquads = tempSquads.filter((item) => item.detachment);
+        // squadsStore.getCompetitionSquads(sortBy.value, isTandem.value);
     } else {
-        tempSquads = tempSquads.filter((item) => !item.detachment);
+        // squadsStore.getCompetitionSquads(sortBy.value, isTandem.value);
     }
 
     if (!ascending.value) {
@@ -206,8 +209,19 @@ const sortedSquads = computed(() => {
     return tempSquads;
 });
 
+watch(
+    () => switched.value,
+    () => {
+        if (switched.value) {
+            squadsStore.getCompetitionSquads(isTandem.value);
+        } else {
+            squadsStore.getCompetitionSquads(!isTandem.value);
+        }
+    },
+);
+
 onMounted(() => {
-    squadsStore.getCompetitionSquads(sortBy.value);
+    squadsStore.getCompetitionSquads(isTandem.value);
 });
 </script>
 <style lang="scss" scoped>

@@ -44,6 +44,10 @@
             </template>
         </div>
 
+        <div class="error" v-if="isError.non_field_errors">
+            {{ '' + isError.non_field_errors }}
+        </div>
+
         <div class="participants__btn" v-if="selectedEventList.length">
             <Button
                 class="save"
@@ -98,12 +102,11 @@ const viewEvents = async (event_pk) => {
             },
         );
         eventsList.value = [...eventsList.value, ...eventsRequest.data.results];
+        selectedEventList.value = [];
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
-
-
 
 const events = async () => {
     try {
@@ -227,12 +230,13 @@ const onAction = async () => {
             } else {
                 await cancelApplication(application.event.id, application.id);
             }
-            eventsList.value = eventsList.value.filter(
-                (event) => event.id != application.id,
-            );
-            selectedEventList.value = selectedEventList.value.filter(
-                (event) => event.id != application.id,
-            );
+
+                eventsList.value = eventsList.value.filter(
+                    (event) => event.id != application.id,
+                );
+                selectedEventList.value = selectedEventList.value.filter(
+                    (event) => event.id != application.id,
+                );
         }
         await viewEvents();
     } catch (e) {
@@ -242,9 +246,22 @@ const onAction = async () => {
 
 onMounted(async () => {
     await events();
+    await viewEvents();
 });
 
 // onActivated(async () => {
 //     await events();
 // });
 </script>
+
+<style>
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+</style>
