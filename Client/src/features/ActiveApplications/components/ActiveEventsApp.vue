@@ -44,6 +44,10 @@
             </template>
         </div>
 
+        <div class="error" v-if="isError.non_field_errors">
+            {{ '' + isError.non_field_errors }}
+        </div>
+
         <div class="participants__btn" v-if="selectedEventList.length">
             <Button
                 class="save"
@@ -102,8 +106,6 @@ const viewEvents = async (event_pk) => {
         console.log('an error occured ' + error);
     }
 };
-
-
 
 const events = async () => {
     try {
@@ -248,3 +250,15 @@ onMounted(async () => {
 //     await events();
 // });
 </script>
+
+<style>
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+</style>

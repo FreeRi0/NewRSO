@@ -222,7 +222,6 @@ const getMembers = async (pagination, orderLimit) => {
             },
         });
 
-
         let response = viewHeadquartersResponse.data;
         if (pagination) {
             response.results = [...peoples.value.results, ...response.results];
@@ -246,11 +245,10 @@ watch(
 
     async (newId) => {
         console.log('id', newId);
-        if (!newId || route.name !== 'allparticipants') return;
-
+        if (!newId) return;
         await getMembers();
         await aboutVerified();
-        console.log('yeahhh!')
+        console.log('yeahhh!');
     },
     {
         immediate: true,
@@ -269,8 +267,6 @@ watch(
         getMembers('', sortedParticipants.value.length);
     },
 );
-
-
 
 // onMounted(() => {
 //     // getMembers();
