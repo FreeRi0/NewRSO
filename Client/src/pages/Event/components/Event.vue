@@ -141,7 +141,9 @@
             <h2 class="title event_org">Организаторы</h2>
             <div v-if="eventsStore.organizators" class="card_wrap">
                 <div
-                    v-for="organizator in eventsStore.organizators"
+                    v-for="organizator in [
+                        ...new Set(eventsStore.organizators),
+                    ]"
                     class="event_card_wrap"
                     :key="organizator.id"
                 >
@@ -246,7 +248,7 @@
                         </div>
                     </li>
                 </ul>
-                <p v-else>Участников не найдено..</p>
+                <p class="text-center" v-else>Участников не найдено..</p>
                 <div class="squad-participants__link">
                     <div
                         v-if="eventsStore.members.length > 6"
@@ -296,7 +298,7 @@
                         </div>
                     </li>
                 </ul>
-                <p v-else>Участников не найдено...</p>
+                <p class="text-center mt-10" v-else>Участников не найдено...</p>
                 <div
                     v-if="eventsStore.applications.length > 6"
                     class="squad-participants__link"
@@ -388,14 +390,19 @@
                     </div>
                 </router-link>
             </div>
-            <Button
-                v-if="eventsStore.events.length > 4"
-                class="form-button btn_wrap"
-                type="button"
-                label="Показать еще"
-                variant="text"
-                size="large"
-            ></Button>
+            <template
+                v-if="
+                    eventsStore.totalEvents &&
+                    eventsStore.totalEvents > eventsStore.eventsLimit
+                "
+            >
+                <Button
+                    @click="next"
+                    v-if="eventsStore.events.length < eventsStore.totalEvents"
+                    label="Показать еще"
+                ></Button>
+                <Button @click="prev" v-else label="Свернуть все"></Button>
+            </template>
         </div>
     </div>
 </template>
@@ -417,11 +424,19 @@ const swal = inject('$swal');
 const eventsStore = useEventsStore();
 const userStore = useUserStore();
 const isContact = ref([]);
+
+const next = () => {
+    eventsStore.getNextFilteredEvents();
+};
+const prev = () => {
+    eventsStore.getFilteredEvents(
+        eventsStore.event.scale,
+        eventsStore.event.direction,
+    );
+};
 let userId = computed(() => {
     return userStore.currentUser.id;
 });
-
-console.log('id', userId.value);
 
 const UserApplication = computed(() => {
     return eventsStore.applications.find(
@@ -429,13 +444,13 @@ const UserApplication = computed(() => {
     );
 });
 
-console.log('app', UserApplication.value);
+// const organizators = computed(() => {
+//     return eventsStore.organizators.filter((item) => item.organizer.id !== item.organizer.id))
+// });
 
 const IsMember = computed(() => {
     return eventsStore.members.find((item) => item.user.id === userId.value);
 });
-
-console.log('mem', IsMember.value);
 
 const AddApplication = async () => {
     try {
@@ -495,7 +510,10 @@ watch(
 watch(
     () => eventsStore.event,
     () => {
-        eventsStore.getFilteredEvents(eventsStore.event.scale, eventsStore.event.direction);
+        eventsStore.getFilteredEvents(
+            eventsStore.event.scale,
+            eventsStore.event.direction,
+        );
     },
 );
 </script>
@@ -818,7 +836,7 @@ watch(
     margin-top: 40px;
 
     box-shadow: 0px 0px 10px 0px #00000014;
-
+    height: 337px;
     padding: 24px 46px;
 }
 
@@ -842,6 +860,7 @@ watch(
     margin: 0 auto;
     width: 120px;
     height: 120px;
+    border-radius: 100%;
 }
 
 .squad-participants__link {

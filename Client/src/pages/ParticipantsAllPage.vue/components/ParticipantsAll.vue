@@ -224,7 +224,6 @@ const getMembers = async (pagination, orderLimit) => {
             },
         });
 
-
         let response = viewHeadquartersResponse.data;
         if (pagination) {
             response.results = [...peoples.value.results, ...response.results];
