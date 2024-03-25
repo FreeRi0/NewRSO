@@ -136,6 +136,7 @@ import GroupSubmitSelect from './GroupSubmitSelect.vue';
 const sortBy = ref('alphabetically');
 
 const width = ref(0);
+const compressed = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -305,6 +306,11 @@ const onRemove = (index) => {
 const onResize = () => {
     width.value = window.innerWidth;
     console.log(width.value);
+    if (width.value > 768) {
+        compressed.value = false;
+    } else {
+        compressed.value = true;
+    }
 };
 
 watch(selectedUsersList, (newSelectedUsersList) => {
@@ -365,15 +371,20 @@ onMounted(async () => {
     text-align: left;
 }
 #wrapper {
-    display: flex;
+    display: grid;
+    grid-template-columns: 276px auto;
+    gap: 24px;
 }
-#left {
-    width: 25%;
-}
-#right {
-    margin-left: 24px;
-    width: 75%;
-}
+// #wrapper {
+//     display: flex;
+// }
+// #left {
+//     width: 25%;
+// }
+// #right {
+//     margin-left: 24px;
+//     width: 75%;
+// }
 .form-input-container {
     border: 1px solid #b6b6b6;
     border-radius: 15px;
