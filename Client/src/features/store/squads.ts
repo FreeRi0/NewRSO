@@ -80,11 +80,11 @@ export const useSquadsStore = defineStore('squads', {
                 this.isLoading = false;
             }
         },
-        async getCompetitionSquads( isTandem: String) {
+        async getCompetitionSquads( isTandem: String, name: String) {
             try {
                 this.isLoading = true;
                 const responseCompetitionSquads = await HTTP.get(
-                    `/competitions/1/participants/?is_tandem=${isTandem}`,
+                    `/competitions/1/participants/?is_tandem=${isTandem}&ordering=${name}`,
                     {
                         params: {
                             limit: this.CompetitionsLimit,
@@ -105,22 +105,6 @@ export const useSquadsStore = defineStore('squads', {
                 console.log('an error occured ' + error);
             }
         },
-
-        // async sortedSquads(name: String) {
-        //     const sortSquadsResp = await HTTP.get(
-        //         `/detachments/?ordering=${name}`,
-
-        //         {
-        //             params: {
-        //                 limit: this.SquadsLimit,
-        //             },
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //         },
-        //     );
-        //     this.squads = sortSquadsResp.data.results;
-        // },
 
         async getNextCompetitionSquads() {
             try {

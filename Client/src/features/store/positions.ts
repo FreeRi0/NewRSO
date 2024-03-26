@@ -17,7 +17,7 @@ export const usePositionsStore = defineStore('positions', {
                         Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
-                this.positions = responsePositions.data;
+                this.positions = responsePositions.data.results;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
