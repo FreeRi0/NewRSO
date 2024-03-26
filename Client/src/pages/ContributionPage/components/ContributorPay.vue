@@ -128,7 +128,6 @@
                                 v-for="participant in sortedParticipants"
                                 :key="participant.id"
                             >
-
                                 <contributionAccessItem
                                     :participant="participant"
                                     @select="onToggleSelectCompetition"
@@ -314,7 +313,6 @@ const updateDistrict = (districtVal) => {
     //     (dis) => dis.name == districtVal,
     // )?.id;
     district.value = districtVal;
-
 };
 
 const updateReg = (regVal) => {
@@ -330,7 +328,6 @@ const updateReg = (regVal) => {
     getFiltersData('/educationals/', search);
 
     reg.value = regVal;
-
 };
 const updateLocal = (localVal) => {
     let search = '';
@@ -344,7 +341,6 @@ const updateLocal = (localVal) => {
     getFiltersData('/educationals/', search);
 
     local.value = localVal;
-
 };
 
 const updateEduc = (educVal) => {
@@ -363,7 +359,6 @@ const updateEduc = (educVal) => {
     getFiltersData('/detachments/', search);
 
     educ.value = educVal;
-
 };
 
 const updateDetachment = (detachmentVal) => {
@@ -423,8 +418,11 @@ const ChangeStatus = async (id) => {
         );
         checkboxAll.value = false;
 
-
-
+        for (let i in participants.value) {
+            if (id === participants.value[i].id) {
+                participants.value[i].membership_fee = true;
+            }
+        }
     } catch (error) {
         isError.value = error.response.data;
         console.error('There was an error!', error);
@@ -454,7 +452,11 @@ const ChangeCancelStatus = async (id) => {
         );
 
         checkboxAll.value = false;
-
+        for (let i in participants.value) {
+            if (id === participants.value[i].id) {
+                participants.value[i].membership_fee = false;
+            }
+        }
     } catch (error) {
         isError.value = error.response.data;
         console.error('There was an error!', error);
@@ -548,7 +550,6 @@ const onAction = async () => {
         } else if (detachment.value) {
             search = '?detachment__name=' + detachment.value;
         }
-        viewContributorsData(search);
     } catch (e) {
         console.log('error action', e);
     }

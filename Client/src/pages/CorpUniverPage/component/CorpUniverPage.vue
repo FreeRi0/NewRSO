@@ -59,13 +59,13 @@
           <td class="corpuniver__table__td">Цели и задачи организации</td>
         </tr>
         <tr>
+          <td class="corpuniver__table__td">Ценности и принципы РСО</td>
+        </tr>
+        <tr>
           <td class="corpuniver__table__td">Все что тебе важно, есть в РСО</td>
         </tr>
         <tr>
           <td class="corpuniver__table__td">История РСО</td>
-        </tr>
-        <tr>
-          <td class="corpuniver__table__td">Ценности и принципы РСО</td>
         </tr>
         <tr>
           <td class="corpuniver__table__td">Всегда 20: Юбилейный год РСО</td>
@@ -110,8 +110,8 @@
           <td class="corpuniver__table__td">Вовлекающие события</td>
         </tr>
         <tr>
-          <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">6</td>
-          <td rowspan="5" class="corpuniver__table__td"><b>19 марта</b><br/>09.00-11.00</td>
+          <td rowspan="4" class="corpuniver__table__td corpuniver__table__border-left">6</td>
+          <td rowspan="4" class="corpuniver__table__td"><b>19 марта</b><br/>09.00-11.00</td>
           <td rowspan="9" class="corpuniver__table__td"><a href="#video_6">Создание и работа команды мечты</a></td>
           <td class="corpuniver__table__td">Цели отряда и план деятельности</td>
         </tr>
@@ -125,11 +125,8 @@
           <td class="corpuniver__table__td">Мои документы РСО</td>
         </tr>
         <tr>
-          <td class="corpuniver__table__td">Погружающие события</td>
-        </tr>
-        <tr>
-          <td rowspan="4" class="corpuniver__table__td corpuniver__table__border-left">7</td>
-          <td rowspan="4" class="corpuniver__table__td"><b>20 марта</b><br/>14.00-16.00</td>
+          <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">7</td>
+          <td rowspan="5" class="corpuniver__table__td"><b>20 марта</b><br/>14.00-16.00</td>
         </tr>
         <tr>
           <td class="corpuniver__table__td">Введение в безопасность труда, безопасность подготовительного периода </td>
@@ -138,13 +135,19 @@
           <td class="corpuniver__table__td">Работа в команде</td>
         </tr>
         <tr>
+          <td class="corpuniver__table__td">Мероприятия для вовлечения в отрядную деятельность</td>
+        </tr>
+        <tr>
           <td class="corpuniver__table__td">Презентация мечты</td>
         </tr>
         <tr>
-          <td rowspan="3" class="corpuniver__table__td corpuniver__table__border-left">8</td>
-          <td rowspan="3" class="corpuniver__table__td"><b>25 марта</b><br/>14.00-16.00</td>
-          <td rowspan="7" class="corpuniver__table__td">Лето с пользой</td>
+          <td rowspan="4" class="corpuniver__table__td corpuniver__table__border-left">8</td>
+          <td rowspan="4" class="corpuniver__table__td"><b>25 марта</b><br/>14.00-16.00</td>
+          <td rowspan="9" class="corpuniver__table__td">Лето с пользой</td>
           <td class="corpuniver__table__td">Целеполагание и планирование деятельности во время трудового семестра</td>
+        </tr>
+        <tr>
+          <td class="corpuniver__table__td">Мои документы: всё что нужно для успешного трудоустройства</td>
         </tr>
         <tr>
           <td class="corpuniver__table__td">Работа на трудовом объекте</td>
@@ -153,8 +156,11 @@
           <td class="corpuniver__table__td">Система мероприятий в трудовом семестре</td>
         </tr>
         <tr>
-          <td rowspan="4" class="corpuniver__table__td corpuniver__table__border-left">9</td>
-          <td rowspan="2" class="corpuniver__table__td"><b>27 марта</b><br/>14.00-15.40</td>
+          <td rowspan="5" class="corpuniver__table__td corpuniver__table__border-left">9</td>
+          <td rowspan="3" class="corpuniver__table__td"><b>27 марта</b><br/>14.00-15.40</td>
+          <td class="corpuniver__table__td">Со мной такое впервые</td>
+        </tr>
+        <tr>
           <td class="corpuniver__table__td">Посвящение</td>
         </tr>
         <tr>
@@ -189,12 +195,12 @@
         </tr>
         <tr>
           <td class="corpuniver__table__td corpuniver__table__border-left">12</td>
-          <td class="corpuniver__table__td"><b>27 марта по 10 апреля</b></td>
+          <td class="corpuniver__table__td"><b>29 марта по 10 апреля</b></td>
           <td colspan="2" class="corpuniver__table__td">Проведение практических мероприятий</td>
         </tr>
         <tr>
           <td class="corpuniver__table__td corpuniver__table__border-left corpuniver__table__td__br-left">13</td>
-          <td class="corpuniver__table__td" style="border-bottom: #ECEFF4 solid 1px"><b>27 марта по 10 апреля</b></td>
+          <td class="corpuniver__table__td" style="border-bottom: #ECEFF4 solid 1px"><b>29 марта по 10 апреля</b></td>
           <td colspan="2" class="corpuniver__table__td corpuniver__table__td__br-right">Тестирование на платформе сайта</td>
         </tr>
         </tbody>

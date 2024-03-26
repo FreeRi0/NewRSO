@@ -141,10 +141,11 @@
             <h2 class="title event_org">Организаторы</h2>
             <div v-if="eventsStore.organizators" class="card_wrap">
                 <div
-                    v-for="organizator in [
+                    v-for="(organizator, index) in [
                         ...new Set(eventsStore.organizators),
                     ]"
                     class="event_card_wrap"
+                    v-show="index > 0"
                     :key="organizator.id"
                 >
                     <div class="round-img">
