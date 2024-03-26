@@ -83,7 +83,7 @@
             </div>
         </div>
 
-        <div>
+        <!-- <div>
             <router-link
                 :to="{
                     name: 'debut',
@@ -92,7 +92,7 @@
             >
                 <div class="route">Отчетность</div></router-link
             >
-        </div>
+        </div> -->
     </section>
 </template>
 
