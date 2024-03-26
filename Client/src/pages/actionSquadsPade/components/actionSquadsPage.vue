@@ -67,11 +67,11 @@
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.format_type"
-                                    value="Оффлайн"
+                                    value="Офлайн"
                                     type="radio"
                                     name="offline"
                                 />
-                                <label for="offline">Оффлайн</label>
+                                <label for="offline">Офлайн</label>
                             </div>
                     </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -92,20 +92,20 @@
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.status"
-                                    value="Незавершен"
+                                    value="Активный"
                                     type="radio"
                                     name="open"
                                 />
-                                <label for="open">Незавершен</label>
+                                <label for="open">Активные</label>
                             </div>
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.status"
-                                    value="Завершен"
+                                    value="Завершенные"
                                     type="radio"
                                     name="close"
                                 />
-                                <label for="close">Завершен</label>
+                                <label for="close">Завершенные</label>
                             </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -295,7 +295,7 @@
                     </div>
                 </div>
                 <div class="cardsContainer">
-                  <v-row v-if="vertical" align="start" justify="center">
+                  <v-row v-if="vertical">
                     <v-col
                         class="pa-2"
                         v-for="(variant, i) in actionsList"
@@ -349,7 +349,7 @@
                           </div>
                         </div>
                         <div class="eventsScale">
-                          {{ variant.application_type }}
+                          {{ variant.direction }}
                         </div>
                       </div>
 
@@ -749,7 +749,7 @@ const sortOptions = ref([
 .eventsScale {
   border: 1px solid #35383F;
   border-radius: 18px;
-  max-width: 121px;
+  min-width: 100px;
   min-height: 26px;
   display: flex;
   align-items: center;
