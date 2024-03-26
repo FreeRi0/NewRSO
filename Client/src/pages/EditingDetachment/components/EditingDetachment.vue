@@ -267,7 +267,7 @@ const changeDetachment = async () => {
     formData.append('slogan', detachment.value.slogan);
     formData.append('about', detachment.value.about);
 
-    for (let member of members.value.results) {
+    for (let member of members.value) {
         if (member.change) {
             await HTTP.patch(
                 `/detachments/${id}/members/${member.id}/`,
