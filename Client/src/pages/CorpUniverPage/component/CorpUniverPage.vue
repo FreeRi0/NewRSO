@@ -143,7 +143,7 @@
         <tr>
           <td rowspan="4" class="corpuniver__table__td corpuniver__table__border-left">8</td>
           <td rowspan="4" class="corpuniver__table__td"><b>25 марта</b><br/>14.00-16.00</td>
-          <td rowspan="9" class="corpuniver__table__td">Лето с пользой</td>
+          <td rowspan="9" class="corpuniver__table__td"><a href="#video_7">Лето с пользой</a></td>
           <td class="corpuniver__table__td">Целеполагание и планирование деятельности во время трудового семестра</td>
         </tr>
         <tr>
@@ -405,6 +405,17 @@
           src="https://vk.com/video_ext.php?oid=-223571150&id=456239074&hd=2"
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
           allowfullscreen></iframe>
+    </div>
+
+    <h2 id="video_7" class="corpuniver__title-h2">Занятие 25 марта «Лето с пользой»</h2>
+    <p class="corpuniver__text-subtitle">Спикеры: Дмитрий Парамонов, Юлия Позднякова, Ксения Пискарева, Валентина Бродягина</p>
+
+    <div class="corpuniver__video">
+      <iframe
+          class="corpuniver__iframe"
+          src="https://vk.com/video_ext.php?oid=-223571150&id=456239085"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+              allowfullscreen></iframe>
     </div>
 
     <div id="testing" class="corpuniver__documents-test">
