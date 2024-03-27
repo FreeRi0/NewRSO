@@ -676,9 +676,16 @@ watch(
     border: 1px solid #1c5c94;
 }
 .banner_wrap img {
-    height: 540px;
+    max-height: 540px;
     width: 100%;
     border-radius: 15px;
+    position: relative;
+    object-fit: cover;
+    img {
+      width: 100%;
+      height: auto;
+      vertical-align: middle;
+    }
 }
 
 .banner_wrap_btn {
