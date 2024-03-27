@@ -51,9 +51,9 @@
             </div>
             <h2 class="title event_about">О мероприятии</h2>
             <div class="category">{{ eventsStore.event.direction }}</div>
-            <p class="text event_type_wrap">
+            <div class="text event_type_wrap">
                 {{ eventsStore.event.description }}
-            </p>
+            </div>
 
             <div class="event">
                 <div class="event-cols-2">
@@ -381,8 +381,8 @@
                             </svg>
                         </div>
                     </div>
-                    <div class="d-flex justify-space-between">
-                        <div class="eventsScale">
+                    <div class="d-flex">
+                        <div class="eventsScale mr-3">
                             {{ items.scale }}
                         </div>
                         <div class="eventsScale">
@@ -730,6 +730,7 @@ watch(
     border-radius: 18px;
     padding: 3px 12px;
     height: 32px;
+    text-align: center;
     max-width: 158px;
     margin-bottom: 40px;
     display: block;
