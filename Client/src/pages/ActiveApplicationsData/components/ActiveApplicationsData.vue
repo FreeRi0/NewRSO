@@ -21,9 +21,9 @@
                 <ActiveSquads />
             </div>
 
-            <!-- <div v-else-if="picked == 'Заявка на участие в мероприятии'">
+            <div v-else-if="picked == 'Заявка на участие в мероприятии'">
                 <ActiveEventsApp />
-            </div> -->
+            </div>
 
             <div v-else-if="picked == 'Конкурсы'">
                 <active-competitions />
@@ -51,10 +51,10 @@ const tabs = ref([
         id: '2',
         name: 'Заявка на вступление в отряд',
     },
-    // {
-    //     id: '3',
-    //     name: 'Заявка на участие в мероприятии',
-    // },
+    {
+        id: '3',
+        name: 'Заявка на участие в мероприятии',
+    },
     {
         id: '4',
         name: 'Конкурсы',
