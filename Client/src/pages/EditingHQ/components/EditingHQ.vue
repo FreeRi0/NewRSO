@@ -151,7 +151,7 @@ const changeHeadquarter = async () => {
     formData.append('name', headquarter.value.name);
     formData.append(
         'educational_institution',
-        headquarter.value.educational_institution,
+        headquarter.value.educational_institution.id,
     );
     formData.append('founding_date', headquarter.value.founding_date);
     formData.append(
@@ -159,13 +159,13 @@ const changeHeadquarter = async () => {
         headquarter.value.regional_headquarter,
     );
     formData.append('city', headquarter.value.city);
-    formData.append('commander', headquarter.value.commander);
+    formData.append('commander', headquarter.value.commander.id);
     formData.append('social_vk', headquarter.value.social_vk);
     formData.append('social_tg', headquarter.value.social_tg);
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
 
-    for (let member of members.value.results) {
+    for (let member of members.value) {
         if (member.change) {
             await HTTP.patch(
                 `/educationals/${id}/members/${member.id}/`,
