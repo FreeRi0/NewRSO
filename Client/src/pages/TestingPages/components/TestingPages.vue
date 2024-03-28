@@ -85,7 +85,7 @@
                 <p class="text_result" v-if="result.score <= 59">
                     Тест не пройден
                 </p>
-                <p class="text_result" v-else>Тест пройден.</p>
+                <p class="text_result" v-else>Тест пройден</p>
             </div>
             <div class="button_result">
                 <button @click="onRestart" class="submit_button">
@@ -97,29 +97,18 @@
         <div v-else>
             <p class="main_title">Тестирование по обучению</p>
 
-            <p class="subtitle">
-                Тест состоит из 20 вопросов. Время на его прохождение не
-                ограничено. Не закрывайте тест после нажатия на кнопку «Начать
-                тестирование» до его завершения.
-            </p>
-            <div class="start_button" v-if="status.left_attempts">
-                <button @click="onStart" class="submit_button">
-                    Начать тестирование
-                </button>
-            </div>
-            <div v-else class="solved__wrapper">
-                <div class="border_result">
-                    <p class="text_result">
-                        Ваш лучший результат: {{ status.best_score }}
-                    </p>
-                    <br />
-                    <p class="text_result" v-if="status.best_score <= 59">
-                        Тест не пройден
-                    </p>
-                    <p class="text_result" v-else>Тест пройден.</p>
+            <div v-if="status.left_attempts">
+                <p class="subtitle">
+                    Тест состоит из 20 вопросов. Время на его прохождение не
+                    ограничено. Не закрывайте тест после нажатия на кнопку
+                    «Начать тестирование» до его завершения.
+                </p>
+                <div class="start_button">
+                    <button @click="onStart" class="submit_button">
+                        Начать тестирование
+                    </button>
                 </div>
             </div>
-        </div>
     </div>
 </template>
 
