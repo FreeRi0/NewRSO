@@ -80,17 +80,14 @@
         <div v-else-if="solved" class="solved__wrapper">
             <p class="main_title">Тестирование по обучению</p>
             <div class="border_result">
-                <p class="text_result">Ваш результат: {{ result.score }}.</p>
+                <p class="text_result">Ваш результат: {{ result.score }}</p>
                 <br />
                 <p class="text_result" v-if="result.score <= 59">
-                    Тест не пройден.
+                    Тест не пройден
                 </p>
                 <p class="text_result" v-else>Тест пройден.</p>
             </div>
-            <div
-                class="button_result"
-                v-if="attemptSpent < 3 && result.score <= 59"
-            >
+            <div class="button_result">
                 <button @click="onRestart" class="submit_button">
                     Начать заново
                 </button>
@@ -103,12 +100,24 @@
             <p class="subtitle">
                 Тест состоит из 20 вопросов. Время на его прохождение не
                 ограничено. Не закрывайте тест после нажатия на кнопку «Начать
-                тестирование» до его завершения. Предоставляется 2 попытки.
+                тестирование» до его завершения.
             </p>
-            <div class="button">
+            <div class="start_button" v-if="status.left_attempts">
                 <button @click="onStart" class="submit_button">
                     Начать тестирование
                 </button>
+            </div>
+            <div v-else class="solved__wrapper">
+                <div class="border_result">
+                    <p class="text_result">
+                        Ваш лучший результат: {{ status.best_score }}
+                    </p>
+                    <!-- <br />
+                    <p class="text_result" v-if="result.score <= 59">
+                        Тест не пройден
+                    </p>
+                    <p class="text_result" v-else>Тест пройден.</p> -->
+                </div>
             </div>
         </div>
     </div>
@@ -117,7 +126,7 @@
 <script setup>
 import { HTTP } from '@app/http';
 
-import { ref, inject, watch } from 'vue';
+import { ref, inject, watch, onMounted } from 'vue';
 
 const swal = inject('$swal');
 
@@ -132,6 +141,11 @@ let indexQuestion = ref(0);
 const choosenAnswer = ref(null);
 const started = ref(false);
 const solved = ref(false);
+
+const status = ref({
+    left_attempts: null,
+    best_score: null,
+});
 
 const onStart = async () => {
     started.value = true;
@@ -191,7 +205,7 @@ const submitAnswers = async () => {
     try {
         const { data } = await HTTP.post(
             `/submit_answers/`,
-            { answers },
+            { answers, category: 'university' },
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -205,12 +219,33 @@ const submitAnswers = async () => {
     }
 };
 
+const getAttempts = async () => {
+    try {
+        const { data } = await HTTP.get(
+            `/get_attempts_status?category=university`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        status.value = data;
+    } catch (e) {
+        console.log(`getAttempts error`, e);
+    }
+};
+
 watch(choosenAnswer, () => {
     if (choosenAnswer.value !== null) {
         selected.value = true;
     } else {
         selected.value = false;
     }
+});
+
+onMounted(async () => {
+    await getAttempts();
 });
 </script>
 
@@ -236,6 +271,7 @@ watch(choosenAnswer, () => {
     border: 1px solid black;
     border-radius: 10px;
     margin-bottom: 60px;
+    margin-top: 20px;
 }
 .text_result {
     display: inline-block;
@@ -317,6 +353,15 @@ watch(choosenAnswer, () => {
     line-height: 20px;
     text-align: center;
     margin-bottom: 60px;
+}
+.start_button {
+    margin-top: 60px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: center;
+    margin-bottom: 224px;
 }
 .button_result {
     font-size: 16px;
