@@ -89,7 +89,7 @@
             </div>
             <div
                 class="button_result"
-                v-if="(attemptSpent = 3 || result.score <= 59)"
+                v-if="attemptSpent < 3 && result.score <= 59"
             >
                 <button @click="onRestart" class="submit_button">
                     Начать заново
