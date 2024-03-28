@@ -2,27 +2,53 @@
     <div class="container">
         <div v-if="started">
             <div class="line">
-                <p class="main_title">Тестирование по обучению </p>
+                <p class="main_title">Тестирование по обучению</p>
 
-                <p class="curr_question">{{ indexQuestion }}/20</p>                
+                <p class="curr_question">{{ indexQuestion }}/20</p>
             </div>
             <p class="question_text">{{ questions[indexQuestion].title }}</p>
             <template v-if="questions[indexQuestion].image != null">
-                <img :src="questions[indexQuestion].image" alt="question photo"/>
+                <img
+                    :src="questions[indexQuestion].image"
+                    alt="question photo"
+                />
             </template>
-            <template v-if="questions[indexQuestion].answer_options[0].image !=null">
-                <div class="radio_field" v-for="(answ, index) in questions[indexQuestion].answer_options" :key="index">
+            <template
+                v-if="questions[indexQuestion].answer_options[0].image != null"
+            >
+                <div
+                    class="radio_field"
+                    v-for="(answ, index) in questions[indexQuestion]
+                        .answer_options"
+                    :key="index"
+                >
                     <div>
-                        <input class="radio_button" type="radio" :id="index" :value="index" name="answers" v-model="choosenAnswer"/>
-
+                        <input
+                            class="radio_button"
+                            type="radio"
+                            :id="index"
+                            :value="index"
+                            name="answers"
+                            v-model="choosenAnswer"
+                        />
                     </div>
-                    <img :for="index" :src="answ.image" alt="answer photo"/>
+                    <img :for="index" :src="answ.image" alt="answer photo" />
                 </div>
             </template>
-            <div class="radio_field" v-for="(answ, index) in questions[indexQuestion].answer_options" :key="index">
+            <div
+                class="radio_field"
+                v-for="(answ, index) in questions[indexQuestion].answer_options"
+                :key="index"
+            >
                 <div>
-                    <input class="radio_button" type="radio" :id="index" :value="index" name="answers" v-model="choosenAnswer"/>
-
+                    <input
+                        class="radio_button"
+                        type="radio"
+                        :id="index"
+                        :value="index"
+                        name="answers"
+                        v-model="choosenAnswer"
+                    />
                 </div>
                 <label :for="index" class="answer_text">{{ answ.text }}</label>
             </div>
@@ -33,13 +59,17 @@
                     Ответить
                 </button>
             </div>
-            
         </div>
 
-        <div v-else-if="solved">
+        <div v-else-if="solved" class="solved__wrapper">
             <p class="main_title">Тестирование по обучению</p>
-            <p class="subtitle">Вы уже прошли тест<br>Результат {{ result }}</p>
-            <div class="button">
+            <div class="border_result">
+                <p class="text_result">Ваш результат: {{ result }}.</p>
+                <br />
+                <p class="text_result" v-if="result <= 59">Тест не пройден.</p>
+                <p class="text_result" v-else>Тест пройден.</p>
+            </div>
+            <div class="button_result" v-if="countAttempt < 2 && result <= 59">
                 <button @click="onRestart" class="submit_button">
                     Начать заново
                 </button>
@@ -49,10 +79,14 @@
         <div v-else>
             <p class="main_title">Тестирование по обучению</p>
 
-            <p class="subtitle">Начать тест</p>
+            <p class="subtitle">
+                Тест состоит из 20 вопросов. Время на его прохождение не
+                ограничено. Не закрывайте тест после нажатия на кнопку «Начать
+                тестирование» до его завершения. Предоставляется 2 попытки.
+            </p>
             <div class="button">
                 <button @click="onStart" class="submit_button">
-                    Начать тест
+                    Начать тестирование
                 </button>
             </div>
         </div>
@@ -60,169 +94,219 @@
 </template>
 
 <script setup>
-    import { HTTP } from '@app/http'
+import { HTTP } from '@app/http';
 
-    import { ref } from 'vue';
+import { ref } from 'vue';
 
-    const questions = ref([{
-        id: 2,
-        title: "Когда учреждено МООД «РСО»?",
-        image: null,
-        answer_options: [{
-            id:1,
-            text: "17 февраля"
-        },{
-            id:2,
-            text: "12 июня 2010"
-        },{
-            id:3,
-            text: "1 июля 1959"
-        },{
-            id:4,
-            text: "3 марта 1993"
-        }]
-    },{
-        id: 4,
-        title: "Какой год принято считать официальным началом движения студенческих отрядов в СССР?",
-        image: null,
-        answer_options: [{
-            id:1,
-            text: "1949"
-        },{
-            id:2,
-            text: "1984"
-        },{
-            id:3,
-            text: "1959"
-        },{
-            id:4,
-            text: "1974"
-        }]
-    },{
-        id: 1,
-        title: "На базе какого высшего учебного заведения были образованы первые студенческие отряды?",
-        image: null,
-        answer_options: [{
-            id:1,
-            text: "Всесоюзный юридический заочный институт"
-        },{
-            id:2,
-            text: "Московский государственный университет имени М. В. Ломоносова "
-        },{
-            id:3,
-            text: "Всесоюзный заочный институт советской торговли Наркомторга СССР"
-        },{
-            id:4,
-            text: "Московский лесотехнический институт"
-        }]
-    },{
-        id: 8,
-        title: "Выберите наиболее неподходящее решение кейса: вы находитесь на трудовом проекте, и к вам поступает жалоба о нарушении сухого закона во время работы на проекте. Жалобу подал один из членов другого отряда, который является непосредственным свидетелем нарушения (Сухой закон строго запрещает употребление алкоголя и других запрещённых веществ во время работы на проекте, чтобы гарантировать безопасность и эффективность выполнения задач).",
-        image: null,
-        answer_options: [{
-            id:1,
-            text: "Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении. Провести личную беседу с бойцом, о котором поступила жалоба. Запросить его версию событий и объяснить, что жалоба была получена. Провести расследование, включающее беседу с другими свидетелями, если таковые имеются, и проверку фото- или видеоматериалов. После сбора всех необходимых доказательств принять решение о нарушении сухого закона."
-        },{
-            id:2,
-            text: "В случае подтверждения нарушения, применить соответствующие меры в соответствии с правилами отряда и регионального отделения, такие как предупреждение, штраф или другие дисциплинарные меры."
-        },{
-            id:3,
-            text: "Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении и попросить написать жалобу выше. Организовать общее собрание отряда, сообщить о решении выгнать бойца из отряда, как порочащего честь отряда без проведения дополнительных разбирательств."
-        },{
-            id:4,
-            text: "Организовать общее собрание отряда, для принятия общего решения о сложившиеся ситуации в случае подтверждения нарушения."
-        }]
-    }])
-    const answers = ref([]);
+// const questions = ref([
+//     {
+//         id: 2,
+//         title: 'Когда учреждено МООД «РСО»?',
+//         image: null,
+//         answer_options: [
+//             {
+//                 id: 1,
+//                 text: '17 февраля',
+//             },
+//             {
+//                 id: 2,
+//                 text: '12 июня 2010',
+//             },
+//             {
+//                 id: 3,
+//                 text: '1 июля 1959',
+//             },
+//             {
+//                 id: 4,
+//                 text: '3 марта 1993',
+//             },
+//         ],
+//     },
+//     {
+//         id: 4,
+//         title: 'Какой год принято считать официальным началом движения студенческих отрядов в СССР?',
+//         image: null,
+//         answer_options: [
+//             {
+//                 id: 1,
+//                 text: '1949',
+//             },
+//             {
+//                 id: 2,
+//                 text: '1984',
+//             },
+//             {
+//                 id: 3,
+//                 text: '1959',
+//             },
+//             {
+//                 id: 4,
+//                 text: '1974',
+//             },
+//         ],
+//     },
+//     {
+//         id: 1,
+//         title: 'На базе какого высшего учебного заведения были образованы первые студенческие отряды?',
+//         image: null,
+//         answer_options: [
+//             {
+//                 id: 1,
+//                 text: 'Всесоюзный юридический заочный институт',
+//             },
+//             {
+//                 id: 2,
+//                 text: 'Московский государственный университет имени М. В. Ломоносова ',
+//             },
+//             {
+//                 id: 3,
+//                 text: 'Всесоюзный заочный институт советской торговли Наркомторга СССР',
+//             },
+//             {
+//                 id: 4,
+//                 text: 'Московский лесотехнический институт',
+//             },
+//         ],
+//     },
+//     {
+//         id: 8,
+//         title: 'Выберите наиболее неподходящее решение кейса: вы находитесь на трудовом проекте, и к вам поступает жалоба о нарушении сухого закона во время работы на проекте. Жалобу подал один из членов другого отряда, который является непосредственным свидетелем нарушения (Сухой закон строго запрещает употребление алкоголя и других запрещённых веществ во время работы на проекте, чтобы гарантировать безопасность и эффективность выполнения задач).',
+//         image: null,
+//         answer_options: [
+//             {
+//                 id: 1,
+//                 text: 'Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении. Провести личную беседу с бойцом, о котором поступила жалоба. Запросить его версию событий и объяснить, что жалоба была получена. Провести расследование, включающее беседу с другими свидетелями, если таковые имеются, и проверку фото- или видеоматериалов. После сбора всех необходимых доказательств принять решение о нарушении сухого закона.',
+//             },
+//             {
+//                 id: 2,
+//                 text: 'В случае подтверждения нарушения, применить соответствующие меры в соответствии с правилами отряда и регионального отделения, такие как предупреждение, штраф или другие дисциплинарные меры.',
+//             },
+//             {
+//                 id: 3,
+//                 text: 'Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении и попросить написать жалобу выше. Организовать общее собрание отряда, сообщить о решении выгнать бойца из отряда, как порочащего честь отряда без проведения дополнительных разбирательств.',
+//             },
+//             {
+//                 id: 4,
+//                 text: 'Организовать общее собрание отряда, для принятия общего решения о сложившиеся ситуации в случае подтверждения нарушения.',
+//             },
+//         ],
+//     },
+// ]);
+const questions = ref([]);
+const answers = ref([]);
 
-    const result = ref();
+const result = ref(20);
+const countAttempt = ref(0);
 
-    let indexQuestion = ref(1);
-    const choosenAnswer = ref();
-    const started = ref(false);
-    const solved = ref(false);
+let indexQuestion = ref(1);
+const choosenAnswer = ref();
+const started = ref(false);
+const solved = ref(true);
 
-    const onStart = async () => {
-        started.value=true;
-        // try{
-        //     const { data } = await HTTP.get(`/questions/`,{
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             Authorization: 'Token ' + localStorage.getItem('Token'),
-        //         },
-        //     });
-        //     questions.value = data.value;
-        // } catch(e) {
-        //     console.log('error onStart', e);
-        // }
+const onStart = async () => {
+    started.value = true;
+    try {
+        const { data } = await HTTP.get(`/questions/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        questions.value = data.value;
+    } catch (e) {
+        console.log('error onStart', e);
     }
+};
 
-    const onRestart = async () => {
-        solved.value = false;
+const onRestart = async () => {
+    countAttempt.value++;
+    solved.value = false;
+};
+
+const onAction = async () => {
+    const temp = {
+        question_id: questions.value[indexQuestion.value].id,
+        answer_option_id: choosenAnswer.value + 1,
+    };
+    answers.value.push(temp);
+    if (indexQuestion.value == 2) {
+        started.value = false;
+        solved.value = true;
+        indexQuestion.value = 0;
+        submitAnswers();
     }
+    indexQuestion.value += 1;
+    choosenAnswer.value = null;
+};
 
-    const onAction = async () => {
-        const temp = {
-            question_id: questions.value[indexQuestion.value].id,
-            answer_option_id: choosenAnswer.value + 1,
-        }
-        answers.value.push(temp)
-        if (indexQuestion.value == 2){
-            started.value = false;
-            solved.value = true;
-            indexQuestion.value = 0;
-            // submitAnswers();
-        }
-        indexQuestion.value += 1;
-        choosenAnswer.value = null;
+const submitAnswers = async () => {
+    try {
+        const { data } = await HTTP.post(
+            `submit_answers/`,
+            { answers },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        result.value = data.value;
+    } catch (e) {
+        console.log('error submitAnswers', e);
     }
-
-    // const submitAnswers = async ()=>{
-    //     try{
-    //         const { data } = await HTTP.post(`submit_answers/`, { answers },
-    //         {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: 'Token ' + localStorage.getItem('Token'),
-    //             },
-    //         });
-    //         result.value = data.value;
-    //     } catch(e) {
-    //         console.log('error submitAnswers', e);
-    //     }
-    // }
+};
 </script>
-    
+
 <styel scoped lang="scss">
-    .container {
+.solved__wrapper {
+    display: flex;
+    flex-direction: column;
+}
+.border_result {
+    margin: 0 auto;
+    text-align: center;
+    padding: 40px 120px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 60px;
+}
+.text_result {
+    display: inline-block;
+    font-family: Akrobat;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 22px;
+    text-align: center;
+}
+.text_result:first-child {
+    margin-bottom: 32px;
+}
+.container {
     margin: 0 auto;
     max-width: 1115px;
 }
 .main_title {
+    padding-bottom: 40px;
+
     font-family: Akrobat;
     font-size: 52px;
     font-weight: 700;
-    letter-spacing: 0em;
+    line-height: 62.4px;
     text-align: left;
     color: #35383f;
-    line-height: normal;
 }
 .subtitle {
-    margin: 20px 0px;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    font-family: Bert Sans;
+    font-family: Akrobat;
     font-size: 24px;
-    font-weight: 600;
-    line-height: 32px;
-    letter-spacing: 0em;
+    font-weight: 500;
+    line-height: 28.8px;
     text-align: left;
+    color: #35383f;
 }
 .question_text {
     margin-bottom: 40px;
-    color: #35383F;
+    color: #35383f;
 
     font-family: Akrobat;
     font-size: 24px;
@@ -231,7 +315,7 @@
     letter-spacing: 0em;
     text-align: left;
 }
-.answer_text{
+.answer_text {
     padding-left: 16px;
 
     font-family: Bert Sans;
@@ -241,7 +325,7 @@
     letter-spacing: 0em;
     text-align: left;
 }
-.radio_field{
+.radio_field {
     display: flex;
     flex-wrap: nowrap;
     margin-bottom: 24px;
@@ -250,12 +334,10 @@
     border-radius: 10px;
     background: #39bfbf;
     padding: 16px 32px;
-    margin-left: 20px;
     color: #fff;
 }
 .button {
     margin-top: 60px;
-    //margin-left: 20px;
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
@@ -263,13 +345,21 @@
     text-align: center;
     margin-bottom: 60px;
 }
-.line{
+.button_result {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: center;
+    margin-bottom: 60px;
+}
+.line {
     display: flex;
     margin: 40px 0px;
     justify-content: space-between;
 }
-.curr_question{
-    color: #B6B6B6;
+.curr_question {
+    color: #b6b6b6;
 
     font-family: Akrobat;
     font-size: 40px;
@@ -277,8 +367,7 @@
     letter-spacing: 0em;
     text-align: right;
 }
-input[type="radio"] + label {
+input[type='radio'] + label {
     word-wrap: break-word; /* автоматически перемещает слова на следующую строку при необходимости */
 }
-
 </styel>
