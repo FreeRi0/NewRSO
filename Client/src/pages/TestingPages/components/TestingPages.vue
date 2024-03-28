@@ -109,7 +109,11 @@
                 </div>
             </div>
             <div v-else class="solved__wrapper">
+<<<<<<< HEAD
                 <div class="border_result_finally">
+=======
+                <div class="border_result">
+>>>>>>> d0f2759ebdfd7f7fb603a309dd9fa6305418f770
                     <p class="text_result">
                         Ваш лучший результат: {{ status.best_score }}
                     </p>
