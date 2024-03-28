@@ -83,7 +83,7 @@ const onChangeItem = async () => {
 
         .then((res) => {
             // console.log(props.address);
-            names.value = res.data;
+            names.value = res.data.results;
             // console.log(res.data);
         })
         .catch(function (error) {
