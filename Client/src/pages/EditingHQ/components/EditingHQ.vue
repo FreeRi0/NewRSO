@@ -165,7 +165,7 @@ const changeHeadquarter = async () => {
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
 
-    for (let member of members.value.results) {
+    for (let member of members.value) {
         if (member.change) {
             await HTTP.patch(
                 `/educationals/${id}/members/${member.id}/`,
