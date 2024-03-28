@@ -116,7 +116,7 @@
                                 name="district_headquarter"
                                 id="district_headquarter"
                                 v-model="headquarter.district_headquarter"
-                                address="districts/"
+                                address="/districts/"
                             ></Select>
                             <p
                                 class="form__error"
