@@ -142,7 +142,7 @@ const name = ref('');
 const isLoading = ref(false);
 const detachments = ref({});
 const isTandem = ref(true);
-const limit = 4;
+const limit = 24;
 const sortBy = ref('junior_detachment__name');
 const education = ref(null);
 const next = () => {

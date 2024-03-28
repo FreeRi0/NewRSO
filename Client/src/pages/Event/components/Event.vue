@@ -19,8 +19,17 @@
                     ></v-progress-circular>
                 </div>
                 <div class="banner_wrap_btn">
+                    <router-link
+                        v-if="isOrganizer"
+                        :to="{
+                            name: 'editAction',
+                            params: { id: eventsStore.event.id },
+                        }"
+                        class="user-data__link"
+                        >Редактировать мероприятие</router-link
+                    >
                     <Button
-                        v-if="!IsMember && !UserApplication"
+                        v-else-if="!IsMember && !UserApplication"
                         class="form-button"
                         type="button"
                         @click="AddApplication()"
@@ -40,13 +49,6 @@
                     <div v-else-if="IsMember" class="user-data__link">
                         Вы участник
                     </div>
-                    <!-- <Button
-                    type="button"
-                    class="form-button form-button--white"
-                    variant="text"
-                    label="Отказаться от участия"
-                    size="large"
-                ></Button> -->
                 </div>
             </div>
             <h2 class="title event_about">О мероприятии</h2>
@@ -134,6 +136,18 @@
                     Окончание регистрации:
                     {{ eventsStore.event.time_data?.registration_end_date }},
                     {{ eventsStore.event.time_data?.registration_end_time }}
+                </div>
+            </div>
+            <div class="event">
+                <div class="event-cols-2">
+                    <img
+                        src="@app/assets/icon/linkRef.svg"
+                        class="mr-3"
+                        alt="linkRef"
+                    />
+                    <a :href="eventsStore.event.conference_link"
+                        >Ссылка на мероприятие</a
+                    >
                 </div>
             </div>
 
@@ -420,6 +434,7 @@ const route = useRoute();
 const router = useRouter();
 const { replaceTargetObjects } = usePage();
 const data = ref({});
+
 const picked = ref(true);
 const swal = inject('$swal');
 const eventsStore = useEventsStore();
@@ -445,9 +460,11 @@ const UserApplication = computed(() => {
     );
 });
 
-// const organizators = computed(() => {
-//     return eventsStore.organizators.filter((item) => item.organizer.id !== item.organizer.id))
-// });
+const isOrganizer = computed(() => {
+    return eventsStore.organizators.find(
+        (item) => item.organizer.id === userId.value,
+    );
+});
 
 const IsMember = computed(() => {
     return eventsStore.members.find((item) => item.user.id === userId.value);
@@ -520,6 +537,10 @@ watch(
 </script>
 
 <style lang="scss" scoped>
+// .linkRef {
+//     width: 18px;
+//     height: 18px;
+// }
 .event {
     width: 100%;
     height: 40px;
@@ -597,6 +618,14 @@ watch(
     &-cols-2 img {
         width: 24px;
         height: 24px;
+    }
+    &-cols-2 a {
+        text-decoration: underline;
+        font-size: 18px;
+        font-weight: 400;
+        color: #35383f;
+        line-height: 23.74px;
+        font-family: 'Bert Sans';
     }
     &-empty {
         height: 60px;
@@ -682,9 +711,9 @@ watch(
     position: relative;
     object-fit: cover;
     img {
-      width: 100%;
-      height: auto;
-      vertical-align: middle;
+        width: 100%;
+        height: auto;
+        vertical-align: middle;
     }
 }
 
@@ -720,14 +749,10 @@ watch(
 
 .event_type_wrap {
     margin-bottom: 40px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
+    word-wrap: break-word;
+    max-width: 980px;
 
     @media (max-width: 430px) {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
         // justify-items: start;
     }
 }

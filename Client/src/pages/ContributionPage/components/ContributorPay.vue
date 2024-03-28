@@ -79,7 +79,13 @@
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
-                            <div class="d-flex align-center">
+                            <div
+                                class="d-flex align-center"
+                                v-if="
+                                    roleStore.roles
+                                        .regionalheadquarter_commander
+                                "
+                            >
                                 <div class="contributor-sort__all">
                                     <input
                                         type="checkbox"
