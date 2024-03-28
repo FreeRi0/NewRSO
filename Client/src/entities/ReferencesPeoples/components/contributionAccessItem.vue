@@ -1,6 +1,6 @@
 <template>
     <div class="horizontallso">
-        <div class="horizontallso__confidant mr-3">
+        <div class="horizontallso__confidant mr-3" v-if="rolesStore">
             <input
                 type="checkbox"
                 v-model="checked"
