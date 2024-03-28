@@ -466,7 +466,6 @@ const isOrganizer = computed(() => {
     );
 });
 
-
 const IsMember = computed(() => {
     return eventsStore.members.find((item) => item.user.id === userId.value);
 });
@@ -712,9 +711,9 @@ watch(
     position: relative;
     object-fit: cover;
     img {
-      width: 100%;
-      height: auto;
-      vertical-align: middle;
+        width: 100%;
+        height: auto;
+        vertical-align: middle;
     }
 }
 
@@ -750,14 +749,10 @@ watch(
 
 .event_type_wrap {
     margin-bottom: 40px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
+    word-wrap: break-word;
+    max-width: 980px;
 
     @media (max-width: 430px) {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
         // justify-items: start;
     }
 }
