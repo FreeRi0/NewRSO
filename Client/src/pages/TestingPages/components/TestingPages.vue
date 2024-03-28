@@ -123,7 +123,7 @@ const swal = inject('$swal');
 
 const scroll = ref();
 const questions = ref([]);
-const answers = [];
+let answers = [];
 const selected = ref(false);
 
 const result = ref();
@@ -131,19 +131,18 @@ const attemptSpent = ref(0);
 let indexQuestion = ref(0);
 const choosenAnswer = ref(null);
 const started = ref(false);
-const solved = ref(true);
+const solved = ref(false);
 
 const onStart = async () => {
     started.value = true;
     try {
-        const { data } = await HTTP.get(`/questions/`, {
+        const { data } = await HTTP.get(`/questions?category=university`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
         questions.value = data;
-        console.log(questions.value);
     } catch (e) {
         if (e.request.status == 400) {
             swal.fire({
@@ -162,6 +161,7 @@ const onStart = async () => {
 const onRestart = async () => {
     attemptSpent.value++;
     questions.value = [];
+    answers = [];
     solved.value = false;
 };
 
@@ -179,7 +179,6 @@ const onAction = async () => {
             started.value = false;
             solved.value = true;
             indexQuestion.value = 0;
-            console.log(answers);
             await submitAnswers();
         }
         indexQuestion.value += 1;
@@ -201,7 +200,6 @@ const submitAnswers = async () => {
             },
         );
         result.value = data;
-        console.log(result.value);
     } catch (e) {
         console.log('error submitAnswers', e);
     }
@@ -218,7 +216,7 @@ watch(choosenAnswer, () => {
 
 <styel scoped lang="scss">
 .image_answer {
-    max-width: 100px;
+    max-width: 150px;
     height: auto;
     padding-left: 16px;
 }
