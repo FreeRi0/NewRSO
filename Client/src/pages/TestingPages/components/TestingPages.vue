@@ -62,7 +62,6 @@
                 </div>
                 <label :for="index" class="answer_text">{{ answ.text }}</label>
             </div>
-            <!-- <p class="answer_text" v-for="answ in currQuestion.answerOptions" :key="answ">{{ answ }}</p> -->
 
             <div class="button">
                 <button
