@@ -4,7 +4,7 @@
             <div class="line">
                 <p class="main_title">Тестирование по обучению</p>
 
-                <p class="curr_question">{{ indexQuestion }}/20</p>
+                <p class="curr_question">{{ indexQuestion + 1}}/20</p>
             </div>
             <p class="question_text">{{ questions[indexQuestion].title }}</p>
             <template v-if="questions[indexQuestion].image != null">
@@ -97,122 +97,28 @@
 import { HTTP } from '@app/http';
 
 import { ref } from 'vue';
-
-// const questions = ref([
-//     {
-//         id: 2,
-//         title: 'Когда учреждено МООД «РСО»?',
-//         image: null,
-//         answer_options: [
-//             {
-//                 id: 1,
-//                 text: '17 февраля',
-//             },
-//             {
-//                 id: 2,
-//                 text: '12 июня 2010',
-//             },
-//             {
-//                 id: 3,
-//                 text: '1 июля 1959',
-//             },
-//             {
-//                 id: 4,
-//                 text: '3 марта 1993',
-//             },
-//         ],
-//     },
-//     {
-//         id: 4,
-//         title: 'Какой год принято считать официальным началом движения студенческих отрядов в СССР?',
-//         image: null,
-//         answer_options: [
-//             {
-//                 id: 1,
-//                 text: '1949',
-//             },
-//             {
-//                 id: 2,
-//                 text: '1984',
-//             },
-//             {
-//                 id: 3,
-//                 text: '1959',
-//             },
-//             {
-//                 id: 4,
-//                 text: '1974',
-//             },
-//         ],
-//     },
-//     {
-//         id: 1,
-//         title: 'На базе какого высшего учебного заведения были образованы первые студенческие отряды?',
-//         image: null,
-//         answer_options: [
-//             {
-//                 id: 1,
-//                 text: 'Всесоюзный юридический заочный институт',
-//             },
-//             {
-//                 id: 2,
-//                 text: 'Московский государственный университет имени М. В. Ломоносова ',
-//             },
-//             {
-//                 id: 3,
-//                 text: 'Всесоюзный заочный институт советской торговли Наркомторга СССР',
-//             },
-//             {
-//                 id: 4,
-//                 text: 'Московский лесотехнический институт',
-//             },
-//         ],
-//     },
-//     {
-//         id: 8,
-//         title: 'Выберите наиболее неподходящее решение кейса: вы находитесь на трудовом проекте, и к вам поступает жалоба о нарушении сухого закона во время работы на проекте. Жалобу подал один из членов другого отряда, который является непосредственным свидетелем нарушения (Сухой закон строго запрещает употребление алкоголя и других запрещённых веществ во время работы на проекте, чтобы гарантировать безопасность и эффективность выполнения задач).',
-//         image: null,
-//         answer_options: [
-//             {
-//                 id: 1,
-//                 text: 'Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении. Провести личную беседу с бойцом, о котором поступила жалоба. Запросить его версию событий и объяснить, что жалоба была получена. Провести расследование, включающее беседу с другими свидетелями, если таковые имеются, и проверку фото- или видеоматериалов. После сбора всех необходимых доказательств принять решение о нарушении сухого закона.',
-//             },
-//             {
-//                 id: 2,
-//                 text: 'В случае подтверждения нарушения, применить соответствующие меры в соответствии с правилами отряда и регионального отделения, такие как предупреждение, штраф или другие дисциплинарные меры.',
-//             },
-//             {
-//                 id: 3,
-//                 text: 'Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении и попросить написать жалобу выше. Организовать общее собрание отряда, сообщить о решении выгнать бойца из отряда, как порочащего честь отряда без проведения дополнительных разбирательств.',
-//             },
-//             {
-//                 id: 4,
-//                 text: 'Организовать общее собрание отряда, для принятия общего решения о сложившиеся ситуации в случае подтверждения нарушения.',
-//             },
-//         ],
-//     },
-// ]);
 const questions = ref([]);
-const answers = ref([]);
+const answers = [];
 
 const result = ref(20);
 const countAttempt = ref(0);
 
-let indexQuestion = ref(1);
-const choosenAnswer = ref();
+let indexQuestion = ref(0);
+const choosenAnswer = ref(null);
 const started = ref(false);
-const solved = ref(true);
+const solved = ref(false);
 
 const onStart = async () => {
     started.value = true;
     try {
-        const { data } = await HTTP.get(`/questions/`, {
+        const { data } = await HTTP.get(`/questions?category=university`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        questions.value = data.value;
+        questions.value = data;
+        console.log(questions.value)
     } catch (e) {
         console.log('error onStart', e);
     }
@@ -224,19 +130,23 @@ const onRestart = async () => {
 };
 
 const onAction = async () => {
-    const temp = {
-        question_id: questions.value[indexQuestion.value].id,
-        answer_option_id: choosenAnswer.value + 1,
-    };
-    answers.value.push(temp);
-    if (indexQuestion.value == 2) {
-        started.value = false;
-        solved.value = true;
-        indexQuestion.value = 0;
-        submitAnswers();
+    if(choosenAnswer.value !== null){
+        const temp = {
+            question_id: questions.value[indexQuestion.value].id,
+            answer_option_id: choosenAnswer.value + 1,
+        };
+        answers.push(temp);
+        if (indexQuestion.value == 19) {
+            started.value = false;
+            solved.value = true;
+            indexQuestion.value = 0;
+            console.log(answers);
+            await submitAnswers();
+        }
+        indexQuestion.value += 1;
+        choosenAnswer.value = null;
     }
-    indexQuestion.value += 1;
-    choosenAnswer.value = null;
+    
 };
 
 const submitAnswers = async () => {
@@ -251,7 +161,8 @@ const submitAnswers = async () => {
                 },
             },
         );
-        result.value = data.value;
+        result.value = data;
+        console.log(result.value)
     } catch (e) {
         console.log('error submitAnswers', e);
     }
