@@ -1,14 +1,17 @@
 <template>
-    <div class="container">
+    <div class="container" ref="scroll">
         <div v-if="started">
             <div class="line">
                 <p class="main_title">Тестирование по обучению</p>
 
-                <p class="curr_question">{{ indexQuestion }}/20</p>
+                <p class="curr_question">{{ indexQuestion + 1 }}/20</p>
             </div>
-            <p class="question_text">{{ questions[indexQuestion].title }}</p>
+            <p class="question_text">
+                {{ questions[indexQuestion].title }}
+            </p>
             <template v-if="questions[indexQuestion].image != null">
                 <img
+                    class="image_question"
                     :src="questions[indexQuestion].image"
                     alt="question photo"
                 />
@@ -32,10 +35,17 @@
                             v-model="choosenAnswer"
                         />
                     </div>
-                    <img :for="index" :src="answ.image" alt="answer photo" />
+                    <label :for="index">
+                        <img
+                            class="image_answer"
+                            :src="answ.image"
+                            alt="answer photo"
+                        />
+                    </label>
                 </div>
             </template>
             <div
+                v-else
                 class="radio_field"
                 v-for="(answ, index) in questions[indexQuestion].answer_options"
                 :key="index"
@@ -55,7 +65,13 @@
             <!-- <p class="answer_text" v-for="answ in currQuestion.answerOptions" :key="answ">{{ answ }}</p> -->
 
             <div class="button">
-                <button @click="onAction" class="submit_button">
+                <button
+                    @click="onAction"
+                    :class="{
+                        submit_button: selected,
+                        inactive_button: !selected,
+                    }"
+                >
                     Ответить
                 </button>
             </div>
@@ -64,12 +80,17 @@
         <div v-else-if="solved" class="solved__wrapper">
             <p class="main_title">Тестирование по обучению</p>
             <div class="border_result">
-                <p class="text_result">Ваш результат: {{ result }}.</p>
+                <p class="text_result">Ваш результат: {{ result.score }}.</p>
                 <br />
-                <p class="text_result" v-if="result <= 59">Тест не пройден.</p>
+                <p class="text_result" v-if="result.score <= 59">
+                    Тест не пройден.
+                </p>
                 <p class="text_result" v-else>Тест пройден.</p>
             </div>
-            <div class="button_result" v-if="countAttempt < 2 && result <= 59">
+            <div
+                class="button_result"
+                v-if="(attemptSpent = 3 || result.score <= 59)"
+            >
                 <button @click="onRestart" class="submit_button">
                     Начать заново
                 </button>
@@ -96,110 +117,19 @@
 <script setup>
 import { HTTP } from '@app/http';
 
-import { ref } from 'vue';
+import { ref, inject, watch } from 'vue';
 
-// const questions = ref([
-//     {
-//         id: 2,
-//         title: 'Когда учреждено МООД «РСО»?',
-//         image: null,
-//         answer_options: [
-//             {
-//                 id: 1,
-//                 text: '17 февраля',
-//             },
-//             {
-//                 id: 2,
-//                 text: '12 июня 2010',
-//             },
-//             {
-//                 id: 3,
-//                 text: '1 июля 1959',
-//             },
-//             {
-//                 id: 4,
-//                 text: '3 марта 1993',
-//             },
-//         ],
-//     },
-//     {
-//         id: 4,
-//         title: 'Какой год принято считать официальным началом движения студенческих отрядов в СССР?',
-//         image: null,
-//         answer_options: [
-//             {
-//                 id: 1,
-//                 text: '1949',
-//             },
-//             {
-//                 id: 2,
-//                 text: '1984',
-//             },
-//             {
-//                 id: 3,
-//                 text: '1959',
-//             },
-//             {
-//                 id: 4,
-//                 text: '1974',
-//             },
-//         ],
-//     },
-//     {
-//         id: 1,
-//         title: 'На базе какого высшего учебного заведения были образованы первые студенческие отряды?',
-//         image: null,
-//         answer_options: [
-//             {
-//                 id: 1,
-//                 text: 'Всесоюзный юридический заочный институт',
-//             },
-//             {
-//                 id: 2,
-//                 text: 'Московский государственный университет имени М. В. Ломоносова ',
-//             },
-//             {
-//                 id: 3,
-//                 text: 'Всесоюзный заочный институт советской торговли Наркомторга СССР',
-//             },
-//             {
-//                 id: 4,
-//                 text: 'Московский лесотехнический институт',
-//             },
-//         ],
-//     },
-//     {
-//         id: 8,
-//         title: 'Выберите наиболее неподходящее решение кейса: вы находитесь на трудовом проекте, и к вам поступает жалоба о нарушении сухого закона во время работы на проекте. Жалобу подал один из членов другого отряда, который является непосредственным свидетелем нарушения (Сухой закон строго запрещает употребление алкоголя и других запрещённых веществ во время работы на проекте, чтобы гарантировать безопасность и эффективность выполнения задач).',
-//         image: null,
-//         answer_options: [
-//             {
-//                 id: 1,
-//                 text: 'Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении. Провести личную беседу с бойцом, о котором поступила жалоба. Запросить его версию событий и объяснить, что жалоба была получена. Провести расследование, включающее беседу с другими свидетелями, если таковые имеются, и проверку фото- или видеоматериалов. После сбора всех необходимых доказательств принять решение о нарушении сухого закона.',
-//             },
-//             {
-//                 id: 2,
-//                 text: 'В случае подтверждения нарушения, применить соответствующие меры в соответствии с правилами отряда и регионального отделения, такие как предупреждение, штраф или другие дисциплинарные меры.',
-//             },
-//             {
-//                 id: 3,
-//                 text: 'Встретиться с лицом, подавшим жалобу, чтобы получить дополнительные детали и подробности о нарушении и попросить написать жалобу выше. Организовать общее собрание отряда, сообщить о решении выгнать бойца из отряда, как порочащего честь отряда без проведения дополнительных разбирательств.',
-//             },
-//             {
-//                 id: 4,
-//                 text: 'Организовать общее собрание отряда, для принятия общего решения о сложившиеся ситуации в случае подтверждения нарушения.',
-//             },
-//         ],
-//     },
-// ]);
+const swal = inject('$swal');
+
+const scroll = ref();
 const questions = ref([]);
-const answers = ref([]);
+const answers = [];
+const selected = ref(false);
 
-const result = ref(20);
-const countAttempt = ref(0);
-
-let indexQuestion = ref(1);
-const choosenAnswer = ref();
+const result = ref();
+const attemptSpent = ref(0);
+let indexQuestion = ref(0);
+const choosenAnswer = ref(null);
 const started = ref(false);
 const solved = ref(true);
 
@@ -212,37 +142,56 @@ const onStart = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        questions.value = data.value;
+        questions.value = data;
+        console.log(questions.value);
     } catch (e) {
-        console.log('error onStart', e);
+        if (e.request.status == 400) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `Использованы все доступные попытки`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        } else {
+            console.log('error onStart', e);
+        }
     }
 };
 
 const onRestart = async () => {
-    countAttempt.value++;
+    attemptSpent.value++;
+    questions.value = [];
     solved.value = false;
 };
 
 const onAction = async () => {
-    const temp = {
-        question_id: questions.value[indexQuestion.value].id,
-        answer_option_id: choosenAnswer.value + 1,
-    };
-    answers.value.push(temp);
-    if (indexQuestion.value == 2) {
-        started.value = false;
-        solved.value = true;
-        indexQuestion.value = 0;
-        submitAnswers();
+    if (choosenAnswer.value !== null) {
+        const temp = {
+            question_id: questions.value[indexQuestion.value].id,
+            answer_option_id:
+                questions.value[indexQuestion.value].answer_options[
+                    choosenAnswer.value
+                ].id,
+        };
+        answers.push(temp);
+        if (indexQuestion.value == 19) {
+            started.value = false;
+            solved.value = true;
+            indexQuestion.value = 0;
+            console.log(answers);
+            await submitAnswers();
+        }
+        indexQuestion.value += 1;
+        choosenAnswer.value = null;
+        scroll.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    indexQuestion.value += 1;
-    choosenAnswer.value = null;
 };
 
 const submitAnswers = async () => {
     try {
         const { data } = await HTTP.post(
-            `submit_answers/`,
+            `/submit_answers/`,
             { answers },
             {
                 headers: {
@@ -251,14 +200,33 @@ const submitAnswers = async () => {
                 },
             },
         );
-        result.value = data.value;
+        result.value = data;
+        console.log(result.value);
     } catch (e) {
         console.log('error submitAnswers', e);
     }
 };
+
+watch(choosenAnswer, () => {
+    if (choosenAnswer.value !== null) {
+        selected.value = true;
+    } else {
+        selected.value = false;
+    }
+});
 </script>
 
 <styel scoped lang="scss">
+.image_answer {
+    max-width: 100px;
+    height: auto;
+    padding-left: 16px;
+}
+.image_question {
+    max-width: 250px;
+    height: auto;
+    margin-bottom: 40px;
+}
 .solved__wrapper {
     display: flex;
     flex-direction: column;
@@ -330,6 +298,13 @@ const submitAnswers = async () => {
     flex-wrap: nowrap;
     margin-bottom: 24px;
 }
+.inactive_button {
+    cursor: not-allowed;
+    border-radius: 10px;
+    background: grey;
+    padding: 16px 32px;
+    color: #fff;
+}
 .submit_button {
     border-radius: 10px;
     background: #39bfbf;
@@ -355,7 +330,6 @@ const submitAnswers = async () => {
 }
 .line {
     display: flex;
-    margin: 40px 0px;
     justify-content: space-between;
 }
 .curr_question {
