@@ -64,15 +64,16 @@ import {
     applicationCompetitionItem,
     selectedApplicationEventItem,
 } from '@entities/Competitions/components';
-import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, onMounted, onActivated, inject } from 'vue';
+import { ref, onMounted, onActivated, inject, computed, watch } from 'vue';
+import { useUserStore } from '@features/store/index';
+import { useEventsStore } from '@features/store/events';
 
-const roleStore = useRoleStore();
-const roles = storeToRefs(roleStore);
+const eventsStore = useEventsStore();
+const userStore = useUserStore();
 const ev = ref([]);
 const eventsList = ref([]);
 const selectedEventList = ref([]);
@@ -81,6 +82,18 @@ const isError = ref([]);
 const swal = inject('$swal');
 const loading = ref(false);
 const action = ref('Одобрить');
+
+let userId = computed(() => {
+    return userStore.currentUser.id;
+});
+
+const isOrganizer = computed(() => {
+    return eventsStore.organizators.find(
+        (item) => item.organizer.id === userId.value,
+    );
+});
+
+console.log('org', isOrganizer);
 
 const actionsList = ref([
     {
@@ -92,17 +105,22 @@ const actionsList = ref([
 
 const viewEvents = async (event_pk) => {
     try {
-        const eventsRequest = await HTTP.get(
-            `/events/${event_pk}/applications/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+        if (isOrganizer) {
+            const eventsRequest = await HTTP.get(
+                `/events/${event_pk}/applications/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        );
-        eventsList.value = [...eventsList.value, ...eventsRequest.data.results];
-        selectedEventList.value = [];
+            );
+            eventsList.value = [
+                ...eventsList.value,
+                ...eventsRequest.data.results,
+            ];
+            selectedEventList.value = [];
+        }
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -110,15 +128,20 @@ const viewEvents = async (event_pk) => {
 
 const events = async () => {
     try {
-        const eventsRequest = await HTTP.get(`/events/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token' + localStorage.getItem('Token'),
-            },
-        });
-        ev.value = eventsRequest.data.results;
-        for (let i in eventsRequest.data.results) {
-            viewEvents(eventsRequest.data.results[i].id);
+        if (isOrganizer) {
+            const eventsRequest = await HTTP.get(`/events/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token' + localStorage.getItem('Token'),
+                },
+            });
+            ev.value = eventsRequest.data.results;
+            for (let i in eventsRequest.data.results) {
+                viewEvents(eventsRequest.data.results[i].id);
+                // eventsStore.getEventOrganizators(
+                //     eventsRequest.data.results[i].id,
+                // );
+            }
         }
     } catch (error) {
         console.log('an error occured' + error);
@@ -231,12 +254,12 @@ const onAction = async () => {
                 await cancelApplication(application.event.id, application.id);
             }
 
-                eventsList.value = eventsList.value.filter(
-                    (event) => event.id != application.id,
-                );
-                selectedEventList.value = selectedEventList.value.filter(
-                    (event) => event.id != application.id,
-                );
+            eventsList.value = eventsList.value.filter(
+                (event) => event.id != application.id,
+            );
+            selectedEventList.value = selectedEventList.value.filter(
+                (event) => event.id != application.id,
+            );
         }
         await viewEvents();
     } catch (e) {
@@ -248,10 +271,6 @@ onMounted(async () => {
     await events();
     await viewEvents();
 });
-
-// onActivated(async () => {
-//     await events();
-// });
 </script>
 
 <style>

@@ -1,6 +1,7 @@
 <template>
     <div class="horizontallso">
-        <div class="horizontallso__confidant mr-3">
+        <div class="horizontallso__confidant mr-3" v-if="roleStore.roles.regionalheadquarter_commander
+">
             <input
                 type="checkbox"
                 v-model="checked"
@@ -54,7 +55,9 @@
 </template>
 <script setup>
 import { ref, watch } from 'vue';
+import { useRoleStore } from '@layouts/store/role';
 
+const roleStore = useRoleStore();
 const props = defineProps({
     participant: {
         type: Object,
