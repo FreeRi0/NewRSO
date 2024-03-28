@@ -109,6 +109,19 @@
                     </button>
                 </div>
             </div>
+            <div v-else class="solved__wrapper">
+                <div class="border_result">
+                    <p class="text_result">
+                        Ваш лучший результат: {{ status.best_score }}
+                    </p>
+                    <br />
+                    <p class="text_result" v-if="status.best_score <= 59">
+                        Тест не пройден
+                    </p>
+                    <p class="text_result" v-else>Тест пройден</p>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -147,17 +160,6 @@ const onStart = async () => {
         });
         questions.value = data;
     } catch (e) {
-        if (e.request.status == 400) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `Использованы все доступные попытки`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        } else {
-            console.log('error onStart', e);
-        }
         if (e.request.status == 400) {
             swal.fire({
                 position: 'center',
@@ -217,7 +219,6 @@ const submitAnswers = async () => {
             },
         );
         result.value = data;
-        result.value = data;
     } catch (e) {
         console.log('error submitAnswers', e);
     }
@@ -254,16 +255,6 @@ onMounted(async () => {
 </script>
 
 <styel scoped lang="scss">
-.image_answer {
-    max-width: 150px;
-    height: auto;
-    padding-left: 16px;
-}
-.image_question {
-    max-width: 250px;
-    height: auto;
-    margin-bottom: 40px;
-}
 .image_answer {
     max-width: 150px;
     height: auto;
