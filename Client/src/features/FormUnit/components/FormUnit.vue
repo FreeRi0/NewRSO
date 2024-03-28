@@ -1985,7 +1985,7 @@ const getHeadquarter = async () => {
         },
     })
         .then((res) => {
-            headquarterItems.value = res.data;
+            headquarterItems.value = res.data.results;
         })
         .catch(function (error) {
             console.log('an error occured ' + error);

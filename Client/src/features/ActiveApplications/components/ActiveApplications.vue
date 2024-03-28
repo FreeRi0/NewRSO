@@ -179,7 +179,6 @@ const confirmApplication = async (id) => {
             timer: 1500,
         });
     } catch (error) {
-        console.log('errr', error);
         isError.value = error.response.data;
         console.error('There was an error!', error);
         if (isError.value) {
@@ -214,7 +213,6 @@ const cancelApplication = async (id) => {
             timer: 1500,
         });
     } catch (error) {
-        console.log('errr', error);
         isError.value = error.response.data;
         console.error('There was an error!', error);
         if (isError.value) {
@@ -238,13 +236,14 @@ const onAction = async () => {
             } else {
                 await cancelApplication(application.user.id);
             }
-            participantList.value = participantList.value.filter(
-                (participant) => participant.id != application.user.id,
-            );
-            selectedParticipantList.value =
-                selectedParticipantList.value.filter(
+
+                participantList.value = participantList.value.filter(
                     (participant) => participant.id != application.user.id,
                 );
+                selectedParticipantList.value =
+                    selectedParticipantList.value.filter(
+                        (participant) => participant.id != application.user.id,
+                    );
         }
         await viewParticipants();
     } catch (e) {
@@ -255,10 +254,6 @@ const onAction = async () => {
 onMounted(async () => {
     await viewParticipants();
 });
-
-// onActivated(async () => {
-//     await viewParticipants();
-// });
 </script>
 
 <style lang="scss">

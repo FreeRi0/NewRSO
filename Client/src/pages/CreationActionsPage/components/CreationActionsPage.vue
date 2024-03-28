@@ -80,9 +80,9 @@
                                         id="offlineBtn"
                                         v-model="maininfo.format"
                                         type="radio"
-                                        value="Оффлайн"
+                                        value="Офлайн"
                                     />
-                                    <label for="offlineBtn" class="ml-3 form-label">Оффлайн</label>
+                                    <label for="offlineBtn" class="ml-3 form-label">Офлайн</label>
                                   </div>
                                   <div style="display: flex; align-items: center">
                                     <input
@@ -151,7 +151,7 @@
                                         <img
                                             v-if="maininfo.banner ?? urlBanner"
                                             class="photo-add__image"
-                                            :src="maininfo.banner ?? urlBanner"
+                                            :src="urlBanner"
                                         />
                                       </div>
 
@@ -159,7 +159,8 @@
                                         <label
                                             class="photo-add__label"
                                             for="upload-banner"
-                                            v-if="!maininfo.banner && !urlBanner">
+                                            v-if="!maininfo.banner && !urlBanner"
+                                            @click="dialogBanner = true">
                                           <svg
                                               class=""
                                               aria-hidden="true"
@@ -240,6 +241,7 @@
                                           <label
                                               class="photo-add__label-edit"
                                               for="upload-banner"
+                                              @click="dialogBanner = true"
                                           ><span class="photo-add__label-text">Изменить фото</span>
                                           </label>
                                           <button
@@ -256,10 +258,66 @@
                                             id="upload-banner"
                                             name="squad-banner"
                                             hidden
-                                            @change="selectBanner"
+                                            @click.prevent
                                         />
                                       </div>
                                     </div>
+                                    <v-dialog v-model="dialogBanner" width="1024">
+                                      <v-card>
+                                        <v-card-title>
+                                            <span class="text-h5">
+                                                Загрузите ваше фото
+                                            </span>
+                                        </v-card-title>
+                                        <v-card-text>
+                                          <v-container>
+                                            <v-row>
+                                              <v-file-input
+                                                  @change="selectBanner"
+                                                  type="file"
+                                                  show-size
+                                                  prepend-icon="mdi-camera"
+                                                  counter
+                                              />
+                                            </v-row>
+                                            <v-row class="align-center justify-end">
+                                              <v-btn
+                                                  v-if="bannerPreview"
+                                                  class="button-wrapper mt-5"
+                                                  @click="cropImage"
+                                                  prepend-icon="crop"
+                                                  variant="plain"
+                                              >Обрезать фото</v-btn>
+                                            </v-row>
+                                            <v-row>
+                                              <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="bannerPreview" />
+                                            </v-row>
+                                          </v-container>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                          <v-spacer></v-spacer>
+                                          <v-btn
+                                              color="blue-darken-1"
+                                              variant="text"
+                                              @click="dialogBanner = false"
+                                          >
+                                            Закрыть
+                                          </v-btn>
+                                          <v-btn
+                                              :disabled="!maininfo.banner"
+                                              color="blue-darken-1"
+                                              variant="text"
+                                              type="submit"
+                                              @click="uploadPhoto"
+                                          >
+                                            Загрузить
+                                          </v-btn>
+                                        </v-card-actions>
+<!--                                        <p class="error" v-if="isError.detail">-->
+<!--                                          {{ isError.detail }}-->
+<!--                                        </p>-->
+                                      </v-card>
+                                    </v-dialog>
                                     <span
                                         style="margin-bottom: 16px; margin-top: 8px;" class="form__footnote"
                                     >Рекомендуемый размер 1920х768</span>
@@ -287,13 +345,14 @@
                                 <div class="form__field">
                                   <label class="form__label" for="group-hq"
                                   >Количество участников <sup class="valid-red">*</sup></label>
-                                  <InputText
-                                      v-model="maininfo.participants_number"
+                                  <Input
+                                      v-model:value="maininfo.participants_number"
                                       id="group-hq"
-                                      type="text"
+                                      type="number"
                                       class="form__input form-input-container"
                                       placeholder="Например, 150"
                                       name="group-hq"
+                                      min="0"
                                   />
                                   <div class="form__counter">
                                     {{ maininfo.participants_number.length }}/4
@@ -317,13 +376,18 @@
                                 <div class="form__field">
                                   <label class="form__label" for="road-hq"
                                   >Добавьте направление <sup class="valid-red">*</sup></label>
-                                  <sortByEducation
-                                      id="road-hq"
-                                      :options="direction_massive"
-                                      optionLabel="name"
-                                      placeholder="Например, ЛСО"
+                                  <v-select
                                       v-model="maininfo.direction"
-                                  ></sortByEducation>
+                                      style="border: 1px solid #b6b6b6;
+                                      border-radius: 10px;
+                                      max-height: 40px;
+                                      display: flex;
+                                      align-items: center;"
+                                      variant="outlined"
+                                      :items="direction_massive"
+                                      placeholder="Например, ЛСО"
+                                      multiple
+                                  ></v-select>
                                 </div>
                               </div>
                             </div>
@@ -1098,13 +1162,12 @@
                               + Добавить вопрос
                             </div>
                           </div>
-
-                          <div class="form-col-100" style="margin-top: 40px;">
-                            <Button type="submit" label="Создать"></Button>
-                          </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
+          <div class="form-col-100" style="margin-top: 40px;">
+            <Button type="submit" label="Создать"></Button>
+          </div>
         </form>
     </div>
 </template>
@@ -1130,6 +1193,8 @@ import { getUser } from '@services/UserService';
 const swal = inject('$swal');
 const router = useRouter();
 const rules = ref([]);
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
 
 const organization_stop = ref('');
 
@@ -1189,7 +1254,7 @@ onMounted(() => {});
 //@update:value="changeValue"
 const maininfo = ref({
     format: '',
-    direction: '',
+    direction: [],
     name: '',
     scale: '',
     banner: null,
@@ -1207,13 +1272,30 @@ const maininfo = ref({
     org_detachment: '',
 });
 
+const cropper = ref();
+const dialogBanner = ref(false);
 const users = ref([]);
 const urlBanner = ref(null);
+let bannerPreview = ref(null);
 
 const selectBanner = (event) => {
     maininfo.value.banner = event.target.files[0];
+  // fileBanner.value = event.target.files[0];
+    bannerPreview.value = URL.createObjectURL(maininfo.value.banner);
 };
-
+const cropImage = () => {
+  if (cropper.value) {
+    const { canvas } = cropper.value.getResult();
+    bannerPreview.value = canvas.toDataURL('image/jpeg')
+    canvas.toBlob((blob) => {
+      maininfo.value.banner = new File([blob], "banner.jpg", { type: "image/jpeg" })
+    }, 'image/jpeg');
+  }
+};
+const uploadPhoto = () => {
+  urlBanner.value = URL.createObjectURL(maininfo.value.banner);
+  dialogBanner.value = false;
+}
 const resetBanner = () => {
     maininfo.value.banner = null;
     urlBanner.value = null;
@@ -1231,11 +1313,11 @@ const scale_massive = ref([
 ]);
 
 const direction_massive = ref([
-    { name: 'Добровольческое' },
-    { name: 'Образовательное' },
-    { name: 'Патриотическое' },
-    { name: 'Спортивное' },
-    { name: 'Творческое' },
+    'Добровольческое',
+    'Образовательное',
+    'Патриотическое',
+    'Спортивное',
+    'Творческое',
 ]);
 
 const area = ref('');
@@ -1469,6 +1551,9 @@ function AddQuestion() {
 </script>
 
 <style lang="scss" scoped>
+.v-expansion-panel {
+  border-bottom: none;
+}
 .form__inner-content {
   border-bottom: none;
 }
@@ -1579,6 +1664,7 @@ function AddQuestion() {
         border-radius: 15px;
         padding-left: 15px;
         margin-bottom: 3px;
+        -moz-appearance: none;
     }
     &-title {
         font-family: Bert Sans;
