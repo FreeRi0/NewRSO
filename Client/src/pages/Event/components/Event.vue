@@ -177,7 +177,9 @@
                         />
                     </div>
                     <div class="text text--organizer">
-                        {{ organizator.organization }}
+                        {{ organizator.organizer?.last_name }}
+                        {{ organizator.organizer?.first_name }}
+                        {{ organizator.organizer?.patronymic_name }}
                     </div>
                     <!-- <div class="text text--status">
                     {{ organizator.status }}
@@ -206,7 +208,9 @@
                             />
                         </div>
                         <div class="text text--organizer">
-                            {{ organizator.organization }}
+                            {{ organizator.organizer?.last_name }}
+                            {{ organizator.organizer?.first_name }}
+                            {{ organizator.organizer?.patronymic_name }}
                         </div>
                         <!-- <div class="text text--status">
                         {{ organizator.status }}
