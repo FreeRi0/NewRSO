@@ -192,7 +192,7 @@ const onAction = async () => {
         };
         indexQuestion.value += 1;
         answers.push(temp);
-        if (indexQuestion.value == 19) {
+        if (indexQuestion.value == 20) {
             started.value = false;
             solved.value = true;
             indexQuestion.value = 0;
