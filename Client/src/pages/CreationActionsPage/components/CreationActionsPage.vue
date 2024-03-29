@@ -432,10 +432,12 @@
                               </div>
                               <div
                                   class="form-col"
-                                  v-if="maininfo.application_type !== 'Персональная'"
+                                  v-if="maininfo.application_type"
                               >
                                 <label class="form__label"
-                                >Какие объекты могут формировать групповые заявки <sup class="valid-red">*</sup></label>
+                                >Какие объекты могут формировать
+                                  {{ maininfo.application_type === 'Персональная' ? 'персональные' : maininfo.application_type === 'Групповая' ? 'групповые' : 'многоэтапные'}}
+                                  заявки <sup class="valid-red">*</sup></label>
                                 <sortByEducation
                                     v-model="area"
                                     :options="area_massive"
@@ -536,6 +538,7 @@
                                       v-model="time_data.event_duration_type"
                                       type="radio"
                                       value="Однодневное"
+                                      checked
                                   />
                                   <label for="onedayBtn" class="ml-3 form-label">Однодневное</label>
                                 </div>
@@ -569,12 +572,11 @@
                                       type="date"
                                   />
                                 </div>
-                                <div class="form__field">
+                                <div v-if="time_data.event_duration_type === 'Многодневное'" class="form__field">
                                   <label
                                       class="form__label"
                                       for="action-end-hq"
-                                  >Окончание мероприятия <sup class="valid-red">*</sup></label
-                                  >
+                                  >Окончание мероприятия <sup class="valid-red">*</sup></label>
                                   <Input
                                       id="action-end-hq"
                                       v-model:value="time_data.end_date"
@@ -615,7 +617,7 @@
                                   />
                                   <div class="form__counter"></div>
                                 </div>
-                                <div class="form__field">
+                                <div v-if="time_data.event_duration_type === 'Многодневное'" class="form__field">
                                   <label
                                       class="form__label"
                                       for="action-hours-end-hq"
@@ -1466,7 +1468,7 @@ const document_data = ref({
     additional_info: '',
 });
 const time_data = ref({
-    event_duration_type: '',
+    event_duration_type: 'Однодневное',
     start_date: '',
     start_time: '',
     end_date: '',
@@ -1493,6 +1495,10 @@ function SubmitEvent() {
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
+    if (time_data.value.event_duration_type === 'Однодневное') {
+      delete time_data.value.end_date;
+      delete time_data.value.end_time;
+    }
     createAction(fd)
         .then((resp) => {
             console.log('Форма передалась успешно', resp.data);
