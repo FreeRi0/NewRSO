@@ -86,7 +86,7 @@
                 </p>
                 <p class="text_result" v-else>Тест пройден</p>
             </div>
-            <div class="button_result">
+            <div class="button_result" v-if='status.left_attempts > 1'>
                 <button @click="onRestart" class="submit_button">
                     Начать заново
                 </button>
@@ -102,13 +102,19 @@
                     ограничено. Не закрывайте тест после нажатия на кнопку
                     «Начать тестирование» до его завершения.
                 </p>
+                <div class="border_result_finally" v-if='status.best_score > 0'>
+                    <p class="text_result">
+                        <template v-if='status.left_attempts == 2'>Ваш результат: {{ status.best_score }} баллов</template>
+                        <template v-else>Ваш лучший результат: {{ status.best_score }} баллов</template>
+                    </p>
+                </div>
                 <div class="start_button">
                     <button @click="onStart" class="submit_button">
                         Начать тестирование
                     </button>
                 </div>
             </div>
-            <div v-else class="solved__wrapper">
+            <div v-else-if='status.best_score' class="solved__wrapper">
                 <div class="border_result_finally">
                     <p class="text_result">
                         Ваш лучший результат: {{ status.best_score }} баллов
@@ -151,7 +157,7 @@ const status = ref({
 const onStart = async () => {
     started.value = true;
     try {
-        const { data } = await HTTP.get(`/questions?category=university`, {
+        const { data } = await HTTP.get(`/questions/?category=university`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -224,7 +230,7 @@ const submitAnswers = async () => {
 const getAttempts = async () => {
     try {
         const { data } = await HTTP.get(
-            `/get_attempts_status?category=university`,
+            `/get_attempts_status/?category=university`,
             {
                 headers: {
                     'Content-Type': 'application/json',
