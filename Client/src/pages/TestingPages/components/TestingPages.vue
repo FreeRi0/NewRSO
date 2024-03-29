@@ -102,7 +102,7 @@
                     ограничено. Не закрывайте тест после нажатия на кнопку
                     «Начать тестирование» до его завершения.
                 </p>
-                <div class="border_result_finally" v-if='status.best_score > 0'>
+                <div class="border_result" v-if='status.best_score > 0'>
                     <p class="text_result">
                         <template v-if='status.left_attempts == 2'>Ваш результат: {{ status.best_score }} баллов</template>
                         <template v-else>Ваш лучший результат: {{ status.best_score }} баллов</template>
