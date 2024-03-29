@@ -943,10 +943,19 @@
                         <v-expansion-panel-text class="form__inner-content">
                           <div class="form__field-group">
                             <div
-                                v-for="organizer in selectedUser"
-                                :key="organizer.organizer"
+                                v-for="(organizer, index) in selectedUser"
+                                :key="index"
                                 style="margin-bottom: 30px;"
                             >
+                              <div v-if="organizer.organizerBtnClose" class="organizer__close">
+                                <svg
+                                    @click="selectedUser.splice(index, 1)"
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                  <path d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z" stroke="#939393" stroke-linecap="round"/>
+                                  <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round"/>
+                                  <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round"/>
+                                </svg>
+                              </div>
                               <div class="form-container" style="align-items: flex-end">
                                 <div class="form-col">
                                   <div class="form__field">
@@ -962,11 +971,10 @@
                                         :item-title="item => `${item.last_name} ${item.first_name} ${item.patronymic_name}`"
                                         placeholder="Фамилия Имя Отчество"
                                         @update:modelValue="item => {
+                                          organizer.organizer = item.id
                                           organizer.last_name = item.last_name
                                           organizer.first_name = item.first_name
                                           organizer.patronymic_name = item.patronymic_name
-                                          organizer.organizer = item.id
-                                          console.log(selectedUser)
                                         }"
                                         style="border: 1px solid #b6b6b6;
                                         border-radius: 10px;
@@ -1002,11 +1010,9 @@
                                       <input
                                           v-model="organizer.is_contact_person"
                                           type="checkbox"
-                                          name="person"
+                                          :id="index"
                                       />
-                                      <label for="person"
-                                      >Сделать контактным лицом</label
-                                      >
+                                      <label :for="index">Сделать контактным лицом</label>
                                     </div>
                                   </div>
                                 </div>
@@ -1014,7 +1020,7 @@
                               <div style="border: 1px solid #939393; width: 100%; margin-top: 40px; margin-bottom: 30px;"/>
                             </div>
 
-                            <div class="form-add" @click="AddOrganizator">
+                            <div class="form-add" @click="AddOrganizer">
                               + Добавить организатора
                             </div>
                           </div>
@@ -1216,7 +1222,8 @@ onActivated( () => {
           last_name: resp.data.last_name,
           first_name: resp.data.first_name,
           patronymic_name: resp.data.patronymic_name,
-          is_contact_person: true
+          is_contact_person: true,
+          organizerBtnClose: false,
       });
     });
     getRsousers().then((resp) => {
@@ -1260,13 +1267,14 @@ const maininfo = ref({
     org_detachment: '',
 });
 
-function AddOrganizator() {
+function AddOrganizer() {
   selectedUser.value.push({
+    organizer: null,
     last_name: '',
     first_name: '',
     patronymic_name: '',
     is_contact_person: false,
-    organizer: null
+    organizerBtnClose: true,
   });
 }
 // ----------------------------------------------------------------------------
@@ -1544,6 +1552,14 @@ function AddQuestion() {
 }
 .form__inner-content {
   border-bottom: none;
+}
+.organizer__close {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  svg {
+    cursor: pointer;
+  }
 }
 .eventType {
   display: flex;
