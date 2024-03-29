@@ -79,7 +79,7 @@
         <div v-else-if="solved" class="solved__wrapper">
             <p class="main_title">Тестирование по обучению</p>
             <div class="border_result">
-                <p class="text_result">Ваш результат: {{ result.score }}</p>
+                <p class="text_result">Ваш результат: {{ result.score }} баллов</p>
                 <br />
                 <p class="text_result" v-if="result.score <= 59">
                     Тест не пройден
@@ -109,9 +109,9 @@
                 </div>
             </div>
             <div v-else class="solved__wrapper">
-                <div class="border_result">
+                <div class="border_result_finally">
                     <p class="text_result">
-                        Ваш лучший результат: {{ status.best_score }}
+                        Ваш лучший результат: {{ status.best_score }} баллов
                     </p>
                     <br />
                     <p class="text_result" v-if="status.best_score <= 59">
@@ -174,13 +174,11 @@ const onStart = async () => {
 };
 
 const onRestart = async () => {
-    attemptSpent.value++;
-    questions.value = [];
-    answers = [];
-    attemptSpent.value++;
-    questions.value = [];
-    answers = [];
-    solved.value = false;
+    // attemptSpent.value++;
+    // questions.value = [];
+    // answers = [];
+    // solved.value = false;
+    window.location.reload();
 };
 
 const onAction = async () => {
@@ -192,6 +190,7 @@ const onAction = async () => {
                     choosenAnswer.value
                 ].id,
         };
+        indexQuestion.value += 1;
         answers.push(temp);
         if (indexQuestion.value == 19) {
             started.value = false;
@@ -199,7 +198,6 @@ const onAction = async () => {
             indexQuestion.value = 0;
             await submitAnswers();
         }
-        indexQuestion.value += 1;
         choosenAnswer.value = null;
         scroll.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -267,6 +265,15 @@ onMounted(async () => {
 .solved__wrapper {
     display: flex;
     flex-direction: column;
+}
+.border_result_finally {
+    margin: 0 auto;
+    text-align: center;
+    padding: 40px 120px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 214px;
+    margin-top: 20px;
 }
 .border_result {
     margin: 0 auto;

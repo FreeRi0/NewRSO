@@ -386,7 +386,6 @@
                                       variant="outlined"
                                       :items="direction_massive"
                                       placeholder="Например, ЛСО"
-                                      multiple
                                   ></v-select>
                                 </div>
                               </div>
@@ -944,90 +943,64 @@
                         <v-expansion-panel-text class="form__inner-content">
                           <div class="form__field-group">
                             <div
-                                v-for="organizator in organizators"
-                                :key="organizator"
+                                v-for="organizer in selectedUser"
+                                :key="organizer.organizer"
                                 style="margin-bottom: 30px;"
                             >
-                              <div class="form-container">
+                              <div class="form-container" style="align-items: flex-end">
                                 <div class="form-col">
                                   <div class="form__field">
                                     <label class="form__label" for="name-hq"
-                                    >ФИО организатора <sup class="valid-red">*</sup
-                                    ></label>
-                                    <InputText
-                                        id="name-hq"
-                                        v-model="organizator.organization"
+                                    >ФИО организатора <sup class="valid-red">*</sup></label>
+
+                                    <v-autocomplete
+                                        variant="outlined"
+                                        :model-value="organizer"
                                         class="form__input form-input-container"
+                                        :items="usersList"
+                                        :item-value="item => item"
+                                        :item-title="item => `${item.last_name} ${item.first_name} ${item.patronymic_name}`"
                                         placeholder="Фамилия Имя Отчество"
-                                        name="name_hq"
-                                        :maxlength="100"
-                                    />
-                                    <div class="form__counter"></div>
-                                  </div>
-                                  <div class="form__field">
-                                    <label
-                                        class="form__label"
-                                        for="telegram-owner-hq">Telegram</label>
-                                    <InputText
-                                        id="telegram-owner-hq"
-                                        v-model="organizator.telegram"
-                                        class="form__input form-input-container"
-                                        placeholder="@nickname"
-                                        name="telegram-owner-hq"
-                                        :maxlength="100"
-                                    />
-                                    <div class="form__counter"></div>
-                                  </div>
-                                  <div class="form__field">
-                                    <label
-                                        class="form__label"
-                                        for="telegram-squad-hq"
-                                    >Телефон</label>
-                                    <InputText
-                                        id="telegram-squad-hq"
-                                        v-model="organizator.organizer_phone_number"
-                                        class="form__input form-input-container"
-                                        placeholder="@Invar"
-                                        name="telegram-squad-hq"
-                                        :maxlength="100"
-                                    />
-                                    <div class="form__counter"></div>
+                                        @update:modelValue="item => {
+                                          organizer.last_name = item.last_name
+                                          organizer.first_name = item.first_name
+                                          organizer.patronymic_name = item.patronymic_name
+                                          organizer.organizer = item.id
+                                          console.log(selectedUser)
+                                        }"
+                                        style="border: 1px solid #b6b6b6;
+                                        border-radius: 10px;
+                                        max-height: 40px;
+                                        display: flex;
+                                        align-items: center;"
+                                    >
+                                      <template v-slot:chip="{ item }">
+                                        <div>
+                                          {{
+                                            item.raw.last_name +
+                                            ' ' +
+                                            item.raw.first_name +
+                                            ' ' +
+                                            item.raw.patronymic_name
+                                          }}
+                                        </div>
+                                      </template>
+                                      <template v-slot:item="{ props, item }">
+                                        <v-list-item
+                                            v-bind="props"
+                                            :title="`${item.raw.last_name} ${item.raw.first_name} ${item.raw.patronymic_name}`"
+                                            :subtitle="item.raw.date_of_birth"
+                                        ></v-list-item>
+                                      </template>
+                                    </v-autocomplete>
+
                                   </div>
                                 </div>
                                 <div class="form-col">
                                   <div class="form__field">
-                                    <label class="form__label" for="email-hq"
-                                    >Email организатора <sup class="valid-red">*</sup></label
-                                    >
-                                    <InputText
-                                        id="email-hq"
-                                        v-model="organizator.organizer_email"
-                                        class="form__input form-input-container"
-                                        placeholder="email@gmail.com"
-                                        name="email_hq"
-                                        :maxlength="100"
-                                    />
-                                    <div class="form__counter"></div>
-                                  </div>
-                                  <div class="form__field">
-                                    <label
-                                        class="form__label"
-                                        for="organization-hq"
-                                    >Организация</label>
-                                    <InputText
-                                        id="organization-hq"
-                                        v-model="organization_stop"
-                                        class="form__input form-input-container"
-                                        placeholder="Например КузГТУ"
-                                        name="organization-hq"
-                                        :maxlength="100"
-                                    />
-                                    <div class="form__counter"></div>
-                                  </div>
-                                  <div class="form__field">
                                     <div class="form-checkbox">
                                       <input
-                                          v-model="organizator.is_contact_person"
+                                          v-model="organizer.is_contact_person"
                                           type="checkbox"
                                           name="person"
                                       />
@@ -1045,7 +1018,6 @@
                               + Добавить организатора
                             </div>
                           </div>
-
                           <v-card-actions class="form__button-group">
                             <Button
                                 class="form-button form-button--prev"
@@ -1176,12 +1148,12 @@
 import { Button } from '@shared/components/buttons';
 import { ref, inject } from 'vue';
 import {
-    createAction,
-    putTimeData,
-    putDocuments,
-    createOrganizator,
-    getRoles,
-    getRsousers,
+  createAction,
+  putTimeData,
+  putDocuments,
+  createOrganizator,
+  getRoles,
+  getRsousers,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
@@ -1195,8 +1167,9 @@ const router = useRouter();
 const rules = ref([]);
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
+import { HTTP } from '@app/http';
 
-const organization_stop = ref('');
+// const organization_stop = ref('');
 
 //------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -1220,10 +1193,11 @@ const openPanelFour = () => {
 const openPanelFive = () => {
   panel.value = 'panelFive';
 }
-
 //-------------------------------------------------------------------------------------
+const usersList = ref(null)
+let selectedUser = ref([])
 
-onActivated(() => {
+onActivated( () => {
     getRoles().then((resp) => {
         console.log(resp.data);
         rules.value = resp.data;
@@ -1237,24 +1211,38 @@ onActivated(() => {
         });
     });
     getUser().then((resp) => {
-        organizators.value.push({
-            organizer: resp.data.id,
-            organizer_phone_number: resp.data.phone_number,
-            organizer_email: resp.data.email,
-            organization: `${resp.data.last_name} ${resp.data.first_name} ${resp.data.patronymic_name}`,
-            telegram: resp.data.social_tg,
-            is_contact_person: true,
-        });
+      selectedUser.value.push({
+          organizer: resp.data.id,
+          last_name: resp.data.last_name,
+          first_name: resp.data.first_name,
+          patronymic_name: resp.data.patronymic_name,
+          is_contact_person: true
+      });
     });
     getRsousers().then((resp) => {
         users.value = resp.data;
     });
+
+    const getUsers = async () => {
+      try {
+        const usersRes = await HTTP.get('users/', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+          },
+        })
+        usersList.value = await usersRes.data.results;
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    getUsers();
 });
 onMounted(() => {});
 //@update:value="changeValue"
 const maininfo = ref({
     format: '',
-    direction: [],
+    direction: '',
     name: '',
     scale: '',
     banner: null,
@@ -1272,6 +1260,16 @@ const maininfo = ref({
     org_detachment: '',
 });
 
+function AddOrganizator() {
+  selectedUser.value.push({
+    last_name: '',
+    first_name: '',
+    patronymic_name: '',
+    is_contact_person: false,
+    organizer: null
+  });
+}
+// ----------------------------------------------------------------------------
 const cropper = ref();
 const dialogBanner = ref(false);
 const users = ref([]);
@@ -1300,7 +1298,7 @@ const resetBanner = () => {
     maininfo.value.banner = null;
     urlBanner.value = null;
 };
-
+//--------------------------------------------------------------
 const scale_massive_sorted = ref([]);
 
 const scale_massive = ref([
@@ -1471,7 +1469,7 @@ const time_data = ref({
 
 //Переменные организаторов
 
-const organizators = ref([]);
+// const organizators = ref([]);
 
 //Ответы на вопросы
 const answers = ref([
@@ -1481,16 +1479,6 @@ const answers = ref([
     },
 ]);
 
-function AddOrganizator() {
-    organizators.value.push({
-        organizer: '',
-        organizer_phone_number: '',
-        organizer_email: '',
-        organization: '',
-        telegram: '',
-        is_contact_person: false,
-    });
-}
 function SubmitEvent() {
     //Внести все значения в FormData главной информации мероприятия
     let fd = new FormData();
@@ -1513,8 +1501,8 @@ function SubmitEvent() {
                 .catch((e) => {
                     console.error(e);
                 });
-            organizators.value.forEach((organizator) => {
-                createOrganizator(resp.data.id, organizator)
+            selectedUser.value.forEach((item) => {
+                createOrganizator(resp.data.id, { organizer: item.organizer, is_contact_person: item.is_contact_person })
                     .then((resp) => {
                         console.log(resp.data);
                     })
@@ -1665,6 +1653,7 @@ function AddQuestion() {
         padding-left: 15px;
         margin-bottom: 3px;
         -moz-appearance: none;
+        background-color: none;
     }
     &-title {
         font-family: Bert Sans;
