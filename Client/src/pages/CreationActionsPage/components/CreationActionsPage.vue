@@ -970,7 +970,7 @@
                                         class="form__input form-input-container"
                                         :items="usersList"
                                         :item-value="item => item"
-                                        :item-title="item => `${item.last_name} ${item.first_name} ${item.patronymic_name}`"
+                                        :item-title="item => item.first_name ? `${item.last_name} ${item.first_name} ${item.patronymic_name}` : ''"
                                         placeholder="Фамилия Имя Отчество"
                                         @update:modelValue="item => {
                                           organizer.organizer = item.id
@@ -983,6 +983,7 @@
                                         max-height: 40px;
                                         display: flex;
                                         align-items: center;"
+                                        no-data-text="Ничего не найдено"
                                     >
                                       <template v-slot:chip="{ item }">
                                         <div>
@@ -1271,7 +1272,7 @@ const maininfo = ref({
 
 function AddOrganizer() {
   selectedUser.value.push({
-    organizer: null,
+    organizer: '',
     last_name: '',
     first_name: '',
     patronymic_name: '',
