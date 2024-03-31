@@ -123,6 +123,7 @@ const results = ref({
 const onAction = async () => {
     router.push({
         name: 'Report',
+        params: { competition_pk: 1 },
     });
 };
 

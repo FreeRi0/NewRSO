@@ -106,7 +106,6 @@ const routes: RouteRecordRaw[] = [
                                     isObject: true,
                                 },
                                 children: [
-
                                     {
                                         path: 'reporting',
                                         meta: {
@@ -127,6 +126,17 @@ const routes: RouteRecordRaw[] = [
                                                 component: () =>
                                                     import(
                                                         '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
+                                                    ),
+                                            },
+                                            {
+                                                path: 'report/:competition_pk',
+                                                meta: {
+                                                    label: 'Редактирование данных по показателям',
+                                                },
+                                                name: 'Report',
+                                                component: () =>
+                                                    import(
+                                                        '@pages/ReportPage/components/ReportPage.vue'
                                                     ),
                                             },
                                         ],
@@ -681,13 +691,6 @@ const routes: RouteRecordRaw[] = [
             },
 
             {
-
-                path: '/report',
-                name: 'Report',
-                component: () =>
-                    import('@pages/ReportPage/components/ReportPage.vue'),
-            },
-            {
                 path: '/CorpUniver',
                 meta: {
                     redirectTo: 'CorpUniver',
@@ -711,7 +714,9 @@ const routes: RouteRecordRaw[] = [
                             label: 'Тестирование по обучению',
                         },
                         component: () =>
-                            import('@pages/TestingPages/components/TestingPages.vue')
+                            import(
+                                '@pages/TestingPages/components/TestingPages.vue'
+                            ),
                     },
                 ],
             },

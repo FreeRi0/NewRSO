@@ -1,3 +1,4 @@
+s
 <template>
     <div class="container">
         <h1 class="title title--mb">Редактирование данных по показателям</h1>
@@ -15,7 +16,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(1)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -71,12 +72,13 @@
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <label class="form__label"
-                                    >Численность членов линейного студенческого
-                                    отряда в соответствии с объемом уплаченных
-                                    членских взносов рассчитывается
-                                    автоматически по состоянию на 15 апреля 2024
-                                    года.
+                                <label
+                                    v-if="report[1]?.place"
+                                    class="form__label"
+                                    >{{ report[1]?.place }}
+                                </label>
+                                <label v-else class="form__label"
+                                    >{{ isError }}
                                 </label>
                             </div>
                         </div>
@@ -94,7 +96,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(2)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -157,11 +159,14 @@
                                             состава пройдена командиром
                                             отряда<span>&nbsp;*</span></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
+                                            v-model="
+                                                report[2].commander_achievement
+                                            "
                                             :options="CommanderChoose"
                                             optionLabel="name"
+                                            :sorts-boolean="true"
                                             class="invents-block invents-select"
                                         />
                                     </div>
@@ -175,6 +180,9 @@
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             :max-length="100"
+                                            v-model:value="
+                                                report[2].commander_link
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -188,12 +196,16 @@
                                             состава пройдена комиссаром
                                             отряда<span>&nbsp;*</span></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="regionalSchool"
+                                            v-model="
+                                                report[2]
+                                                    .commissioner_achievement
+                                            "
                                             :options="Choose"
                                             optionLabel="name"
                                             class="invents-block invents-select"
+                                            :sorts-boolean="true"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -206,6 +218,9 @@
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="
+                                                report[2].commissioner_link
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -219,6 +234,7 @@
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(2)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -239,7 +255,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(3)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -295,12 +311,13 @@
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <label class="form__label"
-                                    >Для получения баллов по данному показателю
-                                    Командиру и Комиссару ЛСО необходимо пройти
-                                    тестирование. Для прохождения теста
-                                    перейдите в «Личный кабинет» —
-                                    «Корпоративный университет» — «Тест».
+                                <label
+                                    v-if="report[3]?.place"
+                                    class="form__label"
+                                    >{{ report[3]?.place }}
+                                </label>
+                                <label v-else class="form__label"
+                                    >{{ isError }}
                                 </label>
                             </div>
                             <div class="form__field-group-bottom">
@@ -325,7 +342,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(4)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -381,13 +398,14 @@
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <label class="form__label"
-                                    >Для получения баллов по данному показателю
-                                    участникам ЛСО необходимо пройти
-                                    тестирование. Для прохождения теста
-                                    перейдите в «Личный кабинет» - «Охрана
-                                    труда» - «Тест».
-                                </label>
+                                <label
+                                    v-if="report[4]?.place"
+                                    class="form__label"
+                                    >{{ report[4]?.place }}</label
+                                >
+                                <label v-else class="form__label">{{
+                                    isError
+                                }}</label>
                             </div>
                             <div class="form__field-group-bottom">
                                 <p>
@@ -409,7 +427,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(5)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -516,6 +534,7 @@
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(5)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -537,7 +556,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(6)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -633,6 +652,7 @@
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(6)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -940,7 +960,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(7)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1094,7 +1114,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(8)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1248,7 +1268,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(9)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1384,7 +1404,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(10)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1520,7 +1540,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(11)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1655,7 +1675,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(12)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1723,6 +1743,7 @@
                                         <Input
                                             placeholder="Например, Творческий фестиваль на ВСС «Мирный атом»"
                                             max-length="100"
+                                            v-model="report[12].event_name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -1736,7 +1757,7 @@
                                         >
                                         <Dropdown
                                             placeholder="Например, 1"
-                                            v-model="prizePlace"
+                                            v-model="report[12].prize_place"
                                             :options="prizePlaceChoose"
                                             optionLabel="name"
                                             class="invents-block invents-select"
@@ -1757,6 +1778,9 @@
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             chooseLabel="Выбрать файл"
+                                            v-model="
+                                                report[12].certificate_scans
+                                            "
                                         />
                                     </div>
                                     <div class="form__field add-block">
@@ -1770,6 +1794,7 @@
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(12)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1789,7 +1814,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(13)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1887,6 +1912,7 @@
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(13)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1908,7 +1934,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(14)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2030,7 +2056,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(15)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2189,7 +2215,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(16)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2370,7 +2396,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(17)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2470,6 +2496,7 @@
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(17)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2490,7 +2517,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(18)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2559,6 +2586,9 @@
                                             type="number"
                                             placeholder="Например, 10"
                                             max-length="100"
+                                            v-model:value="
+                                                report[18].participants_number
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2572,6 +2602,7 @@
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(18)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2593,7 +2624,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(19)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2661,7 +2692,9 @@
                                         >
                                         <Dropdown
                                             placeholder="Например, отсутствуют"
-                                            v-model="precaution"
+                                            v-model="
+                                                report[19].safety_violations
+                                            "
                                             :options="precautionChoose"
                                             optionLabel="name"
                                             class="invents-block invents-select"
@@ -2675,6 +2708,7 @@
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(19)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2696,7 +2730,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
+                            <v-icon v-if="!expanded" @click="getParameters(20)">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2762,6 +2796,9 @@
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="
+                                                report[20].link_emblem
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2774,6 +2811,9 @@
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="
+                                                report[20].link_emblem_img
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2786,6 +2826,7 @@
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="report[20].link_flag"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2798,6 +2839,9 @@
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="
+                                                report[20].link_flag_img
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2810,6 +2854,9 @@
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="
+                                                report[20].link_banner
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2822,6 +2869,9 @@
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="
+                                                reportPost[20].link_banner_img
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2835,6 +2885,7 @@
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(20)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2853,14 +2904,24 @@ import Dropdown from 'primevue/dropdown';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+import { sortByEducation } from '@shared/components/selects';
+
+const route = useRoute();
 
 const regionalSchool = ref();
-const Choose = ref([{ name: 'Да' }, { name: 'Нет' }]);
+const Choose = ref([
+    { value: 'true', name: 'Да' },
+    { value: 'false', name: 'Нет' },
+]);
 
 const regionalSchoolCommander = ref();
-const CommanderChoose = ref([{ name: 'Да' }, { name: 'Нет' }]);
+const CommanderChoose = ref([
+    { value: 'true', name: 'Да' },
+    { value: 'false', name: 'Нет' },
+]);
 
-const precaution = ref();
 const precautionChoose = ref([{ name: 'Отсутствуют' }, { name: 'Имеются' }]);
 
 const status = ref();
@@ -2890,6 +2951,124 @@ const blocks = ref([{ value: '' }]);
 
 const addNewBlock = () => {
     blocks.value.push({ value: '' });
+};
+
+const report = ref({
+    1: { place: '' },
+    2: {
+        commander_achievement: null,
+        commissioner_achievement: null,
+        commander_link: '',
+        commissioner_link: '',
+    },
+    3: { place: '' },
+    4: { place: '' },
+    5: { participants_data: '' },
+    7: {
+        event_name: '',
+        number_of_participants: '',
+        links: '',
+        certificate_scans: '',
+    },
+    8: {
+        event_name: '',
+        number_of_participants: '',
+        links: '',
+        certificate_scans: '',
+    },
+    9: { event_name: '', prize_place: '', certificate_scans: '' },
+    10: { event_name: '', prize_place: '', certificate_scans: '' },
+    11: { event_name: '', prize_place: '', certificate_scans: '' },
+    12: { event_name: '', prize_place: '', certificate_scans: '' },
+    13: { organization_data: '' },
+    18: { participants_number: '' },
+    19: { safety_violations: '' },
+    20: {
+        link_emblem: '',
+        link_emblem_img: '',
+        link_flag: '',
+        link_flag_img: '',
+        link_banner: '',
+        link_banner_img: '',
+    },
+});
+const isError = ref([]);
+const reportPost = ref({
+    1: { place: '' },
+    2: {
+        commander_achievement: '',
+        commissioner_achievement: '',
+        commander_link: '',
+        commissioner_link: '',
+    },
+    3: { place: '' },
+    4: { place: '' },
+    5: { participants_data: '' },
+    7: {
+        event_name: '',
+        number_of_participants: '',
+        links: '',
+        certificate_scans: '',
+    },
+    8: {
+        event_name: '',
+        number_of_participants: '',
+        links: '',
+        certificate_scans: '',
+    },
+    9: { event_name: '', prize_place: '', certificate_scans: '' },
+    10: { event_name: '', prize_place: '', certificate_scans: '' },
+    11: { event_name: '', prize_place: '', certificate_scans: '' },
+    12: { event_name: '', prize_place: '', certificate_scans: '' },
+    13: { organization_data: '' },
+    18: { participants_number: '' },
+    19: { safety_violations: '' },
+    20: {
+        link_emblem: '',
+        link_emblem_img: '',
+        link_flag: '',
+        link_flag_img: '',
+        link_banner: '',
+        link_banner_img: '',
+    },
+});
+
+const getParameters = async (id) => {
+    try {
+        const response = await HTTP.get(
+            `/competitions/${route.params.competition_pk}/reports/q${id}/` +
+                ((id == 1) | 3 | 4 ? 'get_place/' : ''),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        if ((id == 1) | 3 | 4) report.value[id] = response.data;
+        else if (response.data.results.lenght)
+            report.value[id] = response.data.results;
+    } catch (error) {
+        isError.value = error.response.data;
+        console.log('an error occured ' + error);
+    }
+};
+const postParameters = async (id) => {
+    try {
+        await HTTP.post(
+            `/competitions/${route.params.competition_pk}/reports/q${id}/`,
+            report.value[id],
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 </script>
 <style>
