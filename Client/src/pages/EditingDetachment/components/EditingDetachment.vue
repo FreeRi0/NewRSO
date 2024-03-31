@@ -128,7 +128,7 @@ const getMembers = async () => {
                 },
             );
 
-            members.value = membersResponse.data;
+            members.value = membersResponse.data.results;
             /*if (members.value.length) {
                 members.value.forEach((member) => {
                     member.position = member.position?.id;
@@ -267,7 +267,7 @@ const changeDetachment = async () => {
     formData.append('slogan', detachment.value.slogan);
     formData.append('about', detachment.value.about);
 
-    for (let member of members.value.results) {
+    for (let member of members.value) {
         if (member.change) {
             await HTTP.patch(
                 `/detachments/${id}/members/${member.id}/`,

@@ -11,10 +11,10 @@
                 </v-btn>
                 <v-btn
                     class="squads-tabs__item"
-                    :class="{ active: picked === area }"
-                    v-for="area in categories.areas.value"
+                    :class="{ active: picked === area.name }"
+                    v-for="area in squadsStore.areas"
                     :key="area"
-                    @click="picked = area"
+                    @click="picked = area.name"
                     >{{ area.name }}
                 </v-btn>
             </div>
@@ -102,27 +102,22 @@
                 ></horizontalCompetitionList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="isLoading.isLoading.value"
+                    v-if="isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
-                <p
-                    v-else-if="
-                        !isLoading.isLoading.value && !sortedSquads.length
-                    "
-                >
+                <p v-else-if="!isLoading && !sortedSquads.length">
                     Ничего не найдено
                 </p>
             </div>
-            <Button
-                @click="next"
-                v-if="
-                    squads.competitionSquads.value.length <
-                    squadsStore.totalCompetitions
-                "
-                label="Показать еще"
-            ></Button>
-            <Button @click="prev" v-else label="Свернуть все"></Button>
+            <template v-if="detachments.count && detachments.count > limit">
+                <Button
+                    @click="next"
+                    v-if="sortedSquads.length < detachments.count"
+                    label="Показать еще"
+                ></Button>
+                <Button @click="prev" v-else label="Свернуть все"></Button>
+            </template>
         </div>
     </div>
 </template>
@@ -136,92 +131,127 @@ import {
     sortByEducation,
     educInstitutionDropdown,
 } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
 
 const squadsStore = useSquadsStore();
-const squads = storeToRefs(squadsStore);
-const isLoading = storeToRefs(squadsStore);
-const categories = storeToRefs(squadsStore);
+// const categories = storeToRefs(squadsStore);
 const name = ref('');
+const isLoading = ref(false);
+const detachments = ref({});
+const isTandem = ref(true);
+const limit = 24;
+const sortBy = ref('junior_detachment__name');
 const education = ref(null);
 const next = () => {
-    squadsStore.getNextCompetitionSquads();
+    getCompetitons('next');
 };
 const prev = () => {
-    squadsStore.getCompetitionSquads();
+    if (switched.value) {
+        getCompetitons();
+    } else {
+        getCompetitons();
+    }
 };
 const ascending = ref(true);
-const sortBy = ref();
-
 const picked = ref('');
 const switched = ref(true);
 const timerSearch = ref(null);
 const selectedSort = ref(null);
+const sortedSquads = ref([]);
 
 const sortOptionss = ref([
     {
-        value: 'alphabetically',
+        value: 'junior_detachment__name',
         name: 'Алфавиту от А - Я',
     },
+    { value: 'created_at', name: 'Дате создания отряда' },
 ]);
 
-const searchCompetitions = (event) => {
-    if (!name.value.length) {
-        squadsStore.searchCompetitionSquads(name.value);
-    } else if (name.value) {
-        squadsStore.searchCompetitionSquads(name.value);
+const getCompetitons = async (pagination, orderLimit) => {
+    if (isLoading.value) return false;
+    try {
+        isLoading.value = true;
+        let data = [];
+        let url = '/competitions/1/participants/?';
+        if (orderLimit) data.push('limit=' + orderLimit);
+        else if (!pagination) data.push('limit=' + limit);
+        else if (pagination == 'next')
+            url = detachments.value.next.replace('http', 'https');
+        if (name.value) data.push('search=' + name.value);
+        if (isTandem.value) data.push('is_tandem=' + isTandem.value);
+        else if(!isTandem.value) data.push('is_tandem=' + isTandem.value);
+        // if (education.value)
+        //     data.push('educational_institution__name=' + education.value);
+        if (picked.value) data.push('area=' + picked.value);
+        if (sortBy.value && !pagination)
+            data.push(
+                'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
+            );
+        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        isLoading.value = false;
+
+        let response = viewHeadquartersResponse.data;
+        if (pagination) {
+            response.results = [
+                ...detachments.value.results,
+                ...response.results,
+            ];
+        }
+        detachments.value = response;
+        sortedSquads.value = response.results;
+    } catch (error) {
+        console.log('an error occured ' + error);
     }
-    clearTimeout(timerSearch.value);
-    timerSearch.value = setTimeout(() => {}, 400);
 };
 
-const sortedSquads = computed(() => {
-    let tempSquads = squads.competitionSquads.value;
-    if (switched.value) {
-        tempSquads = tempSquads.filter((item) => item.detachment);
-    } else {
-        tempSquads = tempSquads.filter((item) => !item.detachment);
-    }
-    tempSquads = tempSquads.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa =
-                    a.junior_detachment?.name.toLowerCase() ||
-                    a.detachment?.name.toLowerCase(),
-                fb =
-                    b.junior_detachment?.name.toLowerCase() ||
-                    b.detachment?.name.toLowerCase();
+const searchCompetitions = (event) => {
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        getCompetitons();
+    }, 400);
+};
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
+watch(
+    () => switched.value,
+    () => {
+        if (switched.value) {
+            isTandem.value = true;
+            getCompetitons();
+        } else {
+            isTandem.value = false;
+            getCompetitons();
         }
-    });
-
-    if (!ascending.value) {
-        tempSquads.reverse();
-    }
-
-    if (!picked.value) {
-        return tempSquads;
-    }
-    tempSquads = tempSquads.filter(
-        (item) =>
-            item.junior_detachment?.area === picked.value.name ||
-            item.detachment?.area === picked.value.name,
-    );
-    // tempSquads = tempSquads.slice(0, squadsVisible.value);
-    return tempSquads;
-});
+    },
+);
+watch(
+    () => picked.value,
+    () => {
+        getCompetitons();
+    },
+);
+watch(
+    () => sortBy.value,
+    () => {
+        getCompetitons('', sortedSquads.value.length);
+    },
+);
+watch(
+    () => ascending.value,
+    () => {
+        getCompetitons('', sortedSquads.value.length);
+    },
+);
 
 onMounted(() => {
-    squadsStore.getCompetitionSquads();
+    getCompetitons();
 });
 </script>
 <style lang="scss" scoped>

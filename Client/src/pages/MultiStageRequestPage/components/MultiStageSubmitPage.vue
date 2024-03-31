@@ -114,8 +114,7 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .container {
-    margin: 0 auto;
-    padding: 0px 130px 60px 130px;
+    padding-bottom: 60p;
 }
 .main_title {
     margin: 40px 0px;

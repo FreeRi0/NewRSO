@@ -57,15 +57,13 @@ export const useRegionalsStore = defineStore('regionals', {
                 console.log('an error occured ' + err);
             }
         },
-        async getRegionals(name: String) {
+        async getRegionals() {
             try {
                 this.isLoading = true;
                 const responseRegionals = await HTTP.get(
-                    `/regionals/?ordering=${name}`,
+                    `/regionals/`,
                     {
-                        params: {
-                            limit: this.regionalsLimit,
-                        },
+
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization:
@@ -73,9 +71,8 @@ export const useRegionalsStore = defineStore('regionals', {
                         },
                     },
                 );
-                this.totalRegionals = responseRegionals.data.count;
                 this.regionals = responseRegionals.data.results;
-                this.nextRegionals = responseRegionals.data.next;
+
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -83,10 +80,10 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
 
-        async getRegionalsForFilters() {
+        async getRegionalsForFilters(name: String) {
             try {
                 this.isLoading = true;
-                const responseRegionals = await HTTP.get(`/regionals/`, {
+                const responseRegionals = await HTTP.get(`/regionals/?ordering=${name}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -100,30 +97,30 @@ export const useRegionalsStore = defineStore('regionals', {
             }
         },
 
-        async getNextRegionals() {
-            try {
-                this.isLoading = true;
+        // async getNextRegionals() {
+        //     try {
+        //         this.isLoading = true;
 
-                const responseRegionalsNext = await HTTP.get(
-                    this.nextRegionals.replace('http', 'https'),
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
-                this.regionals = this.regionals.concat(
-                    responseRegionalsNext.data.results,
-                );
-                this.nextRegionals = responseRegionalsNext.data.next;
-                this.isLoading = false;
-            } catch (error) {
-                console.log('an error occured' + error);
-                this.isLoading = false;
-            }
-        },
+        //         const responseRegionalsNext = await HTTP.get(
+        //             this.nextRegionals.replace('http', 'https'),
+        //             {
+        //                 headers: {
+        //                     'Content-Type': 'application/json',
+        //                     Authorization:
+        //                         'Token' + localStorage.getItem('Token'),
+        //                 },
+        //             },
+        //         );
+        //         this.regionals = this.regionals.concat(
+        //             responseRegionalsNext.data.results,
+        //         );
+        //         this.nextRegionals = responseRegionalsNext.data.next;
+        //         this.isLoading = false;
+        //     } catch (error) {
+        //         console.log('an error occured' + error);
+        //         this.isLoading = false;
+        //     }
+        // },
         async getRegionalId(id: String) {
             try {
                 this.isLoading = true;

@@ -49,10 +49,10 @@
             :member="member"
             head="Руководство штаба"
             :position="position"
-            :leadership="headquarter.educational.value.leadership"
+            :leadership="educationalsStore.educational.leadership"
         ></ManagementHQ>
         <DetachmentsHQ
-            :headquarter="headquarter.educational.value"
+            :items="educationalsStore.educational?.detachments"
         ></DetachmentsHQ>
     </div>
 </template>

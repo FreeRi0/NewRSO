@@ -79,7 +79,13 @@
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
-                            <div class="d-flex align-center">
+                            <div
+                                class="d-flex align-center"
+                                v-if="
+                                    roleStore.roles
+                                        .regionalheadquarter_commander
+                                "
+                            >
                                 <div class="contributor-sort__all">
                                     <input
                                         type="checkbox"
@@ -90,8 +96,6 @@
                                 </div>
                                 <div class="ml-3">Выбрать всё</div>
                             </div>
-
-                            <!-- <p>Выбрать все</p> -->
                             <div class="participants__actions">
                                 <div class="participants__actions-select mr-3">
                                     <sortByEducation
@@ -315,7 +319,6 @@ const updateDistrict = (districtVal) => {
     //     (dis) => dis.name == districtVal,
     // )?.id;
     district.value = districtVal;
-
 };
 
 const updateReg = (regVal) => {
@@ -331,7 +334,6 @@ const updateReg = (regVal) => {
     getFiltersData('/educationals/', search);
 
     reg.value = regVal;
-
 };
 const updateLocal = (localVal) => {
     let search = '';
@@ -345,7 +347,6 @@ const updateLocal = (localVal) => {
     getFiltersData('/educationals/', search);
 
     local.value = localVal;
-
 };
 
 const updateEduc = (educVal) => {
@@ -364,7 +365,6 @@ const updateEduc = (educVal) => {
     getFiltersData('/detachments/', search);
 
     educ.value = educVal;
-
 };
 
 const updateDetachment = (detachmentVal) => {
@@ -422,13 +422,13 @@ const ChangeStatus = async (id) => {
                 },
             },
         );
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'успешно',
-            showConfirmButton: false,
-            timer: 1500,
-        });
+        checkboxAll.value = false;
+
+        for (let i in participants.value) {
+            if (id === participants.value[i].id) {
+                participants.value[i].membership_fee = true;
+            }
+        }
     } catch (error) {
         isError.value = error.response.data;
         console.error('There was an error!', error);
@@ -456,13 +456,13 @@ const ChangeCancelStatus = async (id) => {
             },
             {},
         );
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'успешно',
-            showConfirmButton: false,
-            timer: 1500,
-        });
+
+        checkboxAll.value = false;
+        for (let i in participants.value) {
+            if (id === participants.value[i].id) {
+                participants.value[i].membership_fee = false;
+            }
+        }
     } catch (error) {
         isError.value = error.response.data;
         console.error('There was an error!', error);
@@ -539,6 +539,7 @@ const onAction = async () => {
                 await ChangeCancelStatus(application.id);
             }
             application.selected = false;
+
             selectedPeoples.value = selectedPeoples.value.filter(
                 (participant) => participant.id != application.id,
             );
@@ -555,7 +556,6 @@ const onAction = async () => {
         } else if (detachment.value) {
             search = '?detachment__name=' + detachment.value;
         }
-        viewContributorsData(search);
     } catch (e) {
         console.log('error action', e);
     }

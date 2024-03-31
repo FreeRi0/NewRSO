@@ -504,7 +504,8 @@ const routes: RouteRecordRaw[] = [
                         meta: {
                             requiresAuth: true,
                             redirectTo: 'Action',
-                            label: 'Мероприятие',
+                            label: 'event.name',
+                            isObject: true,
                         },
                         children: [
                             {
@@ -775,14 +776,37 @@ const routes: RouteRecordRaw[] = [
 
             {
                 path: '/contributorPay',
-                name: 'contributorPay',
-                component: () =>
-                    import(
-                        '@pages/ContributionPage/components/ContributorPay.vue'
-                    ),
                 meta: {
                     label: 'Членский взнос',
+                    redirectTo: 'contributorPay',
                 },
+                children: [
+                    {
+                        path: '',
+                        name: 'contributorPay',
+                        meta: {},
+                        component: () =>
+                            import(
+                                '@pages/ContributionPage/components/ContributorPay.vue'
+                            ),
+                    },
+                    {
+                        path: ':id',
+                        children: [
+                            {
+                                path: 'personal',
+                                meta: {
+                                    label: 'Персональные данные пользователя',
+                                },
+                                name: 'PersonalDataUserContributor',
+                                component: () =>
+                                    import(
+                                        '@pages/PersonalDataPage/components/PersonalDataID.vue'
+                                    ),
+                            },
+                        ],
+                    },
+                ],
             },
 
             {

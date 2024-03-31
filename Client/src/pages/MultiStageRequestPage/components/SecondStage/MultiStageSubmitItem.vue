@@ -80,7 +80,6 @@ watch(
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
-    margin-left: 12px;
     margin-bottom: 12px;
 }
 .containerHorizontal {

@@ -80,7 +80,7 @@
                     <div class="sort-select">
                         <v-select
                             class="form__select filter-district"
-                            :items="districts"
+                            :items="districtsStore.districts"
                             clearable
                             variant="outlined"
                             name="select_district"
@@ -103,7 +103,7 @@
                             class="sort-alphabet"
                             :sorts-boolean="false"
                             placeholder="Выберите фильтр"
-                            @update:modelValue="sortRegionals"
+
                         ></sortByEducation>
                     </div>
 
@@ -123,13 +123,13 @@
                 ></RegionalHQList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="isLoading.isLoading.value"
+                    v-if="isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
                 <p
                     v-else-if="
-                        !isLoading.isLoading.value &&
+                        !isLoading &&
                         !sortedRegionalHeadquarters.length
                     "
                 >
@@ -143,28 +143,30 @@
                 ></HorizontalRegionalHQs>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="isLoading.isLoading.value"
+                    v-if="isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
                 <p
                     v-else-if="
-                        !isLoading.isLoading.value &&
+                        !isLoading &&
                         !sortedRegionalHeadquarters.length
                     "
                 >
                     Ничего не найдено
                 </p>
             </div>
-            <Button
-                @click="next"
-                v-if="
-                    regionalsStore.regionals.length <
-                    regionalsStore.totalRegionals
-                "
-                label="Показать еще"
-            ></Button>
-            <Button @click="prev" v-else label="Свернуть все"></Button>
+            <template v-if='regionals.count && regionals.count > limit'>
+              <Button
+                  @click="next"
+                  v-if="
+                      sortedRegionalHeadquarters.length <
+                     regionals.count
+                  "
+                  label="Показать еще"
+              ></Button>
+              <Button @click="prev" v-else label="Свернуть все"></Button>
+            </template>
         </div>
     </div>
 </template>
@@ -177,34 +179,37 @@ import {
     HorizontalRegionalHQs,
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, computed, onMounted, onActivated } from 'vue';
+import { ref, computed, onMounted, onActivated, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 import { onBeforeRouteLeave } from 'vue-router';
+import { useDistrictsStore } from '@features/store/districts';
 import { useCrosspageFilter } from '@shared';
 
 const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
-
-const regionalHeadquarters = storeToRefs(regionalsStore);
-const isLoading = storeToRefs(regionalsStore);
+const districtsStore = useDistrictsStore();
+const isLoading = ref(false);
 
 const ascending = ref(true);
 const sortBy = ref('name');
+const limit = 4;
 
 const vertical = ref(true);
 
 const name = ref('');
+const regionals = ref({});
 
 const timerSearch = ref(null);
 
+
 const next = () => {
-    regionalsStore.getNextRegionals();
+    getRegionals('next')
 };
 
 const prev = () => {
-    regionalsStore.getRegionals(sortBy.value);
+    getRegionals();
 };
 
 const showVertical = () => {
@@ -215,37 +220,34 @@ const selectedSortDistrict = ref(
         ?.districtName ?? '',
 );
 
-const districts = ref([]);
+const sortedRegionalHeadquarters = ref([]);
 
-const sortRegionals = () => {
-    regionalsStore.getRegionals(sortBy.value);
-};
 
 const searchReg = (event) => {
     clearTimeout(timerSearch.value);
     timerSearch.value = setTimeout(() => {
-        regionalsStore.searchRegionalsHead(name.value);
+        getRegionals()
     }, 400);
 };
 
-const filtersDistricts = computed(() =>
-    selectedSortDistrict.value
-        ? districts.value.find(
-              (district) => district.name === selectedSortDistrict.value,
-          )?.regional_headquarters ?? []
-        : regionalHeadquarters.regionals.value,
-);
+// const filtersDistricts = computed(() =>
+//     selectedSortDistrict.value
+//         ? districts.value.find(
+//               (district) => district.name === selectedSortDistrict.value,
+//           )?.regional_headquarters ?? []
+//         : regionalHeadquarters.regionals.value,
+// );
 
-const getDistrictsHeadquartersForFilters = async () => {
-    try {
-        const { data } = await HTTP.get('/districts/');
-        districts.value = data.results;
-    } catch (e) {
-        console.log('error request districts headquarters');
-    }
-};
+// const getDistrictsHeadquartersForFilters = async () => {
+//     try {
+//         const { data } = await HTTP.get('/districts/');
+//         districts.value = data.results;
+//     } catch (e) {
+//         console.log('error request districts headquarters');
+//     }
+// };
 
-const selectedSort = ref(0);
+// const selectedSort = ref(0);
 
 const sortOptionss = ref([
     {
@@ -253,47 +255,38 @@ const sortOptionss = ref([
         name: 'Алфавиту от А - Я',
     },
     { value: 'founding_date', name: 'Дате создания штаба' },
-    { value: 'members_count', name: 'Количеству участников' },
 ]);
 
-const sortedRegionalHeadquarters = computed(() => {
-    let tempHeadquarters = [...regionalHeadquarters.regionals.value];
-    if (selectedSortDistrict.value) {
-        let districtId = districts.value.find(
-            (district) => district.name === selectedSortDistrict.value,
-        )?.id;
-
-        tempHeadquarters = tempHeadquarters.filter((item) => {
-            return item.district_headquarter === districtId;
+const getRegionals = async (pagination, orderLimit) => {
+    try {
+        isLoading.value = true;
+        let data = [];
+        let url = '/regionals/?';
+        if (orderLimit) data.push('limit='+orderLimit);
+        else if (!pagination) data.push('limit='+limit);
+        else if (pagination == 'next') url = regionals.value.next.replace('http','https');
+        if (name.value) data.push('search='+name.value)
+        if (selectedSortDistrict.value) data.push('district_headquarter__name='+selectedSortDistrict.value)
+        if (sortBy.value && !pagination) data.push('ordering='+(ascending.value?'':'-')+sortBy.value)
+        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         });
-    }
+        isLoading.value = false;
 
-    // сортировка
-    tempHeadquarters = tempHeadquarters.sort((a, b) => {
-        if (sortBy.value === 'alphabetically') {
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value === 'founding_date') {
-            return a.founding_date - b.founding_date;
-        } else if (sortBy.value === 'members_count') {
-            return a.members_count - b.members_count;
+        let response = viewHeadquartersResponse.data;
+        if (pagination){
+            response.results = [...regionals.value.results, ...response.results];
         }
-    });
-
-    if (!ascending.value) {
-        tempHeadquarters.reverse();
+        regionals.value = response;
+        sortedRegionalHeadquarters.value = response.results
+    } catch (error) {
+      console.log('an error occured ' + error);
     }
+};
 
-    return tempHeadquarters;
-});
 
 onBeforeRouteLeave(async (to, from) => {
     const pageName = 'regionalHeadquarters';
@@ -312,9 +305,29 @@ onActivated(() => {
     localStorage.removeItem('regionalHeadquarters_filters');
 });
 
+watch(
+    () => selectedSortDistrict.value,
+    () => {
+        getRegionals();
+    },
+);
+
+watch(
+    () => sortBy.value,
+    () => {
+     getRegionals('', sortedRegionalHeadquarters.value.length);
+    },
+);
+watch(
+    () => ascending.value,
+    () => {
+        getRegionals('', sortedRegionalHeadquarters.value.length);
+    },
+);
+
 onMounted(() => {
-    regionalsStore.getRegionals(sortBy.value);
-    getDistrictsHeadquartersForFilters();
+  districtsStore.getDistricts();
+    getRegionals();
 });
 </script>
 <style lang="scss">

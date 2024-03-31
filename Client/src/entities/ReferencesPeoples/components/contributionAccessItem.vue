@@ -1,13 +1,20 @@
 <template>
     <div class="horizontallso">
-        <div class="horizontallso__confidant mr-3">
+        <div class="horizontallso__confidant mr-3" v-if="roleStore.roles.regionalheadquarter_commander
+">
             <input
                 type="checkbox"
                 v-model="checked"
                 @change="updateMembership"
             />
         </div>
-        <div class="horizontallso-item__wrapper">
+        <router-link
+            :to="{
+                name: 'PersonalDataUserContributor',
+                params: { id: participant.id },
+            }"
+            class="horizontallso-item__wrapper"
+        >
             <div class="horizontallso-img">
                 <img
                     :src="participant.media?.photo"
@@ -38,7 +45,7 @@
                     <p>{{ participant.date_of_birth }}</p>
                 </div>
             </div>
-        </div>
+        </router-link>
 
         <div class="horizontallso-info">
             <p v-if="participant.membership_fee">Оплачен</p>
@@ -48,7 +55,9 @@
 </template>
 <script setup>
 import { ref, watch } from 'vue';
+import { useRoleStore } from '@layouts/store/role';
 
+const roleStore = useRoleStore();
 const props = defineProps({
     participant: {
         type: Object,
@@ -69,12 +78,6 @@ watch(
     () => props.participant.selected,
     (newSelected) => {
         checked.value = newSelected;
-        // const checkedItem = newSelected.find(
-        //     (item) => item.id == props.participant.id,
-        // );
-        // console.log('checkedItem', checkedItem);
-        // if (!checkedItem) checked.value = false;
-        // else checked.value = true;
     },
 );
 </script>

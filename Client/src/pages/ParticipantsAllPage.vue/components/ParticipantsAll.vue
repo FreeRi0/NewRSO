@@ -1,4 +1,5 @@
 <template>
+    <keep-alive>
     <div class="container">
         <div class="participants">
             <h2 class="participants-title">Участники ЛСО</h2>
@@ -26,7 +27,8 @@
                     type="text"
                     id="search"
                     class="participants-search__input"
-                    v-model="searchParticipants"
+                    v-model="name"
+                    @keyup="searchMembers"
                     placeholder="Иванов Иван"
                 />
                 <svg
@@ -108,7 +110,7 @@
                     v-if="picked"
                     :participants="sortedParticipants"
                 ></ParticipantsList>
-                <VerifiedList v-else :verified="sortedVerified"></VerifiedList>
+                <VerifiedList v-else :verified="verified"></VerifiedList>
             </div>
 
             <div class="horizontallso" v-show="!vertical">
@@ -118,17 +120,20 @@
                 ></horizontalParticipantsList>
                 <VerifiedHorizontal
                     v-else
-                    :verified="sortedVerified"
+                    :verified="verified"
                 ></VerifiedHorizontal>
             </div>
-            <Button
-                @click="next"
-                v-if="squadsStore.members.length < squadsStore.totalMembers"
-                label="Показать еще"
-            ></Button>
-            <Button @click="prev" v-else label="Свернуть все"></Button>
+            <template v-if="peoples.count && peoples.count > limit">
+                <Button
+                    @click="next"
+                    v-if="sortedParticipants.length < peoples.count"
+                    label="Показать еще"
+                ></Button>
+                <Button @click="prev" v-else label="Свернуть все"></Button>
+            </template>
         </div>
     </div>
+    </keep-alive>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
@@ -140,18 +145,18 @@ import {
 } from '@features/Participants/components';
 import { sortByEducation } from '@shared/components/selects';
 import { useSquadsStore } from '@features/store/squads';
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, onActivated } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
-const participantsVisible = ref(12);
-
 const squadsStore = useSquadsStore();
-const step = ref(12);
 const picked = ref(true);
 const route = useRoute();
 const verified = ref([]);
-const id = route.params.id;
+
+const isLoading = ref(false);
+const limit = 10;
+const timerSearch = ref(null);
 
 const aboutVerified = async () => {
     await HTTP.get(`/detachments/${id}/applications/`, {
@@ -170,133 +175,90 @@ const aboutVerified = async () => {
 };
 
 const ascending = ref(true);
-const sortBy = ref('alphabetically');
+const sortBy = ref('user__date_of_birth');
 const vertical = ref(true);
-
+const peoples = ref({});
+const sortedParticipants = ref([]);
 const searchParticipants = ref('');
 
 const showVertical = () => {
     vertical.value = !vertical.value;
 };
+const name = ref('');
 
 const next = () => {
-    squadsStore.getNextMembers();
+    getMembers('next');
 };
 
 const prev = () => {
-    squadsStore.getSquadMembers();
+    getMembers();
 };
+
+let id = route.params.id;
 
 const sortOptionss = ref([
     {
-        value: 'alphabetically',
+        value: 'user__last_name',
         name: 'Алфавиту от А - Я',
     },
-    { value: 'birthdate', name: 'По дате рождения' },
-    { value: 'days', name: 'Количество дней в отряде' },
+    { value: 'user__date_of_birth', name: 'По дате рождения' },
 ]);
 
-const sortedParticipants = computed(() => {
-    let tempParticipants = squadsStore.members;
+const getMembers = async (pagination, orderLimit) => {
+    try {
+        let data = [];
+        let url = `/detachments/${id}/members/?`;
+        if (orderLimit) data.push('limit=' + orderLimit);
+        else if (!pagination) data.push('limit=' + limit);
+        else if (pagination == 'next')
+            url = peoples.value.next.replace('http', 'https');
+        if (name.value) data.push('search=' + name.value);
+        if (sortBy.value && !pagination)
+            data.push(
+                'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
+            );
+        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
 
-    tempParticipants = tempParticipants.filter((item) => {
-        return item.user.last_name
-            .toUpperCase()
-            .includes(searchParticipants.value.toUpperCase());
-    });
-
-    tempParticipants = tempParticipants.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.user.last_name.toLowerCase(),
-                fb = b.user.last_name.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'date_of_birth') {
-            let fc = a.user.date_of_birth,
-                fn = b.user.date_of_birth;
-
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'days') {
-            return a.days - b.days;
+        let response = viewHeadquartersResponse.data;
+        if (pagination) {
+            response.results = [...peoples.value.results, ...response.results];
         }
-    });
-
-    if (!ascending.value) {
-        tempParticipants.reverse();
+        peoples.value = response;
+        sortedParticipants.value = response.results;
+    } catch (error) {
+        console.log('an error occured ' + error);
     }
-    tempParticipants = tempParticipants.slice(0, participantsVisible.value);
-    return tempParticipants;
-});
+};
 
-const sortedVerified = computed(() => {
-    let tempVerified = verified.value;
-
-    tempVerified = tempVerified.filter((item) => {
-        return item.user.last_name
-            .toUpperCase()
-            .includes(searchParticipants.value.toUpperCase());
-    });
-
-    tempVerified = tempVerified.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.user.last_name.toLowerCase(),
-                fb = b.user.last_name.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'date_of_birth') {
-            let fc = a.user.date_of_birth,
-                fn = b.user.date_of_birth;
-
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'days') {
-            return a.days - b.days;
-        }
-    });
-
-    if (!ascending.value) {
-        tempVerified.reverse();
-    }
-
-    tempVerified = tempVerified.slice(0, participantsVisible.value);
-    return tempVerified;
-});
+const searchMembers = () => {
+    clearTimeout(timerSearch.value);
+    timerSearch.value = setTimeout(() => {
+        getMembers();
+    }, 400);
+};
 
 watch(
-    () => route.params.id,
-
-    async (newId, oldId) => {
-        if (!newId || route.name !== 'allparticipants') return;
-        await squadsStore.getSquadMembers(newId);
-        await aboutVerified();
-    },
-    {
-        immediate: true,
+    () => sortBy.value,
+    () => {
+        getMembers('', sortedParticipants.value.length);
     },
 );
+watch(
+    () => ascending.value,
+    () => {
+        getMembers('', sortedParticipants.value.length);
+    },
+);
+onActivated(async () => {
+    id = route.params.id;
+    await getMembers();
+    await aboutVerified();
+})
 </script>
 <style lang="scss">
 .participants {

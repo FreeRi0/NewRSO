@@ -108,7 +108,7 @@ const getHeadquarter = async () => {
             //     console.log(region.id);
             // }
             if (headquarter.value.commander) {
-                headquarter.value.commander = headquarter.value.commander.id;
+                headquarter.value.commander = headquarter.value.commander;
             }
             replaceTargetObjects([headquarter.value]);
             loading.value = false;
@@ -138,7 +138,7 @@ const getMembers = async () => {
                 },
             });
 
-            members.value = membersResponse.data;
+            members.value = membersResponse.data.results;
             /*if (members.value.length) {
                 members.value.forEach((member) => {
                     member.position = member.position?.id;
@@ -225,9 +225,8 @@ const changeHeadquarter = async () => {
             !detComId
         ) {
             formData.append('commander', headquarter.value.meId);
-        } else formData.append('commander', headquarter.value.commander);
-
-        formData.append('commander', headquarter.value.commander);
+        } else formData.append('commander', headquarter.value.commander.id);
+        formData.append('commander', headquarter.value.commander.id);
         formData.append('social_vk', headquarter.value.social_vk);
         formData.append('social_tg', headquarter.value.social_tg);
         formData.append('founding_date', headquarter.value.founding_date);
@@ -243,7 +242,7 @@ const changeHeadquarter = async () => {
         formData.append('slogan', headquarter.value.slogan);
         formData.append('about', headquarter.value.about);
 
-        for (let member of members.value.results) {
+        for (let member of members.value) {
             if (member.change) {
                 await HTTP.patch(
                     `/regionals/${id}/members/${member.id}/`,
@@ -300,9 +299,9 @@ const changeHeadquarter = async () => {
             name: 'RegionalHQ',
             params: { id: headquarter.value.id },
         });
-    } catch (err) {
-        isError.value = err.response.data;
-        isErrorMembers.value = err.response.data;
+    } catch (error) {
+        isError.value = error;
+        isErrorMembers.value = error;
         if (isError.value || isErrorMembers.value) {
             swal.fire({
                 position: 'center',

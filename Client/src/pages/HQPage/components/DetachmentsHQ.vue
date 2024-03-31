@@ -1,10 +1,10 @@
 <template>
-    <section class="headquarters-detachments" v-if="squads.length">
+    <section class="headquarters-detachments" v-if="items.length">
         <h3>Отряды штаба</h3>
         <div class="headquarters-detachments__container">
             <div class="squads">
                 <div>
-                    <squadsList :squads="squads"></squadsList>
+                    <squadsList :squads="items"></squadsList>
                 </div>
             </div>
         </div>
@@ -12,45 +12,14 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { HTTP } from '@app/http';
 import { squadsList } from '@features/Squads/components';
 
-const props = defineProps({
-    headquarter: {
-        type: Object,
-        required: true,
-    },
-});
-const squads = ref([]);
-
-const filteredSquad = async (education) => {
-    try {
-        const { data } = await HTTP.get(
-            `/detachments/?educational_institution__name=${education}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
-        squads.value = data;
-    } catch (error) {
-        console.log('an error occured ' + error);
+defineProps({
+    items: {
+        type: Array,
+        default: () => []
     }
-};
-
-watch(
-    () => props.headquarter,
-
-    (newheadquarter) => {
-        if (Object.keys(props.headquarter).length === 0) {
-            return;
-        }
-        filteredSquad(props.headquarter.educational_institution?.name);
-    },
-);
+});
 </script>
 
 <style scoped lang="scss">

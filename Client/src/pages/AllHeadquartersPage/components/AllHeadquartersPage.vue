@@ -78,7 +78,7 @@
                     <div class="sort-select">
                         <v-select
                             class="form__select filter-district"
-                            :items="districts"
+                            :items="districtsStore.districts"
                             clearable
                             variant="outlined"
                             name="select_district"
@@ -88,14 +88,22 @@
                             placeholder="Окружной штаб"
                         >
                             <template #selection="{ item }">
-                                <pre>{{ item.title }}</pre>
+                                        <pre v-if="!districtsStore.isLoading">{{
+                                                item.title
+                                            }}</pre>
+                                <v-progress-circular
+                                    class="circleLoader"
+                                    v-else
+                                    indeterminate
+                                    color="blue"
+                                ></v-progress-circular>
                             </template>
                         </v-select>
                     </div>
                     <div class="sort-select">
                         <v-select
                             class="form__select filter-district"
-                            :items="regionals"
+                            :items="regionalsStore.regionals"
                             clearable
                             variant="outlined"
                             name="select_region"
@@ -103,6 +111,31 @@
                             v-model="SelectedSortRegional"
                             item-title="name"
                             placeholder="Региональные штабы"
+                        >
+                            <template #selection="{ item }">
+                                        <pre v-if="!regionalsStore.isLoading">{{
+                                                item.title
+                                            }}</pre>
+                                <v-progress-circular
+                                    class="circleLoader"
+                                    v-else
+                                    indeterminate
+                                    color="blue"
+                                ></v-progress-circular>
+                            </template>
+                        </v-select>
+                    </div>
+                    <div class="sort-select" v-if='SelectedSortRegional || SelectedSortLocal'>
+                        <v-select
+                            class="form__select filter-district"
+                            :items="locals"
+                            clearable
+                            variant="outlined"
+                            name="select_local"
+                            id="select-local"
+                            v-model="SelectedSortLocal"
+                            item-title="name"
+                            placeholder="Местные штабы"
                         >
                             <template #selection="{ item }">
                                 <pre>{{ item.title }}</pre>
@@ -118,7 +151,6 @@
                             class="sort-alphabet"
                             :sorts-boolean="false"
                             placeholder="Выберите фильтр"
-                            @update:modelValue="sortEduc"
                         ></sortByEducation>
                     </div>
 
@@ -139,14 +171,12 @@
 
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="isLoading.isLoading.value"
+                    v-if="isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
                 <p
-                    v-else-if="
-                        !isLoading.isLoading.value && !sortedHeadquarters.length
-                    "
+                    v-else-if="!isLoading && !sortedHeadquarters.length"
                 >
                     Ничего не найдено
                 </p>
@@ -157,15 +187,17 @@
                     :headquarters="sortedHeadquarters"
                 ></horizontalHeadquarters>
             </div>
-            <Button
-                @click="next"
-                v-if="
-                    educationalsStore.educationals.length <
-                    educationalsStore.totalEducationals
-                "
-                label="Показать еще"
-            ></Button>
-            <Button @click="prev" v-else label="Свернуть все"></Button>
+            <template v-if='educationals.count && educationals.count > limit'>
+              <Button
+                  @click="next"
+                  v-if="
+                      sortedHeadquarters.length <
+                      educationals.count
+                  "
+                  label="Показать еще"
+              ></Button>
+              <Button @click="prev" v-else label="Свернуть все"></Button>
+            </template>
         </div>
     </div>
 </template>
@@ -177,34 +209,34 @@ import {
     horizontalHeadquarters,
 } from '@features/Headquarters/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
-import { useEducationalsStore } from '@features/store/educationals';
-import { storeToRefs } from 'pinia';
 import { onActivated } from 'vue';
-
-const educationalsStore = useEducationalsStore();
+import { useDistrictsStore } from '@features/store/districts';
+import { useRegionalsStore } from '@features/store/regionals';
 
 const crosspageFilters = useCrosspageFilter();
 
-const headquarters = storeToRefs(educationalsStore);
-
-const isLoading = storeToRefs(educationalsStore);
+const districtsStore = useDistrictsStore();
+const regionalsStore = useRegionalsStore();
 
 const next = () => {
-    educationalsStore.getNextEducationals();
+    getEducationals('next')
 };
 
 const prev = () => {
-    educationalsStore.getEducationals(sortBy.value);
+    getEducationals();
 };
 
 const ascending = ref(true);
 const sortBy = ref('name');
 const timerSearch = ref(null);
 const vertical = ref(true);
+const isLoading = ref(false);
+const educationals = ref({});
+const limit = 4;
 
 const name = ref('');
 
@@ -217,58 +249,69 @@ const SelectedSortDistrict = ref(
 const SelectedSortRegional = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
 );
+const SelectedSortLocal = ref(
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName,
+);
 
 const locals = ref([]);
-const districts = ref([]);
-const regionals = ref([]);
+const sortedHeadquarters = ref([]);
 
-// if (sortBy.value == 'name') {
-//     educationalsStore.getEducationals(sortBy.value);
-// } else if (sortBy.value == 'founding_date') {
-//     educationalsStore.getEducationals(sortBy.value);
-// }
-
-const sortEduc = () => {
-    educationalsStore.getEducationals(sortBy.value);
-}
-
-const getDistrictsHeadquartersForFilters = async () => {
-    try {
-        const { data } = await HTTP.get('/districts/');
-        districts.value = data.results;
-    } catch (e) {
-        console.log('error request districts headquarters');
-    }
-};
-const getRegionalsHeadquartersForFilters = async () => {
-    try {
-        const { data } = await HTTP.get('/regionals/');
-        regionals.value = data.results;
-    } catch (e) {
-        console.log('error request districts headquarters');
-    }
-};
 const getLocalsHeadquartersForFilters = async () => {
+    if (!SelectedSortRegional.value){
+        locals.value = [];
+        return false;
+    }
     try {
-        const { data } = await HTTP.get('/locals/');
+        const { data } = await HTTP.get('/locals/??ordering=' +
+                sortBy.value + 'regional_headquarter__name=' + SelectedSortRegional.value);
         locals.value = data.results;
     } catch (e) {
-        console.log('error request districts headquarters');
+        console.log('error request locals headquarters');
+    }
+};
+const getEducationals = async (pagination, orderLimit) => {
+    try {
+        isLoading.value = true;
+        let data = [];
+        let url = '/educationals/?';
+        if (orderLimit) data.push('limit='+orderLimit);
+        else if (!pagination) data.push('limit='+limit);
+        else if (pagination == 'next') url = educationals.value.next.replace('http','https');
+        if (name.value) data.push('search='+name.value)
+        if (SelectedSortDistrict.value) data.push('district_headquarter__name='+SelectedSortDistrict.value)
+        if (SelectedSortRegional.value) data.push('regional_headquarter__name='+SelectedSortRegional.value)
+        if (SelectedSortLocal.value) data.push('local_headquarter__name='+SelectedSortLocal.value)
+        if (sortBy.value && !pagination) data.push('ordering='+(ascending.value?'':'-')+sortBy.value)
+        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        isLoading.value = false;
+
+        let response = viewHeadquartersResponse.data;
+        if (pagination){
+            response.results = [...educationals.value.results, ...response.results];
+        }
+        educationals.value = response;
+        sortedHeadquarters.value = response.results
+    } catch (error) {
+      console.log('an error occured ' + error);
     }
 };
 
-const searchEducational = (event) => {
+const searchEducational = () => {
     clearTimeout(timerSearch.value);
     timerSearch.value = setTimeout(() => {
-        educationalsStore.searchEducationals(name.value);
+        getEducationals();
     }, 400);
 };
 
 onMounted(() => {
-    getDistrictsHeadquartersForFilters();
-    educationalsStore.getEducationals(sortBy.value);
-    getRegionalsHeadquartersForFilters();
-    getLocalsHeadquartersForFilters();
+    regionalsStore.getRegionalsForFilters(sortBy.value);
+    districtsStore.getDistricts();
+    getEducationals();
 });
 
 const sortOptionss = ref([
@@ -279,43 +322,7 @@ const sortOptionss = ref([
     { value: 'founding_date', name: 'Дате создания штаба' },
 ]);
 
-const sortedHeadquarters = computed(() => {
-    let tempHeadquartes = [];
-
-    tempHeadquartes = [...headquarters.educationals.value];
-
-    if (SelectedSortRegional.value || SelectedSortDistrict.value) {
-        let idRegionals = [];
-        if (SelectedSortDistrict.value) {
-            let districtId = districts.value.find(
-                (district) => district.name === SelectedSortDistrict.value,
-            )?.id;
-            idRegionals = regionals.value
-                .filter(
-                    (regional) => regional.district_headquarter === districtId,
-                )
-                .map((reg) => reg.id);
-        }
-        if (SelectedSortRegional.value) {
-            idRegionals = [
-                regionals.value.find(
-                    (regional) => regional.name === SelectedSortRegional.value,
-                )?.id,
-            ];
-        }
-
-        tempHeadquartes = tempHeadquartes.filter((item) => {
-            return idRegionals.indexOf(item.regional_headquarter) >= 0;
-        });
-    }
-
-    if (!ascending.value) {
-        tempHeadquartes.reverse();
-    }
-    return tempHeadquartes;
-});
-
-onBeforeRouteLeave(async (to, from) => {
+onBeforeRouteLeave(async () => {
     const pageName = 'AllHeadquarters';
     const filtersPropertiesToRemove = [
         'districtName',
@@ -326,16 +333,41 @@ onBeforeRouteLeave(async (to, from) => {
     crosspageFilters.removeFilters(pageName, filtersPropertiesToRemove);
 });
 onActivated(() => {
-    SelectedSortDistrict.value = JSON.parse(
-        localStorage.getItem('AllHeadquarters_filters'),
-    )?.districtName;
-
-    SelectedSortRegional.value = JSON.parse(
-        localStorage.getItem('AllHeadquarters_filters'),
-    )?.regionalName;
     localStorage.removeItem('AllHeadquarters_filters');
 });
+watch(
+    () => SelectedSortDistrict.value,
+    () => {
+        getEducationals();
+    },
+);
+watch(
+    () => SelectedSortRegional.value,
+    () => {
+        getLocalsHeadquartersForFilters();
+      getEducationals();
+    },
+);
+watch(
+    () => SelectedSortLocal.value,
+    () => {
+        getEducationals();
+    },
+);
+watch(
+    () => sortBy.value,
+    () => {
+     getEducationals('', sortedHeadquarters.value.length);
+    },
+);
+watch(
+    () => ascending.value,
+    () => {
+        getEducationals('', sortedHeadquarters.value.length);
+    },
+);
 </script>
+
 <style lang="scss">
 .headquarters {
     padding-bottom: 60px;

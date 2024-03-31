@@ -33,7 +33,7 @@
                         :verified="isVerified.slice(0, 6)"
                     ></VerifiedList>
                 </div>
-                <div v-if="props.member.length > 6 || isVerified.length > 6">
+                <div v-if="props.member.length > 3 || isVerified.length > 6">
                     <router-link
                         :to="{
                             name: 'allparticipants',

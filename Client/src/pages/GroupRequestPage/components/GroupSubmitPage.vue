@@ -16,7 +16,7 @@
         </div>
 
         <div id="wrapper">
-            <div id="left">
+            <div id="left" v-if="width > 768">
                 <group-filters @update-filter="onUpdateFilter" />
 
                 <p class="count">
@@ -75,7 +75,9 @@
                                 variant="outlined"
                                 v-model="sortBy"
                                 :options="sortOptions"
+                                :sorts-boolean="false"
                                 selected="sortBy"
+                                placeholder="Выберите фильтр"
                             ></sortByEducation>
                         </div>
                         <Button
@@ -87,6 +89,7 @@
                         ></Button>
                     </div>
                 </div>
+
                 <group-submit-item
                     v-for="user in sortedUsersList"
                     :key="user.id"
@@ -129,9 +132,11 @@ import { useRouter } from 'vue-router';
 import GroupFilters from './GroupFilters.vue';
 import GroupSubmitItem from './GroupSubmitItem.vue';
 import GroupSubmitSelect from './GroupSubmitSelect.vue';
-import search from '@shared/components/inputs/search.vue';
 
 const sortBy = ref('alphabetically');
+
+const width = ref(0);
+const compressed = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -229,6 +234,7 @@ const getUsersList = async (search) => {
         }
         // usersList.value = data;
         sortedUsersList.value = usersList.value;
+        sortedUsersList.value.sort((a, b) => a.name.localeCompare(b.name));
     } catch (e) {
         console.log('getUsersList error', e);
     }
@@ -297,15 +303,24 @@ const onRemove = (index) => {
     files.value.splice(index, 1);
 };
 
+const onResize = () => {
+    width.value = window.innerWidth;
+    console.log(width.value);
+    if (width.value > 768) {
+        compressed.value = false;
+    } else {
+        compressed.value = true;
+    }
+};
+
 watch(selectedUsersList, (newSelectedUsersList) => {
     isChecked.value = newSelectedUsersList.length == usersList.value.length;
 });
 
 watch(sortBy, () => {
-    console.log(sortedUsersList.value);
-    if (sortBy.value == 'По алфавиту: от А - Я')
+    if (sortBy.value == 'alphabetically')
         sortedUsersList.value.sort((a, b) => a.name.localeCompare(b.name));
-    if (sortBy.value == 'По дате рождения') {
+    if (sortBy.value == 'date_of_birth') {
         sortedUsersList.value.sort((a, b) => {
             if (a.date_of_birth > b.date_of_birth) return 1;
             if (a.date_of_birth == b.date_of_birth) return 0;
@@ -321,6 +336,8 @@ watch(ascending, () => {
 });
 
 onMounted(async () => {
+    onResize();
+    window.addEventListener('resize', onResize);
     await getUsersList('');
 });
 </script>
@@ -328,7 +345,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .container {
     margin: 0 auto;
-    padding: 0px 130px 60px 130px;
+    padding-bottom: 60px;
 }
 .main_title {
     font-family: Akrobat;
@@ -354,15 +371,20 @@ onMounted(async () => {
     text-align: left;
 }
 #wrapper {
-    display: flex;
+    display: grid;
+    grid-template-columns: 276px auto;
+    gap: 24px;
 }
-#left {
-    width: 25%;
-}
-#right {
-    margin-left: 24px;
-    width: 75%;
-}
+// #wrapper {
+//     display: flex;
+// }
+// #left {
+//     width: 25%;
+// }
+// #right {
+//     margin-left: 24px;
+//     width: 75%;
+// }
 .form-input-container {
     border: 1px solid #b6b6b6;
     border-radius: 15px;
@@ -467,6 +489,10 @@ onMounted(async () => {
 .sort_line {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+}
+:deep(.btn_icon) {
+    border-radius: 10px;
 }
 .contributor-search__input {
     width: 100%;
@@ -483,31 +509,6 @@ onMounted(async () => {
     position: absolute;
     top: 15px;
     left: 16px;
-}
-.text_total {
-    width: 1180px;
-    height: 26px;
-    margin-top: 60px;
-    margin-bottom: 40px;
-    font-family: Bert Sans;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 26px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #35383f;
-}
-.competitions__btns {
-    display: grid;
-    width: 100%;
-    justify-content: center;
-    margin-top: 68px;
-    font-family: Bert Sans;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 21px;
-    letter-spacing: 0em;
-    text-align: left;
 }
 .form {
     &-fileupload {
@@ -538,14 +539,6 @@ onMounted(async () => {
         margin-top: 36px;
     }
 }
-.sort-select {
-    &--width {
-        width: 193px;
-    }
-    & > .form__select {
-        margin-bottom: 0px;
-    }
-}
 .count {
     margin-top: 36px;
     font-family: Bert Sans;
@@ -553,5 +546,15 @@ onMounted(async () => {
     font-weight: 500;
     line-height: 21.1px;
     color: #898989;
+}
+:deep(.v-field__outline__start) {
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-inline-start-width: 0px;
+}
+:deep(.v-field__outline__end) {
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-inline-end-width: 0px;
 }
 </style>

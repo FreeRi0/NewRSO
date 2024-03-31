@@ -81,7 +81,7 @@
                     <div class="sort-select">
                         <v-select
                             class="form__select filter-district"
-                            :items="districts"
+                            :items="districtsStore.districts"
                             clearable
                             variant="outlined"
                             name="select_district"
@@ -98,7 +98,7 @@
                     <div class="sort-select">
                         <v-select
                             class="form__select filter-district"
-                            :items="regionals"
+                            :items="regionalsStore.regionals"
                             clearable
                             variant="outlined"
                             name="select_region"
@@ -121,7 +121,6 @@
                             class="sort-alphabet"
                             :sorts-boolean="false"
                             placeholder="Выберите фильтр"
-                            @update:modelValue="sortLocals"
                         ></sortByEducation>
                     </div>
 
@@ -136,46 +135,40 @@
             </div>
             <div v-show="vertical" class="mt-10">
                 <LocalHQList
-                    :localHeadquarters="sortedLocalHeadquarters"
+                    :localHeadquarters="sortedLocalsHeadquarters"
                 ></LocalHQList>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="localStore.isLoading"
+                    v-if="isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
-                <p
-                    v-else-if="
-                        !localStore.isLoading && !sortedLocalHeadquarters.length
-                    "
-                >
+                <p v-else-if="!isLoading && !sortedLocalsHeadquarters.length">
                     Ничего не найдено
                 </p>
             </div>
             <div class="horizontal" v-show="!vertical">
                 <HorizontalLocalHQs
-                    :localHeadquarters="sortedLocalHeadquarters"
+                    :localHeadquarters="sortedLocalsHeadquarters"
                 ></HorizontalLocalHQs>
                 <v-progress-circular
                     class="circleLoader"
-                    v-if="localStore.isLoading"
+                    v-if="isLoading"
                     indeterminate
                     color="blue"
                 ></v-progress-circular>
-                <p
-                    v-else-if="
-                        !localStore.isLoading && !sortedLocalHeadquarters.length
-                    "
-                >
+                <p v-else-if="!isLoading && !sortedLocalsHeadquarters.length">
                     Ничего не найдено
                 </p>
             </div>
-            <Button
-                @click="next"
-                v-if="localStore.locals.length < localStore.totalLocals"
-                label="Показать еще"
-            ></Button>
-            <Button @click="prev" v-else label="Свернуть все"></Button>
+            <template v-if="locals.count && locals.count > limit">
+                <Button
+                    @click="next"
+                    v-if="sortedLocalsHeadquarters.length < locals.count"
+                    label="Показать еще"
+                ></Button>
+                <Button @click="prev" v-else label="Свернуть все"></Button>
+            </template>
         </div>
     </div>
 </template>
@@ -188,35 +181,38 @@ import {
     HorizontalLocalHQs,
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { useLocalsStore } from '@features/store/local';
 import { onActivated } from 'vue';
+import { useDistrictsStore } from '@features/store/districts';
+import { useRegionalsStore } from '@features/store/regionals';
 
 const crosspageFilters = useCrosspageFilter();
 
 const localStore = useLocalsStore();
-
-const localHeadquarters = ref([]);
-
-const isLocalLoading = ref(false);
+const districtsStore = useDistrictsStore();
+const regionalsStore = useRegionalsStore();
+const limit = 4;
 const timerSearch = ref(null);
-
+const isLoading = ref(false);
 const ascending = ref(true);
 const sortBy = ref('name');
 
 const vertical = ref(true);
-
+const locals = ref({});
 const name = ref('');
 
 const next = () => {
-    localStore.getNextLocals();
+    getLocals('next');
 };
 
+const sortedLocalsHeadquarters = ref([]);
+
 const prev = () => {
-    localStore.getLocals(sortBy.value);
+    getLocals();
 };
 
 const showVertical = () => {
@@ -229,62 +225,63 @@ const selectedSortRegional = ref(
     JSON.parse(localStorage.getItem('LocalHeadquarters_filters'))?.regionalName,
 );
 
-const sortLocals = () => {
-    localStore.getLocals(sortBy.value);
-}
-
-
-const districts = ref([]);
-const regionals = ref([]);
-
 const searchLocal = (event) => {
     clearTimeout(timerSearch.value);
     timerSearch.value = setTimeout(() => {
-        localStore.searchLocals(name.value);
+        getLocals();
     }, 400);
 };
 
-/*const filtersDistricts = computed(() =>
-    selectedSortDistrict.value
-        ? districts.value.find(
-              (district) => district.name === selectedSortDistrict.value,
-          )?.local_headquarters ?? []
-        : localHeadquarters.value,
-);
-
-const filtersRegionals = computed(() =>
-    selectedSortRegional.value
-        ? regionals.value.find(
-              (regional) => regional.name === selectedSortRegional.value,
-          )?.local_headquarters ?? []
-        : localHeadquarters.value,
-);*/
-
-const getDistrictsHeadquartersForFilters = async () => {
+const getLocals = async (pagination, orderLimit) => {
     try {
-        const { data } = await HTTP.get('/districts/');
-        districts.value = data.results;
-    } catch (e) {
-        console.log('error request districts headquarters');
+        isLoading.value = true;
+        let data = [];
+        let url = '/locals/?';
+        if (orderLimit) data.push('limit=' + orderLimit);
+        else if (!pagination) data.push('limit=' + limit);
+        else if (pagination == 'next')
+            url = locals.value.next.replace('http', 'https');
+        if (name.value) data.push('search=' + name.value);
+        if (selectedSortdistrict.value)
+            data.push(
+                'district_headquarter__name=' + selectedSortdistrict.value,
+            );
+        if (selectedSortRegional.value)
+            data.push(
+                'regional_headquarter__name=' + selectedSortRegional.value,
+            );
+        if (sortBy.value && !pagination)
+            data.push(
+                'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
+            );
+        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        isLoading.value = false;
+
+        let response = viewHeadquartersResponse.data;
+        if (pagination) {
+            response.results = [...locals.value.results, ...response.results];
+        }
+        locals.value = response;
+        sortedLocalsHeadquarters.value = response.results;
+    } catch (error) {
+        console.log('an error occured ' + error);
     }
 };
-const getRegionalsHeadquartersForFilters = async () => {
-    try {
-        const { data } = await HTTP.get('/regionals/');
-        regionals.value = data.results;
-    } catch (e) {
-        console.log('error request districts headquarters');
-    }
-};
+
 onMounted(() => {
-    getDistrictsHeadquartersForFilters();
-    getRegionalsHeadquartersForFilters();
-    localStore.getLocals(sortBy.value);
+    districtsStore.getDistricts();
+    regionalsStore.getRegionals(sortBy.value);
+    getLocals();
 });
 
-const selectedSort = ref(0);
-const selectedSortRegion = ref(null);
-const selectedSortDistrict = ref(null);
+// const selectedSort = ref(0);
+// const selectedSortRegion = ref(null);
+// const selectedSortDistrict = ref(null);
 
 const sortOptionss = ref([
     {
@@ -293,41 +290,6 @@ const sortOptionss = ref([
     },
     { value: 'founding_date', name: 'Дате создания штаба' },
 ]);
-
-const sortedLocalHeadquarters = computed(() => {
-    let tempHeadquartes = [...localStore.locals];
-
-    if (selectedSortRegional.value || selectedSortdistrict.value) {
-        let idRegionals = [];
-        if (selectedSortdistrict.value) {
-            let districtId = districts.value.find(
-                (district) => district.name === selectedSortdistrict.value,
-            )?.id;
-            idRegionals = regionals.value
-                .filter(
-                    (regional) => regional.district_headquarter === districtId,
-                )
-                .map((reg) => reg.id);
-        }
-        if (selectedSortRegional.value) {
-            idRegionals = [
-                regionals.value.find(
-                    (regional) => regional.name === selectedSortRegional.value,
-                )?.id,
-            ];
-        }
-
-        tempHeadquartes = tempHeadquartes.filter((item) => {
-            return idRegionals.indexOf(item.regional_headquarter) >= 0;
-        });
-    }
-
-    if (!ascending.value) {
-        tempHeadquartes.reverse();
-    }
-
-    return tempHeadquartes;
-});
 
 onBeforeRouteLeave(async (to, from) => {
     const pageName = 'LocalHeadquarters';
@@ -347,6 +309,32 @@ onActivated(() => {
 
     localStorage.removeItem('LocalHeadquarters_filters');
 });
+
+watch(
+    () => selectedSortdistrict.value,
+    () => {
+        getLocals();
+    },
+);
+watch(
+    () => selectedSortRegional.value,
+    () => {
+        getLocals();
+    },
+);
+
+watch(
+    () => sortBy.value,
+    () => {
+        getLocals('', sortedLocalsHeadquarters.value.length);
+    },
+);
+watch(
+    () => ascending.value,
+    () => {
+        getLocals('', sortedLocalsHeadquarters.value.length);
+    },
+);
 </script>
 <style lang="scss">
 .headquarters {

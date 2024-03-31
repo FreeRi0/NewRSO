@@ -128,7 +128,7 @@
                                 v-model="headquarter.educational_institution"
                                 @update:value="changeValue"
                                 :SortDropdown="false"
-                                address="eduicational_institutions/"
+
                             ></educInstitutionDropdown>
                             <p
                                 class="form__error"
@@ -1028,64 +1028,6 @@ const getErrorField = (field) => {
 const headquarter = ref(props.headquarter);
 
 //--------------------------Валидация полей-----------------------------
-
-// const title = ref(props.unit.title);
-// const date = ref(props.unit.date);
-// const institution = ref(props.unit.institution);
-// const city = ref(props.unit.city);
-// const regional = ref(props.unit.regional);
-// const beast = ref(props.unit.beast);
-// const vk = ref(props.unit.vk);
-// const te = ref(props.unit.te);
-// const slogan = ref(props.unit.slogan);
-// const about = ref(props.unit.about);
-
-// const avatar = ref(props.unit.avatar);
-// const banner = ref(props.unit.banner);
-
-// const rules = computed(() => ({
-//     title: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     institution: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     regional: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     beast: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-// }));
-
-// const v = useVuelidate(rules, {
-//     title,
-//     institution,
-//     regional,
-//     beast,
-// });
-
-// const swal = inject('$swal');
-
-// const UploadData = async () => {
-//     v.value.$touch();
-//     if (v.value.$error) {
-//         swal.fire({
-//             icon: 'error',
-//             title: 'Упсс...',
-//             text: 'Что-то пошло не так!',
-//         });
-//     } else {
-//         swal.fire({
-//             position: 'top-center',
-//             icon: 'success',
-//             title: 'Данные успешно сохранены',
-//             showConfirmButton: false,
-//             timer: 1500,
-//         });
-//         // функция очистки полей формы после успешной отправки данных на сервер
-//     }
-// };
 
 //----------------------------------------------------------------------------------------------------------
 const counterTitle = computed(() => {

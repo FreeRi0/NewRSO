@@ -49,12 +49,12 @@ const getHeadquarter = async () => {
     })
         .then((response) => {
             headquarter.value = response.data;
-            if (headquarter.value.educational_institution) {
-                headquarter.value.educational_institution =
-                    headquarter.value.educational_institution.id;
+            if (headquarter.value.educational_institution.name) {
+                headquarter.value.educational_institution.name =
+                    headquarter.value.educational_institution.name;
             }
             if (headquarter.value.commander) {
-                headquarter.value.commander = headquarter.value.commander.id;
+                headquarter.value.commander = headquarter.value.commander;
             }
             console.log(response);
             isCommanderLoading.value = false;
@@ -86,7 +86,7 @@ const getMembers = async () => {
                 },
             );
 
-            members.value = membersResponse.data;
+            members.value = membersResponse.data.results;
             /*if (members.value.length) {
                 members.value.forEach((member) => {
                     member.position = member.position?.id;
@@ -165,7 +165,7 @@ const changeHeadquarter = async () => {
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
 
-    for (let member of members.value.results) {
+    for (let member of members.value) {
         if (member.change) {
             await HTTP.patch(
                 `/educationals/${id}/members/${member.id}/`,
