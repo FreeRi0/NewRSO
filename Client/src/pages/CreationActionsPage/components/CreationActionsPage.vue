@@ -2,7 +2,7 @@
     <div class="container">
         <h1 class="title title--mb">Создание мероприятия</h1>
         <form @submit.prevent="SubmitEvent" class="form" style="margin-bottom: 118px;">
-                <v-expansion-panels variant="accordion" v-model="panel">
+          <v-expansion-panels variant="accordion" v-model="panel">
                     <v-expansion-panel value="panelOne">
                         <v-expansion-panel-title>
                             <template v-slot="{ expanded }">
@@ -1171,13 +1171,13 @@ import InputText from 'primevue/inputtext';
 import { Input } from '@shared/components/inputs';
 import { onActivated, onMounted, watchEffect } from 'vue';
 import { getUser } from '@services/UserService';
-const swal = inject('$swal');
-const router = useRouter();
-const rules = ref([]);
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 import { HTTP } from '@app/http';
 
+const swal = inject('$swal');
+const router = useRouter();
+const rules = ref([]);
 // const organization_stop = ref('');
 
 //------------------------------------------------------------------------------------------------
@@ -1623,9 +1623,7 @@ function AddQuestion() {
 .form {
     &-container {
         display: flex;
-        //margin-right: 16px;
         margin-bottom: 8px;
-        //margin-top: 20px;
         gap: 80px;
         @media (max-width: 768px) {
           display: initial;
@@ -1633,11 +1631,9 @@ function AddQuestion() {
     }
     &-col {
         width: 50%;
-        //padding-left: 15px;
-        //padding-right: 15px;
-      @media (max-width: 768px) {
-        width: initial;
-      }
+        @media (max-width: 768px) {
+          width: initial;
+        }
     }
     &-input {
         width: 100%;
