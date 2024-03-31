@@ -1,11 +1,11 @@
 <template>
-    <div class="container">
+    <div class="container" v-if="!loading">
         <p class="main_text">Отчетность</p>
 
         <div class="containers_result">
             <div
                 class="inline-container"
-                v-for="(result, index) in results.data"
+                v-for="(result, index) in mainResults.data"
                 :key="index"
             >
                 <div class="result-container">
@@ -18,7 +18,7 @@
                     </div>
                     <div class="horizontal-item__result-wrapper">
                         <p class="horizontal-item__result">
-                            {{ results.place[index] }}
+                            {{ mainResults.place[index] }}
                         </p>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
             </template>
             <div
                 class="indicator-container"
-                v-for="(indicator, index) in data.indicators"
+                v-for="(indicator, index) in resultData.indicators"
                 :key="index"
             >
                 <div class="horizontal-item__wrapper">
@@ -53,7 +53,7 @@
                 </div>
                 <div class="horizontal-item__result-wrapper">
                     <p class="horizontal-item__result">
-                        {{ data.places[index] }}
+                        {{ resultData.places[index] }}
                     </p>
                 </div>
             </div>
@@ -62,13 +62,16 @@
 </template>
 
 <script setup>
+import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const commander = ref(false);
+const loading = ref(true);
 
-const data = ref({
+const resultData = ref({
     indicators: [
         'Численность членов линейного студенческого отряда в соответствии с объемом уплаченных членских взносов',
         'Прохождение Командиром и Комиссаром студенческого отряда региональной школы командного состава',
@@ -115,7 +118,7 @@ const data = ref({
     ],
 });
 
-const results = ref({
+const mainResults = ref({
     data: ['Ваша сумма мест', 'Место в рейтинге'],
     place: ['20', '6'],
 });
@@ -126,7 +129,77 @@ const onAction = async () => {
     });
 };
 
-onMounted(() => {
+const getPostitions = async () => {
+    for (let index = 1; index <= 20; index++) {
+        try {
+            if (commander.value) {
+                const { data } = await HTTP.get(
+                    `/competitions/1/reports/q${index}/get_place/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                console.log(data);
+                resultData.value.places[index - 1] = data.results.place;
+            } else {
+                const { data } = await HTTP.get(
+                    `/competitions/1/reports/q${index}/me/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                console.log(data);
+                if (data.results) {
+                    resultData.value.places[index - 1] = 'Данные не отправлены';
+                } else {
+                    resultData.value.places[index - 1] = data.result.place;
+                }
+            }
+        } catch (e) {
+            if (e.request.status == 400) {
+                resultData.value.places[index - 1] =
+                    'Рейтинг еще не сформирован';
+                console.log(`${index}: ${e.request.response}`);
+            } else if (e.request.status == 404) {
+                resultData.value.places[index - 1] = 'Данные не отправлены';
+                console.log(`${index}: ${e.request.response}`);
+                //console.log(e);
+            } else {
+                console.log(`!!!\n${index}: getPostions error`, e);
+            }
+        }
+    }
+    loading.value = false;
+};
+
+const getMeCommander = async () => {
+    try {
+        const { data } = await HTTP.get(`/rsousers/me_commander/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        console.log(data);
+        if (data.detachment_commander) {
+            commander.value = true;
+        }
+    } catch (e) {
+        console.log(`getMeCommander error`, e);
+    }
+};
+
+onMounted(async () => {
+    await getMeCommander();
+    await getPostitions();
     window.scroll(0, 0);
 });
 </script>

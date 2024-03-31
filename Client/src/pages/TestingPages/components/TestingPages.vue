@@ -79,14 +79,16 @@
         <div v-else-if="solved" class="solved__wrapper">
             <p class="main_title">Тестирование по обучению</p>
             <div class="border_result">
-                <p class="text_result">Ваш результат: {{ result.score }} баллов</p>
+                <p class="text_result">
+                    Ваш результат: {{ result.score }} баллов
+                </p>
                 <br />
                 <p class="text_result" v-if="result.score <= 59">
                     Тест не пройден
                 </p>
                 <p class="text_result" v-else>Тест пройден</p>
             </div>
-            <div class="button_result" v-if='status.left_attempts > 1'>
+            <div class="button_result" v-if="status.left_attempts > 1">
                 <button @click="onRestart" class="submit_button">
                     Начать заново
                 </button>
@@ -102,10 +104,16 @@
                     ограничено. Не закрывайте тест после нажатия на кнопку
                     «Начать тестирование» до его завершения.
                 </p>
-                <div class="border_result" v-if='status.best_score > 0'>
+                <div class="border_result" v-if="status.best_score > 0">
                     <p class="text_result">
-                        <template v-if='status.left_attempts == 2'>Ваш результат: {{ status.best_score }} баллов</template>
-                        <template v-else>Ваш лучший результат: {{ status.best_score }} баллов</template>
+                        <template v-if="status.left_attempts == 2"
+                            >Ваш результат:
+                            {{ status.best_score }} баллов</template
+                        >
+                        <template v-else
+                            >Ваш лучший результат:
+                            {{ status.best_score }} баллов</template
+                        >
                     </p>
                 </div>
                 <div class="start_button">
@@ -114,7 +122,7 @@
                     </button>
                 </div>
             </div>
-            <div v-else-if='status.best_score' class="solved__wrapper">
+            <div v-else-if="status.best_score" class="solved__wrapper">
                 <div class="border_result_finally">
                     <p class="text_result">
                         Ваш лучший результат: {{ status.best_score }} баллов
