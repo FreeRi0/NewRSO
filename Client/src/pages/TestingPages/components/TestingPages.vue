@@ -122,8 +122,8 @@
                     </button>
                 </div>
             </div>
-            <div v-else class="solved__wrapper">
-                <div class="border_result">
+            <div v-else-if="status.best_score" class="solved__wrapper">
+                <div class="border_result_finally">
                     <p class="text_result">
                         Ваш лучший результат: {{ status.best_score }} баллов
                     </p>
