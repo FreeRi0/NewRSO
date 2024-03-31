@@ -906,121 +906,66 @@
                                 </v-icon>
                             </template>
                         </v-expansion-panel-title>
-                        <v-expansion-panel-text>
+                        <v-expansion-panel-text class="form__inner-content">
+                          <div class="form__field-group">
                             <div
                                 v-for="organizator in organizators"
                                 class="form-container"
                                 :key="organizator"
                             >
-                                <div class="form-col">
-                                    <div class="form__field">
-                                        <label class="form-label" for="name-hq"
-                                            >ФИО организатора<sup
-                                                class="valid-red">*</sup></label>
-                                        <InputText
-                                            id="name-hq"
-                                            v-model="organizator.organization"
-                                            class="form__input form-input-container"
-                                            placeholder="Фамилия Имя Отчество"
-                                            name="name_hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="telegram-owner-hq"
-                                            >Telegram</label
-                                        >
-                                        <InputText
-                                            id="telegram-owner-hq"
-                                            v-model="organizator.telegram"
-                                            class="form__input form-input-container"
-                                            placeholder="@modestra"
-                                            name="telegram-owner-hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="telegram-squad-hq"
-                                            >Телефон</label
-                                        >
-                                        <InputText
-                                            id="telegram-squad-hq"
-                                            v-model="
-                                                organizator.organizer_phone_number
-                                            "
-                                            class="form__input form-input-container"
-                                            placeholder="@Invar"
-                                            name="telegram-squad-hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                </div>
-                                <div class="form-col">
-                                    <div class="form__field">
-                                        <label class="form-label" for="email-hq"
-                                            >Email организатора<sup
-                                                class="valid-red"
-                                                >*</sup
-                                            ></label
-                                        >
-                                        <InputText
-                                            id="email-hq"
-                                            v-model="
-                                                organizator.organizer_email
-                                            "
-                                            class="form__input form-input-container"
-                                            placeholder="email@gmail.com"
-                                            name="email_hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="organization-hq"
-                                            >Организация</label
-                                        >
-                                        <InputText
-                                            id="organization-hq"
-                                            v-model="organization_stop"
-                                            class="form__input form-input-container"
-                                            placeholder="Например КузГТУ"
-                                            name="organization-hq"
-                                            :maxlength="100"
-                                        />
-                                        <div class="form__counter"></div>
-                                    </div>
-                                </div>
+                              <div class="form-col">
                                 <div class="form__field">
-                                    <div class="form-checkbox">
-                                        <input
-                                            v-model="
-                                                organizator.is_contact_person
-                                            "
-                                            type="checkbox"
-                                            name="person"
-                                        />
-                                        <label for="person"
-                                            >Сделать контактным лицом</label
-                                        >
-                                    </div>
+                                  <label class="form-label" for="name-hq"
+                                  >ФИО организатора <sup class="valid-red">*</sup></label>
+
+                                  <InputText
+                                      id="name-hq"
+                                      v-model="organizator.organization"
+                                      class="form__input form-input-container"
+                                      placeholder="Фамилия Имя Отчество"
+                                      name="name_hq"
+                                      :maxlength="100"
+                                  />
                                 </div>
+                              </div>
+                              <div class="form__field">
+                                <div class="form-checkbox">
+                                  <input
+                                      v-model="organizator.is_contact_person"
+                                      type="checkbox"
+                                      name="person"
+                                  />
+                                  <label for="person">Сделать контактным лицом</label>
+                                </div>
+                              </div>
                             </div>
                             <div class="form-add" @click="AddOrganizator">
-                                + Добавить организатора
+                              + Добавить организатора
                             </div>
+                          </div>
+
+                          <v-card-actions class="form__button-group">
+                            <Button
+                                class="form-button form-button--prev"
+                                variant="text"
+                                type="button"
+                                label="Назад"
+                                size="large"
+                                @click="openPanelThree"
+                            ></Button>
+                            <Button
+                                variant="text"
+                                type="button"
+                                class="form-button form-button--next"
+                                label="Далее"
+                                size="large"
+                                @click="openPanelFive"
+                            ></Button>
+                          </v-card-actions>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
 
-                    <v-expansion-panel>
+                    <v-expansion-panel value="panelFive">
                         <v-expansion-panel-title>
                             <template v-slot="{ expanded }">
                                 <v-row no-gutters>

@@ -1012,7 +1012,6 @@
                               </div>
                               <div style="border: 1px solid #939393; width: 100%; margin-top: 40px; margin-bottom: 30px;"/>
                             </div>
-
                             <div class="form-add" @click="AddOrganizer">
                               + Добавить организатора
                             </div>
