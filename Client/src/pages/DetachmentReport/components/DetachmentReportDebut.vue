@@ -1,5 +1,6 @@
 <template>
     <div class="container" v-if="!loading">
+    <div class="container" v-if="!loading">
         <p class="main_text">Отчетность</p>
 
         <div class="containers_result">
@@ -145,7 +146,7 @@ const getPostitions = async () => {
                     },
                 );
                 console.log(data);
-                resultData.value.places[index - 1] = data.results.place;
+                resultData.value.places[index - 1] = data.place;
             } else {
                 const { data } = await HTTP.get(
                     `/competitions/1/reports/q${index}/me/`,
@@ -161,15 +162,15 @@ const getPostitions = async () => {
                 if (data.results) {
                     resultData.value.places[index - 1] = 'Данные не отправлены';
                 } else {
-                    resultData.value.places[index - 1] = data.result.place;
+                    resultData.value.places[index - 1] = data.place;
                 }
             }
         } catch (e) {
-            if (e.request.status == 400) {
+            if (e?.request?.status == 400) {
                 resultData.value.places[index - 1] =
                     'Рейтинг еще не сформирован';
                 console.log(`${index}: ${e.request.response}`);
-            } else if (e.request.status == 404) {
+            } else if (e?.request?.status == 404) {
                 resultData.value.places[index - 1] = 'Данные не отправлены';
                 console.log(`${index}: ${e.request.response}`);
                 //console.log(e);
