@@ -1,6 +1,5 @@
 <template>
     <div class="container" v-if="!loading">
-    <div class="container" v-if="!loading">
         <p class="main_text">Отчетность</p>
 
         <div class="containers_result">
