@@ -130,36 +130,48 @@ const onAction = async () => {
 };
 
 const getPostitions = async () => {
-    for (let index = 1; index <= 20; index++){
+    for (let index = 1; index <= 20; index++) {
         try {
-        if (commander.value){
-            const { data } = await HTTP.get(`/competitions/1/reports/q${index}/get_place/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            })
-            console.log(data);
-            resultData.value.places[index - 1] = data.place;
-        } else {
-            const { data } = await HTTP.get(`/competitions/1/reports/q${index}/me/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            })
-            console.log(data);
-            resultData.value.places[index - 1] = data.place;
-        }
-        
-        } catch(e) {
-            if (e.request.status == 400){
-                resultData.value.places[index - 1] = 'Рейтинг еще не сформирован'
+            if (commander.value) {
+                const { data } = await HTTP.get(
+                    `/competitions/1/reports/q${index}/get_place/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                console.log(data);
+                resultData.value.places[index - 1] = data.results.place;
+            } else {
+                const { data } = await HTTP.get(
+                    `/competitions/1/reports/q${index}/me/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                console.log(data);
+                if (data.results) {
+                    resultData.value.places[index - 1] = 'Данные не отправлены';
+                } else {
+                    resultData.value.places[index - 1] = data.result.place;
+                }
+            }
+        } catch (e) {
+            if (e.request.status == 400) {
+                resultData.value.places[index - 1] =
+                    'Рейтинг еще не сформирован';
                 console.log(`${index}: ${e.request.response}`);
-            } else if(e.request.status == 404) {
-                resultData.value.places[index - 1] = 'Данные не поданы'
+            } else if (e.request.status == 404) {
+                resultData.value.places[index - 1] = 'Данные не отправлены';
                 console.log(`${index}: ${e.request.response}`);
-                console.log(e);
+                //console.log(e);
             } else {
                 console.log(`!!!\n${index}: getPostions error`, e);
             }
@@ -168,19 +180,19 @@ const getPostitions = async () => {
     loading.value = false;
 };
 
-const getMeCommander = async () =>{
-    try{
-        const { data } = await HTTP.get(`/rsousers/me_commander/`,{
+const getMeCommander = async () => {
+    try {
+        const { data } = await HTTP.get(`/rsousers/me_commander/`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
-        })
+        });
         console.log(data);
-        if(data.detachment_commander) {
+        if (data.detachment_commander) {
             commander.value = true;
         }
-    } catch(e){
+    } catch (e) {
         console.log(`getMeCommander error`, e);
     }
 };
