@@ -131,7 +131,8 @@
                                   <label
                                       class="form__label"
                                       for="telegram-owner-hq"
-                                  >Ссылка на конференцию <sup class="valid-red">*</sup></label>
+                                  >Ссылка на конференцию
+                                    <sup v-if="maininfo.format === 'Онлайн'" class="valid-red">*</sup></label>
                                   <InputText
                                       id="telegram-owner-hq"
                                       v-model="maininfo.conference_link"
@@ -823,7 +824,7 @@
                                 </div>
 
                                 <label class="form__label">Добавьте документы:</label>
-                                <div class="form-col" style="margin-top: 6px;">
+                                <div class="form-col" style="margin-top: 12px;">
                                   <div class="form-fileupload">
                                     <FileUpload
                                         mode="basic"
@@ -831,24 +832,13 @@
                                         accept=".pdf, .jpeg, .png"
                                         :maxFileSize="7000000"
                                         :customUpload="true"
-                                        chooseLabel="     Выбрать файл"
+                                        chooseLabel="Выбрать файл"
                                     ></FileUpload>
                                     <img
                                         style="margin-left: 6px;"
                                         src="@app/assets/icon/addFile.svg"
                                         alt="addFile"
                                     />
-                                  </div>
-                                </div>
-                                <div style="margin-top: 22px;">
-                                  <label class="form__label">Расскажите, с какими документами необходимо просто ознакомиться, а какие скачать и заполнить <sup class="valid-red">*</sup></label>
-                                  <textarea
-                                      class="form__textarea"
-                                      v-model="document_data.additional_info"
-                                      placeholder="Начните вводить"
-                                  />
-                                  <div class="form__counter">
-                                    {{ document_data.additional_info.length }}/300
                                   </div>
                                 </div>
                               </div>
@@ -1348,7 +1338,6 @@ watchEffect(() => {
                 { name: 'Местные штабы' },
                 { name: 'ЛСО' },
                 { name: 'Штабы ОО' },
-                { name: 'СО' },
             ];
             break;
         case 'Многоэтапная':
@@ -1358,7 +1347,6 @@ watchEffect(() => {
                 { name: 'Местные штабы' },
                 { name: 'ЛСО' },
                 { name: 'Штабы ОО' },
-                { name: 'СО' },
             ];
             break;
     }
@@ -1466,7 +1454,6 @@ const document_data = ref({
     work_book: false,
     military_document: false,
     consent_personal_data: false,
-    additional_info: '',
 });
 const time_data = ref({
     event_duration_type: 'Однодневное',
