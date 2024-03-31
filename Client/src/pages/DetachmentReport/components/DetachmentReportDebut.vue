@@ -1,5 +1,6 @@
 <template>
     <div class="container" v-if="!loading">
+    <div class="container" v-if="!loading">
         <p class="main_text">Отчетность</p>
 
         <div class="containers_result">
@@ -126,6 +127,7 @@ const mainResults = ref({
 const onAction = async () => {
     router.push({
         name: 'Report',
+        params: { competition_pk: 1 },
     });
 };
 
