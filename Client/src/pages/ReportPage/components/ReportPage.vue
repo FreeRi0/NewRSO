@@ -166,8 +166,8 @@ s
                                             "
                                             :options="CommanderChoose"
                                             optionLabel="name"
-                                            :sorts-boolean="true"
-                                            class="invents-block invents-select"
+                                            :sorts-boolean="false"
+                                            class="invents-select"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -204,8 +204,8 @@ s
                                             "
                                             :options="Choose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
-                                            :sorts-boolean="true"
+                                            class="invents-select"
+                                            :sorts-boolean="false"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -498,6 +498,9 @@ s
                                         <Input
                                             placeholder="Например, Иванова Светлана Андреевна"
                                             max-length="100"
+                                            v-model:value="
+                                                report[5].participants_data.name
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -621,12 +624,16 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
+                                            v-model="
+                                                report[6]
+                                                    .first_may_demonstration
+                                            "
+                                            :options="mayDemonstrationChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
+                                            :sorts-boolean="false"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -639,6 +646,10 @@ s
                                             type="number"
                                             placeholder="Например, 10"
                                             max-length="100"
+                                            v-model:value="
+                                                report[6]
+                                                    .first_may_demonstration_participants
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -675,12 +686,13 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
+                                            v-model="report[6].patriotic_action"
+                                            :options="patrioticActionChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
+                                            :sorts-boolean="false"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -695,6 +707,10 @@ s
                                             type="number"
                                             placeholder="Например, 10"
                                             max-length="100"
+                                            v-nodel:value="
+                                                report[6]
+                                                    .patriotic_action_participants
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -708,6 +724,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(6)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -728,12 +745,13 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
+                                            v-model="report[6].safety_work_week"
+                                            :options="SafetyWeekChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
+                                            :sorts-boolean="false"
                                         />
                                     </div>
                                 </div>
@@ -744,6 +762,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(6)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -764,12 +783,18 @@ s
                                             командиров и комиссаров студенческих
                                             отрядов<span>&nbsp;*</span></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
+                                            v-model="
+                                                report[6]
+                                                    .commander_commissioner_school
+                                            "
+                                            :options="
+                                                CommanderCommissionerschoolChoose
+                                            "
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
+                                            :sorts-boolean="false"
                                         />
                                     </div>
                                 </div>
@@ -780,6 +805,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(6)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -799,12 +825,16 @@ s
                                             >Участие в Открытии трудового
                                             семестра<span>&nbsp;*</span></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
+                                            v-model="
+                                                report[6]
+                                                    .working_semester_opening
+                                            "
+                                            :options="semesterOpeningChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
+                                            :sorts-boolean="false"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -818,6 +848,10 @@ s
                                             type="number"
                                             placeholder="Например, 10"
                                             max-length="100"
+                                            v-model:value="
+                                                report[6]
+                                                    .working_semester_opening_participants
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -831,6 +865,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(6)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -851,12 +886,11 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
+                                            :sorts-boolean="false"
                                         />
                                     </div>
                                 </div>
@@ -867,6 +901,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(6)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -887,12 +922,13 @@ s
                                             отрядов и комплексе мероприятий
                                             РСО-спорт<span>&nbsp;*</span></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
+                                            v-model="report[6].spartakiad"
+                                            :options="spartakiadChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
+                                            :sorts-boolean="false"
                                         />
                                     </div>
                                 </div>
@@ -903,6 +939,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(6)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -924,12 +961,16 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="regionalSchoolCommander"
-                                            :options="CommanderChoose"
+                                            v-model="
+                                                report[6]
+                                                    .professional_competition
+                                            "
+                                            :options="competitionProChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
+                                            :sorts-boolean="false"
                                         />
                                     </div>
                                 </div>
@@ -940,6 +981,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(6)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2289,6 +2331,9 @@ s
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="
+                                                report[16].link_vk_commander
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2304,6 +2349,9 @@ s
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="
+                                                report[16].link_vk_commissar
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2326,6 +2374,10 @@ s
                                             type="number"
                                             placeholder="Например, 5"
                                             max-length="100"
+                                            v-model:value="
+                                                report[16]
+                                                    .vk_rso_number_subscribers
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2343,6 +2395,9 @@ s
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="
+                                                report[16].link_vk_detachment
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2362,6 +2417,10 @@ s
                                         <Input
                                             placeholder="Например, 200"
                                             max-length="100"
+                                            v-model:value="
+                                                report[16]
+                                                    .vk_detachment_number_subscribers
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2375,6 +2434,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(16)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2690,14 +2750,14 @@ s
                                             безопасности в трудовом
                                             семестре<span>&nbsp;*</span></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, отсутствуют"
                                             v-model="
                                                 report[19].safety_violations
                                             "
                                             :options="precautionChoose"
-                                            optionLabel="name"
-                                            class="invents-block invents-select"
+                                            optionLabel="value"
+                                            class="invents-select"
                                         />
                                     </div>
                                 </div>
@@ -2910,20 +2970,57 @@ import { sortByEducation } from '@shared/components/selects';
 
 const route = useRoute();
 
-const regionalSchool = ref();
 const Choose = ref([
-    { value: 'true', name: 'Да' },
-    { value: 'false', name: 'Нет' },
+    { value: true, name: 'Да' },
+    { value: false, name: 'Нет' },
 ]);
 
 const regionalSchoolCommander = ref();
+
 const CommanderChoose = ref([
-    { value: 'true', name: 'Да' },
-    { value: 'false', name: 'Нет' },
+    { value: true, name: 'Да' },
+    { value: false, name: 'Нет' },
 ]);
 
-const precautionChoose = ref([{ name: 'Отсутствуют' }, { name: 'Имеются' }]);
+const precautionChoose = ref([
+    { value: 'Имеются', name: 'Имеются' },
+    { value: 'Отсутствуют', name: 'Отсутствуют' },
+]);
 
+const mayDemonstrationChoose = ref([
+    { value: true, name: 'Да' },
+    { value: false, name: 'Нет' },
+]);
+
+const patrioticActionChoose = ref([
+    { value: true, name: 'Да' },
+    { value: false, name: 'Нет' },
+]);
+
+const SafetyWeekChoose = ref([
+    { value: true, name: 'Да' },
+    { value: false, name: 'Нет' },
+]);
+
+const CommanderCommissionerschoolChoose = ref([
+    { value: true, name: 'Да' },
+    { value: false, name: 'Нет' },
+]);
+
+const semesterOpeningChoose = ref([
+    { value: true, name: 'Да' },
+    { value: false, name: 'Нет' },
+]);
+
+const spartakiadChoose = ref([
+    { value: true, name: 'Да' },
+    { value: false, name: 'Нет' },
+]);
+
+const competitionProChoose = ref([
+    { value: true, name: 'Да' },
+    { value: false, name: 'Нет' },
+]);
 const status = ref();
 const statusChoose = ref([
     { name: 'Региональный' },
@@ -2963,7 +3060,21 @@ const report = ref({
     },
     3: { place: '' },
     4: { place: '' },
-    5: { participants_data: '' },
+    5: {
+        participants_data: [{ name: '' }],
+    },
+    6: {
+        first_may_demonstration: null,
+        first_may_demonstration_participants: '',
+        patriotic_action: null,
+        patriotic_action_participants: '',
+        safety_work_week: null,
+        commander_commissioner_school: null,
+        working_semester_opening: null,
+        working_semester_opening_participants: '',
+        spartakiad: null,
+        professional_competition: null,
+    },
     7: {
         event_name: '',
         number_of_participants: '',
@@ -2981,6 +3092,13 @@ const report = ref({
     11: { event_name: '', prize_place: '', certificate_scans: '' },
     12: { event_name: '', prize_place: '', certificate_scans: '' },
     13: { organization_data: '' },
+    16: {
+        link_vk_commander: '',
+        link_vk_commissar: '',
+        vk_rso_number_subscribers: '',
+        link_vk_detachment: '',
+        vk_detachment_number_subscribers: '',
+    },
     18: { participants_number: '' },
     19: { safety_violations: '' },
     20: {
@@ -3056,6 +3174,7 @@ const getParameters = async (id) => {
 };
 const postParameters = async (id) => {
     try {
+        console.log(report.value[id]);
         await HTTP.post(
             `/competitions/${route.params.competition_pk}/reports/q${id}/`,
             report.value[id],
@@ -3091,7 +3210,6 @@ const postParameters = async (id) => {
 .invents-select {
     border: 2px solid #b6b6b6;
 }
-
 .p-dropdown-items {
     background-color: white;
     border: 1px solid #b6b6b6;
