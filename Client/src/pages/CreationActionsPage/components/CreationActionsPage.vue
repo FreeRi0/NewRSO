@@ -433,11 +433,11 @@
                               </div>
                               <div
                                   class="form-col"
-                                  v-if="maininfo.application_type"
+                                  v-if="maininfo.application_type === 'Групповая' || maininfo.application_type === 'Многоэтапная'"
                               >
                                 <label class="form__label"
                                 >Какие объекты могут формировать
-                                  {{ maininfo.application_type === 'Персональная' ? 'персональные' : maininfo.application_type === 'Групповая' ? 'групповые' : 'многоэтапные'}}
+                                  {{ maininfo.application_type === 'Групповая' ? 'групповые' : 'многоэтапные' }}
                                   заявки <sup class="valid-red">*</sup></label>
                                 <sortByEducation
                                     v-model="area"
