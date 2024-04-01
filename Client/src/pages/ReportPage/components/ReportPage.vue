@@ -78,7 +78,11 @@ s
                                     >{{ report[1]?.place }}
                                 </label>
                                 <label v-else class="form__label"
-                                    >{{ isError }}
+                                    >Численность членов линейного студенческого
+                                    отряда в соответствии с объемом уплаченных
+                                    членских взносов рассчитывается
+                                    автоматически по состоянию на 15 апреля 2024
+                                    года.
                                 </label>
                             </div>
                         </div>
@@ -317,7 +321,11 @@ s
                                     >{{ report[3]?.place }}
                                 </label>
                                 <label v-else class="form__label"
-                                    >{{ isError }}
+                                    >Для получения баллов по данному показателю
+                                    Командиру и Комиссару ЛСО необходимо пройти
+                                    тестирование. Для прохождения теста
+                                    перейдите в «Личный кабинет» —
+                                    «Корпоративный университет» — «Тест».
                                 </label>
                             </div>
                             <div class="form__field-group-bottom">
@@ -403,9 +411,13 @@ s
                                     class="form__label"
                                     >{{ report[4]?.place }}</label
                                 >
-                                <label v-else class="form__label">{{
-                                    isError
-                                }}</label>
+                                <label v-else class="form__label"
+                                    >Для получения баллов по данному показателю
+                                    участникам ЛСО необходимо пройти
+                                    тестирование. Для прохождения теста
+                                    перейдите в «Личный кабинет» - «Охрана
+                                    труда» - «Тест».</label
+                                >
                             </div>
                             <div class="form__field-group-bottom">
                                 <p>
@@ -520,8 +532,26 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
+                                            @select="selectCertScansFive"
+                                            v-if="!report[5].certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="report[5].certificate_scans">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            report[5].certificate_scans.name
+                                                        }}</span
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1122,8 +1152,26 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
+                                            @select="selectCertSkansSeven"
+                                            v-if="!report[7].certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="report[7].certificate_scans">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            report[7].certificate_scans.name
+                                                        }}</span
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form__field add-block">
                                         <p>+ Добавить мероприятие</p>
@@ -1276,8 +1324,26 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
+                                            @select="selectPersonal"
+                                            v-if="!consent_personal_data"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="consent_personal_data">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            consent_personal_data.name
+                                                        }}</span
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form__field add-block">
                                         <p>+ Добавить мероприятие</p>
@@ -1410,8 +1476,26 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
+                                            @select="selectPersonal"
+                                            v-if="!consent_personal_data"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="consent_personal_data">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            consent_personal_data.name
+                                                        }}</span
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form__field add-block">
                                         <p>
@@ -1546,8 +1630,26 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
+                                            @select="selectPersonal"
+                                            v-if="!consent_personal_data"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="consent_personal_data">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            consent_personal_data.name
+                                                        }}</span
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form__field add-block">
                                         <p>
@@ -1683,8 +1785,26 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
+                                            @select="selectPersonal"
+                                            v-if="!consent_personal_data"
                                             chooseLabel="Выбрать файл"
                                         />
+                                        <div v-else-if="consent_personal_data">
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            consent_personal_data.name
+                                                        }}</span
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form__field add-block">
                                         <p>+ добавить проект</p>
@@ -1819,11 +1939,32 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
+                                            @select="selectCertScans"
+                                            v-if="!report[12].certificate_scans"
                                             chooseLabel="Выбрать файл"
-                                            v-model="
+                                        />
+                                        <div
+                                            v-else-if="
                                                 report[12].certificate_scans
                                             "
-                                        />
+                                        >
+                                            <div
+                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
+                                            >
+                                                <div
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                                >
+                                                    <span
+                                                        class="font-semibold"
+                                                        >{{
+                                                            report[12]
+                                                                .certificate_scans
+                                                                .name
+                                                        }}</span
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form__field add-block">
                                         <p>+ добавить проект</p>
@@ -3079,18 +3220,18 @@ const report = ref({
         event_name: '',
         number_of_participants: '',
         links: '',
-        certificate_scans: '',
+        certificate_scans: null,
     },
     8: {
         event_name: '',
         number_of_participants: '',
         links: '',
-        certificate_scans: '',
+        certificate_scans: null,
     },
-    9: { event_name: '', prize_place: '', certificate_scans: '' },
-    10: { event_name: '', prize_place: '', certificate_scans: '' },
-    11: { event_name: '', prize_place: '', certificate_scans: '' },
-    12: { event_name: '', prize_place: '', certificate_scans: '' },
+    9: { event_name: '', prize_place: '', certificate_scans: null },
+    10: { event_name: '', prize_place: '', certificate_scans: null },
+    11: { event_name: '', prize_place: '', certificate_scans: null },
+    12: { event_name: '', prize_place: '', certificate_scans: null },
     13: { organization_data: '' },
     16: {
         link_vk_commander: '',
@@ -3151,6 +3292,11 @@ const reportPost = ref({
     },
 });
 
+const selectCertScans = (event) => {
+    report[12].value.certificate_scans = event.files[0];
+    console.log('файл есть', report[12].value.certificate_scans);
+};
+
 const getParameters = async (id) => {
     try {
         const response = await HTTP.get(
@@ -3174,7 +3320,8 @@ const getParameters = async (id) => {
 };
 const postParameters = async (id) => {
     try {
-        console.log(report.value[id]);
+        let fd = new FormData();
+        // fd.append('certificate_scans', report[12].certificate_scans.value);
         await HTTP.post(
             `/competitions/${route.params.competition_pk}/reports/q${id}/`,
             report.value[id],
