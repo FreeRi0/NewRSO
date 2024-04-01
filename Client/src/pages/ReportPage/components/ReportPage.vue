@@ -496,7 +496,8 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top"
-                                v-for="(block, index) in blocks"
+                                v-for="(block, index) in report[5]
+                                    .participants_data"
                                 :key="index"
                             >
                                 <div class="form__field-group-left">
@@ -510,9 +511,7 @@ s
                                         <Input
                                             placeholder="Например, Иванова Светлана Андреевна"
                                             max-length="100"
-                                            v-model:value="
-                                                report[5].participants_data.name
-                                            "
+                                            v-model:value="block.name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -526,21 +525,38 @@ s
                                             прохождение профессионального
                                             обучения<span>&nbsp;*</span></label
                                         >
-                                        <FileUpload
+                                        <!-- <FileUpload
                                             mode="basic"
                                             name="demo[]"
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @select="selectCertScansFive"
-                                            v-if="!report[5].certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
-                                        <div
-                                            v-else-if="
-                                                report[5].certificate_scans
+                                            @select="
+                                                selectFile(
+                                                    $event,
+                                                    5,
+                                                    'participants_data',
+                                                    'document',
+                                                    index,
+                                                )
                                             "
-                                        >
+                                            v-if="!block.document"
+                                            chooseLabel="Выбрать файл"
+                                        /> -->
+                                        <input
+                                            type="file"
+                                            @change="
+                                                selectFile(
+                                                    $event,
+                                                    5,
+                                                    'participants_data',
+                                                    'document',
+                                                    index,
+                                                )
+                                            "
+                                            v-if="!block.document"
+                                        />
+                                        <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -550,9 +566,7 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            report[5]
-                                                                .certificate_scans
-                                                                .name
+                                                            block.document.name
                                                         }}</span
                                                     >
                                                 </div>
@@ -3220,11 +3234,13 @@ const prizePlaceChoose = ref([{ name: '1' }, { name: '2' }, { name: '3' }]);
 // const counterReport = computed(() => {
 //     return .value?.length || 0;
 // });
-
-const blocks = ref([{ value: '' }]);
-
+const selectFile = (e, id, field, subfield, index) => {
+    console.log(e.target.files[0], id, field, subfield);
+    if (subfield) report.value[id][field][index][subfield] = e.target.files[0];
+    else report.value[id][field] = e.target.files[0];
+};
 const addNewBlock = () => {
-    blocks.value.push({ value: '' });
+    report.value[5].participants_data.push({ name: '', document: '' });
 };
 
 const report = ref({
@@ -3238,7 +3254,7 @@ const report = ref({
     3: { place: '' },
     4: { place: '' },
     5: {
-        participants_data: [{ name: '' }],
+        participants_data: [{ name: '', document: '' }],
     },
     6: {
         first_may_demonstration: null,
@@ -3357,13 +3373,25 @@ const getParameters = async (id) => {
 const postParameters = async (id) => {
     try {
         let fd = new FormData();
-        fd.append('certificate_scans', report.value[12].certificate_scans);
+        for (let i in report.value[id]) {
+            let field = report.value[id][i];
+            if (Array.isArray(field)) {
+                for (let k in field) {
+                    for (let j in field[k]) {
+                        fd.append(i + '[' + k + '][' + j + ']', field[k][j]);
+                        console.log(j, field[k][j]);
+                    }
+                }
+            } else {
+                fd.append(i, field);
+            }
+        }
         await HTTP.post(
             `/competitions/${route.params.competition_pk}/reports/q${id}/`,
-            report.value[id],
+            fd,
             {
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'multipart/form-data',
                     Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
             },
