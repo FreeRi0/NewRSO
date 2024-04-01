@@ -197,7 +197,7 @@ watch(
     () => route.params.id,
 
     (newId) => {
-        if (!newId || route.name !== 'userpage') return;
+        if (!newId ) return;
         id = newId;
         userStore.getUserId(id);
         roleStore.getPositions(id);

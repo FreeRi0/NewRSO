@@ -123,7 +123,7 @@
                     @update:value="updateDetachment"
                     class="mb-2 region-input"
                     :items="detachments"
-                    :SortDropdown="false"
+                    :SortDropdown="true"
                 ></lsoSerachFilter>
             </v-expansion-panel-text>
             <p v-if="detachmentRef">Выбрано: {{ detachmentRef }}</p>

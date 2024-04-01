@@ -52,7 +52,10 @@
                 </div>
             </div>
             <h2 class="title event_about">О мероприятии</h2>
-            <div class="category">{{ eventsStore.event.direction }}</div>
+            <div class="d-flex">
+                <div class="category">{{ eventsStore.event.direction }}</div>
+                <div class="category ml-3">{{ eventsStore.event.scale }}</div>
+            </div>
             <div class="text event_type_wrap">
                 {{ eventsStore.event.description }}
             </div>
@@ -77,26 +80,15 @@
                     {{ eventsStore.event.time_data?.start_time }}
                 </div>
             </div>
-            <div class="event">
-                <div class="event-cols-2">
+            <!-- <div class="event-cols-2">
                     <img
                         src="@app/assets/icon_items/map.svg"
                         class="mr-3"
                         alt=""
                     />
                     Маштаб мероприятия: {{ eventsStore.event.scale }}
-                </div>
-                <div class="event-cols-2">
-                    <img
-                        src="@app/assets/icon_items/clock.svg"
-                        class="mr-3"
-                        alt="g"
-                    />
-                    Окончание мероприятия:
-                    {{ eventsStore.event.time_data?.end_date }},
-                    {{ eventsStore.event.time_data?.end_time }}
-                </div>
-            </div>
+                </div> -->
+
             <div class="event">
                 <div class="event-cols-2">
                     <img
@@ -111,11 +103,11 @@
                     <img
                         src="@app/assets/icon_items/clock.svg"
                         class="mr-3"
-                        alt=""
+                        alt="g"
                     />
-                    Начало регистрации:
-                    {{ eventsStore.event.time_data?.start_date }},
-                    {{ eventsStore.event.time_data?.start_time }}
+                    Окончание мероприятия:
+                    {{ eventsStore.event.time_data?.end_date }},
+                    {{ eventsStore.event.time_data?.end_time }}
                 </div>
             </div>
             <div class="event">
@@ -133,21 +125,31 @@
                         class="mr-3"
                         alt=""
                     />
-                    Окончание регистрации:
-                    {{ eventsStore.event.time_data?.registration_end_date }},
-                    {{ eventsStore.event.time_data?.registration_end_time }}
+                    Начало регистрации:
+                    {{ eventsStore.event.time_data?.start_date }},
+                    {{ eventsStore.event.time_data?.start_time }}
                 </div>
             </div>
             <div class="event">
                 <div class="event-cols-2">
                     <img
                         src="@app/assets/icon/linkRef.svg"
-                        class="mr-3"
+                        class="mr-3 event-cols-2_ref"
                         alt="linkRef"
                     />
                     <a :href="eventsStore.event.conference_link"
                         >Ссылка на мероприятие</a
                     >
+                </div>
+                <div class="event-cols-2">
+                    <img
+                        src="@app/assets/icon_items/clock.svg"
+                        class="mr-3"
+                        alt=""
+                    />
+                    Окончание регистрации:
+                    {{ eventsStore.event.time_data?.registration_end_date }},
+                    {{ eventsStore.event.time_data?.registration_end_time }}
                 </div>
             </div>
 
@@ -175,7 +177,9 @@
                         />
                     </div>
                     <div class="text text--organizer">
-                        {{ organizator.organization }}
+                        {{ organizator.organizer?.last_name }}
+                        {{ organizator.organizer?.first_name }}
+                        {{ organizator.organizer?.patronymic_name }}
                     </div>
                     <!-- <div class="text text--status">
                     {{ organizator.status }}
@@ -204,7 +208,9 @@
                             />
                         </div>
                         <div class="text text--organizer">
-                            {{ organizator.organization }}
+                            {{ organizator.organizer?.last_name }}
+                            {{ organizator.organizer?.first_name }}
+                            {{ organizator.organizer?.patronymic_name }}
                         </div>
                         <!-- <div class="text text--status">
                         {{ organizator.status }}
@@ -537,10 +543,6 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-// .linkRef {
-//     width: 18px;
-//     height: 18px;
-// }
 .event {
     width: 100%;
     height: 40px;
@@ -615,6 +617,9 @@ watch(
 
         margin-right: 1%;
     }
+    &-cols-2_ref {
+        width: 18px !important;
+    }
     &-cols-2 img {
         width: 24px;
         height: 24px;
@@ -625,7 +630,6 @@ watch(
         font-weight: 400;
         color: #35383f;
         line-height: 23.74px;
-        font-family: 'Bert Sans';
     }
     &-empty {
         height: 60px;

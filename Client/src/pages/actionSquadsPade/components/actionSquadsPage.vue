@@ -39,8 +39,8 @@
             </div>
         </div>
         <div class="action-slides">
-            <div class="settings-container">
-                <v-expansion-panels >
+            <div class="settings-container" >
+                <v-expansion-panels style="width: 284px;">
                     <v-expansion-panel
                         class="settings-body"
                         title="Тип мероприятия"
@@ -276,6 +276,7 @@
                   </div>
                     <div class="sort-alphabet">
                       <v-select
+                          style="width: 232px;"
                           class="events__sort-select"
                           item-title="text"
                           item-value="value"
@@ -525,10 +526,10 @@ const sortOptions = ref([
 
 <style>
 .v-input__control {
-  width: 232px;
+  /*width: 232px;*/
 }
 .v-expansion-panels {
-  width: 284px;
+  /*width: 284px;*/
 }
 .v-field__outline {
   border-radius: 10px;

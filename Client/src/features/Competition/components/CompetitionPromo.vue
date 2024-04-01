@@ -83,7 +83,7 @@
             </div>
         </div>
 
-        <!-- <div>
+        <div v-if="roleStore.status.is_commander_detachment">
             <router-link
                 :to="{
                     name: 'debut',
@@ -92,12 +92,13 @@
             >
                 <div class="route">Отчетность</div></router-link
             >
-        </div> -->
+        </div>
     </section>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useRoleStore } from '@layouts/store/role';
 
 defineProps({
     squad: {
@@ -107,7 +108,7 @@ defineProps({
 });
 
 let sizeImage = ref('desktop');
-
+const roleStore = useRoleStore();
 const getSizeImage = () => {
     console.log('ширина экрана', window.innerWidth);
     if (window.innerWidth <= 360) {
