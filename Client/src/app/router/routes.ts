@@ -128,6 +128,17 @@ const routes: RouteRecordRaw[] = [
                                                         '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
                                                     ),
                                             },
+                                            {
+                                                path: 'report/:competition_pk',
+                                                meta: {
+                                                    label: 'Редактирование данных по показателям',
+                                                },
+                                                name: 'Report',
+                                                component: () =>
+                                                    import(
+                                                        '@pages/ReportPage/components/ReportPage.vue'
+                                                    ),
+                                            },
                                         ],
                                     },
                                     {
@@ -680,12 +691,6 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
 
-            {
-                path: '/report',
-                name: 'Report',
-                component: () =>
-                    import('@pages/ReportPage/components/ReportPage.vue'),
-            },
             {
                 path: '/CorpUniver',
                 meta: {
