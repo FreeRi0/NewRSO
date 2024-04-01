@@ -536,7 +536,11 @@ s
                                             v-if="!report[5].certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div v-else-if="report[5].certificate_scans">
+                                        <div
+                                            v-else-if="
+                                                report[5].certificate_scans
+                                            "
+                                        >
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -546,7 +550,9 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            report[5].certificate_scans.name
+                                                            report[5]
+                                                                .certificate_scans
+                                                                .name
                                                         }}</span
                                                     >
                                                 </div>
@@ -1156,7 +1162,11 @@ s
                                             v-if="!report[7].certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div v-else-if="report[7].certificate_scans">
+                                        <div
+                                            v-else-if="
+                                                report[7].certificate_scans
+                                            "
+                                        >
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -1166,7 +1176,9 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            report[7].certificate_scans.name
+                                                            report[7]
+                                                                .certificate_scans
+                                                                .name
                                                         }}</span
                                                     >
                                                 </div>
@@ -1325,10 +1337,14 @@ s
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectPersonal"
-                                            v-if="!consent_personal_data"
+                                            v-if="!report[8].certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div v-else-if="consent_personal_data">
+                                        <div
+                                            v-else-if="
+                                                report[8].certificate_scans
+                                            "
+                                        >
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -1338,7 +1354,9 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            consent_personal_data.name
+                                                            report[8]
+                                                                .certificate_scans
+                                                                .name
                                                         }}</span
                                                     >
                                                 </div>
@@ -1477,10 +1495,14 @@ s
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectPersonal"
-                                            v-if="!consent_personal_data"
+                                            v-if="!report[9].certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div v-else-if="consent_personal_data">
+                                        <div
+                                            v-else-if="
+                                                report[9].certificate_scans
+                                            "
+                                        >
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -1490,7 +1512,9 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            consent_personal_data.name
+                                                            report[9]
+                                                                .certificate_scans
+                                                                .name
                                                         }}</span
                                                     >
                                                 </div>
@@ -1631,10 +1655,14 @@ s
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectPersonal"
-                                            v-if="!consent_personal_data"
+                                            v-if="report[10].certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div v-else-if="consent_personal_data">
+                                        <div
+                                            v-else-if="
+                                                report[10].certificate_scans
+                                            "
+                                        >
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -1644,7 +1672,9 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            consent_personal_data.name
+                                                            report[10]
+                                                                .certificate_scans
+                                                                .name
                                                         }}</span
                                                     >
                                                 </div>
@@ -1786,10 +1816,14 @@ s
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectPersonal"
-                                            v-if="!consent_personal_data"
+                                            v-if="!report[11].certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div v-else-if="consent_personal_data">
+                                        <div
+                                            v-else-if="
+                                                report[11].certificate_scans
+                                            "
+                                        >
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -1799,7 +1833,9 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            consent_personal_data.name
+                                                            report[11]
+                                                                .certificate_scans
+                                                                .name
                                                         }}</span
                                                     >
                                                 </div>
@@ -3293,8 +3329,8 @@ const reportPost = ref({
 });
 
 const selectCertScans = (event) => {
-    report[12].value.certificate_scans = event.files[0];
-    console.log('файл есть', report[12].value.certificate_scans);
+    report.value[12].certificate_scans = event.files[0];
+    console.log('файл есть', report.value[12].certificate_scans);
 };
 
 const getParameters = async (id) => {
@@ -3321,7 +3357,7 @@ const getParameters = async (id) => {
 const postParameters = async (id) => {
     try {
         let fd = new FormData();
-        // fd.append('certificate_scans', report[12].certificate_scans.value);
+        fd.append('certificate_scans', report.value[12].certificate_scans);
         await HTTP.post(
             `/competitions/${route.params.competition_pk}/reports/q${id}/`,
             report.value[id],

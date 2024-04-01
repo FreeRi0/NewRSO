@@ -117,7 +117,7 @@ const data = ref({
 
 const results = ref({
     data: ['Ваша сумма мест', 'Место в рейтинге', 'Сумма мест СМО «Мечта»'],
-    place: ['20', '6', '211,75'],
+    place: ['-', '-', '-'],
 });
 
 const onAction = async () => {

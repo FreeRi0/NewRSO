@@ -120,7 +120,7 @@ const resultData = ref({
 
 const mainResults = ref({
     data: ['Ваша сумма мест', 'Место в рейтинге'],
-    place: ['20', '6'],
+    place: ['-', '-'],
 });
 
 const onAction = async () => {
