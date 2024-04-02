@@ -288,7 +288,7 @@
                             8
                         </td>
                         <td rowspan="4" class="corpuniver__table__td">
-                            <b>25 марта</b><br />14.00-16.00
+                            <b>26 марта</b><br />14.00-16.00
                         </td>
                         <td rowspan="9" class="corpuniver__table__td">
                             <a href="#video_7">Лето с пользой</a>
@@ -599,7 +599,14 @@
             </h2>
 
             <div class="corpuniver__video">
-                <img src="@app/assets/corpuniver/default.png" />
+              <iframe
+                  class="corpuniver__iframe"
+                  src="https://vk.com/video_ext.php?oid=-223571150&id=456239091&hash=e18a9741916ddc13"
+                  frameborder="0"
+                  allowfullscreen
+                  allow="autoplay; encrypted-media; fullscreen; picture-in-picture">
+
+              </iframe>
             </div>
         </div>
         <div v-else-if="toggleBtn.pedagogical">
@@ -701,7 +708,7 @@
         </div>
 
         <h2 id="video_7" class="corpuniver__title-h2">
-            Занятие 25 марта «Лето с пользой»
+            Занятие 26 марта «Лето с пользой»
         </h2>
         <p class="corpuniver__text-subtitle">
             Спикеры: Дмитрий Парамонов, Юлия Позднякова, Ксения Пискарева,
@@ -717,6 +724,148 @@
                 allowfullscreen
             ></iframe>
         </div>
+
+      <div class="videoType">
+        <v-btn
+            class="constructionBtn videoTypeBtn"
+            :class="{ active: toggleBtnSummer.construction }"
+            variant="outlined"
+            @click="toggleSummer"
+        >
+          Строительные
+        </v-btn>
+        <v-btn
+            class="pedagogicalBtn videoTypeBtn"
+            :class="{ active: toggleBtnSummer.pedagogical }"
+            variant="outlined"
+            @click="toggleSummer"
+        >
+          Педагогические
+        </v-btn>
+        <v-btn
+            class="serviceBtn videoTypeBtn"
+            :class="{ active: toggleBtnSummer.service }"
+            variant="outlined"
+            @click="toggleSummer"
+        >
+          Сервисные
+        </v-btn>
+        <v-btn
+            class="agriculturalBtn videoTypeBtn"
+            :class="{ active: toggleBtnSummer.agricultural }"
+            variant="outlined"
+            @click="toggleSummer"
+        >
+          Сельскохозяйственные
+        </v-btn>
+        <v-btn
+            class="conductorBtn videoTypeBtn"
+            :class="{ active: toggleBtnSummer.conductor }"
+            variant="outlined"
+            @click="toggleSummer"
+        >
+          Проводников
+        </v-btn>
+      </div>
+
+      <div v-if="toggleBtnSummer.construction">
+        <h2 id="video_6" class="corpuniver__title-h2">
+          Строительное направление
+        </h2>
+
+        <div class="corpuniver__video">
+          <iframe
+              class="corpuniver__iframe"
+              src="https://vk.com/video_ext.php?oid=-223571150&id=456239092&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div v-else-if="toggleBtnSummer.pedagogical">
+        <h2 id="video_6" class="corpuniver__title-h2">
+          Педагогическое направление
+        </h2>
+
+        <div class="corpuniver__video">
+          <iframe
+              class="corpuniver__iframe"
+              src="https://vk.com/video_ext.php?oid=-223571150&id=456239086&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div v-else-if="toggleBtnSummer.service">
+        <h2 id="video_6" class="corpuniver__title-h2">
+          Сервисное направление
+        </h2>
+
+        <div class="corpuniver__video">
+          <iframe
+              class="corpuniver__iframe"
+              src="https://vk.com/video_ext.php?oid=-223571150&id=456239090&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div v-else-if="toggleBtnSummer.agricultural">
+        <h2 id="video_6" class="corpuniver__title-h2">
+          Сельскохозяйственное направление
+        </h2>
+
+        <div class="corpuniver__video">
+          <iframe
+              class="corpuniver__iframe"
+              src="https://vk.com/video_ext.php?oid=-223571150&id=456239087&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div v-else-if="toggleBtnSummer.conductor">
+        <h2 id="video_6" class="corpuniver__title-h2">
+          Направление проводников
+        </h2>
+
+        <div class="corpuniver__video">
+          <iframe
+              class="corpuniver__iframe"
+              src="https://vk.com/video_ext.php?oid=-223571150&id=456239089&hd=2"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+
+
+      <h2 id="video_8" class="corpuniver__title-h2">
+        Занятие 27 марта «Лето с пользой»
+      </h2>
+      <p class="corpuniver__text-subtitle">
+        Спикеры: Юлия Позднякова
+      </p>
+
+      <div class="corpuniver__video">
+        <iframe
+            class="corpuniver__iframe"
+            src="https://vk.com/video_ext.php?oid=-223571150&id=456239099"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture;"
+            frameborder="0"
+            allowfullscreen></iframe>
+      </div>
+
+      <h2 id="video_9" class="corpuniver__title-h2">
+        Занятие 29 марта «Лето с пользой»
+      </h2>
+      <p class="corpuniver__text-subtitle">
+        Спикеры: Анастасия Гориченко, Владислав Езин
+      </p>
+
+      <div class="corpuniver__video">
+        <iframe
+            class="corpuniver__iframe"
+            src="https://vk.com/video_ext.php?oid=-223571150&id=456239095&hd=2"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture;"
+            frameborder="0"
+            allowfullscreen>
+        </iframe>
+      </div>
 
         <div id="testing" class="corpuniver__documents-test">
             <p class="text corpuniver__documents-description-test">
@@ -739,12 +888,20 @@ import { ref } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
 
 let toggleBtn = ref({
-    construction: false,
-    pedagogical: true,
+    construction: true,
+    pedagogical: false,
     service: false,
     agricultural: false,
     conductor: false,
     medical: false,
+});
+
+let toggleBtnSummer = ref({
+  construction: true,
+  pedagogical: false,
+  service: false,
+  agricultural: false,
+  conductor: false,
 });
 
 const toggle = (e) => {
@@ -793,6 +950,47 @@ const toggle = (e) => {
             toggleBtn.value.medical = true;
         }
     });
+};
+
+const toggleSummer = (e) => {
+  e.target.offsetParent.classList.forEach((c) => {
+    if (c === 'constructionBtn') {
+      toggleBtnSummer.value.construction = true;
+      toggleBtnSummer.value.pedagogical = false;
+      toggleBtnSummer.value.service = false;
+      toggleBtnSummer.value.agricultural = false;
+      toggleBtnSummer.value.conductor = false;
+      toggleBtnSummer.value.medical = false;
+    } else if (c === 'pedagogicalBtn') {
+      toggleBtnSummer.value.construction = false;
+      toggleBtnSummer.value.pedagogical = true;
+      toggleBtnSummer.value.service = false;
+      toggleBtnSummer.value.agricultural = false;
+      toggleBtnSummer.value.conductor = false;
+      toggleBtnSummer.value.medical = false;
+    } else if (c === 'serviceBtn') {
+      toggleBtnSummer.value.construction = false;
+      toggleBtnSummer.value.pedagogical = false;
+      toggleBtnSummer.value.service = true;
+      toggleBtnSummer.value.agricultural = false;
+      toggleBtnSummer.value.conductor = false;
+      toggleBtnSummer.value.medical = false;
+    } else if (c === 'agriculturalBtn') {
+      toggleBtnSummer.value.construction = false;
+      toggleBtnSummer.value.pedagogical = false;
+      toggleBtnSummer.value.service = false;
+      toggleBtnSummer.value.agricultural = true;
+      toggleBtnSummer.value.conductor = false;
+      toggleBtnSummer.value.medical = false;
+    } else if (c === 'conductorBtn') {
+      toggleBtnSummer.value.construction = false;
+      toggleBtnSummer.value.pedagogical = false;
+      toggleBtnSummer.value.service = false;
+      toggleBtnSummer.value.agricultural = false;
+      toggleBtnSummer.value.conductor = true;
+      toggleBtnSummer.value.medical = false;
+    }
+  });
 };
 </script>
 <style>

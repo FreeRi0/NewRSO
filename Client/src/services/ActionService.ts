@@ -95,7 +95,7 @@ export function getOrganizator(id: number) {
 }
 
 export function putOrganizator(id: number, data: object, org_id: number) {
-    return HTTP.put(`/events/${id}/organizers/${org_id}`, data, {
+    return HTTP.put(`/events/${id}/organizers/${org_id}/`, data, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),

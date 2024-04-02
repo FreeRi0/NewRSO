@@ -135,7 +135,7 @@ const getPostitions = async () => {
         try {
             if (commander.value) {
                 const { data } = await HTTP.get(
-                    `/competitions/1/reports/q${index}/get_place/`,
+                    `/competitions/1/reports/q${index}/get-place/`,
                     {
                         headers: {
                             'Content-Type': 'application/json',
