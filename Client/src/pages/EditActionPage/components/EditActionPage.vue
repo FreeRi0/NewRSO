@@ -909,37 +909,84 @@
                         <v-expansion-panel-text class="form__inner-content">
                           <div class="form__field-group">
                             <div
-                                v-for="organizator in organizators"
-                                class="form-container"
-                                :key="organizator"
+                                v-for="(organizer, index) in selectedUser"
+                                style="margin-bottom: 30px;"
+                                :key="index"
                             >
-                              <div class="form-col">
-                                <div class="form__field">
-                                  <label class="form-label" for="name-hq"
-                                  >ФИО организатора <sup class="valid-red">*</sup></label>
+                              <div v-if="organizer.organizerBtnClose" class="organizer__close">
+                                <svg
+                                    @click="selectedUser.splice(index, 1)"
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                  <path d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z" stroke="#939393" stroke-linecap="round"/>
+                                  <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round"/>
+                                  <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round"/>
+                                </svg>
+                              </div>
+                              <div class="form-container" style="align-items: flex-end">
+                                <div class="form-col">
+                                  <div class="form__field">
+                                    <label class="form__label" for="name-hq"
+                                    >ФИО организатора <sup class="valid-red">*</sup></label>
 
-                                  <InputText
-                                      id="name-hq"
-                                      v-model="organizator.organization"
-                                      class="form__input form-input-container"
-                                      placeholder="Фамилия Имя Отчество"
-                                      name="name_hq"
-                                      :maxlength="100"
-                                  />
+                                    <v-autocomplete
+                                        variant="outlined"
+                                        :model-value="organizer"
+                                        class="form__input form-input-container"
+                                        :items="usersList"
+                                        :item-value="item => item"
+                                        :item-title="item => item.first_name ? `${item.last_name} ${item.first_name} ${item.patronymic_name}` : ''"
+                                        placeholder="Фамилия Имя Отчество"
+                                        @update:modelValue="item => {
+                                          organizer.organizer = item.id
+                                          organizer.last_name = item.last_name
+                                          organizer.first_name = item.first_name
+                                          organizer.patronymic_name = item.patronymic_name
+                                          console.log('selectedUser: ', selectedUser)
+                                        }"
+                                        style="border: 1px solid #b6b6b6;
+                                        border-radius: 10px;
+                                        max-height: 40px;
+                                        display: flex;
+                                        align-items: center;"
+                                        no-data-text="Ничего не найдено"
+                                    >
+                                      <template v-slot:chip="{ item }">
+                                        <div>
+                                          {{
+                                            item.raw.last_name +
+                                            ' ' +
+                                            item.raw.first_name +
+                                            ' ' +
+                                            item.raw.patronymic_name
+                                          }}
+                                        </div>
+                                      </template>
+                                      <template v-slot:item="{ props, item }">
+                                        <v-list-item
+                                            v-bind="props"
+                                            :title="`${item.raw.last_name} ${item.raw.first_name} ${item.raw.patronymic_name}`"
+                                            :subtitle="item.raw.date_of_birth"
+                                        ></v-list-item>
+                                      </template>
+                                    </v-autocomplete>
+                                  </div>
+                                </div>
+                                <div class="form-col">
+                                  <div class="form__field">
+                                    <div class="form-checkbox">
+                                      <input
+                                          v-model="organizer.is_contact_person"
+                                          type="checkbox"
+                                          name="person"
+                                      />
+                                      <label for="person">Сделать контактным лицом</label>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <div class="form__field">
-                                <div class="form-checkbox">
-                                  <input
-                                      v-model="organizator.is_contact_person"
-                                      type="checkbox"
-                                      name="person"
-                                  />
-                                  <label for="person">Сделать контактным лицом</label>
-                                </div>
-                              </div>
+                              <div style="border: 1px solid #939393; width: 100%; margin-top: 40px; margin-bottom: 30px;"/>
                             </div>
-                            <div class="form-add" @click="AddOrganizator">
+                            <div class="form-add" @click="AddOrganizer">
                               + Добавить организатора
                             </div>
                           </div>
@@ -1031,34 +1078,36 @@
                                 </v-icon>
                             </template>
                         </v-expansion-panel-title>
-                        <v-expansion-panel-text>
+                        <v-expansion-panel-text class="form__inner-content">
+                          <div class="form__field-group">
                             <div
                                 v-for="answer in answers"
                                 class="form-container"
                                 :key="answer"
                             >
-                                <div class="form-col">
-                                    <div class="form__field">
-                                        <label
-                                            class="form-label"
-                                            for="sub-questions-hq"
-                                            >Задайте интересующие вопросы
-                                            участникам мероприятия</label
-                                        >
-                                        <InputText
-                                            id="sub-questions-hq"
-                                            v-model="answer.question"
-                                            class="form__input form-input-container"
-                                            placeholder="Например: Какой у вас размер футболки"
-                                            name="name_hq"
-                                            :maxlength="100"
-                                        />
-                                    </div>
+                              <div class="form-col" style="width: 100%;">
+                                <div class="form__field">
+                                  <label
+                                      class="form__label"
+                                      for="sub-questions-hq"
+                                  >Задайте интересующие вопросы
+                                    участникам мероприятия</label>
+                                  <InputText
+                                      id="sub-questions-hq"
+                                      v-model="answer.question"
+                                      class="form__input form-input-container"
+                                      placeholder="Например: Какой у вас размер футболки"
+                                      name="name_hq"
+                                      :maxlength="100"
+                                  />
                                 </div>
+                              </div>
                             </div>
                             <div class="form-add" @click="AddQuestion">
-                                + Добавить вопрос
+                              + Добавить вопрос
                             </div>
+                          </div>
+
                         </v-expansion-panel-text>
                     </v-expansion-panel>
 
@@ -1084,12 +1133,13 @@ import {
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRoute, useRouter } from 'vue-router';
-import { useRoleStore } from '@layouts/store/role';
+// import { useRoleStore } from '@layouts/store/role';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import { Input } from '@shared/components/inputs';
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
+import { HTTP } from '@app/http';
 
 const router = useRouter();
 const route = useRoute();
@@ -1097,9 +1147,6 @@ const id = route.params.id;
 const rules = ref([]);
 
 const swal = inject('$swal');
-
-
-const organization_stop = ref('');
 
 //------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -1124,6 +1171,8 @@ const openPanelFive = () => {
   panel.value = 'panelFive';
 }
 //-------------------------------------------------------------------------------------
+const usersList = ref(null)
+let selectedUser = ref([])
 
 onActivated(() => {
     getRoles().then((resp) => {
@@ -1143,9 +1192,25 @@ onActivated(() => {
         .then((resp) => {
             maininfo.value = resp.data;
             maininfo.value.banner = null;
+
+            maininfo.value.org_central_headquarter = resp.data.org_central_headquarter || '';
+            maininfo.value.org_district_headquarter = resp.data.org_district_headquarter || '';
+            maininfo.value.org_regional_headquarter = resp.data.org_regional_headquarter || '';
+            maininfo.value.org_local_headquarter = resp.data.org_local_headquarter || '';
+            maininfo.value.org_educational_headquarter = resp.data.org_educational_headquarter || '';
+            maininfo.value.org_detachment = resp.data.org_detachment || '';
             getOrganizator(id)
                 .then((resp) => {
-                    organizators.value = resp.data.results;
+                  resp.data.results.forEach(item => {
+                    selectedUser.value.push({
+                      organizer: item.id,
+                      last_name: item.organizer.last_name,
+                      first_name: item.organizer.first_name,
+                      patronymic_name: item.organizer.patronymic_name,
+                      is_contact_person: item.is_contact_person,
+                      organizerBtnClose: true,
+                    })
+                  })
                 })
                 .catch((e) => {
                     console.log(e);
@@ -1154,7 +1219,22 @@ onActivated(() => {
         .catch((e) => {
             console.log(e);
         });
-    switch (maininfo.value.application_type) {
+  const getUsers = async () => {
+    try {
+      const usersRes = await HTTP.get('users/', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+      })
+      usersList.value = await usersRes.data.results;
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  getUsers();
+
+  switch (maininfo.value.application_type) {
         case 'Персональная':
             area_massive.value = [{ name: 'ЛСО' }];
             break;
@@ -1177,7 +1257,7 @@ onActivated(() => {
             ];
             break;
     }
-    switch (maininfo.value.scale) {
+  switch (maininfo.value.scale) {
         case 'Отрядное':
             Object.entries(rules.value).forEach(([key, value]) => {
                 if (key === 'detachment_commander') {
@@ -1347,13 +1427,11 @@ const area_massive = ref([
 // ----------------------------------------------------------------------------
 const cropper = ref();
 const dialogBanner = ref(false);
-const users = ref([]);
 const urlBanner = ref(null);
 let bannerPreview = ref(null);
 
 const selectBanner = (event) => {
   maininfo.value.banner = event.target.files[0];
-  // fileBanner.value = event.target.files[0];
   bannerPreview.value = URL.createObjectURL(maininfo.value.banner);
 };
 const cropImage = () => {
@@ -1399,16 +1477,15 @@ const answers = ref([
     ],
 ]);
 
-function AddOrganizator() {
-    organizators.value.push({
-        id: Number,
-        organizer: '',
-        organizer_phone_number: '',
-        organizer_email: '',
-        organization: '',
-        telegram: '',
-        is_contact_person: false,
-    });
+function AddOrganizer() {
+  selectedUser.value.push({
+    organizer: '',
+    last_name: '',
+    first_name: '',
+    patronymic_name: '',
+    is_contact_person: false,
+    organizerBtnClose: true,
+  });
 }
 function SubmitEvent() {
     let fd = new FormData();
@@ -1431,8 +1508,8 @@ function SubmitEvent() {
                 .catch((e) => {
                     console.log(e);
                 });
-            organizators.value.forEach((organizator) => {
-                putOrganizator(id, organizator, organizator.id)
+          selectedUser.value.forEach((item) => {
+                putOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person }, item.organizer)
                     .then((resp) => {
                         console.log(resp.data);
                     })
@@ -1467,6 +1544,14 @@ function AddQuestion() {
 }
 .form__inner-content {
   border-bottom: none;
+}
+.organizer__close {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  svg {
+    cursor: pointer;
+  }
 }
 .eventType {
   display: flex;
@@ -1626,8 +1711,14 @@ function AddQuestion() {
         align-items: center;
     }
     &-add {
-        margin-top: 10px;
-        text-decoration: underline;
+      margin-top: 10px;
+      text-decoration: underline;
+      font-family: Bert Sans;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 24px;
+      text-align: left;
+      color: #35383F;
     }
     &-add:hover {
         cursor: pointer;
