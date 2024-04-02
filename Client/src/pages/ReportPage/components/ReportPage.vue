@@ -525,7 +525,7 @@ s
                                             прохождение профессионального
                                             обучения<span>&nbsp;*</span></label
                                         >
-                                        <!-- <FileUpload
+                                        <FileUpload
                                             mode="basic"
                                             name="demo[]"
                                             accept=".pdf, .jpeg, .png"
@@ -542,19 +542,6 @@ s
                                             "
                                             v-if="!block.document"
                                             chooseLabel="Выбрать файл"
-                                        /> -->
-                                        <input
-                                            type="file"
-                                            @change="
-                                                selectFile(
-                                                    $event,
-                                                    5,
-                                                    'participants_data',
-                                                    'document',
-                                                    index,
-                                                )
-                                            "
-                                            v-if="!block.document"
                                         />
                                         <div v-else>
                                             <div
@@ -939,6 +926,10 @@ s
                                         <sortByEducation
                                             placeholder="Например, да"
                                             optionLabel="name"
+                                            v-model="
+                                                report[6].creative_festival
+                                            "
+                                            :options="festivalChoose"
                                             class="invents-select"
                                             :sorts-boolean="false"
                                         />
@@ -1955,7 +1946,10 @@ s
                                         <Input
                                             placeholder="Например, Творческий фестиваль на ВСС «Мирный атом»"
                                             max-length="100"
-                                            v-model="report[12].event_name"
+                                            v-model:value="
+                                                report[12].participation_data
+                                                    .event_name
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -1967,12 +1961,15 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, 1"
-                                            v-model="report[12].prize_place"
+                                            v-model="
+                                                report[12].participation_data
+                                                    .prize_place
+                                            "
                                             :options="prizePlaceChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1990,12 +1987,16 @@ s
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectCertScans"
-                                            v-if="!report[12].certificate_scans"
+                                            v-if="
+                                                !report[12].participation_data
+                                                    .certificate_scans
+                                            "
                                             chooseLabel="Выбрать файл"
                                         />
                                         <div
                                             v-else-if="
-                                                report[12].certificate_scans
+                                                report[12].participation_data
+                                                    .certificate_scans
                                             "
                                         >
                                             <div
@@ -2008,6 +2009,7 @@ s
                                                         class="font-semibold"
                                                         >{{
                                                             report[12]
+                                                                .participation_data
                                                                 .certificate_scans
                                                                 .name
                                                         }}</span
@@ -2704,6 +2706,8 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="(block, index) in report[17]"
+                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -2715,6 +2719,9 @@ s
                                         <Input
                                             placeholder="Например, РИА Новости"
                                             max-length="100"
+                                            v-model:value="
+                                                block.q17_event.source_name
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2731,15 +2738,19 @@ s
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="block.q17_link.link"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>+ добавить источник</p>
-                                    </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="addNewBlockQ17"
+                            >
+                                + добавить участника
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -3166,8 +3177,6 @@ const Choose = ref([
     { value: false, name: 'Нет' },
 ]);
 
-const regionalSchoolCommander = ref();
-
 const CommanderChoose = ref([
     { value: true, name: 'Да' },
     { value: false, name: 'Нет' },
@@ -3212,6 +3221,12 @@ const competitionProChoose = ref([
     { value: true, name: 'Да' },
     { value: false, name: 'Нет' },
 ]);
+
+const festivalChoose = ref([
+    { value: true, name: 'Да' },
+    { value: false, name: 'Нет' },
+]);
+
 const status = ref();
 const statusChoose = ref([
     { name: 'Региональный' },
@@ -3229,18 +3244,28 @@ const typeEventChoose = ref([
 ]);
 
 const prizePlace = ref();
-const prizePlaceChoose = ref([{ name: '1' }, { name: '2' }, { name: '3' }]);
+const prizePlaceChoose = ref([
+    { name: '1', value: 1 },
+    { name: '2', value: 2 },
+    { name: '3', value: 3 },
+]);
 
 // const counterReport = computed(() => {
 //     return .value?.length || 0;
 // });
 const selectFile = (e, id, field, subfield, index) => {
-    console.log(e.target.files[0], id, field, subfield);
-    if (subfield) report.value[id][field][index][subfield] = e.target.files[0];
-    else report.value[id][field] = e.target.files[0];
+    if (subfield) report.value[id][field][index][subfield] = e.files[0];
+    else report.value[id][field] = e.files[0];
 };
 const addNewBlock = () => {
     report.value[5].participants_data.push({ name: '', document: '' });
+};
+
+const addNewBlockQ17 = () => {
+    report.value[17].push({
+        q17_event: { source_name: '' },
+        q17_link: { link: '' },
+    });
 };
 
 const report = ref({
@@ -3254,7 +3279,7 @@ const report = ref({
     3: { place: '' },
     4: { place: '' },
     5: {
-        participants_data: [{ name: '', document: '' }],
+        participants_data: [{ name: '', document: null }],
     },
     6: {
         first_may_demonstration: null,
@@ -3283,7 +3308,11 @@ const report = ref({
     9: { event_name: '', prize_place: '', certificate_scans: null },
     10: { event_name: '', prize_place: '', certificate_scans: null },
     11: { event_name: '', prize_place: '', certificate_scans: null },
-    12: { event_name: '', prize_place: '', certificate_scans: null },
+    12: {
+        participation_data: [
+            { event_name: '', prize_place: null, certificate_scans: null },
+        ],
+    },
     13: { organization_data: '' },
     16: {
         link_vk_commander: '',
@@ -3292,6 +3321,7 @@ const report = ref({
         link_vk_detachment: '',
         vk_detachment_number_subscribers: '',
     },
+    17: { q17_event: { source_name: '' }, q17_link: { link: '' } },
     18: { participants_number: '' },
     19: { safety_violations: '' },
     20: {
@@ -3345,8 +3375,11 @@ const reportPost = ref({
 });
 
 const selectCertScans = (event) => {
-    report.value[12].certificate_scans = event.files[0];
-    console.log('файл есть', report.value[12].certificate_scans);
+    report.value[12].participation_data.certificate_scans = event.files[0];
+    console.log(
+        'файл есть',
+        report.value[12].participation_data.certificate_scans,
+    );
 };
 
 const getParameters = async (id) => {
@@ -3388,7 +3421,7 @@ const postParameters = async (id) => {
         }
         await HTTP.post(
             `/competitions/${route.params.competition_pk}/reports/q${id}/`,
-            fd,
+            report.value[id],
             {
                 headers: {
                     'Content-Type': 'multipart/form-data',
