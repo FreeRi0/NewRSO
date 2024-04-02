@@ -999,7 +999,7 @@
                                 </div>
                                 <div class="form-col">
                                   <div class="form__field">
-                                    <div class="form-checkbox">
+                                    <div class="form-checkbox" style="justify-content: center">
                                       <input
                                           v-model="organizer.is_contact_person"
                                           type="checkbox"
