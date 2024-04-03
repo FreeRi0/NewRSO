@@ -664,7 +664,7 @@ s
                                         <sortByEducation
                                             placeholder="Например, да"
                                             v-model="
-                                                report[6]
+                                                report[61]
                                                     .first_may_demonstration
                                             "
                                             :options="mayDemonstrationChoose"
@@ -684,7 +684,7 @@ s
                                             placeholder="Например, 10"
                                             max-length="100"
                                             v-model:value="
-                                                report[6]
+                                                report[61]
                                                     .first_may_demonstration_participants
                                             "
                                         />
@@ -700,7 +700,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
-                                    @click="postParameters(6)"
+                                    @click="postParameters(61)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -725,7 +725,9 @@ s
                                         >
                                         <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="report[6].patriotic_action"
+                                            v-model="
+                                                report[62].patriotic_action
+                                            "
                                             :options="patrioticActionChoose"
                                             optionLabel="name"
                                             class="invents-select"
@@ -744,8 +746,8 @@ s
                                             type="number"
                                             placeholder="Например, 10"
                                             max-length="100"
-                                            v-nodel:value="
-                                                report[6]
+                                            v-model:value="
+                                                report[62]
                                                     .patriotic_action_participants
                                             "
                                         />
@@ -761,7 +763,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
-                                    @click="postParameters(6)"
+                                    @click="postParameters(62)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -784,7 +786,9 @@ s
                                         >
                                         <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="report[6].safety_work_week"
+                                            v-model="
+                                                report[63].safety_work_week
+                                            "
                                             :options="SafetyWeekChoose"
                                             optionLabel="name"
                                             class="invents-select"
@@ -799,7 +803,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
-                                    @click="postParameters(6)"
+                                    @click="postParameters(63)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -823,7 +827,7 @@ s
                                         <sortByEducation
                                             placeholder="Например, да"
                                             v-model="
-                                                report[6]
+                                                report[64]
                                                     .commander_commissioner_school
                                             "
                                             :options="
@@ -842,7 +846,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
-                                    @click="postParameters(6)"
+                                    @click="postParameters(64)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -865,7 +869,7 @@ s
                                         <sortByEducation
                                             placeholder="Например, да"
                                             v-model="
-                                                report[6]
+                                                report[65]
                                                     .working_semester_opening
                                             "
                                             :options="semesterOpeningChoose"
@@ -886,7 +890,7 @@ s
                                             placeholder="Например, 10"
                                             max-length="100"
                                             v-model:value="
-                                                report[6]
+                                                report[65]
                                                     .working_semester_opening_participants
                                             "
                                         />
@@ -902,7 +906,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
-                                    @click="postParameters(6)"
+                                    @click="postParameters(65)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -927,7 +931,7 @@ s
                                             placeholder="Например, да"
                                             optionLabel="name"
                                             v-model="
-                                                report[6].creative_festival
+                                                report[66].creative_festival
                                             "
                                             :options="festivalChoose"
                                             class="invents-select"
@@ -942,7 +946,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
-                                    @click="postParameters(6)"
+                                    @click="postParameters(66)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -965,7 +969,7 @@ s
                                         >
                                         <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="report[6].spartakiad"
+                                            v-model="report[67].spartakiad"
                                             :options="spartakiadChoose"
                                             optionLabel="name"
                                             class="invents-select"
@@ -980,7 +984,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
-                                    @click="postParameters(6)"
+                                    @click="postParameters(67)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1005,7 +1009,7 @@ s
                                         <sortByEducation
                                             placeholder="Например, да"
                                             v-model="
-                                                report[6]
+                                                report[68]
                                                     .professional_competition
                                             "
                                             :options="competitionProChoose"
@@ -1022,7 +1026,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
-                                    @click="postParameters(6)"
+                                    @click="postParameters(68)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1100,6 +1104,9 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="(block, index) in report[7]
+                                    .participation_data"
+                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -1111,6 +1118,7 @@ s
                                         <Input
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
                                             max-length="100"
+                                            v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -1126,6 +1134,9 @@ s
                                             type="number"
                                             placeholder="Например, 5"
                                             max-length="100"
+                                            v-model:value="
+                                                block.number_of_participants
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -1140,14 +1151,23 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
-                                        />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
-                                        <div class="form__field add-block">
+                                        <template
+                                            v-for="(link, i) in block.links"
+                                            :key="index + '_' + i"
+                                        >
+                                            <Input
+                                                placeholder="Например, https://vk.com/cco_monolit"
+                                                max-length="100"
+                                                v-model:value="link.link"
+                                            />
+                                            <div class="form__counter">
+                                                {{ counterReport }} / 100
+                                            </div>
+                                        </template>
+                                        <div
+                                            class="form__field add-block"
+                                            @click="AddLink7(index)"
+                                        >
                                             <p>+ добавить ссылку</p>
                                         </div>
                                     </div>
@@ -1163,15 +1183,19 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @select="selectCertSkansSeven"
-                                            v-if="!report[7].certificate_scans"
+                                            @select="
+                                                selectFile(
+                                                    $event,
+                                                    7,
+                                                    'participation_data',
+                                                    'certificate_scans',
+                                                    index,
+                                                )
+                                            "
+                                            v-if="!block.certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div
-                                            v-else-if="
-                                                report[7].certificate_scans
-                                            "
-                                        >
+                                        <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -1181,7 +1205,7 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            report[7]
+                                                            block
                                                                 .certificate_scans
                                                                 .name
                                                         }}</span
@@ -1190,7 +1214,10 @@ s
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
+                                    <div
+                                        class="form__field add-block"
+                                        @click="AddBlock7"
+                                    >
                                         <p>+ Добавить мероприятие</p>
                                     </div>
                                 </div>
@@ -1201,6 +1228,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(7)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1278,6 +1306,9 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="(block, index) in report[8]
+                                    .participation_data"
+                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -1289,6 +1320,7 @@ s
                                         <Input
                                             placeholder="Например, Всероссийский конкурс «В объективе РСО»"
                                             max-length="100"
+                                            v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -1304,6 +1336,9 @@ s
                                             type="number"
                                             placeholder="Например, 5"
                                             max-length="100"
+                                            v-model:value="
+                                                block.number_of_participants
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -1318,14 +1353,22 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
-                                        />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
-                                        <div class="form__field add-block">
+                                        <template
+                                            v-for="(link, i) in block.links"
+                                            :key="index + '_' + i"
+                                            ><Input
+                                                placeholder="Например, https://vk.com/cco_monolit"
+                                                max-length="100"
+                                                v-model:value="link.link"
+                                            />
+                                            <div class="form__counter">
+                                                {{ counterReport }} / 100
+                                            </div>
+                                        </template>
+                                        <div
+                                            class="form__field add-block"
+                                            @click="AddLink8(index)"
+                                        >
                                             <p>+ добавить ссылку</p>
                                         </div>
                                     </div>
@@ -1342,13 +1385,11 @@ s
                                             :maxFileSize="7000000"
                                             :customUpload="true"
                                             @select="selectPersonal"
-                                            v-if="!report[8].certificate_scans"
+                                            v-if="!block.certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
                                         <div
-                                            v-else-if="
-                                                report[8].certificate_scans
-                                            "
+                                            v-else-if="block.certificate_scans"
                                         >
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
@@ -1359,7 +1400,7 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            report[8]
+                                                            block
                                                                 .certificate_scans
                                                                 .name
                                                         }}</span
@@ -1368,7 +1409,10 @@ s
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
+                                    <div
+                                        class="form__field add-block"
+                                        @click="AddBlock8"
+                                    >
                                         <p>+ Добавить мероприятие</p>
                                     </div>
                                 </div>
@@ -1379,6 +1423,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(8)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1456,6 +1501,9 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="(block, index) in report[9]
+                                    .participation_data"
+                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -1466,6 +1514,7 @@ s
                                         <Input
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
                                             max-length="100"
+                                            v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -1477,12 +1526,12 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, 1"
-                                            v-model="prizePlace"
-                                            :options="prizePlaceChoose"
+                                            v-model="block.prize_place"
+                                            :options="prizePlaceChoose9"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1539,6 +1588,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(9)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1935,6 +1985,8 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="(block, index) in report[12]
+                                    .participation_data"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -1946,10 +1998,7 @@ s
                                         <Input
                                             placeholder="Например, Творческий фестиваль на ВСС «Мирный атом»"
                                             max-length="100"
-                                            v-model:value="
-                                                report[12].participation_data
-                                                    .event_name
-                                            "
+                                            v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -1963,10 +2012,7 @@ s
                                         >
                                         <sortByEducation
                                             placeholder="Например, 1"
-                                            v-model="
-                                                report[12].participation_data
-                                                    .prize_place
-                                            "
+                                            v-model="block.prize_place"
                                             :options="prizePlaceChoose"
                                             optionLabel="name"
                                             class="invents-select"
@@ -1986,18 +2032,14 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @select="selectCertScans"
-                                            v-if="
-                                                !report[12].participation_data
-                                                    .certificate_scans
+                                            @select="
+                                                selectCertScans($event, index)
                                             "
+                                            v-if="!block.certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
                                         <div
-                                            v-else-if="
-                                                report[12].participation_data
-                                                    .certificate_scans
-                                            "
+                                            v-else-if="block.certificate_scans"
                                         >
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
@@ -2008,8 +2050,7 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            report[12]
-                                                                .participation_data
+                                                            block
                                                                 .certificate_scans
                                                                 .name
                                                         }}</span
@@ -2706,7 +2747,7 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
-                                v-for="(block, index) in report[17]"
+                                v-for="(block, index) in report[17].q17_event"
                                 :key="index"
                             >
                                 <div class="form__field-group-left">
@@ -2719,16 +2760,12 @@ s
                                         <Input
                                             placeholder="Например, РИА Новости"
                                             max-length="100"
-                                            v-model:value="
-                                                block.q17_event.source_name
-                                            "
+                                            v-model:value="block.source_name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Ссылка на публикацию<span
@@ -2738,13 +2775,16 @@ s
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
-                                            v-model:value="block.q17_link.link"
+                                            v-model:value="
+                                                block.q17_link[index].link
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form__field-group-left"></div>
                             </div>
                             <div
                                 class="form__field add-block"
@@ -3250,6 +3290,11 @@ const prizePlaceChoose = ref([
     { name: '3', value: 3 },
 ]);
 
+const prizePlaceChoose9 = ref([
+    { name: '1', value: 1 },
+    { name: '2', value: 2 },
+    { name: '3', value: 3 },
+]);
 // const counterReport = computed(() => {
 //     return .value?.length || 0;
 // });
@@ -3262,11 +3307,32 @@ const addNewBlock = () => {
 };
 
 const addNewBlockQ17 = () => {
-    report.value[17].push({
-        q17_event: { source_name: '' },
-        q17_link: { link: '' },
+    report.value[17].q17_event.push({ source_name: '' });
+    report.value[17].q17_link.push({ link: '' });
+};
+const AddLink7 = (index) => {
+    report.value[7].participation_data[index].links.push({ link: '' });
+};
+
+const AddBlock7 = () => {
+    report.value[7].participation_data.push({
+        event_name: '',
+        number_of_participants: '',
+        certificate_scans: null,
     });
 };
+
+const AddLink8 = (index) => {
+    report.value[8].participation_data[index].links.push({ link: '' });
+};
+const AddBlock8 = () => {
+    report.value[8].participation_data.push({
+        event_name: '',
+        number_of_participants: '',
+        certificate_scans: null,
+    });
+};
+// const =addBlock12
 
 const report = ref({
     1: { place: '' },
@@ -3281,31 +3347,50 @@ const report = ref({
     5: {
         participants_data: [{ name: '', document: null }],
     },
-    6: {
+    61: {
         first_may_demonstration: null,
         first_may_demonstration_participants: '',
-        patriotic_action: null,
-        patriotic_action_participants: '',
-        safety_work_week: null,
-        commander_commissioner_school: null,
+    },
+    62: { patriotic_action: null, patriotic_action_participants: '' },
+    63: { safety_work_week: null },
+    64: { commander_commissioner_school: null },
+    65: {
         working_semester_opening: null,
         working_semester_opening_participants: '',
-        spartakiad: null,
-        professional_competition: null,
     },
+    66: { creative_festival: null },
+    67: { spartakiad: null },
+    68: { professional_competition: null },
     7: {
-        event_name: '',
-        number_of_participants: '',
-        links: '',
-        certificate_scans: null,
+        participation_data: [
+            {
+                event_name: '',
+                number_of_participants: '',
+                links: [{ link: '' }],
+                certificate_scans: null,
+            },
+        ],
     },
     8: {
-        event_name: '',
-        number_of_participants: '',
-        links: '',
-        certificate_scans: null,
+        participation_data: [
+            {
+                event_name: '',
+                number_of_participants: '',
+                links: [{ link: '' }],
+                certificate_scans: null,
+            },
+        ],
     },
-    9: { event_name: '', prize_place: '', certificate_scans: null },
+    9: {
+        participation_data: [
+            {
+                event_name: '',
+                number_of_participants: '',
+                links: [{ link: '' }],
+                certificate_scans: null,
+            },
+        ],
+    },
     10: { event_name: '', prize_place: '', certificate_scans: null },
     11: { event_name: '', prize_place: '', certificate_scans: null },
     12: {
@@ -3321,7 +3406,7 @@ const report = ref({
         link_vk_detachment: '',
         vk_detachment_number_subscribers: '',
     },
-    17: { q17_event: { source_name: '' }, q17_link: { link: '' } },
+    17: { q17_event: [{ source_name: '' }], q17_link: [{ link: '' }] },
     18: { participants_number: '' },
     19: { safety_violations: '' },
     20: {
@@ -3374,8 +3459,9 @@ const reportPost = ref({
     },
 });
 
-const selectCertScans = (event) => {
-    report.value[12].participation_data.certificate_scans = event.files[0];
+const selectCertScans = (event, index) => {
+    report.value[12].participation_data[index].certificate_scans =
+        event.files[0];
     console.log(
         'файл есть',
         report.value[12].participation_data.certificate_scans,
@@ -3386,7 +3472,7 @@ const getParameters = async (id) => {
     try {
         const response = await HTTP.get(
             `/competitions/${route.params.competition_pk}/reports/q${id}/` +
-                ((id == 1) | 3 | 4 ? 'get_place/' : ''),
+                (id == 1 || id == 3 || id == 4 ? 'get-place/' : ''),
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -3395,7 +3481,7 @@ const getParameters = async (id) => {
             },
         );
 
-        if ((id == 1) | 3 | 4) report.value[id] = response.data;
+        if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
         else if (response.data.results.lenght)
             report.value[id] = response.data.results;
     } catch (error) {
@@ -3405,26 +3491,56 @@ const getParameters = async (id) => {
 };
 const postParameters = async (id) => {
     try {
-        let fd = new FormData();
-        for (let i in report.value[id]) {
-            let field = report.value[id][i];
-            if (Array.isArray(field)) {
-                for (let k in field) {
-                    for (let j in field[k]) {
-                        fd.append(i + '[' + k + '][' + j + ']', field[k][j]);
-                        console.log(j, field[k][j]);
+        let fd = report.value[id];
+        let type = 'application/json';
+        if (id == 5 || id == 7 || id == 8 || id == 12) {
+            type = 'multipart/form-data';
+            fd = new FormData();
+            for (let i in report.value[id]) {
+                let field = report.value[id][i];
+                if (Array.isArray(field)) {
+                    for (let k in field) {
+                        for (let j in field[k]) {
+                            if (Array.isArray(field[k][j])) {
+                                let temp = field[k][j];
+
+                                for (let k1 in temp) {
+                                    for (let j1 in temp[k1]) {
+                                        fd.append(
+                                            i +
+                                                '[' +
+                                                k +
+                                                '][' +
+                                                j +
+                                                ']' +
+                                                '[' +
+                                                k1 +
+                                                '][' +
+                                                j1 +
+                                                ']',
+                                            temp[k1][j1],
+                                        );
+                                    }
+                                }
+                            } else
+                                fd.append(
+                                    i + '[' + k + '][' + j + ']',
+                                    field[k][j],
+                                );
+                        }
                     }
+                } else {
+                    fd.append(i, field);
                 }
-            } else {
-                fd.append(i, field);
             }
         }
+        let index = id > 60 ? 6 : id;
         await HTTP.post(
-            `/competitions/${route.params.competition_pk}/reports/q${id}/`,
-            report.value[id],
+            `/competitions/${route.params.competition_pk}/reports/q${index}/`,
+            fd,
             {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': type,
                     Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
             },
