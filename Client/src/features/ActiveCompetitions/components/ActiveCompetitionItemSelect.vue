@@ -4,7 +4,7 @@
             <div class="competition__detachments">
                 <div
                     v-if="competition.detachment"
-                    class="horizontallso-item__wrapper"
+                    class="horizontal-item__wrapper"
                 >
                     <img
                         class="competition__avatar_circle"
@@ -23,7 +23,7 @@
                 </div>
 
                 <div
-                    class="horizontallso-item__wrapper"
+                    class="horizontal-item__wrapper"
                     v-if="
                         commanderIds.regionalheadquarter_commander?.id != null
                     "
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="horizontallso-item__wrapper competitition">
+            <div class="horizontal-item__wrapper competitition">
                 <img
                     class="competition__avatar_square"
                     src="@app/assets/competition/tablet-promo.png"
@@ -61,13 +61,13 @@
                 </div>
             </div>
 
-            <div class="horizontallso-item__wrapper competition__nomination">
+            <div class="horizontal-item__wrapper competition__nomination">
                 {{ competition.detachment ? 'Тандем' : 'Дебют' }}
             </div>
 
-            <div class="horizontallso-item__wrapper">{{ action }}</div>
+            <div class="horizontal-item__wrapper">{{ action }}</div>
 
-            <div class="horizontallso__confidant">
+            <div class="horizontal__confidant">
                 <input
                     type="checkbox"
                     v-model="isChecked"
@@ -127,7 +127,7 @@ const onCheckbox = (e) => {
 </script>
 
 <style scoped lang="scss">
-.horizontallso__confidant {
+.horizontal__confidant {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
@@ -165,7 +165,7 @@ const onCheckbox = (e) => {
     width: 52px;
     height: 40px;
 }
-.horizontallso-item__wrapper {
+.horizontal-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: baseline;

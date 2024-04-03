@@ -19,7 +19,7 @@
             <div class="competition__detachments">
                 <div
                     v-if="competition.detachment"
-                    class="horizontallso-item__wrapper"
+                    class="horizontal-item__wrapper"
                 >
                     <img
                         v-if="competition.detachment.banner"
@@ -44,7 +44,7 @@
                 </div>
 
                 <div
-                    class="horizontallso-item__wrapper"
+                    class="horizontal-item__wrapper"
                     v-if="
                         commanderIds.regionalheadquarter_commander?.id != null
                     "
@@ -74,9 +74,8 @@
                 </div>
             </div>
 
-            <div class="horizontallso-item__wrapper competitition">
+            <div class="horizontal-item__wrapper competitition">
                 <img
-
                     class="competition__avatar_square"
                     src="@app/assets/competition/tablet-promo.png"
                     alt="banner"
@@ -89,7 +88,7 @@
                 </div>
             </div>
 
-            <div class="horizontallso-item__wrapper competition__nomination">
+            <div class="horizontal-item__wrapper competition__nomination">
                 {{ competition.detachment ? 'Тандем' : 'Дебют' }}
             </div>
         </div>
@@ -117,7 +116,6 @@ const props = defineProps({
         default: 0,
     },
 });
-
 
 const emit = defineEmits({
     select: null,
@@ -205,7 +203,7 @@ watch(
     height: 40px;
 }
 
-.horizontallso-item__wrapper {
+.horizontal-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: baseline;

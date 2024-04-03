@@ -361,8 +361,8 @@
                             <b>1 апреля</b><br />14.00-15.30
                         </td>
                         <td rowspan="5" class="corpuniver__table__td">
-                            Подведение итогов трудового семестра и планирование
-                            следующего года
+                          <a href="#video_10">Подведение итогов трудового семестра и планирование
+                            следующего года</a>
                         </td>
                         <td class="corpuniver__table__td">
                             Анализ работы, подведение итогов 2024 года
@@ -865,6 +865,21 @@
             frameborder="0"
             allowfullscreen>
         </iframe>
+      </div>
+
+      <h2 id="video_10" class="corpuniver__title-h2">
+        Занятие 1 апреля «Подведение итогов трудового семестра и планирование следующего года»
+      </h2>
+      <p class="corpuniver__text-subtitle">
+        Спикеры: Анастасия Гориченко, Владислав Езин
+      </p>
+
+      <div class="corpuniver__video">
+        <iframe
+            class="corpuniver__iframe"
+            src="https://vk.com/video_ext.php?oid=-223571150&id=456239098"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
+                allowfullscreen></iframe>
       </div>
 
         <div id="testing" class="corpuniver__documents-test">

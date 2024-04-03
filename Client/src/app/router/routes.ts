@@ -913,6 +913,22 @@ const routes: RouteRecordRaw[] = [
                                 component: () =>
                                     import('@pages/lsoPage/lsoPage.vue'),
                             },
+                            {
+                                path: 'indicator',
+                                children: [
+                                    {
+                                        path: ':applicationId',
+                                        meta: {
+                                            label: 'Показатели пользователя',
+                                        },
+                                        name: 'indicatorPage',
+                                        component: () =>
+                                            import(
+                                                '@pages/indicatorPages/components/IndicatorsPage.vue'
+                                            ),
+                                    },
+                                ],
+                            },
                         ],
                     },
                 ],

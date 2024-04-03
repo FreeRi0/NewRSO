@@ -34,9 +34,28 @@
                         @select="onToggleSelectCompetition"
                     />
                 </template>
-                <template v-if="selectedCompetitionsList.length">
+                <template
+                    v-for="(report, index) in allReporting[2]"
+                    :key="report.id"
+                >
+                    <active-competition-item-report
+                        :report="report"
+                        :position="index"
+                        @select="onToggleSelectReport"
+                    />
+                </template>
+                <template
+                    v-if="
+                        selectedCompetitionsList.length ||
+                        selectedReportingList.length
+                    "
+                >
                     <p class="text_total">
-                        Итого: {{ selectedCompetitionsList.length }}
+                        Итого:
+                        {{
+                            selectedCompetitionsList.length +
+                            selectedReportingList.length
+                        }}
                     </p>
 
                     <active-competition-item-select
@@ -47,12 +66,22 @@
                         :commander-ids="commanderIds"
                         @select="onToggleSelectCompetition"
                     />
+                    <active-competition-item-select-report
+                        v-for="report in selectedReportingList"
+                        :key="report.id"
+                        :action="action"
+                        :report="report"
+                        @select="onToggleSelectReport"
+                    />
                 </template>
             </div>
 
             <div
                 class="competitions__btns"
-                v-if="selectedCompetitionsList.length"
+                v-if="
+                    selectedCompetitionsList.length ||
+                    selectedReportingList.length
+                "
             >
                 <Button
                     class="save"
@@ -72,11 +101,18 @@ import { HTTP } from '@app/http';
 import { ref, onMounted, onActivated } from 'vue';
 import ActiveCompetitionItem from './ActiveCompetitionItem.vue';
 import ActiveCompetitionItemSelect from './ActiveCompetitionItemSelect.vue';
+import ActiveCompetitionItemReport from './ActiveCompetitionsItemReport.vue';
+import ActiveCompetitionItemSelectReport from './ActiveCompetitionsItemSelectReport.vue';
 
 const competitionsList = ref([]);
 const commanderIds = ref();
 const selectedCompetitionsList = ref([]);
 const allCompetition = ref([]);
+
+const allReporting = ref({
+    2: [],
+});
+const selectedReportingList = ref([]);
 
 const loading = ref(false);
 const action = ref('Одобрить');
@@ -91,6 +127,7 @@ const getMeCommander = async () => {
             },
         });
         commanderIds.value = data;
+        console.log(commanderIds.value);
     } catch (e) {
         console.log('error getMeCommander', e);
     }
@@ -104,13 +141,14 @@ const getAllCompetition = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        allCompetition.value = data;
+        allCompetition.value = data.results;
     } catch (e) {
         console.log('error getAllCompetition', e);
     }
 };
 
 const getCompetitionsJunior = async () => {
+    console.log(allCompetition);
     for (const competitionId of allCompetition.value) {
         try {
             loading.value = true;
@@ -134,7 +172,7 @@ const getCompetitionsJunior = async () => {
 };
 
 const getCompetitions = async () => {
-    for (const competitionId of allCompetition.value.results) {
+    for (const competitionId of allCompetition.value) {
         try {
             loading.value = true;
             const { data } = await HTTP.get(
@@ -157,7 +195,21 @@ const getCompetitions = async () => {
     }
 };
 
+const onToggleSelectReport = (report, isChecked) => {
+    if (isChecked) {
+        report.selected = isChecked;
+        selectedReportingList.value.push(report);
+        console.log(selectedReportingList.value);
+    } else {
+        report.selected = isChecked;
+        selectedReportingList.value = selectedReportingList.value.filter(
+            (r) => r.id !== report.id,
+        );
+    }
+};
+
 const onToggleSelectCompetition = (competition, isChecked) => {
+    console.log(competition);
     if (isChecked) {
         competition.selected = isChecked;
         selectedCompetitionsList.value.push(competition);
@@ -210,40 +262,126 @@ const cancelApplication = async (id, competitionId) => {
     );
 };
 
+const confirmIndicator = async (id, applicationId) => {
+    await HTTP.post(
+        `/competitions/1/reports/q${id}/${applicationId}/verify/`,
+        {},
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    );
+};
+
+const cancelIndicator = async (id, applicationId) => {
+    await HTTP.delete(
+        `/competitions/1/reports/q${id}/${applicationId}/verify/`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+        {},
+    );
+};
+
 const onAction = async () => {
-    try {
-        for (const application of selectedCompetitionsList.value) {
-            if (action.value === 'Одобрить') {
-                console.log(application.id);
-                await confirmApplication(
-                    application.id,
-                    application.competition.id,
-                );
-            } else {
-                await cancelApplication(
-                    application.id,
-                    application.competition.id,
-                );
-            }
-            competitionsList.value = competitionsList.value.filter(
-                (competition) => competition.id != application.id,
-            );
-            selectedCompetitionsList.value =
-                selectedCompetitionsList.value.filter(
+    console.log(selectedReportingList.value);
+    if (selectedReportingList.value.lenght) {
+        try {
+            for (const application of selectedReportingList.value) {
+                console.log(application);
+                if (action.value === 'Одобрить') {
+                    await confirmIndicator(
+                        application.indicator,
+                        application.id,
+                    );
+                } else {
+                    await cancelIndicator(
+                        application.indicator,
+                        application.id,
+                    );
+                }
+                competitionsList.value = competitionsList.value.filter(
                     (competition) => competition.id != application.id,
                 );
+                selectedReportingList.value =
+                    selectedReportingList.value.filter(
+                        (competition) => competition.id != application.id,
+                    );
+            }
+        } catch (e) {
+            console.log('error action 1', e);
         }
+    }
 
-        if (commanderIds.value.regionalheadquarter_commander?.id == null)
+    if (selectedCompetitionsList.value.lenght) {
+        try {
+            for (const application of selectedCompetitionsList.value) {
+                if (action.value === 'Одобрить') {
+                    console.log(application.id);
+                    await confirmApplication(
+                        application.id,
+                        application.competition.id,
+                    );
+                } else {
+                    await cancelApplication(
+                        application.id,
+                        application.competition.id,
+                    );
+                }
+                allReporting.value = allReporting.value.filter(
+                    (competition) => competition.id != application.id,
+                );
+                selectedCompetitionsList.value =
+                    selectedCompetitionsList.value.filter(
+                        (competition) => competition.id != application.id,
+                    );
+            }
+
             if (commanderIds.value.regionalheadquarter_commander?.id == null)
-                await getCompetitionsJunior();
-            else await getCompetitions();
-    } catch (e) {
-        console.log('error action', e);
+                if (
+                    commanderIds.value.regionalheadquarter_commander?.id == null
+                )
+                    await getCompetitionsJunior();
+                else await getCompetitions();
+        } catch (e) {
+            console.log('error action 2', e);
+        }
     }
 };
 
+const getAllReporting = async () => {
+    loading.value = true;
+    for (let index = 1; index <= 20; ++index)
+        try {
+            const { data } = await HTTP.get(
+                `/competitions/1/reports/q${index}/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            for (let report of data.results) {
+                if (!report.is_verified) {
+                    report.indicator = index;
+                    allReporting.value[index].push(report);
+                }
+            }
+            console.log(allReporting.value);
+        } catch (e) {
+            console.log('getAllReporting error', e);
+        }
+    loading.value = false;
+};
+
 onMounted(async () => {
+    await getAllReporting();
     await getAllCompetition();
     await getMeCommander();
     console.log();
