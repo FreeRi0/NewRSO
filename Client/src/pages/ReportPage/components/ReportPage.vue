@@ -1396,9 +1396,7 @@ s
                                             v-if="!block.certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div
-                                            v-else-if="block.certificate_scans"
-                                        >
+                                        <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -1565,14 +1563,10 @@ s
                                                     index,
                                                 )
                                             "
-                                            v-if="!report[9].certificate_scans"
+                                            v-if="!block.certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div
-                                            v-else-if="
-                                                report[9].certificate_scans
-                                            "
-                                        >
+                                        <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -1582,7 +1576,7 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            report[9]
+                                                            block
                                                                 .certificate_scans
                                                                 .name
                                                         }}</span
@@ -1592,12 +1586,12 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    class="form__field add-block"
-                                    @click="AddBlock9"
-                                >
-                                    <p>+ Добавить мероприятие или конкурс</p>
-                                </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="AddBlock9"
+                            >
+                                <p>+ Добавить мероприятие или конкурс</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -1683,6 +1677,9 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="(block, index) in report[10]
+                                    .participation_data"
+                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -1693,6 +1690,7 @@ s
                                         <Input
                                             placeholder="Например, Всероссийский конкурс «В объективе РСО»"
                                             max-length="100"
+                                            v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -1704,12 +1702,12 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, 1"
-                                            v-model="prizePlace"
+                                            v-model="block.prize_place"
                                             :options="prizePlaceChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1726,15 +1724,19 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @select="selectPersonal"
-                                            v-if="report[10].certificate_scans"
+                                            @select="
+                                                selectFile(
+                                                    $event,
+                                                    10,
+                                                    'participation_data',
+                                                    'certificate_scans',
+                                                    index,
+                                                )
+                                            "
+                                            v-if="!block.certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div
-                                            v-else-if="
-                                                report[10].certificate_scans
-                                            "
-                                        >
+                                        <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -1744,7 +1746,7 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            report[10]
+                                                            block
                                                                 .certificate_scans
                                                                 .name
                                                         }}</span
@@ -1753,12 +1755,13 @@ s
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>
-                                            + Добавить мероприятие или конкурс
-                                        </p>
-                                    </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="AddBlock10"
+                            >
+                                <p>+ Добавить мероприятие или конкурс</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -1766,6 +1769,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(10)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1843,6 +1847,9 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="(block, index) in report[11]
+                                    .participation_data"
+                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -1854,6 +1861,7 @@ s
                                         <Input
                                             placeholder="Например, Спартакиада на МСС «Алабуга»"
                                             max-length="100"
+                                            v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -1865,12 +1873,12 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, 1"
-                                            v-model="prizePlace"
+                                            v-model="block.prize_place"
                                             :options="prizePlaceChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1887,15 +1895,19 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @select="selectPersonal"
-                                            v-if="!report[11].certificate_scans"
+                                            @select="
+                                                selectFile(
+                                                    $event,
+                                                    11,
+                                                    'participation_data',
+                                                    'certificate_scans',
+                                                    index,
+                                                )
+                                            "
+                                            v-if="!block.certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div
-                                            v-else-if="
-                                                report[11].certificate_scans
-                                            "
-                                        >
+                                        <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -1905,7 +1917,7 @@ s
                                                     <span
                                                         class="font-semibold"
                                                         >{{
-                                                            report[11]
+                                                            block
                                                                 .certificate_scans
                                                                 .name
                                                         }}</span
@@ -1914,10 +1926,13 @@ s
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>+ добавить проект</p>
-                                    </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="AddBlock11"
+                            >
+                                <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -2004,6 +2019,7 @@ s
                                 class="form__field-group-top form__field-column-one"
                                 v-for="(block, index) in report[12]
                                     .participation_data"
+                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -2055,9 +2071,7 @@ s
                                             v-if="!block.certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
-                                        <div
-                                            v-else-if="block.certificate_scans"
-                                        >
+                                        <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
                                             >
@@ -2076,10 +2090,13 @@ s
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>+ добавить проект</p>
-                                    </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="addBlock12"
+                            >
+                                <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -2164,6 +2181,9 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="(block, index) in report[13]
+                                    .organization_data"
+                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -2172,12 +2192,12 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, спортивное"
-                                            v-model="typeEvent"
+                                            v-model="block.event_type"
                                             :options="typeEventChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -2189,15 +2209,19 @@ s
                                         <Input
                                             placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                             max-length="100"
+                                            v-model:value="block.event_link"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>+ добавить мероприятие</p>
-                                    </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="AddBlock13"
+                            >
+                                <p>+ добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -2284,6 +2308,9 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="(block, index) in report[14]
+                                    .q14_labor_project"
+                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -2295,6 +2322,9 @@ s
                                         <Input
                                             placeholder="Например, ВСС «Мирный атом»"
                                             max-length="100"
+                                            v-model:value="
+                                                block.lab_project_name
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2311,15 +2341,19 @@ s
                                             type="number"
                                             placeholder="Например, 5"
                                             max-length="100"
+                                            v-model:value="block.amount"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>+ добавить проект</p>
-                                    </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="AddBlock14"
+                            >
+                                <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -2327,6 +2361,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(14)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2406,6 +2441,8 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="(block, index) in report[15].grants_data"
+                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -2416,6 +2453,7 @@ s
                                         <Input
                                             placeholder="Например, Всероссийский конкурс молодёжных проектов среди физических лиц Федерального агентства по делам молодежи"
                                             max-length="100"
+                                            v-model:value="block.name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2427,12 +2465,12 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
+                                        <sortByEducation
                                             placeholder="Например, окружной"
-                                            v-model="status"
+                                            v-model="block.status"
                                             :options="statusChoose"
                                             optionLabel="name"
-                                            class="invents-block invents-select"
+                                            class="invents-select"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -2458,6 +2496,9 @@ s
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
+                                            v-model:value="
+                                                block.competition_link
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2473,15 +2514,19 @@ s
                                         <Input
                                             placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                             max-length="100"
+                                            v-model:value="block.prove_link"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>+ добавить проект</p>
-                                    </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="AddBlock15"
+                            >
+                                <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -2489,6 +2534,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(15)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -3296,16 +3342,14 @@ const statusChoose = ref([
     { name: 'Всероссийский' },
 ]);
 
-const typeEvent = ref();
 const typeEventChoose = ref([
-    { name: 'Спортивное' },
-    { name: 'Интеллектуальное' },
-    { name: 'Творческое' },
-    { name: 'Волонтерское' },
-    { name: 'Внутреннее' },
+    { name: 'Спортивное', value: 'Спортивное' },
+    { name: 'Интеллектуальное', value: 'Интеллектуальное' },
+    { name: 'Творческое', value: 'Творческое' },
+    { name: 'Волонтерское', value: 'Волонтерское' },
+    { name: 'Внутреннее', value: 'Внутреннее' },
 ]);
 
-const prizePlace = ref();
 const prizePlaceChoose = ref([
     { name: '1', value: 1 },
     { name: '2', value: 2 },
@@ -3357,7 +3401,52 @@ const AddBlock9 = () => {
         certificate_scans: null,
     });
 };
-// const =addBlock12
+
+const AddBlock10 = () => {
+    report.value[10].participation_data.push({
+        event_name: '',
+        number_of_participants: '',
+        certificate_scans: null,
+    });
+};
+
+const AddBlock11 = () => {
+    report.value[11].participation_data.push({
+        event_name: '',
+        number_of_participants: '',
+        certificate_scans: null,
+    });
+};
+
+const addBlock12 = () => {
+    report.value[12].participation_data.push({
+        event_name: '',
+        number_of_participants: '',
+        certificate_scans: null,
+    });
+};
+
+const AddBlock13 = () => {
+    report.value[13].organization_data.push({
+        event_type: '',
+        event_link: '',
+    });
+};
+const AddBlock14 = () => {
+    report.value[14].q14_labor_project.push({
+        lab_project_name: '',
+        amount: '',
+    });
+};
+
+const AddBlock15 = () => {
+    report.value[15].grants_data.push({
+        name: '',
+        status: '',
+        competition_link: '',
+        prove_link: '',
+    });
+};
 
 const report = ref({
     1: { place: '' },
@@ -3424,13 +3513,27 @@ const report = ref({
             },
         ],
     },
-    11: { event_name: '', prize_place: '', certificate_scans: null },
+    11: {
+        participation_data: [
+            {
+                event_name: '',
+                number_of_participants: '',
+                certificate_scans: null,
+            },
+        ],
+    },
     12: {
         participation_data: [
             { event_name: '', prize_place: null, certificate_scans: null },
         ],
     },
-    13: { organization_data: '' },
+    13: { organization_data: [{ event_type: '', event_link: '' }] },
+    14: { q14_labor_project: [{ lab_project_name: '', amount: '' }] },
+    15: {
+        grants_data: [
+            { name: '', status: '', competition_link: '', prove_link: '' },
+        ],
+    },
     16: {
         link_vk_commander: '',
         link_vk_commissar: '',
@@ -3439,45 +3542,6 @@ const report = ref({
         vk_detachment_number_subscribers: '',
     },
     17: { q17_event: [{ source_name: '' }], q17_link: [{ link: '' }] },
-    18: { participants_number: '' },
-    19: { safety_violations: '' },
-    20: {
-        link_emblem: '',
-        link_emblem_img: '',
-        link_flag: '',
-        link_flag_img: '',
-        link_banner: '',
-        link_banner_img: '',
-    },
-});
-const reportPost = ref({
-    1: { place: '' },
-    2: {
-        commander_achievement: '',
-        commissioner_achievement: '',
-        commander_link: '',
-        commissioner_link: '',
-    },
-    3: { place: '' },
-    4: { place: '' },
-    5: { participants_data: '' },
-    7: {
-        event_name: '',
-        number_of_participants: '',
-        links: '',
-        certificate_scans: '',
-    },
-    8: {
-        event_name: '',
-        number_of_participants: '',
-        links: '',
-        certificate_scans: '',
-    },
-    9: { event_name: '', prize_place: '', certificate_scans: '' },
-    10: { event_name: '', prize_place: '', certificate_scans: '' },
-    11: { event_name: '', prize_place: '', certificate_scans: '' },
-    12: { event_name: '', prize_place: '', certificate_scans: '' },
-    13: { organization_data: '' },
     18: { participants_number: '' },
     19: { safety_violations: '' },
     20: {
@@ -3524,7 +3588,15 @@ const postParameters = async (id) => {
     try {
         let fd = report.value[id];
         let type = 'application/json';
-        if (id == 5 || id == 7 || id == 8 || id == 9 || id == 12) {
+        if (
+            id == 5 ||
+            id == 7 ||
+            id == 8 ||
+            id == 9 ||
+            id == 10 ||
+            id == 11 ||
+            id == 12
+        ) {
             type = 'multipart/form-data';
             fd = new FormData();
             for (let i in report.value[id]) {
