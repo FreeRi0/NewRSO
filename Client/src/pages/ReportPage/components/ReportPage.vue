@@ -1940,6 +1940,7 @@ s
                                     class="form__button"
                                     label="Отправить данные на верификацию"
                                     size="large"
+                                    @click="postParameters(11)"
                                 />
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2482,6 +2483,7 @@ s
                                         <Input
                                             placeholder="Например, Иванова Светлана Андреевна"
                                             max-length="100"
+                                            v-model:value="block.author_name"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -2839,7 +2841,7 @@ s
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
                                             v-model:value="
-                                                block.q17_link[index].link
+                                                report[17].q17_link[index].link
                                             "
                                         />
                                         <div class="form__counter">
@@ -3499,7 +3501,6 @@ const report = ref({
         participation_data: [
             {
                 event_name: '',
-                number_of_participants: '',
                 certificate_scans: null,
             },
         ],
@@ -3508,7 +3509,6 @@ const report = ref({
         participation_data: [
             {
                 event_name: '',
-                number_of_participants: '',
                 certificate_scans: null,
             },
         ],
@@ -3517,7 +3517,6 @@ const report = ref({
         participation_data: [
             {
                 event_name: '',
-                number_of_participants: '',
                 certificate_scans: null,
             },
         ],
@@ -3531,7 +3530,13 @@ const report = ref({
     14: { q14_labor_project: [{ lab_project_name: '', amount: '' }] },
     15: {
         grants_data: [
-            { name: '', status: '', competition_link: '', prove_link: '' },
+            {
+                name: '',
+                status: '',
+                author_name: '',
+                competition_link: '',
+                prove_link: '',
+            },
         ],
     },
     16: {
@@ -3567,7 +3572,7 @@ const getParameters = async (id) => {
     try {
         const response = await HTTP.get(
             `/competitions/${route.params.competition_pk}/reports/q${id}/` +
-                (id == 1 || id == 3 || id == 4 ? 'get-place/' : ''),
+                (id == 1 || id == 3 || id == 4 ? 'get-place/' : 'me/'),
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -3577,8 +3582,8 @@ const getParameters = async (id) => {
         );
 
         if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
-        else if (response.data.results.lenght)
-            report.value[id] = response.data.results;
+        else if (response.data.results.length)
+            report.value[id] = response.data.results[0];
     } catch (error) {
         isError.value = error.response.data;
         console.log('an error occured ' + error);
