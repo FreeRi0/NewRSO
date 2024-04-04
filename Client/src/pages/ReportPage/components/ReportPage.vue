@@ -1214,13 +1214,13 @@ s
                                             </div>
                                         </div>
                                     </div>
-                                    <div
-                                        class="form__field add-block"
-                                        @click="AddBlock7"
-                                    >
-                                        <p>+ Добавить мероприятие</p>
-                                    </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="AddBlock7"
+                            >
+                                <p>+ Добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -1384,7 +1384,15 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @select="selectPersonal"
+                                            @select="
+                                                selectFile(
+                                                    $event,
+                                                    8,
+                                                    'participation_data',
+                                                    'certificate_scans',
+                                                    index,
+                                                )
+                                            "
                                             v-if="!block.certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
@@ -1409,13 +1417,13 @@ s
                                             </div>
                                         </div>
                                     </div>
-                                    <div
-                                        class="form__field add-block"
-                                        @click="AddBlock8"
-                                    >
-                                        <p>+ Добавить мероприятие</p>
-                                    </div>
                                 </div>
+                            </div>
+                            <div
+                                class="form__field add-block"
+                                @click="AddBlock8"
+                            >
+                                <p>+ Добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <Button
@@ -1529,7 +1537,7 @@ s
                                         <sortByEducation
                                             placeholder="Например, 1"
                                             v-model="block.prize_place"
-                                            :options="prizePlaceChoose9"
+                                            :options="prizePlaceChoose"
                                             optionLabel="name"
                                             class="invents-select"
                                         />
@@ -1548,7 +1556,15 @@ s
                                             accept=".pdf, .jpeg, .png"
                                             :maxFileSize="7000000"
                                             :customUpload="true"
-                                            @select="selectPersonal"
+                                            @select="
+                                                selectFile(
+                                                    $event,
+                                                    9,
+                                                    'participation_data',
+                                                    'certificate_scans',
+                                                    index,
+                                                )
+                                            "
                                             v-if="!report[9].certificate_scans"
                                             chooseLabel="Выбрать файл"
                                         />
@@ -1575,11 +1591,12 @@ s
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>
-                                            + Добавить мероприятие или конкурс
-                                        </p>
-                                    </div>
+                                </div>
+                                <div
+                                    class="form__field add-block"
+                                    @click="AddBlock9"
+                                >
+                                    <p>+ Добавить мероприятие или конкурс</p>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
@@ -3172,7 +3189,7 @@ s
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
                                             v-model:value="
-                                                reportPost[20].link_banner_img
+                                                report[20].link_banner_img
                                             "
                                         />
                                         <div class="form__counter">
@@ -3205,12 +3222,17 @@ s
 import Dropdown from 'primevue/dropdown';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
 
 const route = useRoute();
+
+const swal = inject('$swal');
+
+const isError = ref('');
+const isLoading = ref(false);
 
 const Choose = ref([
     { value: true, name: 'Да' },
@@ -3290,11 +3312,6 @@ const prizePlaceChoose = ref([
     { name: '3', value: 3 },
 ]);
 
-const prizePlaceChoose9 = ref([
-    { name: '1', value: 1 },
-    { name: '2', value: 2 },
-    { name: '3', value: 3 },
-]);
 // const counterReport = computed(() => {
 //     return .value?.length || 0;
 // });
@@ -3327,6 +3344,14 @@ const AddLink8 = (index) => {
 };
 const AddBlock8 = () => {
     report.value[8].participation_data.push({
+        event_name: '',
+        number_of_participants: '',
+        certificate_scans: null,
+    });
+};
+
+const AddBlock9 = () => {
+    report.value[9].participation_data.push({
         event_name: '',
         number_of_participants: '',
         certificate_scans: null,
@@ -3386,12 +3411,19 @@ const report = ref({
             {
                 event_name: '',
                 number_of_participants: '',
-                links: [{ link: '' }],
                 certificate_scans: null,
             },
         ],
     },
-    10: { event_name: '', prize_place: '', certificate_scans: null },
+    10: {
+        participation_data: [
+            {
+                event_name: '',
+                number_of_participants: '',
+                certificate_scans: null,
+            },
+        ],
+    },
     11: { event_name: '', prize_place: '', certificate_scans: null },
     12: {
         participation_data: [
@@ -3418,7 +3450,6 @@ const report = ref({
         link_banner_img: '',
     },
 });
-const isError = ref([]);
 const reportPost = ref({
     1: { place: '' },
     2: {
@@ -3493,7 +3524,7 @@ const postParameters = async (id) => {
     try {
         let fd = report.value[id];
         let type = 'application/json';
-        if (id == 5 || id == 7 || id == 8 || id == 12) {
+        if (id == 5 || id == 7 || id == 8 || id == 9 || id == 12) {
             type = 'multipart/form-data';
             fd = new FormData();
             for (let i in report.value[id]) {
@@ -3545,8 +3576,28 @@ const postParameters = async (id) => {
                 },
             },
         );
+        isLoading.value = false;
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
     } catch (error) {
         console.log('an error occured ' + error);
+        isError.value = error.response.data;
+        console.error(error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
 </script>
