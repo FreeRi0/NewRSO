@@ -905,6 +905,15 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
+                                path: 'action',
+                                meta: {
+                                    label: 'Данные мероприятия',
+                                },
+                                name: 'ActionData',
+                                component: () =>
+                                    import('@pages/Event/components/Event.vue'),
+                            },
+                            {
                                 path: 'detachment',
                                 meta: {
                                     label: 'Данные отряда',
