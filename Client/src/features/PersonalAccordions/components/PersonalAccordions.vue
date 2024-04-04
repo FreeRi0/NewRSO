@@ -467,7 +467,7 @@
                                 class="form-data izm"
                                 v-else="!props.user.parent.russian_passport"
                             >
-                                <!-- <div class="form-field one">
+                                <div class="form-field one">
                                     <label for="pass-num"
                                         >Документ удостоверяющий личность
                                         <span class="valid-red">*</span></label
@@ -477,7 +477,11 @@
                                         class="input-full"
                                         placeholder="документ"
                                         v-model:value="foreignDocParent"
+                                        :max-length="200"
                                     />
+                                    <!-- <div class="form__counter">
+                                    {{ counterForeignParent }} / 200
+                                </div> -->
                                 </div>
 
                                 <div class="form-field">
@@ -504,6 +508,7 @@
                                         v-model:value="foreignNumberDocParent"
                                         vmaska
                                         maska="####-######"
+                                        :max-length="50"
                                     />
                                 </div>
                                 <div class="form-field one">
@@ -518,6 +523,7 @@
                                         class="input-full"
                                         placeholder="оуфмс по моковской обл"
                                         v-model:value="foreignOrgDocParent"
+                                        :max-length="230"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -532,6 +538,7 @@
                                         v-model:value="foreignWorkBookParent"
                                         vmaska
                                         maska="AA #########"
+                                        :max-length="15"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -544,6 +551,7 @@
                                         v-model:value="foreignINNParent"
                                         vmaska
                                         maska="AA #########"
+                                        :max-length="12"
                                     />
                                 </div>
                                 <div class="form-field">
@@ -558,8 +566,9 @@
                                         v-model:value="foreignSNILSParent"
                                         vmaska
                                         maska="AA #########"
+                                        :max-length="30"
                                     />
-                                </div> -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -4092,7 +4101,7 @@
             >
                 <Button
                     :disabled="
-                    isLoading ||
+                        isLoading ||
                         !props.user.first_name ||
                         !props.user.last_name ||
                         !props.user.gender ||
@@ -4108,7 +4117,7 @@
                             (!props.user.documents.pass_ser_num ||
                                 !props.user.documents.pass_date ||
                                 !props.user.documents.inn ||
-                             !props.user.documents.snils)) ||
+                                !props.user.documents.snils)) ||
                         (props.user.is_adult === false &&
                             (!props.user.parent.parent_first_name ||
                                 !props.user.parent.parent_last_name ||
@@ -4611,7 +4620,7 @@ const updateData = async () => {
             parent_date_of_birth: '',
             relationship: '',
             parent_phone_number: '',
-            russian_passport: '',
+            russian_passport: null,
             passport_number: '',
             passport_date: '',
             passport_authority: '',

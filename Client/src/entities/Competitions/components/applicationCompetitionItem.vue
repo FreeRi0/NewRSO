@@ -8,18 +8,17 @@
             />
         </div>
 
-        <div class="horizontallso-item__wrapper mr-3">
+        <router-link
+            :to="{ name: 'PersonalDataUser', params: { id: event.user.id } }"
+            class="horizontallso-item__wrapper mr-3"
+        >
             <div class="horizontallso-img">
                 <img
                     :src="event?.user?.avatar?.photo"
                     alt="logo"
                     v-if="event?.user?.avatar?.photo"
                 />
-                <img
-                   v-else
-                    src="@app/assets/user-avatar.png"
-                    alt="photo"
-                />
+                <img v-else src="@app/assets/user-avatar.png" alt="photo" />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
@@ -43,8 +42,11 @@
                     <p>{{ event.user.date_of_birth }}</p>
                 </div>
             </div>
-        </div>
-        <div class="horizontallso-item__wrapper">
+        </router-link>
+        <router-link
+            :to="{ name: 'ActionData', params: { id: event.event.id } }"
+            class="horizontallso-item__wrapper"
+        >
             <div class="horizontallso-img">
                 <img
                     :src="event.event.banner"
@@ -62,7 +64,7 @@
                     {{ event.event.name }}
                 </p>
             </div>
-        </div>
+        </router-link>
     </div>
 </template>
 <script setup>
