@@ -934,12 +934,12 @@
                                         variant="outlined"
                                         :model-value="organizer"
                                         class="form__input form-input-container"
+                                        :disabled="organizer.oldValue"
                                         :items="usersList"
                                         :item-value="item => item"
                                         :item-title="item => item.first_name ? `${item.last_name} ${item.first_name} ${item.patronymic_name}` : ''"
                                         placeholder="Фамилия Имя Отчество"
                                         @update:modelValue="item => {
-                                          console.log('item: ', item)
                                           organizer.organizer = item.id
                                           organizer.last_name = item.last_name
                                           organizer.first_name = item.first_name
@@ -1132,7 +1132,7 @@ import {
   putOrganizator,
   putTimeData,
   putDocuments,
-  getRoles, deleteOrganizator,
+  getRoles, deleteOrganizator, createOrganizator,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRoute, useRouter } from 'vue-router';
@@ -1213,6 +1213,7 @@ onActivated(() => {
                       patronymic_name: item.organizer.patronymic_name,
                       is_contact_person: item.is_contact_person,
                       organizerBtnClose: true,
+                      oldValue: true,
                     })
                   })
                 })
@@ -1491,6 +1492,7 @@ function AddOrganizer() {
     patronymic_name: '',
     is_contact_person: false,
     organizerBtnClose: true,
+    oldValue: false
   });
 }
 function SubmitEvent() {
@@ -1525,15 +1527,26 @@ function SubmitEvent() {
                     console.log(e);
                   });
             })
-            selectedUser.value.forEach((item) => {
-                putOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person }, item.organizer)
-                    .then((resp) => {
-                        console.log(resp.data);
-                    })
-                    .catch((e) => {
-                        console.log(e);
-                    });
-            });
+            // selectedUser.value.forEach((item) => {
+            //     putOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person }, item.organizer)
+            //         .then((resp) => {
+            //             console.log(resp.data);
+            //         })
+            //         .catch((e) => {
+            //             console.log(e);
+            //         });
+            // });
+          selectedUser.value.forEach((item) => {
+            if (!item.oldValue) {
+              createOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person })
+                  .then((resp) => {
+                    console.log(resp.data);
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  });
+            }
+          });
             router.push({ name: 'actionSquads' });
         })
         .catch(() => {
