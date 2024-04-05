@@ -155,7 +155,7 @@ const squad = storeToRefs(squadsStore);
 const user = storeToRefs(userStore);
 const currentUser = storeToRefs(userStore);
 const isLoading = storeToRefs(userStore);
-console.log('userTop', user.user.value);
+
 const education = ref({});
 const member = ref([]);
 const region = ref({});
@@ -164,32 +164,32 @@ const route = useRoute();
 let id = route.params.id;
 
 const uploadAva = (imageAva) => {
-    console.log('photo', imageAva);
+
     user.user.value.media.photo = imageAva;
 };
 
 const updateAva = (imageAva) => {
-    console.log('photoUpdate', imageAva);
+
     user.user.value.media.photo = imageAva;
 };
 
 const deleteAva = (imageAva) => {
-    console.log('photoDelete', imageAva);
+
     user.user.value.media.photo = imageAva;
 };
 
 const uploadWall = (imageWall) => {
-    console.log('ban', imageWall);
+
     user.user.value.media.banner = imageWall;
 };
 
 const updateWall = (imageWall) => {
-    console.log('banUpdate', imageWall);
+
     user.user.value.media.banner = imageWall;
 };
 
 const deleteWall = (imageWall) => {
-    console.log('banDelete', imageWall);
+
     user.user.value.media.banner = imageWall;
 };
 

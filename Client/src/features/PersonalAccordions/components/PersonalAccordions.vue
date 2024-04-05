@@ -475,13 +475,13 @@
                                     <Input
                                         type="text"
                                         class="input-full"
-                                        placeholder="документ"
+                                        placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
                                         v-model:value="foreignDocParent"
                                         :max-length="200"
                                     />
-                                    <!-- <div class="form__counter">
-                                    {{ counterForeignParent }} / 200
-                                </div> -->
+                                    <div class="form__counter">
+                                        {{ counterForeignParent }} / 200
+                                    </div>
                                 </div>
 
                                 <div class="form-field">
@@ -499,7 +499,7 @@
                                 </div>
 
                                 <div class="form-field">
-                                    <label for="pass-id">серия номер</label>
+                                    <label for="pass-id">Серия номер</label>
                                     <Input
                                         type="text"
                                         id="pass-id"
@@ -510,6 +510,9 @@
                                         maska="####-######"
                                         :max-length="50"
                                     />
+                                    <div class="form__counter">
+                                        {{ counterForeignParentNumber }} / 50
+                                    </div>
                                 </div>
                                 <div class="form-field one">
                                     <label for="org-id"
@@ -521,10 +524,13 @@
                                         type="text"
                                         id="org-id"
                                         class="input-full"
-                                        placeholder="оуфмс по моковской обл"
+                                        placeholder="Страна"
                                         v-model:value="foreignOrgDocParent"
                                         :max-length="230"
                                     />
+                                    <div class="form__counter">
+                                        {{ counterForeignParentOrg }} / 230
+                                    </div>
                                 </div>
                                 <div class="form-field">
                                     <label for="work-book-foreign"
@@ -540,6 +546,9 @@
                                         maska="AA #########"
                                         :max-length="15"
                                     />
+                                    <div class="form__counter">
+                                        {{ counterForeignParentWork }} / 15
+                                    </div>
                                 </div>
                                 <div class="form-field">
                                     <label for="INN-id-foreign">ИНН</label>
@@ -553,6 +562,9 @@
                                         maska="AA #########"
                                         :max-length="12"
                                     />
+                                    <div class="form__counter">
+                                        {{ counterForeignParentInn }} / 12
+                                    </div>
                                 </div>
                                 <div class="form-field">
                                     <label for="snils-id-foreign"
@@ -568,6 +580,9 @@
                                         maska="AA #########"
                                         :max-length="30"
                                     />
+                                    <div class="form__counter">
+                                        {{ counterForeignParentSnils }} / 30
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -4263,60 +4278,59 @@ const formatSize = (size) => {
 
 const statementUp = (event) => {
     statement.value = event.files[0];
-    console.log('файл есть', statement.value);
+
     isStatementChange.value = true;
 };
 
 const selectPersonal = (event) => {
     consent_personal_data.value = event.files[0];
-    console.log('файл есть', consent_personal_data.value);
+
     isConsent_personal_dataChange.value = true;
 };
 
 const selectParentPersonal = (event) => {
     consent_personal_data_representative.value = event.files[0];
-    console.log('файл есть', consent_personal_data_representative.value);
+
     isConsent_personal_data_representativeChange.value = true;
 };
 
 const selectPass = (event) => {
     passportUpload.value = event.files[0];
-    console.log('файл есть', passportUpload.value);
+
     isPassChange.value = true;
 };
 
 const selectParentPersonalPass = (event) => {
     passport_representative.value = event.files[0];
-    console.log('файл есть', passport_representative.value);
+
     isParentPassChange.value = true;
 };
 const selectINN = (event) => {
     inn_file.value = event.files[0];
-    console.log('файл есть', inn_file.value);
+
     isInnChange.value = true;
 };
 
 const selectSnils = (event) => {
     snils_file.value = event.files[0];
-    console.log('файл есть', snils_file.value);
+
     isSnilsChange.value = true;
 };
 
 const selectEmployment = (event) => {
     employment_document.value = event.files[0];
-    console.log('файл есть', employment_document.value);
     isEmployeChange.value = true;
 };
 
 const selectIntPass = (event) => {
     international_passport.value = event.files[0];
-    console.log('файл есть', international_passport.value);
+
     isForeignChange.value = true;
 };
 
 const selectMilitary = (event) => {
     military_document.value = event.files[0];
-    console.log('файл есть', military_document.value);
+
     isMilitaryChange.value = true;
 };
 
@@ -4351,6 +4365,10 @@ const counterHouse = computed(() => {
 const counterVk = computed(() => {
     return props.user.social_vk?.length || 0;
 });
+
+// const counterForeignParent = computed(() => {
+//     return props.
+// })
 
 const counterTg = computed(() => {
     return props.user.social_tg?.length || 0;
@@ -4451,7 +4469,6 @@ const downloadBlankPersonal = async () => {
             docUrl.setAttribute('download', 'persnal.rtf');
             document.body.appendChild(docUrl);
             docUrl.click();
-            console.log(response, 'success');
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -4477,7 +4494,6 @@ const downloadBlankMembership = async () => {
             docUrl.setAttribute('download', 'membership.rtf');
             document.body.appendChild(docUrl);
             docUrl.click();
-            console.log(response, 'success');
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -4502,7 +4518,6 @@ const downloadBlankParent = async () => {
             docUrl.setAttribute('download', 'parent.rtf');
             document.body.appendChild(docUrl);
             docUrl.click();
-            console.log(response, 'success');
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -4524,7 +4539,6 @@ const downloadAll = async () => {
             link.setAttribute('download', 'file.zip');
             document.body.appendChild(link);
             link.click();
-            console.log(response, 'success');
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -4772,7 +4786,6 @@ const updateData = async () => {
             showConfirmButton: false,
             timer: 1000,
         });
-        console.log('resdp', axiosrequest1.data);
         isLoading.value = false;
         emit('updateUserData', axiosrequest1.data);
         emit('updateRegionData', axiosrequest2.data);
@@ -5049,6 +5062,7 @@ onMounted(() => {
     margin-bottom: 20px;
     font-family: 'Bert-Sans', sans-serif;
     font-weight: 600;
+    margin-left: 18px;
 }
 
 .simple {

@@ -16,14 +16,13 @@ const changePeoples = (CheckedUser, UserId) => {
     emit('change', CheckedUser, UserId);
 };
 const approveParticipant = (approved) => {
-    console.log('user', approved);
+
     emit('approve', approved);
-    console.log('approved');
+
 };
 const rejectParticipant = (rejected) => {
-    console.log('user', rejected);
     emit('reject', rejected);
-    console.log('rejected');
+
 };
 
 const props = defineProps({
