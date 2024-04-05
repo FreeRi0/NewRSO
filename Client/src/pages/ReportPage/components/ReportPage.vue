@@ -3640,6 +3640,7 @@ const AddBlock7 = () => {
         event_name: '',
         number_of_participants: '',
         certificate_scans: null,
+        links: [{ link: '' }],
     });
 };
 
@@ -3877,10 +3878,40 @@ const getParameters = async (id) => {
                 },
             },
         );
-
         if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
-        else if (response.data.results.length)
-            report.value[id] = response.data.results[0];
+        else if (response.data.results.length) {
+            if (
+                id == 6 &&
+                route.params.id == response.data.results[0].detachment
+            ) {
+                report.value[61].first_may_demonstration =
+                    response.data.results[0].first_may_demonstration;
+                report.value[61].first_may_demonstration_participants =
+                    response.data.results[0].first_may_demonstration_participants;
+                report.value[62].patriotic_action =
+                    response.data.results[0].patriotic_action;
+                report.value[62].patriotic_action_participants =
+                    response.data.results[0].patriotic_action_participants;
+                report.value[63].safety_work_week =
+                    response.data.results[0].safety_work_week;
+                report.value[64].commander_commissioner_school =
+                    response.data.results[0].commander_commissioner_school;
+                report.value[65].working_semester_opening =
+                    response.data.results[0].working_semester_opening;
+                report.value[65].working_semester_opening_participants =
+                    response.data.results[0].working_semester_opening_participants;
+                report.value[66].creative_festival =
+                    response.data.results[0].creative_festival;
+                report.value[67].spartakiad =
+                    response.data.results[0].spartakiad;
+                report.value[68].professional_competition =
+                    response.data.results[0].professional_competition;
+            } else {
+                if (report.value[id].participation_data)
+                    report.value[id].participation_data = response.data.results;
+                else report.value[id] = response.data.results[0];
+            }
+        }
     } catch (error) {
         isError.value = error.response.data;
     }
