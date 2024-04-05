@@ -1,7 +1,7 @@
 <template>
     <div class="competition__item">
         <div class="competition__content">
-            <template v-if="!position">
+            <template v-if="position == 1">
                 <span></span>
                 <span>Показатель</span>
                 <span>Отряд</span>
