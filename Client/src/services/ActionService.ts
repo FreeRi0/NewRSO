@@ -103,6 +103,15 @@ export function putOrganizator(id: number, data: object, org_id: number) {
     });
 }
 
+export function deleteOrganizator(id: number, org_id: number) {
+    return HTTP.delete(`/events/${id}/organizers/${org_id}/`, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Token ' + localStorage.getItem('Token'),
+        },
+    });
+}
+
 //Получить и добавить документы пользователя
 export function getDocuments(id: number) {
     return HTTP.get(`/events/${id}/user_documents`, {

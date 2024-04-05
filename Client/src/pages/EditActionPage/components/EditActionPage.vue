@@ -915,7 +915,9 @@
                             >
                               <div v-if="organizer.organizerBtnClose" class="organizer__close">
                                 <svg
-                                    @click="selectedUser.splice(index, 1)"
+                                    @click="() => {
+                                      deletedUser.push(selectedUser.splice(index, 1)[0])
+                                    }"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                   <path d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z" stroke="#939393" stroke-linecap="round"/>
                                   <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round"/>
@@ -932,6 +934,7 @@
                                         variant="outlined"
                                         :model-value="organizer"
                                         class="form__input form-input-container"
+                                        :disabled="organizer.oldValue"
                                         :items="usersList"
                                         :item-value="item => item"
                                         :item-title="item => item.first_name ? `${item.last_name} ${item.first_name} ${item.patronymic_name}` : ''"
@@ -1123,13 +1126,13 @@
 import { Button } from '@shared/components/buttons';
 import { ref, onActivated, watchEffect, inject } from 'vue';
 import {
-    getAction,
-    getOrganizator,
-    putAction,
-    putOrganizator,
-    putTimeData,
-    putDocuments,
-    getRoles,
+  getAction,
+  getOrganizator,
+  putAction,
+  putOrganizator,
+  putTimeData,
+  putDocuments,
+  getRoles, deleteOrganizator, createOrganizator,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRoute, useRouter } from 'vue-router';
@@ -1171,8 +1174,9 @@ const openPanelFive = () => {
   panel.value = 'panelFive';
 }
 //-------------------------------------------------------------------------------------
-const usersList = ref(null)
-let selectedUser = ref([])
+const usersList = ref(null);
+let selectedUser = ref([]);
+let deletedUser =  ref([]);
 
 onActivated(() => {
     getRoles().then((resp) => {
@@ -1191,7 +1195,7 @@ onActivated(() => {
     getAction(id)
         .then((resp) => {
             maininfo.value = resp.data;
-            maininfo.value.banner = null;
+            urlBanner.value = resp.data.banner;
 
             maininfo.value.org_central_headquarter = resp.data.org_central_headquarter || '';
             maininfo.value.org_district_headquarter = resp.data.org_district_headquarter || '';
@@ -1209,6 +1213,7 @@ onActivated(() => {
                       patronymic_name: item.organizer.patronymic_name,
                       is_contact_person: item.is_contact_person,
                       organizerBtnClose: true,
+                      oldValue: true,
                     })
                   })
                 })
@@ -1384,7 +1389,7 @@ const maininfo = ref({
     direction: '',
     name: '',
     scale: '',
-    banner: null,
+    banner: '',
     conference_link: '',
     address: '',
     description: '',
@@ -1429,6 +1434,7 @@ const cropper = ref();
 const dialogBanner = ref(false);
 const urlBanner = ref(null);
 let bannerPreview = ref(null);
+let bannerDirty = ref(false);
 
 const selectBanner = (event) => {
   maininfo.value.banner = event.target.files[0];
@@ -1446,6 +1452,7 @@ const cropImage = () => {
 const uploadPhoto = () => {
   urlBanner.value = URL.createObjectURL(maininfo.value.banner);
   dialogBanner.value = false;
+  bannerDirty.value = true;
 }
 const resetBanner = () => {
   maininfo.value.banner = null;
@@ -1485,10 +1492,13 @@ function AddOrganizer() {
     patronymic_name: '',
     is_contact_person: false,
     organizerBtnClose: true,
+    oldValue: false
   });
 }
 function SubmitEvent() {
     let fd = new FormData();
+    if (!bannerDirty.value) delete maininfo.value.banner
+
     Object.entries(maininfo.value).forEach(([key, item]) => {
         fd.append(key, item);
     });
@@ -1508,15 +1518,35 @@ function SubmitEvent() {
                 .catch((e) => {
                     console.log(e);
                 });
+            deletedUser.value.forEach(item => {
+              deleteOrganizator(id, item.organizer)
+                  .then((resp) => {
+                    console.log(resp.data);
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  });
+            })
+            // selectedUser.value.forEach((item) => {
+            //     putOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person }, item.organizer)
+            //         .then((resp) => {
+            //             console.log(resp.data);
+            //         })
+            //         .catch((e) => {
+            //             console.log(e);
+            //         });
+            // });
           selectedUser.value.forEach((item) => {
-                putOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person }, item.organizer)
-                    .then((resp) => {
-                        console.log(resp.data);
-                    })
-                    .catch((e) => {
-                        console.log(e);
-                    });
-            });
+            if (!item.oldValue) {
+              createOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person })
+                  .then((resp) => {
+                    console.log(resp.data);
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  });
+            }
+          });
             router.push({ name: 'actionSquads' });
         })
         .catch(() => {
