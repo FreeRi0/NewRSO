@@ -231,7 +231,7 @@ const onAction = async () => {
     try {
         for (const application of selectedParticipantList.value) {
             if (action.value === 'Одобрить') {
-                console.log('app', application.user.id, application);
+   
                 await confirmApplication(application.user.id);
             } else {
                 await cancelApplication(application.user.id);

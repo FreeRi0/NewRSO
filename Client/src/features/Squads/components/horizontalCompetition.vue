@@ -3,7 +3,7 @@
         <horizontalSquadItem
             v-for="member in members"
             :member="member"
-            :rating="false"
+            :rating="true"
             :key="member.id"
             :competition="true"
         />

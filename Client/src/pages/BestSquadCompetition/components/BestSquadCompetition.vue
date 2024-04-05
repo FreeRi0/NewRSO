@@ -169,7 +169,7 @@
         </div>
 
         <div
-            class="d-flex mb-12 school-wrapper"
+            class="d-flex  school-wrapper"
             v-if="
                 roleStore.status.is_commander_detachment ||
                 roleStore.status.is_commissar_detachment ||
@@ -198,7 +198,37 @@
                 /></router-link>
             </div>
         </div>
+        <div
+            class="d-flex competition__safety-wrapper"
+            v-if="
+                roleStore.status.is_commander_detachment ||
+                roleStore.status.is_commissar_detachment ||
+                roleStore.roles.regionalheadquarter_commander ||
+                roleStore.roles.centralheadquarter_commander
+            "
+        >
+            <div class="competition__safety-text">
+                <p>
+                    В рамках конкурса «Лучший студенческий отряд» с 22
+                    по 28 апреля состоится обучение по охране труда и пожарной
+                    безопасности.
+                    <span
+                        >Школа командных составов линейных студенческих отрядов
+                        РСО</span
+                    >
+                </p>
 
+                <router-link
+                    :to="{
+                        name: 'Safety',
+                    }"
+                    ><Button
+                        class="competition__safety-text_btn"
+                        label="Обучение по охране труда и технике безопасности"
+                /></router-link>
+            </div>
+            <img src="@app/assets/competition/bgSchool.png" alt="bg" />
+        </div>
         <router-link
             :to="{
                 name: 'CompetitionParticipants',
