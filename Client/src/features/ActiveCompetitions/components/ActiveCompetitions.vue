@@ -290,7 +290,7 @@ const cancelIndicator = async (id, applicationId) => {
 
 const onAction = async () => {
     console.log(selectedReportingList.value);
-    if (selectedReportingList.value.lenght) {
+    if (selectedReportingList.value) {
         try {
             for (const application of selectedReportingList.value) {
                 console.log(application);
@@ -305,7 +305,7 @@ const onAction = async () => {
                         application.id,
                     );
                 }
-                competitionsList.value = competitionsList.value.filter(
+                allReporting.value = allReporting.value.filter(
                     (competition) => competition.id != application.id,
                 );
                 selectedReportingList.value =
