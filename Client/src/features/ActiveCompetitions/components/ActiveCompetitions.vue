@@ -1,7 +1,7 @@
 <template>
     <div class="competitions__container">
         <p v-if="loading">Загрузка...</p>
-        <p v-else-if="!loading && !competitionsList.length">
+        <p v-else-if="!loading && !competitionsList.length && !allReporting">
             Список заявок на конкурсы пуст
         </p>
 
@@ -317,10 +317,13 @@ const onAction = async () => {
             console.log('error action 1', e);
         }
     }
+    console.log(selectedCompetitionsList.value);
 
-    if (selectedCompetitionsList.value.lenght) {
+    if (selectedCompetitionsList.value) {
+        console.log(123);
         try {
             for (const application of selectedCompetitionsList.value) {
+                console.log(application);
                 if (action.value === 'Одобрить') {
                     console.log(application.id);
                     await confirmApplication(
@@ -333,7 +336,7 @@ const onAction = async () => {
                         application.competition.id,
                     );
                 }
-                allReporting.value = allReporting.value.filter(
+                allCompetition.value = allCompetition.value.filter(
                     (competition) => competition.id != application.id,
                 );
                 selectedCompetitionsList.value =
