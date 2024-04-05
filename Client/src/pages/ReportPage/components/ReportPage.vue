@@ -4,7 +4,7 @@ s
         <h1 class="title title--mb">Редактирование данных по показателям</h1>
         <form class="form" action="#" method="post">
             <v-expansion-panels>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(1)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -16,7 +16,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(1)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -88,7 +88,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(2)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -100,7 +100,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(2)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -248,7 +248,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(3)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -259,7 +259,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(3)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -338,7 +338,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(4)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -350,7 +350,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(4)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -428,7 +428,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(5)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -439,7 +439,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(5)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -584,7 +584,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(6)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -596,7 +596,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(6)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1036,7 +1036,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(7)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -1047,7 +1047,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(7)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1238,7 +1238,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(8)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -1249,7 +1249,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(8)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1439,7 +1439,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(9)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -1450,7 +1450,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(9)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1609,7 +1609,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(10)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -1620,7 +1620,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(10)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1779,7 +1779,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(11)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -1950,7 +1950,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(12)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -1961,7 +1961,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(12)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2115,7 +2115,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(13)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -2125,7 +2125,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(13)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2240,7 +2240,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(14)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -2252,7 +2252,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(14)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2372,7 +2372,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(15)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -2385,7 +2385,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(15)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2546,7 +2546,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(16)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -2556,7 +2556,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(16)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2743,7 +2743,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(17)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -2755,7 +2755,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(17)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2873,7 +2873,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(18)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -2884,7 +2884,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(18)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2979,7 +2979,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(19)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -2991,7 +2991,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(19)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -3085,7 +3085,7 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel>
+                <v-expansion-panel @click="getParameters(20)">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -3097,7 +3097,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(20)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -3267,7 +3267,6 @@ s
     </div>
 </template>
 <script setup>
-import Dropdown from 'primevue/dropdown';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { ref, inject } from 'vue';
@@ -3337,7 +3336,6 @@ const festivalChoose = ref([
     { value: false, name: 'Нет' },
 ]);
 
-const status = ref();
 const statusChoose = ref([
     { name: 'Региональный' },
     { name: 'Окружной' },
@@ -3586,7 +3584,6 @@ const getParameters = async (id) => {
             report.value[id] = response.data.results[0];
     } catch (error) {
         isError.value = error.response.data;
-        console.log('an error occured ' + error);
     }
 };
 const postParameters = async (id) => {
@@ -3611,7 +3608,6 @@ const postParameters = async (id) => {
                         for (let j in field[k]) {
                             if (Array.isArray(field[k][j])) {
                                 let temp = field[k][j];
-
                                 for (let k1 in temp) {
                                     for (let j1 in temp[k1]) {
                                         fd.append(
@@ -3662,9 +3658,7 @@ const postParameters = async (id) => {
             timer: 1500,
         });
     } catch (error) {
-        console.log('an error occured ' + error);
         isError.value = error.response.data;
-        console.error(error);
         isLoading.value = false;
         if (isError.value) {
             swal.fire({
