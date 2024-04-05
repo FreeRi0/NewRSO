@@ -1,93 +1,9 @@
 <template>
     <div class="container">
         <h1 class="title title--mb">Данные пользователя по показателям</h1>
-        <form class="form" action="#" method="post">
+        <form class="form" action="#" method="post" v-if="!loading">
             <v-expansion-panels>
-                <v-expansion-panel v-if="id == 1">
-                    <v-expansion-panel-title>
-                        <template v-slot="{ expanded }">
-                            <v-row no-gutters>
-                                <v-col class="d-flex justify-start">
-                                    Численность членов линейного студенческого
-                                    отряда в соответствии с объемом уплаченных
-                                    членских взносов
-                                </v-col>
-                            </v-row>
-                        </template>
-                        <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(1)">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                        </template>
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text class="form__inner-content">
-                        <div class="form__field-group">
-                            <div class="form__field">
-                                <label
-                                    v-if="report[1]?.place"
-                                    class="form__label"
-                                    >{{ report[1]?.place }}
-                                </label>
-                                <label v-else class="form__label"
-                                    >Численность членов линейного студенческого
-                                    отряда в соответствии с объемом уплаченных
-                                    членских взносов рассчитывается
-                                    автоматически по состоянию на 15 апреля 2024
-                                    года.
-                                </label>
-                            </div>
-                        </div>
-                    </v-expansion-panel-text>
-                </v-expansion-panel>
-                <v-expansion-panel v-else-if="id == 2">
+                <v-expansion-panel v-if="id == 2">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
                             <v-row no-gutters>
@@ -238,186 +154,6 @@
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel v-else-if="id == 3">
-                    <v-expansion-panel-title>
-                        <template v-slot="{ expanded }">
-                            <v-row no-gutters>
-                                <v-col class="d-flex justify-start">
-                                    Получение командным составом отряда
-                                    образования в корпоративном университете РСО
-                                </v-col>
-                            </v-row>
-                        </template>
-                        <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(3)">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                        </template>
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text class="form__inner-content">
-                        <div class="form__field-group">
-                            <div class="form__field">
-                                <label
-                                    v-if="report[3]?.place"
-                                    class="form__label"
-                                    >{{ report[3]?.place }}
-                                </label>
-                                <label v-else class="form__label"
-                                    >Для получения баллов по данному показателю
-                                    Командиру и Комиссару ЛСО необходимо пройти
-                                    тестирование. Для прохождения теста
-                                    перейдите в «Личный кабинет» —
-                                    «Корпоративный университет» — «Тест».
-                                </label>
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    с 27 марта по 10 апреля 2024 года
-                                    включительно.
-                                </p>
-                            </div>
-                        </div>
-                    </v-expansion-panel-text>
-                </v-expansion-panel>
-                <v-expansion-panel v-else-if="id == 4">
-                    <v-expansion-panel-title>
-                        <template v-slot="{ expanded }">
-                            <v-row no-gutters>
-                                <v-col class="d-flex justify-start">
-                                    Прохождение обучения по охране труда и
-                                    пожарной безопасности в рамках недели охраны
-                                    труда РСО
-                                </v-col>
-                            </v-row>
-                        </template>
-                        <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(4)">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                        </template>
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text class="form__inner-content">
-                        <div class="form__field-group">
-                            <div class="form__field">
-                                <label
-                                    v-if="report[4]?.place"
-                                    class="form__label"
-                                    >{{ report[4]?.place }}</label
-                                >
-                                <label v-else class="form__label"
-                                    >Для получения баллов по данному показателю
-                                    участникам ЛСО необходимо пройти
-                                    тестирование. Для прохождения теста
-                                    перейдите в «Личный кабинет» - «Охрана
-                                    труда» - «Тест».</label
-                                >
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 15 июня 2024 года включительно.
-                                </p>
-                            </div>
-                        </div>
-                    </v-expansion-panel-text>
-                </v-expansion-panel>
                 <v-expansion-panel v-else-if="id == 5">
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
@@ -486,9 +222,8 @@
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top"
-                                v-for="(block, index) in report[5]
-                                    .participants_data"
-                                :key="index"
+                                v-for="participant in applicationData.participants_data"
+                                :key="participant.id"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -499,13 +234,10 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, Иванова Светлана Андреевна"
-                                            max-length="100"
-                                            v-model:value="block.name"
+                                            type="text"
+                                            v-model:value="participant.name"
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="form__field-group-right">
@@ -515,61 +247,42 @@
                                             прохождение профессионального
                                             обучения<span>&nbsp;*</span></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="
-                                                selectFile(
-                                                    $event,
-                                                    5,
-                                                    'participants_data',
-                                                    'document',
-                                                    index,
-                                                )
-                                            "
-                                            v-if="!block.document"
-                                            chooseLabel="Выбрать файл"
-                                        />
-                                        <div v-else>
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
-                                                <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                        <div class="file">
+                                            <div class="file_name">
+                                                <img
+                                                    class="file_img"
+                                                    src="/assets/file_dock.svg"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
                                                 >
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block.document.name
-                                                        }}</span
-                                                    >
-                                                </div>
                                             </div>
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    class="download_img"
+                                                    src="/assets/download.svg"
+                                                />
+                                                скачать файл
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="form__field add-block"
-                                @click="addNewBlock"
-                            >
-                                + добавить участника
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(5)"
-                                />
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 15 июня 2024 года включительно.
-                                </p>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -956,12 +669,12 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, Окружной слет студенческих отрядов ПФО"
-                                            max-length="100"
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -970,15 +683,20 @@
                                             ></label
                                         >
                                         <Input
-                                            type="number"
-                                            placeholder="Например, 5"
-                                            max-length="100"
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.number_of_participants
+                                            "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
-                                    <div class="form__field">
+                                    <div
+                                        class="form__field"
+                                        v-for="(
+                                            link, index
+                                        ) in applicationData.links"
+                                        :key="index"
+                                    >
                                         <label class="form__label"
                                             >Ссылка на социальные сети с
                                             фотоотчетом с наименованием
@@ -988,15 +706,13 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.links[index]
+                                                    .link
+                                            "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
-                                        <div class="form__field add-block">
-                                            <p>+ добавить ссылку</p>
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -1004,55 +720,42 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="selectCertSkansSeven"
-                                            v-if="!report[7].certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
-                                        <div
-                                            v-else-if="
-                                                report[7].certificate_scans
-                                            "
-                                        >
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
-                                                <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                        <div class="file">
+                                            <div class="file_name">
+                                                <img
+                                                    class="file_img"
+                                                    src="/assets/file_dock.svg"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
                                                 >
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            report[7]
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                </div>
                                             </div>
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    class="download_img"
+                                                    src="/assets/download.svg"
+                                                />
+                                                скачать файл
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>+ Добавить мероприятие</p>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                />
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 15 октября 2024 года включительно.
-                                </p>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -1134,12 +837,12 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, Всероссийский конкурс «В объективе РСО»"
-                                            max-length="100"
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -1148,15 +851,18 @@
                                             ></label
                                         >
                                         <Input
-                                            type="number"
-                                            placeholder="Например, 5"
-                                            max-length="100"
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.number_of_participants
+                                            "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
-                                    <div class="form__field">
+                                    <div
+                                        class="form__field"
+                                        v-for="link in applicationData.links"
+                                        :key="link.id"
+                                    >
                                         <label class="form__label"
                                             >Ссылка на социальные сети с
                                             фотоотчетом с наименованием
@@ -1166,15 +872,10 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            type="text"
+                                            v-model:value="link.link"
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
-                                        <div class="form__field add-block">
-                                            <p>+ добавить ссылку</p>
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -1182,55 +883,42 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="selectPersonal"
-                                            v-if="!report[8].certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
-                                        <div
-                                            v-else-if="
-                                                report[8].certificate_scans
-                                            "
-                                        >
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
-                                                <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                        <div class="file">
+                                            <div class="file_name">
+                                                <img
+                                                    class="file_img"
+                                                    src="/assets/file_dock.svg"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
                                                 >
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            report[8]
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                </div>
                                             </div>
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    class="download_img"
+                                                    src="/assets/download.svg"
+                                                />
+                                                скачать файл
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>+ Добавить мероприятие</p>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                />
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 15 октября 2024 года включительно.
-                                </p>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -1311,12 +999,12 @@
                                             конкурса<span>&nbsp;*</span></label
                                         >
                                         <Input
-                                            placeholder="Например, Окружной слет студенческих отрядов ПФО"
-                                            max-length="100"
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -1324,12 +1012,12 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
-                                            placeholder="Например, 1"
-                                            v-model="prizePlace"
-                                            :options="prizePlaceChoose"
-                                            optionLabel="name"
-                                            class="invents-block invents-select"
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.prize_place
+                                            "
+                                            readonly
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1340,57 +1028,42 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="selectPersonal"
-                                            v-if="!report[9].certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
-                                        <div
-                                            v-else-if="
-                                                report[9].certificate_scans
-                                            "
-                                        >
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
-                                                <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                        <div class="file">
+                                            <div class="file_name">
+                                                <img
+                                                    class="file_img"
+                                                    src="/assets/file_dock.svg"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
                                                 >
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            report[9]
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                </div>
                                             </div>
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    class="download_img"
+                                                    src="/assets/download.svg"
+                                                />
+                                                скачать файл
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>
-                                            + Добавить мероприятие или конкурс
-                                        </p>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                />
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 15 октября 2024 года включительно.
-                                </p>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -1471,12 +1144,11 @@
                                             конкурса<span>&nbsp;*</span></label
                                         >
                                         <Input
-                                            placeholder="Например, Всероссийский конкурс «В объективе РСО»"
-                                            max-length="100"
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -1484,12 +1156,12 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
-                                            placeholder="Например, 1"
-                                            v-model="prizePlace"
-                                            :options="prizePlaceChoose"
-                                            optionLabel="name"
-                                            class="invents-block invents-select"
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.prize_place
+                                            "
+                                            readonly
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1500,57 +1172,42 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="selectPersonal"
-                                            v-if="report[10].certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
-                                        <div
-                                            v-else-if="
-                                                report[10].certificate_scans
-                                            "
-                                        >
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
-                                                <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                        <div class="file">
+                                            <div class="file_name">
+                                                <img
+                                                    class="file_img"
+                                                    src="/assets/file_dock.svg"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
                                                 >
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            report[10]
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                </div>
                                             </div>
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    class="download_img"
+                                                    src="/assets/download.svg"
+                                                />
+                                                скачать файл
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>
-                                            + Добавить мероприятие или конкурс
-                                        </p>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                />
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 15 октября 2024 года включительно.
-                                </p>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -1632,12 +1289,12 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, Спартакиада на МСС «Алабуга»"
-                                            max-length="100"
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -1645,12 +1302,12 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
-                                            placeholder="Например, 1"
-                                            v-model="prizePlace"
-                                            :options="prizePlaceChoose"
-                                            optionLabel="name"
-                                            class="invents-block invents-select"
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.prize_place
+                                            "
+                                            readonly
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1661,55 +1318,42 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="selectPersonal"
-                                            v-if="!report[11].certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
-                                        <div
-                                            v-else-if="
-                                                report[11].certificate_scans
-                                            "
-                                        >
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
-                                                <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                        <div class="file">
+                                            <div class="file_name">
+                                                <img
+                                                    class="file_img"
+                                                    src="/assets/file_dock.svg"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
                                                 >
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            report[11]
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                </div>
                                             </div>
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    class="download_img"
+                                                    src="/assets/download.svg"
+                                                />
+                                                скачать файл
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>+ добавить проект</p>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                />
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 15 октября 2024 года включительно.
-                                </p>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -1791,16 +1435,12 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, Творческий фестиваль на ВСС «Мирный атом»"
-                                            max-length="100"
+                                            type="text"
                                             v-model:value="
-                                                report[12].participation_data
-                                                    .event_name
+                                                applicationData.event_name
                                             "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -1808,15 +1448,12 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <sortByEducation
-                                            placeholder="Например, 1"
-                                            v-model="
-                                                report[12].participation_data
-                                                    .prize_place
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.prize_place
                                             "
-                                            :options="prizePlaceChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
+                                            readonly
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1827,61 +1464,42 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="selectCertScans"
-                                            v-if="
-                                                !report[12].participation_data
-                                                    .certificate_scans
-                                            "
-                                            chooseLabel="Выбрать файл"
-                                        />
-                                        <div
-                                            v-else-if="
-                                                report[12].participation_data
-                                                    .certificate_scans
-                                            "
-                                        >
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
-                                                <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+                                        <div class="file">
+                                            <div class="file_name">
+                                                <img
+                                                    class="file_img"
+                                                    src="/assets/file_dock.svg"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
                                                 >
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            report[12]
-                                                                .participation_data
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                </div>
                                             </div>
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    class="download_img"
+                                                    src="/assets/download.svg"
+                                                />
+                                                скачать файл
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="form__field add-block">
-                                        <p>+ добавить проект</p>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(12)"
-                                />
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 15 октября 2024 года включительно.
-                                </p>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -2165,6 +1783,8 @@
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="grant in applicationData.grants_data"
+                                :key="grant.id"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -2173,12 +1793,9 @@
                                             проекта<span>&nbsp;*</span></label
                                         >
                                         <Input
-                                            placeholder="Например, Всероссийский конкурс молодёжных проектов среди физических лиц Федерального агентства по делам молодежи"
-                                            max-length="100"
+                                            type="text"
+                                            v-model:value="grant.name"
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -2186,12 +1803,10 @@
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <Dropdown
-                                            placeholder="Например, окружной"
-                                            v-model="status"
-                                            :options="statusChoose"
-                                            optionLabel="name"
-                                            class="invents-block invents-select"
+                                        <Input
+                                            type="text"
+                                            v-model="grant.status"
+                                            readonly
                                         />
                                     </div>
                                     <div class="form__field">
@@ -2201,12 +1816,10 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, Иванова Светлана Андреевна"
-                                            max-length="100"
+                                            type="text"
+                                            v-model="grant.author_name"
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -2215,12 +1828,10 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            type="text"
+                                            v-model="grant.competition_link"
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -2230,29 +1841,12 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, https://t.me/+7pe98d2PqoJ"
-                                            max-length="100"
+                                            type="text"
+                                            v-model="grant.prove_link"
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
-                                    </div>
-                                    <div class="form__field add-block">
-                                        <p>+ добавить проект</p>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                />
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 15 октября 2024 года включительно.
-                                </p>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -2339,15 +1933,12 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            type="text"
                                             v-model:value="
-                                                report[16].link_vk_commander
+                                                applicationData.link_vk_commander
                                             "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -2357,15 +1948,12 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            type="text"
                                             v-model:value="
-                                                report[16].link_vk_commissar
+                                                applicationData.link_vk_commissar
                                             "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field-group-left-title">
                                         Наличие действующей подписки на
@@ -2381,17 +1969,12 @@
                                             ></label
                                         >
                                         <Input
-                                            type="number"
-                                            placeholder="Например, 5"
-                                            max-length="100"
+                                            type="text"
                                             v-model:value="
-                                                report[16]
-                                                    .vk_rso_number_subscribers
+                                                applicationData.vk_rso_number_subscribers
                                             "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field-group-left-title">
                                         Наличие активной группы Отряда в
@@ -2403,15 +1986,12 @@
                                             ВКонтакте<span>&nbsp;*</span></label
                                         >
                                         <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            type="text"
                                             v-model:value="
-                                                report[16].link_vk_detachment
+                                                applicationData.link_vk_detachment
                                             "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                     <div class="form__field-group-left-title">
                                         Количество подписчиков активной группы
@@ -2425,31 +2005,14 @@
                                             ></label
                                         >
                                         <Input
-                                            placeholder="Например, 200"
-                                            max-length="100"
+                                            type="text"
                                             v-model:value="
-                                                report[16]
-                                                    .vk_detachment_number_subscribers
+                                                applicationData.vk_detachment_number_subscribers
                                             "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(16)"
-                                />
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 15 октября 2024 года включительно.
-                                </p>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -2523,8 +2086,6 @@
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
-                                v-for="(block, index) in report[17]"
-                                :key="index"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -2534,15 +2095,13 @@
                                             >
                                         </label>
                                         <Input
-                                            placeholder="Например, РИА Новости"
-                                            max-length="100"
+                                            type="text"
                                             v-model:value="
-                                                block.q17_event.source_name
+                                                applicationData.q17_event
+                                                    .source_name
                                             "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="form__field-group-left">
@@ -2553,34 +2112,14 @@
                                             >
                                         </label>
                                         <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
-                                            v-model:value="block.q17_link.link"
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.q17_link.link
+                                            "
+                                            readonly
                                         />
-                                        <div class="form__counter">
-                                            {{ counterReport }} / 100
-                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="form__field add-block"
-                                @click="addNewBlockQ17"
-                            >
-                                + добавить участника
-                            </div>
-                            <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(17)"
-                                />
-                                <p>
-                                    Срок предоставления отчетности по показателю
-                                    по 30 сентября 2024 года включительно.
-                                </p>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -2918,32 +2457,22 @@
 </template>
 
 <script setup>
-import { Button } from '@shared/components/buttons';
-import { sortByEducation } from '@shared/components/selects';
-
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { HTTP } from '@app/http';
 
 import { Input } from '@shared/components/inputs';
 
 const route = useRoute();
-const id = route.params.id;
-const applicationId = route.params.applicationId;
-console.log(id);
-console.log(applicationId);
+const id = ref(route.params.id);
 
-const applicationData = ref({
-    commander_achievement: true,
-    commissioner_achievement: true,
-    commander_link: 'http://vk.com',
-    commissioner_link: 'http://vk.com',
-});
-
-const getApplicationData = async () => {
+const applicationData = ref({});
+const loading = ref(true);
+const getApplicationData = async (_id, applicationId) => {
+    id.value = _id;
     try {
         const { data } = await HTTP.get(
-            `/competitions/1/reports/q${id}/${applicationId}`,
+            `/competitions/1/reports/q${_id}/${applicationId}`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -2952,15 +2481,22 @@ const getApplicationData = async () => {
             },
         );
         applicationData.value = data;
-        console.log(applicationData.value);
     } catch (e) {
         console.log(`getApplicationData error`, e);
+    } finally {
+        loading.value = false;
     }
 };
 
+watch(
+    [() => route.params.id, () => route.params.applicationId],
+    async (newParams) => {
+        await getApplicationData(newParams[0], newParams[1]);
+    },
+    { immediate: true },
+);
+
 onMounted(async () => {
-    console.log(123);
-    await getApplicationData();
     window.scroll(0, 0);
 });
 </script>
@@ -3032,5 +2568,44 @@ onMounted(async () => {
     cursor: pointer;
     max-width: fit-content;
     border-bottom: 1px solid #35383f;
+}
+</style>
+<style scoped lang="scss">
+.file_img {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+.file_name {
+    display: flex;
+    flex-wrap: nowrap;
+    color: #35383f;
+    font-size: 16px;
+    font-style: normal;
+    align-items: center;
+    font-weight: 400;
+    line-height: 20px;
+    text-decoration-line: underline;
+}
+.download_text {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    color: #1f7cc0;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+.download_img {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-left: 40px;
+    margin-right: 4px;
+}
+.file {
+    display: flex;
 }
 </style>
