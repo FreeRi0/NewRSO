@@ -556,9 +556,8 @@
                               </div>
                             </div>
                             <div class="form-container">
-                              <div class="form-col">
-
-                                <div class="form__field">
+                              <div class="form-timeGrid">
+                                <div class="form__field form-timeGrid1">
                                   <label
                                       class="form__label"
                                       for="action-start-hq"
@@ -573,7 +572,10 @@
                                       type="date"
                                   />
                                 </div>
-                                <div v-if="time_data.event_duration_type === 'Многодневное'" class="form__field">
+                                <div
+                                    v-show="time_data.event_duration_type === 'Многодневное'"
+                                    class="form__field form-timeGrid2"
+                                >
                                   <label
                                       class="form__label"
                                       for="action-end-hq"
@@ -587,7 +589,7 @@
                                       type="date"
                                   />
                                 </div>
-                                <div class="form__field">
+                                <div class="form__field form-timeGrid3">
                                   <label
                                       class="form__label"
                                       for="end-registration-hq"
@@ -601,13 +603,12 @@
                                       type="date"
                                   />
                                 </div>
-                              </div>
-                              <div class="form-col">
-                                <div class="form__field">
+
+                                <div class="form__field form-timeGrid4">
                                   <label
                                       class="form__label"
                                       for="action-hours-start-hq"
-                                  >Время в часах</label>
+                                  >Время начала мероприятия</label>
                                   <Input
                                       id="action-hours-start-hq"
                                       class="form__input form-input-container"
@@ -618,11 +619,14 @@
                                   />
                                   <div class="form__counter"></div>
                                 </div>
-                                <div v-if="time_data.event_duration_type === 'Многодневное'" class="form__field">
+                                <div
+                                    class="form__field form-timeGrid5"
+                                    :class="{ 'form-timeGrid5_oneDay': time_data.event_duration_type === 'Однодневное' }"
+                                >
                                   <label
                                       class="form__label"
                                       for="action-hours-end-hq"
-                                  >Время в часах</label>
+                                  >Время окончания мероприятия</label>
                                   <Input
                                       id="action-hours-end-hq"
                                       class="form__input form-input-container"
@@ -633,26 +637,11 @@
                                   />
                                   <div class="form__counter"></div>
                                 </div>
-                                <div class="form__field">
-                                  <!----<label class='flex align-items-center' style='display: flex'>
-                                      <div class="flex align-items-center">
-                                          <input v-model='timeData.hour' value="1" name='houre1' type='radio' class='form-radio'/>
-                                          <label for="hours1" class="ml-2">За час</label>
-                                      </div>
-                                      <div class="flex align-items-center">
-                                          <input v-model='timeData.hour' value="2" name="hours2" type='radio' class='form-radio'/>
-                                          <label for="hours2" class="ml-2">За 2 часа</label>
-                                      </div>
-                                      <div class="flex align-items-center">
-                                          <input v-model='timeData.hour' value="3" name="hours3" type='radio' class='form-radio'/>
-                                          <label for="hours3" class="ml-2">За 3 часа</label>
-                                      </div>
-                                  </label> -->
-                                  <div class="form__field">
+                                <div class="form__field form-timeGrid6">
                                     <label
                                         class="form__label"
                                         for="action-hours-end-hq"
-                                    >Время в часах</label>
+                                    >Время окончания регистрации</label>
                                     <Input
                                         id="action-hours-end-hq"
                                         class="form__input form-input-container"
@@ -662,7 +651,6 @@
                                         type="time"
                                     />
                                     <div class="form__counter"></div>
-                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -1484,7 +1472,6 @@ function SubmitEvent() {
     });
     if (time_data.value.event_duration_type === 'Однодневное') {
       delete time_data.value.end_date;
-      delete time_data.value.end_time;
     }
     createAction(fd)
         .then((resp) => {
@@ -1616,11 +1603,49 @@ function AddQuestion() {
         }
     }
     &-col {
+        display: grid;
         width: 50%;
+        align-content: space-between;
         @media (max-width: 768px) {
           width: initial;
         }
     }
+    &-timeGrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      grid-column-gap: 80px;
+      grid-row-gap: 0px;
+      width: 100%;
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(6, 1fr);
+        grid-column-gap: 20px;
+      }
+    }
+    &-timeGrid1 { grid-area: 1 / 1 / 2 / 2; }
+    &-timeGrid2 { grid-area: 2 / 1 / 3 / 2; }
+    &-timeGrid3 { grid-area: 3 / 1 / 4 / 2; }
+    &-timeGrid4 { grid-area: 1 / 2 / 2 / 3; }
+    &-timeGrid5 { grid-area: 2 / 2 / 3 / 3; }
+    &-timeGrid6 { grid-area: 3 / 2 / 4 / 3; }
+
+    @media (max-width: 768px) {
+      &-timeGrid1 { grid-area: 1 / 1 / 2 / 2; }
+      &-timeGrid2 { grid-area: 3 / 1 / 4 / 2; }
+      &-timeGrid3 { grid-area: 5 / 1 / 6 / 2; }
+      &-timeGrid4 { grid-area: 2 / 1 / 3 / 2; }
+      &-timeGrid5 { grid-area: 4 / 1 / 5 / 2; }
+      &-timeGrid6 { grid-area: 6 / 1 / 7 / 2; }
+    }
+
+    &-timeGrid5_oneDay {
+     grid-area: 2 / 1 / 3 / 3;
+      @media (max-width: 768px) {
+        grid-area: 3 / 1 / 4 / 2;
+      }
+    }
+
     &-input {
         width: 100%;
         height: 40px;
