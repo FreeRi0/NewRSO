@@ -101,7 +101,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
-import { ref, onMounted, onActivated } from 'vue';
+import { ref, onMounted, onActivated, inject } from 'vue';
 import ActiveCompetitionItem from './ActiveCompetitionItem.vue';
 import ActiveCompetitionItemSelect from './ActiveCompetitionItemSelect.vue';
 import ActiveCompetitionItemReport from './ActiveCompetitionsItemReport.vue';
@@ -111,6 +111,8 @@ const competitionsList = ref([]);
 const commanderIds = ref();
 const selectedCompetitionsList = ref([]);
 const allCompetition = ref([]);
+
+const swal = inject('$swal');
 
 const allReporting = ref({});
 const selectedReportingList = ref([]);
@@ -314,7 +316,21 @@ const onAction = async () => {
                         (competition) => competition.id != application.id,
                     );
             }
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         } catch (e) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `Ошибка верификации`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
             console.log('error action 1', e);
         }
     }
@@ -352,7 +368,21 @@ const onAction = async () => {
                 )
                     await getCompetitionsJunior();
                 else await getCompetitions();
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         } catch (e) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `Ошибка верификации`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
             console.log('error action 2', e);
         }
     }
