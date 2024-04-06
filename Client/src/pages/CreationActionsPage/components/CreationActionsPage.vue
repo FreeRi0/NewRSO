@@ -573,7 +573,7 @@
                                   />
                                 </div>
                                 <div
-                                    v-show="time_data.event_duration_type === 'Многодневное'"
+                                    v-if="time_data.event_duration_type === 'Многодневное'"
                                     class="form__field form-timeGrid2"
                                 >
                                   <label
@@ -1603,9 +1603,7 @@ function AddQuestion() {
         }
     }
     &-col {
-        display: grid;
         width: 50%;
-        align-content: space-between;
         @media (max-width: 768px) {
           width: initial;
         }
