@@ -836,6 +836,23 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             {
+                path: '/Safety',
+                meta: {
+                    redirectTo: 'Safety',
+                    label: 'Охрана труда и пожарная безопасность',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'Safety',
+                        component: () =>
+                            import(
+                                '@pages/SafetyPage/components/SafetyPage.vue'
+                            ),
+                    },
+                ],
+            },
+            {
                 path: '/references',
                 meta: {
                     label: 'Оформление справок',

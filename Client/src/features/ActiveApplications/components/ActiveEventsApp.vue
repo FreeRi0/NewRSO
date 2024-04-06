@@ -93,7 +93,6 @@ const isOrganizer = computed(() => {
     );
 });
 
-console.log('org', isOrganizer);
 
 const actionsList = ref([
     {
@@ -248,7 +247,7 @@ const onAction = async () => {
     try {
         for (const application of selectedEventList.value) {
             if (action.value === 'Одобрить') {
-                console.log('app', application.id, application);
+        
                 await confirmApplication(application.event.id, application.id);
             } else {
                 await cancelApplication(application.event.id, application.id);

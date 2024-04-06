@@ -3,13 +3,13 @@
         position: relative;
         margin-bottom: 40px;
     }
-    
+
     &__school {
         padding: 47px 111px 47px 60px;
         p {
-            width: 386px;
+            max-width: 386px;
             font-size: 20px;
-            font-family: 'Akrobat', sans-serif;
+            font-family: "Akrobat", sans-serif;
             font-weight: 500;
             margin-bottom: 46px;
             span {
@@ -21,21 +21,31 @@
         }
     }
 
-
-    &__school {
-        padding: 47px 111px 47px 60px;
-        p {
-            width: 386px;
-            font-size: 20px;
-            font-family: 'Akrobat', sans-serif;
-            font-weight: 500;
-            margin-bottom: 46px;
-            span {
-                font-weight: 700;
+    &__safety {
+        &-text {
+            padding: 64px 0px 64px 60px;
+            p {
+                font-size: 20px;
+                font-family: "Akrobat", sans-serif;
+                font-weight: 500;
+                margin-bottom: 46px;
+                span {
+                    font-weight: 700;
+                }
+            }
+            &_btn {
+                margin: 0px;
             }
         }
-        &_btn {
-            margin: 0px;
+
+        &-wrapper {
+            margin: 60px 0px;
+            column-gap: 62px;
+            box-shadow: 1px 0px 10px 0px #00000014;
+            border-radius: 10px;
+            img {
+                border-radius: 0px 10px 10px 0px;
+            }
         }
     }
 
@@ -118,7 +128,7 @@
 
     &__link.header__nav-link {
         padding: 2px 7px 2px 31px;
-        background-image: url('@/app/assets/icon/fire-icon.svg');
+        background-image: url("@/app/assets/icon/fire-icon.svg");
         background-repeat: no-repeat;
         background-position: 0 0;
         color: #ffffff;
@@ -143,7 +153,7 @@
     }
 
     &__label {
-        font-family: 'Bert Sans';
+        font-family: "Bert Sans";
         font-size: 20px;
         font-weight: 500;
         line-height: 20px;
@@ -176,7 +186,7 @@
         width: fit-content;
         margin: 0 auto;
         margin-top: 16px;
-        font-family: 'Montserrat';
+        font-family: "Montserrat";
         font-size: 16px;
         font-weight: 400;
         line-height: 19px;
@@ -233,7 +243,7 @@
         position: absolute;
         left: 34.3%;
         bottom: 14%;
-        font-family: 'Bert Sans';
+        font-family: "Bert Sans";
         font-size: 16px;
         font-weight: 600;
         line-height: 20px;
@@ -339,24 +349,24 @@
         }
 
         li:last-child .competition__list li {
-            background-image: url('@/app/assets/icon/timer.svg');
+            background-image: url("@/app/assets/icon/timer.svg");
         }
 
         li:first-child .competition__list {
             li:first-child {
-                background-image: url('@/app/assets/icon/map.svg');
+                background-image: url("@/app/assets/icon/map.svg");
             }
 
             li:nth-child(2) {
-                background-image: url('@/app/assets/icon/group_light.svg');
+                background-image: url("@/app/assets/icon/group_light.svg");
             }
 
             li:nth-child(3) {
-                background-image: url('@/app/assets/icon/funds.svg');
+                background-image: url("@/app/assets/icon/funds.svg");
             }
 
             li:last-child {
-                background-image: url('@/app/assets/icon/telephone.svg');
+                background-image: url("@/app/assets/icon/telephone.svg");
             }
         }
     }
@@ -393,7 +403,7 @@
 
     &__documents-description {
         // max-width: 900px;
-        font-family: 'Akrobat';
+        font-family: "Akrobat";
         font-size: 20px;
         font-weight: 500;
     }
@@ -405,7 +415,7 @@
         height: 32px;
         margin-left: 76px;
         padding-right: 10px;
-        font-family: 'Akrobat';
+        font-family: "Akrobat";
         font-weight: 600;
         line-height: 16px;
         color: #1f7cc0;
@@ -517,7 +527,7 @@
         right: 8px;
         width: 24px;
         height: 24px;
-        background-image: url('@/app/assets/icon/close-location.svg');
+        background-image: url("@/app/assets/icon/close-location.svg");
     }
 
     &__info {
@@ -552,5 +562,4 @@
 .school-wrapper {
     box-shadow: 0px 0px 10px 0px #00000014;
     border-radius: 10px;
-
 }

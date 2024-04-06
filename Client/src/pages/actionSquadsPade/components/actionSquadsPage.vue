@@ -39,8 +39,8 @@
             </div>
         </div>
         <div class="action-slides">
-            <div class="settings-container" >
-                <v-expansion-panels style="width: 284px;">
+            <div class="settings-container" :class="{hideSettings: toggleBtn}">
+                <v-expansion-panels class="expansion-panels" >
                     <v-expansion-panel
                         class="settings-body"
                         title="Тип мероприятия"
@@ -60,7 +60,7 @@
                                     v-model="actionFormSearch.format_type"
                                     value="Онлайн"
                                     type="radio"
-                                    name="online"
+                                    id="online"
                                 />
                                 <label for="online">Онлайн</label>
                             </div>
@@ -69,7 +69,7 @@
                                     v-model="actionFormSearch.format_type"
                                     value="Офлайн"
                                     type="radio"
-                                    name="offline"
+                                    id="offline"
                                 />
                                 <label for="offline">Офлайн</label>
                             </div>
@@ -94,7 +94,7 @@
                                     v-model="actionFormSearch.status"
                                     value="Активный"
                                     type="radio"
-                                    name="open"
+                                    id="open"
                                 />
                                 <label for="open">Активные</label>
                             </div>
@@ -103,7 +103,7 @@
                                     v-model="actionFormSearch.status"
                                     value="Завершенные"
                                     type="radio"
-                                    name="close"
+                                    id="close"
                                 />
                                 <label for="close">Завершенные</label>
                             </div>
@@ -117,56 +117,63 @@
                                         v-model="actionFormSearch.scale"
                                         type="radio"
                                         value=""
+                                        id="scaleAll"
                                     />
-                                    <label class="ml-2">Все</label>
+                                    <label for="scaleAll" class="ml-2">Все</label>
                                 </div>
                                 <div class="settings-radio">
                                     <input
                                         v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Всероссийское"
+                                        id="All-Russian"
                                     />
-                                    <label class="ml-2">Всероссийское</label>
+                                    <label for="All-Russian" class="ml-2">Всероссийское</label>
                                 </div>
                                 <div class="settings-radio">
                                     <input
                                         v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Окружное"
+                                        id="District"
                                     />
-                                    <label class="ml-2">Окружное</label>
+                                    <label for="District" class="ml-2">Окружное</label>
                                 </div>
                                 <div class="settings-radio">
                                     <input
                                         v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Региональное"
+                                        id="Regional"
                                     />
-                                    <label class="ml-2">Региональное</label>
+                                    <label for="Regional" class="ml-2">Региональное</label>
                                 </div>
                                 <div class="settings-radio">
                                     <input
                                         v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Городское"
+                                        id="Urban"
                                     />
-                                    <label class="ml-2">Городское</label>
+                                    <label for="Urban" class="ml-2">Городское</label>
                                 </div>
                                 <div class="settings-radio">
                                     <input
                                         v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Мероприятие ОО"
+                                        id="OOevent"
                                     />
-                                    <label class="ml-2">Мероприятие ОО</label>
+                                    <label for="OOevent" class="ml-2">Мероприятие ОО</label>
                                 </div>
                                 <div class="settings-radio">
                                     <input
                                         v-model="actionFormSearch.scale"
                                         type="radio"
                                         value="Отрядное"
+                                        id="Detachment"
                                     />
-                                    <label class="ml-2">Отрядное</label>
+                                    <label for="Detachment" class="ml-2">Отрядное</label>
                                 </div>
                             </div>
                         </v-expansion-panel-text>
@@ -190,47 +197,51 @@
                                     v-model="actionFormSearch.direction"
                                     type="radio"
                                     value="Добровольческое"
+                                    id="Volunteer"
                                 />
-                                <label class="ml-2">Добровольческое</label>
+                                <label for="Volunteer" class="ml-2">Добровольческое</label>
                             </div>
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.direction"
                                     type="radio"
                                     value="Образовательное"
+                                    id="Educational"
                                 />
-                                <label class="ml-2">Образовательное</label>
+                                <label for="Educational" class="ml-2">Образовательное</label>
                             </div>
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.direction"
                                     type="radio"
                                     value="Патриотическое"
+                                    id="Patriotic"
                                 />
-                                <label class="ml-2">Патриотическое</label>
+                                <label for="Patriotic" class="ml-2">Патриотическое</label>
                             </div>
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.direction"
                                     type="radio"
                                     value="Спортивное"
+                                    id="Sports"
                                 />
-                                <label class="ml-2">Спортивное</label>
+                                <label for="Sports" class="ml-2">Спортивное</label>
                             </div>
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.direction"
                                     type="radio"
-                                    value="Все"
+                                    value="Творческое"
+                                    id="Creative"
                                 />
-                                <label class="ml-2">Творческое</label>
+                                <label for="Creative" class="ml-2">Творческое</label>
                             </div>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
               <p class="totalEvents">Мероприятий найдено: {{ actionsList.length }}</p>
             </div>
-
             <div class="col" style="width: 100%">
                 <div class="sort-container">
                   <div class="sort-layout">
@@ -272,9 +283,18 @@
                           @click="showVertical"
                       ></Button>
                     </div>
-
+                    <div class="toggleSettings">
+                      <svg
+                          @click="toggleBtn = !toggleBtn"
+                          class="toggleSettings-btn"
+                          xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="4.5" fill="white"/>
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="4.5" stroke="#35383F"/>
+                        <path d="M13.6581 23.7806L13.8162 24.255H13.8162L13.6581 23.7806ZM18.6581 22.114L18.8162 22.5883H18.8162L18.6581 22.114ZM23.7071 11.2929L24.0607 11.6464L23.7071 11.2929ZM19.2929 15.7071L18.9393 15.3536L19.2929 15.7071ZM9 8.5H23V7.5H9V8.5ZM8.5 10.5858V9H7.5V10.5858H8.5ZM13.0607 15.3535L8.64645 10.9393L7.93934 11.6464L12.3535 16.0607L13.0607 15.3535ZM12.5 16.4142V23.3063H13.5V16.4142H12.5ZM12.5 23.3063C12.5 23.9888 13.1687 24.4708 13.8162 24.255L13.5 23.3063V23.3063H12.5ZM13.8162 24.255L18.8162 22.5883L18.5 21.6396L13.5 23.3063L13.8162 24.255ZM18.8162 22.5883C19.2246 22.4522 19.5 22.0701 19.5 21.6396H18.5L18.8162 22.5883ZM19.5 21.6396V16.4142H18.5V21.6396H19.5ZM23.3536 10.9393L18.9393 15.3536L19.6464 16.0607L24.0607 11.6464L23.3536 10.9393ZM23.5 9V10.5858H24.5V9H23.5ZM24.0607 11.6464C24.342 11.3651 24.5 10.9836 24.5 10.5858H23.5C23.5 10.7184 23.4473 10.8456 23.3536 10.9393L24.0607 11.6464ZM19.5 16.4142C19.5 16.2816 19.5527 16.1544 19.6464 16.0607L18.9393 15.3536C18.658 15.6349 18.5 16.0164 18.5 16.4142H19.5ZM12.3535 16.0607C12.4473 16.1544 12.5 16.2816 12.5 16.4142H13.5C13.5 16.0164 13.342 15.6349 13.0607 15.3535L12.3535 16.0607ZM7.5 10.5858C7.5 10.9836 7.65804 11.3651 7.93934 11.6464L8.64645 10.9393C8.55268 10.8456 8.5 10.7184 8.5 10.5858H7.5ZM23 8.5C23.2761 8.5 23.5 8.72386 23.5 9H24.5C24.5 8.17157 23.8284 7.5 23 7.5V8.5ZM9 7.5C8.17157 7.5 7.5 8.17157 7.5 9H8.5C8.5 8.72386 8.72386 8.5 9 8.5V7.5Z" fill="#35383F"/>
+                      </svg>
+                    </div>
                   </div>
-                    <div class="sort-alphabet">
+                  <div class="sort-alphabet">
                       <v-select
                           style="width: 232px;"
                           class="events__sort-select"
@@ -295,8 +315,19 @@
                       ></Button>
                     </div>
                 </div>
+                <div
+                    v-if="!actionsList.length"
+                    style="
+                    font-family: Bert Sans;
+                    font-size: 18px;
+                    font-weight: 500;
+                    line-height: 23.74px;
+                    text-align: center;
+                    color: #898989;">
+                  По вашему запросу мероприятий не найдено.
+                </div>
                 <div class="cardsContainer">
-                  <v-row v-if="vertical">
+                  <v-row v-if="vertical" class="cardsRow">
                     <v-col
                         class="pa-2"
                         v-for="(variant, i) in actionsList"
@@ -425,6 +456,7 @@ let rolesCount = ref(0);
 const text = ref('');
 const vertical = ref(true);
 const reverseListActive = ref(false);
+const toggleBtn = ref(true)
 
 onActivated(() => {
     getListActionsBySearch(text.value).then((resp) => {
@@ -563,6 +595,15 @@ const sortOptions = ref([
   text-align: left;
   padding-left: 0;
 }
+@media (max-width: 768px) {
+  .v-expansion-panel-title {
+    font-family: Bert Sans;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 23.74px;
+    text-align: left;
+  }
+}
 .v-expansion-panel__shadow {
   border: none;
   box-shadow: none;
@@ -586,9 +627,37 @@ const sortOptions = ref([
 </style>
 
 <style lang="scss" scoped>
+.toggleSettings {
+  display: flex;
+  justify-content: right;
+  width:  100%;
+  @media (min-width: 768px) {
+    display: none;
+  }
+  &-btn {
+    //border: 1px solid #B6B6B6 !important;
+    //border-radius: 10px;
+    //margin-bottom: 30px;
+    //width:  100%;
+    text-align: left;
+  }
+}
+.hideSettings {
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+.expansion-panels {
+  width: 284px;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
 .settings-container {
   @media (max-width: 768px) {
     //display: none;
+    margin-right: 0 !important;
+    margin-bottom: 20px !important;
   }
 }
 .totalEvents {
@@ -599,6 +668,10 @@ const sortOptions = ref([
   text-align: left;
   color: #898989;
   margin-top: 36px;
+  @media (max-width: 768px) {
+    margin-top: 0;
+    padding-bottom: 10px;
+  }
 }
 .v-img__img--cover {
   object-fit: fill;
@@ -613,6 +686,9 @@ const sortOptions = ref([
   height: 48px;
   cursor: pointer;
   max-width: 880px;
+  @media (max-width: 768px) {
+    margin-top: 20px;
+  }
 }
 .vertical_list-itemLeft,
 .vertical_list-itemRight {
@@ -708,6 +784,12 @@ const sortOptions = ref([
   max-width: 880px;
   margin-bottom: 80px;
 }
+.cardsRow {
+  @media (max-width: 768px) {
+    margin-top: 20px;
+    justify-content: center;
+  }
+}
 .textCaption {
   max-width: 280px;
   font-family: Bert Sans;
@@ -774,10 +856,19 @@ const sortOptions = ref([
 //Общий стиль компонента
 .action {
     &-title {
-        height: 116px;
-        font-size: 52px;
-        @media screen and (max-width: 575px) {
-            font-size: 32px;
+      margin-bottom: 40px;
+      font-family: Akrobat;
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 62.4px;
+      text-align: left;
+
+      @media screen and (max-width: 575px) {
+          font-family: Akrobat;
+          font-size: 40px;
+          font-weight: 600;
+          line-height: 48px;
+          text-align: left;
         }
     }
     &-slides {
@@ -874,6 +965,12 @@ const sortOptions = ref([
       width: 32px;
       height: 32px;
     }
+    @media (max-width: 768px) {
+      &-button {
+        margin-left: 0;
+      }
+
+    }
     &-buttonDirection {
       border-radius: 10px;
       width: 32px;
@@ -892,11 +989,25 @@ const sortOptions = ref([
         height: 50px;
         display: flex;
         justify-content: space-between;
+        @media (max-width: 768px) {
+          flex-flow: column-reverse;
+          height: initial;
+        }
+    }
+    &-layout {
+      @media (max-width: 768px) {
+        margin-top: 10px;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
     }
     &-alphabet {
         //width: 320px;
         display: flex;
         justify-content: flex-end;
+        @media (max-width: 768px) {
+          margin-top: 10px;
+         }
     }
     &-select {
         //height: 50px;
@@ -941,6 +1052,9 @@ const sortOptions = ref([
     width: 100%;
     height: 50px;
     margin-bottom: 40px;
+  @media (max-width: 768px) {
+    margin-bottom: 10px;
+  }
 }
 .events_magnifier {
     position: relative;

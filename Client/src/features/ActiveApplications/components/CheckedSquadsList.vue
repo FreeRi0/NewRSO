@@ -19,14 +19,14 @@ const changeSquads = (CheckedSquad, SquadId) => {
 };
 
 const approveMember = (approved) => {
-    console.log('user', approved);
+
     emit('approveMember', approved);
-    console.log('approved');
+
 };
 const rejectMember = (rejected) => {
-    console.log('user', rejected);
+  
     emit('rejectMember', rejected);
-    console.log('rejected');
+
 };
 
 const props = defineProps({

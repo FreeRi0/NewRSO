@@ -115,7 +115,6 @@ const viewDetachments = async () => {
 
 const select = (event) => {
     selectedDetachmentList.value = [];
-    console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
         for (let index in detachmentList.value) {
             detachmentList.value[index].selected = true;
@@ -214,7 +213,6 @@ const onAction = async () => {
     try {
         for (const application of selectedDetachmentList.value) {
             if (action.value === 'Одобрить') {
-                console.log('app', application.id, application);
                 await confirmApplication(
                     roles.roles.value.detachment_commander?.id,
                     application.id,

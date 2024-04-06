@@ -4,10 +4,10 @@ s
         <h1 class="title title--mb">Редактирование данных по показателям</h1>
         <form class="form" action="#" method="post">
             <v-expansion-panels>
-                <v-expansion-panel @click="getParameters(1)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(1)">
                                 <v-col class="d-flex justify-start">
                                     Численность членов линейного студенческого
                                     отряда в соответствии с объемом уплаченных
@@ -88,10 +88,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(2)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(2)">
                                 <v-col class="d-flex justify-start">
                                     Прохождение Командиром и Комиссаром
                                     студенческого отряда региональной школы
@@ -248,10 +248,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(3)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(3)">
                                 <v-col class="d-flex justify-start">
                                     Получение командным составом отряда
                                     образования в корпоративном университете РСО
@@ -338,10 +338,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(4)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(4)">
                                 <v-col class="d-flex justify-start">
                                     Прохождение обучения по охране труда и
                                     пожарной безопасности в рамках недели охраны
@@ -428,10 +428,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(5)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(5)">
                                 <v-col class="d-flex justify-start">
                                     Процент членов студенческого отряда,
                                     прошедших профессиональное обучение
@@ -610,10 +610,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(6)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(6)">
                                 <v-col class="d-flex justify-start">
                                     Участие членов студенческого отряда в
                                     обязательных общесистемных мероприятиях на
@@ -1062,10 +1062,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(7)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(7)">
                                 <v-col class="d-flex justify-start">
                                     Участие членов студенческого отряда в
                                     окружных и межрегиональных мероприятиях РСО
@@ -1290,10 +1290,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(8)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(8)">
                                 <v-col class="d-flex justify-start">
                                     Участие членов студенческого отряда во
                                     всероссийских мероприятиях РСО
@@ -1517,10 +1517,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(9)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(9)">
                                 <v-col class="d-flex justify-start">
                                     Призовые места отряда в окружных и
                                     межрегиональных мероприятиях и конкурсах РСО
@@ -1713,10 +1713,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(10)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(10)">
                                 <v-col class="d-flex justify-start">
                                     Призовые места отряда во Всероссийских
                                     мероприятиях и конкурсах РСО
@@ -1909,10 +1909,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(11)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(11)">
                                 <v-col class="d-flex justify-start">
                                     Призовые места отряда на окружных и
                                     межрегиональных трудовых проектах
@@ -1920,7 +1920,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(11)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2106,10 +2106,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(12)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(12)">
                                 <v-col class="d-flex justify-start">
                                     Призовые места отряда на всероссийских
                                     трудовых проектах
@@ -2297,10 +2297,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(13)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(13)">
                                 <v-col class="d-flex justify-start">
                                     Организация собственных мероприятий отряда
                                 </v-col>
@@ -2448,10 +2448,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(14)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(14)">
                                 <v-col class="d-flex justify-start">
                                     Отношение количества бойцов, отработавших в
                                     летнем трудовом семестре к общему числу
@@ -2606,10 +2606,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(15)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(15)">
                                 <v-col class="d-flex justify-start">
                                     Победы членов отряда в региональных,
                                     окружных и всероссийских грантовых
@@ -2806,10 +2806,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(16)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(16)">
                                 <v-col class="d-flex justify-start">
                                     Активность отряда в социальных сетях
                                 </v-col>
@@ -3003,10 +3003,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(17)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(17)">
                                 <v-col class="d-flex justify-start">
                                     Количество упоминаний в СМИ о прошедших
                                     творческих, добровольческих и патриотических
@@ -3071,7 +3071,7 @@ s
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div
-                                class="form__field-group-top form__field-column-one"
+                                class="form__field-group-top form__field-column-one form__field-column-one-file"
                                 v-for="(block, index) in report[17].q17_event"
                                 :key="index"
                             >
@@ -3109,7 +3109,32 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form__field-group-left"></div>
+                                <div type="button">
+                                    <svg
+                                        @click="deleteBlock17(index)"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
+                                            stroke="#939393"
+                                            stroke-linecap="round"
+                                        />
+                                        <path
+                                            d="M9 9L15 15"
+                                            stroke="#939393"
+                                            stroke-linecap="round"
+                                        />
+                                        <path
+                                            d="M15 9L9 15"
+                                            stroke="#939393"
+                                            stroke-linecap="round"
+                                        />
+                                    </svg>
+                                </div>
                             </div>
                             <div
                                 class="form__field add-block"
@@ -3133,10 +3158,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(18)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(18)">
                                 <v-col class="d-flex justify-start">
                                     Охват бойцов, принявших участие во
                                     Всероссийском дне ударного труда
@@ -3239,10 +3264,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(19)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(19)">
                                 <v-col class="d-flex justify-start">
                                     Отсутствие нарушений техники безопасности,
                                     охраны труда и противопожарной безопасности
@@ -3345,10 +3370,10 @@ s
                         </div>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-                <v-expansion-panel @click="getParameters(20)">
+                <v-expansion-panel>
                     <v-expansion-panel-title>
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters>
+                            <v-row no-gutters @click="getParameters(20)">
                                 <v-col class="d-flex justify-start">
                                     Соответствие требованиям и положения
                                     символики и атрибутике форменной одежды и
@@ -3640,6 +3665,7 @@ const AddBlock7 = () => {
         event_name: '',
         number_of_participants: '',
         certificate_scans: null,
+        links: [{ link: '' }],
     });
 };
 
@@ -3745,6 +3771,11 @@ const deleteBlock14 = (index) => {
 
 const deleteBlock15 = (index) => {
     report.value[15].grants_data.splice(index, 1);
+};
+
+const deleteBlock17 = (index) => {
+    report.value[17].q17_event.splice(index, 1);
+    report.value[17].q17_link.splice(index, 1);
 };
 
 const report = ref({
@@ -3877,10 +3908,40 @@ const getParameters = async (id) => {
                 },
             },
         );
-
         if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
-        else if (response.data.results.length)
-            report.value[id] = response.data.results[0];
+        else if (response.data.results.length) {
+            if (
+                id == 6 &&
+                route.params.id == response.data.results[0].detachment
+            ) {
+                report.value[61].first_may_demonstration =
+                    response.data.results[0].first_may_demonstration;
+                report.value[61].first_may_demonstration_participants =
+                    response.data.results[0].first_may_demonstration_participants;
+                report.value[62].patriotic_action =
+                    response.data.results[0].patriotic_action;
+                report.value[62].patriotic_action_participants =
+                    response.data.results[0].patriotic_action_participants;
+                report.value[63].safety_work_week =
+                    response.data.results[0].safety_work_week;
+                report.value[64].commander_commissioner_school =
+                    response.data.results[0].commander_commissioner_school;
+                report.value[65].working_semester_opening =
+                    response.data.results[0].working_semester_opening;
+                report.value[65].working_semester_opening_participants =
+                    response.data.results[0].working_semester_opening_participants;
+                report.value[66].creative_festival =
+                    response.data.results[0].creative_festival;
+                report.value[67].spartakiad =
+                    response.data.results[0].spartakiad;
+                report.value[68].professional_competition =
+                    response.data.results[0].professional_competition;
+            } else {
+                if (report.value[id].participation_data)
+                    report.value[id].participation_data = response.data.results;
+                else report.value[id] = response.data.results[0];
+            }
+        }
     } catch (error) {
         isError.value = error.response.data;
     }
