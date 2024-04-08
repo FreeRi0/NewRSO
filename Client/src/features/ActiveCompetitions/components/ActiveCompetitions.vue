@@ -1,7 +1,7 @@
 <template>
     <div class="competitions__container">
         <p v-if="loading">Загрузка...</p>
-        <p v-else-if="!loading && !competitionsList.length && !allReporting">
+        <p v-else-if="competitionsList.length || allReporting.length">
             Список заявок на конкурсы пуст
         </p>
 
@@ -34,16 +34,19 @@
                         @select="onToggleSelectCompetition"
                     />
                 </template>
-                <template
-                    v-for="(report, index) in allReporting[2]"
-                    :key="report.id"
-                >
-                    <active-competition-item-report
-                        :report="report"
-                        :position="index"
-                        @select="onToggleSelectReport"
-                    />
+                <template v-for="index in 20" :key="index">
+                    <template
+                        v-for="report in allReporting[index]"
+                        :key="report.id"
+                    >
+                        <active-competition-item-report
+                            :report="report"
+                            :position="index"
+                            @select="onToggleSelectReport"
+                        />
+                    </template>
                 </template>
+
                 <template
                     v-if="
                         selectedCompetitionsList.length ||
@@ -98,7 +101,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
-import { ref, onMounted, onActivated } from 'vue';
+import { ref, onMounted, onActivated, inject } from 'vue';
 import ActiveCompetitionItem from './ActiveCompetitionItem.vue';
 import ActiveCompetitionItemSelect from './ActiveCompetitionItemSelect.vue';
 import ActiveCompetitionItemReport from './ActiveCompetitionsItemReport.vue';
@@ -109,9 +112,9 @@ const commanderIds = ref();
 const selectedCompetitionsList = ref([]);
 const allCompetition = ref([]);
 
-const allReporting = ref({
-    2: [],
-});
+const swal = inject('$swal');
+
+const allReporting = ref({});
 const selectedReportingList = ref([]);
 
 const loading = ref(false);
@@ -290,7 +293,7 @@ const cancelIndicator = async (id, applicationId) => {
 
 const onAction = async () => {
     console.log(selectedReportingList.value);
-    if (selectedReportingList.value) {
+    if (selectedReportingList.value.length) {
         try {
             for (const application of selectedReportingList.value) {
                 console.log(application);
@@ -313,13 +316,27 @@ const onAction = async () => {
                         (competition) => competition.id != application.id,
                     );
             }
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         } catch (e) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `Ошибка верификации`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
             console.log('error action 1', e);
         }
     }
     console.log(selectedCompetitionsList.value);
 
-    if (selectedCompetitionsList.value) {
+    if (selectedCompetitionsList.value.length) {
         console.log(123);
         try {
             for (const application of selectedCompetitionsList.value) {
@@ -351,7 +368,21 @@ const onAction = async () => {
                 )
                     await getCompetitionsJunior();
                 else await getCompetitions();
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
         } catch (e) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `Ошибка верификации`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
             console.log('error action 2', e);
         }
     }
@@ -373,6 +404,9 @@ const getAllReporting = async () => {
             for (let report of data.results) {
                 if (!report.is_verified) {
                     report.indicator = index;
+                    if (!allReporting.value[index]) {
+                        allReporting.value[index] = [];
+                    }
                     allReporting.value[index].push(report);
                 }
             }
@@ -380,6 +414,7 @@ const getAllReporting = async () => {
         } catch (e) {
             console.log('getAllReporting error', e);
         }
+    console.log(allReporting.value);
     loading.value = false;
 };
 

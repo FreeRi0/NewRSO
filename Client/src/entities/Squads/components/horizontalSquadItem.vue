@@ -47,8 +47,12 @@
                 {{ member.junior_detachment?.regional_headquarter_name }}
             </p>
         </div>
-        <div class="rating ml-2" v-if="rating">
-            <p>{{ place.place }}</p>
+        <div
+            class="horizontal-item mini ml-2"
+            v-if="rating && roleStore.status.is_commander_detachment"
+        >
+            <p v-if="place.place">Место в рейтинге: {{ place.place }}</p>
+            <p v-else>Место в рейтинге: -</p>
         </div>
     </div>
 
@@ -70,6 +74,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
 const props = defineProps({
     squad: {
         type: Object,
@@ -87,7 +92,7 @@ const props = defineProps({
         type: Object,
     },
 });
-
+const roleStore = useRoleStore();
 const place = ref([]);
 
 const getPlaces = async () => {
@@ -98,6 +103,7 @@ const getPlaces = async () => {
         },
     });
     let data = response.data;
+    console.log('data', data);
     place.value = data;
 };
 
@@ -143,10 +149,19 @@ onMounted(() => {
     }
 }
 
-.rating {
-    border-radius: 10px;
-    border: 1px solid #b6b6b6;
-    font-size: 16px;
-    padding: 13px;
+// .rating {
+//     border-radius: 10px;
+//     border: 1px solid #b6b6b6;
+//     font-size: 16px;
+//     padding: 4px 13px;
+//     display: grid;
+//     grid-template-columns: auto 1fr auto auto;
+//     align-items: baseline;
+//     align-items: center;
+//     width: 40%;
+// }
+.mini {
+    width: 100%;
+    max-width: 182px;
 }
 </style>
