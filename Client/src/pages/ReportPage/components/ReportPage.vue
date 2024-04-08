@@ -510,11 +510,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Иванова Светлана Андреевна"
-                                            max-length="100"
+                                            maxlength="100"
                                             v-model:value="block.name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ counterReport5 }} / 100
                                         </div>
                                     </div>
                                 </div>
@@ -2518,7 +2518,7 @@ s
                             <div
                                 class="form__field-group-top form__field-column-one form__field-column-one-file"
                                 v-for="(block, index) in report[14]
-                                    .q14_labor_project"
+                                    .q14_labor_projects"
                                 :key="index"
                             >
                                 <div class="form__field-group-left">
@@ -3072,7 +3072,7 @@ s
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[17].q17_event"
+                                v-for="(block, index) in report[17].source_data"
                                 :key="index"
                             >
                                 <div class="form__field-group-left">
@@ -3100,9 +3100,7 @@ s
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             max-length="100"
-                                            v-model:value="
-                                                report[17].q17_link[index].link
-                                            "
+                                            v-model:value="block.link"
                                         />
                                         <div class="form__counter">
                                             {{ counterReport }} / 100
@@ -3554,7 +3552,7 @@ s
 <script setup>
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref, inject } from 'vue';
+import { ref, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
@@ -3641,9 +3639,12 @@ const prizePlaceChoose = ref([
     { name: '3', value: 3 },
 ]);
 
-// const counterReport = computed(() => {
-//     return .value?.length || 0;
+// const counterReport5 = computed(() => {
+//     if (report.value[5].participants_data.name) {
+//         return report.value[5].participants_data?.length;
+//     } else return 0;
 // });
+
 const selectFile = (e, id, field, subfield, index) => {
     if (subfield) report.value[id][field][index][subfield] = e.files[0];
     else report.value[id][field] = e.files[0];
@@ -3653,8 +3654,7 @@ const addNewBlock = () => {
 };
 
 const addNewBlockQ17 = () => {
-    report.value[17].q17_event.push({ source_name: '' });
-    report.value[17].q17_link.push({ link: '' });
+    report.value[17].source_data.push({ source_name: '', link: '' });
 };
 const AddLink7 = (index) => {
     report.value[7].participation_data[index].links.push({ link: '' });
@@ -3719,7 +3719,7 @@ const AddBlock13 = () => {
     });
 };
 const AddBlock14 = () => {
-    report.value[14].q14_labor_project.push({
+    report.value[14].q14_labor_projects.push({
         lab_project_name: '',
         amount: '',
     });
@@ -3766,7 +3766,7 @@ const deleteBlock13 = (index) => {
 };
 
 const deleteBlock14 = (index) => {
-    report.value[14].q14_labor_project.splice(index, 1);
+    report.value[14].q14_labor_projects.splice(index, 1);
 };
 
 const deleteBlock15 = (index) => {
@@ -3774,8 +3774,7 @@ const deleteBlock15 = (index) => {
 };
 
 const deleteBlock17 = (index) => {
-    report.value[17].q17_event.splice(index, 1);
-    report.value[17].q17_link.splice(index, 1);
+    report.value[17].source_data.splice(index, 1);
 };
 
 const report = ref({
@@ -3855,7 +3854,7 @@ const report = ref({
         ],
     },
     13: { organization_data: [{ event_type: '', event_link: '' }] },
-    14: { q14_labor_project: [{ lab_project_name: '', amount: '' }] },
+    14: { q14_labor_projects: [{ lab_project_name: '', amount: '' }] },
     15: {
         grants_data: [
             {
@@ -3874,7 +3873,7 @@ const report = ref({
         link_vk_detachment: '',
         vk_detachment_number_subscribers: '',
     },
-    17: { q17_event: [{ source_name: '' }], q17_link: [{ link: '' }] },
+    17: { source_data: [{ source_name: '', link: '' }] },
     18: { participants_number: '' },
     19: { safety_violations: '' },
     20: {
