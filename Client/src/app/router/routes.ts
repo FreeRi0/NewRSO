@@ -120,14 +120,6 @@ const routes: RouteRecordRaw[] = [
                                                         '@pages/DetachmentReport/components/DetachmentReport.vue'
                                                     ),
                                             },
-                                            // {
-                                            //     path: 'tandem',
-                                            //     name: 'tandem',
-                                            //     component: () =>
-                                            //         import(
-                                            //             '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
-                                            //         ),
-                                            // },
                                             {
                                                 path: 'report/:competition_pk',
                                                 meta: {
@@ -193,30 +185,6 @@ const routes: RouteRecordRaw[] = [
                                             },
                                         ],
                                     },
-                                    // {
-                                    //     path: 'reporting',
-                                    //     meta: {
-                                    //         label: 'Отчетность',
-                                    //     },
-                                    //     children: [
-                                    //         {
-                                    //             path: '',
-                                    //             name: 'debut',
-                                    //             component: () =>
-                                    //                 import(
-                                    //                     '@pages/DetachmentReport/components/DetachmentReportDebut.vue'
-                                    //                 ),
-                                    //         },
-                                    //         // {
-                                    //         //     path: 'tandem',
-                                    //         //     name: 'tandem',
-                                    //         //     component: () =>
-                                    //         //         import(
-                                    //         //             '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
-                                    //         //         ),
-                                    //         // },
-                                    //     ],
-                                    // },
                                 ],
                             },
                         ],
@@ -709,13 +677,13 @@ const routes: RouteRecordRaw[] = [
 
                     {
                         path: 'test',
-                        name: 'testPage',
                         meta: {
                             redirectTo: 'testPage',
                             label: 'Тестирование по обучению',
                         },
                         children: [
                             {
+                                name: 'testPage',
                                 path: ':name',
                                 component: () =>
                                     import(
