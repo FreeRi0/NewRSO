@@ -894,6 +894,7 @@ onMounted(() => {
 
         &__link {
             color: #ffffff;
+            max-width: 218px;
         }
     }
 }

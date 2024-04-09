@@ -149,6 +149,7 @@ import { ref, computed, onMounted, watch, onActivated } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 
+
 const squadsStore = useSquadsStore();
 const picked = ref(true);
 const route = useRoute();

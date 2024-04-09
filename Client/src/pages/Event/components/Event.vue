@@ -277,7 +277,7 @@
                     >
                         <router-link
                             :to="{
-                                name: 'allparticipants',
+                                name: 'actionparticipants',
                                 params: { id: eventsStore.event.id },
                             }"
                         >
@@ -326,7 +326,7 @@
                 >
                     <router-link
                         :to="{
-                            name: 'allparticipants',
+                            name: 'actionparticipants',
                             params: { id: eventsStore.event.id },
                         }"
                     >
