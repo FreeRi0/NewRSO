@@ -277,7 +277,7 @@
                     >
                         <router-link
                             :to="{
-                                name: 'allparticipants',
+                                name: 'actionparticipants',
                                 params: { id: eventsStore.event.id },
                             }"
                         >
@@ -326,7 +326,7 @@
                 >
                     <router-link
                         :to="{
-                            name: 'allparticipants',
+                            name: 'actionparticipants',
                             params: { id: eventsStore.event.id },
                         }"
                     >
@@ -507,7 +507,7 @@ watch(
     () => route.params.id,
 
     async (newId, oldId) => {
-        if (!newId || route.name !== 'Action') return;
+        if (!newId) return;
         await eventsStore.getEventId(newId);
         await eventsStore.getEventMembers(newId);
         await eventsStore.getEventOrganizators(newId);

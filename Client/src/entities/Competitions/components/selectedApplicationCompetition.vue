@@ -1,17 +1,16 @@
 <template>
     <div class="horizontallso">
-        <div class="horizontallso-item__wrapper mr-3">
+        <router-link
+            :to="{ name: 'PersonalDataUser', params: { id: event.user.id } }"
+            class="horizontallso-item__wrapper mr-3"
+        >
             <div class="horizontallso-img">
                 <img
                     :src="event?.user?.avatar?.photo"
                     alt="logo"
                     v-if="event?.user?.avatar?.photo"
                 />
-                <img
-                v-else
-                    src="@app/assets/user-avatar.png"
-                    alt="photo"
-                />
+                <img v-else src="@app/assets/user-avatar.png" alt="photo" />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
@@ -35,8 +34,11 @@
                     <p>{{ event.user.date_of_birth }}</p>
                 </div>
             </div>
-        </div>
-        <div class="horizontallso-item__wrapper">
+        </router-link>
+        <router-link
+            :to="{ name: 'ActionData', params: { id: event.event.id } }"
+            class="horizontallso-item__wrapper"
+        >
             <div class="horizontallso-img">
                 <img
                     :src="event.event.banner"
@@ -54,7 +56,7 @@
                     {{ event.event.name }}
                 </p>
             </div>
-        </div>
+        </router-link>
         <div class="d-flex">
             <div class="actionVal">{{ action }}</div>
 
@@ -81,7 +83,7 @@ const props = defineProps({
     action: {
         type: String,
         default: '',
-    }
+    },
 });
 
 const checked = ref(true);
@@ -93,7 +95,6 @@ const emit = defineEmits({
 const updateCheckEvents = (e) => {
     emit('select', props.event, e.target.checked);
 };
-
 </script>
 <style lang="scss" scoped>
 .horizontallso {
@@ -148,7 +149,6 @@ const updateCheckEvents = (e) => {
     height: 48px;
     margin-left: 12px;
 }
-
 
 .containerHorizontal {
     display: flex;

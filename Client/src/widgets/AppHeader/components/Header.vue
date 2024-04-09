@@ -425,6 +425,15 @@ const userPages = computed(() => [
             roleStore.roles.regionalheadquarter_commander ||
             roleStore.roles.centralheadquarter_commander,
     },
+    {
+        title: 'Обучение по охране труда и технике безопасности',
+        name: 'Safety',
+        show:
+            roleStore.status.is_commander_detachment ||
+            roleStore.status.is_commissar_detachment ||
+            roleStore.roles.regionalheadquarter_commander ||
+            roleStore.roles.centralheadquarter_commander,
+    },
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },
 ]);
@@ -885,6 +894,7 @@ onMounted(() => {
 
         &__link {
             color: #ffffff;
+            max-width: 218px;
         }
     }
 }

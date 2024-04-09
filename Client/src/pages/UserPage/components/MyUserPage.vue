@@ -95,32 +95,32 @@ const education = ref({});
 const region = ref({});
 
 const uploadAva = (imageAva) => {
-    console.log('photo', imageAva);
+
     currentUser.currentUser.value.media.photo = imageAva;
 };
 
 const updateAva = (imageAva) => {
-    console.log('photoUpdate', imageAva);
+
     currentUser.currentUser.value.media.photo = imageAva;
 };
 
 const deleteAva = (imageAva) => {
-    console.log('photoDelete', imageAva);
+
     currentUser.currentUser.value.media.photo = imageAva;
 };
 
 const uploadWall = (imageWall) => {
-    console.log('ban', imageWall);
+
     currentUser.currentUser.value.media.banner = imageWall;
 };
 
 const updateWall = (imageWall) => {
-    console.log('banUpdate', imageWall);
+
     currentUser.currentUser.value.media.banner = imageWall;
 };
 
 const deleteWall = (imageWall) => {
-    console.log('banDelete', imageWall);
+  
     currentUser.currentUser.value.media.banner = imageWall;
 };
 </script>

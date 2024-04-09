@@ -113,19 +113,11 @@ const routes: RouteRecordRaw[] = [
                                         },
                                         children: [
                                             {
-                                                path: 'debut',
-                                                name: 'debut',
+                                                path: ':reporting_name',
+                                                name: 'reporting',
                                                 component: () =>
                                                     import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportDebut.vue'
-                                                    ),
-                                            },
-                                            {
-                                                path: 'tandem',
-                                                name: 'tandem',
-                                                component: () =>
-                                                    import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
+                                                        '@pages/DetachmentReport/components/DetachmentReport.vue'
                                                     ),
                                             },
                                             {
@@ -191,30 +183,6 @@ const routes: RouteRecordRaw[] = [
                                                     },
                                                 ],
                                             },
-                                        ],
-                                    },
-                                    {
-                                        path: 'reporting',
-                                        meta: {
-                                            label: 'Отчетность',
-                                        },
-                                        children: [
-                                            {
-                                                path: '',
-                                                name: 'debut',
-                                                component: () =>
-                                                    import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportDebut.vue'
-                                                    ),
-                                            },
-                                            // {
-                                            //     path: 'tandem',
-                                            //     name: 'tandem',
-                                            //     component: () =>
-                                            //         import(
-                                            //             '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
-                                            //         ),
-                                            // },
                                         ],
                                     },
                                 ],
@@ -522,6 +490,40 @@ const routes: RouteRecordRaw[] = [
                                         '@pages/EditActionPage/components/EditActionPage.vue'
                                     ),
                             },
+
+                            {
+                                path: 'ActionParticipants',
+                                meta: {
+                                    label: 'Участники мероприятия',
+                                },
+                                children: [
+                                    {
+                                        path: '',
+                                        name: 'actionparticipants',
+                                        component: () =>
+                                            import(
+                                                '@pages/ParticipantsAllPage.vue/components/ParticipantsActions.vue'
+                                            ),
+                                    },
+                                    {
+                                        path: ':id',
+                                        meta: {
+                                            redirectTo: 'userpage',
+                                            label: 'Страница участника',
+                                        },
+                                        children: [
+                                            {
+                                                path: '',
+                                                name: 'userpage',
+                                                component: () =>
+                                                    import(
+                                                        '@pages/UserPage/components/UserPage.vue'
+                                                    ),
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
                             {
                                 path: 'verification',
                                 meta: {
@@ -709,15 +711,20 @@ const routes: RouteRecordRaw[] = [
 
                     {
                         path: 'test',
-                        name: 'testPage',
                         meta: {
                             redirectTo: 'testPage',
                             label: 'Тестирование по обучению',
                         },
-                        component: () =>
-                            import(
-                                '@pages/TestingPages/components/TestingPages.vue'
-                            ),
+                        children: [
+                            {
+                                name: 'testPage',
+                                path: ':name',
+                                component: () =>
+                                    import(
+                                        '@pages/TestingPages/components/TestingPages.vue'
+                                    ),
+                            },
+                        ],
                     },
                 ],
             },
@@ -836,6 +843,23 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             {
+                path: '/Safety',
+                meta: {
+                    redirectTo: 'Safety',
+                    label: 'Охрана труда и пожарная безопасность',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'Safety',
+                        component: () =>
+                            import(
+                                '@pages/SafetyPage/components/SafetyPage.vue'
+                            ),
+                    },
+                ],
+            },
+            {
                 path: '/references',
                 meta: {
                     label: 'Оформление справок',
@@ -905,6 +929,15 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
+                                path: 'action',
+                                meta: {
+                                    label: 'Данные мероприятия',
+                                },
+                                name: 'ActionData',
+                                component: () =>
+                                    import('@pages/Event/components/Event.vue'),
+                            },
+                            {
                                 path: 'detachment',
                                 meta: {
                                     label: 'Данные отряда',
@@ -912,6 +945,22 @@ const routes: RouteRecordRaw[] = [
                                 name: 'DetachmentData',
                                 component: () =>
                                     import('@pages/lsoPage/lsoPage.vue'),
+                            },
+                            {
+                                path: 'indicator',
+                                children: [
+                                    {
+                                        path: ':applicationId',
+                                        meta: {
+                                            label: 'Показатели пользователя',
+                                        },
+                                        name: 'indicatorPage',
+                                        component: () =>
+                                            import(
+                                                '@pages/indicatorPages/components/IndicatorsPage.vue'
+                                            ),
+                                    },
+                                ],
                             },
                         ],
                     },
