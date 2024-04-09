@@ -719,17 +719,14 @@ const routes: RouteRecordRaw[] = [
                         component: () =>
                             import(
                                 '@pages/TestingPages/components/TestingPages.vue'
-                                ),
-                        /*children: [
-                            {
-                                name: 'testPage',
-                                path: ':name',
-                                component: () =>
-                                    import(
-                                        '@pages/TestingPages/components/TestingPages.vue'
-                                    ),
-                            },
-                        ],*/
+                            ),
+                        // children: [
+                        //     {
+                        //         name: 'testPage',
+                        //         path: ':name',
+
+                        //     },
+                        // ],
                     },
                 ],
             },
