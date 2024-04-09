@@ -143,7 +143,13 @@ const isLoading = ref(false);
 const detachments = ref({});
 const isTandem = ref(true);
 const limit = 24;
-const sortBy = ref('junior_detachment__name');
+const sortBy = ref('detachment__overalltandemranking_main_detachment__place');
+// if (isTandem.value) {
+//     sortBy.value = 'detachment__overalltandemranking_main_detachment__place';
+// } else {
+//     sortBy.value = 'junior_detachment__overallranking__place';
+// }
+
 const education = ref(null);
 const next = () => {
     getCompetitons('next');
@@ -161,14 +167,18 @@ const switched = ref(true);
 const timerSearch = ref(null);
 const selectedSort = ref(null);
 const sortedSquads = ref([]);
-
-const sortOptionss = ref([
+const sortOptionss = ref([]);
+sortOptionss.value = [
     {
         value: 'junior_detachment__name',
         name: 'Алфавиту от А - Я',
     },
     { value: 'created_at', name: 'Дате создания отряда' },
-]);
+    {
+        value: 'detachment__overalltandemranking_main_detachment__place',
+        name: 'Рейтингу',
+    },
+];
 
 const getCompetitons = async (pagination, orderLimit) => {
     if (isLoading.value) return false;
@@ -182,14 +192,21 @@ const getCompetitons = async (pagination, orderLimit) => {
             url = detachments.value.next.replace('http', 'https');
         if (name.value) data.push('search=' + name.value);
         if (isTandem.value) data.push('is_tandem=' + isTandem.value);
-        else if(!isTandem.value) data.push('is_tandem=' + isTandem.value);
+        else data.push('is_tandem=' + isTandem.value);
         // if (education.value)
         //     data.push('educational_institution__name=' + education.value);
         if (picked.value) data.push('area=' + picked.value);
-        if (sortBy.value && !pagination)
-            data.push(
-                'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
-            );
+        if (sortBy.value && !pagination) {
+            let sort = sortBy.value;
+            if (
+                sort ==
+                    'detachment__overalltandemranking_main_detachment__place' &&
+                !isTandem.value
+            ) {
+                sort = 'junior_detachment__overallranking__place';
+            }
+            data.push('ordering=' + (ascending.value ? '' : '-') + sort);
+        }
         const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
             headers: {
                 'Content-Type': 'application/json',

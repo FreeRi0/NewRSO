@@ -490,6 +490,40 @@ const routes: RouteRecordRaw[] = [
                                         '@pages/EditActionPage/components/EditActionPage.vue'
                                     ),
                             },
+
+                            {
+                                path: 'ActionParticipants',
+                                meta: {
+                                    label: 'Участники мероприятия',
+                                },
+                                children: [
+                                    {
+                                        path: '',
+                                        name: 'actionparticipants',
+                                        component: () =>
+                                            import(
+                                                '@pages/ParticipantsAllPage.vue/components/ParticipantsActions.vue'
+                                            ),
+                                    },
+                                    {
+                                        path: ':id',
+                                        meta: {
+                                            redirectTo: 'userpage',
+                                            label: 'Страница участника',
+                                        },
+                                        children: [
+                                            {
+                                                path: '',
+                                                name: 'userpage',
+                                                component: () =>
+                                                    import(
+                                                        '@pages/UserPage/components/UserPage.vue'
+                                                    ),
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
                             {
                                 path: 'verification',
                                 meta: {
@@ -681,16 +715,17 @@ const routes: RouteRecordRaw[] = [
                             redirectTo: 'testPage',
                             label: 'Тестирование по обучению',
                         },
-                        children: [
-                            {
-                                name: 'testPage',
-                                path: ':name',
-                                component: () =>
-                                    import(
-                                        '@pages/TestingPages/components/TestingPages.vue'
-                                    ),
-                            },
-                        ],
+                        component: () =>
+                            import(
+                                '@pages/TestingPages/components/TestingPages.vue'
+                            ),
+                        // children: [
+                        //     {
+                        //         name: 'testPage',
+                        //         path: ':name',
+
+                        //     },
+                        // ],
                     },
                 ],
             },

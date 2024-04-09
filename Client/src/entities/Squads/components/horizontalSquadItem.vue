@@ -49,7 +49,7 @@
         </div>
         <div
             class="horizontal-item mini ml-2"
-            v-if="rating && roleStore.status.is_commander_detachment"
+            v-if="rating"
         >
             <p v-if="place.place">Место в рейтинге: {{ place.place }}</p>
             <p v-else>Место в рейтинге: -</p>
@@ -95,15 +95,16 @@ const props = defineProps({
 const roleStore = useRoleStore();
 const place = ref([]);
 
+let id = props.member.junior_detachment.id;
+
 const getPlaces = async () => {
-    const response = await HTTP.get('/competitions/1/get-place/', {
+    const response = await HTTP.get(`detachments/${id}/competitions/1/place/`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
     let data = response.data;
-    console.log('data', data);
     place.value = data;
 };
 
