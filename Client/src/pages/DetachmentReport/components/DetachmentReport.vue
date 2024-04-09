@@ -226,7 +226,28 @@ const addTandemField = async () => {
     mainResults.value.place.push('-');
 };
 
+const getMainResults = async () => {
+    try {
+        const { data } = await HTTP.get(`/competitions/1/get-place/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        console.log(data);
+        if (data.place) {
+            mainResults.value.place[0] = data.place;
+        }
+        if (data.places_sum) {
+            mainResults.value.place[1] = data.places_sum;
+        }
+    } catch (e) {
+        console.log('getMainResults error', e);
+    }
+};
+
 onMounted(async () => {
+    await getMainResults();
     await getMeCommander();
     await getPostitions();
     if (route.params.reporting_name == 'debut') {
@@ -282,11 +303,11 @@ onMounted(async () => {
     grid-gap: 12px;
     grid-template-columns: minmax(186px, 1038px) 130px;
     font-family: Bert Sans;
-    padding-bottom: 12px;
+    //padding-bottom: 12px;
 
     font-size: 16px;
     font-weight: 500;
-    line-height: 21px;
+    //line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
 }
