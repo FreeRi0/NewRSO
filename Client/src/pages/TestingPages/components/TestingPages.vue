@@ -281,7 +281,7 @@ onMounted(async () => {
 });
 </script>
 
-<styel scoped lang="scss">
+<style scoped lang="scss">
 .image_answer {
     max-width: 150px;
     height: auto;
@@ -434,4 +434,4 @@ onMounted(async () => {
 input[type='radio'] + label {
     word-wrap: break-word; /* автоматически перемещает слова на следующую строку при необходимости */
 }
-</styel>
+</style>
