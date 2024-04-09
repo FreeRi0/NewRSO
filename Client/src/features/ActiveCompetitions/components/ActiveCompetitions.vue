@@ -154,7 +154,7 @@ const getCompetitionsJunior = async () => {
     console.log(allCompetition);
     for (const competitionId of allCompetition.value) {
         try {
-            loading.value = true;
+            //loading.value = true;
             const { data } = await HTTP.get(
                 `/competitions/${competitionId.id}/applications/me`,
                 {
@@ -169,7 +169,7 @@ const getCompetitionsJunior = async () => {
         } catch (e) {
             console.log('error getCompetitionsJunior', e);
         } finally {
-            loading.value = false;
+            //loading.value = false;
         }
     }
 };
@@ -177,7 +177,7 @@ const getCompetitionsJunior = async () => {
 const getCompetitions = async () => {
     for (const competitionId of allCompetition.value) {
         try {
-            loading.value = true;
+            //loading.value = true;
             const { data } = await HTTP.get(
                 `/competitions/${competitionId.id}/applications/`,
                 {
@@ -193,7 +193,7 @@ const getCompetitions = async () => {
         } catch (e) {
             console.log('error getCompetitions', e);
         } finally {
-            loading.value = false;
+            //loading.value = false;
         }
     }
 };
@@ -292,7 +292,6 @@ const cancelIndicator = async (id, applicationId) => {
 };
 
 const onAction = async () => {
-    console.log(selectedReportingList.value);
     if (selectedReportingList.value.length) {
         try {
             for (const application of selectedReportingList.value) {
@@ -308,9 +307,9 @@ const onAction = async () => {
                         application.id,
                     );
                 }
-                allReporting.value = allReporting.value.filter(
-                    (competition) => competition.id != application.id,
-                );
+                allReporting.value[application.indicator] = allReporting.value[
+                    application.indicator
+                ].filter((competition) => competition.id != application.id);
                 selectedReportingList.value =
                     selectedReportingList.value.filter(
                         (competition) => competition.id != application.id,
@@ -334,7 +333,6 @@ const onAction = async () => {
             console.log('error action 1', e);
         }
     }
-    console.log(selectedCompetitionsList.value);
 
     if (selectedCompetitionsList.value.length) {
         console.log(123);

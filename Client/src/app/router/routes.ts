@@ -108,26 +108,23 @@ const routes: RouteRecordRaw[] = [
                                 children: [
                                     {
                                         path: 'reporting',
+                                        name: 'debut',
                                         meta: {
                                             label: 'Отчетность',
                                         },
+                                        component: () =>
+                                            import(
+                                                '@pages/DetachmentReport/components/DetachmentReport.vue'
+                                            ),
                                         children: [
-                                            {
-                                                path: 'debut',
-                                                name: 'debut',
-                                                component: () =>
-                                                    import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportDebut.vue'
-                                                    ),
-                                            },
-                                            {
-                                                path: 'tandem',
-                                                name: 'tandem',
-                                                component: () =>
-                                                    import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
-                                                    ),
-                                            },
+                                            // {
+                                            //     path: ':reporting_name',
+                                            //     name: 'reporting',
+                                            //     component: () =>
+                                            //         import(
+                                            //             '@pages/DetachmentReport/components/DetachmentReport.vue'
+                                            //         ),
+                                            // },
                                             {
                                                 path: 'report/:competition_pk',
                                                 meta: {
@@ -191,30 +188,6 @@ const routes: RouteRecordRaw[] = [
                                                     },
                                                 ],
                                             },
-                                        ],
-                                    },
-                                    {
-                                        path: 'reporting',
-                                        meta: {
-                                            label: 'Отчетность',
-                                        },
-                                        children: [
-                                            {
-                                                path: '',
-                                                name: 'debut',
-                                                component: () =>
-                                                    import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportDebut.vue'
-                                                    ),
-                                            },
-                                            // {
-                                            //     path: 'tandem',
-                                            //     name: 'tandem',
-                                            //     component: () =>
-                                            //         import(
-                                            //             '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
-                                            //         ),
-                                            // },
                                         ],
                                     },
                                 ],
@@ -522,6 +495,40 @@ const routes: RouteRecordRaw[] = [
                                         '@pages/EditActionPage/components/EditActionPage.vue'
                                     ),
                             },
+
+                            {
+                                path: 'ActionParticipants',
+                                meta: {
+                                    label: 'Участники мероприятия',
+                                },
+                                children: [
+                                    {
+                                        path: '',
+                                        name: 'actionparticipants',
+                                        component: () =>
+                                            import(
+                                                '@pages/ParticipantsAllPage.vue/components/ParticipantsActions.vue'
+                                            ),
+                                    },
+                                    {
+                                        path: ':id',
+                                        meta: {
+                                            redirectTo: 'userpage',
+                                            label: 'Страница участника',
+                                        },
+                                        children: [
+                                            {
+                                                path: '',
+                                                name: 'userpage',
+                                                component: () =>
+                                                    import(
+                                                        '@pages/UserPage/components/UserPage.vue'
+                                                    ),
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
                             {
                                 path: 'verification',
                                 meta: {
@@ -718,6 +725,13 @@ const routes: RouteRecordRaw[] = [
                             import(
                                 '@pages/TestingPages/components/TestingPages.vue'
                             ),
+                        // children: [
+                        //     {
+                        //         name: 'testPage',
+                        //         path: ':name',
+
+                        //     },
+                        // ],
                     },
                 ],
             },

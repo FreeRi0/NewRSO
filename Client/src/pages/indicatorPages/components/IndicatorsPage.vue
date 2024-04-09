@@ -254,24 +254,20 @@
                                                     src="/assets/file_dock.svg"
                                                 />
                                                 <a
-                                                    :href="
-                                                        applicationData.certificate_scans
-                                                    "
+                                                    :href="participant.document"
                                                     target="_blank"
                                                     >{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
+                                                        participant.document.slice(
+                                                            participant.document.indexOf(
+                                                                '/media/',
+                                                            ) + 7,
                                                         )
                                                     }}</a
                                                 >
                                             </div>
                                             <a
                                                 class="download_text"
-                                                :href="
-                                                    applicationData.certificate_scans
-                                                "
+                                                :href="participant.document"
                                                 target="_blank"
                                             >
                                                 <img
@@ -2481,6 +2477,7 @@ const getApplicationData = async (_id, applicationId) => {
             },
         );
         applicationData.value = data;
+        console.log(applicationData.value);
     } catch (e) {
         console.log(`getApplicationData error`, e);
     } finally {
