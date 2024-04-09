@@ -47,10 +47,7 @@
                 {{ member.junior_detachment?.regional_headquarter_name }}
             </p>
         </div>
-        <div
-            class="horizontal-item mini ml-2"
-            v-if="rating"
-        >
+        <div class="horizontal-item mini ml-2" v-if="rating">
             <p v-if="place.place">Место в рейтинге: {{ place.place }}</p>
             <p v-else>Место в рейтинге: -</p>
         </div>
@@ -95,7 +92,7 @@ const props = defineProps({
 const roleStore = useRoleStore();
 const place = ref([]);
 
-let id = props.member.junior_detachment.id;
+let id = props.member?.junior_detachment?.id;
 
 const getPlaces = async () => {
     const response = await HTTP.get(`detachments/${id}/competitions/1/place/`, {
@@ -109,7 +106,9 @@ const getPlaces = async () => {
 };
 
 onMounted(() => {
-    getPlaces();
+    if (props.competition) {
+        getPlaces();
+    }
 });
 </script>
 <style lang="scss" scoped>
