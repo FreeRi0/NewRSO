@@ -292,7 +292,6 @@ const cancelIndicator = async (id, applicationId) => {
 };
 
 const onAction = async () => {
-    console.log(selectedReportingList.value);
     if (selectedReportingList.value.length) {
         try {
             for (const application of selectedReportingList.value) {
@@ -308,9 +307,9 @@ const onAction = async () => {
                         application.id,
                     );
                 }
-                allReporting.value = allReporting.value.filter(
-                    (competition) => competition.id != application.id,
-                );
+                allReporting.value[application.indicator] = allReporting.value[
+                    application.indicator
+                ].filter((competition) => competition.id != application.id);
                 selectedReportingList.value =
                     selectedReportingList.value.filter(
                         (competition) => competition.id != application.id,
@@ -334,7 +333,6 @@ const onAction = async () => {
             console.log('error action 1', e);
         }
     }
-    console.log(selectedCompetitionsList.value);
 
     if (selectedCompetitionsList.value.length) {
         console.log(123);

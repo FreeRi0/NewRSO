@@ -4,7 +4,9 @@
             <div class="line">
                 <p class="main_title">Тестирование по обучению</p>
 
-                <p class="curr_question">{{ indexQuestion + 1 }}/20</p>
+                <p class="curr_question">
+                    {{ indexQuestion + 1 }}/{{ questions.length }}
+                </p>
             </div>
             <p class="question_text">
                 {{ questions[indexQuestion].title }}
@@ -99,8 +101,13 @@
             <p class="main_title">Тестирование по обучению</p>
 
             <div v-if="status.left_attempts">
-                <p class="subtitle">
+                <p class="subtitle" v-if="testName == 'university'">
                     Тест состоит из 20 вопросов. Время на его прохождение не
+                    ограничено. Не закрывайте тест после нажатия на кнопку
+                    «Начать тестирование» до его завершения.
+                </p>
+                <p class="subtitle" v-if="testName == 'safety'">
+                    Тест состоит из 15 вопросов. Время на его прохождение не
                     ограничено. Не закрывайте тест после нажатия на кнопку
                     «Начать тестирование» до его завершения.
                 </p>
@@ -142,6 +149,12 @@
 import { HTTP } from '@app/http';
 
 import { ref, inject, watch, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const testName = ref(route.params.name);
+
+console.log(testName.value);
 
 const swal = inject('$swal');
 
@@ -151,7 +164,6 @@ let answers = [];
 const selected = ref(false);
 
 const result = ref();
-const attemptSpent = ref(0);
 let indexQuestion = ref(0);
 const choosenAnswer = ref(null);
 const started = ref(false);
@@ -165,12 +177,15 @@ const status = ref({
 const onStart = async () => {
     started.value = true;
     try {
-        const { data } = await HTTP.get(`/questions/?category=university`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+        const { data } = await HTTP.get(
+            `/questions/?category=${testName.value}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        });
+        );
         questions.value = data;
     } catch (e) {
         if (e.request.status == 400) {
@@ -206,7 +221,7 @@ const onAction = async () => {
         };
         indexQuestion.value += 1;
         answers.push(temp);
-        if (indexQuestion.value == 19) {
+        if (indexQuestion.value == questions.value.length) {
             started.value = false;
             solved.value = true;
             indexQuestion.value = 0;
@@ -221,7 +236,7 @@ const submitAnswers = async () => {
     try {
         const { data } = await HTTP.post(
             `/submit_answers/`,
-            { answers, category: 'university' },
+            { answers, category: `${testName.value}` },
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -238,7 +253,7 @@ const submitAnswers = async () => {
 const getAttempts = async () => {
     try {
         const { data } = await HTTP.get(
-            `/get_attempts_status/?category=university`,
+            `/get_attempts_status/?category=${testName.value}`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -311,7 +326,6 @@ onMounted(async () => {
 }
 .container {
     margin: 0 auto;
-    max-width: 1115px;
 }
 .main_title {
     padding-bottom: 40px;

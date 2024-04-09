@@ -66,6 +66,10 @@ import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const isDebut = ref();
 
 const router = useRouter();
 const commander = ref(false);
@@ -130,6 +134,26 @@ const onAction = async () => {
     });
 };
 
+const getTotalPlace = async () => {
+    try {
+        const { data } = await HTTP.get(`/competitions/1/get-place/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        console.log(data);
+    } catch (e) {
+        if (e.request.status == 400) {
+            for (let index in mainResults.value.place) {
+                mainResults.value.place[index] = `Рейтинг еще не сформирован`;
+            }
+            console.log(`400 error`);
+        }
+        console.log(`getTotalPlace error`, e);
+    }
+};
+
 const getPostitions = async () => {
     for (let index = 1; index <= 20; index++) {
         try {
@@ -157,7 +181,6 @@ const getPostitions = async () => {
                         },
                     },
                 );
-                console.log(data);
                 if (data.results) {
                     resultData.value.places[index - 1] = 'Данные не отправлены';
                 } else {
@@ -168,10 +191,10 @@ const getPostitions = async () => {
             if (e?.request?.status == 400) {
                 resultData.value.places[index - 1] =
                     'Рейтинг еще не сформирован';
-                console.log(`${index}: ${e.request.response}`);
+                //console.log(`${index}: ${e.request.response}`);
             } else if (e?.request?.status == 404) {
                 resultData.value.places[index - 1] = 'Данные не отправлены';
-                console.log(`${index}: ${e.request.response}`);
+                //console.log(`${index}: ${e.request.response}`);
                 //console.log(e);
             } else {
                 console.log(`!!!\n${index}: getPostions error`, e);
@@ -198,9 +221,21 @@ const getMeCommander = async () => {
     }
 };
 
+const addTandemField = async () => {
+    mainResults.value.data.push('Сумма мест');
+    mainResults.value.place.push('-');
+};
+
 onMounted(async () => {
     await getMeCommander();
     await getPostitions();
+    if (route.params.reporting_name == 'debut') {
+        isDebut.value = true;
+    } else if (route.params.reporting_name == 'tandem') {
+        await addTandemField();
+        isDebut.value = false;
+    }
+    await getTotalPlace();
     window.scroll(0, 0);
 });
 </script>
@@ -259,7 +294,7 @@ onMounted(async () => {
     display: grid;
     width: 100%;
     grid-gap: 12px;
-    grid-template-columns: minmax(236px, 438px) minmax(80px, 100px);
+    grid-template-columns: minmax(236px, 438px) minmax(80px, 120px);
     padding-top: 12px;
 
     font-family: Bert Sans;

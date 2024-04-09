@@ -113,19 +113,11 @@ const routes: RouteRecordRaw[] = [
                                         },
                                         children: [
                                             {
-                                                path: 'debut',
-                                                name: 'debut',
+                                                path: ':reporting_name',
+                                                name: 'reporting',
                                                 component: () =>
                                                     import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportDebut.vue'
-                                                    ),
-                                            },
-                                            {
-                                                path: 'tandem',
-                                                name: 'tandem',
-                                                component: () =>
-                                                    import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
+                                                        '@pages/DetachmentReport/components/DetachmentReport.vue'
                                                     ),
                                             },
                                             {
@@ -191,30 +183,6 @@ const routes: RouteRecordRaw[] = [
                                                     },
                                                 ],
                                             },
-                                        ],
-                                    },
-                                    {
-                                        path: 'reporting',
-                                        meta: {
-                                            label: 'Отчетность',
-                                        },
-                                        children: [
-                                            {
-                                                path: '',
-                                                name: 'debut',
-                                                component: () =>
-                                                    import(
-                                                        '@pages/DetachmentReport/components/DetachmentReportDebut.vue'
-                                                    ),
-                                            },
-                                            // {
-                                            //     path: 'tandem',
-                                            //     name: 'tandem',
-                                            //     component: () =>
-                                            //         import(
-                                            //             '@pages/DetachmentReport/components/DetachmentReportTandem.vue'
-                                            //         ),
-                                            // },
                                         ],
                                     },
                                 ],
@@ -709,15 +677,20 @@ const routes: RouteRecordRaw[] = [
 
                     {
                         path: 'test',
-                        name: 'testPage',
                         meta: {
                             redirectTo: 'testPage',
                             label: 'Тестирование по обучению',
                         },
-                        component: () =>
-                            import(
-                                '@pages/TestingPages/components/TestingPages.vue'
-                            ),
+                        children: [
+                            {
+                                name: 'testPage',
+                                path: ':name',
+                                component: () =>
+                                    import(
+                                        '@pages/TestingPages/components/TestingPages.vue'
+                                    ),
+                            },
+                        ],
                     },
                 ],
             },
