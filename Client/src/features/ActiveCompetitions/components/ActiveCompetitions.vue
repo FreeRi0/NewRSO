@@ -154,7 +154,7 @@ const getCompetitionsJunior = async () => {
     console.log(allCompetition);
     for (const competitionId of allCompetition.value) {
         try {
-            loading.value = true;
+            //loading.value = true;
             const { data } = await HTTP.get(
                 `/competitions/${competitionId.id}/applications/me`,
                 {
@@ -169,7 +169,7 @@ const getCompetitionsJunior = async () => {
         } catch (e) {
             console.log('error getCompetitionsJunior', e);
         } finally {
-            loading.value = false;
+            //loading.value = false;
         }
     }
 };
@@ -177,7 +177,7 @@ const getCompetitionsJunior = async () => {
 const getCompetitions = async () => {
     for (const competitionId of allCompetition.value) {
         try {
-            loading.value = true;
+            //loading.value = true;
             const { data } = await HTTP.get(
                 `/competitions/${competitionId.id}/applications/`,
                 {
@@ -193,7 +193,7 @@ const getCompetitions = async () => {
         } catch (e) {
             console.log('error getCompetitions', e);
         } finally {
-            loading.value = false;
+            //loading.value = false;
         }
     }
 };
