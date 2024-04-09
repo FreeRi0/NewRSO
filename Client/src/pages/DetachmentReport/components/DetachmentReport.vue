@@ -99,26 +99,26 @@ const resultData = ref({
         'Соответствие требованиями положения символики и атрибутике форменной одежды и символики отрядов',
     ],
     places: [
-        'Показатель не засчитан',
-        'Показатель в обработке',
-        '2',
-        '3',
-        '1',
-        '7.75',
-        '2',
-        '3',
-        '3',
-        '1',
-        '1',
-        '2',
-        '2',
-        '3',
-        '1',
-        '1',
-        '3',
-        '2',
-        '1',
-        '1',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
     ],
 });
 
@@ -132,26 +132,6 @@ const onAction = async () => {
         name: 'Report',
         params: { competition_pk: 1 },
     });
-};
-
-const getTotalPlace = async () => {
-    try {
-        const { data } = await HTTP.get(`/competitions/1/get-place/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        console.log(data);
-    } catch (e) {
-        if (e.request.status == 400) {
-            for (let index in mainResults.value.place) {
-                mainResults.value.place[index] = `Рейтинг еще не сформирован`;
-            }
-            console.log(`400 error`);
-        }
-        console.log(`getTotalPlace error`, e);
-    }
 };
 
 const getPostitions = async () => {
@@ -256,7 +236,6 @@ onMounted(async () => {
         await addTandemField();
         isDebut.value = false;
     }
-    await getTotalPlace();
     window.scroll(0, 0);
 });
 </script>
