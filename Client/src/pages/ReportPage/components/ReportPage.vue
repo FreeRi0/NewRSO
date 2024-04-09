@@ -183,13 +183,16 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            :max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[2].commander_link
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[2].commander_link.length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                 </div>
@@ -227,7 +230,11 @@ s
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[2].commissioner_link
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                 </div>
@@ -510,11 +517,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Иванова Светлана Андреевна"
-                                            maxlength="100"
+                                            :maxlength="100"
                                             v-model:value="block.name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport5 }} / 100
+                                            {{ block.name.length }} / 100
                                         </div>
                                     </div>
                                 </div>
@@ -708,14 +715,19 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 10"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[61]
                                                     .first_may_demonstration_participants
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[61]
+                                                    .first_may_demonstration_participants
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                 </div>
@@ -771,14 +783,19 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 10"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[62]
                                                     .patriotic_action_participants
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[62]
+                                                    .patriotic_action_participants
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                 </div>
@@ -914,14 +931,19 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 10"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[65]
                                                     .working_semester_opening_participants
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[65]
+                                                    .working_semester_opening_participants
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                 </div>
@@ -1143,11 +1165,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -1159,13 +1181,17 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 5"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 block.number_of_participants
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                block.number_of_participants
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -1183,11 +1209,11 @@ s
                                         >
                                             <Input
                                                 placeholder="Например, https://vk.com/cco_monolit"
-                                                max-length="100"
+                                                :maxlength="100"
                                                 v-model:value="link.link"
                                             />
                                             <div class="form__counter">
-                                                {{ counterReport }} / 100
+                                                {{ link.link.length }} / 100
                                             </div>
                                         </template>
                                         <div
@@ -1371,11 +1397,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Всероссийский конкурс «В объективе РСО»"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -1387,13 +1413,17 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 5"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 block.number_of_participants
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                block.number_of_participants
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -1410,11 +1440,11 @@ s
                                             :key="index + '_' + i"
                                             ><Input
                                                 placeholder="Например, https://vk.com/cco_monolit"
-                                                max-length="100"
+                                                :maxlength="100"
                                                 v-model:value="link.link"
                                             />
                                             <div class="form__counter">
-                                                {{ counterReport }} / 100
+                                                {{ link.link.length }} / 100
                                             </div>
                                         </template>
                                         <div
@@ -1597,11 +1627,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -1793,11 +1823,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Всероссийский конкурс «В объективе РСО»"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -1990,11 +2020,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Спартакиада на МСС «Алабуга»"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -2187,11 +2217,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Творческий фестиваль на ВСС «Мирный атом»"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -2391,11 +2421,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://t.me/+7pe98d2PqoJ"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.event_link"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.event_link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
@@ -2530,13 +2560,14 @@ s
                                         >
                                         <Input
                                             placeholder="Например, ВСС «Мирный атом»"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 block.lab_project_name
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.lab_project_name.length }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -2549,11 +2580,11 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 5"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.amount"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.amount.length }} / 100
                                         </div>
                                     </div>
                                 </div>
@@ -2687,11 +2718,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Всероссийский конкурс молодёжных проектов среди физических лиц Федерального агентства по делам молодежи"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -2716,11 +2747,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Иванова Светлана Андреевна"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.author_name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.author_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -2731,13 +2762,14 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 block.competition_link
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.competition_link.length }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -2749,11 +2781,11 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://t.me/+7pe98d2PqoJ"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.prove_link"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.prove_link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
@@ -2889,13 +2921,17 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[16].link_vk_commander
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[16].link_vk_commander
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -2907,13 +2943,17 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[16].link_vk_commissar
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[16].link_vk_commissar
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field-group-left-title">
@@ -2932,14 +2972,19 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 5"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[16]
                                                     .vk_rso_number_subscribers
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[16]
+                                                    .vk_rso_number_subscribers
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field-group-left-title">
@@ -2953,13 +2998,17 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[16].link_vk_detachment
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[16].link_vk_detachment
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field-group-left-title">
@@ -2975,14 +3024,19 @@ s
                                         >
                                         <Input
                                             placeholder="Например, 200"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[16]
                                                     .vk_detachment_number_subscribers
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[16]
+                                                    .vk_detachment_number_subscribers
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                 </div>
@@ -3084,11 +3138,11 @@ s
                                         </label>
                                         <Input
                                             placeholder="Например, РИА Новости"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.source_name"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.source_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -3099,11 +3153,11 @@ s
                                         </label>
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="block.link"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ block.link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
@@ -3235,13 +3289,17 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 10"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[18].participants_number
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[18].participants_number
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                 </div>
@@ -3445,13 +3503,14 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[20].link_emblem
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ report[20].link_emblem.length }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -3460,13 +3519,17 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[20].link_emblem_img
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[20].link_emblem_img
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -3475,11 +3538,12 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="report[20].link_flag"
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ report[20].link_flag.length }} /
+                                            100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -3488,13 +3552,16 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[20].link_flag_img
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[20].link_flag_img.length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -3503,13 +3570,14 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[20].link_banner
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{ report[20].link_banner.length }}
+                                            / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -3518,13 +3586,17 @@ s
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
+                                            :maxlength="100"
                                             v-model:value="
                                                 report[20].link_banner_img
                                             "
                                         />
                                         <div class="form__counter">
-                                            {{ counterReport }} / 100
+                                            {{
+                                                report[20].link_banner_img
+                                                    .length
+                                            }}
+                                            / 100
                                         </div>
                                     </div>
                                 </div>
@@ -3640,9 +3712,7 @@ const prizePlaceChoose = ref([
 ]);
 
 // const counterReport5 = computed(() => {
-//     if (report.value[5].participants_data.name) {
-//         return report.value[5].participants_data?.length;
-//     } else return 0;
+//     return report.value[5]?.participants_data?.name?.length || 0;
 // });
 
 const selectFile = (e, id, field, subfield, index) => {
