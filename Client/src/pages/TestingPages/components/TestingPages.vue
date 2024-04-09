@@ -152,7 +152,8 @@ import { ref, inject, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const testName = ref(route.params.name);
+// const testName = ref(route.params.name);
+const testName = ref('university');
 
 console.log(testName.value);
 
