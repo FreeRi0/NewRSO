@@ -108,18 +108,23 @@ const routes: RouteRecordRaw[] = [
                                 children: [
                                     {
                                         path: 'reporting',
+                                        name: 'debut',
                                         meta: {
                                             label: 'Отчетность',
                                         },
+                                        component: () =>
+                                            import(
+                                                '@pages/DetachmentReport/components/DetachmentReport.vue'
+                                            ),
                                         children: [
-                                            {
-                                                path: ':reporting_name',
-                                                name: 'reporting',
-                                                component: () =>
-                                                    import(
-                                                        '@pages/DetachmentReport/components/DetachmentReport.vue'
-                                                    ),
-                                            },
+                                            // {
+                                            //     path: ':reporting_name',
+                                            //     name: 'reporting',
+                                            //     component: () =>
+                                            //         import(
+                                            //             '@pages/DetachmentReport/components/DetachmentReport.vue'
+                                            //         ),
+                                            // },
                                             {
                                                 path: 'report/:competition_pk',
                                                 meta: {
@@ -711,7 +716,6 @@ const routes: RouteRecordRaw[] = [
 
                     {
                         path: 'test',
-                        name: 'testPage',
                         meta: {
                             redirectTo: 'testPage',
                             label: 'Тестирование по обучению',
