@@ -108,15 +108,20 @@ const routes: RouteRecordRaw[] = [
                                 children: [
                                     {
                                         path: 'reporting',
-                                        name: 'debut',
+                                        //name: 'debut',
                                         meta: {
                                             label: 'Отчетность',
                                         },
-                                        component: () =>
-                                            import(
-                                                '@pages/DetachmentReport/components/DetachmentReport.vue'
-                                            ),
+
                                         children: [
+                                            {
+                                                path: '',
+                                                name: 'debut',
+                                                component: () =>
+                                                    import(
+                                                        '@pages/DetachmentReport/components/DetachmentReport.vue'
+                                                    ),
+                                            },
                                             // {
                                             //     path: ':reporting_name',
                                             //     name: 'reporting',
