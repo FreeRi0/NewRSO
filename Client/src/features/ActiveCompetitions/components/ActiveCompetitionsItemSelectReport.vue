@@ -52,7 +52,7 @@
             </div>
 
             <div class="horizontal-item__wrapper competition__nomination">
-                {{ detachmentData ? 'Тандем' : 'Дебют' }}
+                {{ detachmentData ? 'Дебют' : 'Тандем' }}
             </div>
 
             <div class="horizontal-item__wrapper">{{ action }}</div>
