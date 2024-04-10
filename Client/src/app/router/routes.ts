@@ -110,6 +110,7 @@ const routes: RouteRecordRaw[] = [
                                         path: 'reporting',
                                         //name: 'debut',
                                         meta: {
+                                            redirectTo: 'debut',
                                             label: 'Отчетность',
                                         },
 

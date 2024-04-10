@@ -1,7 +1,7 @@
 <template>
     <div class="competitions__container">
         <p v-if="loading">Загрузка...</p>
-        <p v-else-if="competitionsList.length || allReporting.length">
+        <p v-else-if="!competitionsList.length && !hasReports">
             Список заявок на конкурсы пуст
         </p>
 
@@ -35,6 +35,17 @@
                     />
                 </template>
                 <template v-for="index in 20" :key="index">
+                    <div class="competition__item">
+                        <div class="competition__content">
+                            <template v-if="index == 1">
+                                <span></span>
+                                <span>Показатель</span>
+                                <span>Отряд</span>
+                                <span>Конкурс</span>
+                                <span>Номинация</span>
+                            </template>
+                        </div>
+                    </div>
                     <template
                         v-for="report in allReporting[index]"
                         :key="report.id"
@@ -120,6 +131,8 @@ const selectedReportingList = ref([]);
 const loading = ref(false);
 const action = ref('Одобрить');
 const actionsList = ref(['Одобрить', 'Отклонить']);
+
+const hasReports = ref(false);
 
 const getMeCommander = async () => {
     try {
@@ -406,9 +419,11 @@ const getAllReporting = async () => {
                         allReporting.value[index] = [];
                     }
                     allReporting.value[index].push(report);
+                    hasReports.value = true;
                 }
             }
             console.log(allReporting.value);
+            console.log(allReporting.value.length);
         } catch (e) {
             console.log('getAllReporting error', e);
         }
@@ -500,6 +515,24 @@ onActivated(async () => {
     font-family: Bert Sans;
     font-size: 16px;
     font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+.competition__item {
+    display: grid;
+    width: 100%;
+    gap: 12px;
+}
+.competition__content {
+    display: grid;
+    width: 100%;
+    grid-gap: 12px;
+    grid-template-columns: 48px minmax(200px, 300px) minmax(200px, 300px) 1fr 100px;
+
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 500;
     line-height: 21px;
     letter-spacing: 0em;
     text-align: left;

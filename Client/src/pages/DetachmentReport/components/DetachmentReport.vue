@@ -66,10 +66,6 @@ import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useRoute } from 'vue-router';
-
-const route = useRoute();
-const isDebut = ref();
 
 const router = useRouter();
 const commander = ref(false);
@@ -99,26 +95,26 @@ const resultData = ref({
         'Соответствие требованиями положения символики и атрибутике форменной одежды и символики отрядов',
     ],
     places: [
-        'Показатель не засчитан',
-        'Показатель в обработке',
-        '2',
-        '3',
-        '1',
-        '7.75',
-        '2',
-        '3',
-        '3',
-        '1',
-        '1',
-        '2',
-        '2',
-        '3',
-        '1',
-        '1',
-        '3',
-        '2',
-        '1',
-        '1',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
+        '-',
     ],
 });
 
@@ -132,26 +128,6 @@ const onAction = async () => {
         name: 'Report',
         params: { competition_pk: 1 },
     });
-};
-
-const getTotalPlace = async () => {
-    try {
-        const { data } = await HTTP.get(`/competitions/1/get-place/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        console.log(data);
-    } catch (e) {
-        if (e.request.status == 400) {
-            for (let index in mainResults.value.place) {
-                mainResults.value.place[index] = `Рейтинг еще не сформирован`;
-            }
-            console.log(`400 error`);
-        }
-        console.log(`getTotalPlace error`, e);
-    }
 };
 
 const getPostitions = async () => {
@@ -221,21 +197,44 @@ const getMeCommander = async () => {
     }
 };
 
-const addTandemField = async () => {
-    mainResults.value.data.push('Сумма мест');
-    mainResults.value.place.push('-');
+const getMainResults = async () => {
+    try {
+        const { data } = await HTTP.get(`/competitions/1/get-place/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        if (data.place) {
+            mainResults.value.place[0] = data.place;
+        } else {
+            mainResults.value.place[0] = 'Рейтинг еще не сформирован';
+        }
+        if (data.places_sum) {
+            mainResults.value.place[1] = data.places_sum;
+        } else {
+            mainResults.value.place[1] = 'Рейтинг еще не сформирован';
+        }
+        if (data.partner_detachment) {
+            mainResults.value.place.push(
+                data.places_sum
+                    ? data.places_sum
+                    : 'Рейтинг еще не сформирован',
+            );
+            mainResults.value.data.push(
+                `Сумма мест отряда ${data.partner_detachment}`,
+            );
+            console.log(mainResults.value);
+        }
+    } catch (e) {
+        console.log('getMainResults error', e);
+    }
 };
 
 onMounted(async () => {
+    await getMainResults();
     await getMeCommander();
     await getPostitions();
-    if (route.params.reporting_name == 'debut') {
-        isDebut.value = true;
-    } else if (route.params.reporting_name == 'tandem') {
-        await addTandemField();
-        isDebut.value = false;
-    }
-    await getTotalPlace();
     window.scroll(0, 0);
 });
 </script>
@@ -282,11 +281,11 @@ onMounted(async () => {
     grid-gap: 12px;
     grid-template-columns: minmax(186px, 1038px) 130px;
     font-family: Bert Sans;
-    padding-bottom: 12px;
+    //padding-bottom: 12px;
 
     font-size: 16px;
     font-weight: 500;
-    line-height: 21px;
+    //line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
 }
