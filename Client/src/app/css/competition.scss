@@ -563,3 +563,9 @@
     box-shadow: 0px 0px 10px 0px #00000014;
     border-radius: 10px;
 }
+
+.subtitle {
+    &--link {
+        margin-top: 60px;
+    }
+}
