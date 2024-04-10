@@ -1,7 +1,7 @@
 <template>
     <div class="competitions__container">
         <p v-if="loading">Загрузка...</p>
-        <p v-else-if="competitionsList.length || allReporting.length">
+        <p v-else-if="!competitionsList.length && !allReporting.length">
             Список заявок на конкурсы пуст
         </p>
 
