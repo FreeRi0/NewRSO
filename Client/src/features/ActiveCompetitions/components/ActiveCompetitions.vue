@@ -35,6 +35,17 @@
                     />
                 </template>
                 <template v-for="index in 20" :key="index">
+                    <div class="competition__item">
+                        <div class="competition__content">
+                            <template v-if="index == 1">
+                                <span></span>
+                                <span>Показатель</span>
+                                <span>Отряд</span>
+                                <span>Конкурс</span>
+                                <span>Номинация</span>
+                            </template>
+                        </div>
+                    </div>
                     <template
                         v-for="report in allReporting[index]"
                         :key="report.id"
@@ -500,6 +511,24 @@ onActivated(async () => {
     font-family: Bert Sans;
     font-size: 16px;
     font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+.competition__item {
+    display: grid;
+    width: 100%;
+    gap: 12px;
+}
+.competition__content {
+    display: grid;
+    width: 100%;
+    grid-gap: 12px;
+    grid-template-columns: 48px minmax(200px, 300px) minmax(200px, 300px) 1fr 100px;
+
+    font-family: Bert Sans;
+    font-size: 16px;
+    font-weight: 500;
     line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
