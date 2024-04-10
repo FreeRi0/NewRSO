@@ -242,7 +242,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(2)"
@@ -604,7 +605,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(5)"
@@ -735,7 +737,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(61)"
@@ -803,7 +806,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(62)"
@@ -843,7 +847,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(63)"
@@ -886,7 +891,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(64)"
@@ -951,7 +957,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(65)"
@@ -991,7 +998,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(66)"
@@ -1029,7 +1037,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(67)"
@@ -1071,7 +1080,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(68)"
@@ -1303,7 +1313,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(7)"
@@ -1534,7 +1545,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(8)"
@@ -1730,7 +1742,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(9)"
@@ -1926,7 +1939,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(10)"
@@ -2123,7 +2137,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(11)"
@@ -2314,7 +2329,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(12)"
@@ -2465,7 +2481,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(13)"
@@ -2624,7 +2641,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(14)"
@@ -2825,7 +2843,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(15)"
@@ -3044,7 +3063,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(16)"
@@ -3197,7 +3217,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(17)"
@@ -3307,7 +3328,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(18)"
@@ -3413,7 +3435,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(19)"
@@ -3604,7 +3627,8 @@ s
                             <div class="form__field-group-bottom">
                                 <Button
                                     type="button"
-                                    class="form__button"
+                                    :disabled="disabledBtn"
+                                    class="form__button form__button-color"
                                     label="Отправить данные на верификацию"
                                     size="large"
                                     @click="postParameters(20)"
@@ -3624,7 +3648,7 @@ s
 <script setup>
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref, inject, computed } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
@@ -3965,6 +3989,8 @@ const selectCertScans = (event, index) => {
     );
 };
 
+const disabledBtn = ref(false);
+
 const getParameters = async (id) => {
     try {
         const response = await HTTP.get(
@@ -4010,7 +4036,8 @@ const getParameters = async (id) => {
                     report.value[id].participation_data = response.data.results;
                 else report.value[id] = response.data.results[0];
             }
-        }
+            disabledBtn.value = true;
+        } else disabledBtn.value = false;
     } catch (error) {
         isError.value = error.response.data;
     }
@@ -4086,6 +4113,7 @@ const postParameters = async (id) => {
             showConfirmButton: false,
             timer: 1500,
         });
+        disabledBtn.value = true;
     } catch (error) {
         isError.value = error.response.data;
         isLoading.value = false;
@@ -4100,8 +4128,18 @@ const postParameters = async (id) => {
         }
     }
 };
+
+// const showButton = ref(true);
+
+// if (!report.value[2]) {
+//     showButton.value = true;
+// } else showButton.value = false;
+
+onMounted(async (id) => {
+    await getParameters(id);
+});
 </script>
-<style>
+<style scoped>
 .v-expansion-panels {
     margin-bottom: 60px;
 }
@@ -4174,5 +4212,9 @@ const postParameters = async (id) => {
 }
 .form__field-column-one-file {
     grid-template-columns: 10fr 0.5fr;
+}
+.form__button-color:disabled {
+    background-color: #b6b6b6;
+    border-color: #b6b6b6;
 }
 </style>
