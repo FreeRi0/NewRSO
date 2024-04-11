@@ -476,7 +476,7 @@
                                         type="text"
                                         class="input-full"
                                         placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
-                                        v-model:value="foreignDocParent"
+                                        v-model:value="foreignDocParent.name"
                                         :max-length="200"
                                     />
                                     <div class="form__counter">
@@ -494,7 +494,9 @@
                                         type="date"
                                         name="pass-date"
                                         class="input-small"
-                                        v-model:value="foreignDocDateParent"
+                                        v-model:value="
+                                            foreignDocParent.foreign_pass_date
+                                        "
                                     />
                                 </div>
 
@@ -505,7 +507,9 @@
                                         id="pass-id"
                                         class="input-small pass-masked"
                                         placeholder="__ ___ ____"
-                                        v-model:value="foreignNumberDocParent"
+                                        v-model:value="
+                                            foreignDocParent.foreign_pass_num
+                                        "
                                         vmaska
                                         maska="####-######"
                                         :max-length="50"
@@ -525,7 +529,9 @@
                                         id="org-id"
                                         class="input-full"
                                         placeholder="Страна"
-                                        v-model:value="foreignOrgDocParent"
+                                        v-model:value="
+                                            foreignDocParent.foreign_pass_whom
+                                        "
                                         :max-length="230"
                                     />
                                     <div class="form__counter">
@@ -541,7 +547,9 @@
                                         id="work-book-foreign"
                                         class="input-big mask-workbook"
                                         placeholder="AA 999999999"
-                                        v-model:value="foreignWorkBookParent"
+                                        v-model:value="
+                                            foreignDocParent.work_book_num
+                                        "
                                         vmaska
                                         maska="AA #########"
                                         :max-length="15"
@@ -557,7 +565,7 @@
                                         id="INN-id-foreign"
                                         class="input-big mask-inn"
                                         placeholder="AA 999999999"
-                                        v-model:value="foreignINNParent"
+                                        v-model:value="foreignDocParent.inn"
                                         vmaska
                                         maska="AA #########"
                                         :max-length="12"
@@ -575,7 +583,7 @@
                                         id="snils-id-foreign"
                                         class="input-big mask-snils"
                                         placeholder="AA 999999999"
-                                        v-model:value="foreignSNILSParent"
+                                        v-model:value="foreignDocParent.snils"
                                         vmaska
                                         maska="AA #########"
                                         :max-length="30"
@@ -4234,6 +4242,16 @@ const foreignDoc = ref({
     work_book_num: '',
 });
 
+const foreignDocParent = ref({
+    name: '',
+    foreign_pass_num: '',
+    foreign_pass_whom: '',
+    foreign_pass_date: '',
+    snils: '',
+    inn: '',
+    work_book_num: '',
+});
+
 const swal = inject('$swal');
 
 const data = ref({});
@@ -4366,10 +4384,25 @@ const counterVk = computed(() => {
     return props.user.social_vk?.length || 0;
 });
 
-// const counterForeignParent = computed(() => {
-//     return props.
-// })
+const counterForeignParent = computed(() => {
+    return foreignDocParent.value.name?.length || 0;
+});
+const counterForeignParentOrg = computed(() => {
+    return foreignDocParent.value.foreign_pass_whom?.length || 0;
+});
+const counterForeignParentNumber = computed(() => {
+    return foreignDocParent.value.foreign_pass_num?.length || 0;
+});
+const counterForeignParentInn = computed(() => {
+    return foreignDocParent.value.inn?.length || 0;
+});
 
+const counterForeignParentWork = computed(() => {
+    return foreignDocParent.value.work_book_num?.length || 0;
+});
+const counterForeignParentSnils = computed(() => {
+    return foreignDocParent.value.snils?.length || 0;
+});
 const counterTg = computed(() => {
     return props.user.social_tg?.length || 0;
 });
@@ -4445,6 +4478,23 @@ const getData = async () => {
         );
 
         foreignDoc.value = responseForeignDocs.data;
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+};
+const getForeignParentDocs = async () => {
+    try {
+        const responseForeignDocsParent = await HTTP.get(
+            '/rsousers/me/foreign_parent_documents/',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+
+        foreignDocParent.value = responseForeignDocsParent.data;
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -4642,7 +4692,11 @@ const updateData = async () => {
             city: '',
             address: '',
         });
-        if (!props.user.is_adult) {
+        if (
+            !props.user.is_adult &&
+            (props.user.parent.russian_passport ||
+                !props.user.parent.russian_passport)
+        ) {
             const parentRequest = await HTTP.patch(
                 '/rsousers/me/parent/',
                 {
@@ -4670,6 +4724,20 @@ const updateData = async () => {
                 },
             );
             axiosrequestParent.value = parentRequest.data;
+        }
+
+        const axiosrequestForeignDocsParent = ref(null);
+        if (!props.user.is_adult && !props.user.parent.russian_passport) {
+            const axiosrequestForeignDocsParent = await HTTP.post(
+                '/rsousers/me/foreign_parent_documents/',
+                foreignDocParent.value,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
         }
 
         const axiosrequest2 = await HTTP.patch(
@@ -4853,6 +4921,7 @@ const passport = ref([
 
 onMounted(() => {
     getData();
+    getForeignParentDocs();
 });
 </script>
 <style lang="scss">
