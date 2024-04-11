@@ -7,7 +7,6 @@
             :id="name"
             :placeholder="placeholder"
             :maxlength="maxLength"
-    
             max="9999-12-31"
             class="mb-2"
             @input="updateValue"
@@ -50,13 +49,13 @@ const props = defineProps({
     disabled: {
         type: Boolean,
         default: false,
-    }
+    },
 });
 
 const updateValue = (event) => {
-    console.log('textt');
+    // console.log('textt');
     emit('update:value', event.target.value);
-    console.log('textt', event.target.value);
+    // console.log('textt', event.target.value);
 };
 </script>
 
