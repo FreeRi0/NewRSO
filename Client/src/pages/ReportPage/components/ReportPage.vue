@@ -179,7 +179,14 @@ s
                                             >Ссылка на публикацию из группы
                                             отряда о прохождении школы
                                             командного состава командиром
-                                            отряда<span>&nbsp;*</span></label
+                                            отряда<span
+                                                v-if="
+                                                    report[2]
+                                                        .commander_achievement ==
+                                                    true
+                                                "
+                                                >&nbsp;*</span
+                                            ></label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
@@ -220,7 +227,14 @@ s
                                             >Ссылка на публикацию из группы
                                             отряда о прохождении школы
                                             командного состава комиссаром
-                                            отряда<span>&nbsp;*</span></label
+                                            отряда<span
+                                                v-if="
+                                                    report[2]
+                                                        .commissioner_achievement ==
+                                                    true
+                                                "
+                                                >&nbsp;*</span
+                                            ></label
                                         >
                                         <Input
                                             placeholder="Например, https://vk.com/cco_monolit"
@@ -240,13 +254,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(2)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(2)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 мая 2024 года включительно.
@@ -429,7 +452,7 @@ s
                             <div class="form__field-group-bottom">
                                 <p>
                                     Срок предоставления отчетности по показателю
-                                    по 15 июня 2024 года включительно.
+                                    по 15 мая 2024 года включительно.
                                 </p>
                             </div>
                         </div>
@@ -530,26 +553,35 @@ s
                                         <label class="form__label"
                                             >Документ, подтверждающий
                                             прохождение профессионального
-                                            обучения<span>&nbsp;*</span></label
-                                        >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="
-                                                selectFile(
-                                                    $event,
-                                                    5,
-                                                    'participants_data',
-                                                    'document',
-                                                    index,
-                                                )
-                                            "
+                                            обучения<span>&nbsp;*</span>
+                                        </label>
+                                        <div
+                                            class="statement-item"
                                             v-if="!block.document"
-                                            chooseLabel="Выбрать файл"
-                                        />
+                                        >
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                :customUpload="true"
+                                                @select="
+                                                    selectFile(
+                                                        $event,
+                                                        5,
+                                                        'participants_data',
+                                                        'document',
+                                                        index,
+                                                    )
+                                                "
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+
                                         <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
@@ -557,10 +589,26 @@ s
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
+                                                    <img
+                                                        class="addFile"
+                                                        src="@app/assets/icon/addFile.svg"
+                                                        alt="addFile"
+                                                    />
                                                     <span
                                                         class="font-semibold"
                                                         >{{
                                                             block.document.name
+                                                        }}</span
+                                                    >
+                                                    <span
+                                                        v-if="disabledBtn"
+                                                        class="font-semibold"
+                                                        >{{
+                                                            decodeURIComponent(
+                                                                block.document
+                                                                    .split('/')
+                                                                    .pop(),
+                                                            )
                                                         }}</span
                                                     >
                                                 </div>
@@ -570,6 +618,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -596,22 +645,32 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="addNewBlock"
                             >
                                 + добавить участника
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(5)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(5)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
-                                    по 15 июня 2024 года включительно.
+                                    по 15 мая 2024 года включительно.
                                 </p>
                             </div>
                         </div>
@@ -733,13 +792,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(61)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(61)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 31 мая 2024 года включительно.
@@ -801,13 +869,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(62)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(62)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 31 мая 2024 года включительно.
@@ -841,13 +918,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(63)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(63)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 31 мая 2024 года включительно.
@@ -884,13 +970,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(64)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(64)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 31 мая 2024 года включительно.
@@ -949,13 +1044,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(65)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(65)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 июня 2024 года включительно.
@@ -989,13 +1093,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(66)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(66)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1027,13 +1140,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(67)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(67)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1069,13 +1191,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(68)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(68)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1229,24 +1360,33 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="
-                                                selectFile(
-                                                    $event,
-                                                    7,
-                                                    'participation_data',
-                                                    'certificate_scans',
-                                                    index,
-                                                )
-                                            "
+                                        <div
+                                            class="statement-item"
                                             v-if="!block.certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
+                                        >
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                :customUpload="true"
+                                                @select="
+                                                    selectFile(
+                                                        $event,
+                                                        7,
+                                                        'participation_data',
+                                                        'certificate_scans',
+                                                        index,
+                                                    )
+                                                "
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+
                                         <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
@@ -1254,12 +1394,28 @@ s
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
+                                                    <img
+                                                        class="addFile"
+                                                        src="@app/assets/icon/addFile.svg"
+                                                        alt="addFile"
+                                                    />
                                                     <span
                                                         class="font-semibold"
                                                         >{{
                                                             block
                                                                 .certificate_scans
                                                                 .name
+                                                        }}</span
+                                                    >
+                                                    <span
+                                                        v-if="disabledBtn"
+                                                        class="font-semibold"
+                                                        >{{
+                                                            decodeURIComponent(
+                                                                block.certificate_scans
+                                                                    .split('/')
+                                                                    .pop(),
+                                                            )
                                                         }}</span
                                                     >
                                                 </div>
@@ -1269,6 +1425,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock7(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1295,19 +1452,29 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock7"
                             >
                                 <p>+ Добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(7)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(7)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1448,6 +1615,7 @@ s
                                             </div>
                                         </template>
                                         <div
+                                            v-if="!disabledBtn"
                                             class="form__field add-block"
                                             @click="AddLink8(index)"
                                         >
@@ -1460,24 +1628,33 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="
-                                                selectFile(
-                                                    $event,
-                                                    8,
-                                                    'participation_data',
-                                                    'certificate_scans',
-                                                    index,
-                                                )
-                                            "
+                                        <div
+                                            class="statement-item"
                                             v-if="!block.certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
+                                        >
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                :customUpload="true"
+                                                @select="
+                                                    selectFile(
+                                                        $event,
+                                                        8,
+                                                        'participation_data',
+                                                        'certificate_scans',
+                                                        index,
+                                                    )
+                                                "
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+
                                         <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
@@ -1485,12 +1662,28 @@ s
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
+                                                    <img
+                                                        src="@app/assets/icon/addFile.svg"
+                                                        alt="addFile"
+                                                        class="addFile"
+                                                    />
                                                     <span
                                                         class="font-semibold"
                                                         >{{
                                                             block
                                                                 .certificate_scans
                                                                 .name
+                                                        }}</span
+                                                    >
+                                                    <span
+                                                        v-if="disabledBtn"
+                                                        class="font-semibold"
+                                                        >{{
+                                                            decodeURIComponent(
+                                                                block.certificate_scans
+                                                                    .split('/')
+                                                                    .pop(),
+                                                            )
                                                         }}</span
                                                     >
                                                 </div>
@@ -1500,6 +1693,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock8(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1526,19 +1720,29 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock8"
                             >
                                 <p>+ Добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(8)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(8)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1656,24 +1860,33 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="
-                                                selectFile(
-                                                    $event,
-                                                    9,
-                                                    'participation_data',
-                                                    'certificate_scans',
-                                                    index,
-                                                )
-                                            "
+                                        <div
+                                            class="statement-item"
                                             v-if="!block.certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
+                                        >
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                :customUpload="true"
+                                                @select="
+                                                    selectFile(
+                                                        $event,
+                                                        9,
+                                                        'participation_data',
+                                                        'certificate_scans',
+                                                        index,
+                                                    )
+                                                "
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+
                                         <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
@@ -1681,12 +1894,28 @@ s
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
+                                                    <img
+                                                        src="@app/assets/icon/addFile.svg"
+                                                        alt="addFile"
+                                                        class="addFile"
+                                                    />
                                                     <span
                                                         class="font-semibold"
                                                         >{{
                                                             block
                                                                 .certificate_scans
                                                                 .name
+                                                        }}</span
+                                                    >
+                                                    <span
+                                                        v-if="disabledBtn"
+                                                        class="font-semibold"
+                                                        >{{
+                                                            decodeURIComponent(
+                                                                block.certificate_scans
+                                                                    .split('/')
+                                                                    .pop(),
+                                                            )
                                                         }}</span
                                                     >
                                                 </div>
@@ -1696,6 +1925,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock9(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1722,19 +1952,29 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock9"
                             >
                                 <p>+ Добавить мероприятие или конкурс</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(9)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(9)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1852,24 +2092,33 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="
-                                                selectFile(
-                                                    $event,
-                                                    10,
-                                                    'participation_data',
-                                                    'certificate_scans',
-                                                    index,
-                                                )
-                                            "
+                                        <div
+                                            class="statement-item"
                                             v-if="!block.certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
+                                        >
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                :customUpload="true"
+                                                @select="
+                                                    selectFile(
+                                                        $event,
+                                                        10,
+                                                        'participation_data',
+                                                        'certificate_scans',
+                                                        index,
+                                                    )
+                                                "
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+
                                         <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
@@ -1877,12 +2126,28 @@ s
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
+                                                    <img
+                                                        src="@app/assets/icon/addFile.svg"
+                                                        alt="addFile"
+                                                        class="addFile"
+                                                    />
                                                     <span
                                                         class="font-semibold"
                                                         >{{
                                                             block
                                                                 .certificate_scans
                                                                 .name
+                                                        }}</span
+                                                    >
+                                                    <span
+                                                        v-if="disabledBtn"
+                                                        class="font-semibold"
+                                                        >{{
+                                                            decodeURIComponent(
+                                                                block.certificate_scans
+                                                                    .split('/')
+                                                                    .pop(),
+                                                            )
                                                         }}</span
                                                     >
                                                 </div>
@@ -1892,6 +2157,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock10(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1918,19 +2184,29 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock10"
                             >
                                 <p>+ Добавить мероприятие или конкурс</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(10)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(10)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -2049,24 +2325,34 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="
-                                                selectFile(
-                                                    $event,
-                                                    11,
-                                                    'participation_data',
-                                                    'certificate_scans',
-                                                    index,
-                                                )
-                                            "
+                                        <div
+                                            class="statement-item"
                                             v-if="!block.certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
+                                        >
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                :customUpload="true"
+                                                @select="
+                                                    selectFile(
+                                                        $event,
+                                                        11,
+                                                        'participation_data',
+                                                        'certificate_scans',
+                                                        index,
+                                                    )
+                                                "
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+
                                         <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
@@ -2074,12 +2360,29 @@ s
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
+                                                    <img
+                                                        src="@app/assets/icon/addFile.svg"
+                                                        alt="addFile"
+                                                        class="addFile"
+                                                    />
+
                                                     <span
                                                         class="font-semibold"
                                                         >{{
                                                             block
                                                                 .certificate_scans
                                                                 .name
+                                                        }}</span
+                                                    >
+                                                    <span
+                                                        v-if="disabledBtn"
+                                                        class="font-semibold"
+                                                        >{{
+                                                            decodeURIComponent(
+                                                                block.certificate_scans
+                                                                    .split('/')
+                                                                    .pop(),
+                                                            )
                                                         }}</span
                                                     >
                                                 </div>
@@ -2089,6 +2392,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock11(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2115,19 +2419,29 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock11"
                             >
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(11)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(11)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -2246,18 +2560,30 @@ s
                                                 >&nbsp;*</span
                                             ></label
                                         >
-                                        <FileUpload
-                                            mode="basic"
-                                            name="demo[]"
-                                            accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000"
-                                            :customUpload="true"
-                                            @select="
-                                                selectCertScans($event, index)
-                                            "
+                                        <div
+                                            class="statement-item"
                                             v-if="!block.certificate_scans"
-                                            chooseLabel="Выбрать файл"
-                                        />
+                                        >
+                                            <img
+                                                src="@app/assets/icon/addFile.svg"
+                                                alt="addFile"
+                                            />
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                accept=".pdf, .jpeg, .png"
+                                                :maxFileSize="7000000"
+                                                :customUpload="true"
+                                                @select="
+                                                    selectCertScans(
+                                                        $event,
+                                                        index,
+                                                    )
+                                                "
+                                                chooseLabel="Выбрать файл"
+                                            />
+                                        </div>
+
                                         <div v-else>
                                             <div
                                                 class="flex flex-wrap p-0 sm:p-5 gap-5"
@@ -2265,12 +2591,28 @@ s
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
+                                                    <img
+                                                        src="@app/assets/icon/addFile.svg"
+                                                        alt="addFile"
+                                                        class="addFile"
+                                                    />
                                                     <span
                                                         class="font-semibold"
                                                         >{{
                                                             block
                                                                 .certificate_scans
                                                                 .name
+                                                        }}</span
+                                                    >
+                                                    <span
+                                                        v-if="disabledBtn"
+                                                        class="font-semibold"
+                                                        >{{
+                                                            decodeURIComponent(
+                                                                block.certificate_scans
+                                                                    .split('/')
+                                                                    .pop(),
+                                                            )
                                                         }}</span
                                                     >
                                                 </div>
@@ -2280,6 +2622,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock12(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2306,19 +2649,29 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="addBlock12"
                             >
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(12)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(12)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -2431,6 +2784,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock13(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2457,19 +2811,29 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock13"
                             >
                                 <p>+ добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(13)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(13)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -2590,6 +2954,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock14(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2616,19 +2981,29 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock14"
                             >
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(14)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(14)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 сентября 2024 года включительно.
@@ -2791,6 +3166,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock15(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2817,19 +3193,29 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock15"
                             >
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(15)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(15)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -3042,13 +3428,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(16)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(16)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -3163,6 +3558,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
+                                        v-if="!disabledBtn"
                                         @click="deleteBlock17(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -3189,19 +3585,29 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="addNewBlockQ17"
                             >
                                 + добавить участника
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(17)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(17)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 сентября 2024 года включительно.
@@ -3305,13 +3711,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(18)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(18)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 сентября 2024 года включительно.
@@ -3411,13 +3826,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(19)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(19)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 сентября 2024 года включительно.
@@ -3602,13 +4026,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    class="form__button"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(20)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(20)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -3624,7 +4057,7 @@ s
 <script setup>
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref, inject, computed } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
@@ -3710,10 +4143,6 @@ const prizePlaceChoose = ref([
     { name: '2', value: 2 },
     { name: '3', value: 3 },
 ]);
-
-// const counterReport5 = computed(() => {
-//     return report.value[5]?.participants_data?.name?.length || 0;
-// });
 
 const selectFile = (e, id, field, subfield, index) => {
     if (subfield) report.value[id][field][index][subfield] = e.files[0];
@@ -3965,8 +4394,13 @@ const selectCertScans = (event, index) => {
     );
 };
 
+// let url5 = report.value[5].participants_data.document;
+// console.log(decodeURIComponent(url5));
+
+const disabledBtn = ref(false);
 const getParameters = async (id) => {
     try {
+        isLoading.value = true;
         const response = await HTTP.get(
             `/competitions/${route.params.competition_pk}/reports/q${id}/` +
                 (id == 1 || id == 3 || id == 4 ? 'get-place/' : 'me/'),
@@ -4010,7 +4444,9 @@ const getParameters = async (id) => {
                     report.value[id].participation_data = response.data.results;
                 else report.value[id] = response.data.results[0];
             }
-        }
+            disabledBtn.value = true;
+        } else disabledBtn.value = false;
+        isLoading.value = false;
     } catch (error) {
         isError.value = error.response.data;
     }
@@ -4086,6 +4522,7 @@ const postParameters = async (id) => {
             showConfirmButton: false,
             timer: 1500,
         });
+        disabledBtn.value = true;
     } catch (error) {
         isError.value = error.response.data;
         isLoading.value = false;
@@ -4100,6 +4537,10 @@ const postParameters = async (id) => {
         }
     }
 };
+
+onMounted(async (id) => {
+    await getParameters(id);
+});
 </script>
 <style>
 .v-expansion-panels {
@@ -4139,6 +4580,12 @@ const postParameters = async (id) => {
 .form__field-group-bottom {
     margin-top: 50px;
 }
+
+.form__field-group-bottom-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .form__field-group-bottom p {
     margin-top: 50px;
     font-family: 'Akrobat';
@@ -4174,5 +4621,45 @@ const postParameters = async (id) => {
 }
 .form__field-column-one-file {
     grid-template-columns: 10fr 0.5fr;
+}
+.form__button-color:disabled {
+    background-color: #b6b6b6;
+    border-color: #b6b6b6;
+}
+.card {
+    position: relative;
+}
+.addFile {
+    position: absolute;
+    top: 4px;
+    left: 1px;
+}
+.statement-item {
+    display: flex;
+    margin-top: 12px;
+    margin-right: 30px;
+}
+
+.statement-item p,
+.statement-item a {
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    margin-left: 8px;
+    @media (max-width: 768px) {
+        font-size: 14px;
+        max-width: 290px;
+    }
+}
+
+.statement-item a {
+    color: #1f7cc0;
+}
+.p-icon {
+    display: none !important;
+}
+.p-button-label {
+    color: #1f7cc0;
+    margin-left: 5px;
 }
 </style>

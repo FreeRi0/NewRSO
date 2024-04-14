@@ -1,7 +1,7 @@
 <template>
     <div class="competitions__container">
         <p v-if="loading">Загрузка...</p>
-        <p v-else-if="competitionsList.length || allReporting.length">
+        <p v-else-if="!competitionsList.length && !hasReports">
             Список заявок на конкурсы пуст
         </p>
 
@@ -131,6 +131,8 @@ const selectedReportingList = ref([]);
 const loading = ref(false);
 const action = ref('Одобрить');
 const actionsList = ref(['Одобрить', 'Отклонить']);
+
+const hasReports = ref(false);
 
 const getMeCommander = async () => {
     try {
@@ -417,9 +419,11 @@ const getAllReporting = async () => {
                         allReporting.value[index] = [];
                     }
                     allReporting.value[index].push(report);
+                    hasReports.value = true;
                 }
             }
             console.log(allReporting.value);
+            console.log(allReporting.value.length);
         } catch (e) {
             console.log('getAllReporting error', e);
         }

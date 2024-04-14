@@ -66,10 +66,6 @@ import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useRoute } from 'vue-router';
-
-const route = useRoute();
-const isDebut = ref();
 
 const router = useRouter();
 const commander = ref(false);
@@ -201,11 +197,6 @@ const getMeCommander = async () => {
     }
 };
 
-const addTandemField = async () => {
-    mainResults.value.data.push('Сумма мест');
-    mainResults.value.place.push('-');
-};
-
 const getMainResults = async () => {
     try {
         const { data } = await HTTP.get(`/competitions/1/get-place/`, {
@@ -214,12 +205,26 @@ const getMainResults = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        console.log(data);
         if (data.place) {
             mainResults.value.place[0] = data.place;
+        } else {
+            mainResults.value.place[0] = 'Рейтинг еще не сформирован';
         }
         if (data.places_sum) {
             mainResults.value.place[1] = data.places_sum;
+        } else {
+            mainResults.value.place[1] = 'Рейтинг еще не сформирован';
+        }
+        if (data.partner_detachment) {
+            mainResults.value.place.push(
+                data.places_sum
+                    ? data.places_sum
+                    : 'Рейтинг еще не сформирован',
+            );
+            mainResults.value.data.push(
+                `Сумма мест отряда ${data.partner_detachment}`,
+            );
+            console.log(mainResults.value);
         }
     } catch (e) {
         console.log('getMainResults error', e);
@@ -230,12 +235,6 @@ onMounted(async () => {
     await getMainResults();
     await getMeCommander();
     await getPostitions();
-    if (route.params.reporting_name == 'debut') {
-        isDebut.value = true;
-    } else if (route.params.reporting_name == 'tandem') {
-        await addTandemField();
-        isDebut.value = false;
-    }
     window.scroll(0, 0);
 });
 </script>

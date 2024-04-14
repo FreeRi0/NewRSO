@@ -191,12 +191,12 @@ const getCompetitons = async (pagination, orderLimit) => {
         else if (pagination == 'next')
             url = detachments.value.next.replace('http', 'https');
         if (name.value) data.push('search=' + name.value);
-        if (isTandem.value) data.push('is_tandem=' + isTandem.value);
-        else data.push('is_tandem=' + isTandem.value);
-        // if (education.value)
-        //     data.push('educational_institution__name=' + education.value);
+
         if (picked.value) data.push('area=' + picked.value);
+
         if (sortBy.value && !pagination) {
+            if (isTandem.value) data.push('is_tandem=' + isTandem.value);
+            else data.push('is_tandem=' + isTandem.value);
             let sort = sortBy.value;
             if (
                 sort ==
