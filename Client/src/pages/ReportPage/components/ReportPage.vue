@@ -254,14 +254,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(2)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(2)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 мая 2024 года включительно.
@@ -644,14 +652,22 @@ s
                                 + добавить участника
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(5)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(5)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 мая 2024 года включительно.
@@ -776,14 +792,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(61)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(61)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 31 мая 2024 года включительно.
@@ -845,14 +869,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(62)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(62)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 31 мая 2024 года включительно.
@@ -886,14 +918,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(63)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(63)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 31 мая 2024 года включительно.
@@ -930,14 +970,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(64)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(64)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 31 мая 2024 года включительно.
@@ -996,14 +1044,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(65)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(65)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 июня 2024 года включительно.
@@ -1037,14 +1093,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(66)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(66)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1076,14 +1140,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(67)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(67)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1119,14 +1191,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(68)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(68)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1379,14 +1459,22 @@ s
                                 <p>+ Добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(7)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(7)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1639,14 +1727,22 @@ s
                                 <p>+ Добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(8)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(8)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -1863,14 +1959,22 @@ s
                                 <p>+ Добавить мероприятие или конкурс</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(9)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(9)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -2087,14 +2191,22 @@ s
                                 <p>+ Добавить мероприятие или конкурс</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(10)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(10)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -2314,14 +2426,22 @@ s
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(11)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(11)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -2536,14 +2656,22 @@ s
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(12)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(12)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -2690,14 +2818,22 @@ s
                                 <p>+ добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(13)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(13)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -2852,14 +2988,22 @@ s
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(14)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(14)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 сентября 2024 года включительно.
@@ -3056,14 +3200,22 @@ s
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(15)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(15)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -3276,14 +3428,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(16)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(16)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -3432,14 +3592,22 @@ s
                                 + добавить участника
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(17)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(17)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 сентября 2024 года включительно.
@@ -3543,14 +3711,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(18)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(18)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 сентября 2024 года включительно.
@@ -3650,14 +3826,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(19)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(19)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 30 сентября 2024 года включительно.
@@ -3842,14 +4026,22 @@ s
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
-                                <Button
-                                    type="button"
-                                    :disabled="disabledBtn"
-                                    class="form__button form__button-color"
-                                    label="Отправить данные на верификацию"
-                                    size="large"
-                                    @click="postParameters(20)"
-                                />
+                                <div class="form__field-group-bottom-btn">
+                                    <v-progress-circular
+                                        class="circleLoader"
+                                        v-if="isLoading"
+                                        indeterminate
+                                        color="blue"
+                                    ></v-progress-circular>
+                                    <Button
+                                        type="button"
+                                        :disabled="disabledBtn"
+                                        class="form__button form__button-color"
+                                        label="Отправить данные на верификацию"
+                                        size="large"
+                                        @click="postParameters(20)"
+                                    />
+                                </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
                                     по 15 октября 2024 года включительно.
@@ -4208,6 +4400,7 @@ const selectCertScans = (event, index) => {
 const disabledBtn = ref(false);
 const getParameters = async (id) => {
     try {
+        isLoading.value = true;
         const response = await HTTP.get(
             `/competitions/${route.params.competition_pk}/reports/q${id}/` +
                 (id == 1 || id == 3 || id == 4 ? 'get-place/' : 'me/'),
@@ -4253,6 +4446,7 @@ const getParameters = async (id) => {
             }
             disabledBtn.value = true;
         } else disabledBtn.value = false;
+        isLoading.value = false;
     } catch (error) {
         isError.value = error.response.data;
     }
@@ -4385,6 +4579,12 @@ onMounted(async (id) => {
 }
 .form__field-group-bottom {
     margin-top: 50px;
+}
+
+.form__field-group-bottom-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .form__field-group-bottom p {
     margin-top: 50px;
