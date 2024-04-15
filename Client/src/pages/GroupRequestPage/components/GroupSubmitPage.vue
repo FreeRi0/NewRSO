@@ -87,13 +87,6 @@
                             @click="ascending = !ascending"
                             color="white"
                         ></Button>
-                        <Button
-                            type="button"
-                            class="filter"
-                            icon="filter"
-                            @click="ascending = !ascending"
-                            color="white"
-                        ></Button>
                     </div>
                 </div>
 
