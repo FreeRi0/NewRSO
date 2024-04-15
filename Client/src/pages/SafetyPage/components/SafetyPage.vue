@@ -45,7 +45,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td corpuniver__table__border-left">
                             22 апреля 2024г.
                         </td>
                         <td class="corpuniver__table__td">
@@ -54,7 +54,7 @@
                     </tr>
                     <tr>
 
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td corpuniver__table__border-left">
                             23 апреля 2024г.
                         </td>
                         <td class="corpuniver__table__td">
@@ -62,7 +62,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td corpuniver__table__border-left">
                             24 апреля 2024г.
                         </td>
                         <td class="corpuniver__table__td">
@@ -71,7 +71,7 @@
                     </tr>
 
                     <tr>
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td corpuniver__table__border-left">
                             25 апреля 2024г.
                         </td>
 
@@ -79,21 +79,24 @@
                     </tr>
 
                     <tr>
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td corpuniver__table__border-left"
+                            style="border-bottom: #eceff4 solid 1px ; border-radius: 0px 0px 0px 10px">
                             26 апреля 2024г.
                         </td>
 
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td"
+                            style="border-bottom: #eceff4 solid 1px; border-radius: 0px 0px 10px 0px">
                             «День первой помощи»
                         </td>
                     </tr>
-
                 </tbody>
             </v-table>
         </div>
+
         <div class="corpuniver__text">
             <p class="text corpuniver__text-about">
-                Более подробную информацию вы сможете получить в вашем региональном отделении МООО «РСО».
+                Более подробную информацию вы сможете получить в вашем региональном отделении <a
+                    href="https://xn--d1amqcgedd.xn--p1ai/map">МООО «РСО».</a>
             </p>
             <p class="text corpuniver__text-about">
                 В рамках конкурса «Лучший студенческий отряд» с 22 по 28 апреля состоится <b>Обучение по охране труда и
@@ -111,6 +114,84 @@
                 практике. 
             </p>
         </div>
+        <h2 id="video_1" class="corpuniver__title-h2">
+            Занятие 1 «Перечень документов при приеме на работу. Часть 1»
+        </h2>
+        <div class="corpuniver__video ">
+            <iframe class="corpuniver__iframe" src="https://www.youtube.com/embed/5lBxsbNyyYQ?enablejsapi=1"
+                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+                </iframe>
+        </div>
+<!--
+        <video    muted autopictureinpicture controls poster="@app/assets/lesson_1_1.png">
+            <source src="https://www.youtube.com/embed/bF2qhaLE-_k?enablejsapi=1" type="video/webm">
+            <source src="https://www.youtube.com/embed/bF2qhaLE-_k?enablejsapi=1" type="video/mp4">
+        </video> -->
+        <!-- <div class="box-video" @click="playVideo">
+            <div class="bg-video"
+                style="background: url(https://static.vecteezy.com/system/resources/thumbnails/025/220/125/small_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg);">
+                <div class="bt-play"></div>
+            </div>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/5lBxsbNyyYQ?enablejsapi=1 "
+                    frame border="0" allowfullscreen="allowfullscreen"></iframe>
+            </div>
+        </div> -->
+
+        <!-- <h2 id="video_2" class="corpuniver__title-h2">
+            Занятие 1 «Перечень документов при приеме на работу. Часть 2»
+        </h2>
+        <div class="corpuniver__video">
+            <iframe class="corpuniver__iframe" src="https://www.youtube.com/embed/bF2qhaLE-_k?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_3" class="corpuniver__title-h2">
+            Занятие 2 «Документы, регламентирующие трудовые отношения работника и работодателя»
+        </h2>
+        <div class="corpuniver__video">
+            <iframe class="corpuniver__iframe" src="https://www.youtube.com/embed/oZeFr6_b3UU?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_4" class="corpuniver__title-h2">
+            Занятие 3 «Основные виды инструктажей при приеме на работу. Часть 1»
+        </h2>
+        <div class="corpuniver__video">
+            <iframe class="corpuniver__iframe" src="https://www.youtube.com/embed/TOSphxyF1Sk?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_5" class="corpuniver__title-h2">
+            Занятие 3 «Основные виды инструктажей при приеме на работу. Часть 2»
+        </h2>
+        <div class="corpuniver__video">
+            <iframe class="corpuniver__iframe" src="https://www.youtube.com/embed/SjRDDpy3LI4&t=10s?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_6" class="corpuniver__title-h2">
+            Занятие 4 «Несчастный случай на производстве. Часть 1»
+        </h2>
+        <div class="corpuniver__video">
+            <iframe class="corpuniver__iframe" src="https://www.youtube.com/embed/jMblehZ2wuY&t=18s?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_7" class="corpuniver__title-h2">
+            Занятие 4 «Несчастный случай на производстве. Часть 2»
+        </h2>
+        <div class="corpuniver__video">
+            <iframe class="corpuniver__iframe" src="https://www.youtube.com/embed/8fGUjz36o3A?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div> -->
+
         <div id="testing" class="corpuniver__documents-test">
             <p class="text corpuniver__documents-description-test">
                 Итоговую аттестацию можно пройти с 22 апреля по 15 мая 2024 года (допускается 1 пересдача) онлайн
@@ -125,8 +206,17 @@
 </template>
 <script setup>
 import Button from '@shared/components/buttons/Button.vue';
+
+const playVideo = () => {
+    const iframeElement = document.querySelector('iframe');
+    // iframeElement.src += "&amp;autoplay=1";
+    const videoContainerElement = document.querySelector('.video-container');
+    videoContainerElement.classList.add('open');
+}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+
+
 .corpuniver {
     &__title-h2 {
         font-family: Akrobat;
@@ -134,8 +224,8 @@ import Button from '@shared/components/buttons/Button.vue';
         font-weight: 600;
         line-height: 38px;
         color: #35383f;
-        margin-top: 36px;
-        margin-bottom: 20px;
+        margin-top: 60px;
+        margin-bottom: 40px;
 
         @media (max-width: 768px) {
             font-size: 20px;
@@ -205,7 +295,7 @@ import Button from '@shared/components/buttons/Button.vue';
 
         a {
             color: #1c5c94;
-            text-decoration: underline;
+            text-decoration: none;
         }
 
         span {
@@ -255,6 +345,7 @@ import Button from '@shared/components/buttons/Button.vue';
         font-weight: 500;
         text-align: center;
         margin-top: 40px;
+        padding: 0 120px;
     }
 
     &__documents-btn {
@@ -361,5 +452,112 @@ import Button from '@shared/components/buttons/Button.vue';
     &__border-left {
         border-left: #eceff4 solid 1px;
     }
+}
+
+.box-video {
+    position: relative;
+    width: 100%;
+    margin: 0 auto 20px auto;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* Set Cover aka Background-Image */
+.box-video .bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    z-index: 2;
+}
+
+/* Add light shade to make play button visible*/
+.bg-video::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 3;
+}
+
+
+/* The Play-Button using CSS-Only */
+.box-video .bt-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -30px 0 0 -30px;
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50%;
+    text-indent: -999em;
+    cursor: pointer;
+    z-index: 2;
+    -webkit-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+}
+
+/* The Play-Triangle */
+.box-video .bt-play:after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 0;
+    width: 0;
+    margin: -12px 0 0 -6px;
+    border: solid transparent;
+    border-left-color: #000;
+    border-width: 12px 20px;
+    -webkit-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+}
+
+.box-video:hover .bt-play {
+    transform: scale(1.1);
+}
+
+/* When Class added the Cover gets hidden... */
+.box-video.open .bg-video {
+    visibility: hidden;
+    opacity: 0;
+
+    -webkit-transition: all .6s .8s;
+    transition: all .6s .8s;
+}
+
+/* and iframe shows up */
+.box-video.open .video-container {
+    opacity: 1;
+    -webkit-transition: all .6s .8s;
+    transition: all .6s .8s;
+}
+
+/* Giving the div ratio of 16:9 with padding */
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    margin: 0;
+    z-index: 1;
+    padding-bottom: 56.27198%;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 </style>
