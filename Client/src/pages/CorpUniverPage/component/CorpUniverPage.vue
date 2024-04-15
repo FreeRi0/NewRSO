@@ -1302,7 +1302,7 @@
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"
                 allowfullscreen></iframe>
       </div>
-
+<!-- 
         <div id="testing" class="corpuniver__documents-test">
             <p class="text corpuniver__documents-description-test">
                 Итоговую аттестацию можно пройти с 29 марта по 10 апреля 2024
@@ -1316,7 +1316,7 @@
                     class="corpuniver__documents-btn"
                 ></Button>
             </router-link>
-        </div>
+        </div> -->
     </div>
 </template>
 <script setup>
