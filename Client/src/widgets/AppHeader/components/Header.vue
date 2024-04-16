@@ -43,9 +43,9 @@
                             </div>
                         </li>
                         <li class="header__nav-item">
-                            <a class="header__nav-link" href="/actionSquads">
+                            <!-- <a class="header__nav-link" href="/actionSquads">
                                 Мероприятия
-                            </a>
+                            </a> -->
                         </li>
                         <li class="header__nav-item competition__nav-item">
                             <a
