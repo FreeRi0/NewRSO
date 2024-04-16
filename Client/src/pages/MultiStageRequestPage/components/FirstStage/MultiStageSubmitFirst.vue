@@ -15,7 +15,7 @@
         </div>
 
         <div id="wrapper">
-            <div id="left">
+            <div id="left" v-if="width > 768">
                 <filters
                     @update-district="updateDistrict"
                     @update-reg="updateReg"
@@ -111,9 +111,6 @@
                 <p class="subtitle" v-if="!sortedParticipants.length">
                     Ничего не найдено
                 </p>
-                <p class="subtitle" v-if="!sortedParticipants.length">
-                    Ничего не найдено
-                </p>
             </div>
             <p class="subtitle" v-else>Ничего не найдено.</p>
         </div>
@@ -178,6 +175,8 @@ const props = defineProps({
         default: () => ({}),
     },
 });
+
+const width = ref(0);
 
 const router = useRouter();
 const sortBy = ref('alphabetically');
@@ -746,22 +745,34 @@ watch(selectedCompetitionsList, () => {
     }
 });
 
+const onResize = () => {
+    width.value = window.innerWidth;
+    console.log(width.value);
+};
+
 onMounted(() => {
+    onResize();
+    window.addEventListener('resize', onResize);
     getItemsByRoles();
     getHeadquartersJunior();
 });
 </script>
 
 <style scoped lang="scss">
+.container {
+    margin: 0px auto;
+    padding-bottom: 60px;
+}
 #wrapper {
-    display: flex;
+    display: grid;
+    grid-template-columns: 276px auto;
+    gap: 24px;
 }
-#left {
-    width: 25%;
-}
-#right {
-    margin-left: 24px;
-    width: 75%;
+@media screen and (max-width: 769px) {
+    #wrapper {
+        display: grid;
+        grid-template-columns: auto;
+    }
 }
 .form-input-container {
     border: 1px solid #b6b6b6;

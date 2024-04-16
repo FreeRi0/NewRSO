@@ -45,7 +45,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td corpuniver__table__border-left">
                             22 апреля 2024г.
                         </td>
                         <td class="corpuniver__table__td">
@@ -54,7 +54,7 @@
                     </tr>
                     <tr>
 
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td corpuniver__table__border-left">
                             23 апреля 2024г.
                         </td>
                         <td class="corpuniver__table__td">
@@ -62,7 +62,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td corpuniver__table__border-left">
                             24 апреля 2024г.
                         </td>
                         <td class="corpuniver__table__td">
@@ -71,7 +71,7 @@
                     </tr>
 
                     <tr>
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td corpuniver__table__border-left">
                             25 апреля 2024г.
                         </td>
 
@@ -79,21 +79,24 @@
                     </tr>
 
                     <tr>
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td corpuniver__table__border-left"
+                            style="border-bottom: #eceff4 solid 1px ; border-radius: 0px 0px 0px 10px">
                             26 апреля 2024г.
                         </td>
 
-                        <td class="corpuniver__table__td">
+                        <td class="corpuniver__table__td"
+                            style="border-bottom: #eceff4 solid 1px; border-radius: 0px 0px 10px 0px">
                             «День первой помощи»
                         </td>
                     </tr>
-
                 </tbody>
             </v-table>
         </div>
+
         <div class="corpuniver__text">
             <p class="text corpuniver__text-about">
-                Более подробную информацию вы сможете получить в вашем региональном отделении МООО «РСО».
+                Более подробную информацию вы сможете получить в вашем региональном отделении <a
+                    href="https://xn--d1amqcgedd.xn--p1ai/map">МООО «РСО».</a>
             </p>
             <p class="text corpuniver__text-about">
                 В рамках конкурса «Лучший студенческий отряд» с 22 по 28 апреля состоится <b>Обучение по охране труда и
@@ -111,6 +114,80 @@
                 практике. 
             </p>
         </div>
+        <h2 id="video_1" class="corpuniver__title-h2">
+            Занятие 1 «Перечень документов при приеме на работу. Часть 1»
+        </h2>
+        <div class="corpuniver__video " @click="playVideo(1)">
+            <img src="@app/assets/lso/lessonFirst.png" v-show="showVideo[1] == false">
+            <iframe v-show="showVideo[1] == true" class="corpuniver__iframe video_1"
+                src="https://www.youtube.com/embed/5lBxsbNyyYQ?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+
+
+        <h2 id="video_2" class="corpuniver__title-h2">
+            Занятие 1 «Перечень документов при приеме на работу. Часть 2»
+        </h2>
+        <div class="corpuniver__video" @click="playVideo(2)">
+            <img src="@app/assets/lso/lesson1_2.png" v-show="showVideo[2] == false">
+            <iframe v-show="showVideo[2] == true" class="corpuniver__iframe video_2"
+                src="https://www.youtube.com/embed/bF2qhaLE-_k?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_3" class="corpuniver__title-h2">
+            Занятие 2 «Документы, регламентирующие трудовые отношения работника и работодателя»
+        </h2>
+        <div class="corpuniver__video" @click="playVideo(3)">
+            <img src="@app/assets/lso/lesson2.png" v-show="showVideo[3] == false">
+            <iframe  v-show="showVideo[3] == true" class="corpuniver__iframe video_3" src="https://www.youtube.com/embed/oZeFr6_b3UU?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_4" class="corpuniver__title-h2">
+            Занятие 3 «Основные виды инструктажей при приеме на работу. Часть 1»
+        </h2>
+        <div class="corpuniver__video" @click="playVideo(4)">
+            <img src="@app/assets/lso/lesson3_1.png" v-show="showVideo[4] == false">
+            <iframe v-show="showVideo[4] == true" class="corpuniver__iframe video_4" src="https://www.youtube.com/embed/TOSphxyF1Sk?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_5" class="corpuniver__title-h2">
+            Занятие 3 «Основные виды инструктажей при приеме на работу. Часть 2»
+        </h2>
+        <div class="corpuniver__video" @click="playVideo(5)">
+            <img src="@app/assets/lso/lesson3_2.png" v-show="showVideo[5] == false"/>
+            <iframe v-show="showVideo[5] == true" class="corpuniver__iframe video_5" src="https://www.youtube.com/embed/SjRDDpy3LI4&t=10s?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_6" class="corpuniver__title-h2">
+            Занятие 4 «Несчастный случай на производстве. Часть 1»
+        </h2>
+        <div class="corpuniver__video" @click="playVideo(6)">
+            <img src="@app/assets/lso/lesson4_1.png" v-show="showVideo[6] == false"/>
+            <iframe v-show="showVideo[6] == true" class="corpuniver__iframe video_6" src="https://www.youtube.com/embed/jMblehZ2wuY&t=18s?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_7" class="corpuniver__title-h2">
+            Занятие 4 «Несчастный случай на производстве. Часть 2»
+        </h2>
+        <div class="corpuniver__video" @click="playVideo(7)">
+            <img src="@app/assets/lso/lesson4_2.png" v-show="showVideo[7] == false"/>
+            <iframe v-show="showVideo[7] == true" class="corpuniver__iframe video_7" src="https://www.youtube.com/embed/8fGUjz36o3A?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
         <div id="testing" class="corpuniver__documents-test">
             <p class="text corpuniver__documents-description-test">
                 Итоговую аттестацию можно пройти с 22 апреля по 15 мая 2024 года (допускается 1 пересдача) онлайн
@@ -124,9 +201,19 @@
     </div>
 </template>
 <script setup>
+import { ref } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
+const showVideo = ref({1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false});
+
+
+function playVideo(video) {
+    const iframeElement = document.querySelector('.video_' + video);
+    iframeElement.src += "&amp;autoplay=1";
+    showVideo.value[video] = true;
+}
 </script>
-<style lang="scss">
+
+<style lang="scss" scoped>
 .corpuniver {
     &__title-h2 {
         font-family: Akrobat;
@@ -134,8 +221,8 @@ import Button from '@shared/components/buttons/Button.vue';
         font-weight: 600;
         line-height: 38px;
         color: #35383f;
-        margin-top: 36px;
-        margin-bottom: 20px;
+        margin-top: 60px;
+        margin-bottom: 40px;
 
         @media (max-width: 768px) {
             font-size: 20px;
@@ -205,7 +292,7 @@ import Button from '@shared/components/buttons/Button.vue';
 
         a {
             color: #1c5c94;
-            text-decoration: underline;
+            text-decoration: none;
         }
 
         span {
@@ -255,6 +342,7 @@ import Button from '@shared/components/buttons/Button.vue';
         font-weight: 500;
         text-align: center;
         margin-top: 40px;
+        padding: 0 120px;
     }
 
     &__documents-btn {
@@ -281,6 +369,10 @@ import Button from '@shared/components/buttons/Button.vue';
         padding: 0 0 56.25% 0;
         height: 0;
         overflow: hidden;
+
+        img {
+            cursor: pointer;
+        }
     }
 
     &__iframe {

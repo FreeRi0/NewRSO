@@ -278,30 +278,56 @@ const cancelApplication = async (id, competitionId) => {
     );
 };
 
-const confirmIndicator = async (id, applicationId) => {
-    await HTTP.post(
-        `/competitions/1/reports/q${id}/${applicationId}/verify/`,
-        {},
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+const confirmIndicator = async (id, applicationId, pointId) => {
+    if (id == 5 || id == 13 || id == 14 || id == 15 || id == 17) {
+        await HTTP.post(
+            `/competitions/1/reports/q${id}/${applicationId}/accept/${pointId}/`,
+            {},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        },
-    );
+        );
+    } else {
+        await HTTP.post(
+            `/competitions/1/reports/q${id}/${applicationId}/accept/`,
+            {},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+    }
 };
 
-const cancelIndicator = async (id, applicationId) => {
-    await HTTP.delete(
-        `/competitions/1/reports/q${id}/${applicationId}/verify/`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+const cancelIndicator = async (id, applicationId, pointId) => {
+    if (id == 5 || id == 13 || id == 14 || id == 15 || id == 17) {
+        await HTTP.delete(
+            `/competitions/1/reports/q${id}/${applicationId}/accept/${pointId}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
             },
-        },
-        {},
-    );
+            {},
+        );
+    } else {
+        await HTTP.delete(
+            `/competitions/1/reports/q${id}/${applicationId}/accept/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+            {},
+        );
+    }
 };
 
 const onAction = async () => {
@@ -310,15 +336,111 @@ const onAction = async () => {
             for (const application of selectedReportingList.value) {
                 console.log(application);
                 if (action.value === 'Одобрить') {
-                    await confirmIndicator(
-                        application.indicator,
-                        application.id,
-                    );
+                    if (application.participants_data) {
+                        //5
+                        for (const participant of application.participants_data) {
+                            await confirmIndicator(
+                                application.indicator,
+                                application.id,
+                                participant.id,
+                            );
+                        }
+                    } else if (application.organization_data) {
+                        //13
+                        for (const organizator of application.organization_data) {
+                            await confirmIndicator(
+                                application.indicator,
+                                application.id,
+                                organizator.id,
+                            );
+                        }
+                    } else if (application.q14_labor_projects) {
+                        //14
+                        for (const project of application.q14_labor_projects) {
+                            await confirmIndicator(
+                                application.indicator,
+                                application.id,
+                                project.id,
+                            );
+                        }
+                    } else if (application.grants_data) {
+                        //15
+                        for (const grant of application.grants_data) {
+                            await confirmIndicator(
+                                application.indicator,
+                                application.id,
+                                grant.id,
+                            );
+                        }
+                    } else if (application.source_data) {
+                        //17
+                        for (const source of application.source_data) {
+                            await confirmIndicator(
+                                application.indicator,
+                                application.id,
+                                source.id,
+                            );
+                        }
+                    } else {
+                        await confirmIndicator(
+                            application.indicator,
+                            application.id,
+                            null,
+                        );
+                    }
                 } else {
-                    await cancelIndicator(
-                        application.indicator,
-                        application.id,
-                    );
+                    if (application.participants_data) {
+                        //5
+                        for (const participant of application.participants_data) {
+                            await cancelIndicator(
+                                application.indicator,
+                                application.id,
+                                participant.id,
+                            );
+                        }
+                    } else if (application.organization_data) {
+                        //13
+                        for (const organizator of application.organization_data) {
+                            await cancelIndicator(
+                                application.indicator,
+                                application.id,
+                                organizator.id,
+                            );
+                        }
+                    } else if (application.q14_labor_projects) {
+                        //14
+                        for (const project of application.q14_labor_projects) {
+                            await cancelIndicator(
+                                application.indicator,
+                                application.id,
+                                project.id,
+                            );
+                        }
+                    } else if (application.grants_data) {
+                        //15
+                        for (const grant of application.grants_data) {
+                            await cancelIndicator(
+                                application.indicator,
+                                application.id,
+                                grant.id,
+                            );
+                        }
+                    } else if (application.source_data) {
+                        //17
+                        for (const source of application.source_data) {
+                            await cancelIndicator(
+                                application.indicator,
+                                application.id,
+                                source.id,
+                            );
+                        }
+                    } else {
+                        await cancelIndicator(
+                            application.indicator,
+                            application.id,
+                            null,
+                        );
+                    }
                 }
                 allReporting.value[application.indicator] = allReporting.value[
                     application.indicator
