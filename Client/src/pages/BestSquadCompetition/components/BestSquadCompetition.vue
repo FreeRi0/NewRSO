@@ -198,13 +198,11 @@
                 /></router-link>
             </div>
         </div>
-        <!-- <div
+        <div
             class="d-flex competition__safety-wrapper"
             v-if="
                 roleStore.status.is_commander_detachment ||
-                roleStore.status.is_commissar_detachment ||
-                roleStore.roles.regionalheadquarter_commander ||
-                roleStore.roles.centralheadquarter_commander
+                roleStore.status.is_commissar_detachment 
             "
         >
             <div class="competition__safety-text">
@@ -228,7 +226,7 @@
                 /></router-link>
             </div>
             <img src="@app/assets/competition/bgSchool.png" alt="bg" />
-        </div> -->
+        </div>
         <router-link
             :to="{
                 name: 'CompetitionParticipants',
