@@ -153,6 +153,8 @@ const ascending = ref(true);
 const name = ref('');
 const timerSearch = ref(null);
 
+const width = ref(0);
+
 const props = defineProps({
     route: {
         type: Object,
@@ -579,7 +581,14 @@ watch(selectedUsersList, (newSelectedUserrsList) => {
     isChecked.value = newSelectedUserrsList.length == usersList.value.length;
 });
 
+const onResize = () => {
+    width.value = window.innerWidth;
+    console.log(width.value);
+};
+
 onMounted(async () => {
+    onResize();
+    window.addEventListener('resize', onResize);
     getUsersByRoles();
     await getCompileList();
 });
@@ -587,14 +596,15 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 #wrapper {
-    display: flex;
+    display: grid;
+    grid-template-columns: 276px auto;
+    gap: 24px;
 }
-#left {
-    width: 25%;
-}
-#right {
-    margin-left: 24px;
-    width: 75%;
+@media screen and (max-width: 769px) {
+    #wrapper {
+        display: grid;
+        grid-template-columns: auto;
+    }
 }
 .form-input-container {
     border: 1px solid #b6b6b6;
