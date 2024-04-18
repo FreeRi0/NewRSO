@@ -20,7 +20,7 @@
             <div class="horizontal-item__wrapper">
                 <div class="containerHorizontal">
                     <p class="cursor_redirect" @click="clickIndicator(report)">
-                        {{ indicator.name[report.indicator] }}
+                        {{ indicator.name[report.indicator - 1] }}
                     </p>
                 </div>
             </div>
