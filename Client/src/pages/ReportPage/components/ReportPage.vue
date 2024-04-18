@@ -1356,9 +1356,7 @@ s
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Скан грамот (при наличии)<span
-                                                >&nbsp;*</span
-                                            ></label
+                                            >Скан грамот (при наличии)</label
                                         >
                                         <div
                                             class="statement-item"
@@ -1624,9 +1622,7 @@ s
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
-                                            >Скан грамот (при наличии)<span
-                                                >&nbsp;*</span
-                                            ></label
+                                            >Скан грамот (при наличии)</label
                                         >
                                         <div
                                             class="statement-item"
