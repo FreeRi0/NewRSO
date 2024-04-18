@@ -523,7 +523,8 @@ const onAction = async () => {
 
 const getAllReporting = async () => {
     loading.value = true;
-    for (let index = 1; index <= 20; ++index)
+    for (let index = 2; index <= 20; ++index) {
+        if (index == 3 || index == 4) continue;
         try {
             const { data } = await HTTP.get(
                 `/competitions/1/reports/q${index}/`,
@@ -549,6 +550,7 @@ const getAllReporting = async () => {
         } catch (e) {
             console.log('getAllReporting error', e);
         }
+    }
     console.log(allReporting.value);
     loading.value = false;
 };
