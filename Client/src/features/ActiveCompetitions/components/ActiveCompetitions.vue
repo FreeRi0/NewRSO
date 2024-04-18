@@ -7,6 +7,13 @@
 
         <template v-else>
             <div class="competitions__actions">
+                <div class="horizontal__confidant">
+                    <input
+                        type="checkbox"
+                        v-model="isCheckedAll"
+                        @change="onChooseAll"
+                    />
+                </div>
                 <v-select
                     variant="outlined"
                     class="form__field competitions__actions-select"
@@ -15,6 +22,7 @@
                     placeholder="Выберите действие"
                 />
             </div>
+
             <div class="competitions__list">
                 <template
                     v-for="(competition, index) in competitionsList"
@@ -112,7 +120,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
-import { ref, onMounted, onActivated, inject } from 'vue';
+import { ref, onMounted, onActivated, inject, watch, computed } from 'vue';
 import ActiveCompetitionItem from './ActiveCompetitionItem.vue';
 import ActiveCompetitionItemSelect from './ActiveCompetitionItemSelect.vue';
 import ActiveCompetitionItemReport from './ActiveCompetitionsItemReport.vue';
@@ -124,6 +132,8 @@ const selectedCompetitionsList = ref([]);
 const allCompetition = ref([]);
 
 const swal = inject('$swal');
+
+const isCheckedAll = ref(false);
 
 const allReporting = ref({});
 const selectedReportingList = ref([]);
@@ -211,10 +221,38 @@ const getCompetitions = async () => {
     }
 };
 
+const onChooseAll = (e) => {
+    console.log(e);
+    if(isCheckedAll.value){
+        selectedReportingList.value = [];
+        for (let index = 2; index <=20; index++){
+            if (allReporting.value[index]){
+                allReporting.value[index] = allReporting.value[index].map((r) => {
+                    r.selected=isCheckedAll.value;
+                    return r
+                });
+                for (const r of allReporting.value[index]){
+                    selectedReportingList.value.push(r);
+                }
+            }
+        }
+        console.log(selectedReportingList.value);
+    } else{
+        for (let index = 2; index <=20; index++){
+            if (allReporting.value[index]){
+                allReporting.value[index] = allReporting.value[index].map((r) => {r.selected=isCheckedAll.value;
+                return r});
+            }
+        }
+        selectedReportingList.value = [];
+    }
+}
+
 const onToggleSelectReport = (report, isChecked) => {
     if (isChecked) {
         report.selected = isChecked;
-        selectedReportingList.value.push(report);
+        selectedReportingList.value = [...selectedReportingList.value, report];
+        // selectedReportingList.value.push(report);
         console.log(selectedReportingList.value);
     } else {
         report.selected = isChecked;
@@ -555,6 +593,23 @@ const getAllReporting = async () => {
     loading.value = false;
 };
 
+const lengthAllReporting = computed(()=>{
+    let sum = 0;
+    for (let index = 2; index <=20; index++){
+        if (allReporting.value[index]){
+            sum += allReporting.value[index].length;
+        }
+    }
+    return sum;
+});
+
+watch(selectedReportingList, (selectedReportingList)=>{
+    console.log(selectedReportingList.length);
+    console.log(lengthAllReporting.value);
+    console.log(selectedReportingList.length == lengthAllReporting.value);
+    isCheckedAll.value = selectedReportingList.length == lengthAllReporting.value;
+})
+
 onMounted(async () => {
     await getAllReporting();
     await getAllCompetition();
@@ -582,12 +637,14 @@ onActivated(async () => {
 .competitions__actions {
     display: grid;
     width: 100%;
-    justify-content: flex-end;
     margin-bottom: 40px;
-    //width: 224px;
+    grid-template-columns: 48px 224px;
+    justify-content: space-between;
+    // width: 224px;
     height: 48px;
     padding: 4px, 16px, 4px, 16px;
     gap: 10px;
+    
     font-family: Bert Sans;
     font-size: 16px;
     font-weight: 400;
@@ -660,5 +717,15 @@ onActivated(async () => {
     line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
+}
+.horizontal__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    // margin-bottom: 12px;
+    input {
+        width: 100%;
+        height: 100%;
+    }
 }
 </style>
