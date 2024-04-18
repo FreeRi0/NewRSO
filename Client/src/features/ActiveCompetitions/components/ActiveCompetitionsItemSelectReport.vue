@@ -7,7 +7,7 @@
                         class="cursor_redirect"
                         @click="clickIndicator(report.indicator)"
                     >
-                        {{ indicator.name[report.indicator] }}
+                        {{ indicator.name[report.indicator - 1] }}
                     </p>
                 </div>
             </div>
@@ -149,16 +149,20 @@ const onCheckbox = (e) => {
 
 const getCompetition = async () => {
     try {
-        const { data } = await HTTP.get(
-            `/competitions/${props.report.competition}/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+        if (props.report.detachment_report) {
+            competition.value = props.report.detachment_report.competition;
+        } else {
+            const { data } = await HTTP.get(
+                `/competitions/${props.report.competition}/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        );
-        competition.value = data;
+            );
+            competition.value = data;
+        }
     } catch (e) {
         console.log(`getCompetitions error`, e);
     }
@@ -166,16 +170,20 @@ const getCompetition = async () => {
 
 const getDetachmentData = async () => {
     try {
-        const { data } = await HTTP.get(
-            `/detachments/${props.report.detachment}/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+        if (props.report.detachment_report) {
+            detachmentData.value = props.report.detachment_report.detachment;
+        } else {
+            const { data } = await HTTP.get(
+                `/detachments/${props.report.detachment}/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        );
-        detachmentData.value = data;
+            );
+            detachmentData.value = data;
+        }
     } catch (e) {
         console.log(`getDetachmentData error`, e);
     }
