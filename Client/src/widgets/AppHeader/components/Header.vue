@@ -300,7 +300,9 @@ const userPages = computed(() => [
         name: 'active',
         show:
             roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.detachment_commander,
+            roleStore.roles?.detachment_commander || roleStore.myPositions.usercentralheadquarterposition?.position === "Начальник отдела реализации мероприятий по профессиональному обучению участников студенческих отрядов ЦШ"
+
+        ,
     },
     {
         title: 'Поиск участников',
