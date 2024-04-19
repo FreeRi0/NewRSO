@@ -859,7 +859,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/Safety',
                 meta: {
                     redirectTo: 'Safety',
-                    label: 'Охрана труда и пожарная безопасность',
+                    label: 'Охрана труда и техника безопасности',
                 },
                 children: [
                     {

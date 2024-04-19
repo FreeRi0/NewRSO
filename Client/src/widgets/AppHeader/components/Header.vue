@@ -331,7 +331,7 @@ const userPages = computed(() => [
             roleStore.roles.centralheadquarter_commander,
     },
     {
-        title: 'Обучение по охране труда и технике безопасности',
+        title: 'Охрана труда и техника безопасности',
         name: 'Safety',
         show:
             roleStore.status.is_commander_detachment ||
