@@ -144,7 +144,7 @@ const onCompetition = () => {
 };
 
 const onCheckbox = (e) => {
-    emit('select', props.competition, e.target.checked);
+    emit('select', props.report, e.target.checked);
 };
 
 const getCompetition = async () => {

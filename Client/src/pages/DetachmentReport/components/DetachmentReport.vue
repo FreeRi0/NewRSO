@@ -222,10 +222,11 @@ const getMainResults = async () => {
                     : 'Рейтинг еще не сформирован',
             );
             mainResults.value.data.push(
-                `Сумма мест отряда ${data.partner_detachment}`,
+                `Сумма мест отряд «${data.partner_detachment.name}»`,
             );
             console.log(mainResults.value);
         }
+        console.log(mainResults.value);
     } catch (e) {
         console.log('getMainResults error', e);
     }
