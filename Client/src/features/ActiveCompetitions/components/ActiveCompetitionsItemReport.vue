@@ -65,7 +65,7 @@
             </div>
 
             <div class="horizontal-item__wrapper competition__nomination">
-                {{ detachmentData ? 'Дебют' : 'Тандем' }}
+                {{ isTandem ? 'Тандем' : 'Дебют' }}
             </div>
         </div>
     </div>
@@ -104,6 +104,8 @@ const indicator = {
 
 const detachmentData = ref({});
 const competition = ref({});
+
+const isTandem = ref(false);
 
 const router = useRouter();
 
@@ -199,6 +201,24 @@ const getDetachmentData = async () => {
     }
 };
 
+const getIsTandemInfo = async () => {
+    try {
+        const { data } = await HTTP.get(
+            `/detachments/${props.report.detachment}/competitions/1/is_tandem/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        console.log(data);
+        isTandem.value = data.is_tandem;
+    } catch (e) {
+        console.log(`getIsTandemInfo error`, e);
+    }
+};
+
 watch(
     () => props.report.selected,
     (newSelected) => {
@@ -207,6 +227,7 @@ watch(
 );
 
 onMounted(() => {
+    getIsTandemInfo();
     getCompetition();
     getDetachmentData();
 });

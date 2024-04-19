@@ -73,6 +73,8 @@ import { HTTP } from '@app/http';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
+const isTandem = ref(false);
+
 const detachmentData = ref({});
 const competition = ref();
 const indicator = {
@@ -189,8 +191,26 @@ const getDetachmentData = async () => {
     }
 };
 
+const getIsTandemInfo = async () => {
+    try {
+        const { data } = await HTTP.get(
+            `/detachments/${props.report.detachment}/competitions/1/is_tandem/`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        console.log(data);
+        isTandem.value = data.is_tandem;
+    } catch (e) {
+        console.log(`getIsTandemInfo error`, e);
+    }
+};
+
 onMounted(async () => {
-    console.log(props.report);
+    await getIsTandemInfo();
     await getCompetition();
     await getDetachmentData();
 });
