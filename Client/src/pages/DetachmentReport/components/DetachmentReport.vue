@@ -164,14 +164,19 @@ const getPostitions = async () => {
                 }
             }
         } catch (e) {
-            if (e?.request?.status == 400) {
-                resultData.value.places[index - 1] =
-                    'Рейтинг еще не сформирован';
-                //console.log(`${index}: ${e.request.response}`);
-            } else if (e?.request?.status == 404) {
-                resultData.value.places[index - 1] = 'Данные не отправлены';
-                //console.log(`${index}: ${e.request.response}`);
-                //console.log(e);
+            // if (e?.request?.status == 400) {
+            //     resultData.value.places[index - 1] =
+            //         'Рейтинг еще не сформирован';
+            //     console.log(`${index}: ${e.request.response}`);
+            // } else
+            if (e?.request?.status == 404) {
+                if (e.request.response) {
+                    resultData.value.places[index - 1] =
+                        'Рейтинг еще не сформирован';
+                } else
+                    resultData.value.places[index - 1] = 'Данные не отправлены';
+                console.log(`${index}: ${e.request.response}`);
+                console.log(e);
             } else {
                 console.log(`!!!\n${index}: getPostions error`, e);
             }
@@ -222,10 +227,10 @@ const getMainResults = async () => {
                     : 'Рейтинг еще не сформирован',
             );
             mainResults.value.data.push(
-                `Сумма мест отряда ${data.partner_detachment}`,
+                `Сумма мест отряд «${data.partner_detachment.name}»`,
             );
-            console.log(mainResults.value);
         }
+        console.log(mainResults.value);
     } catch (e) {
         console.log('getMainResults error', e);
     }

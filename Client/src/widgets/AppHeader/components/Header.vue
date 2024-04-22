@@ -27,11 +27,11 @@
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
                         </li>
-                        <li class="header__nav-item">
+                        <!-- <li class="header__nav-item">
                             <a class="header__nav-link" href="/actionSquads">
                                 Мероприятия
                             </a>
-                        </li>
+                        </li> -->
                         <li class="header__nav-item competition__nav-item">
                             <a class="header__nav-link competition__link" href="/Competition">
                                 Конкурс
@@ -179,7 +179,7 @@ const props = defineProps({
 
 const emit = defineEmits(['changeReg']);
 
-const roleStore = useRoleStore();
+c
 const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
 const squadsStore = useSquadsStore();
@@ -300,7 +300,9 @@ const userPages = computed(() => [
         name: 'active',
         show:
             roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.detachment_commander,
+            roleStore.roles?.detachment_commander || roleStore.myPositions.usercentralheadquarterposition?.position === "Начальник отдела реализации мероприятий по профессиональному обучению участников студенческих отрядов ЦШ"
+
+        ,
     },
     {
         title: 'Поиск участников',
@@ -332,11 +334,10 @@ const userPages = computed(() => [
     },
 
     {
-        title: 'Обучение по охране труда и технике безопасности',
+        title: 'Охрана труда и техника безопасности',
         name: 'Safety',
         show:
-            roleStore.status.is_commander_detachment ||
-            roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))
+            true
 
     },
 

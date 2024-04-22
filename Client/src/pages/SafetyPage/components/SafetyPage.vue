@@ -1,6 +1,6 @@
 <template>
     <div class="container corpuniver">
-        <h1 class="title title--mb">Обучение по охране труда и технике безопасности</h1>
+        <h1 class="title title--mb">Охрана труда и техника безопасности</h1>
 
         <div class="corpuniver__image-box">
             <img src="@app/assets/SafetyBg.png" alt="Логотип конкурса" />
@@ -109,8 +109,8 @@
             </p>
             <p class="text corpuniver__text-about">
                 Вы узнаете, с чего начинается охрана труда в РСО, ознакомитесь с основами безопасного выполнения видов
-                работ, несчастными случаями на производстве и как избежать их наступления, а также как правильно
-                воспользоваться огнетушителем. Успешного обучения и качественного применения полученных знаний на
+                работ, несчастными случаями на производстве и как избежать их наступления. Успешного обучения и
+                качественного применения полученных знаний на
                 практике. 
             </p>
         </div>
@@ -143,7 +143,8 @@
         </h2>
         <div class="corpuniver__video" @click="playVideo(3)">
             <img src="@app/assets/lso/lesson2.png" v-show="showVideo[3] == false">
-            <iframe  v-show="showVideo[3] == true" class="corpuniver__iframe video_3" src="https://www.youtube.com/embed/oZeFr6_b3UU?enablejsapi=1"
+            <iframe v-show="showVideo[3] == true" class="corpuniver__iframe video_3"
+                src="https://www.youtube.com/embed/oZeFr6_b3UU?enablejsapi=1"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
@@ -153,7 +154,8 @@
         </h2>
         <div class="corpuniver__video" @click="playVideo(4)">
             <img src="@app/assets/lso/lesson3_1.png" v-show="showVideo[4] == false">
-            <iframe v-show="showVideo[4] == true" class="corpuniver__iframe video_4" src="https://www.youtube.com/embed/TOSphxyF1Sk?enablejsapi=1"
+            <iframe v-show="showVideo[4] == true" class="corpuniver__iframe video_4"
+                src="https://www.youtube.com/embed/TOSphxyF1Sk?enablejsapi=1"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
@@ -162,8 +164,9 @@
             Занятие 3 «Основные виды инструктажей при приеме на работу. Часть 2»
         </h2>
         <div class="corpuniver__video" @click="playVideo(5)">
-            <img src="@app/assets/lso/lesson3_2.png" v-show="showVideo[5] == false"/>
-            <iframe v-show="showVideo[5] == true" class="corpuniver__iframe video_5" src="https://www.youtube.com/embed/SjRDDpy3LI4&t=10s?enablejsapi=1"
+            <img src="@app/assets/lso/lesson3_2.png" v-show="showVideo[5] == false" />
+            <iframe v-show="showVideo[5] == true" class="corpuniver__iframe video_5"
+                src="https://www.youtube.com/embed/SjRDDpy3LI4&t=10s?enablejsapi=1"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
@@ -172,8 +175,9 @@
             Занятие 4 «Несчастный случай на производстве. Часть 1»
         </h2>
         <div class="corpuniver__video" @click="playVideo(6)">
-            <img src="@app/assets/lso/lesson4_1.png" v-show="showVideo[6] == false"/>
-            <iframe v-show="showVideo[6] == true" class="corpuniver__iframe video_6" src="https://www.youtube.com/embed/jMblehZ2wuY&t=18s?enablejsapi=1"
+            <img src="@app/assets/lso/lesson4_1.png" v-show="showVideo[6] == false" />
+            <iframe v-show="showVideo[6] == true" class="corpuniver__iframe video_6"
+                src="https://www.youtube.com/embed/jMblehZ2wuY&t=18s?enablejsapi=1"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
@@ -182,19 +186,32 @@
             Занятие 4 «Несчастный случай на производстве. Часть 2»
         </h2>
         <div class="corpuniver__video" @click="playVideo(7)">
-            <img src="@app/assets/lso/lesson4_2.png" v-show="showVideo[7] == false"/>
-            <iframe v-show="showVideo[7] == true" class="corpuniver__iframe video_7" src="https://www.youtube.com/embed/8fGUjz36o3A?enablejsapi=1"
+            <img src="@app/assets/lso/lesson4_2.png" v-show="showVideo[7] == false" />
+            <iframe v-show="showVideo[7] == true" class="corpuniver__iframe video_7"
+                src="https://www.youtube.com/embed/8fGUjz36o3A?enablejsapi=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+
+        <h2 id="video_8" class="corpuniver__title-h2">
+            Занятие 5 «Первая помощь»
+        </h2>
+        <div class="corpuniver__video">
+
+            <iframe class="corpuniver__iframe" src="https://vk.com/video_ext.php?oid=-223571150&id=456239108"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
 
         <div id="testing" class="corpuniver__documents-test">
             <p class="text corpuniver__documents-description-test">
-                Итоговую аттестацию можно пройти с 22 апреля по 15 мая 2024 года (допускается 1 пересдача) онлайн
-                в профиле Личного кабинета.
+                Итоговую аттестацию можно пройти с 22 апреля по 15 мая 2024 года (допускается 1 пересдача)
                 Для прохождения тестирования необходимо набрать не менее 60 баллов. Удачи!
             </p>
-            <router-link :to="{ name: 'testPage' }">
+            <router-link
+                v-if="roleStore.status.is_commander_detachment ||
+                    roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))"
+                :to="{ name: 'safety' }">
                 <Button label="Начать тестирование" class="corpuniver__documents-btn"></Button>
             </router-link>
         </div>
@@ -203,7 +220,13 @@
 <script setup>
 import { ref } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
-const showVideo = ref({1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false});
+import { useRoleStore } from '@layouts/store/role';
+import { useUserStore } from '@features/store/index';
+import { useSquadsStore } from '@features/store/squads';
+const roleStore = useRoleStore();
+const squadsStore = useSquadsStore();
+const userStore = useUserStore();
+const showVideo = ref({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false });
 
 
 function playVideo(video) {
