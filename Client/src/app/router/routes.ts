@@ -727,17 +727,16 @@ const routes: RouteRecordRaw[] = [
                             redirectTo: 'testPage',
                             label: 'Тестирование по обучению',
                         },
-                        component: () =>
-                            import(
-                                '@pages/TestingPages/components/TestingPages.vue'
-                            ),
-                        // children: [
-                        //     {
-                        //         name: 'testPage',
-                        //         path: ':name',
-
-                        //     },
-                        // ],
+                        children: [
+                            {
+                                name: 'testPage',
+                                path: ':name',
+                                component: () =>
+                                    import(
+                                        '@pages/TestingPages/components/TestingPages.vue'
+                                    ),
+                            },
+                        ],
                     },
                 ],
             },
