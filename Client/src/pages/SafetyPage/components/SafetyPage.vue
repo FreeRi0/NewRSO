@@ -203,15 +203,14 @@
             </iframe>
         </div>
 
-        <div id="testing" class="corpuniver__documents-test">
+        <div id="testing" class="corpuniver__documents-test"
+            v-if="roleStore.status.is_commander_detachment ||
+                roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))">
             <p class="text corpuniver__documents-description-test">
                 Итоговую аттестацию можно пройти с 22 апреля по 15 мая 2024 года (допускается 1 пересдача)
                 Для прохождения тестирования необходимо набрать не менее 60 баллов. Удачи!
             </p>
-            <router-link
-                v-if="roleStore.status.is_commander_detachment ||
-                    roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))"
-                :to="{ name: 'safety' }">
+            <router-link :to="{ name: 'safety' }">
                 <Button label="Начать тестирование" class="corpuniver__documents-btn"></Button>
             </router-link>
         </div>
