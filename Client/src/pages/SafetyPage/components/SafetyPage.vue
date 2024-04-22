@@ -210,7 +210,7 @@
                 Итоговую аттестацию можно пройти с 22 апреля по 15 мая 2024 года (допускается 1 пересдача)
                 Для прохождения тестирования необходимо набрать не менее 60 баллов. Удачи!
             </p>
-            <router-link :to="{ name: 'safety' }">
+            <router-link :to="{ name: 'testPage', params: { name: 'safety' } }">
                 <Button label="Начать тестирование" class="corpuniver__documents-btn"></Button>
             </router-link>
         </div>
@@ -237,6 +237,8 @@ function playVideo(video) {
 
 <style lang="scss" scoped>
 .corpuniver {
+    padding-bottom: 60px;
+
     &__title-h2 {
         font-family: Akrobat;
         font-size: 32px;
@@ -340,7 +342,6 @@ function playVideo(video) {
 
     &__documents-test {
         display: block;
-        margin-bottom: 60px;
         border: 1px solid #b6b6b6;
         border-radius: 10px;
         margin-top: 80px;
