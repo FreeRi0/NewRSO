@@ -178,8 +178,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['changeReg']);
-
-c
+const roleStore = useRoleStore();
 const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
 const squadsStore = useSquadsStore();
