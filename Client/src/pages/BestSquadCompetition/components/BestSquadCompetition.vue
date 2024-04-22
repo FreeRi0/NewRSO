@@ -153,11 +153,7 @@
             </div>
         </div>
 
-        <div class="d-flex competition__safety-wrapper" v-if="
-            roleStore.status.is_commander_detachment ||
-            roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))
-
-        ">
+        <div class="d-flex competition__safety-wrapper">
 
             <div class="competition__safety-text">
                 <p>

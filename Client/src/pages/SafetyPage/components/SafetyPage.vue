@@ -198,8 +198,7 @@
         </h2>
         <div class="corpuniver__video">
 
-            <iframe class="corpuniver__iframe"
-                src="https://vk.com/video_ext.php?oid=-223571150&id=456239108"
+            <iframe class="corpuniver__iframe" src="https://vk.com/video_ext.php?oid=-223571150&id=456239108"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
@@ -209,7 +208,10 @@
                 Итоговую аттестацию можно пройти с 22 апреля по 15 мая 2024 года (допускается 1 пересдача)
                 Для прохождения тестирования необходимо набрать не менее 60 баллов. Удачи!
             </p>
-            <router-link :to="{ name: 'testPage' }">
+            <router-link
+                v-if="roleStore.status.is_commander_detachment ||
+                    roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))"
+                :to="{ name: 'safety' }">
                 <Button label="Начать тестирование" class="corpuniver__documents-btn"></Button>
             </router-link>
         </div>
@@ -218,6 +220,12 @@
 <script setup>
 import { ref } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
+import { useRoleStore } from '@layouts/store/role';
+import { useUserStore } from '@features/store/index';
+import { useSquadsStore } from '@features/store/squads';
+const roleStore = useRoleStore();
+const squadsStore = useSquadsStore();
+const userStore = useUserStore();
 const showVideo = ref({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false });
 
 
