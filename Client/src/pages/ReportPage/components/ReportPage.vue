@@ -72,16 +72,16 @@ s
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <label
+                                <!-- <label
                                     v-if="report[1]?.place"
                                     class="form__label"
                                     >{{ report[1]?.place }}
-                                </label>
-                                <label v-else class="form__label"
+                                </label> -->
+                                <label class="form__label"
                                     >Численность членов линейного студенческого
                                     отряда в соответствии с объемом уплаченных
                                     членских взносов рассчитывается
-                                    автоматически по состоянию на 15 апреля 2024
+                                    автоматически по состоянию на 30 апреля 2024
                                     года.
                                 </label>
                             </div>
@@ -255,15 +255,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[2].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -601,7 +601,10 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="
+                                                            report[5]
+                                                                .disabledBtn
+                                                        "
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -618,7 +621,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[5].disabledBtn"
                                         @click="deleteBlock(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -645,7 +648,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[5].disabledBtn"
                                 class="form__field add-block"
                                 @click="addNewBlock"
                             >
@@ -653,15 +656,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[5].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -793,15 +796,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[61].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -870,15 +873,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[62].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -919,15 +922,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[63].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -971,15 +974,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[64].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1045,15 +1048,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[65].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1094,15 +1097,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[66].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1141,15 +1144,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[67].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1192,15 +1195,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[68].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1406,7 +1409,10 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="
+                                                            report[7]
+                                                                .disabledBtn
+                                                        "
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -1423,7 +1429,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[7].disabledBtn"
                                         @click="deleteBlock7(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1450,7 +1456,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[7].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock7"
                             >
@@ -1458,15 +1464,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[7].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1613,7 +1619,7 @@ s
                                             </div>
                                         </template>
                                         <div
-                                            v-if="!disabledBtn"
+                                            v-if="!report[8].disabledBtn"
                                             class="form__field add-block"
                                             @click="AddLink8(index)"
                                         >
@@ -1672,7 +1678,10 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="
+                                                            report[8]
+                                                                .disabledBtn
+                                                        "
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -1689,7 +1698,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[8].disabledBtn"
                                         @click="deleteBlock8(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1716,7 +1725,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[8].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock8"
                             >
@@ -1724,15 +1733,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[8].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1904,7 +1913,10 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="
+                                                            report[9]
+                                                                .disabledBtn
+                                                        "
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -1921,7 +1933,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[9].disabledBtn"
                                         @click="deleteBlock9(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1948,7 +1960,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[9].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock9"
                             >
@@ -1956,15 +1968,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[9].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -2136,7 +2148,10 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="
+                                                            report[10]
+                                                                .disabledBtn
+                                                        "
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -2153,7 +2168,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[10].disabledBtn"
                                         @click="deleteBlock10(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2180,7 +2195,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[10].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock10"
                             >
@@ -2188,15 +2203,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[10].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -2371,7 +2386,10 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="
+                                                            report[11]
+                                                                .disabledBtn
+                                                        "
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -2388,7 +2406,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[11].disabledBtn"
                                         @click="deleteBlock11(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2415,7 +2433,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[11].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock11"
                             >
@@ -2423,15 +2441,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[11].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -2601,7 +2619,10 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="
+                                                            report[12]
+                                                                .disabledBtn
+                                                        "
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -2618,7 +2639,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[12].disabledBtn"
                                         @click="deleteBlock12(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2645,7 +2666,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[12].disabledBtn"
                                 class="form__field add-block"
                                 @click="addBlock12"
                             >
@@ -2653,15 +2674,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[12].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -2780,7 +2801,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[13].disabledBtn"
                                         @click="deleteBlock13(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2807,7 +2828,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[13].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock13"
                             >
@@ -2815,15 +2836,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[13].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -2950,7 +2971,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[14].disabledBtn"
                                         @click="deleteBlock14(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2977,7 +2998,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[14].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock14"
                             >
@@ -2985,15 +3006,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[14].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3162,7 +3183,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[15].disabledBtn"
                                         @click="deleteBlock15(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -3189,7 +3210,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[15].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock15"
                             >
@@ -3197,15 +3218,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[15].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3425,15 +3446,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[16].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3554,7 +3575,7 @@ s
                                 </div>
                                 <div type="button">
                                     <svg
-                                        v-if="!disabledBtn"
+                                        v-if="!report[17].disabledBtn"
                                         @click="deleteBlock17(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -3581,7 +3602,7 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
+                                v-if="!report[17].disabledBtn"
                                 class="form__field add-block"
                                 @click="addNewBlockQ17"
                             >
@@ -3589,15 +3610,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[17].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3708,15 +3729,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[18].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3823,15 +3844,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[19].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -4023,15 +4044,15 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
+                                    <!-- <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular>
+                                    ></v-progress-circular> -->
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[20].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -4224,6 +4245,7 @@ const AddBlock15 = () => {
     report.value[15].grants_data.push({
         name: '',
         status: '',
+        author_name: '',
         competition_link: '',
         prove_link: '',
     });
@@ -4279,26 +4301,34 @@ const report = ref({
         commissioner_achievement: null,
         commander_link: '',
         commissioner_link: '',
+        disabledBtn: false,
     },
     3: { place: '' },
     4: { place: '' },
     5: {
         participants_data: [{ name: '', document: null }],
+        disabledBtn: false,
     },
     61: {
         first_may_demonstration: null,
         first_may_demonstration_participants: '',
+        disabledBtn: false,
     },
-    62: { patriotic_action: null, patriotic_action_participants: '' },
-    63: { safety_work_week: null },
-    64: { commander_commissioner_school: null },
+    62: {
+        patriotic_action: null,
+        patriotic_action_participants: '',
+        disabledBtn: false,
+    },
+    63: { safety_work_week: null, disabledBtn: false },
+    64: { commander_commissioner_school: null, disabledBtn: false },
     65: {
         working_semester_opening: null,
         working_semester_opening_participants: '',
+        disabledBtn: false,
     },
-    66: { creative_festival: null },
-    67: { spartakiad: null },
-    68: { professional_competition: null },
+    66: { creative_festival: null, disabledBtn: false },
+    67: { spartakiad: null, disabledBtn: false },
+    68: { professional_competition: null, disabledBtn: false },
     7: {
         participation_data: [
             {
@@ -4308,6 +4338,7 @@ const report = ref({
                 certificate_scans: null,
             },
         ],
+        disabledBtn: false,
     },
     8: {
         participation_data: [
@@ -4318,6 +4349,7 @@ const report = ref({
                 certificate_scans: null,
             },
         ],
+        disabledBtn: false,
     },
     9: {
         participation_data: [
@@ -4326,6 +4358,7 @@ const report = ref({
                 certificate_scans: null,
             },
         ],
+        disabledBtn: false,
     },
     10: {
         participation_data: [
@@ -4334,6 +4367,7 @@ const report = ref({
                 certificate_scans: null,
             },
         ],
+        disabledBtn: false,
     },
     11: {
         participation_data: [
@@ -4342,14 +4376,22 @@ const report = ref({
                 certificate_scans: null,
             },
         ],
+        disabledBtn: false,
     },
     12: {
         participation_data: [
             { event_name: '', prize_place: null, certificate_scans: null },
         ],
+        disabledBtn: false,
     },
-    13: { organization_data: [{ event_type: '', event_link: '' }] },
-    14: { q14_labor_projects: [{ lab_project_name: '', amount: '' }] },
+    13: {
+        organization_data: [{ event_type: '', event_link: '' }],
+        disabledBtn: false,
+    },
+    14: {
+        q14_labor_projects: [{ lab_project_name: '', amount: '' }],
+        disabledBtn: false,
+    },
     15: {
         grants_data: [
             {
@@ -4360,6 +4402,7 @@ const report = ref({
                 prove_link: '',
             },
         ],
+        disabledBtn: false,
     },
     16: {
         link_vk_commander: '',
@@ -4367,10 +4410,11 @@ const report = ref({
         vk_rso_number_subscribers: '',
         link_vk_detachment: '',
         vk_detachment_number_subscribers: '',
+        disabledBtn: false,
     },
-    17: { source_data: [{ source_name: '', link: '' }] },
-    18: { participants_number: '' },
-    19: { safety_violations: '' },
+    17: { source_data: [{ source_name: '', link: '' }], disabledBtn: false },
+    18: { participants_number: '', disabledBtn: false },
+    19: { safety_violations: '', disabledBtn: false },
     20: {
         link_emblem: '',
         link_emblem_img: '',
@@ -4378,6 +4422,7 @@ const report = ref({
         link_flag_img: '',
         link_banner: '',
         link_banner_img: '',
+        disabledBtn: false,
     },
 });
 
@@ -4390,13 +4435,9 @@ const selectCertScans = (event, index) => {
     );
 };
 
-// let url5 = report.value[5].participants_data.document;
-// console.log(decodeURIComponent(url5));
-
-const disabledBtn = ref(false);
 const getParameters = async (id) => {
     try {
-        isLoading.value = true;
+        // isLoading.value = true;
         const response = await HTTP.get(
             `/competitions/${route.params.competition_pk}/reports/q${id}/` +
                 (id == 1 || id == 3 || id == 4 ? 'get-place/' : 'me/'),
@@ -4413,6 +4454,22 @@ const getParameters = async (id) => {
                 id == 6 &&
                 route.params.id == response.data.results[0].detachment
             ) {
+                if (response.data.results[0].first_may_demonstration)
+                    report.value[61].disabledBtn = true;
+                if (response.data.results[0].patriotic_action_participants)
+                    report.value[62].disabledBtn = true;
+                if (response.data.results[0].safety_work_week)
+                    report.value[63].disabledBtn = true;
+                if (response.data.results[0].commander_commissioner_school)
+                    report.value[64].disabledBtn = true;
+                if (response.data.results[0].working_semester_opening)
+                    report.value[65].disabledBtn = true;
+                if (response.data.results[0].creative_festival)
+                    report.value[66].disabledBtn = true;
+                if (response.data.results[0].spartakiad)
+                    report.value[67].disabledBtn = true;
+                if (response.data.results[0].professional_competition)
+                    report.value[68].disabledBtn = true;
                 report.value[61].first_may_demonstration =
                     response.data.results[0].first_may_demonstration;
                 report.value[61].first_may_demonstration_participants =
@@ -4436,18 +4493,19 @@ const getParameters = async (id) => {
                 report.value[68].professional_competition =
                     response.data.results[0].professional_competition;
             } else {
-                if (report.value[id].participation_data)
+                if (report.value[id].participation_data) {
                     report.value[id].participation_data = response.data.results;
-                else report.value[id] = response.data.results[0];
+                } else report.value[id] = response.data.results[0];
+                report.value[id].disabledBtn = true;
             }
-            disabledBtn.value = true;
-        } else disabledBtn.value = false;
-        isLoading.value = false;
+        }
+        // isLoading.value = false;
     } catch (error) {
         isError.value = error.response.data;
     }
 };
 const postParameters = async (id) => {
+    if (report.value[id].disabledBtn) return false;
     try {
         let fd = report.value[id];
         let type = 'application/json';
@@ -4518,7 +4576,7 @@ const postParameters = async (id) => {
             showConfirmButton: false,
             timer: 1500,
         });
-        disabledBtn.value = true;
+        report.value[id].disabledBtn = true;
     } catch (error) {
         isError.value = error.response.data;
         isLoading.value = false;
