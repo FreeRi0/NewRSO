@@ -217,7 +217,7 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useUserStore } from '@features/store/index';
@@ -233,6 +233,10 @@ function playVideo(video) {
     iframeElement.src += "&amp;autoplay=1";
     showVideo.value[video] = true;
 }
+
+onMounted(async () => {
+    await squadsStore.getCompetitionSquads();
+})
 </script>
 
 <style lang="scss" scoped>
