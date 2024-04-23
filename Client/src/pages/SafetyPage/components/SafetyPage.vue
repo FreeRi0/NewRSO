@@ -202,8 +202,6 @@
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
-        <pre>id{{ userStore.currentUser.detachment_id }}</pre>
-        <!-- <pre>name{{ roleStore.myPositions.userdetachmentposition.headquarter.name }}</pre> -->
         <div id="testing" class="corpuniver__documents-test"
             v-if="roleStore.status.is_commander_detachment ||
                 roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))">
