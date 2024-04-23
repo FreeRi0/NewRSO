@@ -226,8 +226,8 @@ const roleStore = useRoleStore();
 const squadsStore = useSquadsStore();
 const userStore = useUserStore();
 const showVideo = ref({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false });
-let id = userStore.currentUser.detachment_id;
-let name = squadsStore.squad.name;
+// let id = userStore.currentUser.detachment_id;
+// let name = squadsStore.squad.name;
 
 
 function playVideo(video) {
