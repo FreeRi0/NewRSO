@@ -4,7 +4,7 @@
             <h1 class="title title--lso">
                 {{ eventsStore.event.name }}
             </h1>
-            <div class="banner_wrap">
+            <div class="banner_wrap" id="ankor">
                 <div>
                     <img v-if="eventsStore.event.banner" :src="eventsStore.event.banner" alt="Баннер мероприятия" />
                     <v-progress-circular class="circleLoader" v-else indeterminate color="blue"></v-progress-circular>
@@ -163,7 +163,7 @@
                         </div>
                     </li>
                 </ul>
-                <p class="text-center" v-else>Участников не найдено..</p>
+                <p class="text-center mt-10" v-else>Участников не найдено..</p>
                 <div class="squad-participants__link">
                     <div v-if="eventsStore.members.length > 6" class="squad-participants__link">
                         <router-link :to="{
@@ -263,7 +263,7 @@
                 eventsStore.totalEvents &&
                 eventsStore.totalEvents > eventsStore.eventsLimit
             ">
-                <Button @click="next" v-if="eventsStore.events.length < eventsStore.totalEvents"
+                <Button @click="next" class="event__show_btn" v-if="eventsStore.events.length < eventsStore.totalEvents"
                     label="Показать еще"></Button>
                 <Button @click="prev" v-else label="Свернуть все"></Button>
             </template>
@@ -398,6 +398,11 @@ watch(
         font-family: 'Akrobat';
         margin: 40px 0px;
     }
+    &__show {
+        &_btn {
+            margin-top: 60px;
+        }
+    }
 
     &_item {
         max-width: 280px;
@@ -515,8 +520,9 @@ watch(
 .eventsScale {
     border: 1px solid #35383f;
     border-radius: 18px;
-    padding: 2px 6px;
+    padding: 2px 12px;
     font-size: 14px;
+    height: 26px;
 }
 
 .text--organizer {
