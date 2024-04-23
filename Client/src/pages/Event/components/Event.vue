@@ -165,12 +165,12 @@
                 </ul>
                 <p class="text-center mt-10" v-else>Участников не найдено..</p>
                 <div class="squad-participants__link">
-                    <div v-if="eventsStore.members.length > 6" class="squad-participants__link">
+                    <div v-if="eventsStore.members.length >= 6" class="squad-participants__link">
                         <router-link :to="{
                             name: 'actionparticipants',
                             params: { id: eventsStore.event.id },
                         }">
-                            <div class="squad__wrapper-route">
+                            <div class="squad__wrapper-route text-center">
                                 Показать всех
                             </div>
                         </router-link>
@@ -197,12 +197,12 @@
                     </li>
                 </ul>
                 <p class="text-center mt-10" v-else>Участников не найдено...</p>
-                <div v-if="eventsStore.applications.length > 6" class="squad-participants__link">
+                <div v-if="eventsStore.applications.length >= 6" class="squad-participants__link">
                     <router-link :to="{
                         name: 'actionparticipants',
                         params: { id: eventsStore.event.id },
                     }">
-                        <div class="squad__wrapper-route">
+                        <div class="squad__wrapper-route text-center">
                             Показать всех
                         </div>
                     </router-link>
