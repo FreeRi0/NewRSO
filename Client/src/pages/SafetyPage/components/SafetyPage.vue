@@ -204,7 +204,7 @@
         </div>
         <div id="testing" class="corpuniver__documents-test"
             v-if="roleStore.status.is_commander_detachment ||
-                roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))">
+                roleStore.status.is_commissar_detachment  || (squadsStore.competitionSquads.find((item) => item.detachment?.id === userStore.currentUser.detachment_id || item.junior_detachment?.id === userStore.currentUser.detachment_id))">
             <p class="text corpuniver__documents-description-test"></p>
             <p class="text corpuniver__documents-description-test">
                 Итоговую аттестацию можно пройти с 22 апреля по 15 мая 2024 года (допускается 1 пересдача)
@@ -226,9 +226,8 @@ const roleStore = useRoleStore();
 const squadsStore = useSquadsStore();
 const userStore = useUserStore();
 const showVideo = ref({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false });
-// let id = userStore.currentUser.detachment_id;
-// let name = squadsStore.squad.name;
-// let namme = 2;
+let id = userStore.currentUser.detachment_id;
+let name = squadsStore.squad.name;
 
 
 function playVideo(video) {
@@ -249,11 +248,11 @@ function playVideo(video) {
 //     }
 // );
 
-onMounted(() => {
+onMounted(async() => {
     // roleStore.getMyPositions();
     // squadsStore.getSquadId(userStore.currentUser.detachment_id);
     // squadsStore.searchCompetitionSquads(name);
-    squadsStore.getCompetitionSquads();
+    await squadsStore.getCompetitionSquads();
 })
 </script>
 
