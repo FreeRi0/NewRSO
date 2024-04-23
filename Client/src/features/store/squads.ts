@@ -131,9 +131,6 @@ export const useSquadsStore = defineStore('squads', {
             const searchCompSquads = await HTTP.get(
                 `/competitions/1/participants/?search=${name}`,
                 {
-                    params: {
-                        limit: this.CompetitionsLimit,
-                    },
                     headers: {
                         'Content-Type': 'application/json',
                     },
