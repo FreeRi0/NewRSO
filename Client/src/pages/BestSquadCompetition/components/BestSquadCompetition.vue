@@ -374,7 +374,7 @@ const closeSendApplication = () => {
 
 onMounted(async () => {
     await getUserCommander();
-    await squadsStore.getCompetitionSquads();
+
     await getCompetition();
     await getSquadStatus();
     await getMeSquad();
