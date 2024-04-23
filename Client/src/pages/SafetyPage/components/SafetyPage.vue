@@ -202,7 +202,8 @@
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
-
+        <pre>id{{ userStore.currentUser.detachment_id }}</pre>
+        <!-- <pre>name{{ roleStore.myPositions.userdetachmentposition.headquarter.name }}</pre> -->
         <div id="testing" class="corpuniver__documents-test"
             v-if="roleStore.status.is_commander_detachment ||
                 roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))">
@@ -218,7 +219,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useUserStore } from '@features/store/index';
@@ -227,6 +228,9 @@ const roleStore = useRoleStore();
 const squadsStore = useSquadsStore();
 const userStore = useUserStore();
 const showVideo = ref({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false });
+// let id = userStore.currentUser.detachment_id;
+// let name = squadsStore.squad.name;
+// let namme = 2;
 
 
 function playVideo(video) {
@@ -235,8 +239,23 @@ function playVideo(video) {
     showVideo.value[video] = true;
 }
 
-onMounted(async () => {
-    await squadsStore.getCompetitionSquads();
+// watch(() => roleStore.myPositions,
+
+//     (newPos) => {
+//         if (Object.keys(roleStore.myPositions).length === 0) {
+//             return;
+//         }
+//         // getUserData();
+//         // getEducData();
+//         roleStore.getMyPositions();
+//     }
+// );
+
+onMounted(() => {
+    // roleStore.getMyPositions();
+    // squadsStore.getSquadId(userStore.currentUser.detachment_id);
+    // squadsStore.searchCompetitionSquads(name);
+    squadsStore.getCompetitionSquads();
 })
 </script>
 
