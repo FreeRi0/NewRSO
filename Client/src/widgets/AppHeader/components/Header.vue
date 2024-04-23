@@ -27,11 +27,11 @@
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
                         </li>
-                        <!-- <li class="header__nav-item">
+                        <li class="header__nav-item">
                             <a class="header__nav-link" href="/actionSquads">
                                 Мероприятия
                             </a>
-                        </li> -->
+                        </li>
                         <li class="header__nav-item competition__nav-item">
                             <a class="header__nav-link competition__link" href="/Competition">
                                 Конкурс
