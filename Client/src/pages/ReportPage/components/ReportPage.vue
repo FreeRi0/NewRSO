@@ -255,12 +255,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[2].disabledBtn"
@@ -345,12 +345,12 @@ s
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <label
+                                <!-- <label
                                     v-if="report[3]?.place"
                                     class="form__label"
                                     >{{ report[3]?.place }}
-                                </label>
-                                <label v-else class="form__label"
+                                </label> -->
+                                <label class="form__label"
                                     >Для получения баллов по данному показателю
                                     Командиру и Комиссару ЛСО необходимо пройти
                                     тестирование. Для прохождения теста
@@ -436,12 +436,12 @@ s
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <label
+                                <!-- <label
                                     v-if="report[4]?.place"
                                     class="form__label"
                                     >{{ report[4]?.place }}</label
-                                >
-                                <label v-else class="form__label"
+                                > -->
+                                <label class="form__label"
                                     >Для получения баллов по данному показателю
                                     участникам ЛСО необходимо пройти
                                     тестирование. Для прохождения теста
@@ -601,10 +601,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="
-                                                            report[5]
-                                                                .disabledBtn
-                                                        "
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -619,9 +616,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[5].disabledBtn"
                                         @click="deleteBlock(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -648,7 +644,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[5].disabledBtn"
                                 class="form__field add-block"
                                 @click="addNewBlock"
                             >
@@ -656,12 +651,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[5].disabledBtn"
@@ -777,7 +772,7 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 10"
-                                            :maxlength="100"
+                                            :maxlength="5"
                                             v-model:value="
                                                 report[61]
                                                     .first_may_demonstration_participants
@@ -789,19 +784,19 @@ s
                                                     .first_may_demonstration_participants
                                                     .length
                                             }}
-                                            / 100
+                                            / 5
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[61].disabledBtn"
@@ -854,7 +849,7 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 10"
-                                            :maxlength="100"
+                                            :maxlength="5"
                                             v-model:value="
                                                 report[62]
                                                     .patriotic_action_participants
@@ -873,12 +868,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[62].disabledBtn"
@@ -922,12 +917,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[63].disabledBtn"
@@ -974,12 +969,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[64].disabledBtn"
@@ -1029,7 +1024,7 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 10"
-                                            :maxlength="100"
+                                            :maxlength="5"
                                             v-model:value="
                                                 report[65]
                                                     .working_semester_opening_participants
@@ -1048,12 +1043,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[65].disabledBtn"
@@ -1097,12 +1092,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[66].disabledBtn"
@@ -1144,12 +1139,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[67].disabledBtn"
@@ -1195,12 +1190,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[68].disabledBtn"
@@ -1299,7 +1294,7 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
-                                            :maxlength="100"
+                                            :maxlength="150"
                                             v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
@@ -1315,7 +1310,7 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 5"
-                                            :maxlength="100"
+                                            :maxlength="5"
                                             v-model:value="
                                                 block.number_of_participants
                                             "
@@ -1341,11 +1336,45 @@ s
                                             v-for="(link, i) in block.links"
                                             :key="index + '_' + i"
                                         >
-                                            <Input
-                                                placeholder="Например, https://vk.com/cco_monolit"
-                                                :maxlength="100"
-                                                v-model:value="link.link"
-                                            />
+                                            <div class="form__field-link">
+                                                <Input
+                                                    placeholder="Например, https://vk.com/cco_monolit"
+                                                    :maxlength="100"
+                                                    v-model:value="link.link"
+                                                />
+                                                <div
+                                                    type="button"
+                                                    v-if="!block.is_verified"
+                                                >
+                                                    <svg
+                                                        @click="
+                                                            deleteLink7(index)
+                                                        "
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="24"
+                                                        height="24"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                    >
+                                                        <path
+                                                            d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                        <path
+                                                            d="M9 9L15 15"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                        <path
+                                                            d="M15 9L9 15"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                            </div>
+
                                             <div class="form__counter">
                                                 {{ link.link.length }} / 100
                                             </div>
@@ -1409,10 +1438,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="
-                                                            report[7]
-                                                                .disabledBtn
-                                                        "
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -1427,9 +1453,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[7].disabledBtn"
                                         @click="deleteBlock7(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1456,7 +1481,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[7].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock7"
                             >
@@ -1464,12 +1488,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[7].disabledBtn"
@@ -1609,17 +1633,50 @@ s
                                         <template
                                             v-for="(link, i) in block.links"
                                             :key="index + '_' + i"
-                                            ><Input
-                                                placeholder="Например, https://vk.com/cco_monolit"
-                                                :maxlength="100"
-                                                v-model:value="link.link"
-                                            />
+                                        >
+                                            <div class="form__field-link">
+                                                <Input
+                                                    placeholder="Например, https://vk.com/cco_monolit"
+                                                    :maxlength="100"
+                                                    v-model:value="link.link"
+                                                />
+                                                <div
+                                                    type="button"
+                                                    v-if="!block.is_verified"
+                                                >
+                                                    <svg
+                                                        @click="
+                                                            deleteLink8(index)
+                                                        "
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="24"
+                                                        height="24"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                    >
+                                                        <path
+                                                            d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                        <path
+                                                            d="M9 9L15 15"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                        <path
+                                                            d="M15 9L9 15"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                            </div>
                                             <div class="form__counter">
                                                 {{ link.link.length }} / 100
                                             </div>
                                         </template>
                                         <div
-                                            v-if="!report[8].disabledBtn"
                                             class="form__field add-block"
                                             @click="AddLink8(index)"
                                         >
@@ -1678,10 +1735,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="
-                                                            report[8]
-                                                                .disabledBtn
-                                                        "
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -1696,9 +1750,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[8].disabledBtn"
                                         @click="deleteBlock8(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1725,7 +1778,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[8].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock8"
                             >
@@ -1733,12 +1785,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[8].disabledBtn"
@@ -1913,10 +1965,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="
-                                                            report[9]
-                                                                .disabledBtn
-                                                        "
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -1931,9 +1980,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[9].disabledBtn"
                                         @click="deleteBlock9(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1960,7 +2008,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[9].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock9"
                             >
@@ -1968,12 +2015,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[9].disabledBtn"
@@ -2148,10 +2195,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="
-                                                            report[10]
-                                                                .disabledBtn
-                                                        "
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -2166,9 +2210,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[10].disabledBtn"
                                         @click="deleteBlock10(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2195,7 +2238,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[10].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock10"
                             >
@@ -2203,12 +2245,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[10].disabledBtn"
@@ -2386,10 +2428,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="
-                                                            report[11]
-                                                                .disabledBtn
-                                                        "
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -2404,9 +2443,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[11].disabledBtn"
                                         @click="deleteBlock11(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2433,7 +2471,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[11].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock11"
                             >
@@ -2441,12 +2478,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[11].disabledBtn"
@@ -2619,10 +2656,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="
-                                                            report[12]
-                                                                .disabledBtn
-                                                        "
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -2637,9 +2671,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[12].disabledBtn"
                                         @click="deleteBlock12(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2666,7 +2699,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[12].disabledBtn"
                                 class="form__field add-block"
                                 @click="addBlock12"
                             >
@@ -2674,12 +2706,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[12].disabledBtn"
@@ -2799,9 +2831,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[13].disabledBtn"
                                         @click="deleteBlock13(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2828,7 +2859,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[13].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock13"
                             >
@@ -2836,12 +2866,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[13].disabledBtn"
@@ -2969,9 +2999,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[14].disabledBtn"
                                         @click="deleteBlock14(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2998,7 +3027,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[14].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock14"
                             >
@@ -3006,12 +3034,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[14].disabledBtn"
@@ -3181,9 +3209,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[15].disabledBtn"
                                         @click="deleteBlock15(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -3210,7 +3237,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[15].disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock15"
                             >
@@ -3218,12 +3244,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[15].disabledBtn"
@@ -3446,12 +3472,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[16].disabledBtn"
@@ -3573,9 +3599,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!report[17].disabledBtn"
                                         @click="deleteBlock17(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -3602,7 +3627,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!report[17].disabledBtn"
                                 class="form__field add-block"
                                 @click="addNewBlockQ17"
                             >
@@ -3610,12 +3634,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[17].disabledBtn"
@@ -3729,12 +3753,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[18].disabledBtn"
@@ -3844,12 +3868,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[19].disabledBtn"
@@ -4044,12 +4068,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <!-- <v-progress-circular
+                                    <v-progress-circular
                                         class="circleLoader"
                                         v-if="isLoading"
                                         indeterminate
                                         color="blue"
-                                    ></v-progress-circular> -->
+                                    ></v-progress-circular>
                                     <Button
                                         type="button"
                                         :disabled="report[20].disabledBtn"
@@ -4074,7 +4098,7 @@ s
 <script setup>
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref, inject, onMounted } from 'vue';
+import { ref, inject, onMounted, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
@@ -4175,6 +4199,9 @@ const addNewBlockQ17 = () => {
 const AddLink7 = (index) => {
     report.value[7].participation_data[index].links.push({ link: '' });
 };
+const deleteLink7 = (index) => {
+    report.value[7].participation_data[index].links.splice(index, 1);
+};
 
 const AddBlock7 = () => {
     report.value[7].participation_data.push({
@@ -4188,6 +4215,10 @@ const AddBlock7 = () => {
 const AddLink8 = (index) => {
     report.value[8].participation_data[index].links.push({ link: '' });
 };
+const deleteLink8 = (index) => {
+    report.value[8].participation_data[index].links.splice(index, 1);
+};
+
 const AddBlock8 = () => {
     report.value[8].participation_data.push({
         event_name: '',
@@ -4426,6 +4457,10 @@ const report = ref({
     },
 });
 
+// const counterMayDemonstration = computed(() => {
+//     return report.value[61].first_may_demonstration_participants.length || 0;
+// });
+
 const selectCertScans = (event, index) => {
     report.value[12].participation_data[index].certificate_scans =
         event.files[0];
@@ -4437,7 +4472,7 @@ const selectCertScans = (event, index) => {
 
 const getParameters = async (id) => {
     try {
-        // isLoading.value = true;
+        isLoading.value = true;
         const response = await HTTP.get(
             `/competitions/${route.params.competition_pk}/reports/q${id}/` +
                 (id == 1 || id == 3 || id == 4 ? 'get-place/' : 'me/'),
@@ -4499,7 +4534,22 @@ const getParameters = async (id) => {
                 report.value[id].disabledBtn = true;
             }
         }
-        // isLoading.value = false;
+        isLoading.value = false;
+        if (
+            id == 5 ||
+            id == 7 ||
+            id == 8 ||
+            id == 9 ||
+            id == 10 ||
+            id == 11 ||
+            id == 12 ||
+            id == 13 ||
+            id == 14 ||
+            id == 15 ||
+            id == 17
+        ) {
+            report.value[id].disabledBtn = false;
+        }
     } catch (error) {
         isError.value = error.response.data;
     }
@@ -4557,17 +4607,67 @@ const postParameters = async (id) => {
                 }
             }
         }
+
         let index = id > 60 ? 6 : id;
-        await HTTP.post(
-            `/competitions/${route.params.competition_pk}/reports/q${index}/`,
-            fd,
-            {
-                headers: {
-                    'Content-Type': type,
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+        let dataName = 'participation_data';
+        if (id == 5) dataName = 'participants_data';
+        if (id == 13) dataName = 'organization_data';
+        if (id == 14) dataName = 'q14_labor_projects';
+        if (id == 15) dataName = 'grants_data';
+        if (id == 17) dataName = 'source_data';
+
+        if (report.value[id].id) {
+            let data = {};
+            data['' + dataName] = [];
+            if (!(id == 2 || id == 16 || id >= 18)) {
+                for (let i in report.value[id][dataName]) {
+                    let temp = report.value[id][dataName][i];
+
+                    if (temp.id) {
+                        delete temp.document;
+
+                        await HTTP.patch(
+                            `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].id}/participants/${temp.id}/`,
+                            temp,
+                            {
+                                headers: {
+                                    'Content-Type': type,
+                                    Authorization:
+                                        'Token ' +
+                                        localStorage.getItem('Token'),
+                                },
+                            },
+                        );
+                    } else {
+                        data[dataName].push(temp);
+                    }
+                }
+                if (data[dataName].length > 0) {
+                    await HTTP.post(
+                        `/competitions/${route.params.competition_pk}/reports/q${index}/`,
+                        data,
+                        {
+                            headers: {
+                                'Content-Type': type,
+                                Authorization:
+                                    'Token ' + localStorage.getItem('Token'),
+                            },
+                        },
+                    );
+                }
+            }
+        } else {
+            await HTTP.post(
+                `/competitions/${route.params.competition_pk}/reports/q${index}/`,
+                fd,
+                {
+                    headers: {
+                        'Content-Type': type,
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        );
+            );
+        }
         isLoading.value = false;
         swal.fire({
             position: 'top-center',
@@ -4715,5 +4815,14 @@ onMounted(async (id) => {
 .p-button-label {
     color: #1f7cc0;
     margin-left: 5px;
+}
+
+.form__field-link {
+    display: grid;
+    grid-template-columns: 10fr 0.5fr;
+    grid-column-gap: 5px;
+}
+.form__field-link svg {
+    margin-top: 10px;
 }
 </style>
