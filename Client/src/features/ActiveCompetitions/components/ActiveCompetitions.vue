@@ -1,12 +1,19 @@
 <template>
     <div class="competitions__container">
         <p v-if="loading">Загрузка...</p>
-        <p v-else-if="!competitionsList.length && !hasReports">
+        <p v-else-if="!competitionsList.length && !lengthAllReporting">
             Список заявок на конкурсы пуст
         </p>
 
         <template v-else>
             <div class="competitions__actions">
+                <div class="horizontal__confidant">
+                    <input
+                        type="checkbox"
+                        v-model="isCheckedAll"
+                        @change="onChooseAll"
+                    />
+                </div>
                 <v-select
                     variant="outlined"
                     class="form__field competitions__actions-select"
@@ -15,6 +22,7 @@
                     placeholder="Выберите действие"
                 />
             </div>
+
             <div class="competitions__list">
                 <template
                     v-for="(competition, index) in competitionsList"
@@ -112,7 +120,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
-import { ref, onMounted, onActivated, inject } from 'vue';
+import { ref, onMounted, onActivated, inject, watch, computed } from 'vue';
 import ActiveCompetitionItem from './ActiveCompetitionItem.vue';
 import ActiveCompetitionItemSelect from './ActiveCompetitionItemSelect.vue';
 import ActiveCompetitionItemReport from './ActiveCompetitionsItemReport.vue';
@@ -124,6 +132,8 @@ const selectedCompetitionsList = ref([]);
 const allCompetition = ref([]);
 
 const swal = inject('$swal');
+
+const isCheckedAll = ref(false);
 
 const allReporting = ref({});
 const selectedReportingList = ref([]);
@@ -143,7 +153,6 @@ const getMeCommander = async () => {
             },
         });
         commanderIds.value = data;
-        console.log(commanderIds.value);
     } catch (e) {
         console.log('error getMeCommander', e);
     }
@@ -164,7 +173,6 @@ const getAllCompetition = async () => {
 };
 
 const getCompetitionsJunior = async () => {
-    console.log(allCompetition);
     for (const competitionId of allCompetition.value) {
         try {
             //loading.value = true;
@@ -211,11 +219,42 @@ const getCompetitions = async () => {
     }
 };
 
+const onChooseAll = () => {
+    if (isCheckedAll.value) {
+        selectedReportingList.value = [];
+        for (let index = 2; index <= 20; index++) {
+            if (allReporting.value[index]) {
+                allReporting.value[index] = allReporting.value[index].map(
+                    (r) => {
+                        r.selected = isCheckedAll.value;
+                        return r;
+                    },
+                );
+                for (const r of allReporting.value[index]) {
+                    selectedReportingList.value.push(r);
+                }
+            }
+        }
+    } else {
+        for (let index = 2; index <= 20; index++) {
+            if (allReporting.value[index]) {
+                allReporting.value[index] = allReporting.value[index].map(
+                    (r) => {
+                        r.selected = isCheckedAll.value;
+                        return r;
+                    },
+                );
+            }
+        }
+        selectedReportingList.value = [];
+    }
+};
+
 const onToggleSelectReport = (report, isChecked) => {
     if (isChecked) {
         report.selected = isChecked;
-        selectedReportingList.value.push(report);
-        console.log(selectedReportingList.value);
+        selectedReportingList.value = [...selectedReportingList.value, report];
+        // selectedReportingList.value.push(report);
     } else {
         report.selected = isChecked;
         selectedReportingList.value = selectedReportingList.value.filter(
@@ -225,7 +264,6 @@ const onToggleSelectReport = (report, isChecked) => {
 };
 
 const onToggleSelectCompetition = (competition, isChecked) => {
-    console.log(competition);
     if (isChecked) {
         competition.selected = isChecked;
         selectedCompetitionsList.value.push(competition);
@@ -334,7 +372,6 @@ const onAction = async () => {
     if (selectedReportingList.value.length) {
         try {
             for (const application of selectedReportingList.value) {
-                console.log(application);
                 if (action.value === 'Одобрить') {
                     if (application.participants_data) {
                         //5
@@ -470,12 +507,9 @@ const onAction = async () => {
     }
 
     if (selectedCompetitionsList.value.length) {
-        console.log(123);
         try {
             for (const application of selectedCompetitionsList.value) {
-                console.log(application);
                 if (action.value === 'Одобрить') {
-                    console.log(application.id);
                     await confirmApplication(
                         application.id,
                         application.competition.id,
@@ -523,7 +557,8 @@ const onAction = async () => {
 
 const getAllReporting = async () => {
     loading.value = true;
-    for (let index = 1; index <= 20; ++index)
+    for (let index = 2; index <= 20; ++index) {
+        if (index == 3 || index == 4) continue;
         try {
             const { data } = await HTTP.get(
                 `/competitions/1/reports/q${index}/`,
@@ -540,24 +575,69 @@ const getAllReporting = async () => {
                     if (!allReporting.value[index]) {
                         allReporting.value[index] = [];
                     }
-                    allReporting.value[index].push(report);
+                    if (index == 5) {
+                        let tempArr = [];
+                        for (const tempData of report.participants_data) {
+                            if (!tempData.is_verified) tempArr.push(tempData);
+                        }
+                        report.participants_data = tempArr;
+                        if (tempArr) allReporting.value[index].push(report);
+                    } else if (index == 13) {
+                        let tempArr = [];
+                        for (const tempData of report.organization_data) {
+                            if (!tempData.is_verified) tempArr.push(tempData);
+                        }
+                        report.organization_data = tempArr;
+                        if (tempArr) allReporting.value[index].push(report);
+                    } else if (index == 14) {
+                        let tempArr = [];
+                        for (const tempData of report.q14_labor_projects) {
+                            if (!tempData.is_verified) tempArr.push(tempData);
+                        }
+                        report.q14_labor_projects = tempArr;
+                        if (tempArr) allReporting.value[index].push(report);
+                    } else if (index == 17) {
+                        let tempArr = [];
+                        for (const tempData of report.source_data) {
+                            if (!tempData.is_verified) tempArr.push(tempData);
+                        }
+                        report.source_data = tempArr;
+                        if (tempArr) allReporting.value[index].push(report);
+                    } else {
+                        allReporting.value[index].push(report);
+                    }
+                    //allReporting.value[index].push(report);
                     hasReports.value = true;
                 }
             }
             console.log(allReporting.value);
-            console.log(allReporting.value.length);
         } catch (e) {
             console.log('getAllReporting error', e);
         }
+    }
     console.log(allReporting.value);
     loading.value = false;
 };
+
+const lengthAllReporting = computed(() => {
+    let sum = 0;
+    for (let index = 2; index <= 20; index++) {
+        if (allReporting.value[index]) {
+            sum += allReporting.value[index].length;
+        }
+    }
+    return sum;
+});
+
+watch(selectedReportingList, (selectedReportingList) => {
+    isCheckedAll.value =
+        selectedReportingList.length == lengthAllReporting.value;
+});
 
 onMounted(async () => {
     await getAllReporting();
     await getAllCompetition();
     await getMeCommander();
-    console.log();
     if (commanderIds.value.regionalheadquarter_commander?.id == null)
         await getCompetitionsJunior();
     else await getCompetitions();
@@ -580,12 +660,14 @@ onActivated(async () => {
 .competitions__actions {
     display: grid;
     width: 100%;
-    justify-content: flex-end;
     margin-bottom: 40px;
-    //width: 224px;
+    grid-template-columns: 48px 224px;
+    justify-content: space-between;
+    // width: 224px;
     height: 48px;
     padding: 4px, 16px, 4px, 16px;
     gap: 10px;
+
     font-family: Bert Sans;
     font-size: 16px;
     font-weight: 400;
@@ -658,5 +740,14 @@ onActivated(async () => {
     line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
+}
+.horizontal__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    input {
+        width: 100%;
+        height: 100%;
+    }
 }
 </style>

@@ -722,22 +722,20 @@ const routes: RouteRecordRaw[] = [
 
                     {
                         path: 'test',
-                        name: 'testPage',
                         meta: {
                             redirectTo: 'testPage',
                             label: 'Тестирование по обучению',
                         },
-                        component: () =>
-                            import(
-                                '@pages/TestingPages/components/TestingPages.vue'
-                            ),
-                        // children: [
-                        //     {
-                        //         name: 'testPage',
-                        //         path: ':name',
-
-                        //     },
-                        // ],
+                        children: [
+                            {
+                                name: 'testPage',
+                                path: ':name',
+                                component: () =>
+                                    import(
+                                        '@pages/TestingPages/components/TestingPages.vue'
+                                    ),
+                            },
+                        ],
                     },
                 ],
             },
@@ -859,7 +857,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/Safety',
                 meta: {
                     redirectTo: 'Safety',
-                    label: 'Охрана труда и пожарная безопасность',
+                    label: 'Охрана труда и техника безопасности',
                 },
                 children: [
                     {

@@ -7,7 +7,7 @@
                         class="cursor_redirect"
                         @click="clickIndicator(report.indicator)"
                     >
-                        {{ indicator.name[report.indicator] }}
+                        {{ indicator.name[report.indicator - 1] }}
                     </p>
                 </div>
             </div>
@@ -72,6 +72,8 @@
 import { HTTP } from '@app/http';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+
+const isTandem = ref(false);
 
 const detachmentData = ref({});
 const competition = ref();
@@ -144,21 +146,25 @@ const onCompetition = () => {
 };
 
 const onCheckbox = (e) => {
-    emit('select', props.competition, e.target.checked);
+    emit('select', props.report, e.target.checked);
 };
 
 const getCompetition = async () => {
     try {
-        const { data } = await HTTP.get(
-            `/competitions/${props.report.competition}/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+        if (props.report.detachment_report) {
+            competition.value = props.report.detachment_report.competition;
+        } else {
+            const { data } = await HTTP.get(
+                `/competitions/${props.report.competition}/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        );
-        competition.value = data;
+            );
+            competition.value = data;
+        }
     } catch (e) {
         console.log(`getCompetitions error`, e);
     }
@@ -166,8 +172,29 @@ const getCompetition = async () => {
 
 const getDetachmentData = async () => {
     try {
+        if (props.report.detachment_report) {
+            detachmentData.value = props.report.detachment_report.detachment;
+        } else {
+            const { data } = await HTTP.get(
+                `/detachments/${props.report.detachment}/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
+                },
+            );
+            detachmentData.value = data;
+        }
+    } catch (e) {
+        console.log(`getDetachmentData error`, e);
+    }
+};
+
+const getIsTandemInfo = async () => {
+    try {
         const { data } = await HTTP.get(
-            `/detachments/${props.report.detachment}/`,
+            `/detachments/${props.report.detachment}/competitions/1/is_tandem/`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -175,14 +202,15 @@ const getDetachmentData = async () => {
                 },
             },
         );
-        detachmentData.value = data;
+        console.log(data);
+        isTandem.value = data.is_tandem;
     } catch (e) {
-        console.log(`getDetachmentData error`, e);
+        console.log(`getIsTandemInfo error`, e);
     }
 };
 
 onMounted(async () => {
-    console.log(props.report);
+    await getIsTandemInfo();
     await getCompetition();
     await getDetachmentData();
 });
