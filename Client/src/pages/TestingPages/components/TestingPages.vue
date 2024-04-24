@@ -393,7 +393,7 @@ onMounted(async () => {
     color: #fff;
 }
 .button {
-    margin-top: 60px;
+    margin-top: 80px;
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
