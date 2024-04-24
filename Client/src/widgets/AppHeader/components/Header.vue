@@ -178,7 +178,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['changeReg']);
-
 const roleStore = useRoleStore();
 const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
@@ -336,8 +335,7 @@ const userPages = computed(() => [
         title: 'Охрана труда и техника безопасности',
         name: 'Safety',
         show:
-            roleStore.status.is_commander_detachment ||
-            roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))
+            true
 
     },
 

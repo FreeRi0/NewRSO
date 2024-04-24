@@ -10,7 +10,7 @@ export const useEventsStore = defineStore('events', {
         applications: [],
         isLoading: false,
         totalEvents: 0,
-        MembersLimit: 6,
+        MembersLimit: 7,
         eventsLimit: 4,
         nextEvents: '',
     }),

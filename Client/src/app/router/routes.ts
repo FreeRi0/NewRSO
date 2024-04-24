@@ -722,7 +722,6 @@ const routes: RouteRecordRaw[] = [
 
                     {
                         path: 'test',
-                        name: 'testPage',
                         meta: {
                             redirectTo: 'testPage',
                             label: 'Тестирование по обучению',
