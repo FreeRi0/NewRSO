@@ -99,9 +99,7 @@
             <!-- Организаторы -->
             <h2 class="title event_org">Организаторы</h2>
             <div v-if="eventsStore.organizators" class="card_wrap">
-                <div v-for="(organizator, index) in [
-                    ...new Set(eventsStore.organizators),
-                ]" v-show="index > 0" :key="organizator.id">
+                <div v-for="organizator in eventsStore.organizators" :key="organizator.id">
                     <router-link :to="{ name: 'userpage', params: { id: organizator.organizer?.id } }"
                         class="event_card_wrap">
                         <div class="round-img">
