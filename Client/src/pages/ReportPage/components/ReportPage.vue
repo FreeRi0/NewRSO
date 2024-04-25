@@ -4457,10 +4457,6 @@ const report = ref({
     },
 });
 
-// const counterMayDemonstration = computed(() => {
-//     return report.value[61].first_may_demonstration_participants.length || 0;
-// });
-
 const selectCertScans = (event, index) => {
     report.value[12].participation_data[index].certificate_scans =
         event.files[0];
@@ -4627,7 +4623,7 @@ const postParameters = async (id) => {
                         delete temp.document;
 
                         await HTTP.patch(
-                            `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].id}/participants/${temp.id}/`,
+                            `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].id}/objects/${temp.id}/`,
                             temp,
                             {
                                 headers: {
