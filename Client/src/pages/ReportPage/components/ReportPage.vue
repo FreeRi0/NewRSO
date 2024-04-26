@@ -9,9 +9,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(1)">
                                 <v-col class="d-flex justify-start">
-                                    Численность членов линейного студенческого
-                                    отряда в соответствии с объемом уплаченных
-                                    членских взносов
+                                    1.&nbsp;Численность членов линейного
+                                    студенческого отряда в соответствии
+                                    с объемом уплаченных членских взносов
                                 </v-col>
                             </v-row>
                         </template>
@@ -93,7 +93,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(2)">
                                 <v-col class="d-flex justify-start">
-                                    Прохождение Командиром и Комиссаром
+                                    2.&nbsp;Прохождение Командиром и Комиссаром
                                     студенческого отряда региональной школы
                                     командного состава
                                 </v-col>
@@ -283,7 +283,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(3)">
                                 <v-col class="d-flex justify-start">
-                                    Получение командным составом отряда
+                                    3.&nbsp;Получение командным составом отряда
                                     образования в корпоративном университете РСО
                                 </v-col>
                             </v-row>
@@ -373,9 +373,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(4)">
                                 <v-col class="d-flex justify-start">
-                                    Прохождение обучения по охране труда и
-                                    пожарной безопасности в рамках недели охраны
-                                    труда РСО
+                                    4.&nbsp;Прохождение обучения по охране труда
+                                    и пожарной безопасности в рамках недели
+                                    охраны труда РСО
                                 </v-col>
                             </v-row>
                         </template>
@@ -463,7 +463,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(5)">
                                 <v-col class="d-flex justify-start">
-                                    Процент членов студенческого отряда,
+                                    5.&nbsp;Процент членов студенческого отряда,
                                     прошедших профессиональное обучение
                                 </v-col>
                             </v-row>
@@ -679,8 +679,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(6)">
                                 <v-col class="d-flex justify-start">
-                                    Участие членов студенческого отряда в
-                                    обязательных общесистемных мероприятиях на
+                                    6.&nbsp;Участие членов студенческого отряда
+                                    в обязательных общесистемных мероприятиях на
                                     региональном уровне
                                 </v-col>
                             </v-row>
@@ -1218,8 +1218,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(7)">
                                 <v-col class="d-flex justify-start">
-                                    Участие членов студенческого отряда в
-                                    окружных и межрегиональных мероприятиях РСО
+                                    7.&nbsp;Участие членов студенческого отряда
+                                    в окружных и межрегиональных мероприятиях
+                                    РСО
                                 </v-col>
                             </v-row>
                         </template>
@@ -1516,8 +1517,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(8)">
                                 <v-col class="d-flex justify-start">
-                                    Участие членов студенческого отряда во
-                                    всероссийских мероприятиях РСО
+                                    8.&nbsp;Участие членов студенческого отряда
+                                    во всероссийских мероприятиях РСО
                                 </v-col>
                             </v-row>
                         </template>
@@ -1813,7 +1814,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(9)">
                                 <v-col class="d-flex justify-start">
-                                    Призовые места отряда в окружных и
+                                    9.&nbsp;Призовые места отряда в окружных и
                                     межрегиональных мероприятиях и конкурсах РСО
                                 </v-col>
                             </v-row>
@@ -2043,8 +2044,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(10)">
                                 <v-col class="d-flex justify-start">
-                                    Призовые места отряда во Всероссийских
-                                    мероприятиях и конкурсах РСО
+                                    10.&nbsp;Призовые места отряда во
+                                    Всероссийских мероприятиях и конкурсах РСО
                                 </v-col>
                             </v-row>
                         </template>
@@ -2273,7 +2274,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(11)">
                                 <v-col class="d-flex justify-start">
-                                    Призовые места отряда на окружных и
+                                    11.&nbsp;Призовые места отряда на окружных и
                                     межрегиональных трудовых проектах
                                 </v-col>
                             </v-row>
@@ -2506,8 +2507,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(12)">
                                 <v-col class="d-flex justify-start">
-                                    Призовые места отряда на всероссийских
-                                    трудовых проектах
+                                    12.&nbsp;Призовые места отряда на
+                                    всероссийских трудовых проектах
                                 </v-col>
                             </v-row>
                         </template>
@@ -2734,7 +2735,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(13)">
                                 <v-col class="d-flex justify-start">
-                                    Организация собственных мероприятий отряда
+                                    13.&nbsp;Организация собственных мероприятий
+                                    отряда
                                 </v-col>
                             </v-row>
                         </template>
@@ -2894,9 +2896,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(14)">
                                 <v-col class="d-flex justify-start">
-                                    Отношение количества бойцов, отработавших в
-                                    летнем трудовом семестре к общему числу
-                                    членов отряда
+                                    14.&nbsp;Отношение количества бойцов,
+                                    отработавших в летнем трудовом семестре к
+                                    общему числу членов отряда
                                 </v-col>
                             </v-row>
                         </template>
@@ -3062,10 +3064,10 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(15)">
                                 <v-col class="d-flex justify-start">
-                                    Победы членов отряда в региональных,
-                                    окружных и всероссийских грантовых
-                                    конкурсах, направленных на развитие
-                                    студенческих отрядов
+                                    15.&nbsp;Победы членов отряда в
+                                    региональных, окружных и всероссийских
+                                    грантовых конкурсах, направленных на
+                                    развитие студенческих отрядов
                                 </v-col>
                             </v-row>
                         </template>
@@ -3272,7 +3274,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(16)">
                                 <v-col class="d-flex justify-start">
-                                    Активность отряда в социальных сетях
+                                    16.&nbsp;Активность отряда в социальных
+                                    сетях
                                 </v-col>
                             </v-row>
                         </template>
@@ -3500,9 +3503,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(17)">
                                 <v-col class="d-flex justify-start">
-                                    Количество упоминаний в СМИ о прошедших
-                                    творческих, добровольческих и патриотических
-                                    мероприятиях отряда
+                                    17.&nbsp;Количество упоминаний в СМИ о
+                                    прошедших творческих, добровольческих и
+                                    патриотических мероприятиях отряда
                                 </v-col>
                             </v-row>
                         </template>
@@ -3662,7 +3665,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(18)">
                                 <v-col class="d-flex justify-start">
-                                    Охват бойцов, принявших участие во
+                                    18.&nbsp;Охват бойцов, принявших участие во
                                     Всероссийском дне ударного труда
                                 </v-col>
                             </v-row>
@@ -3781,9 +3784,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(19)">
                                 <v-col class="d-flex justify-start">
-                                    Отсутствие нарушений техники безопасности,
-                                    охраны труда и противопожарной безопасности
-                                    в трудовом семестре
+                                    19.&nbsp;Отсутствие нарушений техники
+                                    безопасности, охраны труда и противопожарной
+                                    безопасности в трудовом семестре
                                 </v-col>
                             </v-row>
                         </template>
@@ -3896,9 +3899,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(20)">
                                 <v-col class="d-flex justify-start">
-                                    Соответствие требованиям и положения
-                                    символики и атрибутике форменной одежды и
-                                    символики отрядов
+                                    20.&nbsp;Соответствие требованиям и
+                                    положения символики и атрибутике форменной
+                                    одежды и символики отрядов
                                 </v-col>
                             </v-row>
                         </template>
@@ -4282,9 +4285,28 @@ const AddBlock15 = () => {
     });
 };
 
+// const deleteBlock = async (index) => {
+//     try {
+//         const response = await HTTP.delete(
+//             `/competitions/${route.params.competition_pk}/reports/q5/${report.value[5].id}/objects/${report.value[5].participants_data[index].id}/`,
+//             report.value[5],
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             },
+//         );
+//         report.value[5] = response.data;
+//     } catch (error) {
+//         isError.value = error.response.data;
+//     }
+//     report.value[5].participants_data.splice(index, 1);
+// };
 const deleteBlock = (index) => {
     report.value[5].participants_data.splice(index, 1);
 };
+
 const deleteBlock7 = (index) => {
     report.value[7].participation_data.splice(index, 1);
 };

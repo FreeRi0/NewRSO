@@ -112,7 +112,7 @@
                             {{ organizator.organizer?.first_name }}
                             {{ organizator.organizer?.patronymic_name }}
                         </div>
-                        <div class="text text--position">{{ organizator.position.position }}</div>
+                        <div class="text text--position">{{ organizator?.position?.position }}</div>
 
                     </router-link>
 
@@ -136,7 +136,7 @@
                                 {{ organizator.organizer?.first_name }}
                                 {{ organizator.organizer?.patronymic_name }}
                             </div>
-                            <div class="text text--position">{{ organizator.position.position }}</div>
+                            <div class="text text--position">{{ organizator?.position?.position }}</div>
 
                         </router-link>
                     </div>
@@ -216,9 +216,17 @@
             <!-- Другие мероприятия -->
             <h2 class="title event_others event_border">Другие мероприятия</h2>
             <div class="other_events_wrap">
-                <router-link :to="{ name: 'Action', params: { id: items.id } }" class="event_item"
+                <router-link :to="{ path: `/actionSquads/${items.id}`, hash: '#ankor', params: { id: items.id } }" class="event_item"
                     v-for="items in eventsStore.events" v-show="items.id !== eventsStore.event.id">
-                    <img :src="items.banner" alt="banner" class="event_item_banner" />
+                    <!-- <img :src="items.banner" alt="banner" class="event_item_banner" /> -->
+                    <v-card
+                          class="mx-auto"
+                          min-width="280"
+                          height="210"
+                          :image="items.banner"
+                          :id="items.id"
+                      >
+                      </v-card>
                     <p class="event_item_title">{{ items.name }}</p>
                     <div class="d-flex justify-space-between mb-3">
                         <p class="event_item_date">
