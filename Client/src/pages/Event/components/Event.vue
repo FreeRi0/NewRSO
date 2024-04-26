@@ -16,6 +16,18 @@
                     }" class="user-data__link">Редактировать мероприятие</router-link>
                     <Button v-else-if="!IsMember && !UserApplication" class="form-button" type="button"
                         @click="AddApplication()" label="Подать заявку" variant="text" size="large"></Button>
+                    <router-link
+                        v-else-if="(!IsMember && !UserApplication) && eventsStore.event.application_type === 'Групповая'"
+                        :to="{ name: 'groupsubmit' }">
+                        <Button class="form-button" type="button" label="Подать заявку" variant="text"
+                            size="large"></Button></router-link>
+
+                    <router-link
+                        v-else-if="(!IsMember && !UserApplication) && eventsStore.event.application_type === 'Многоэтапная'"
+                        :to="{ name: 'multistagesubmit' }">
+                        <Button class="form-button" type="button" label="Подать заявку" variant="text"
+                            size="large"></Button></router-link>
+
                     <Button v-else-if="UserApplication" type="button" class="form-button form-button--grey"
                         variant="text" label="Заявка на рассмотрении" size="large"></Button>
 
@@ -45,14 +57,6 @@
                     {{ eventsStore.event.time_data?.start_time }}
                 </div>
             </div>
-            <!-- <div class="event-cols-2">
-                    <img
-                        src="@app/assets/icon_items/map.svg"
-                        class="mr-3"
-                        alt=""
-                    />
-                    Маштаб мероприятия: {{ eventsStore.event.scale }}
-                </div> -->
 
             <div class="event">
                 <div class="event-cols-2">
@@ -95,29 +99,9 @@
             <!-- Организаторы -->
             <h2 class="title event_org">Организаторы</h2>
             <div v-if="eventsStore.organizators" class="card_wrap">
-                <div v-for="(organizator, index) in [
-                    ...new Set(eventsStore.organizators),
-                ]" class="event_card_wrap" v-show="index > 0" :key="organizator.id">
-                    <div class="round-img">
-                        <img :src="organizator.organizer?.avatar.photo" alt="photo"
-                            v-if="organizator.organizer?.avatar.photo" />
-                        <img src="@app/assets/user-avatar.png" alt="photo" v-else />
-                    </div>
-                    <div class="text text--organizer">
-                        {{ organizator.organizer?.last_name }}
-                        {{ organizator.organizer?.first_name }}
-                        {{ organizator.organizer?.patronymic_name }}
-                    </div>
-                    <!-- <div class="text text--status">
-                    {{ organizator.status }}
-                </div> -->
-                </div>
-            </div>
-            <!-- Контактные лица -->
-            <template v-if="isContact.length">
-                <h2 class="title event_contact">Контактные лица</h2>
-                <div class="card_wrap">
-                    <div v-for="organizator in isContact" class="event_card_wrap" :key="organizator.id">
+                <div v-for="organizator in eventsStore.organizators" :key="organizator.id">
+                    <router-link :to="{ name: 'userpage', params: { id: organizator.organizer?.id } }"
+                        class="event_card_wrap">
                         <div class="round-img">
                             <img :src="organizator.organizer?.avatar.photo" alt="photo"
                                 v-if="organizator.organizer?.avatar.photo" />
@@ -128,9 +112,33 @@
                             {{ organizator.organizer?.first_name }}
                             {{ organizator.organizer?.patronymic_name }}
                         </div>
-                        <!-- <div class="text text--status">
-                        {{ organizator.status }}
-                    </div> -->
+                        <div class="text text--position">{{ organizator?.position?.position }}</div>
+
+                    </router-link>
+
+
+                </div>
+            </div>
+            <!-- Контактные лица -->
+            <template v-if="isContact.length">
+                <h2 class="title event_contact">Контактные лица</h2>
+                <div class="card_wrap">
+                    <div v-for="organizator in isContact" :key="organizator.id">
+                        <router-link :to="{ name: 'userpage', params: { id: organizator.organizer?.id } }"
+                            class="event_card_wrap">
+                            <div class="round-img">
+                                <img :src="organizator.organizer?.avatar.photo" alt="photo"
+                                    v-if="organizator.organizer?.avatar.photo" />
+                                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
+                            </div>
+                            <div class="text text--organizer">
+                                {{ organizator.organizer?.last_name }}
+                                {{ organizator.organizer?.first_name }}
+                                {{ organizator.organizer?.patronymic_name }}
+                            </div>
+                            <div class="text text--position">{{ organizator?.position?.position }}</div>
+
+                        </router-link>
                     </div>
                 </div>
             </template>
@@ -150,17 +158,16 @@
             <section class="section_wrap" v-if="picked === true">
                 <ul class="list_wrap" v-if="eventsStore.members.length">
                     <li v-for="participant in eventsStore.members.slice(0, 6)" :key="participant">
-                        <div>
+                        <router-link :to="{ name: 'userpage', params: { id: participant.user.id } }">
                             <img class="participant_img" :src="participant.user?.avatar?.photo"
                                 v-if="participant.user?.avatar?.photo" alt="avatar" />
                             <img class="participant_img" src="@app/assets/user-avatar.png" v-else alt="avatar" />
                             <div class="text text--participant_name mt-7">
                                 {{ participant.user.first_name }}
                             </div>
-                            <!-- <p class="text text--status">
-                            {{ participant.status }}
-                        </p> -->
-                        </div>
+
+
+                        </router-link>
                     </li>
                 </ul>
                 <p class="text-center mt-10" v-else>Участников не найдено..</p>
@@ -170,7 +177,7 @@
                             name: 'actionparticipants',
                             params: { id: eventsStore.event.id },
                         }">
-                            <div class="squad__wrapper-route text-center">
+                            <div class="squad__wrapper-route text-center mt-10">
                                 Показать всех
                             </div>
                         </router-link>
@@ -183,17 +190,15 @@
                         0,
                         6,
                     )" :key="participant">
-                        <div>
+                        <router-link :to="{ name: 'userpage', params: { id: participant.user.id } }">
                             <img class="participant_img" :src="participant.user?.avatar?.photo"
                                 v-if="participant.user?.avatar?.photo" alt="avatar" />
                             <img class="participant_img" src="@app/assets/user-avatar.png" v-else alt="avatar" />
                             <div class="text text--participant_name mt-7">
                                 {{ participant.user.first_name }}
                             </div>
-                            <!-- <p class="text text--status">
-                            {{ participant.status }}
-                        </p> -->
-                        </div>
+
+                        </router-link>
                     </li>
                 </ul>
                 <p class="text-center mt-10" v-else>Участников не найдено...</p>
@@ -202,7 +207,7 @@
                         name: 'actionparticipants',
                         params: { id: eventsStore.event.id },
                     }">
-                        <div class="squad__wrapper-route text-center">
+                        <div class="squad__wrapper-route text-center mt-10">
                             Показать всех
                         </div>
                     </router-link>
@@ -211,9 +216,17 @@
             <!-- Другие мероприятия -->
             <h2 class="title event_others event_border">Другие мероприятия</h2>
             <div class="other_events_wrap">
-                <router-link :to="{ name: 'Action', params: { id: items.id } }" class="event_item"
-                    v-for="items in eventsStore.events">
-                    <img :src="items.banner" alt="banner" class="event_item_banner" />
+                <router-link :to="{ path: `/actionSquads/${items.id}`, hash: '#ankor', params: { id: items.id } }" class="event_item"
+                    v-for="items in eventsStore.events" v-show="items.id !== eventsStore.event.id">
+                    <!-- <img :src="items.banner" alt="banner" class="event_item_banner" /> -->
+                    <v-card
+                          class="mx-auto"
+                          min-width="280"
+                          height="210"
+                          :image="items.banner"
+                          :id="items.id"
+                      >
+                      </v-card>
                     <p class="event_item_title">{{ items.name }}</p>
                     <div class="d-flex justify-space-between mb-3">
                         <p class="event_item_date">
@@ -398,6 +411,7 @@ watch(
         font-family: 'Akrobat';
         margin: 40px 0px;
     }
+
     &__show {
         &_btn {
             margin-top: 60px;
@@ -420,6 +434,7 @@ watch(
             margin-top: 12px;
             margin-bottom: 26px;
             font-family: 'Bert-Sans';
+            word-wrap: break-word;
         }
 
         &_date {
@@ -528,6 +543,14 @@ watch(
 .text--organizer {
     line-height: normal;
     margin: 0px;
+}
+
+.text--position {
+    color: #676767;
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 16px;
+    font-family: 'Bert-Sans';
 }
 
 .form-button {

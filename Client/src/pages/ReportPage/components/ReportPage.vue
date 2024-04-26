@@ -9,9 +9,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(1)">
                                 <v-col class="d-flex justify-start">
-                                    Численность членов линейного студенческого
-                                    отряда в соответствии с объемом уплаченных
-                                    членских взносов
+                                    1.&nbsp;Численность членов линейного
+                                    студенческого отряда в соответствии
+                                    с объемом уплаченных членских взносов
                                 </v-col>
                             </v-row>
                         </template>
@@ -72,16 +72,16 @@ s
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <label
+                                <!-- <label
                                     v-if="report[1]?.place"
                                     class="form__label"
                                     >{{ report[1]?.place }}
-                                </label>
-                                <label v-else class="form__label"
+                                </label> -->
+                                <label class="form__label"
                                     >Численность членов линейного студенческого
                                     отряда в соответствии с объемом уплаченных
                                     членских взносов рассчитывается
-                                    автоматически по состоянию на 15 апреля 2024
+                                    автоматически по состоянию на 30 апреля 2024
                                     года.
                                 </label>
                             </div>
@@ -93,7 +93,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(2)">
                                 <v-col class="d-flex justify-start">
-                                    Прохождение Командиром и Комиссаром
+                                    2.&nbsp;Прохождение Командиром и Комиссаром
                                     студенческого отряда региональной школы
                                     командного состава
                                 </v-col>
@@ -263,7 +263,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[2].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -283,7 +283,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(3)">
                                 <v-col class="d-flex justify-start">
-                                    Получение командным составом отряда
+                                    3.&nbsp;Получение командным составом отряда
                                     образования в корпоративном университете РСО
                                 </v-col>
                             </v-row>
@@ -345,12 +345,12 @@ s
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <label
+                                <!-- <label
                                     v-if="report[3]?.place"
                                     class="form__label"
                                     >{{ report[3]?.place }}
-                                </label>
-                                <label v-else class="form__label"
+                                </label> -->
+                                <label class="form__label"
                                     >Для получения баллов по данному показателю
                                     Командиру и Комиссару ЛСО необходимо пройти
                                     тестирование. Для прохождения теста
@@ -373,9 +373,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(4)">
                                 <v-col class="d-flex justify-start">
-                                    Прохождение обучения по охране труда и
-                                    пожарной безопасности в рамках недели охраны
-                                    труда РСО
+                                    4.&nbsp;Прохождение обучения по охране труда
+                                    и пожарной безопасности в рамках недели
+                                    охраны труда РСО
                                 </v-col>
                             </v-row>
                         </template>
@@ -436,12 +436,12 @@ s
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <label
+                                <!-- <label
                                     v-if="report[4]?.place"
                                     class="form__label"
                                     >{{ report[4]?.place }}</label
-                                >
-                                <label v-else class="form__label"
+                                > -->
+                                <label class="form__label"
                                     >Для получения баллов по данному показателю
                                     участникам ЛСО необходимо пройти
                                     тестирование. Для прохождения теста
@@ -463,7 +463,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(5)">
                                 <v-col class="d-flex justify-start">
-                                    Процент членов студенческого отряда,
+                                    5.&nbsp;Процент членов студенческого отряда,
                                     прошедших профессиональное обучение
                                 </v-col>
                             </v-row>
@@ -601,7 +601,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -616,9 +616,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -645,7 +644,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="addNewBlock"
                             >
@@ -661,7 +659,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[5].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -681,8 +679,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(6)">
                                 <v-col class="d-flex justify-start">
-                                    Участие членов студенческого отряда в
-                                    обязательных общесистемных мероприятиях на
+                                    6.&nbsp;Участие членов студенческого отряда
+                                    в обязательных общесистемных мероприятиях на
                                     региональном уровне
                                 </v-col>
                             </v-row>
@@ -774,7 +772,7 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 10"
-                                            :maxlength="100"
+                                            :maxlength="5"
                                             v-model:value="
                                                 report[61]
                                                     .first_may_demonstration_participants
@@ -786,7 +784,7 @@ s
                                                     .first_may_demonstration_participants
                                                     .length
                                             }}
-                                            / 100
+                                            / 5
                                         </div>
                                     </div>
                                 </div>
@@ -801,7 +799,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[61].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -851,7 +849,7 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 10"
-                                            :maxlength="100"
+                                            :maxlength="5"
                                             v-model:value="
                                                 report[62]
                                                     .patriotic_action_participants
@@ -878,7 +876,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[62].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -927,7 +925,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[63].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -979,7 +977,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[64].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1026,7 +1024,7 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 10"
-                                            :maxlength="100"
+                                            :maxlength="5"
                                             v-model:value="
                                                 report[65]
                                                     .working_semester_opening_participants
@@ -1053,7 +1051,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[65].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1102,7 +1100,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[66].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1149,7 +1147,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[67].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1200,7 +1198,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[68].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1220,8 +1218,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(7)">
                                 <v-col class="d-flex justify-start">
-                                    Участие членов студенческого отряда в
-                                    окружных и межрегиональных мероприятиях РСО
+                                    7.&nbsp;Участие членов студенческого отряда
+                                    в окружных и межрегиональных мероприятиях
+                                    РСО
                                 </v-col>
                             </v-row>
                         </template>
@@ -1296,7 +1295,7 @@ s
                                         >
                                         <Input
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
-                                            :maxlength="100"
+                                            :maxlength="150"
                                             v-model:value="block.event_name"
                                         />
                                         <div class="form__counter">
@@ -1312,7 +1311,7 @@ s
                                         <Input
                                             type="number"
                                             placeholder="Например, 5"
-                                            :maxlength="100"
+                                            :maxlength="5"
                                             v-model:value="
                                                 block.number_of_participants
                                             "
@@ -1338,11 +1337,45 @@ s
                                             v-for="(link, i) in block.links"
                                             :key="index + '_' + i"
                                         >
-                                            <Input
-                                                placeholder="Например, https://vk.com/cco_monolit"
-                                                :maxlength="100"
-                                                v-model:value="link.link"
-                                            />
+                                            <div class="form__field-link">
+                                                <Input
+                                                    placeholder="Например, https://vk.com/cco_monolit"
+                                                    :maxlength="100"
+                                                    v-model:value="link.link"
+                                                />
+                                                <div
+                                                    type="button"
+                                                    v-if="!block.is_verified"
+                                                >
+                                                    <svg
+                                                        @click="
+                                                            deleteLink7(index)
+                                                        "
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="24"
+                                                        height="24"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                    >
+                                                        <path
+                                                            d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                        <path
+                                                            d="M9 9L15 15"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                        <path
+                                                            d="M15 9L9 15"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                            </div>
+
                                             <div class="form__counter">
                                                 {{ link.link.length }} / 100
                                             </div>
@@ -1406,7 +1439,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -1421,9 +1454,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock7(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1450,7 +1482,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock7"
                             >
@@ -1466,7 +1497,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[7].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1486,8 +1517,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(8)">
                                 <v-col class="d-flex justify-start">
-                                    Участие членов студенческого отряда во
-                                    всероссийских мероприятиях РСО
+                                    8.&nbsp;Участие членов студенческого отряда
+                                    во всероссийских мероприятиях РСО
                                 </v-col>
                             </v-row>
                         </template>
@@ -1603,17 +1634,50 @@ s
                                         <template
                                             v-for="(link, i) in block.links"
                                             :key="index + '_' + i"
-                                            ><Input
-                                                placeholder="Например, https://vk.com/cco_monolit"
-                                                :maxlength="100"
-                                                v-model:value="link.link"
-                                            />
+                                        >
+                                            <div class="form__field-link">
+                                                <Input
+                                                    placeholder="Например, https://vk.com/cco_monolit"
+                                                    :maxlength="100"
+                                                    v-model:value="link.link"
+                                                />
+                                                <div
+                                                    type="button"
+                                                    v-if="!block.is_verified"
+                                                >
+                                                    <svg
+                                                        @click="
+                                                            deleteLink8(index)
+                                                        "
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="24"
+                                                        height="24"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                    >
+                                                        <path
+                                                            d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                        <path
+                                                            d="M9 9L15 15"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                        <path
+                                                            d="M15 9L9 15"
+                                                            stroke="#939393"
+                                                            stroke-linecap="round"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                            </div>
                                             <div class="form__counter">
                                                 {{ link.link.length }} / 100
                                             </div>
                                         </template>
                                         <div
-                                            v-if="!disabledBtn"
                                             class="form__field add-block"
                                             @click="AddLink8(index)"
                                         >
@@ -1672,7 +1736,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -1687,9 +1751,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock8(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1716,7 +1779,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock8"
                             >
@@ -1732,7 +1794,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[8].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1752,7 +1814,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(9)">
                                 <v-col class="d-flex justify-start">
-                                    Призовые места отряда в окружных и
+                                    9.&nbsp;Призовые места отряда в окружных и
                                     межрегиональных мероприятиях и конкурсах РСО
                                 </v-col>
                             </v-row>
@@ -1904,7 +1966,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -1919,9 +1981,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock9(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -1948,7 +2009,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock9"
                             >
@@ -1964,7 +2024,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[9].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -1984,8 +2044,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(10)">
                                 <v-col class="d-flex justify-start">
-                                    Призовые места отряда во Всероссийских
-                                    мероприятиях и конкурсах РСО
+                                    10.&nbsp;Призовые места отряда во
+                                    Всероссийских мероприятиях и конкурсах РСО
                                 </v-col>
                             </v-row>
                         </template>
@@ -2136,7 +2196,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -2151,9 +2211,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock10(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2180,7 +2239,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock10"
                             >
@@ -2196,7 +2254,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[10].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -2216,7 +2274,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(11)">
                                 <v-col class="d-flex justify-start">
-                                    Призовые места отряда на окружных и
+                                    11.&nbsp;Призовые места отряда на окружных и
                                     межрегиональных трудовых проектах
                                 </v-col>
                             </v-row>
@@ -2371,7 +2429,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -2386,9 +2444,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock11(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2415,7 +2472,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock11"
                             >
@@ -2431,7 +2487,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[11].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -2451,8 +2507,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(12)">
                                 <v-col class="d-flex justify-start">
-                                    Призовые места отряда на всероссийских
-                                    трудовых проектах
+                                    12.&nbsp;Призовые места отряда на
+                                    всероссийских трудовых проектах
                                 </v-col>
                             </v-row>
                         </template>
@@ -2601,7 +2657,7 @@ s
                                                         }}</span
                                                     >
                                                     <span
-                                                        v-if="disabledBtn"
+                                                        v-if="block.id"
                                                         class="font-semibold"
                                                         >{{
                                                             decodeURIComponent(
@@ -2616,9 +2672,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock12(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2645,7 +2700,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="addBlock12"
                             >
@@ -2661,7 +2715,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[12].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -2681,7 +2735,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(13)">
                                 <v-col class="d-flex justify-start">
-                                    Организация собственных мероприятий отряда
+                                    13.&nbsp;Организация собственных мероприятий
+                                    отряда
                                 </v-col>
                             </v-row>
                         </template>
@@ -2778,9 +2833,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock13(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2807,7 +2861,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock13"
                             >
@@ -2823,7 +2876,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[13].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -2843,9 +2896,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(14)">
                                 <v-col class="d-flex justify-start">
-                                    Отношение количества бойцов, отработавших в
-                                    летнем трудовом семестре к общему числу
-                                    членов отряда
+                                    14.&nbsp;Отношение количества бойцов,
+                                    отработавших в летнем трудовом семестре к
+                                    общему числу членов отряда
                                 </v-col>
                             </v-row>
                         </template>
@@ -2948,9 +3001,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock14(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -2977,7 +3029,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock14"
                             >
@@ -2993,7 +3044,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[14].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3013,10 +3064,10 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(15)">
                                 <v-col class="d-flex justify-start">
-                                    Победы членов отряда в региональных,
-                                    окружных и всероссийских грантовых
-                                    конкурсах, направленных на развитие
-                                    студенческих отрядов
+                                    15.&nbsp;Победы членов отряда в
+                                    региональных, окружных и всероссийских
+                                    грантовых конкурсах, направленных на
+                                    развитие студенческих отрядов
                                 </v-col>
                             </v-row>
                         </template>
@@ -3160,9 +3211,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock15(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -3189,7 +3239,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="AddBlock15"
                             >
@@ -3205,7 +3254,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[15].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3225,7 +3274,8 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(16)">
                                 <v-col class="d-flex justify-start">
-                                    Активность отряда в социальных сетях
+                                    16.&nbsp;Активность отряда в социальных
+                                    сетях
                                 </v-col>
                             </v-row>
                         </template>
@@ -3433,7 +3483,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[16].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3453,9 +3503,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(17)">
                                 <v-col class="d-flex justify-start">
-                                    Количество упоминаний в СМИ о прошедших
-                                    творческих, добровольческих и патриотических
-                                    мероприятиях отряда
+                                    17.&nbsp;Количество упоминаний в СМИ о
+                                    прошедших творческих, добровольческих и
+                                    патриотических мероприятиях отряда
                                 </v-col>
                             </v-row>
                         </template>
@@ -3552,9 +3602,8 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button">
+                                <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        v-if="!disabledBtn"
                                         @click="deleteBlock17(index)"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -3581,7 +3630,6 @@ s
                                 </div>
                             </div>
                             <div
-                                v-if="!disabledBtn"
                                 class="form__field add-block"
                                 @click="addNewBlockQ17"
                             >
@@ -3597,7 +3645,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[17].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3617,7 +3665,7 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(18)">
                                 <v-col class="d-flex justify-start">
-                                    Охват бойцов, принявших участие во
+                                    18.&nbsp;Охват бойцов, принявших участие во
                                     Всероссийском дне ударного труда
                                 </v-col>
                             </v-row>
@@ -3716,7 +3764,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[18].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3736,9 +3784,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(19)">
                                 <v-col class="d-flex justify-start">
-                                    Отсутствие нарушений техники безопасности,
-                                    охраны труда и противопожарной безопасности
-                                    в трудовом семестре
+                                    19.&nbsp;Отсутствие нарушений техники
+                                    безопасности, охраны труда и противопожарной
+                                    безопасности в трудовом семестре
                                 </v-col>
                             </v-row>
                         </template>
@@ -3831,7 +3879,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[19].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3851,9 +3899,9 @@ s
                         <template v-slot="{ expanded }">
                             <v-row no-gutters @click="getParameters(20)">
                                 <v-col class="d-flex justify-start">
-                                    Соответствие требованиям и положения
-                                    символики и атрибутике форменной одежды и
-                                    символики отрядов
+                                    20.&nbsp;Соответствие требованиям и
+                                    положения символики и атрибутике форменной
+                                    одежды и символики отрядов
                                 </v-col>
                             </v-row>
                         </template>
@@ -4031,7 +4079,7 @@ s
                                     ></v-progress-circular>
                                     <Button
                                         type="button"
-                                        :disabled="disabledBtn"
+                                        :disabled="report[20].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -4053,7 +4101,7 @@ s
 <script setup>
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref, inject, onMounted } from 'vue';
+import { ref, inject, onMounted, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
@@ -4154,6 +4202,9 @@ const addNewBlockQ17 = () => {
 const AddLink7 = (index) => {
     report.value[7].participation_data[index].links.push({ link: '' });
 };
+const deleteLink7 = (index) => {
+    report.value[7].participation_data[index].links.splice(index, 1);
+};
 
 const AddBlock7 = () => {
     report.value[7].participation_data.push({
@@ -4167,6 +4218,10 @@ const AddBlock7 = () => {
 const AddLink8 = (index) => {
     report.value[8].participation_data[index].links.push({ link: '' });
 };
+const deleteLink8 = (index) => {
+    report.value[8].participation_data[index].links.splice(index, 1);
+};
+
 const AddBlock8 = () => {
     report.value[8].participation_data.push({
         event_name: '',
@@ -4224,14 +4279,34 @@ const AddBlock15 = () => {
     report.value[15].grants_data.push({
         name: '',
         status: '',
+        author_name: '',
         competition_link: '',
         prove_link: '',
     });
 };
 
+// const deleteBlock = async (index) => {
+//     try {
+//         const response = await HTTP.delete(
+//             `/competitions/${route.params.competition_pk}/reports/q5/${report.value[5].id}/objects/${report.value[5].participants_data[index].id}/`,
+//             report.value[5],
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             },
+//         );
+//         report.value[5] = response.data;
+//     } catch (error) {
+//         isError.value = error.response.data;
+//     }
+//     report.value[5].participants_data.splice(index, 1);
+// };
 const deleteBlock = (index) => {
     report.value[5].participants_data.splice(index, 1);
 };
+
 const deleteBlock7 = (index) => {
     report.value[7].participation_data.splice(index, 1);
 };
@@ -4279,26 +4354,34 @@ const report = ref({
         commissioner_achievement: null,
         commander_link: '',
         commissioner_link: '',
+        disabledBtn: false,
     },
     3: { place: '' },
     4: { place: '' },
     5: {
         participants_data: [{ name: '', document: null }],
+        disabledBtn: false,
     },
     61: {
         first_may_demonstration: null,
         first_may_demonstration_participants: '',
+        disabledBtn: false,
     },
-    62: { patriotic_action: null, patriotic_action_participants: '' },
-    63: { safety_work_week: null },
-    64: { commander_commissioner_school: null },
+    62: {
+        patriotic_action: null,
+        patriotic_action_participants: '',
+        disabledBtn: false,
+    },
+    63: { safety_work_week: null, disabledBtn: false },
+    64: { commander_commissioner_school: null, disabledBtn: false },
     65: {
         working_semester_opening: null,
         working_semester_opening_participants: '',
+        disabledBtn: false,
     },
-    66: { creative_festival: null },
-    67: { spartakiad: null },
-    68: { professional_competition: null },
+    66: { creative_festival: null, disabledBtn: false },
+    67: { spartakiad: null, disabledBtn: false },
+    68: { professional_competition: null, disabledBtn: false },
     7: {
         participation_data: [
             {
@@ -4308,6 +4391,7 @@ const report = ref({
                 certificate_scans: null,
             },
         ],
+        disabledBtn: false,
     },
     8: {
         participation_data: [
@@ -4318,6 +4402,7 @@ const report = ref({
                 certificate_scans: null,
             },
         ],
+        disabledBtn: false,
     },
     9: {
         participation_data: [
@@ -4326,6 +4411,7 @@ const report = ref({
                 certificate_scans: null,
             },
         ],
+        disabledBtn: false,
     },
     10: {
         participation_data: [
@@ -4334,6 +4420,7 @@ const report = ref({
                 certificate_scans: null,
             },
         ],
+        disabledBtn: false,
     },
     11: {
         participation_data: [
@@ -4342,14 +4429,22 @@ const report = ref({
                 certificate_scans: null,
             },
         ],
+        disabledBtn: false,
     },
     12: {
         participation_data: [
             { event_name: '', prize_place: null, certificate_scans: null },
         ],
+        disabledBtn: false,
     },
-    13: { organization_data: [{ event_type: '', event_link: '' }] },
-    14: { q14_labor_projects: [{ lab_project_name: '', amount: '' }] },
+    13: {
+        organization_data: [{ event_type: '', event_link: '' }],
+        disabledBtn: false,
+    },
+    14: {
+        q14_labor_projects: [{ lab_project_name: '', amount: '' }],
+        disabledBtn: false,
+    },
     15: {
         grants_data: [
             {
@@ -4360,6 +4455,7 @@ const report = ref({
                 prove_link: '',
             },
         ],
+        disabledBtn: false,
     },
     16: {
         link_vk_commander: '',
@@ -4367,10 +4463,11 @@ const report = ref({
         vk_rso_number_subscribers: '',
         link_vk_detachment: '',
         vk_detachment_number_subscribers: '',
+        disabledBtn: false,
     },
-    17: { source_data: [{ source_name: '', link: '' }] },
-    18: { participants_number: '' },
-    19: { safety_violations: '' },
+    17: { source_data: [{ source_name: '', link: '' }], disabledBtn: false },
+    18: { participants_number: '', disabledBtn: false },
+    19: { safety_violations: '', disabledBtn: false },
     20: {
         link_emblem: '',
         link_emblem_img: '',
@@ -4378,6 +4475,7 @@ const report = ref({
         link_flag_img: '',
         link_banner: '',
         link_banner_img: '',
+        disabledBtn: false,
     },
 });
 
@@ -4390,10 +4488,6 @@ const selectCertScans = (event, index) => {
     );
 };
 
-// let url5 = report.value[5].participants_data.document;
-// console.log(decodeURIComponent(url5));
-
-const disabledBtn = ref(false);
 const getParameters = async (id) => {
     try {
         isLoading.value = true;
@@ -4413,6 +4507,22 @@ const getParameters = async (id) => {
                 id == 6 &&
                 route.params.id == response.data.results[0].detachment
             ) {
+                if (response.data.results[0].first_may_demonstration)
+                    report.value[61].disabledBtn = true;
+                if (response.data.results[0].patriotic_action_participants)
+                    report.value[62].disabledBtn = true;
+                if (response.data.results[0].safety_work_week)
+                    report.value[63].disabledBtn = true;
+                if (response.data.results[0].commander_commissioner_school)
+                    report.value[64].disabledBtn = true;
+                if (response.data.results[0].working_semester_opening)
+                    report.value[65].disabledBtn = true;
+                if (response.data.results[0].creative_festival)
+                    report.value[66].disabledBtn = true;
+                if (response.data.results[0].spartakiad)
+                    report.value[67].disabledBtn = true;
+                if (response.data.results[0].professional_competition)
+                    report.value[68].disabledBtn = true;
                 report.value[61].first_may_demonstration =
                     response.data.results[0].first_may_demonstration;
                 report.value[61].first_may_demonstration_participants =
@@ -4436,18 +4546,34 @@ const getParameters = async (id) => {
                 report.value[68].professional_competition =
                     response.data.results[0].professional_competition;
             } else {
-                if (report.value[id].participation_data)
+                if (report.value[id].participation_data) {
                     report.value[id].participation_data = response.data.results;
-                else report.value[id] = response.data.results[0];
+                } else report.value[id] = response.data.results[0];
+                report.value[id].disabledBtn = true;
             }
-            disabledBtn.value = true;
-        } else disabledBtn.value = false;
+        }
         isLoading.value = false;
+        if (
+            id == 5 ||
+            id == 7 ||
+            id == 8 ||
+            id == 9 ||
+            id == 10 ||
+            id == 11 ||
+            id == 12 ||
+            id == 13 ||
+            id == 14 ||
+            id == 15 ||
+            id == 17
+        ) {
+            report.value[id].disabledBtn = false;
+        }
     } catch (error) {
         isError.value = error.response.data;
     }
 };
 const postParameters = async (id) => {
+    if (report.value[id].disabledBtn) return false;
     try {
         let fd = report.value[id];
         let type = 'application/json';
@@ -4499,17 +4625,67 @@ const postParameters = async (id) => {
                 }
             }
         }
+
         let index = id > 60 ? 6 : id;
-        await HTTP.post(
-            `/competitions/${route.params.competition_pk}/reports/q${index}/`,
-            fd,
-            {
-                headers: {
-                    'Content-Type': type,
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+        let dataName = 'participation_data';
+        if (id == 5) dataName = 'participants_data';
+        if (id == 13) dataName = 'organization_data';
+        if (id == 14) dataName = 'q14_labor_projects';
+        if (id == 15) dataName = 'grants_data';
+        if (id == 17) dataName = 'source_data';
+
+        if (report.value[id].id) {
+            let data = {};
+            data['' + dataName] = [];
+            if (!(id == 2 || id == 16 || id >= 18)) {
+                for (let i in report.value[id][dataName]) {
+                    let temp = report.value[id][dataName][i];
+
+                    if (temp.id) {
+                        delete temp.document;
+
+                        await HTTP.patch(
+                            `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].id}/objects/${temp.id}/`,
+                            temp,
+                            {
+                                headers: {
+                                    'Content-Type': type,
+                                    Authorization:
+                                        'Token ' +
+                                        localStorage.getItem('Token'),
+                                },
+                            },
+                        );
+                    } else {
+                        data[dataName].push(temp);
+                    }
+                }
+                if (data[dataName].length > 0) {
+                    await HTTP.post(
+                        `/competitions/${route.params.competition_pk}/reports/q${index}/`,
+                        data,
+                        {
+                            headers: {
+                                'Content-Type': type,
+                                Authorization:
+                                    'Token ' + localStorage.getItem('Token'),
+                            },
+                        },
+                    );
+                }
+            }
+        } else {
+            await HTTP.post(
+                `/competitions/${route.params.competition_pk}/reports/q${index}/`,
+                fd,
+                {
+                    headers: {
+                        'Content-Type': type,
+                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                    },
                 },
-            },
-        );
+            );
+        }
         isLoading.value = false;
         swal.fire({
             position: 'top-center',
@@ -4518,7 +4694,7 @@ const postParameters = async (id) => {
             showConfirmButton: false,
             timer: 1500,
         });
-        disabledBtn.value = true;
+        report.value[id].disabledBtn = true;
     } catch (error) {
         isError.value = error.response.data;
         isLoading.value = false;
@@ -4657,5 +4833,14 @@ onMounted(async (id) => {
 .p-button-label {
     color: #1f7cc0;
     margin-left: 5px;
+}
+
+.form__field-link {
+    display: grid;
+    grid-template-columns: 10fr 0.5fr;
+    grid-column-gap: 5px;
+}
+.form__field-link svg {
+    margin-top: 10px;
 }
 </style>
