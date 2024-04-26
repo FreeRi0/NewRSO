@@ -4149,10 +4149,7 @@
                                 !props.user.parent.parent_phone_number ||
                                 !props.user.parent.passport_number ||
                                 !props.user.parent.passport_date ||
-                                !props.user.parent.passport_authority ||
-                                !props.user.parent.region ||
-                                !props.user.parent.city ||
-                                !props.user.parent.address))
+                                !props.user.parent.passport_authority))
                     "
                     :loaded="isLoading"
                     v-if="
