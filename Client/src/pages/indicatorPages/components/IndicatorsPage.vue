@@ -165,7 +165,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(5)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -295,7 +295,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(6)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -599,7 +599,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(7)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -767,7 +767,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(8)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -930,7 +930,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(9)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1075,7 +1075,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(10)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1219,7 +1219,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(11)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1365,7 +1365,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(12)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1511,7 +1511,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(13)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1615,7 +1615,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(14)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1672,12 +1672,10 @@
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="project in applicationData.q14_labor_projects"
+                                :key="project.id"
                             >
-                                <div
-                                    class="form__field-group-left"
-                                    v-for="project in applicationData.q14_labor_project"
-                                    :key="project.id"
-                                >
+                                <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Наименование трудового проекта<span
@@ -1723,7 +1721,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(15)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -1792,6 +1790,7 @@
                                         <Input
                                             type="text"
                                             v-model:value="grant.name"
+                                            readonly
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1802,7 +1801,7 @@
                                         >
                                         <Input
                                             type="text"
-                                            v-model="grant.status"
+                                            v-model:value="grant.status"
                                             readonly
                                         />
                                     </div>
@@ -1814,7 +1813,7 @@
                                         >
                                         <Input
                                             type="text"
-                                            v-model="grant.author_name"
+                                            v-model:value="grant.author_name"
                                             readonly
                                         />
                                     </div>
@@ -1826,7 +1825,9 @@
                                         >
                                         <Input
                                             type="text"
-                                            v-model="grant.competition_link"
+                                            v-model:value="
+                                                grant.competition_link
+                                            "
                                             readonly
                                         />
                                     </div>
@@ -1839,7 +1840,7 @@
                                         >
                                         <Input
                                             type="text"
-                                            v-model="grant.prove_link"
+                                            v-model:value="grant.prove_link"
                                             readonly
                                         />
                                     </div>
@@ -1858,7 +1859,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(16)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2026,7 +2027,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(17)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2083,6 +2084,8 @@
                         <div class="form__field-group">
                             <div
                                 class="form__field-group-top form__field-column-one"
+                                v-for="source in applicationData.source_data"
+                                :key="source.id"
                             >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
@@ -2093,10 +2096,7 @@
                                         </label>
                                         <Input
                                             type="text"
-                                            v-model:value="
-                                                applicationData.q17_event
-                                                    .source_name
-                                            "
+                                            v-model:value="source.source_name"
                                             readonly
                                         />
                                     </div>
@@ -2110,9 +2110,7 @@
                                         </label>
                                         <Input
                                             type="text"
-                                            v-model:value="
-                                                applicationData.q17_link.link
-                                            "
+                                            v-model:value="source.link"
                                             readonly
                                         />
                                     </div>
@@ -2132,7 +2130,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(18)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2222,7 +2220,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(19)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
@@ -2290,7 +2288,7 @@
                                         >
                                         <Input
                                             type="text"
-                                            v-model="
+                                            v-model:value="
                                                 applicationData.safety_violations
                                             "
                                             readonly
@@ -2313,7 +2311,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded" @click="getParameters(20)">
+                            <v-icon v-if="!expanded">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="32"
