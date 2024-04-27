@@ -2,7 +2,7 @@
     <div class="container" ref="scroll">
         <div v-if="started">
             <div class="line">
-                <p class="main_title">Тестирование по обучению</p>
+                <p class="main_title">{{ titleName }}</p>
 
                 <p class="curr_question">
                     {{ indexQuestion + 1 }}/{{ questions.length }}
@@ -79,7 +79,7 @@
         </div>
 
         <div v-else-if="solved" class="solved__wrapper">
-            <p class="main_title">Тестирование по обучению</p>
+            <p class="main_title">{{ titleName }}</p>
             <div class="border_result">
                 <p class="text_result">
                     Ваш результат: {{ result.score }} баллов
@@ -98,7 +98,7 @@
         </div>
 
         <div v-else>
-            <p class="main_title">Тестирование по обучению</p>
+            <p class="main_title">{{ titleName }}</p>
 
             <div v-if="status.left_attempts">
                 <p class="subtitle" v-if="testName == 'university'">
@@ -153,6 +153,11 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const testName = ref(route.params.name);
+const titleName = ref(
+    testName.value == 'university'
+        ? 'Тестирование по обучению'
+        : 'Тестирование по охране труда',
+);
 // const testName = ref('university');
 
 console.log(testName.value);

@@ -71,6 +71,8 @@ const router = useRouter();
 const commander = ref(false);
 const loading = ref(true);
 
+const detachment_id = ref();
+
 const resultData = ref({
     indicators: [
         '1. Численность членов линейного студенческого отряда в соответствии с объемом уплаченных членских взносов',
@@ -145,7 +147,7 @@ const getPostitions = async () => {
                         },
                     },
                 );
-                console.log(data);
+                //console.log(data);
                 resultData.value.places[index - 1] = data.place;
             } else {
                 const { data } = await HTTP.get(
@@ -174,10 +176,13 @@ const getPostitions = async () => {
                 if (e.request.response) {
                     resultData.value.places[index - 1] =
                         'Рейтинг еще не сформирован';
-                } else
+                } else {
+                    await getVerificationLogs(index);
+                }
+                if (resultData.value.places[index - 1] == '-')
                     resultData.value.places[index - 1] = 'Данные не отправлены';
-                console.log(`${index}: ${e.request.response}`);
-                console.log(e);
+                //console.log(`${index}: ${e.request.response}`);
+                //console.log(e);
             } else {
                 console.log(`!!!\n${index}: getPostions error`, e);
             }
@@ -186,22 +191,31 @@ const getPostitions = async () => {
     loading.value = false;
 };
 
-// const getVerificationLogs = async (q_number) => {
-//     try {
-//         const { data } = await HTTP.get(
-//             `/competitions/${q_number}/verification_logs/`,
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//         );
-//         console.log(data);
-//     } catch (e) {
-//         console.log(`getVerificationLogs error`, e);
-//     }
-// };
+const getVerificationLogs = async (q_number) => {
+    try {
+        const { data } = await HTTP.get(
+            `/competitions/1/verification_logs/${q_number}/?verified_detachment_id=${detachment_id.value}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        // console.log(data);
+
+        if (data.results.length != 0) {
+            const temp = data.results.pop();
+            // console.log(temp);
+            if (temp?.action == 'Отклонил') {
+                resultData.value.places[q_number - 1] =
+                    'Показатель не засчитан';
+            }
+        }
+    } catch (e) {
+        console.log(`getVerificationLogs error`, e);
+    }
+};
 
 const getMeCommander = async () => {
     try {
@@ -211,9 +225,10 @@ const getMeCommander = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        console.log(data);
+        // console.log(data);
         if (data.detachment_commander) {
             commander.value = true;
+            detachment_id.value = data.detachment_commander.id;
         }
     } catch (e) {
         console.log(`getMeCommander error`, e);
