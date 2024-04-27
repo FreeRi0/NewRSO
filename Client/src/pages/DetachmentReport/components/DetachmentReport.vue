@@ -132,6 +132,7 @@ const onAction = async () => {
 
 const getPostitions = async () => {
     for (let index = 1; index <= 20; index++) {
+        // await getVerificationLogs(index);
         try {
             if (commander.value) {
                 const { data } = await HTTP.get(
@@ -185,6 +186,23 @@ const getPostitions = async () => {
     loading.value = false;
 };
 
+// const getVerificationLogs = async (q_number) => {
+//     try {
+//         const { data } = await HTTP.get(
+//             `/competitions/${q_number}/verification_logs/`,
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             },
+//         );
+//         console.log(data);
+//     } catch (e) {
+//         console.log(`getVerificationLogs error`, e);
+//     }
+// };
+
 const getMeCommander = async () => {
     try {
         const { data } = await HTTP.get(`/rsousers/me_commander/`, {
@@ -211,14 +229,14 @@ const getMainResults = async () => {
             },
         });
         if (data.place) {
-            mainResults.value.place[0] = data.place;
-        } else {
-            mainResults.value.place[0] = 'Рейтинг еще не сформирован';
-        }
-        if (data.places_sum) {
-            mainResults.value.place[1] = data.places_sum;
+            mainResults.value.place[1] = data.place;
         } else {
             mainResults.value.place[1] = 'Рейтинг еще не сформирован';
+        }
+        if (data.places_sum) {
+            mainResults.value.place[0] = data.places_sum;
+        } else {
+            mainResults.value.place[0] = 'Рейтинг еще не сформирован';
         }
         if (data.partner_detachment) {
             mainResults.value.place.push(
@@ -230,7 +248,7 @@ const getMainResults = async () => {
                 `Сумма мест отряд «${data.partner_detachment.name}»`,
             );
         }
-        console.log(mainResults.value);
+        // console.log(mainResults.value);
     } catch (e) {
         console.log('getMainResults error', e);
     }
