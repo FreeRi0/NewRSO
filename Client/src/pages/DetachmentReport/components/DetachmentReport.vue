@@ -134,6 +134,7 @@ const onAction = async () => {
 
 const getPostitions = async () => {
     for (let index = 1; index <= 20; index++) {
+        // await getVerificationLogs(index);
         try {
             if (commander.value) {
                 const { data } = await HTTP.get(
