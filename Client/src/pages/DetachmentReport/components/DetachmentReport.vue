@@ -146,7 +146,7 @@ const getPostitions = async () => {
                         },
                     },
                 );
-                console.log(data);
+                //console.log(data);
                 resultData.value.places[index - 1] = data.place;
             } else {
                 const { data } = await HTTP.get(
@@ -180,8 +180,8 @@ const getPostitions = async () => {
                 }
                 if (resultData.value.places[index - 1] == '-')
                     resultData.value.places[index - 1] = 'Данные не отправлены';
-                console.log(`${index}: ${e.request.response}`);
-                console.log(e);
+                //console.log(`${index}: ${e.request.response}`);
+                //console.log(e);
             } else {
                 console.log(`!!!\n${index}: getPostions error`, e);
             }
@@ -201,11 +201,11 @@ const getVerificationLogs = async (q_number) => {
                 },
             },
         );
-        console.log(data);
+        // console.log(data);
 
         if (data.results.length != 0) {
             const temp = data.results.pop();
-            console.log(temp);
+            // console.log(temp);
             if (temp?.action == 'Отклонил') {
                 resultData.value.places[q_number - 1] =
                     'Показатель не засчитан';
@@ -224,7 +224,7 @@ const getMeCommander = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        console.log(data);
+        // console.log(data);
         if (data.detachment_commander) {
             commander.value = true;
             detachment_id.value = data.detachment_commander.id;
