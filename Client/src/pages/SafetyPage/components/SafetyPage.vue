@@ -115,7 +115,7 @@
             </p>
         </div>
         <h2 id="video_1" class="corpuniver__title-h2">
-            <a href="https://www.youtube.com/watch?v=5lBxsbNyyYQ">Занятие 1 «Перечень документов при приеме на
+            <a href="https://www.youtube.com/watch?v=5lBxsbNyyYQ" target="_blank">Занятие 1 «Перечень документов при приеме на
                 работу. Часть 1»</a>
         </h2>
         <div class="corpuniver__video " @click="playVideo(1)">
@@ -127,7 +127,7 @@
         </div>
 
         <h2 id="video_2" class="corpuniver__title-h2">
-            <a href="https://www.youtube.com/watch?v=bF2qhaLE-_k">Занятие 1 «Перечень документов при приеме на
+            <a href="https://www.youtube.com/watch?v=bF2qhaLE-_k" target="_blank">Занятие 1 «Перечень документов при приеме на
                 работу. Часть 2»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(2)">
@@ -138,7 +138,7 @@
             </iframe>
         </div>
         <h2 id="video_3" class="corpuniver__title-h2">
-            <a href="https://www.youtube.com/watch?v=oZeFr6_b3UU">Занятие 2 «Документы, регламентирующие трудовые
+            <a href="https://www.youtube.com/watch?v=oZeFr6_b3UU" target="_blank">Занятие 2 «Документы, регламентирующие трудовые
                 отношения работника и работодателя»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(3)">
@@ -149,7 +149,7 @@
             </iframe>
         </div>
         <h2 id="video_4" class="corpuniver__title-h2">
-            <a href="https://www.youtube.com/watch?v=TOSphxyF1Sk"> Занятие 3 «Основные виды инструктажей при приеме на
+            <a href="https://www.youtube.com/watch?v=TOSphxyF1Sk" target="_blank"> Занятие 3 «Основные виды инструктажей при приеме на
                 работу. Часть 1»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(4)">
@@ -160,7 +160,7 @@
             </iframe>
         </div>
         <h2 id="video_5" class="corpuniver__title-h2">
-            <a href="https://www.youtube.com/watch?v=SjRDDpy3LI4&t=10s"> Занятие 3 «Основные виды инструктажей при
+            <a href="https://www.youtube.com/watch?v=SjRDDpy3LI4&t=10s" target="_blank"> Занятие 3 «Основные виды инструктажей при
                 приеме на
                 работу. Часть 2»</a>
         </h2>
@@ -174,7 +174,7 @@
 
 
         <h2 id="video_6" class="corpuniver__title-h2">
-            <a href="https://www.youtube.com/watch?v=jMblehZ2wuY&t=18s"> Занятие 4 «Несчастный случай на производстве.
+            <a href="https://www.youtube.com/watch?v=jMblehZ2wuY&t=18s"  target="_blank"> Занятие 4 «Несчастный случай на производстве.
                 Часть 1»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(6)">
@@ -186,7 +186,7 @@
         </div>
 
         <h2 id="video_7" class="corpuniver__title-h2">
-            <a href="https://www.youtube.com/watch?v=8fGUjz36o3A"> Занятие 4 «Несчастный случай на производстве.
+            <a href="https://www.youtube.com/watch?v=8fGUjz36o3A" target="_blank"> Занятие 4 «Несчастный случай на производстве.
                 Часть 2»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(7)">
@@ -197,7 +197,7 @@
             </iframe>
         </div>
         <h2 id="video_8" class="corpuniver__title-h2">
-            <a href="https://vk.com/video-223571150_456239108"> Занятие 5 «Первая помощь»</a>
+            <a href="https://vk.com/video-223571150_456239108" target="_blank"> Занятие 5 «Первая помощь»</a>
         </h2>
         <div class="corpuniver__video">
 

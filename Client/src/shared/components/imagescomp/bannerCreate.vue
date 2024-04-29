@@ -7,7 +7,7 @@
             v-if="
             !roles.roles.value.detachment_commander && currentUser.currentUser.value || roles.roles.value.educationalheadquarter_commander || roles.roles.value.regionalheadquarter_commander ||
                 roles.roles.value.localheadquarter_commander || roles.roles.value.districtheadquarter_commander ||
-                roles.roles.value.centralComId 
+                roles.roles.value.centralComId
             "
             :to="{ name: name }"
             :target="target"
@@ -52,7 +52,6 @@ const userStore = useUserStore();
 const currentUser = storeToRefs(userStore);
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
-// roleStore.getRoles();
 const props = defineProps({
     label: {
         type: String,
@@ -79,6 +78,10 @@ const props = defineProps({
         default: false,
     },
     educCom: {
+        type: Boolean,
+        default: false,
+    },
+    actionCom: {
         type: Boolean,
         default: false,
     },
