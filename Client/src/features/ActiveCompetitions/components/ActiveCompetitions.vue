@@ -581,28 +581,36 @@ const getAllReporting = async () => {
                             if (!tempData.is_verified) tempArr.push(tempData);
                         }
                         report.participants_data = tempArr;
-                        if (tempArr) allReporting.value[index].push(report);
+                        if (tempArr.length)
+                            allReporting.value[index].push(report);
                     } else if (index == 13) {
                         let tempArr = [];
                         for (const tempData of report.organization_data) {
                             if (!tempData.is_verified) tempArr.push(tempData);
                         }
                         report.organization_data = tempArr;
-                        if (tempArr) allReporting.value[index].push(report);
+                        if (tempArr.length)
+                            allReporting.value[index].push(report);
                     } else if (index == 14) {
                         let tempArr = [];
+                        console.log(report.q14_labor_projects);
                         for (const tempData of report.q14_labor_projects) {
+                            console.log(tempData);
                             if (!tempData.is_verified) tempArr.push(tempData);
+                            console.log(tempArr);
                         }
+                        console.log(tempArr);
                         report.q14_labor_projects = tempArr;
-                        if (tempArr) allReporting.value[index].push(report);
+                        if (tempArr.length)
+                            allReporting.value[index].push(report);
                     } else if (index == 17) {
                         let tempArr = [];
                         for (const tempData of report.source_data) {
                             if (!tempData.is_verified) tempArr.push(tempData);
                         }
                         report.source_data = tempArr;
-                        if (tempArr) allReporting.value[index].push(report);
+                        if (tempArr.length)
+                            allReporting.value[index].push(report);
                     } else {
                         allReporting.value[index].push(report);
                     }

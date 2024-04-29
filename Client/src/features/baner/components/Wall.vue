@@ -1,71 +1,52 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto
-            v-if="
-                (props.user.privacy?.privacy_photo === 'Члены отряда' &&
-                    props.user.detachment_id ===
-                        currentUser.currentUser.value.detachment_id) ||
-                (props.user.privacy?.privacy_email === 'Руководство' &&
-                    ((roleStore.roles.detachment_commander &&
-                        roleStore.roles.detachment_commander?.id ===
-                            props.user.detachment_id) ||
-                        (roleStore.roles.regionalheadquarter_commander &&
-                            roleStore.roles.regionalheadquarter_commander
-                                ?.id === props.user.regional_headquarter_id) ||
-                        roleStore.roles.localheadquarter_commander ||
-                        roleStore.roles.educationalheadquarter_commander ||
-                        roleStore.roles.districtheadquarter_commander ||
-                        roleStore.roles.centralheadquarter_commander)) ||
-                props.user.privacy?.privacy_email === 'Все' ||
-                props.user.privacy?.privacy_email === 'all'
-            "
-            :banner="user.media?.banner"
-            @upload-wall="uploadWall"
-            @update-wall="updateWall"
-            @delete-wall="deleteWall"
-            :edited="false"
-        ></bannerPhoto>
+        <bannerPhoto v-if="
+            (props.user.privacy?.privacy_photo === 'Члены отряда' &&
+                props.user.detachment_id ===
+                currentUser.currentUser.value.detachment_id) ||
+            (props.user.privacy?.privacy_email === 'Руководство' &&
+                ((roleStore.roles.detachment_commander &&
+                    roleStore.roles.detachment_commander?.id ===
+                    props.user.detachment_id) ||
+                    (roleStore.roles.regionalheadquarter_commander &&
+                        roleStore.roles.regionalheadquarter_commander
+                            ?.id === props.user.regional_headquarter_id) ||
+                    roleStore.roles.localheadquarter_commander ||
+                    roleStore.roles.educationalheadquarter_commander ||
+                    roleStore.roles.districtheadquarter_commander ||
+                    roleStore.roles.centralheadquarter_commander)) ||
+            props.user.privacy?.privacy_email === 'Все' ||
+            props.user.privacy?.privacy_email === 'all'
+        " :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall"
+            @delete-wall="deleteWall" :edited="false"></bannerPhoto>
         <div class="user-metric__top" v-else>
             <div class="user-metric__top-img-wrapper">
-                <img
-                    src="@/app/assets/user-banner.jpg"
-                    alt="Баннер личной страницы(пусто)"
-                />
+                <img src="@/app/assets/user-banner.jpg" alt="Баннер личной страницы(пусто)" />
             </div>
         </div>
 
-        <Avatar
-            v-if="
-                (props.user.privacy?.privacy_photo === 'Члены отряда' &&
-                    props.user.detachment_id ===
-                        currentUser.currentUser.value.detachment_id) ||
-                (props.user.privacy?.privacy_email === 'Руководство' &&
-                    ((roleStore.roles.detachment_commander &&
-                        roleStore.roles.detachment_commander?.id ===
-                            props.user.detachment_id) ||
-                        (roleStore.roles.regionalheadquarter_commander &&
-                            roleStore.roles.regionalheadquarter_commander
-                                ?.id === props.user.regional_headquarter_id) ||
-                        roleStore.roles.localheadquarter_commander ||
-                        roleStore.roles.educationalheadquarter_commander ||
-                        roleStore.roles.districtheadquarter_commander ||
-                        roleStore.roles.centralheadquarter_commander)) ||
-                props.user.privacy?.privacy_email === 'Все' ||
-                props.user.privacy?.privacy_email === 'all'
-            "
-            :avatar="user.media?.photo"
-            @upload="uploadAva"
-            @update="updateAva"
-            @delete="deleteAva"
-            :edited="false"
-        ></Avatar>
+        <Avatar v-if="
+            (props.user.privacy?.privacy_photo === 'Члены отряда' &&
+                props.user.detachment_id ===
+                currentUser.currentUser.value.detachment_id) ||
+            (props.user.privacy?.privacy_email === 'Руководство' &&
+                ((roleStore.roles.detachment_commander &&
+                    roleStore.roles.detachment_commander?.id ===
+                    props.user.detachment_id) ||
+                    (roleStore.roles.regionalheadquarter_commander &&
+                        roleStore.roles.regionalheadquarter_commander
+                            ?.id === props.user.regional_headquarter_id) ||
+                    roleStore.roles.localheadquarter_commander ||
+                    roleStore.roles.educationalheadquarter_commander ||
+                    roleStore.roles.districtheadquarter_commander ||
+                    roleStore.roles.centralheadquarter_commander)) ||
+            props.user.privacy?.privacy_email === 'Все' ||
+            props.user.privacy?.privacy_email === 'all'
+        " :avatar="user.media?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva" :edited="false">
+        </Avatar>
         <div class="user-metric__avatar-wrapper" v-else>
             <div class="user-metric__avatar">
-                <img
-                    id="profile-pic"
-                    src="@app/assets/user-avatar.png"
-                    alt="Аватарка(пусто)"
-                />
+                <img id="profile-pic" src="@app/assets/user-avatar.png" alt="Аватарка(пусто)" />
             </div>
         </div>
 
@@ -80,30 +61,24 @@
 
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
-                        <li
-                            class="user-data__title"
-                            v-if="
-                                commander.detachment_commander?.id ||
-                                commander.educationalheadquarter_commander
-                                    ?.id ||
-                                commander.localheadquarter_commander?.id ||
-                                commander.regionalheadquarter_commander?.id ||
-                                commander.districtheadquarter_commander?.id ||
-                                commander.centralheadquarter_commander
-                            "
-                        >
+                        <li class="user-data__title" v-if="
+                            commander.detachment_commander?.id ||
+                            commander.educationalheadquarter_commander
+                                ?.id ||
+                            commander.localheadquarter_commander?.id ||
+                            commander.regionalheadquarter_commander?.id ||
+                            commander.districtheadquarter_commander?.id ||
+                            commander.centralheadquarter_commander
+                        ">
                             <p>Командир</p>
                         </li>
-                        <li
-                            class="user-data__title"
-                            v-else-if="
-                                position?.userdetachmentposition ||
-                                position.userregionalheadquarterposition ||
-                                position.userlocalheadquarterposition ||
-                                position.userdistrictheadquarterposition ||
-                                position?.usercentralheadquarterposition
-                            "
-                        >
+                        <li class="user-data__title" v-else-if="
+                            position?.userdetachmentposition ||
+                            position.userregionalheadquarterposition ||
+                            position.userlocalheadquarterposition ||
+                            position.userdistrictheadquarterposition ||
+                            position?.usercentralheadquarterposition
+                        ">
                             <p>
                                 {{
                                     position.userdetachmentposition?.position ??
@@ -120,20 +95,19 @@
                                 }}
                             </p>
                         </li>
-                        <li class="user-data__title" v-else><p>Кандитат</p></li>
+                        <li class="user-data__title" v-else>
+                            <p>Кандидат</p>
+                        </li>
                         <li class="user-data__title" v-if="detachment?.name">
                             <p>{{ detachment?.name }}</p>
                         </li>
-                        <li
-                            class="user-data__title"
-                            v-if="
-                                position?.userdetachmentposition ||
-                                position.userregionalheadquarterposition ||
-                                position.userlocalheadquarterposition ||
-                                position.userdistrictheadquarterposition ||
-                                position?.usercentralheadquarterposition
-                            "
-                        >
+                        <li class="user-data__title" v-if="
+                            position?.userdetachmentposition ||
+                            position.userregionalheadquarterposition ||
+                            position.userlocalheadquarterposition ||
+                            position.userdistrictheadquarterposition ||
+                            position?.usercentralheadquarterposition
+                        ">
                             <p>
                                 {{
                                     position.userdetachmentposition?.headquarter
@@ -143,28 +117,21 @@
                                 }}
                             </p>
                         </li>
-                        <li
-                            class="user-data__title"
-                            v-if="educationalHeadquarter?.name"
-                        >
+                        <li class="user-data__title" v-if="educationalHeadquarter?.name">
                             <p>Штаб {{ educationalHeadquarter?.name }}</p>
                         </li>
                         <li class="user-data__regional-office">
                             <div v-if="user.region">
-                                <div
-                                    v-for="item in regionals.filteredRegional
-                                        .value"
-                                >
+                                <div v-for="item in regionals.filteredRegional
+                                    .value">
                                     <p>{{ item.name }}</p>
                                 </div>
                             </div>
                         </li>
 
-                        <li
-                            v-if="
-                                user.education?.study_institution?.short_name
-                            "
-                        >
+                        <li v-if="
+                            user.education?.study_institution?.short_name
+                        ">
                             <p>
                                 {{
                                     user.education?.study_institution
@@ -187,26 +154,77 @@
                     </ul>
                 </div>
                 <div class="user-data__contact">
-                    <div
-                        class="user-data__social-network"
-                        v-if="
-                            (props.user.privacy?.privacy_social ===
+                    <div class="user-data__social-network" v-if="
+                        (props.user.privacy?.privacy_social ===
+                            'Члены отряда' &&
+                            props.user.detachment_id ===
+                            currentUser.currentUser.value
+                                .detachment_id) ||
+                        (props.user.privacy?.privacy_social ===
+                            'Руководство' &&
+                            ((roleStore.roles.detachment_commander &&
+                                roleStore.roles.detachment_commander?.id ===
+                                props.user.detachment_id) ||
+                                (roleStore.roles
+                                    .regionalheadquarter_commander &&
+                                    roleStore.roles
+                                        .regionalheadquarter_commander
+                                        ?.id ===
+                                    props.user
+                                        .regional_headquarter_id) ||
+                                roleStore.roles
+                                    .localheadquarter_commander ||
+                                roleStore.roles
+                                    .educationalheadquarter_commander ||
+                                roleStore.roles
+                                    .districtheadquarter_commander ||
+                                roleStore.roles
+                                    .centralheadquarter_commander)) ||
+                        props.user.privacy?.privacy_social === 'Все' ||
+                        props.user.privacy?.privacy_social === 'all'
+                    ">
+                        <div class="user-data__link-vk mr-2">
+                            <a :href="user.social_vk" target="_blank" v-if="
+                                user.social_vk && user.social_vk !== 'https://vk.com/'
+                            ">
+                                <img src="@/app/assets/icon/vk-blue.svg" />
+                            </a>
+                        </div>
+                        <div class="user-data__link-telegram mr-2"
+                            v-if="user.social_tg && user.social_tg !== 'https://t.me/'">
+                            <a :href="user.social_tg">
+                                <img src="@/app/assets/icon/telegram-blue.svg" alt="" />
+                            </a>
+                        </div>
+                        <div class="user-data__link-share-link">
+                            <a @click="copyL">
+                                <img src="@/app/assets/icon/to-share-link.svg" alt="" />
+                            </a>
+                            <div class="copy-message" hidden>
+                                Ссылка скопирована
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-data__contact-contact">
+                        <div class="user-data__contact-contact_item" v-if="
+                            (props.user.privacy?.privacy_telephone ===
                                 'Члены отряда' &&
                                 props.user.detachment_id ===
-                                    currentUser.currentUser.value
-                                        .detachment_id) ||
-                            (props.user.privacy?.privacy_social ===
+                                currentUser.currentUser.value
+                                    .detachment_id) ||
+                            (props.user.privacy?.privacy_telephone ===
                                 'Руководство' &&
                                 ((roleStore.roles.detachment_commander &&
-                                    roleStore.roles.detachment_commander?.id ===
-                                        props.user.detachment_id) ||
+                                    roleStore.roles.detachment_commander
+                                        ?.id ===
+                                    props.user.detachment_id) ||
                                     (roleStore.roles
                                         .regionalheadquarter_commander &&
                                         roleStore.roles
                                             .regionalheadquarter_commander
                                             ?.id ===
-                                            props.user
-                                                .regional_headquarter_id) ||
+                                        props.user
+                                            .regional_headquarter_id) ||
                                     roleStore.roles
                                         .localheadquarter_commander ||
                                     roleStore.roles
@@ -215,117 +233,42 @@
                                         .districtheadquarter_commander ||
                                     roleStore.roles
                                         .centralheadquarter_commander)) ||
-                            props.user.privacy?.privacy_social === 'Все' ||
-                            props.user.privacy?.privacy_social === 'all'
-                        "
-                    >
-                        <div class="user-data__link-vk mr-2">
-                            <a
-                                :href="user.social_vk"
-                                target="_blank"
-                                v-if="
-                                    user.social_vk && user.social_vk !== 'https://vk.com/'
-                                "
-                            >
-                                <img src="@/app/assets/icon/vk-blue.svg" />
-                            </a>
-                        </div>
-                        <div
-                            class="user-data__link-telegram mr-2"
-                            v-if="user.social_tg && user.social_tg !== 'https://t.me/'"
-                        >
-                            <a :href="user.social_tg">
-                                <img
-                                    src="@/app/assets/icon/telegram-blue.svg"
-                                    alt=""
-                                />
-                            </a>
-                        </div>
-                        <div class="user-data__link-share-link">
-                            <a @click="copyL">
-                                <img
-                                    src="@/app/assets/icon/to-share-link.svg"
-                                    alt=""
-                                />
-                            </a>
-                            <div class="copy-message" hidden>
-                                Ссылка скопирована
-                            </div>
-                        </div>
-                    </div>
-                    <div class="user-data__contact-contact">
-                        <div
-                            class="user-data__contact-contact_item"
-                            v-if="
-                                (props.user.privacy?.privacy_telephone ===
-                                    'Члены отряда' &&
-                                    props.user.detachment_id ===
-                                        currentUser.currentUser.value
-                                            .detachment_id) ||
-                                (props.user.privacy?.privacy_telephone ===
-                                    'Руководство' &&
-                                    ((roleStore.roles.detachment_commander &&
-                                        roleStore.roles.detachment_commander
-                                            ?.id ===
-                                            props.user.detachment_id) ||
-                                        (roleStore.roles
-                                            .regionalheadquarter_commander &&
-                                            roleStore.roles
-                                                .regionalheadquarter_commander
-                                                ?.id ===
-                                                props.user
-                                                    .regional_headquarter_id) ||
-                                        roleStore.roles
-                                            .localheadquarter_commander ||
-                                        roleStore.roles
-                                            .educationalheadquarter_commander ||
-                                        roleStore.roles
-                                            .districtheadquarter_commander ||
-                                        roleStore.roles
-                                            .centralheadquarter_commander)) ||
-                                props.user.privacy?.privacy_telephone ===
-                                    'Все' ||
-                                props.user.privacy?.privacy_telephone === 'all'
-                            "
-                        >
-                            <img
-                                src="@/app/assets/icon/phone.svg"
-                                alt="phone"
-                            />
+                            props.user.privacy?.privacy_telephone ===
+                            'Все' ||
+                            props.user.privacy?.privacy_telephone === 'all'
+                        ">
+                            <img src="@/app/assets/icon/phone.svg" alt="phone" />
                             <p class="ml-2">{{ user.phone_number }}</p>
                         </div>
-                        <div
-                            class="user-data__contact-contact_item mail"
-                            v-if="
-                                (props.user.privacy?.privacy_email ===
-                                    'Члены отряда' &&
-                                    props.user.detachment_id ===
-                                        userStore.currentUser.detachment_id) ||
-                                (props.user.privacy?.privacy_email ===
-                                    'Руководство' &&
-                                    ((roleStore.roles.detachment_commander &&
-                                        roleStore.roles.detachment_commander
+                        <div class="user-data__contact-contact_item mail" v-if="
+                            (props.user.privacy?.privacy_email ===
+                                'Члены отряда' &&
+                                props.user.detachment_id ===
+                                userStore.currentUser.detachment_id) ||
+                            (props.user.privacy?.privacy_email ===
+                                'Руководство' &&
+                                ((roleStore.roles.detachment_commander &&
+                                    roleStore.roles.detachment_commander
+                                        ?.id ===
+                                    props.user.detachment_id) ||
+                                    (roleStore.roles
+                                        .regionalheadquarter_commander &&
+                                        roleStore.roles
+                                            .regionalheadquarter_commander
                                             ?.id ===
-                                            props.user.detachment_id) ||
-                                        (roleStore.roles
-                                            .regionalheadquarter_commander &&
-                                            roleStore.roles
-                                                .regionalheadquarter_commander
-                                                ?.id ===
-                                                props.user
-                                                    .regional_headquarter_id) ||
-                                        roleStore.roles
-                                            .localheadquarter_commander ||
-                                        roleStore.roles
-                                            .educationalheadquarter_commander ||
-                                        roleStore.roles
-                                            .districtheadquarter_commander ||
-                                        roleStore.roles
-                                            .centralheadquarter_commander)) ||
-                                props.user.privacy?.privacy_email === 'Все' ||
-                                props.user.privacy?.privacy_email === 'all'
-                            "
-                        >
+                                        props.user
+                                            .regional_headquarter_id) ||
+                                    roleStore.roles
+                                        .localheadquarter_commander ||
+                                    roleStore.roles
+                                        .educationalheadquarter_commander ||
+                                    roleStore.roles
+                                        .districtheadquarter_commander ||
+                                    roleStore.roles
+                                        .centralheadquarter_commander)) ||
+                            props.user.privacy?.privacy_email === 'Все' ||
+                            props.user.privacy?.privacy_email === 'all'
+                        ">
                             <img src="@/app/assets/icon/mail.svg" alt="mail" />
                             <p class="ml-2">{{ user.email }}</p>
                         </div>
@@ -501,9 +444,11 @@ const copyL = () => {
     grid-row-start: 3;
     grid-row-end: 5;
     padding: 36px 38px 32px 300px;
+
     @media screen and (max-width: 768px) {
         padding: 116px 90px 36px 60px;
     }
+
     @media screen and (max-width: 575px) {
         padding: 116px 14px 32px 14px;
     }
@@ -515,59 +460,74 @@ const copyL = () => {
     flex-direction: column;
     flex-wrap: wrap;
 }
+
 .user-data__name {
     display: flex;
     margin-bottom: 32px;
+
     @media screen and (max-width: 768px) {
         margin-bottom: 20px;
     }
+
     @media screen and (max-width: 575px) {
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
     }
 }
+
 .user-data__social-network {
     display: flex;
     align-items: center;
     margin-right: 40px;
+
     @media screen and (max-width: 768px) {
         margin-top: 16px;
         margin-right: 0;
     }
+
     @media screen and (max-width: 575px) {
         margin-top: 16px;
         margin-right: 0;
     }
 }
+
 .user-data__contact {
     display: flex;
+
     p {
         color: #35383f;
     }
+
     &-contact {
         display: flex;
+
         @media screen and (max-width: 575px) {
             flex-direction: column;
             align-items: center;
         }
+
         &_item {
             display: flex;
             align-items: center;
             margin-right: 20px;
+
             @media screen and (max-width: 575px) {
                 margin-right: 0;
             }
         }
     }
+
     @media screen and (max-width: 768px) {
         flex-direction: column-reverse;
     }
+
     @media screen and (max-width: 575px) {
         flex-direction: column-reverse;
         align-items: center;
     }
 }
+
 .user-data__name p {
     color: #35383f;
     /* Desktop/H-3 */
@@ -586,6 +546,7 @@ const copyL = () => {
     align-items: center;
     max-width: 700px;
     margin-bottom: 32px;
+
     @media screen and (max-width: 768px) {
         margin-bottom: 20px;
     }
@@ -597,6 +558,7 @@ const copyL = () => {
     align-items: center;
     justify-content: flex-start;
     list-style: none;
+
     @media screen and (max-width: 575px) {
         justify-content: center;
     }

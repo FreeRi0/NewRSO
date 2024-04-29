@@ -720,23 +720,23 @@ const routes: RouteRecordRaw[] = [
                             ),
                     },
 
-                    {
-                        path: 'test',
-                        meta: {
-                            redirectTo: 'testPage',
-                            label: 'Тестирование по обучению',
-                        },
-                        children: [
-                            {
-                                name: 'testPage',
-                                path: ':name',
-                                component: () =>
-                                    import(
-                                        '@pages/TestingPages/components/TestingPages.vue'
-                                    ),
-                            },
-                        ],
-                    },
+                    // {
+                    //     path: 'test',
+                    //     meta: {
+                    //         redirectTo: 'testPage',
+                    //         label: 'Тестирование по обучению',
+                    //     },
+                    //     children: [
+                    //         {
+                    //             name: 'testPage',
+                    //             path: ':name',
+                    //             component: () =>
+                    //                 import(
+                    //                     '@pages/TestingPages/components/TestingPages.vue'
+                    //                 ),
+                    //         },
+                    //     ],
+                    // },
                 ],
             },
         ],
@@ -867,6 +867,23 @@ const routes: RouteRecordRaw[] = [
                             import(
                                 '@pages/SafetyPage/components/SafetyPage.vue'
                             ),
+                    },
+                    {
+                        path: 'test',
+                        meta: {
+                            redirectTo: 'testPage',
+                            label: 'Тестирование по охране труда',
+                        },
+                        children: [
+                            {
+                                name: 'testPage',
+                                path: ':name',
+                                component: () =>
+                                    import(
+                                        '@pages/TestingPages/components/TestingPages.vue'
+                                    ),
+                            },
+                        ],
                     },
                 ],
             },

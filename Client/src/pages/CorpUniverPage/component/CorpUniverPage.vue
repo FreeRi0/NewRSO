@@ -1303,8 +1303,8 @@
                 allowfullscreen></iframe>
       </div>
 
-        <!-- <div id="testing" class="corpuniver__documents-test">
-
+<!--
+        <div id="testing" class="corpuniver__documents-test">
             <p class="text corpuniver__documents-description-test">
                 Итоговую аттестацию можно пройти с 29 марта по 10 апреля 2024
                 года (допускается 2 пересдачи) онлайн в профиле Личного
@@ -1516,6 +1516,7 @@ const toggleSummer = (e) => {
 }
 
 .corpuniver {
+    margin-bottom: 80px;
     &__title-h2 {
         font-family: Akrobat;
         font-size: 32px;
@@ -1540,6 +1541,7 @@ const toggleSummer = (e) => {
         width: 100%;
         height: 0;
         padding-top: 43.1%;
+
     }
 
     &__image-box {
