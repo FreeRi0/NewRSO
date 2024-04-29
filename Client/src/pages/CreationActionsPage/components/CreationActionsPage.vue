@@ -326,7 +326,7 @@
                                 </div>
                               </div>
                               <div class="form-col">
-                                <div class="form__field">
+                                <div class="form__field" v-if="maininfo.format === 'Офлайн' || ''">
                                   <label
                                       class="form__label"
                                       for="address-hq"
@@ -1013,19 +1013,19 @@
                                 size="large"
                                 @click="openPanelThree"
                             ></Button>
-                            <Button
-                                variant="text"
-                                type="button"
-                                class="form-button form-button--next"
-                                label="Далее"
-                                size="large"
-                                @click="openPanelFive"
-                            ></Button>
+<!--                            <Button-->
+<!--                                variant="text"-->
+<!--                                type="button"-->
+<!--                                class="form-button form-button&#45;&#45;next"-->
+<!--                                label="Далее"-->
+<!--                                size="large"-->
+<!--                                @click="openPanelFive"-->
+<!--                            ></Button>-->
                           </v-card-actions>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
 
-                    <v-expansion-panel value="panelFive">
+                    <v-expansion-panel value="panelFive" v-if="false">
                         <v-expansion-panel-title>
                             <template v-slot="{ expanded }">
                                 <v-row no-gutters>
@@ -1176,9 +1176,9 @@ const openPanelFour = () => {
   panel.value = 'panelFour';
 }
 
-const openPanelFive = () => {
-  panel.value = 'panelFive';
-}
+// const openPanelFive = () => {
+//   panel.value = 'panelFive';
+// }
 //-------------------------------------------------------------------------------------
 const usersList = ref(null)
 let selectedUser = ref([])
