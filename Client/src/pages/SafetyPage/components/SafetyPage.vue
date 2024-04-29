@@ -115,21 +115,20 @@
             </p>
         </div>
         <h2 id="video_1" class="corpuniver__title-h2">
-            Занятие 1 «Перечень документов при приеме на работу. Часть 1»
+            <a href="https://www.youtube.com/watch?v=5lBxsbNyyYQ">Занятие 1 «Перечень документов при приеме на
+                работу. Часть 1»</a>
         </h2>
         <div class="corpuniver__video " @click="playVideo(1)">
-            <img src="@app/assets/lso/lessonFirst.png" v-show="showVideo[1] == false">
+            <img src="@app/assets/lso/lesson.jpg" v-show="showVideo[1] == false">
             <iframe v-show="showVideo[1] == true" class="corpuniver__iframe video_1"
                 src="https://www.youtube.com/embed/5lBxsbNyyYQ?enablejsapi=1"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
-        <p class="mt-2 safe">Если у вас не открывается видео, то <a
-                href="https://www.youtube.com/watch?v=5lBxsbNyyYQ">тык</a></p>
-
 
         <h2 id="video_2" class="corpuniver__title-h2">
-            Занятие 1 «Перечень документов при приеме на работу. Часть 2»
+            <a href="https://www.youtube.com/watch?v=bF2qhaLE-_k">Занятие 1 «Перечень документов при приеме на
+                работу. Часть 2»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(2)">
             <img src="@app/assets/lso/lesson1_2.png" v-show="showVideo[2] == false">
@@ -138,10 +137,9 @@
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
-        <p class="mt-2 safe">Если у вас не открывается видео, то <a
-                href="https://www.youtube.com/watch?v=bF2qhaLE-_k">тык</a></p>
         <h2 id="video_3" class="corpuniver__title-h2">
-            Занятие 2 «Документы, регламентирующие трудовые отношения работника и работодателя»
+            <a href="https://www.youtube.com/watch?v=oZeFr6_b3UU">Занятие 2 «Документы, регламентирующие трудовые
+                отношения работника и работодателя»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(3)">
             <img src="@app/assets/lso/lesson2.png" v-show="showVideo[3] == false">
@@ -150,10 +148,9 @@
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
-        <p class="mt-2 safe">Если у вас не открывается видео, то <a
-                href="https://www.youtube.com/watch?v=oZeFr6_b3UU">тык</a></p>
         <h2 id="video_4" class="corpuniver__title-h2">
-            Занятие 3 «Основные виды инструктажей при приеме на работу. Часть 1»
+            <a href="https://www.youtube.com/watch?v=TOSphxyF1Sk"> Занятие 3 «Основные виды инструктажей при приеме на
+                работу. Часть 1»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(4)">
             <img src="@app/assets/lso/lesson3_1.png" v-show="showVideo[4] == false">
@@ -162,10 +159,10 @@
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
-        <p class="mt-2 safe">Если у вас не открывается видео, то <a
-                href="https://www.youtube.com/watch?v=TOSphxyF1Sk">тык</a></p>
         <h2 id="video_5" class="corpuniver__title-h2">
-            Занятие 3 «Основные виды инструктажей при приеме на работу. Часть 2»
+            <a href="https://www.youtube.com/watch?v=SjRDDpy3LI4&t=10s"> Занятие 3 «Основные виды инструктажей при
+                приеме на
+                работу. Часть 2»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(5)">
             <img src="@app/assets/lso/lesson3_2.png" v-show="showVideo[5] == false" />
@@ -174,12 +171,11 @@
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
-        <p class="mt-2 safe">Если у вас не открывается видео, то <a
-                href="https://www.youtube.com/watch?v=SjRDDpy3LI4&t=10s">тык</a></p>
 
 
         <h2 id="video_6" class="corpuniver__title-h2">
-            Занятие 4 «Несчастный случай на производстве. Часть 1»
+            <a href="https://www.youtube.com/watch?v=jMblehZ2wuY&t=18s"> Занятие 4 «Несчастный случай на производстве.
+                Часть 1»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(6)">
             <img src="@app/assets/lso/lesson4_1.png" v-show="showVideo[6] == false" />
@@ -188,11 +184,10 @@
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
-        <p class="mt-2 safe">Если у вас не открывается видео, то <a
-                href="https://www.youtube.com/watch?v=jMblehZ2wuY&t=18s">тык</a></p>
 
         <h2 id="video_7" class="corpuniver__title-h2">
-            Занятие 4 «Несчастный случай на производстве. Часть 2»
+            <a href="https://www.youtube.com/watch?v=8fGUjz36o3A"> Занятие 4 «Несчастный случай на производстве.
+                Часть 2»</a>
         </h2>
         <div class="corpuniver__video" @click="playVideo(7)">
             <img src="@app/assets/lso/lesson4_2.png" v-show="showVideo[7] == false" />
@@ -201,10 +196,8 @@
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
-        <p class="mt-2">Если у вас не открывается видео, то <a
-                href="https://www.youtube.com/watch?v=8fGUjz36o3A">тык</a></p>
         <h2 id="video_8" class="corpuniver__title-h2">
-            Занятие 5 «Первая помощь»
+            <a href="https://vk.com/video-223571150_456239108"> Занятие 5 «Первая помощь»</a>
         </h2>
         <div class="corpuniver__video">
 
@@ -212,8 +205,6 @@
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen>
             </iframe>
         </div>
-        <p class="mt-2 safe">Если у вас не открывается видео, то <a
-                href="https://vk.com/video-223571150_456239108 ">тык</a></p>
         <div id="testing" class="corpuniver__documents-test"
             v-if="roleStore.status.is_commander_detachment ||
                 roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))">
@@ -251,17 +242,6 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.safe {
-    font-size: 16px;
-    font-family: Bert Sans;
-    font-weight: 400;
-
-    a {
-        color: #1c5c94;
-        text-decoration: none;
-    }
-}
-
 .corpuniver {
     padding-bottom: 60px;
 
@@ -415,7 +395,7 @@ onMounted(async () => {
 
     &__video {
         position: relative;
-        padding: 0 0 50.25% 0;
+        padding: 0 0 56.25% 0;
         height: 0;
         overflow: hidden;
 
