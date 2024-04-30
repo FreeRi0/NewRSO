@@ -530,13 +530,13 @@ const goToEventList = (event) => {
 }
 
 const dateHandler = (date, time) => {
-
-    if (Date.parse(date) - Date.parse(new Date()) < '2592000000') {
+  if (date) {
+    if (Date.parse(date + 'T' + time) < Date.parse(new Date())) {
       return 'Регистрация окончена'
     } else {
       return `Окончание регистрации: ${date} в ${time}`
     }
-
+  }
 }
 
 const actionFormSearch = ref({
