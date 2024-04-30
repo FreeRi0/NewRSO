@@ -449,6 +449,7 @@
 
 <script setup>
 import {Button} from '@shared/components/buttons';
+import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
 import {onActivated, ref, watch} from 'vue';
 import {getListActionsByFilter, getListActionsBySearch, getRoles} from '@services/ActionService';
 import {useRouter} from "vue-router";
@@ -551,10 +552,11 @@ const dateHandler = (date, time) => {
       let h = ['час', 'часа', 'часов']
       let minute = ['минуту', 'минуты', 'минут']
 
+      // console.log(years + ' years ' + months + ' months ' + days + ' days ' + hours + ' hours ' + minutes +  ' minutes' );
       return years > 0 ? `Окончание регистрации через ${years} ${plural(years, y)}`
           : months > 0 ? `Окончание регистрации через ${months} ${plural(months, m)}`
               : days > 0 ? `Окончание регистрации через ${days} ${plural(days, d)}`
-                  : hours > 0?`Окончание регистрации через ${hours} ${plural(hours, h)}`
+                  : hours > 0 ? `Окончание регистрации через ${hours} ${plural(hours, h)}`
                   : `Окончание регистрации через ${minutes} ${plural(minutes, minute)}`;
     }
   } else {
