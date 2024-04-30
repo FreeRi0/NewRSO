@@ -800,6 +800,11 @@
                                 >Добавьте Документы:</label>
                                 <div class="form-col" style="margin-top: 12px;">
                                   <div class="form-fileupload">
+                                    <img
+                                        class="paper-clip"
+                                        src="@app/assets/icon/addFile.svg"
+                                        alt="addFile"
+                                    />
                                     <FileUpload
                                         mode="basic"
                                         name="demo[]"
@@ -808,11 +813,6 @@
                                         :customUpload="true"
                                         chooseLabel="Выбрать файл"
                                     ></FileUpload>
-                                    <img
-                                        style="margin-left: 6px;"
-                                        src="@app/assets/icon/addFile.svg"
-                                        alt="addFile"
-                                    />
                                   </div>
                                 </div>
                               </div>
@@ -1672,6 +1672,25 @@ function AddQuestion() {
   &-fileupload {
     display: flex;
     flex-direction: row;
+    margin-left: 4px;
+    font-family: Bert Sans;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: 0em;
+    gap: 10px;
+    text-align: left;
+    color: #1f7cc0;
+    & > :deep(.p-) {
+      display: none;
+    }
+
+    & :deep(.p-button-label) {
+      text-decoration: underline;
+    }
+    & :deep(svg) {
+      display: none;
+    }
   }
     &-radioR {
       margin-left: 16px;
