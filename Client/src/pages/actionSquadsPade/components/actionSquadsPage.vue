@@ -454,6 +454,7 @@ import { ref, watch } from 'vue';
 import { getListActionsByFilter, getListActionsBySearch, getRoles} from '@services/ActionService';
 import { onActivated } from 'vue';
 import { useRouter } from "vue-router";
+import moment from "moment";
 
 const router = useRouter();
 
@@ -534,9 +535,34 @@ const dateHandler = (date, time) => {
     if (Date.parse(date + 'T' + time) < Date.parse(new Date())) {
       return 'Регистрация окончена'
     } else {
-      return `Окончание регистрации: ${date} в ${time}`
+      let a = moment(date + 'T' + time)
+      let b = moment(new Date())
+
+      let years = a.diff(b, 'years')
+      b.add(years, 'years');
+      let months = a.diff(b, 'months');
+      b.add(months, 'months');
+      let days = a.diff(b, 'days');
+      b.add(days, 'days')
+      let hours = a.diff(b, 'hours')
+
+      let y = ['год', 'года', 'лет'];
+      let m = ['месяц', 'месяца', 'месяцев']
+      let d = ['день', 'дня', 'дней']
+      let h = ['час', 'часа', 'часов']
+
+      let result = years > 0 ? `Окончание регистрации через ${years} ${plural(years, y)}`
+          : months > 0 ?  `Окончание регистрации через ${months} ${plural(months, m)}`
+              : days > 0 ? `Окончание регистрации через ${days} ${plural(days, d)}`
+                  : `Окончание регистрации через ${hours} ${plural(hours, h)}`
+      return result;
     }
   }
+}
+
+const plural = (number, titles) => {
+  let cases = [2, 0, 1, 1, 1, 2];
+  return titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];
 }
 
 const actionFormSearch = ref({
@@ -881,7 +907,7 @@ const sortOptions = ref([
     position: absolute;
     opacity: 0;
     font-family: Bert Sans;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 300;
     line-height: 18.46px;
     text-align: left;
