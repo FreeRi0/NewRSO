@@ -8,34 +8,14 @@
                     width="1124"
                     height="481"
                 /> -->
-                <img
-                    v-if="sizeImage == 'mobile'"
-                    src="@app/assets/competition/mobile-promo.png"
-                    alt="Логотип конкурса"
-                    width="312"
-                    height="150"
-                />
-                <img
-                    v-else-if="sizeImage == 'tablet'"
-                    src="@app/assets/competition/tablet-promo.png"
-                    alt="Логотип конкурса"
-                    width="668"
-                    height="320"
-                />
-                <img
-                    v-else-if="sizeImage == 'laptop'"
-                    src="@app/assets/competition/laptop-promo.png"
-                    alt="Логотип конкурса"
-                    width="836"
-                    height="402"
-                />
-                <img
-                    v-else
-                    src="@app/assets/competition/desktop-promo.png"
-                    alt="Логотип конкурса"
-                    width="1124"
-                    height="481"
-                />
+                <img v-if="sizeImage == 'mobile'" src="@app/assets/competition/mobile-promo.png" alt="Логотип конкурса"
+                    width="312" height="150" />
+                <img v-else-if="sizeImage == 'tablet'" src="@app/assets/competition/tablet-promo.png"
+                    alt="Логотип конкурса" width="668" height="320" />
+                <img v-else-if="sizeImage == 'laptop'" src="@app/assets/competition/laptop-promo.png"
+                    alt="Логотип конкурса" width="836" height="402" />
+                <img v-else src="@app/assets/competition/desktop-promo.png" alt="Логотип конкурса" width="1124"
+                    height="481" />
             </div>
 
             <div class="competition__link-container">
@@ -44,33 +24,21 @@
                         <a href="/CompetitionParticipants">Участник конкурса</a>
                     </li>
                     <li class="competition__label">
-                        <a href="/Competition"
-                            >Номинация «{{ squad.nomination }}»</a
-                        >
+                        <a href="/Competition">Номинация «{{ squad.nomination }}»</a>
                     </li>
-                    <li
-                        v-if="squad.status === 'Наставник'"
-                        class="competition__label"
-                    >
-                        <router-link
-                            :to="{
-                                name: 'lso',
-                                params: { id: squad.tandem_partner.id },
-                            }"
-                            >Наставник ЛСО «{{ squad.tandem_partner.name }}»
+                    <li v-if="squad.status === 'Наставник'" class="competition__label">
+                        <router-link :to="{
+                            name: 'lso',
+                            params: { id: squad.tandem_partner.id },
+                        }">Наставник ЛСО «{{ squad.tandem_partner.name }}»
                         </router-link>
                     </li>
 
-                    <li
-                        v-if="squad.status === 'Старт'"
-                        class="competition__label"
-                    >
-                        <router-link
-                            :to="{
-                                name: 'lso',
-                                params: { id: squad.tandem_partner.id },
-                            }"
-                            >Под наставничеством ЛСО «{{
+                    <li v-if="squad.status === 'Старт'" class="competition__label">
+                        <router-link :to="{
+                            name: 'lso',
+                            params: { id: squad.tandem_partner.id },
+                        }">Под наставничеством ЛСО «{{
                                 squad.tandem_partner.name
                             }}»
                         </router-link>
@@ -83,15 +51,14 @@
             </div>
         </div>
 
-        <div v-if="roleStore.status.is_commander_detachment">
-            <router-link
-                :to="{
-                    name: 'debut',
-                    params: { id: squad.id },
-                }"
-            >
-                <div class="route">Отчетность</div></router-link
-            >
+        <div v-if="roleStore.status.is_commander_detachment && roleStore.roles?.detachment_commander?.id === squad.id
+        ">
+            <router-link :to="{
+                name: 'debut',
+                params: { id: squad.id },
+            }">
+                <div class="route">Отчетность</div>
+            </router-link>
         </div>
     </section>
 </template>
