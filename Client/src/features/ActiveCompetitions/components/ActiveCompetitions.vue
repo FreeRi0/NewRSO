@@ -570,55 +570,53 @@ const getAllReporting = async () => {
                 },
             );
             for (let report of data.results) {
-                if (!report.is_verified) {
-                    report.indicator = index;
-                    if (!allReporting.value[index]) {
-                        allReporting.value[index] = [];
-                    }
-                    if (index == 5) {
-                        let tempArr = [];
-                        for (const tempData of report.participants_data) {
-                            if (!tempData.is_verified) tempArr.push(tempData);
-                        }
-                        report.participants_data = tempArr;
-                        if (tempArr.length)
-                            allReporting.value[index].push(report);
-                    } else if (index == 13) {
-                        let tempArr = [];
-                        for (const tempData of report.organization_data) {
-                            if (!tempData.is_verified) tempArr.push(tempData);
-                        }
-                        report.organization_data = tempArr;
-                        if (tempArr.length)
-                            allReporting.value[index].push(report);
-                    } else if (index == 14) {
-                        let tempArr = [];
-                        console.log(report.q14_labor_projects);
-                        for (const tempData of report.q14_labor_projects) {
-                            console.log(tempData);
-                            if (!tempData.is_verified) tempArr.push(tempData);
-                            console.log(tempArr);
-                        }
-                        console.log(tempArr);
-                        report.q14_labor_projects = tempArr;
-                        if (tempArr.length)
-                            allReporting.value[index].push(report);
-                    } else if (index == 17) {
-                        let tempArr = [];
-                        for (const tempData of report.source_data) {
-                            if (!tempData.is_verified) tempArr.push(tempData);
-                        }
-                        report.source_data = tempArr;
-                        if (tempArr.length)
-                            allReporting.value[index].push(report);
-                    } else {
-                        allReporting.value[index].push(report);
-                    }
-                    //allReporting.value[index].push(report);
-                    hasReports.value = true;
+                if (report.is_verified) continue;
+                report.indicator = index;
+                if (!allReporting.value[index]) {
+                    allReporting.value[index] = [];
                 }
+                if (index == 5) {
+                    let tempArr = [];
+                    for (const tempData of report.participants_data) {
+                        if (!tempData.is_verified) tempArr.push(tempData);
+                    }
+                    report.participants_data = tempArr;
+                    if (tempArr.length) allReporting.value[index].push(report);
+                } else if (index == 13) {
+                    let tempArr = [];
+                    for (const tempData of report.organization_data) {
+                        if (!tempData.is_verified) tempArr.push(tempData);
+                    }
+                    report.organization_data = tempArr;
+                    if (tempArr.length) allReporting.value[index].push(report);
+                } else if (index == 14) {
+                    let tempArr = [];
+                    for (const tempData of report.q14_labor_projects) {
+                        if (!tempData.is_verified) tempArr.push(tempData);
+                    }
+                    report.q14_labor_projects = tempArr;
+                    if (tempArr.length) allReporting.value[index].push(report);
+                } else if (index == 15) {
+                    let tempArr = [];
+                    for (const tempData of report.grants_data) {
+                        if (!tempData.is_verified) tempArr.push(tempData);
+                    }
+                    report.grants_data = tempArr;
+                    if (tempArr.length) allReporting.value[index].push(report);
+                } else if (index == 17) {
+                    let tempArr = [];
+                    for (const tempData of report.source_data) {
+                        if (!tempData.is_verified) tempArr.push(tempData);
+                    }
+                    report.source_data = tempArr;
+                    if (tempArr.length) allReporting.value[index].push(report);
+                } else {
+                    allReporting.value[index].push(report);
+                }
+                if (!allReporting.value[index].length)
+                    delete allReporting.value[index];
+                hasReports.value = true;
             }
-            console.log(allReporting.value);
         } catch (e) {
             console.log('getAllReporting error', e);
         }
