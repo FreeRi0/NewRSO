@@ -1,9 +1,30 @@
 <template>
-    <div class="container" v-if="!loading">
-        <p class="main_text">Отчетность</p>
+    <div class="container">
+        <template v-if="!loading">
+            <p class="main_text">Отчетность</p>
 
-        <div class="containers_result">
-            <div
+            <div class="containers_result">
+                <div class="inline-container">
+                    <div
+                        class="indicator-container"
+                        v-for="(result, index) in mainResults.data"
+                        :key="index"
+                    >
+                        <div class="horizontal-item__wrapper">
+                            <div class="containerHorizontal">
+                                <p class="horizontal-item__list-full">
+                                    {{ result }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="horizontal-item__result-wrapper">
+                            <p class="horizontal-item__result">
+                                {{ mainResults.place[index] }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div
                 class="inline-container"
                 v-for="(result, index) in mainResults.data"
                 :key="index"
@@ -22,42 +43,45 @@
                         </p>
                     </div>
                 </div>
+            </div> -->
             </div>
-        </div>
 
-        <template class="data__btns">
-            <Button
-                type="button"
-                class="input_data"
-                label="Внести данные"
-                @click="onAction"
-            ></Button>
-        </template>
-
-        <div class="indicators">
-            <template class="indicator-text">
-                <p>Показатель</p>
-                <p>Место</p>
+            <template class="data__btns">
+                <Button
+                    type="button"
+                    class="input_data"
+                    label="Внести данные"
+                    @click="onAction"
+                ></Button>
             </template>
-            <div
-                class="indicator-container"
-                v-for="(indicator, index) in resultData.indicators"
-                :key="index"
-            >
-                <div class="horizontal-item__wrapper">
-                    <div class="containerHorizontal">
-                        <p class="horizontal-item__list-full">
-                            {{ indicator }}
+
+            <div class="indicators">
+                <template class="indicator-text">
+                    <p>Показатель</p>
+                    <p>Место</p>
+                </template>
+                <div
+                    class="indicator-container"
+                    v-for="(indicator, index) in resultData.indicators"
+                    :key="index"
+                >
+                    <div class="horizontal-item__wrapper">
+                        <div class="containerHorizontal">
+                            <p class="horizontal-item__list-full">
+                                {{ indicator }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="horizontal-item__result-wrapper">
+                        <p class="horizontal-item__result">
+                            {{ resultData.places[index] }}
                         </p>
                     </div>
                 </div>
-                <div class="horizontal-item__result-wrapper">
-                    <p class="horizontal-item__result">
-                        {{ resultData.places[index] }}
-                    </p>
-                </div>
             </div>
-        </div>
+        </template>
+
+        <div class="indicator-text" v-else>Загрузка...</div>
     </div>
 </template>
 
@@ -120,9 +144,14 @@ const resultData = ref({
     ],
 });
 
+// const mainResults = ref({
+//     data: ['Ваша сумма мест', 'Место в рейтинге'],
+//     place: ['-', '-'],
+// });
+
 const mainResults = ref({
-    data: ['Ваша сумма мест', 'Место в рейтинге'],
-    place: ['-', '-'],
+    data: ['Место в рейтинге'],
+    place: ['-'],
 });
 
 const onAction = async () => {
@@ -243,16 +272,17 @@ const getMainResults = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+        // Вернуть 1 в индекс для суммы мест
         if (data.place) {
-            mainResults.value.place[1] = data.place;
-        } else {
-            mainResults.value.place[1] = 'Рейтинг еще не сформирован';
-        }
-        if (data.places_sum) {
-            mainResults.value.place[0] = data.places_sum;
+            mainResults.value.place[0] = data.place;
         } else {
             mainResults.value.place[0] = 'Рейтинг еще не сформирован';
         }
+        // if (data.places_sum) {
+        //     mainResults.value.place[0] = data.places_sum;
+        // } else {
+        //     mainResults.value.place[0] = 'Рейтинг еще не сформирован';
+        // }
         if (data.partner_detachment) {
             mainResults.value.place.push(
                 data.places_sum
@@ -310,9 +340,9 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
-.indicator-container:last-child {
-    padding-bottom: 80px;
-}
+// .indicator-container:last-child {
+//     padding-bottom: 80px;
+// }
 .indicator-text {
     display: grid;
     width: 100%;
@@ -416,13 +446,7 @@ onMounted(async () => {
     padding-right: 0px minmax(12px, 80px);
     font-size: 80px;
 }
-// .inline-container:last-child {
-//     display: inline-block;
-//     padding-right: 0px;
-// }
-// .inline-container::after {
-//     content: '';
-//     display: inline-block;
-//     width: 10px; /* Ширина отступа между блоками */
-// }
+.container {
+    padding-bottom: 80px;
+}
 </style>
