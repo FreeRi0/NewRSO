@@ -626,7 +626,7 @@
                                     <span class="valid-red">&nbsp;*</span></label>
                                 <Input type="text" class="input-full"
                                     placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
-                                    v-model:value="foreignDoc.name" :max-length="200" />
+                                    v-model:value="props.foreignUserDocs.name" :max-length="200" />
                                 <div class="form__counter">
                                     {{ counterOtherDoc }} / 200
                                 </div>
@@ -635,13 +635,13 @@
                             <div class="form-field">
                                 <label for="pass-date">Дата выдачи<span class="valid-red">&nbsp;*</span></label>
                                 <Input type="date" name="pass-date" class="input-small"
-                                    v-model:value="foreignDoc.foreign_pass_date" />
+                                    v-model:value="props.foreignUserDocs.foreign_pass_date" />
                             </div>
 
                             <div class="form-field">
                                 <label for="pass-id">Серия и номер</label>
                                 <Input type="text" id="pass-id" class="input-small pass-masked" vmaska
-                                    maska="AA ##########" v-model:value="foreignDoc.foreign_pass_num"
+                                    maska="AA ##########" v-model:value="props.foreignUserDocs.foreign_pass_num"
                                     :max-length="50" />
                                 <div class="form__counter">
                                     {{ counterOtherPassNum }} / 50
@@ -650,7 +650,7 @@
                             <div class="form-field one">
                                 <label for="org-id">Кем выдан<span class="valid-red">&nbsp;*</span></label>
                                 <Input type="text" id="org-id" class="input-full" placeholder="Страна"
-                                    v-model:value="foreignDoc.foreign_pass_whom" :max-length="230" />
+                                    v-model:value="props.foreignUserDocs.foreign_pass_whom" :max-length="230" />
                                 <div class="form__counter">
                                     {{ counterOtherPassWhom }} / 230
                                 </div>
@@ -659,7 +659,8 @@
                                 <label for="work-book-foreign">Трудовая книжка
                                 </label>
                                 <Input type="text" id="work-book-foreign" class="input-big mask-workbook" vmaska
-                                    maska="AA ##########" v-model:value="foreignDoc.work_book_num" :max-length="15" />
+                                    maska="AA ##########" v-model:value="props.foreignUserDocs.work_book_num"
+                                    :max-length="15" />
                                 <div class="form__counter">
                                     {{ counterOtherWorkbook }} / 15
                                 </div>
@@ -667,7 +668,7 @@
                             <div class="form-field">
                                 <label for="INN-id-foreign">ИНН</label>
                                 <Input type="text" id="INN-id-foreign" class="input-big mask-inn" vmaska
-                                    maska="AA ##########" v-model:value="foreignDoc.inn" :max-length="12" />
+                                    maska="AA ##########" v-model:value="props.foreignUserDocs.inn" :max-length="12" />
                                 <div class="form__counter">
                                     {{ counterOtherInn }} / 12
                                 </div>
@@ -675,7 +676,8 @@
                             <div class="form-field">
                                 <label for="snils-id-foreign">Номер СНИЛС</label>
                                 <Input type="text" id="snils-id-foreign" vmaska maska="AA ##########"
-                                    class="input-big mask-snils" v-model:value="foreignDoc.snils" :max-length="30" />
+                                    class="input-big mask-snils" v-model:value="props.foreignUserDocs.snils"
+                                    :max-length="30" />
                                 <div class="form__counter">
                                     {{ counterOtherSnils }} / 30
                                 </div>
@@ -2360,9 +2362,9 @@
                             !props.user.documents.inn ||
                             !props.user.documents.snils)) ||
                     (props.user.documents.russian_passport === false &&
-                        (!foreignDoc.name ||
-                            !foreignDoc.foreign_pass_date ||
-                            !foreignDoc.foreign_pass_whom
+                        (!props.foreignUserDocs.name ||
+                            !props.foreignUserDocs.foreign_pass_date ||
+                            !props.foreignUserDocs.foreign_pass_whom
                         )) ||
                     (props.user.is_adult === false &&
                         (!props.user.parent.parent_first_name ||
@@ -2412,6 +2414,8 @@ const props = defineProps({
     button: Boolean,
     user: Object,
     disabled: Boolean,
+    foreignUserDocs: Object,
+    foreignParent: Object,
 });
 const emit = defineEmits([
     'updateUserData',
@@ -2424,7 +2428,6 @@ const emit = defineEmits([
 const onNumber = ref('');
 const router = useRouter();
 const userStore = useUserStore();
-// const currentUser = storeToRefs(userStore);
 const panel = ref();
 const isError = ref({});
 const isLoading = ref(false);
@@ -2448,15 +2451,15 @@ const openPanelFive = () => {
     panel.value = 'panelFive';
 };
 
-const foreignDoc = ref({
-    name: '',
-    foreign_pass_num: '',
-    foreign_pass_whom: '',
-    foreign_pass_date: '',
-    snils: '',
-    inn: '',
-    work_book_num: '',
-});
+// const foreignDoc = ref({
+//     name: '',
+//     foreign_pass_num: '',
+//     foreign_pass_whom: '',
+//     foreign_pass_date: '',
+//     snils: '',
+//     inn: '',
+//     work_book_num: '',
+// });
 
 const foreignDocParent = ref({
     name: '',
@@ -2646,27 +2649,27 @@ const counterPass = computed(() => {
 });
 
 const counterOtherDoc = computed(() => {
-    return foreignDoc.value.name?.length || 0;
+    return props.foreignUserDocs.name?.length || 0;
 });
 
 const counterOtherWorkbook = computed(() => {
-    return foreignDoc.value.work_book_num?.length || 0;
+    return props.foreignUserDocs.work_book_num?.length || 0;
 });
 
 const counterOtherPassNum = computed(() => {
-    return foreignDoc.value.foreign_pass_num?.length || 0;
+    return props.foreignUserDocs.foreign_pass_num?.length || 0;
 });
 
 const counterOtherPassWhom = computed(() => {
-    return foreignDoc.value.foreign_pass_whom?.length || 0;
+    return props.foreignUserDocs.foreign_pass_whom?.length || 0;
 });
 
 const counterOtherSnils = computed(() => {
-    return foreignDoc.value.snils?.length || 0;
+    return props.foreignUserDocs.snils?.length || 0;
 });
 
 const counterOtherInn = computed(() => {
-    return foreignDoc.value.inn?.length || 0;
+    return props.foreignUserDocs.inn?.length || 0;
 });
 
 const counterPassWhom = computed(() => {
@@ -2681,23 +2684,23 @@ const counterKnow = computed(() => {
 //     emit('update:value', event.target.value);
 //     console.log('textt', event.target.value);
 // };
-const getData = async () => {
-    try {
-        const responseForeignDocs = await HTTP.get(
-            '/rsousers/me/foreign_documents/',
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
+// const getData = async () => {
+//     try {
+//         const responseForeignDocs = await HTTP.get(
+//             '/rsousers/me/foreign_documents/',
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             },
+//         );
 
-        foreignDoc.value = responseForeignDocs.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+//         foreignDoc.value = responseForeignDocs.data;
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 const getForeignParentDocs = async () => {
     try {
         const responseForeignDocsParent = await HTTP.get(
@@ -3005,7 +3008,15 @@ const updateData = async () => {
         if (!props.user.documents.russian_passport) {
             const axiosrequestForeignDocs = await HTTP.patch(
                 '/rsousers/me/foreign_documents/',
-                foreignDoc.value,
+                {
+                    name: props.foreignUserDocs.name,
+                    foreign_pass_num: props.foreignUserDocs.foreign_pass_num,
+                    foreign_pass_whom: props.foreignUserDocs.foreign_pass_whom,
+                    foreign_pass_date: props.foreignUserDocs.foreign_pass_date,
+                    snils: props.foreignUserDocs.snils,
+                    inn: props.foreignUserDocs.inn,
+                    work_book_num: props.foreignUserDocs.work_book_num,
+                },
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -3136,7 +3147,6 @@ const passport = ref([
 ]);
 
 onMounted(() => {
-    getData();
     getForeignParentDocs();
 });
 </script>

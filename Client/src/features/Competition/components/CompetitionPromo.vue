@@ -39,8 +39,8 @@
                             name: 'lso',
                             params: { id: squad.tandem_partner.id },
                         }">Под наставничеством ЛСО «{{
-                                squad.tandem_partner.name
-                            }}»
+                            squad.tandem_partner.name
+                        }}»
                         </router-link>
                     </li>
                 </ul>
@@ -51,8 +51,8 @@
             </div>
         </div>
 
-        <div v-if="roleStore.status.is_commander_detachment && roleStore.roles?.detachment_commander?.id === squad.id
-        ">
+        <div
+            v-if="(roleStore.status.is_commander_detachment && roleStore.roles?.detachment_commander?.id === squad.id) || (roleStore.roles?.regionalheadquarter_commander?.id === squadsStore.squad?.regional_headquarter)">
             <router-link :to="{
                 name: 'debut',
                 params: { id: squad.id },
@@ -60,12 +60,14 @@
                 <div class="route">Отчетность</div>
             </router-link>
         </div>
+
     </section>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
+import { useSquadsStore } from '@features/store/squads';
 
 defineProps({
     squad: {
@@ -74,8 +76,18 @@ defineProps({
     },
 });
 
-let sizeImage = ref('desktop');
+
+const squadsStore = useSquadsStore();
 const roleStore = useRoleStore();
+// const regComLocal = computed(() => {
+//     return squadsStore.competitionSquads.find((item) => item?.detachment?.regional_headquarter_name || item?.junior_detachment?.regional_headquarter_name === roleStore.roles?.
+//         regionalheadquarter_commander?.name
+//     );
+// })
+
+
+let sizeImage = ref('desktop');
+
 const getSizeImage = () => {
     console.log('ширина экрана', window.innerWidth);
     if (window.innerWidth <= 360) {

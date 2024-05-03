@@ -2,53 +2,26 @@
     <div class="container">
         <div class="mt-14">
             <h2 class="profile-title">Настройки профиля</h2>
-            <MyWall
-                :user="currentUser.currentUser.value"
-                :education="education"
-                class="mt-3"
-                @upload-wall="uploadWall"
-                @update-wall="updateWall"
-                @upload="uploadAva"
-                @update="updateAva"
-                @updateUserData="updateUser"
-                @updateEducData="updateEduc"
-            ></MyWall>
+            <MyWall :user="currentUser.currentUser.value" :education="education" class="mt-3" @upload-wall="uploadWall"
+                @update-wall="updateWall" @upload="uploadAva" @update="updateAva" @updateUserData="updateUser"
+                @updateEducData="updateEduc"></MyWall>
             <!--Табы-->
             <div class="d-flex mt-9 mb-9 buttonWrap">
-                <button
-                    class="contributorBtn"
-                    :class="{ active: picked === tab.name }"
-                    v-for="tab in tabs"
-                    :key="tab.id"
-                    @click="picked = tab.name"
-                >
+                <button class="contributorBtn" :class="{ active: picked === tab.name }" v-for="tab in tabs"
+                    :key="tab.id" @click="picked = tab.name">
                     {{ tab.name }}
                 </button>
             </div>
-            <AccordionsPersonal
-                v-if="picked == 'Персональные данные'"
-                :button="true"
+            <AccordionsPersonal v-if="picked == 'Персональные данные'" :button="true"
                 :user="currentUser.currentUser.value"
-                @updateUserData="updateUser"
-                @updateRegionData="updateRegion"
-                @updateDocData="updateDoc"
-                @updateEducData="updateEduc"
-                @updateFileData="updateFile"
-                @updateStatus="updateStatus"
-                @updateParentData="updateParent"
-            ></AccordionsPersonal>
-            <userData
-                @uploadUserPic="uploadUserPic"
-                @changeBio="changeBio"
-                v-else-if="picked == 'Моя страница' || picked == ''"
-            ></userData>
-            <privateProfile
-                v-else-if="picked == 'Настройки приватности'"
-            ></privateProfile>
-            <changePassword
-                @changeUsername="changeUsername"
-                v-else-if="picked == 'Логин и пароль'"
-            ></changePassword>
+                :foreignUserDocs="userStore.userDocs"
+                @updateUserData="updateUser" @updateRegionData="updateRegion" @updateDocData="updateDoc"
+                @updateEducData="updateEduc" @updateFileData="updateFile" @updateStatus="updateStatus"
+                @updateParentData="updateParent"></AccordionsPersonal>
+            <userData @uploadUserPic="uploadUserPic" @changeBio="changeBio"
+                v-else-if="picked == 'Моя страница' || picked == ''"></userData>
+            <privateProfile v-else-if="picked == 'Настройки приватности'"></privateProfile>
+            <changePassword @changeUsername="changeUsername" v-else-if="picked == 'Логин и пароль'"></changePassword>
         </div>
     </div>
 </template>
@@ -165,6 +138,10 @@ const pages = ref([
     { pageTitle: 'Личный кабинет', href: '#' },
     { pageTitle: 'Настройка профиля', href: '#' },
 ]);
+
+onMounted(() => {
+    userStore.getForeignDocs();
+})
 </script>
 <style lang="scss" scoped>
 .profile-title {
@@ -181,10 +158,12 @@ const pages = ref([
     padding: 10px 24px;
     width: 100%;
     margin: 7px;
+
     @media screen and (max-width: 768px) {
         padding: 8px 20px;
     }
 }
+
 .buttonWrap {
     @media screen and (max-width: 768px) {
         flex-wrap: wrap;
@@ -195,6 +174,7 @@ const pages = ref([
     background-color: #1c5c94;
     color: white;
 }
+
 .v-icon {
     color: white;
 }
