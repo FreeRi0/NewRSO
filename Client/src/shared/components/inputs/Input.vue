@@ -7,6 +7,7 @@
             :id="name"
             :placeholder="placeholder"
             :maxlength="maxLength"
+            :readonly="readonly"
             max="9999-12-31"
             class="mb-2"
             @input="updateValue"
