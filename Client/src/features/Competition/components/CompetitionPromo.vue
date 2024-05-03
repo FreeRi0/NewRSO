@@ -8,34 +8,14 @@
                     width="1124"
                     height="481"
                 /> -->
-                <img
-                    v-if="sizeImage == 'mobile'"
-                    src="@app/assets/competition/mobile-promo.png"
-                    alt="Логотип конкурса"
-                    width="312"
-                    height="150"
-                />
-                <img
-                    v-else-if="sizeImage == 'tablet'"
-                    src="@app/assets/competition/tablet-promo.png"
-                    alt="Логотип конкурса"
-                    width="668"
-                    height="320"
-                />
-                <img
-                    v-else-if="sizeImage == 'laptop'"
-                    src="@app/assets/competition/laptop-promo.png"
-                    alt="Логотип конкурса"
-                    width="836"
-                    height="402"
-                />
-                <img
-                    v-else
-                    src="@app/assets/competition/desktop-promo.png"
-                    alt="Логотип конкурса"
-                    width="1124"
-                    height="481"
-                />
+                <img v-if="sizeImage == 'mobile'" src="@app/assets/competition/mobile-promo.png" alt="Логотип конкурса"
+                    width="312" height="150" />
+                <img v-else-if="sizeImage == 'tablet'" src="@app/assets/competition/tablet-promo.png"
+                    alt="Логотип конкурса" width="668" height="320" />
+                <img v-else-if="sizeImage == 'laptop'" src="@app/assets/competition/laptop-promo.png"
+                    alt="Логотип конкурса" width="836" height="402" />
+                <img v-else src="@app/assets/competition/desktop-promo.png" alt="Логотип конкурса" width="1124"
+                    height="481" />
             </div>
 
             <div class="competition__link-container">
@@ -44,35 +24,23 @@
                         <a href="/CompetitionParticipants">Участник конкурса</a>
                     </li>
                     <li class="competition__label">
-                        <a href="/Competition"
-                            >Номинация «{{ squad.nomination }}»</a
-                        >
+                        <a href="/Competition">Номинация «{{ squad.nomination }}»</a>
                     </li>
-                    <li
-                        v-if="squad.status === 'Наставник'"
-                        class="competition__label"
-                    >
-                        <router-link
-                            :to="{
-                                name: 'lso',
-                                params: { id: squad.tandem_partner.id },
-                            }"
-                            >Наставник ЛСО «{{ squad.tandem_partner.name }}»
+                    <li v-if="squad.status === 'Наставник'" class="competition__label">
+                        <router-link :to="{
+                            name: 'lso',
+                            params: { id: squad.tandem_partner.id },
+                        }">Наставник ЛСО «{{ squad.tandem_partner.name }}»
                         </router-link>
                     </li>
 
-                    <li
-                        v-if="squad.status === 'Старт'"
-                        class="competition__label"
-                    >
-                        <router-link
-                            :to="{
-                                name: 'lso',
-                                params: { id: squad.tandem_partner.id },
-                            }"
-                            >Под наставничеством ЛСО «{{
-                                squad.tandem_partner.name
-                            }}»
+                    <li v-if="squad.status === 'Старт'" class="competition__label">
+                        <router-link :to="{
+                            name: 'lso',
+                            params: { id: squad.tandem_partner.id },
+                        }">Под наставничеством ЛСО «{{
+                            squad.tandem_partner.name
+                        }}»
                         </router-link>
                     </li>
                 </ul>
@@ -83,22 +51,23 @@
             </div>
         </div>
 
-        <div v-if="roleStore.status.is_commander_detachment">
-            <router-link
-                :to="{
-                    name: 'debut',
-                    params: { id: squad.id },
-                }"
-            >
-                <div class="route">Отчетность</div></router-link
-            >
+        <div
+            v-if="(roleStore.status.is_commander_detachment && roleStore.roles?.detachment_commander?.id === squad.id) || (roleStore.roles?.regionalheadquarter_commander?.id === squadsStore.squad?.regional_headquarter)">
+            <router-link :to="{
+                name: 'debut',
+                params: { id: squad.id },
+            }">
+                <div class="route">Отчетность</div>
+            </router-link>
         </div>
+
     </section>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
+import { useSquadsStore } from '@features/store/squads';
 
 defineProps({
     squad: {
@@ -107,8 +76,18 @@ defineProps({
     },
 });
 
-let sizeImage = ref('desktop');
+
+const squadsStore = useSquadsStore();
 const roleStore = useRoleStore();
+// const regComLocal = computed(() => {
+//     return squadsStore.competitionSquads.find((item) => item?.detachment?.regional_headquarter_name || item?.junior_detachment?.regional_headquarter_name === roleStore.roles?.
+//         regionalheadquarter_commander?.name
+//     );
+// })
+
+
+let sizeImage = ref('desktop');
+
 const getSizeImage = () => {
     console.log('ширина экрана', window.innerWidth);
     if (window.innerWidth <= 360) {

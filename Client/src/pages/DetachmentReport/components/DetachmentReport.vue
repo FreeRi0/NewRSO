@@ -1,9 +1,30 @@
 <template>
-    <div class="container" v-if="!loading">
-        <p class="main_text">Отчетность</p>
+    <div class="container">
+        <template v-if="!loading">
+            <p class="main_text">Отчетность</p>
 
-        <div class="containers_result">
-            <div
+            <div class="containers_result">
+                <div class="inline-container">
+                    <div
+                        class="indicator-container"
+                        v-for="(result, index) in mainResults.data"
+                        :key="index"
+                    >
+                        <div class="horizontal-item__wrapper">
+                            <div class="containerHorizontal">
+                                <p class="horizontal-item__list-full">
+                                    {{ result }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="horizontal-item__result-wrapper">
+                            <p class="horizontal-item__result">
+                                {{ mainResults.place[index] }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div
                 class="inline-container"
                 v-for="(result, index) in mainResults.data"
                 :key="index"
@@ -22,42 +43,45 @@
                         </p>
                     </div>
                 </div>
+            </div> -->
             </div>
-        </div>
 
-        <template class="data__btns">
-            <Button
-                type="button"
-                class="input_data"
-                label="Внести данные"
-                @click="onAction"
-            ></Button>
-        </template>
-
-        <div class="indicators">
-            <template class="indicator-text">
-                <p>Показатель</p>
-                <p>Место</p>
+            <template class="data__btns">
+                <Button
+                    type="button"
+                    class="input_data"
+                    label="Внести данные"
+                    @click="onAction"
+                ></Button>
             </template>
-            <div
-                class="indicator-container"
-                v-for="(indicator, index) in resultData.indicators"
-                :key="index"
-            >
-                <div class="horizontal-item__wrapper">
-                    <div class="containerHorizontal">
-                        <p class="horizontal-item__list-full">
-                            {{ indicator }}
+
+            <div class="indicators">
+                <template class="indicator-text">
+                    <p>Показатель</p>
+                    <p>Место</p>
+                </template>
+                <div
+                    class="indicator-container"
+                    v-for="(indicator, index) in resultData.indicators"
+                    :key="index"
+                >
+                    <div class="horizontal-item__wrapper">
+                        <div class="containerHorizontal">
+                            <p class="horizontal-item__list-full">
+                                {{ indicator }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="horizontal-item__result-wrapper">
+                        <p class="horizontal-item__result">
+                            {{ resultData.places[index] }}
                         </p>
                     </div>
                 </div>
-                <div class="horizontal-item__result-wrapper">
-                    <p class="horizontal-item__result">
-                        {{ resultData.places[index] }}
-                    </p>
-                </div>
             </div>
-        </div>
+        </template>
+
+        <div class="indicator-text" v-else>Загрузка...</div>
     </div>
 </template>
 
@@ -71,28 +95,30 @@ const router = useRouter();
 const commander = ref(false);
 const loading = ref(true);
 
+const detachment_id = ref();
+
 const resultData = ref({
     indicators: [
-        'Численность членов линейного студенческого отряда в соответствии с объемом уплаченных членских взносов',
-        'Прохождение Командиром и Комиссаром студенческого отряда региональной школы командного состава',
-        'Получение командным составом отряда образования в корпоративном университете РСО',
-        'Прохождение обучение по охране труда и пожарной безопасности в рамках недели охраны труда РСО',
-        'Процент членов студенческого отряда прошедших профессиональное обучение',
-        'Участие членов студенческого отряда в обязательных общесистемных мероприятиях на региональном уровне',
-        'Участие членов студенческого отряда в, окружных и межрегиональных мероприятиях РСО',
-        'Участие членов студенческого отряда во всероссийских мероприятиях РСО',
-        'Призовые места отряда в окружных и межрегиональных мероприятиях и конкурсах РСО',
-        'Призовые места отряда во Всероссийских мероприятиях и конкурсах РСО',
-        'Призовые места отряда на окружных и межрегиональных трудовых проектах',
-        'Призовые места отряда на всероссийских трудовых проектах',
-        'Организация собственных мероприятий отряда',
-        'Отношение количества бойцов, отработавших в летнем трудовом семестре к общему числу членов отряда',
-        'Победы членов отряда в региональных, окружных и всероссийских грантовых конкурсах, направленных на развитие студенческих отрядов',
-        'Активность отряда в социальных сетях',
-        'Количество упоминаний в СМИ о прошедших творческих, добровольческих и патриотических мероприятиях отряда',
-        'Охват бойцов, принявших участие во Всероссийском дне ударного труда',
-        'Отсутствие нарушении техники безопасности, охраны труда и противопожарной безопасности в трудовом семестре',
-        'Соответствие требованиями положения символики и атрибутике форменной одежды и символики отрядов',
+        '1. Численность членов линейного студенческого отряда в соответствии с объемом уплаченных членских взносов',
+        '2. Прохождение Командиром и Комиссаром студенческого отряда региональной школы командного состава',
+        '3. Получение командным составом отряда образования в корпоративном университете РСО',
+        '4. Прохождение обучение по охране труда и пожарной безопасности в рамках недели охраны труда РСО',
+        '5. Процент членов студенческого отряда прошедших профессиональное обучение',
+        '6. Участие членов студенческого отряда в обязательных общесистемных мероприятиях на региональном уровне',
+        '7. Участие членов студенческого отряда в, окружных и межрегиональных мероприятиях РСО',
+        '8. Участие членов студенческого отряда во всероссийских мероприятиях РСО',
+        '9. Призовые места отряда в окружных и межрегиональных мероприятиях и конкурсах РСО',
+        '10. Призовые места отряда во Всероссийских мероприятиях и конкурсах РСО',
+        '11. Призовые места отряда на окружных и межрегиональных трудовых проектах',
+        '12. Призовые места отряда на всероссийских трудовых проектах',
+        '13. Организация собственных мероприятий отряда',
+        '14. Отношение количества бойцов, отработавших в летнем трудовом семестре к общему числу членов отряда',
+        '15. Победы членов отряда в региональных, окружных и всероссийских грантовых конкурсах, направленных на развитие студенческих отрядов',
+        '16. Активность отряда в социальных сетях',
+        '17. Количество упоминаний в СМИ о прошедших творческих, добровольческих и патриотических мероприятиях отряда',
+        '18. Охват бойцов, принявших участие во Всероссийском дне ударного труда',
+        '19. Отсутствие нарушении техники безопасности, охраны труда и противопожарной безопасности в трудовом семестре',
+        '20. Соответствие требованиями положения символики и атрибутике форменной одежды и символики отрядов',
     ],
     places: [
         '-',
@@ -118,9 +144,14 @@ const resultData = ref({
     ],
 });
 
+// const mainResults = ref({
+//     data: ['Ваша сумма мест', 'Место в рейтинге'],
+//     place: ['-', '-'],
+// });
+
 const mainResults = ref({
-    data: ['Ваша сумма мест', 'Место в рейтинге'],
-    place: ['-', '-'],
+    data: ['Место в рейтинге'],
+    place: ['-'],
 });
 
 const onAction = async () => {
@@ -132,6 +163,7 @@ const onAction = async () => {
 
 const getPostitions = async () => {
     for (let index = 1; index <= 20; index++) {
+        // await getVerificationLogs(index);
         try {
             if (commander.value) {
                 const { data } = await HTTP.get(
@@ -144,7 +176,7 @@ const getPostitions = async () => {
                         },
                     },
                 );
-                console.log(data);
+                //console.log(data);
                 resultData.value.places[index - 1] = data.place;
             } else {
                 const { data } = await HTTP.get(
@@ -173,16 +205,45 @@ const getPostitions = async () => {
                 if (e.request.response) {
                     resultData.value.places[index - 1] =
                         'Рейтинг еще не сформирован';
-                } else
+                } else {
+                    await getVerificationLogs(index);
+                }
+                if (resultData.value.places[index - 1] == '-')
                     resultData.value.places[index - 1] = 'Данные не отправлены';
-                console.log(`${index}: ${e.request.response}`);
-                console.log(e);
+                //console.log(`${index}: ${e.request.response}`);
+                //console.log(e);
             } else {
                 console.log(`!!!\n${index}: getPostions error`, e);
             }
         }
     }
     loading.value = false;
+};
+
+const getVerificationLogs = async (q_number) => {
+    try {
+        const { data } = await HTTP.get(
+            `/competitions/1/verification_logs/${q_number}/?verified_detachment_id=${detachment_id.value}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            },
+        );
+        // console.log(data);
+
+        if (data.results.length != 0) {
+            const temp = data.results.pop();
+            // console.log(temp);
+            if (temp?.action == 'Отклонил') {
+                resultData.value.places[q_number - 1] =
+                    'Показатель не засчитан';
+            }
+        }
+    } catch (e) {
+        console.log(`getVerificationLogs error`, e);
+    }
 };
 
 const getMeCommander = async () => {
@@ -193,9 +254,10 @@ const getMeCommander = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        console.log(data);
+        // console.log(data);
         if (data.detachment_commander) {
             commander.value = true;
+            detachment_id.value = data.detachment_commander.id;
         }
     } catch (e) {
         console.log(`getMeCommander error`, e);
@@ -210,16 +272,17 @@ const getMainResults = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+        // Вернуть 1 в индекс для суммы мест
         if (data.place) {
             mainResults.value.place[0] = data.place;
         } else {
             mainResults.value.place[0] = 'Рейтинг еще не сформирован';
         }
-        if (data.places_sum) {
-            mainResults.value.place[1] = data.places_sum;
-        } else {
-            mainResults.value.place[1] = 'Рейтинг еще не сформирован';
-        }
+        // if (data.places_sum) {
+        //     mainResults.value.place[0] = data.places_sum;
+        // } else {
+        //     mainResults.value.place[0] = 'Рейтинг еще не сформирован';
+        // }
         if (data.partner_detachment) {
             mainResults.value.place.push(
                 data.places_sum
@@ -230,7 +293,7 @@ const getMainResults = async () => {
                 `Сумма мест отряд «${data.partner_detachment.name}»`,
             );
         }
-        console.log(mainResults.value);
+        // console.log(mainResults.value);
     } catch (e) {
         console.log('getMainResults error', e);
     }
@@ -277,9 +340,9 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
-.indicator-container:last-child {
-    padding-bottom: 80px;
-}
+// .indicator-container:last-child {
+//     padding-bottom: 80px;
+// }
 .indicator-text {
     display: grid;
     width: 100%;
@@ -383,13 +446,7 @@ onMounted(async () => {
     padding-right: 0px minmax(12px, 80px);
     font-size: 80px;
 }
-// .inline-container:last-child {
-//     display: inline-block;
-//     padding-right: 0px;
-// }
-// .inline-container::after {
-//     content: '';
-//     display: inline-block;
-//     width: 10px; /* Ширина отступа между блоками */
-// }
+.container {
+    padding-bottom: 80px;
+}
 </style>

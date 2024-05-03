@@ -326,7 +326,7 @@
                                 </div>
                               </div>
                               <div class="form-col">
-                                <div class="form__field">
+                                <div class="form__field" v-if="maininfo.format === 'Офлайн' || ''">
                                   <label
                                       class="form__label"
                                       for="address-hq"
@@ -814,7 +814,14 @@
                                 <label class="form__label">Добавьте документы:</label>
                                 <div class="form-col" style="margin-top: 12px;">
                                   <div class="form-fileupload">
+                                    <img
+                                        class="paper-clip"
+                                        src="@app/assets/icon/addFile.svg"
+                                        alt="addFile"
+                                    />
+
                                     <FileUpload
+                                        class="file-upload-text"
                                         mode="basic"
                                         name="demo[]"
                                         accept=".pdf, .jpeg, .png"
@@ -822,11 +829,6 @@
                                         :customUpload="true"
                                         chooseLabel="Выбрать файл"
                                     ></FileUpload>
-                                    <img
-                                        style="margin-left: 6px;"
-                                        src="@app/assets/icon/addFile.svg"
-                                        alt="addFile"
-                                    />
                                   </div>
                                 </div>
                               </div>
@@ -1013,19 +1015,19 @@
                                 size="large"
                                 @click="openPanelThree"
                             ></Button>
-                            <Button
-                                variant="text"
-                                type="button"
-                                class="form-button form-button--next"
-                                label="Далее"
-                                size="large"
-                                @click="openPanelFive"
-                            ></Button>
+<!--                            <Button-->
+<!--                                variant="text"-->
+<!--                                type="button"-->
+<!--                                class="form-button form-button&#45;&#45;next"-->
+<!--                                label="Далее"-->
+<!--                                size="large"-->
+<!--                                @click="openPanelFive"-->
+<!--                            ></Button>-->
                           </v-card-actions>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
 
-                    <v-expansion-panel value="panelFive">
+                    <v-expansion-panel value="panelFive" v-if="false">
                         <v-expansion-panel-title>
                             <template v-slot="{ expanded }">
                                 <v-row no-gutters>
@@ -1176,9 +1178,9 @@ const openPanelFour = () => {
   panel.value = 'panelFour';
 }
 
-const openPanelFive = () => {
-  panel.value = 'panelFive';
-}
+// const openPanelFive = () => {
+//   panel.value = 'panelFive';
+// }
 //-------------------------------------------------------------------------------------
 const usersList = ref(null)
 let selectedUser = ref([])
@@ -1665,8 +1667,27 @@ function AddQuestion() {
         margin-right: 10px;
     }
     &-fileupload {
-        display: flex;
-        flex-direction: row;
+      display: flex;
+      flex-direction: row;
+      margin-left: 4px;
+      font-family: Bert Sans;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 21px;
+      letter-spacing: 0em;
+      gap: 10px;
+      text-align: left;
+      color: #1f7cc0;
+      & > :deep(.p-) {
+        display: none;
+      }
+
+      & :deep(.p-button-label) {
+        text-decoration: underline;
+      }
+      & :deep(svg) {
+        display: none;
+      }
     }
     &-radioR {
         margin-left: 16px;

@@ -14,17 +14,19 @@
                         name: 'editAction',
                         params: { id: eventsStore.event.id },
                     }" class="user-data__link">Редактировать мероприятие</router-link>
-                    <Button v-else-if="!IsMember && !UserApplication" class="form-button" type="button"
-                        @click="AddApplication()" label="Подать заявку" variant="text" size="large"></Button>
+                    <Button
+                        v-else-if="(!IsMember && !UserApplication) && eventsStore.event.application_type === 'Персональная'"
+                        class="form-button" type="button" @click="AddApplication()" label="Подать заявку" variant="text"
+                        size="large"></Button>
                     <router-link
                         v-else-if="(!IsMember && !UserApplication) && eventsStore.event.application_type === 'Групповая'"
-                        :to="{ name: 'groupsubmit' }">
+                        :to="{ name: 'GroupSubmit' }">
                         <Button class="form-button" type="button" label="Подать заявку" variant="text"
                             size="large"></Button></router-link>
 
                     <router-link
-                        v-else-if="(!IsMember && !UserApplication) && eventsStore.event.application_type === 'Многоэтапная'"
-                        :to="{ name: 'multistagesubmit' }">
+                        v-else-if="(!IsMember && !UserApplication) && eventsStore.event.application_type === 'Мультиэтапная'"
+                        :to="{ name: 'MultiStageSubmit' }">
                         <Button class="form-button" type="button" label="Подать заявку" variant="text"
                             size="large"></Button></router-link>
 
@@ -97,30 +99,35 @@
             </div>
 
             <!-- Организаторы -->
-            <h2 class="title event_org">Организаторы</h2>
-            <div v-if="eventsStore.organizators" class="card_wrap">
-                <div v-for="organizator in eventsStore.organizators" :key="organizator.id">
-                    <router-link :to="{ name: 'userpage', params: { id: organizator.organizer?.id } }"
-                        class="event_card_wrap">
-                        <div class="round-img">
-                            <img :src="organizator.organizer?.avatar.photo" alt="photo"
-                                v-if="organizator.organizer?.avatar.photo" />
-                            <img src="@app/assets/user-avatar.png" alt="photo" v-else />
-                        </div>
-                        <div class="text text--organizer">
-                            {{ organizator.organizer?.last_name }}
-                            {{ organizator.organizer?.first_name }}
-                            {{ organizator.organizer?.patronymic_name }}
-                        </div>
-                        <div class="text text--position">{{ organizator.position.position }}</div>
+            <div
+                v-if="(CentralLevel && isOrganizer) || ((DistrictLevel && isOrganizer) || roleStore.roles.centralheadquarter_commander) ||
+                    ((RegLevel && isOrganizer) || (roleStore.roles.centralheadquarter_commander || ddd)) || ((LocalLevel && isOrganizer) || (roleStore.roles.centralheadquarter_commander || ddd || lll)) || ((EducLevel && isOrganizer) || (roleStore.roles.centralheadquarter_commander || ddd || lll || edd)) || ((DetLevel && isOrganizer) || (roleStore.roles.centralheadquarter_commander || ddd || lll || edd || det))">
+                <h2 class="title event_org">Организаторы</h2>
+                <div v-if="eventsStore.organizators" class="card_wrap">
+                    <div v-for="organizator in eventsStore.organizators" :key="organizator.id">
+                        <router-link :to="{ name: 'userpage', params: { id: organizator.organizer?.id } }"
+                            class="event_card_wrap">
+                            <div class="round-img">
+                                <img :src="organizator.organizer?.avatar.photo" alt="photo"
+                                    v-if="organizator.organizer?.avatar.photo" />
+                                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
+                            </div>
+                            <div class="text text--organizer">
+                                {{ organizator.organizer?.last_name }}
+                                {{ organizator.organizer?.first_name }}
+                                {{ organizator.organizer?.patronymic_name }}
+                            </div>
+                            <div class="text text--position">{{ organizator?.position?.position }}</div>
 
-                    </router-link>
+                        </router-link>
 
 
+                    </div>
                 </div>
             </div>
+
             <!-- Контактные лица -->
-            <template v-if="isContact.length">
+            <template v-if="isContact.length && isAuth">
                 <h2 class="title event_contact">Контактные лица</h2>
                 <div class="card_wrap">
                     <div v-for="organizator in isContact" :key="organizator.id">
@@ -136,7 +143,7 @@
                                 {{ organizator.organizer?.first_name }}
                                 {{ organizator.organizer?.patronymic_name }}
                             </div>
-                            <div class="text text--position">{{ organizator.position.position }}</div>
+                            <div class="text text--position">{{ organizator?.position?.position }}</div>
 
                         </router-link>
                     </div>
@@ -216,9 +223,10 @@
             <!-- Другие мероприятия -->
             <h2 class="title event_others event_border">Другие мероприятия</h2>
             <div class="other_events_wrap">
-                <router-link :to="{ name: 'Action', params: { id: items.id } }" class="event_item"
-                    v-for="items in eventsStore.events" v-show="items.id !== eventsStore.event.id">
-                    <img :src="items.banner" alt="banner" class="event_item_banner" />
+                <router-link :to="{ path: `/actionSquads/${items.id}`, hash: '#ankor', params: { id: items.id } }"
+                    class="event_item" v-for="items in eventsStore.events" v-show="items.id !== eventsStore.event.id">
+                    <v-card class="mx-auto" min-width="280" height="210" :image="items.banner" :id="items.id">
+                    </v-card>
                     <p class="event_item_title">{{ items.name }}</p>
                     <div class="d-flex justify-space-between mb-3">
                         <p class="event_item_date">
@@ -283,7 +291,12 @@ import { useRoute, useRouter } from 'vue-router';
 import { HTTP } from '@app/http';
 import { usePage } from '@shared';
 import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
 import { useEventsStore } from '@features/store/events';
+import { useRegionalsStore } from '@features/store/regionals';
+import { useSquadsStore } from '@features/store/squads';
+import { useLocalsStore } from '@features/store/local';
+import { useEducationalsStore } from '@features/store/educationals';
 const route = useRoute();
 const router = useRouter();
 const { replaceTargetObjects } = usePage();
@@ -293,7 +306,13 @@ const picked = ref(true);
 const swal = inject('$swal');
 const eventsStore = useEventsStore();
 const userStore = useUserStore();
+const regionalsStore = useRegionalsStore();
+const squadsStore = useSquadsStore();
+const localsStore = useLocalsStore();
+const roleStore = useRoleStore();
+const educationalsStore = useEducationalsStore();
 const isContact = ref([]);
+const isAuth = ref(!!localStorage.getItem('Token'));
 
 const next = () => {
     eventsStore.getNextFilteredEvents();
@@ -308,11 +327,75 @@ let userId = computed(() => {
     return userStore.currentUser.id;
 });
 
+const ddd = computed(() => {
+    return regionalsStore.regionals.find((item) => item.district === roleStore.roles.districtheadquarter_commander?.id);
+})
+
+const lll = computed(() => {
+    return localsStore.locals.find((item) => item.
+        regional_headquarter
+        === roleStore.roles.regional_headquarter_commander?.id);
+})
+
+const edd = computed(() => {
+    return educationalsStore.educationals.find((item) => item?.
+        regional_headquarter
+        === roleStore.roles.regional_headquarter_commander?.id || item?.local_headquarter === roleStore.roles.local_headquarter_commander?.id);
+})
+
+const det = computed(() => {
+    return squadsStore.squads.find((item) => item?.
+        regional_headquarter
+        === roleStore.roles.regional_headquarter_commander?.id || item?.local_headquarter === roleStore.roles.local_headquarter_commander?.id || item?.educational_headquarter === roleStore.roles.educational_headquarter_commander?.id
+    );
+})
 const UserApplication = computed(() => {
     return eventsStore.applications.find(
         (item) => item.user.id === userId.value,
     );
 });
+
+const CentralLevel = computed(() => {
+    return eventsStore.organizators.find(
+        (item) => item?.position?.level === 'CentralHeadquarter',
+    );
+});
+
+const IsCreator = computed(() => {
+    return eventsStore.organizators.find(
+        (item) => item?.position.headquarter_id === roleStore.roles.regionalheadquarter_commander?.id || item?.position.headquarter_id === roleStore.roles?.centralheadquarter_commander?.id || item?.position.headquarter_id === roleStore.roles?.districtheadquarter_commander?.id || item?.position.headquarter_id === roleStore.roles?.localheadquarter_commander?.id || item?.position.headquarter_id === roleStore.roles?.educationalheadquarter_commander?.id || item?.position.headquarter_id === roleStore.roles?.detachment_commander?.id
+        ,
+    );
+});
+
+
+const DistrictLevel = computed(() => {
+    return eventsStore.organizators.find(
+        (item) => item?.position?.level === 'DistrictHeadquarter',
+    );
+});
+const LocalLevel = computed(() => {
+    return eventsStore.organizators.find(
+        (item) => item?.position?.level === 'LocalHeadquarter',
+    );
+});
+const RegLevel = computed(() => {
+    return eventsStore.organizators.find(
+        (item) => item?.position?.level === 'RegionalHeadquarter',
+    );
+});
+const EducLevel = computed(() => {
+    return eventsStore.organizators.find(
+        (item) => item?.position?.level === 'EducationalHeadquarter',
+    );
+});
+const DetLevel = computed(() => {
+    return eventsStore.organizators.find(
+        (item) => item?.position?.level === 'Detachment',
+    );
+});
+
+
 
 const isOrganizer = computed(() => {
     return eventsStore.organizators.find(
