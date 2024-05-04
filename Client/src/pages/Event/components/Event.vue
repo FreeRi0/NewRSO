@@ -327,6 +327,7 @@ let userId = computed(() => {
     return userStore.currentUser.id;
 });
 
+
 const ddd = computed(() => {
     return regionalsStore.regionals.find((item) => item.district === roleStore.roles.districtheadquarter_commander?.id);
 })
@@ -434,12 +435,23 @@ const AddApplication = async () => {
     }
 };
 
+// watch(
+//     () => userStore.currentUser,
+//     (newUser) => {
+//         return userStore.currentUser?.id
+//     },
+//     {
+//         immediate: true,
+//     },
+// );
+
 watch(
     () => route.params.id,
 
-    async (newId, oldId) => {
+    async (newId) => {
         if (!newId) return;
         await eventsStore.getEventId(newId);
+        await eventsStore.getStatus(newId, userStore.currentUser?.id);
         await eventsStore.getEventMembers(newId);
         await eventsStore.getEventOrganizators(newId);
         await eventsStore.getAppEvents(newId);
@@ -449,6 +461,9 @@ watch(
         immediate: true,
     },
 );
+
+
+
 
 watch(
     () => eventsStore.organizators,

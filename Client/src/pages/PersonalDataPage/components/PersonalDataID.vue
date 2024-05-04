@@ -6,7 +6,9 @@
                 :user_region="region" :disabled="disabled" :position="roles.positions.value"
                 :commander="roles.userRoles.value" class="mt-3"></Wall>
             <AccordionsPersonal :button="false" :user="privateUser.privateUser.value"
-                :foreignUserDocs="userStore.foreignUser"></AccordionsPersonal>
+                :foreignUserDocs="userStore.foreignUser"
+                :foreign-parent="userStore.foreignParent"
+                :isArr="true"></AccordionsPersonal>
         </div>
     </div>
 </template>
