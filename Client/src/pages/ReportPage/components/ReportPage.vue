@@ -4672,7 +4672,7 @@ const postParameters = async (id) => {
         if (id == 15) dataName = 'grants_data';
         if (id == 17) dataName = 'source_data';
         console.log(report.value[id]);
-        if (report.value[id].id) {
+        if (report.value[id].id || report.value[id].participation_data) {
             let data = {};
             data['' + dataName] = [];
             if (!(id == 2 || id == 6 || id == 16 || id >= 18)) {
