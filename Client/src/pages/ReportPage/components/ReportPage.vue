@@ -172,6 +172,8 @@ s
                                             optionLabel="name"
                                             :sorts-boolean="false"
                                             class="invents-select"
+                                            variant="outlined"
+                                            :disabled="report[2].is_verified"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -194,6 +196,7 @@ s
                                             v-model:value="
                                                 report[2].commander_link
                                             "
+                                            :readonly="report[2].is_verified"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -220,6 +223,8 @@ s
                                             optionLabel="name"
                                             class="invents-select"
                                             :sorts-boolean="false"
+                                            variant="outlined"
+                                            :disabled="report[2].is_verified"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -242,6 +247,7 @@ s
                                             v-model:value="
                                                 report[2].commissioner_link
                                             "
+                                            :readonly="report[2].is_verified"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -542,6 +548,7 @@ s
                                             placeholder="Например, Иванова Светлана Андреевна"
                                             :maxlength="100"
                                             v-model:value="block.name"
+                                            :readonly="block.is_verified"
                                         />
                                         <div class="form__counter">
                                             {{ block.name.length }} / 100
@@ -567,7 +574,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -761,6 +767,8 @@ s
                                             optionLabel="name"
                                             class="invents-select"
                                             :sorts-boolean="false"
+                                            variant="outlined"
+                                            clearable
                                         />
                                     </div>
                                     <div class="form__field">
@@ -836,6 +844,8 @@ s
                                             optionLabel="name"
                                             class="invents-select"
                                             :sorts-boolean="false"
+                                            variant="outlined"
+                                            clearable
                                         />
                                     </div>
                                     <div class="form__field">
@@ -911,6 +921,8 @@ s
                                             optionLabel="name"
                                             class="invents-select"
                                             :sorts-boolean="false"
+                                            variant="outlined"
+                                            clearable
                                         />
                                     </div>
                                 </div>
@@ -963,6 +975,8 @@ s
                                             optionLabel="name"
                                             class="invents-select"
                                             :sorts-boolean="false"
+                                            variant="outlined"
+                                            clearable
                                         />
                                     </div>
                                 </div>
@@ -1012,6 +1026,8 @@ s
                                             optionLabel="name"
                                             class="invents-select"
                                             :sorts-boolean="false"
+                                            variant="outlined"
+                                            clearable
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1086,6 +1102,8 @@ s
                                             :options="festivalChoose"
                                             class="invents-select"
                                             :sorts-boolean="false"
+                                            variant="outlined"
+                                            clearable
                                         />
                                     </div>
                                 </div>
@@ -1133,6 +1151,8 @@ s
                                             optionLabel="name"
                                             class="invents-select"
                                             :sorts-boolean="false"
+                                            variant="outlined"
+                                            clearable
                                         />
                                     </div>
                                 </div>
@@ -1184,6 +1204,8 @@ s
                                             optionLabel="name"
                                             class="invents-select"
                                             :sorts-boolean="false"
+                                            variant="outlined"
+                                            clearable
                                         />
                                     </div>
                                 </div>
@@ -1403,7 +1425,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -1700,7 +1721,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -1908,6 +1928,9 @@ s
                                             :options="prizePlaceChoose"
                                             optionLabel="name"
                                             class="invents-select"
+                                            :sorts-boolean="false"
+                                            variant="outlined"
+                                            clearable
                                         />
                                     </div>
                                     <div class="form__field">
@@ -1930,7 +1953,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -2138,6 +2160,9 @@ s
                                             :options="prizePlaceChoose"
                                             optionLabel="name"
                                             class="invents-select"
+                                            :sorts-boolean="false"
+                                            variant="outlined"
+                                            clearable
                                         />
                                     </div>
                                     <div class="form__field">
@@ -2160,7 +2185,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -2369,6 +2393,9 @@ s
                                             :options="prizePlaceChoose"
                                             optionLabel="name"
                                             class="invents-select"
+                                            :sorts-boolean="false"
+                                            clearable
+                                            variant="outlined"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -2392,7 +2419,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -2602,6 +2628,9 @@ s
                                             :options="prizePlaceChoose"
                                             optionLabel="name"
                                             class="invents-select"
+                                            :sorts-boolean="false"
+                                            clearable
+                                            variant="outlined"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -2624,7 +2653,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectCertScans(
@@ -2810,11 +2838,12 @@ s
                                             ></label
                                         >
                                         <sortByEducation
-                                            placeholder="Например, спортивное"
                                             v-model="block.event_type"
                                             :options="typeEventChoose"
-                                            optionLabel="name"
                                             class="invents-select"
+                                            clearable
+                                            placeholder="Например, спортивное"
+                                            variant="outlined"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -3157,8 +3186,9 @@ s
                                             placeholder="Например, окружной"
                                             v-model="block.status"
                                             :options="statusChoose"
-                                            optionLabel="name"
                                             class="invents-select"
+                                            clearable
+                                            variant="outlined"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -3858,13 +3888,14 @@ s
                                             семестре<span>&nbsp;*</span></label
                                         >
                                         <sortByEducation
-                                            placeholder="Например, отсутствуют"
                                             v-model="
                                                 report[19].safety_violations
                                             "
                                             :options="precautionChoose"
-                                            optionLabel="value"
                                             class="invents-select"
+                                            clearable
+                                            placeholder="Например, отсутствуют"
+                                            variant="outlined"
                                         />
                                     </div>
                                 </div>
@@ -4101,7 +4132,7 @@ s
 <script setup>
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref, inject, onMounted, computed } from 'vue';
+import { ref, inject, onMounted, computed, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
@@ -4169,17 +4200,17 @@ const festivalChoose = ref([
 ]);
 
 const statusChoose = ref([
-    { name: 'Региональный' },
-    { name: 'Окружной' },
-    { name: 'Всероссийский' },
+    { name: 'Региональный', value: 'Региональный' },
+    { name: 'Окружной', value: 'Окружной' },
+    { name: 'Всероссийский', value: 'Всероссийский' },
 ]);
 
 const typeEventChoose = ref([
-    { name: 'Спортивное', value: 'Спортивное' },
-    { name: 'Интеллектуальное', value: 'Интеллектуальное' },
-    { name: 'Творческое', value: 'Творческое' },
-    { name: 'Волонтерское', value: 'Волонтерское' },
-    { name: 'Внутреннее', value: 'Внутреннее' },
+    { value: 'Спортивное', name: 'Спортивное' },
+    { value: 'Интеллектуальное', name: 'Интеллектуальное' },
+    { value: 'Творческое', name: 'Творческое' },
+    { value: 'Волонтерское', name: 'Волонтерское' },
+    { value: 'Внутреннее', name: 'Внутреннее' },
 ]);
 
 const prizePlaceChoose = ref([
@@ -4194,10 +4225,12 @@ const selectFile = (e, id, field, subfield, index) => {
 };
 const addNewBlock = () => {
     report.value[5].participants_data.push({ name: '', document: '' });
+    report.value[5].disabledBtn = false;
 };
 
 const addNewBlockQ17 = () => {
     report.value[17].source_data.push({ source_name: '', link: '' });
+    report.value[17].disabledBtn = false;
 };
 const AddLink7 = (index) => {
     report.value[7].participation_data[index].links.push({ link: '' });
@@ -4227,6 +4260,7 @@ const AddBlock8 = () => {
         event_name: '',
         number_of_participants: '',
         certificate_scans: null,
+        links: [{ link: '' }],
     });
 };
 
@@ -4267,6 +4301,7 @@ const AddBlock13 = () => {
         event_type: '',
         event_link: '',
     });
+    report.value[13].disabledBtn = false;
 };
 const AddBlock14 = () => {
     report.value[14].q14_labor_projects.push({
@@ -4388,7 +4423,7 @@ const report = ref({
                 event_name: '',
                 number_of_participants: '',
                 links: [{ link: '' }],
-                certificate_scans: null,
+                // certificate_scans: null,
             },
         ],
         disabledBtn: false,
@@ -4399,7 +4434,7 @@ const report = ref({
                 event_name: '',
                 number_of_participants: '',
                 links: [{ link: '' }],
-                certificate_scans: null,
+                // certificate_scans: null,
             },
         ],
         disabledBtn: false,
@@ -4408,6 +4443,7 @@ const report = ref({
         participation_data: [
             {
                 event_name: '',
+                prize_place: null,
                 certificate_scans: null,
             },
         ],
@@ -4417,6 +4453,7 @@ const report = ref({
         participation_data: [
             {
                 event_name: '',
+                prize_place: null,
                 certificate_scans: null,
             },
         ],
@@ -4426,6 +4463,7 @@ const report = ref({
         participation_data: [
             {
                 event_name: '',
+                prize_place: null,
                 certificate_scans: null,
             },
         ],
@@ -4438,7 +4476,7 @@ const report = ref({
         disabledBtn: false,
     },
     13: {
-        organization_data: [{ event_type: '', event_link: '' }],
+        organization_data: [{ event_type: null, event_link: '' }],
         disabledBtn: false,
     },
     14: {
@@ -4449,7 +4487,7 @@ const report = ref({
         grants_data: [
             {
                 name: '',
-                status: '',
+                status: null,
                 author_name: '',
                 competition_link: '',
                 prove_link: '',
@@ -4467,7 +4505,7 @@ const report = ref({
     },
     17: { source_data: [{ source_name: '', link: '' }], disabledBtn: false },
     18: { participants_number: '', disabledBtn: false },
-    19: { safety_violations: '', disabledBtn: false },
+    19: { safety_violations: null, disabledBtn: false },
     20: {
         link_emblem: '',
         link_emblem_img: '',
@@ -4633,16 +4671,21 @@ const postParameters = async (id) => {
         if (id == 14) dataName = 'q14_labor_projects';
         if (id == 15) dataName = 'grants_data';
         if (id == 17) dataName = 'source_data';
-
-        if (report.value[id].id) {
+        console.log(report.value[id]);
+        if (report.value[id].id || report.value[id].participation_data) {
             let data = {};
             data['' + dataName] = [];
-            if (!(id == 2 || id == 16 || id >= 18)) {
+            if (!(id == 2 || id == 6 || id == 16 || id >= 18)) {
+                let u = report.value[id].disabledBtn;
+                delete report.value[id].disabledBtn;
                 for (let i in report.value[id][dataName]) {
                     let temp = report.value[id][dataName][i];
 
                     if (temp.id) {
-                        delete temp.document;
+                        if (!temp.is_verified) {
+                            delete temp.document;
+                            delete temp.certificate_scans;
+                        }
 
                         await HTTP.patch(
                             `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].id}/objects/${temp.id}/`,
@@ -4673,8 +4716,11 @@ const postParameters = async (id) => {
                         },
                     );
                 }
+                report.value[id].disabledBtn = u;
             }
         } else {
+            let u = report.value[id].disabledBtn;
+            delete report.value[id].disabledBtn;
             await HTTP.post(
                 `/competitions/${route.params.competition_pk}/reports/q${index}/`,
                 fd,
@@ -4685,6 +4731,8 @@ const postParameters = async (id) => {
                     },
                 },
             );
+
+            report.value[id].disabledBtn = u;
         }
         isLoading.value = false;
         swal.fire({

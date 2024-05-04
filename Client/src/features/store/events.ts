@@ -4,6 +4,7 @@ import { HTTP } from '@app/http';
 export const useEventsStore = defineStore('events', {
     state: () => ({
         members: [],
+        status: {},
         events: [],
         organizators: [],
         event: {},
@@ -29,6 +30,25 @@ export const useEventsStore = defineStore('events', {
             } catch (error) {
                 this.isLoading = false;
                 console.log('an error occured ' + error);
+            }
+        },
+        async getStatus(eventId: String, userId: String) {
+            try {
+
+                const responseStatus = await HTTP.get(
+                    `/events/${eventId}/user_status/${userId}/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.status = responseStatus.data;
+
+            } catch (error) {
+                console.log('an error occured' + error);
             }
         },
         async getAppEvents(id: String) {

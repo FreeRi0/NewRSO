@@ -2,20 +2,13 @@
     <div class="container">
         <div class="mt-14">
             <h2 class="profile-title">Настройки профиля</h2>
-            <Wall
-                :user="privateUser.privateUser.value"
-                :education="education"
-                :user_region="region"
-                :disabled="disabled"
-                :position="roles.positions.value"
-                :commander="roles.userRoles.value"
-                class="mt-3"
-            ></Wall>
-            <AccordionsPersonal
-                :button="false"
-                :user="privateUser.privateUser.value"
-            
-            ></AccordionsPersonal>
+            <Wall :user="privateUser.privateUser.value" :foreignUserDocs="userStore.foreignUser" :education="education"
+                :user_region="region" :disabled="disabled" :position="roles.positions.value"
+                :commander="roles.userRoles.value" class="mt-3"></Wall>
+            <AccordionsPersonal :button="false" :user="privateUser.privateUser.value"
+                :foreignUserDocs="userStore.foreignUser"
+                :foreign-parent="userStore.foreignParent"
+                :isArr="true"></AccordionsPersonal>
         </div>
     </div>
 </template>
@@ -40,7 +33,10 @@ let id = route.params.id;
 
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
+        userStore.getForeignDocsId(id);
+        userStore.getForeignParentId(id);
         userStore.getPrivateUserId(id);
+
         roleStore.getPositions(id);
         roleStore.getUserRoles(id);
     }
@@ -51,7 +47,9 @@ watch(
 
     (newId) => {
         id = newId;
+        userStore.getForeignDocsId(id);
         userStore.getPrivateUserId(id);
+        userStore.getForeignParentId(id);
         roleStore.getPositions(id);
         roleStore.getUserRoles(id);
     },
@@ -61,7 +59,9 @@ onMounted(() => {
         roleStore.roles.regionalheadquarter_commander?.id ||
         roleStore.roles.detachment_commander?.id
     ) {
+        userStore.getForeignDocsId(id);
         userStore.getPrivateUserId(id);
+        userStore.getForeignParentId(id);
         roleStore.getPositions(id);
         roleStore.getUserRoles(id);
     } else {
@@ -87,10 +87,12 @@ onMounted(() => {
     padding: 10px 24px;
     width: 100%;
     margin: 7px;
+
     @media screen and (max-width: 768px) {
         padding: 8px 20px;
     }
 }
+
 .buttonWrap {
     @media screen and (max-width: 768px) {
         flex-wrap: wrap;

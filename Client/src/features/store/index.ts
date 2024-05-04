@@ -6,6 +6,10 @@ export const useUserStore = defineStore('user', {
     state: () => ({
         user: {},
         privateUser: {},
+        userDocs: {},
+        parentDocs: {},
+        foreignUser: [],
+        foreignParent: [],
         users: [],
         currentUser: {},
         count: {},
@@ -13,7 +17,7 @@ export const useUserStore = defineStore('user', {
     }),
     actions: {
         async getUser() {
-            if (Object.keys(this.currentUser).length) return;
+
             try {
                 this.isLoading = true;
                 setTimeout(async () => {
@@ -82,6 +86,43 @@ export const useUserStore = defineStore('user', {
                 },
             });
             this.privateUser = responsePrivate.data;
+        },
+        async getForeignDocsId(id: String) {
+            const responseForeignDocsId = await HTTP.get(`rsousers/foreign_documents/${id}/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.foreignUser = responseForeignDocsId.data.results;
+        },
+        async getForeignDocs() {
+            const responseForeignDocs = await HTTP.get(`rsousers/me/foreign_documents/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.userDocs = responseForeignDocs.data;
+        },
+        async getForeignParentId(id: String) {
+            const responseForeignParentId = await HTTP.get(`rsousers/foreign_parent_documents/${id}/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.foreignParent = responseForeignParentId.data.results;
+        },
+
+        async getForeignParent() {
+            const responseForeignParent = await HTTP.get(`rsousers/me/foreign_parent_documents/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.parentDocs = responseForeignParent.data;
         },
 
         async searchUsers(name: String) {

@@ -333,25 +333,31 @@
                         v-for="(variant, i) in actionsList"
                         :key="i"
                         cols="auto"
+                        @click="goToEvent(variant.id)"
+                        style="cursor: pointer"
                     >
                       <v-card
                           class="mx-auto"
                           min-width="280"
                           height="210"
                           :image="variant.banner"
-                          @click="goToEvent"
-                          :id="variant.id"
                       >
                         <div class="cardClock">
+                          <div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                               <ellipse cx="9.99967" cy="11.6667" rx="6.66667" ry="6.66667" stroke="#35383F"/>
                               <path d="M10 11.6641L10 9.16406" stroke="#35383F" stroke-linecap="round"/>
                               <path d="M14.583 6.25L15.833 5" stroke="#35383F" stroke-linecap="round"/>
                               <path d="M8.39045 1.97289C8.48541 1.88429 8.69465 1.806 8.98572 1.75017C9.2768 1.69433 9.63343 1.66406 10.0003 1.66406C10.3672 1.66406 10.7239 1.69433 11.0149 1.75017C11.306 1.806 11.5152 1.88429 11.6102 1.97289" stroke="#35383F" stroke-linecap="round"/>
                             </svg>
+                          </div>
+                            <div>
+                              <p>{{dateHandler(variant.time_data.registration_end_date, variant.time_data.registration_end_time)}}</p>
+                            </div>
+
                         </div>
                       </v-card>
-                      <div class="text-caption textCaption">
+                      <div class="text-caption textCaption" >
                         {{ variant.name }}
                       </div>
                       <div class="cardTimeQuantity">
@@ -442,12 +448,12 @@
 </template>
 
 <script setup>
-import { Button } from '@shared/components/buttons';
+import {Button} from '@shared/components/buttons';
 import bannerCreate from '@shared/components/imagescomp/bannerCreate.vue';
-import { ref, watch } from 'vue';
-import { getListActionsByFilter, getListActionsBySearch, getRoles} from '@services/ActionService';
-import { onActivated } from 'vue';
-import { useRouter } from "vue-router";
+import {onActivated, ref, watch} from 'vue';
+import {getListActionsByFilter, getListActionsBySearch, getRoles} from '@services/ActionService';
+import {useRouter} from "vue-router";
+import moment from "moment";
 
 const router = useRouter();
 
@@ -516,11 +522,51 @@ function SearchByInput() {
     actionsList.value = resp.data.results;
   });
 }
-const goToEvent = (event) => {
-  router.push({ name: 'Action', params: { id: event.target.offsetParent.offsetParent.offsetParent.id } })
+const goToEvent = (id) => {
+router.push({ name: 'Action', params: { id: id } })
 }
 const goToEventList = (event) => {
   router.push({ name: 'Action', params: { id: event.target.id } })
+}
+const dateHandler = (date, time) => {
+  if (date) {
+    if (Date.parse(date + 'T' + time) < Date.parse(new Date())) {
+      return 'Регистрация окончена'
+    } else {
+      let end = moment(date + 'T' + time)
+      let now = moment()
+
+      let years = end.diff(now, 'years')
+      now.add(years, 'years');
+      let months = end.diff(now, 'months');
+      now.add(months, 'months');
+      let days = end.diff(now, 'days');
+      now.add(days, 'days')
+      let hours = end.diff(now, 'hours')
+      now.add(hours, 'hours')
+      let minutes = end.diff(now, 'minutes')
+
+      let y = ['год', 'года', 'лет'];
+      let m = ['месяц', 'месяца', 'месяцев']
+      let d = ['день', 'дня', 'дней']
+      let h = ['час', 'часа', 'часов']
+      let minute = ['минуту', 'минуты', 'минут']
+
+      // console.log(years + ' years ' + months + ' months ' + days + ' days ' + hours + ' hours ' + minutes +  ' minutes' );
+      return years > 0 ? `Окончание регистрации через ${years} ${plural(years, y)}`
+          : months > 0 ? `Окончание регистрации через ${months} ${plural(months, m)}`
+              : days > 0 ? `Окончание регистрации через ${days} ${plural(days, d)}`
+                  : hours > 0 ? `Окончание регистрации через ${hours} ${plural(hours, h)}`
+                  : `Окончание регистрации через ${minutes} ${plural(minutes, minute)}`;
+    }
+  } else {
+    return 'Нет информации об окончании';
+  }
+}
+
+const plural = (number, titles) => {
+  let cases = [2, 0, 1, 1, 1, 2];
+  return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
 }
 
 const actionFormSearch = ref({
@@ -792,12 +838,16 @@ const sortOptions = ref([
 }
 .textCaption {
   max-width: 280px;
+  max-height: 20px;
   font-family: Bert Sans;
   font-size: 14px;
   font-weight: 600;
   line-height: 18.46px;
   text-align: left;
   margin-top: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .cardTimeQuantity {
   display: flex;
@@ -842,6 +892,7 @@ const sortOptions = ref([
   margin-right: 12px;
 }
 .cardClock {
+  display: flex;
   position: relative;
   width:24px;
   height: 24px;
@@ -851,6 +902,36 @@ const sortOptions = ref([
   gap: 10px;
   border-radius: 6px;
   background-color: #FFFFFFCC;
+  -webkit-transition: width 500ms ease;
+  -moz-transition: width 500ms ease;
+  -ms-transition: width 500ms ease;
+  -o-transition: width 500ms ease;
+  transition: width 500ms ease;
+  p {
+    position: absolute;
+    opacity: 0;
+    font-family: Bert Sans;
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 18.46px;
+    text-align: left;
+    color: #35383F;
+    height: 0px;
+  }
+}
+
+.cardClock:hover {
+  width: 100%;
+  p {
+    //-webkit-transition: all 5s ease;
+    //-moz-transition: all 5s ease;
+    //-ms-transition: all 5s ease;
+    //-o-transition: all 5s ease;
+    transition: opacity 500ms ease;
+    transition-delay: 500ms;
+    opacity: 1;
+  }
+
 }
 
 //Общий стиль компонента
