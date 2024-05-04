@@ -34,6 +34,7 @@ let id = route.params.id;
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         userStore.getForeignDocsId(id);
+        userStore.getForeignParentId(id);
         userStore.getPrivateUserId(id);
 
         roleStore.getPositions(id);
@@ -48,7 +49,7 @@ watch(
         id = newId;
         userStore.getForeignDocsId(id);
         userStore.getPrivateUserId(id);
-
+        userStore.getForeignParentId(id);
         roleStore.getPositions(id);
         roleStore.getUserRoles(id);
     },
@@ -60,6 +61,7 @@ onMounted(() => {
     ) {
         userStore.getForeignDocsId(id);
         userStore.getPrivateUserId(id);
+        userStore.getForeignParentId(id);
         roleStore.getPositions(id);
         roleStore.getUserRoles(id);
     } else {
