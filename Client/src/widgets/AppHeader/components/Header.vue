@@ -303,15 +303,15 @@ const userPages = computed(() => [
 
         ,
     },
-    {
-        title: 'Поиск участников',
-        link: '/roster',
-        show:
-            roleStore.roles?.centralheadquarter_commander ||
-            roleStore.roles?.districtheadquarter_commander ||
-            roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.detachment_commander,
-    },
+    // {
+    //     title: 'Поиск участников',
+    //     link: '/roster',
+    //     show:
+    //         roleStore.roles?.centralheadquarter_commander ||
+    //         roleStore.roles?.districtheadquarter_commander ||
+    //         roleStore.roles?.regionalheadquarter_commander ||
+    //         roleStore.roles?.detachment_commander,
+    // },
     {
         title: 'Членский взнос',
         name: 'contributorPay',
