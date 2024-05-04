@@ -170,7 +170,7 @@
                                                     " />
                                         <label :for="id">{{
                                             passP.name
-                                        }}</label>
+                                            }}</label>
                                     </div>
                                 </div>
                                 <div class="addres" id="pass-no-addr" v-if="props.user.parent.russian_passport">
@@ -323,8 +323,8 @@
                                 <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
                                     <label for="INN-id-foreign">ИНН</label>
                                     <Input type="text" id="INN-id-foreign" class="input-big mask-inn"
-                                        placeholder="AA 999999999" v-model:value="item.inn" vmaska
-                                        maska="AA #########" :max-length="12" />
+                                        placeholder="AA 999999999" v-model:value="item.inn" vmaska maska="AA #########"
+                                        :max-length="12" />
                                     <div class="form__counter">
                                         {{ counterForeignParentInn }} / 12
                                     </div>
@@ -686,7 +686,8 @@
                             </div>
                         </div>
                         <div class="form-data izm" v-else-if="!props.user.documents.russian_passport">
-                            <div class="form-field one" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                            <div class="form-field one" v-for="item in props.foreignUserDocs"
+                                v-if="props.isArr === true">
                                 <label for="pass-num">Документ удостоверяющий личность
                                     <span class="valid-red">&nbsp;*</span></label>
                                 <Input type="text" class="input-full"
@@ -708,7 +709,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-field"  v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                            <div class="form-field" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
                                 <label for="pass-date">Дата выдачи<span class="valid-red">&nbsp;*</span></label>
                                 <Input type="date" name="pass-date" class="input-small"
                                     v-model:value="item.foreign_pass_date" />
@@ -720,11 +721,10 @@
                                     v-model:value="props.foreignUserDocs.foreign_pass_date" />
                             </div>
 
-                            <div class="form-field"  v-for="item in props.foreignUserDocs"  v-if="props.isArr === true">
+                            <div class="form-field" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
                                 <label for="pass-id">Серия и номер</label>
                                 <Input type="text" id="pass-id" class="input-small pass-masked" vmaska
-                                    maska="AA ##########" v-model:value="item.foreign_pass_num"
-                                    :max-length="50" />
+                                    maska="AA ##########" v-model:value="item.foreign_pass_num" :max-length="50" />
                                 <div class="form__counter">
                                     {{ counterOtherPassNum }} / 50
                                 </div>
@@ -739,7 +739,8 @@
                                     {{ counterOtherPassNum }} / 50
                                 </div>
                             </div>
-                            <div class="form-field one"  v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                            <div class="form-field one" v-for="item in props.foreignUserDocs"
+                                v-if="props.isArr === true">
                                 <label for="org-id">Кем выдан<span class="valid-red">&nbsp;*</span></label>
                                 <Input type="text" id="org-id" class="input-full" placeholder="Страна"
                                     v-model:value="item.foreign_pass_whom" :max-length="230" />
@@ -756,12 +757,11 @@
                                     {{ counterOtherPassWhom }} / 230
                                 </div>
                             </div>
-                            <div class="form-field"  v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                            <div class="form-field" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
                                 <label for="work-book-foreign">Трудовая книжка
                                 </label>
                                 <Input type="text" id="work-book-foreign" class="input-big mask-workbook" vmaska
-                                    maska="AA ##########" v-model:value="item.work_book_num"
-                                    :max-length="15" />
+                                    maska="AA ##########" v-model:value="item.work_book_num" :max-length="15" />
                                 <div class="form__counter">
                                     {{ counterOtherWorkbook }} / 15
                                 </div>
@@ -777,7 +777,7 @@
                                     {{ counterOtherWorkbook }} / 15
                                 </div>
                             </div>
-                            <div class="form-field"  v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                            <div class="form-field" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
                                 <label for="INN-id-foreign">ИНН</label>
                                 <Input type="text" id="INN-id-foreign" class="input-big mask-inn" vmaska
                                     maska="AA ##########" v-model:value="item.inn" :max-length="12" />
@@ -786,7 +786,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-field"  v-else>
+                            <div class="form-field" v-else>
                                 <label for="INN-id-foreign">ИНН</label>
                                 <Input type="text" id="INN-id-foreign" class="input-big mask-inn" vmaska
                                     maska="AA ##########" v-model:value="props.foreignUserDocs.inn" :max-length="12" />
@@ -794,11 +794,10 @@
                                     {{ counterOtherInn }} / 12
                                 </div>
                             </div>
-                            <div class="form-field"  v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                            <div class="form-field" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
                                 <label for="snils-id-foreign">Номер СНИЛС</label>
                                 <Input type="text" id="snils-id-foreign" vmaska maska="AA ##########"
-                                    class="input-big mask-snils" v-model:value="item.snils"
-                                    :max-length="30" />
+                                    class="input-big mask-snils" v-model:value="item.snils" :max-length="30" />
                                 <div class="form__counter">
                                     {{ counterOtherSnils }} / 30
                                 </div>
@@ -1012,7 +1011,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             statement.name
-                                                            }}</span>
+                                                        }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1067,7 +1066,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             consent_personal_data.name
-                                                            }}</span>
+                                                        }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1126,7 +1125,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             consent_personal_data_representative.name
-                                                            }}</span>
+                                                        }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1188,7 +1187,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             passportUpload.name
-                                                            }}</span>
+                                                        }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1239,7 +1238,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             passport_representative.name
-                                                            }}</span>
+                                                        }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1293,7 +1292,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1332,7 +1331,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         military_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1375,7 +1374,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1414,7 +1413,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         international_passport.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1457,7 +1456,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1563,7 +1562,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passportUpload.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1606,7 +1605,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passport_representative.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1656,7 +1655,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1695,7 +1694,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         military_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1738,7 +1737,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1777,7 +1776,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         international_passport.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1821,7 +1820,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1929,7 +1928,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         statement.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1976,7 +1975,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         consent_personal_data.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2035,7 +2034,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passportUpload.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2081,7 +2080,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2120,7 +2119,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2159,7 +2158,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2267,7 +2266,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passportUpload.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2309,7 +2308,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passport_representative.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2359,7 +2358,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2398,7 +2397,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2438,7 +2437,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -3030,7 +3029,15 @@ const updateData = async () => {
         if (!props.user.is_adult && !props.user.parent.russian_passport) {
             const axiosrequestForeignDocsParent = await HTTP.post(
                 '/rsousers/me/foreign_parent_documents/',
-                foreignDocParent.value,
+                {
+                    name: props.foreignParent.name,
+                    foreign_pass_num: props.foreignParent.foreign_pass_num,
+                    foreign_pass_whom: props.foreignParent.foreign_pass_whom,
+                    foreign_pass_date: props.foreignParent.foreign_pass_date,
+                    snils: props.foreignParent.snils,
+                    inn: props.foreignParent.inn,
+                    work_book_num: props.foreignParent.work_book_num,
+                },
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -3152,7 +3159,7 @@ const updateData = async () => {
             );
         }
 
-        foreignDoc.value = axiosrequestForeignDocs.data;
+        props.foreignUserDocs = axiosrequestForeignDocs.data;
         fd = axiosrequest5.data;
         data.value = axiosrequest6?.data;
         swal.fire({
