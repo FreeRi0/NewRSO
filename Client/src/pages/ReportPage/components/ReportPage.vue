@@ -4673,8 +4673,8 @@ const postParameters = async (id) => {
         if (id == 17) dataName = 'source_data';
         console.log(report.value[id]);
         if (
-            report.value[id].id ||
-            report.value[id].participation_data[0].detachment_report.id
+            report.value[id]?.id ||
+            report.value[id]?.participation_data?.[0]?.detachment_report?.id
         ) {
             let data = {};
             data['' + dataName] = [];
@@ -4697,6 +4697,7 @@ const postParameters = async (id) => {
                             id == 11 ||
                             id == 12
                         ) {
+                            if (temp.id) continue;
                             await HTTP.patch(
                                 `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].participation_data[0].detachment_report.id}/objects/${temp.id}/`,
                                 temp,
