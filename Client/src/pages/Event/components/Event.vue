@@ -15,25 +15,25 @@
                         params: { id: eventsStore.event.id },
                     }" class="user-data__link">Редактировать мероприятие</router-link>
                     <Button
-                        v-else-if="(!IsMember && !UserApplication) && eventsStore.event.application_type === 'Персональная'"
+                        v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant) && eventsStore.event.application_type === 'Персональная'"
                         class="form-button" type="button" @click="AddApplication()" label="Подать заявку" variant="text"
                         size="large"></Button>
                     <router-link
-                        v-else-if="(!IsMember && !UserApplication) && eventsStore.event.application_type === 'Групповая'"
+                        v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant) && eventsStore.event.application_type === 'Групповая'"
                         :to="{ name: 'GroupSubmit' }">
                         <Button class="form-button" type="button" label="Подать заявку" variant="text"
                             size="large"></Button></router-link>
 
                     <router-link
-                        v-else-if="(!IsMember && !UserApplication) && eventsStore.event.application_type === 'Мультиэтапная'"
+                        v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant) && eventsStore.event.application_type === 'Мультиэтапная'"
                         :to="{ name: 'MultiStageSubmit' }">
                         <Button class="form-button" type="button" label="Подать заявку" variant="text"
                             size="large"></Button></router-link>
 
-                    <Button v-else-if="UserApplication" type="button" class="form-button form-button--grey"
+                    <Button v-else-if="eventsStore.status.is_applicant" type="button" class="form-button form-button--grey"
                         variant="text" label="Заявка на рассмотрении" size="large"></Button>
 
-                    <div v-else-if="IsMember" class="user-data__link">
+                    <div v-else-if="eventsStore.status.is_participant" class="user-data__link">
                         Вы участник
                     </div>
                 </div>
@@ -327,6 +327,7 @@ let userId = computed(() => {
     return userStore.currentUser.id;
 });
 
+
 const ddd = computed(() => {
     return regionalsStore.regionals.find((item) => item.district === roleStore.roles.districtheadquarter_commander?.id);
 })
@@ -434,12 +435,23 @@ const AddApplication = async () => {
     }
 };
 
+// watch(
+//     () => userStore.currentUser,
+//     (newUser) => {
+//         return userStore.currentUser?.id
+//     },
+//     {
+//         immediate: true,
+//     },
+// );
+
 watch(
     () => route.params.id,
 
-    async (newId, oldId) => {
+    async (newId) => {
         if (!newId) return;
         await eventsStore.getEventId(newId);
+        await eventsStore.getStatus(newId, userStore.currentUser?.id);
         await eventsStore.getEventMembers(newId);
         await eventsStore.getEventOrganizators(newId);
         await eventsStore.getAppEvents(newId);
@@ -449,6 +461,9 @@ watch(
         immediate: true,
     },
 );
+
+
+
 
 watch(
     () => eventsStore.organizators,

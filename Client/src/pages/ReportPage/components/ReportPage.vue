@@ -574,7 +574,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -1426,7 +1425,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -1723,7 +1721,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -1956,7 +1953,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -2189,7 +2185,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -2424,7 +2419,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -2659,7 +2653,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectCertScans(
@@ -4679,7 +4672,10 @@ const postParameters = async (id) => {
         if (id == 15) dataName = 'grants_data';
         if (id == 17) dataName = 'source_data';
         console.log(report.value[id]);
-        if (report.value[id].id) {
+        if (
+            report.value[id].id ||
+            report.value[id].participation_data[0].detachment_report.id
+        ) {
             let data = {};
             data['' + dataName] = [];
             if (!(id == 2 || id == 6 || id == 16 || id >= 18)) {
@@ -4693,19 +4689,40 @@ const postParameters = async (id) => {
                             delete temp.document;
                             delete temp.certificate_scans;
                         }
-
-                        await HTTP.patch(
-                            `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].id}/objects/${temp.id}/`,
-                            temp,
-                            {
-                                headers: {
-                                    'Content-Type': type,
-                                    Authorization:
-                                        'Token ' +
-                                        localStorage.getItem('Token'),
+                        if (
+                            id == 7 ||
+                            id == 8 ||
+                            id == 9 ||
+                            id == 10 ||
+                            id == 11 ||
+                            id == 12
+                        ) {
+                            await HTTP.patch(
+                                `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].participation_data[0].detachment_report.id}/objects/${temp.id}/`,
+                                temp,
+                                {
+                                    headers: {
+                                        'Content-Type': type,
+                                        Authorization:
+                                            'Token ' +
+                                            localStorage.getItem('Token'),
+                                    },
                                 },
-                            },
-                        );
+                            );
+                        } else {
+                            await HTTP.patch(
+                                `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].id}/objects/${temp.id}/`,
+                                temp,
+                                {
+                                    headers: {
+                                        'Content-Type': type,
+                                        Authorization:
+                                            'Token ' +
+                                            localStorage.getItem('Token'),
+                                    },
+                                },
+                            );
+                        }
                     } else {
                         data[dataName].push(temp);
                     }

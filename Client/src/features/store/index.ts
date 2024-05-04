@@ -7,8 +7,9 @@ export const useUserStore = defineStore('user', {
         user: {},
         privateUser: {},
         userDocs: {},
+        parentDocs: {},
         foreignUser: [],
-        foreignParent: {},
+        foreignParent: [],
         users: [],
         currentUser: {},
         count: {},
@@ -105,13 +106,23 @@ export const useUserStore = defineStore('user', {
             this.userDocs = responseForeignDocs.data;
         },
         async getForeignParentId(id: String) {
-            const responseForeignParent = await HTTP.get(`rsousers/foreign_parent_documents/${id}/`, {
+            const responseForeignParentId = await HTTP.get(`rsousers/foreign_parent_documents/${id}/`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'Token ' + localStorage.getItem('Token'),
                 },
             });
-            this.foreignParent = responseForeignParent.data;
+            this.foreignParent = responseForeignParentId.data.results;
+        },
+
+        async getForeignParent() {
+            const responseForeignParent = await HTTP.get(`rsousers/me/foreign_parent_documents/`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                },
+            });
+            this.parentDocs = responseForeignParent.data;
         },
 
         async searchUsers(name: String) {
