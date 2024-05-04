@@ -13,11 +13,10 @@
                 </button>
             </div>
             <AccordionsPersonal v-if="picked == 'Персональные данные'" :button="true"
-                :user="currentUser.currentUser.value"
-                :foreignUserDocs="userStore.userDocs"
-                @updateUserData="updateUser" @updateRegionData="updateRegion" @updateDocData="updateDoc"
-                @updateEducData="updateEduc" @updateFileData="updateFile" @updateStatus="updateStatus"
-                @updateParentData="updateParent"></AccordionsPersonal>
+                :user="currentUser.currentUser.value" :foreignUserDocs="userStore.userDocs" :isArr="false"
+                :foreign-parent="userStore.parentDocs" @updateUserData="updateUser" @updateRegionData="updateRegion"
+                @updateDocData="updateDoc" @updateEducData="updateEduc" @updateFileData="updateFile"
+                @updateStatus="updateStatus" @updateParentData="updateParent"></AccordionsPersonal>
             <userData @uploadUserPic="uploadUserPic" @changeBio="changeBio"
                 v-else-if="picked == 'Моя страница' || picked == ''"></userData>
             <privateProfile v-else-if="picked == 'Настройки приватности'"></privateProfile>
@@ -141,6 +140,7 @@ const pages = ref([
 
 onMounted(() => {
     userStore.getForeignDocs();
+    userStore.getForeignParent();
 })
 </script>
 <style lang="scss" scoped>

@@ -4132,7 +4132,7 @@ s
 <script setup>
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref, inject, onMounted, computed } from 'vue';
+import { ref, inject, onMounted, computed, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
@@ -4225,10 +4225,12 @@ const selectFile = (e, id, field, subfield, index) => {
 };
 const addNewBlock = () => {
     report.value[5].participants_data.push({ name: '', document: '' });
+    report.value[5].disabledBtn = false;
 };
 
 const addNewBlockQ17 = () => {
     report.value[17].source_data.push({ source_name: '', link: '' });
+    report.value[17].disabledBtn = false;
 };
 const AddLink7 = (index) => {
     report.value[7].participation_data[index].links.push({ link: '' });
@@ -4299,6 +4301,7 @@ const AddBlock13 = () => {
         event_type: '',
         event_link: '',
     });
+    report.value[13].disabledBtn = false;
 };
 const AddBlock14 = () => {
     report.value[14].q14_labor_projects.push({
@@ -4420,7 +4423,7 @@ const report = ref({
                 event_name: '',
                 number_of_participants: '',
                 links: [{ link: '' }],
-                certificate_scans: null,
+                // certificate_scans: null,
             },
         ],
         disabledBtn: false,
@@ -4431,7 +4434,7 @@ const report = ref({
                 event_name: '',
                 number_of_participants: '',
                 links: [{ link: '' }],
-                certificate_scans: null,
+                // certificate_scans: null,
             },
         ],
         disabledBtn: false,

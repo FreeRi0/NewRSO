@@ -228,64 +228,130 @@
                                 </div>
                             </div>
                             <div id="no-passport" class="form-data izm" v-else="!props.user.parent.russian_passport">
-                                <div class="form-field one">
+                                <div class="form-field one" v-if="props.isArr" v-for="item in props.foreignParent">
                                     <label for="pass-num">Документ удостоверяющий личность
                                         <span class="valid-red">*</span></label>
                                     <Input type="text" class="input-full"
                                         placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
-                                        v-model:value="foreignDocParent.name" :max-length="200" />
+                                        v-model:value="item.name" :max-length="200" />
+                                    <div class="form__counter">
+                                        {{ counterForeignParent }} / 200
+                                    </div>
+                                </div>
+                                <div class="form-field one" v-else>
+                                    <label for="pass-num">Документ удостоверяющий личность
+                                        <span class="valid-red">*</span></label>
+                                    <Input type="text" class="input-full"
+                                        placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
+                                        v-model:value="props.foreignParent.name" :max-length="200" />
                                     <div class="form__counter">
                                         {{ counterForeignParent }} / 200
                                     </div>
                                 </div>
 
-                                <div class="form-field">
+                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
                                     <label for="pass-date">Дата выдачи<span class="valid-red">*</span></label>
-                                    <Input type="date" name="pass-date" class="input-small" v-model:value="foreignDocParent.foreign_pass_date
+                                    <Input type="date" name="pass-date" class="input-small" v-model:value="item.foreign_pass_date
                                         " />
                                 </div>
 
-                                <div class="form-field">
+                                <div class="form-field" v-else>
+                                    <label for="pass-date">Дата выдачи<span class="valid-red">*</span></label>
+                                    <Input type="date" name="pass-date" class="input-small" v-model:value="props.foreignParent.foreign_pass_date
+                                        " />
+                                </div>
+
+                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
                                     <label for="pass-id">Серия номер</label>
                                     <Input type="text" id="pass-id" class="input-small pass-masked"
-                                        placeholder="__ ___ ____" v-model:value="foreignDocParent.foreign_pass_num
+                                        placeholder="__ ___ ____" v-model:value="item.foreign_pass_num
                                             " vmaska maska="####-######" :max-length="50" />
                                     <div class="form__counter">
                                         {{ counterForeignParentNumber }} / 50
                                     </div>
                                 </div>
-                                <div class="form-field one">
+
+                                <div class="form-field" v-else>
+                                    <label for="pass-id">Серия номер</label>
+                                    <Input type="text" id="pass-id" class="input-small pass-masked"
+                                        placeholder="__ ___ ____" v-model:value="props.foreignParent.foreign_pass_num
+                                            " vmaska maska="####-######" :max-length="50" />
+                                    <div class="form__counter">
+                                        {{ counterForeignParentNumber }} / 50
+                                    </div>
+                                </div>
+
+                                <div class="form-field one" v-if="props.isArr" v-for="item in props.foreignParent">
                                     <label for="org-id">Кем выдан<span class="valid-red">*</span></label>
                                     <Input type="text" id="org-id" class="input-full" placeholder="Страна"
-                                        v-model:value="foreignDocParent.foreign_pass_whom
+                                        v-model:value="item.foreign_pass_whom
                                             " :max-length="230" />
                                     <div class="form__counter">
                                         {{ counterForeignParentOrg }} / 230
                                     </div>
                                 </div>
-                                <div class="form-field">
+
+                                <div class="form-field one" v-else>
+                                    <label for="org-id">Кем выдан<span class="valid-red">*</span></label>
+                                    <Input type="text" id="org-id" class="input-full" placeholder="Страна"
+                                        v-model:value="props.foreignParent.foreign_pass_whom
+                                            " :max-length="230" />
+                                    <div class="form__counter">
+                                        {{ counterForeignParentOrg }} / 230
+                                    </div>
+                                </div>
+                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
                                     <label for="work-book-foreign">Трудовая книжка
                                     </label>
                                     <Input type="text" id="work-book-foreign" class="input-big mask-workbook"
-                                        placeholder="AA 999999999" v-model:value="foreignDocParent.work_book_num
+                                        placeholder="AA 999999999" v-model:value="item.work_book_num
                                             " vmaska maska="AA #########" :max-length="15" />
                                     <div class="form__counter">
                                         {{ counterForeignParentWork }} / 15
                                     </div>
                                 </div>
-                                <div class="form-field">
+                                <div class="form-field" v-else>
+                                    <label for="work-book-foreign">Трудовая книжка
+                                    </label>
+                                    <Input type="text" id="work-book-foreign" class="input-big mask-workbook"
+                                        placeholder="AA 999999999" v-model:value="props.foreignParent.work_book_num
+                                            " vmaska maska="AA #########" :max-length="15" />
+                                    <div class="form__counter">
+                                        {{ counterForeignParentWork }} / 15
+                                    </div>
+                                </div>
+                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
                                     <label for="INN-id-foreign">ИНН</label>
                                     <Input type="text" id="INN-id-foreign" class="input-big mask-inn"
-                                        placeholder="AA 999999999" v-model:value="foreignDocParent.inn" vmaska
+                                        placeholder="AA 999999999" v-model:value="item.inn" vmaska
                                         maska="AA #########" :max-length="12" />
                                     <div class="form__counter">
                                         {{ counterForeignParentInn }} / 12
                                     </div>
                                 </div>
-                                <div class="form-field">
+                                <div class="form-field" v-else>
+                                    <label for="INN-id-foreign">ИНН</label>
+                                    <Input type="text" id="INN-id-foreign" class="input-big mask-inn"
+                                        placeholder="AA 999999999" v-model:value="props.foreignParent.inn" vmaska
+                                        maska="AA #########" :max-length="12" />
+                                    <div class="form__counter">
+                                        {{ counterForeignParentInn }} / 12
+                                    </div>
+                                </div>
+                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
                                     <label for="snils-id-foreign">Номер СНИЛС</label>
                                     <Input type="text" id="snils-id-foreign" class="input-big mask-snils"
-                                        placeholder="AA 999999999" v-model:value="foreignDocParent.snils" vmaska
+                                        placeholder="AA 999999999" v-model:value="item.snils" vmaska
+                                        maska="AA #########" :max-length="30" />
+                                    <div class="form__counter">
+                                        {{ counterForeignParentSnils }} / 30
+                                    </div>
+                                </div>
+
+                                <div class="form-field" v-else>
+                                    <label for="snils-id-foreign">Номер СНИЛС</label>
+                                    <Input type="text" id="snils-id-foreign" class="input-big mask-snils"
+                                        placeholder="AA 999999999" v-model:value="props.foreignParent.snils" vmaska
                                         maska="AA #########" :max-length="30" />
                                     <div class="form__counter">
                                         {{ counterForeignParentSnils }} / 30
@@ -521,8 +587,7 @@
                             </p>
                             <div class="checkbox" v-for="pas in passport" :key="pas.id">
                                 <input class="radiobutton" type="radio" :id="pas.id" :label="pas.id" :value="pas.value"
-                                    :name="pas.name" :checked="props.user.documents
-                                        .russian_passport === pas.value
+                                    :name="pas.name" :checked="props.user.documents?.russian_passport === pas.value
                                         " v-model="props.user.documents.russian_passport
                                             " />
                                 <label :for="id">{{ pas.name }}</label>
@@ -621,7 +686,18 @@
                             </div>
                         </div>
                         <div class="form-data izm" v-else-if="!props.user.documents.russian_passport">
-                            <div class="form-field one">
+                            <div class="form-field one" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                                <label for="pass-num">Документ удостоверяющий личность
+                                    <span class="valid-red">&nbsp;*</span></label>
+                                <Input type="text" class="input-full"
+                                    placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
+                                    v-model:value="item.name" :max-length="200" />
+                                <div class="form__counter">
+                                    {{ counterOtherDoc }} / 200
+                                </div>
+                            </div>
+
+                            <div v-else class="form-field one">
                                 <label for="pass-num">Документ удостоверяющий личность
                                     <span class="valid-red">&nbsp;*</span></label>
                                 <Input type="text" class="input-full"
@@ -632,13 +708,29 @@
                                 </div>
                             </div>
 
-                            <div class="form-field">
+                            <div class="form-field"  v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                                <label for="pass-date">Дата выдачи<span class="valid-red">&nbsp;*</span></label>
+                                <Input type="date" name="pass-date" class="input-small"
+                                    v-model:value="item.foreign_pass_date" />
+                            </div>
+
+                            <div class="form-field" v-else>
                                 <label for="pass-date">Дата выдачи<span class="valid-red">&nbsp;*</span></label>
                                 <Input type="date" name="pass-date" class="input-small"
                                     v-model:value="props.foreignUserDocs.foreign_pass_date" />
                             </div>
 
-                            <div class="form-field">
+                            <div class="form-field"  v-for="item in props.foreignUserDocs"  v-if="props.isArr === true">
+                                <label for="pass-id">Серия и номер</label>
+                                <Input type="text" id="pass-id" class="input-small pass-masked" vmaska
+                                    maska="AA ##########" v-model:value="item.foreign_pass_num"
+                                    :max-length="50" />
+                                <div class="form__counter">
+                                    {{ counterOtherPassNum }} / 50
+                                </div>
+                            </div>
+
+                            <div class="form-field" v-else>
                                 <label for="pass-id">Серия и номер</label>
                                 <Input type="text" id="pass-id" class="input-small pass-masked" vmaska
                                     maska="AA ##########" v-model:value="props.foreignUserDocs.foreign_pass_num"
@@ -647,7 +739,16 @@
                                     {{ counterOtherPassNum }} / 50
                                 </div>
                             </div>
-                            <div class="form-field one">
+                            <div class="form-field one"  v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                                <label for="org-id">Кем выдан<span class="valid-red">&nbsp;*</span></label>
+                                <Input type="text" id="org-id" class="input-full" placeholder="Страна"
+                                    v-model:value="item.foreign_pass_whom" :max-length="230" />
+                                <div class="form__counter">
+                                    {{ counterOtherPassWhom }} / 230
+                                </div>
+                            </div>
+
+                            <div class="form-field one" v-else>
                                 <label for="org-id">Кем выдан<span class="valid-red">&nbsp;*</span></label>
                                 <Input type="text" id="org-id" class="input-full" placeholder="Страна"
                                     v-model:value="props.foreignUserDocs.foreign_pass_whom" :max-length="230" />
@@ -655,7 +756,18 @@
                                     {{ counterOtherPassWhom }} / 230
                                 </div>
                             </div>
-                            <div class="form-field">
+                            <div class="form-field"  v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                                <label for="work-book-foreign">Трудовая книжка
+                                </label>
+                                <Input type="text" id="work-book-foreign" class="input-big mask-workbook" vmaska
+                                    maska="AA ##########" v-model:value="item.work_book_num"
+                                    :max-length="15" />
+                                <div class="form__counter">
+                                    {{ counterOtherWorkbook }} / 15
+                                </div>
+                            </div>
+
+                            <div class="form-field" v-else>
                                 <label for="work-book-foreign">Трудовая книжка
                                 </label>
                                 <Input type="text" id="work-book-foreign" class="input-big mask-workbook" vmaska
@@ -665,7 +777,16 @@
                                     {{ counterOtherWorkbook }} / 15
                                 </div>
                             </div>
-                            <div class="form-field">
+                            <div class="form-field"  v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                                <label for="INN-id-foreign">ИНН</label>
+                                <Input type="text" id="INN-id-foreign" class="input-big mask-inn" vmaska
+                                    maska="AA ##########" v-model:value="item.inn" :max-length="12" />
+                                <div class="form__counter">
+                                    {{ counterOtherInn }} / 12
+                                </div>
+                            </div>
+
+                            <div class="form-field"  v-else>
                                 <label for="INN-id-foreign">ИНН</label>
                                 <Input type="text" id="INN-id-foreign" class="input-big mask-inn" vmaska
                                     maska="AA ##########" v-model:value="props.foreignUserDocs.inn" :max-length="12" />
@@ -673,7 +794,17 @@
                                     {{ counterOtherInn }} / 12
                                 </div>
                             </div>
-                            <div class="form-field">
+                            <div class="form-field"  v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
+                                <label for="snils-id-foreign">Номер СНИЛС</label>
+                                <Input type="text" id="snils-id-foreign" vmaska maska="AA ##########"
+                                    class="input-big mask-snils" v-model:value="item.snils"
+                                    :max-length="30" />
+                                <div class="form__counter">
+                                    {{ counterOtherSnils }} / 30
+                                </div>
+                            </div>
+
+                            <div class="form-field" v-else>
                                 <label for="snils-id-foreign">Номер СНИЛС</label>
                                 <Input type="text" id="snils-id-foreign" vmaska maska="AA ##########"
                                     class="input-big mask-snils" v-model:value="props.foreignUserDocs.snils"
@@ -2378,9 +2509,9 @@
                             !props.user.parent.parent_date_of_birth ||
                             !props.user.parent.passport_authority ||
                             !props.user.parent.region || !props.user.parent.city || !props.user.parent.address)) || (props.user.is_adult === false && props.user.parent.russian_passport === false &&
-                                (!foreignDocParent.name ||
-                                    !foreignDocParent.foreign_pass_date ||
-                                    !foreignDocParent.foreign_pass_whom))
+                                (!props.foreignParent.name ||
+                                    !props.foreignParent.foreign_pass_date ||
+                                    !props.foreignParent.foreign_pass_whom))
                     " :loaded="isLoading" v-if="
                         props.user.sent_verification === false &&
                         props.user.is_verified === false
@@ -2414,8 +2545,9 @@ const props = defineProps({
     button: Boolean,
     user: Object,
     disabled: Boolean,
-    foreignUserDocs: Object,
-    foreignParent: Object,
+    foreignUserDocs: Array,
+    isArr: Boolean,
+    foreignParent: Array,
 });
 const emit = defineEmits([
     'updateUserData',
@@ -2451,25 +2583,6 @@ const openPanelFive = () => {
     panel.value = 'panelFive';
 };
 
-// const foreignDoc = ref({
-//     name: '',
-//     foreign_pass_num: '',
-//     foreign_pass_whom: '',
-//     foreign_pass_date: '',
-//     snils: '',
-//     inn: '',
-//     work_book_num: '',
-// });
-
-const foreignDocParent = ref({
-    name: '',
-    foreign_pass_num: '',
-    foreign_pass_whom: '',
-    foreign_pass_date: '',
-    snils: '',
-    inn: '',
-    work_book_num: '',
-});
 
 const swal = inject('$swal');
 
@@ -2604,23 +2717,23 @@ const counterVk = computed(() => {
 });
 
 const counterForeignParent = computed(() => {
-    return foreignDocParent.value.name?.length || 0;
+    return props.foreignParent.name?.length || 0;
 });
 const counterForeignParentOrg = computed(() => {
-    return foreignDocParent.value.foreign_pass_whom?.length || 0;
+    return props.foreignParent.foreign_pass_whom?.length || 0;
 });
 const counterForeignParentNumber = computed(() => {
-    return foreignDocParent.value.foreign_pass_num?.length || 0;
+    return props.foreignParent.foreign_pass_num?.length || 0;
 });
 const counterForeignParentInn = computed(() => {
-    return foreignDocParent.value.inn?.length || 0;
+    return props.foreignParent.inn?.length || 0;
 });
 
 const counterForeignParentWork = computed(() => {
-    return foreignDocParent.value.work_book_num?.length || 0;
+    return props.foreignParent.work_book_num?.length || 0;
 });
 const counterForeignParentSnils = computed(() => {
-    return foreignDocParent.value.snils?.length || 0;
+    return props.foreignParent.snils?.length || 0;
 });
 const counterTg = computed(() => {
     return props.user.social_tg?.length || 0;
@@ -2684,40 +2797,8 @@ const counterKnow = computed(() => {
 //     emit('update:value', event.target.value);
 //     console.log('textt', event.target.value);
 // };
-// const getData = async () => {
-//     try {
-//         const responseForeignDocs = await HTTP.get(
-//             '/rsousers/me/foreign_documents/',
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//         );
 
-//         foreignDoc.value = responseForeignDocs.data;
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-const getForeignParentDocs = async () => {
-    try {
-        const responseForeignDocsParent = await HTTP.get(
-            '/rsousers/me/foreign_parent_documents/',
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
-        );
 
-        foreignDocParent.value = responseForeignDocsParent.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
 
 const downloadBlankPersonal = async () => {
     await HTTP.get(
@@ -3146,9 +3227,6 @@ const passport = ref([
     { name: 'Нет', value: false, id: 'Нет' },
 ]);
 
-onMounted(() => {
-    getForeignParentDocs();
-});
 </script>
 <style lang="scss">
 .accordion {

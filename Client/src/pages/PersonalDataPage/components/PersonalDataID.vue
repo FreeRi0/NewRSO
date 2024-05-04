@@ -6,7 +6,9 @@
                 :user_region="region" :disabled="disabled" :position="roles.positions.value"
                 :commander="roles.userRoles.value" class="mt-3"></Wall>
             <AccordionsPersonal :button="false" :user="privateUser.privateUser.value"
-                :foreignUserDocs="userStore.foreignUser"></AccordionsPersonal>
+                :foreignUserDocs="userStore.foreignUser"
+                :foreign-parent="userStore.foreignParent"
+                :isArr="true"></AccordionsPersonal>
         </div>
     </div>
 </template>
@@ -32,6 +34,7 @@ let id = route.params.id;
 onBeforeRouteUpdate(async (to, from) => {
     if (to.params.id !== from.params.id) {
         userStore.getForeignDocsId(id);
+        userStore.getForeignParentId(id);
         userStore.getPrivateUserId(id);
 
         roleStore.getPositions(id);
@@ -46,7 +49,7 @@ watch(
         id = newId;
         userStore.getForeignDocsId(id);
         userStore.getPrivateUserId(id);
-
+        userStore.getForeignParentId(id);
         roleStore.getPositions(id);
         roleStore.getUserRoles(id);
     },
@@ -58,6 +61,7 @@ onMounted(() => {
     ) {
         userStore.getForeignDocsId(id);
         userStore.getPrivateUserId(id);
+        userStore.getForeignParentId(id);
         roleStore.getPositions(id);
         roleStore.getUserRoles(id);
     } else {
