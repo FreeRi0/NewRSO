@@ -574,7 +574,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -1426,7 +1425,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -1723,7 +1721,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -1956,7 +1953,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -2189,7 +2185,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -2424,7 +2419,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectFile(
@@ -2659,7 +2653,6 @@ s
                                                 mode="basic"
                                                 name="demo[]"
                                                 accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
                                                 :customUpload="true"
                                                 @select="
                                                     selectCertScans(
