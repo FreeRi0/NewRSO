@@ -4698,6 +4698,7 @@ const postParameters = async (id) => {
                             id == 11 ||
                             id == 12
                         ) {
+                            if (temp.id) continue;
                             await HTTP.patch(
                                 `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].participation_data[0].detachment_report.id}/objects/${temp.id}/`,
                                 temp,
