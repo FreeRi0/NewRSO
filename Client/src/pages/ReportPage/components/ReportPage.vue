@@ -4587,6 +4587,7 @@ const getParameters = async (id) => {
                 if (report.value[id].participation_data) {
                     report.value[id].participation_data = response.data.results;
                 } else report.value[id] = response.data.results[0];
+                console.log(`true`);
                 report.value[id].disabledBtn = true;
             }
         }
@@ -4742,10 +4743,29 @@ const postParameters = async (id) => {
                     );
                 }
                 report.value[id].disabledBtn = u;
+            } else if (id == 20 || id == 16) {
+                await HTTP.patch(
+                    `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].id}/`,
+                    report.value[id],
+                    {
+                        headers: {
+                            'Content-Type': type,
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
             }
         } else {
             let u = report.value[id].disabledBtn;
             delete report.value[id].disabledBtn;
+            if (id == 16) {
+                if (!fd.vk_rso_number_subscribers)
+                    fd.vk_rso_number_subscribers = 0;
+                if (!fd.vk_detachment_number_subscribers)
+                    fd.vk_detachment_number_subscribers = 0;
+            }
+            console.log(fd);
             await HTTP.post(
                 `/competitions/${route.params.competition_pk}/reports/q${index}/`,
                 fd,
@@ -4769,6 +4789,7 @@ const postParameters = async (id) => {
         });
         report.value[id].disabledBtn = true;
     } catch (error) {
+        console.log(error);
         isError.value = error.response.data;
         isLoading.value = false;
         if (isError.value) {
@@ -4782,6 +4803,22 @@ const postParameters = async (id) => {
         }
     }
 };
+
+watch(
+    () => report.value[16],
+    () => {
+        report.value[16].disabledBtn = false;
+    },
+    { deep: true },
+);
+
+watch(
+    () => report.value[20],
+    () => {
+        report.value[20].disabledBtn = false;
+    },
+    { deep: true },
+);
 
 onMounted(async (id) => {
     await getParameters(id);
