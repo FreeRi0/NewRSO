@@ -287,7 +287,7 @@ const getMeCommander = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        console.log(data);
+        // console.log(data);
         if (data.detachment_commander) {
             commander.value = true;
         } else if (data.regionalheadquarter_commander) {
@@ -306,6 +306,7 @@ const getMainResults = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+        console.log(data);
         // Вернуть 1 в индекс для суммы мест
         if (data.place) {
             mainResults.value.place[0] = data.place;
@@ -319,12 +320,10 @@ const getMainResults = async () => {
         // }
         if (data.partner_detachment) {
             mainResults.value.place.push(
-                data.places_sum
-                    ? data.places_sum
-                    : 'Рейтинг еще не сформирован',
+                data.place ? data.place : 'Рейтинг еще не сформирован',
             );
             mainResults.value.data.push(
-                `Сумма мест отряд «${data.partner_detachment.name}»`,
+                `Место в рейтинге отряда «${data.partner_detachment.name}»`,
             );
         }
         // console.log(mainResults.value);
