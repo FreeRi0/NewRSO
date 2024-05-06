@@ -238,7 +238,6 @@ const getPostitions = async () => {
                 if (e.request.response) {
                     resultData.value.places[index - 1] =
                         'Рейтинг еще не сформирован';
-                } else {
                     await getVerificationLogs(index);
                 }
                 if (resultData.value.places[index - 1] == '-')
