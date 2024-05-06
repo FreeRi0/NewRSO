@@ -257,8 +257,8 @@
                                                     :href="participant.document"
                                                     target="_blank"
                                                     >{{
-                                                        participant.document.slice(
-                                                            participant.document.indexOf(
+                                                        participant.document_name.slice(
+                                                            participant.document_name.indexOf(
                                                                 '/media/',
                                                             ) + 7,
                                                         )
@@ -2477,6 +2477,22 @@ const getApplicationData = async (_id, applicationId) => {
         );
         applicationData.value = data;
         console.log(applicationData.value);
+        if (_id == 5) {
+            for (let part in applicationData.value.participants_data) {
+                console.log(part);
+                console.log(
+                    decodeURI(
+                        applicationData.value.participants_data[part].document,
+                    ),
+                );
+                applicationData.value.participants_data[part].document_name =
+                    decodeURI(
+                        applicationData.value.participants_data[part].document,
+                    );
+            }
+        }
+
+        console.log(applicationData.value);
     } catch (e) {
         console.log(`getApplicationData error`, e);
     } finally {
@@ -2529,7 +2545,7 @@ onMounted(async () => {
 
 .form__field-group-top {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 50% 50%;
     column-gap: 80px;
 }
 .form__field-group-bottom {
