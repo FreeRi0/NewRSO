@@ -257,8 +257,8 @@
                                                     :href="participant.document"
                                                     target="_blank"
                                                     >{{
-                                                        participant.document.slice(
-                                                            participant.document.indexOf(
+                                                        participant.document_name.slice(
+                                                            participant.document_name.indexOf(
                                                                 '/media/',
                                                             ) + 7,
                                                         )
@@ -361,10 +361,17 @@
                                             ></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.first_may_demonstration
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -401,10 +408,17 @@
                                             ></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.patriotic_action
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -441,10 +455,17 @@
                                             ></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.safety_work_week
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -465,10 +486,17 @@
                                             отрядов<span>&nbsp;*</span></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.commander_commissioner_school
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -488,10 +516,17 @@
                                             семестра<span>&nbsp;*</span></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.working_semester_opening
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -527,10 +562,17 @@
                                             ></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.creative_festival
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -551,10 +593,15 @@
                                             РСО-спорт<span>&nbsp;*</span></label
                                         >
                                         <Input
+                                            v-if="applicationData.spartakiad"
                                             type="text"
-                                            v-model:value="
-                                                applicationData.spartakiad
-                                            "
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -576,10 +623,17 @@
                                             ></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.professional_competition
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -2476,6 +2530,16 @@ const getApplicationData = async (_id, applicationId) => {
             },
         );
         applicationData.value = data;
+        // console.log(applicationData.value);
+        if (_id == 5) {
+            for (let part in applicationData.value.participants_data) {
+                applicationData.value.participants_data[part].document_name =
+                    decodeURI(
+                        applicationData.value.participants_data[part].document,
+                    );
+            }
+        }
+
         console.log(applicationData.value);
     } catch (e) {
         console.log(`getApplicationData error`, e);
