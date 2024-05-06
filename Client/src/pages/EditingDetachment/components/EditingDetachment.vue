@@ -26,6 +26,7 @@
             @select-photo-four="onSelectPhotoFour"
             @reset-photo-four="onResetPhotoFour"
             @update-member="onUpdateMember"
+            @delete-member="onDeleteMember"
         ></FormUnit>
     </div>
 </template>
@@ -154,6 +155,12 @@ const onUpdateMember = (event, id) => {
         members.value[memberIndex].position.id = event[firstkey];
     else members.value[memberIndex][firstkey] = event[firstkey];
 };
+
+const onDeleteMember = (id) => {
+    const memberIndex = members.value.findIndex((member) => member.change);
+    members.value.splice(memberIndex, 1);
+    // members.value[memberIndex].change = true;
+}
 
 const submited = ref(false);
 const fileEmblem = ref(null);
