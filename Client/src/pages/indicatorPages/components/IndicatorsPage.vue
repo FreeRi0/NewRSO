@@ -361,10 +361,17 @@
                                             ></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.first_may_demonstration
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -401,10 +408,17 @@
                                             ></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.patriotic_action
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -441,10 +455,17 @@
                                             ></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.safety_work_week
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -465,10 +486,17 @@
                                             отрядов<span>&nbsp;*</span></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.commander_commissioner_school
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -488,10 +516,17 @@
                                             семестра<span>&nbsp;*</span></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.working_semester_opening
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -527,10 +562,17 @@
                                             ></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.creative_festival
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -551,10 +593,15 @@
                                             РСО-спорт<span>&nbsp;*</span></label
                                         >
                                         <Input
+                                            v-if="applicationData.spartakiad"
                                             type="text"
-                                            v-model:value="
-                                                applicationData.spartakiad
-                                            "
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -576,10 +623,17 @@
                                             ></label
                                         >
                                         <Input
-                                            type="text"
-                                            v-model:value="
+                                            v-if="
                                                 applicationData.professional_competition
                                             "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
                                             readonly
                                         />
                                     </div>
@@ -2539,7 +2593,7 @@ onMounted(async () => {
 
 .form__field-group-top {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 1fr 1fr;
     column-gap: 80px;
 }
 .form__field-group-bottom {
