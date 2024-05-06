@@ -2476,15 +2476,9 @@ const getApplicationData = async (_id, applicationId) => {
             },
         );
         applicationData.value = data;
-        console.log(applicationData.value);
+        // console.log(applicationData.value);
         if (_id == 5) {
             for (let part in applicationData.value.participants_data) {
-                console.log(part);
-                console.log(
-                    decodeURI(
-                        applicationData.value.participants_data[part].document,
-                    ),
-                );
                 applicationData.value.participants_data[part].document_name =
                     decodeURI(
                         applicationData.value.participants_data[part].document,
