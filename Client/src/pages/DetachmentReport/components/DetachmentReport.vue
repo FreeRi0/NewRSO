@@ -89,13 +89,17 @@
 import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
+
 const commander = ref(false);
+const regional_commander = ref(false);
+
 const loading = ref(true);
 
-const detachment_id = ref();
+const detachment_id = ref(route.params.id);
 
 const resultData = ref({
     indicators: [
@@ -161,7 +165,36 @@ const onAction = async () => {
     });
 };
 
+const getPlaceRegionalCommander = async () => {
+    const { data } = await HTTP.get(
+        `/competitions/1/get-detachment-places/${detachment_id.value}/`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        },
+    );
+    if (data.is_tandem) {
+        mainResults.value.place.push(
+            data.places_sum ? data.places_sum : 'Рейтинг еще не сформирован',
+        );
+        mainResults.value.data.push(
+            `Сумма мест отряд «${data.partner_detachment.name}»`,
+        );
+    }
+    mainResults.value.place[0] = data.overall_place;
+    for (let i = 1; i <= 20; ++i) {
+        let index = `q${i}_place`;
+        resultData.value.places[i - 1] = data[index];
+    }
+    console.log(data);
+    loading.value = false;
+};
+
 const getPostitions = async () => {
+    await getMainResults();
+
     for (let index = 1; index <= 20; index++) {
         // await getVerificationLogs(index);
         try {
@@ -205,7 +238,6 @@ const getPostitions = async () => {
                 if (e.request.response) {
                     resultData.value.places[index - 1] =
                         'Рейтинг еще не сформирован';
-                } else {
                     await getVerificationLogs(index);
                 }
                 if (resultData.value.places[index - 1] == '-')
@@ -257,7 +289,8 @@ const getMeCommander = async () => {
         // console.log(data);
         if (data.detachment_commander) {
             commander.value = true;
-            detachment_id.value = data.detachment_commander.id;
+        } else if (data.regionalheadquarter_commander) {
+            regional_commander.value = true;
         }
     } catch (e) {
         console.log(`getMeCommander error`, e);
@@ -272,6 +305,7 @@ const getMainResults = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+        console.log(data);
         // Вернуть 1 в индекс для суммы мест
         if (data.place) {
             mainResults.value.place[0] = data.place;
@@ -285,12 +319,10 @@ const getMainResults = async () => {
         // }
         if (data.partner_detachment) {
             mainResults.value.place.push(
-                data.places_sum
-                    ? data.places_sum
-                    : 'Рейтинг еще не сформирован',
+                data.place ? data.place : 'Рейтинг еще не сформирован',
             );
             mainResults.value.data.push(
-                `Сумма мест отряд «${data.partner_detachment.name}»`,
+                `Место в рейтинге отряда «${data.partner_detachment.name}»`,
             );
         }
         // console.log(mainResults.value);
@@ -300,9 +332,13 @@ const getMainResults = async () => {
 };
 
 onMounted(async () => {
-    await getMainResults();
     await getMeCommander();
-    await getPostitions();
+
+    if (commander.value) {
+        await getPostitions();
+    } else if (regional_commander.value) {
+        await getPlaceRegionalCommander();
+    }
     window.scroll(0, 0);
 });
 </script>
