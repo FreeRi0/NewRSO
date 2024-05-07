@@ -3663,7 +3663,7 @@ s
                                 class="form__field add-block"
                                 @click="addNewBlockQ17"
                             >
-                                + добавить участника
+                                + Добавить источник
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">

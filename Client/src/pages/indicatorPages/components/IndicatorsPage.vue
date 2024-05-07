@@ -256,6 +256,7 @@
                                                 <a
                                                     :href="participant.document"
                                                     target="_blank"
+                                                    class="file_title"
                                                     >{{
                                                         participant.document_name.slice(
                                                             participant.document_name.indexOf(
@@ -764,7 +765,10 @@
                                             readonly
                                         />
                                     </div>
-                                    <div class="form__field">
+                                    <div
+                                        class="form__field"
+                                        v-if="applicationData.certificate_scans"
+                                    >
                                         <label class="form__label"
                                             >Скан грамот (при наличии)<span
                                                 >&nbsp;*</span
@@ -927,7 +931,10 @@
                                             readonly
                                         />
                                     </div>
-                                    <div class="form__field">
+                                    <div
+                                        class="form__field"
+                                        v-if="applicationData.certificate_scans"
+                                    >
                                         <label class="form__label"
                                             >Скан грамот (при наличии)<span
                                                 >&nbsp;*</span
@@ -2667,5 +2674,9 @@ onMounted(async () => {
 }
 .file {
     display: flex;
+}
+.file_title {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>
