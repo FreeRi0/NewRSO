@@ -256,6 +256,7 @@
                                                 <a
                                                     :href="participant.document"
                                                     target="_blank"
+                                                    class="file_title"
                                                     >{{
                                                         participant.document_name.slice(
                                                             participant.document_name.indexOf(
@@ -2667,5 +2668,9 @@ onMounted(async () => {
 }
 .file {
     display: flex;
+}
+.file_title {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>
