@@ -157,7 +157,7 @@ const onUpdateMember = (event, id) => {
 };
 
 const onDeleteMember = (id) => {
-    const memberIndex = members.value.findIndex((member) => member.change);
+    const memberIndex = members.value.findIndex((member) => member.id === id);
     members.value.splice(memberIndex, 1);
     // members.value[memberIndex].change = true;
 }

@@ -98,7 +98,6 @@ const onDeleteMember = (memId) => {
     }
 
     &__delete {
-        margin-left: 12px;
         width: 44px;
         height: 48px;
         border: 1px solid #b6b6b6;
@@ -109,6 +108,21 @@ const onDeleteMember = (memId) => {
         img {
             min-height: 12px;
             min-width: 12px;
+        }
+    }
+
+    &__wrap {
+        display: flex;
+        column-gap: 12px;
+
+        @media (max-width: 768px) {
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 575px) {
+            column-gap: 8px;
+            row-gap: 5px;
+            margin-top: 4px;
         }
     }
 
@@ -184,10 +198,14 @@ const onDeleteMember = (memId) => {
         @media (max-width: 768px) {
             margin-bottom: 4px;
         }
+        @media (max-width: 575px) {
+           max-width: 264px;
+           width: 100%;
+        }
     }
 
     &__image {
-        margin-right: 11px;
+        margin-right: 12px;
         width: 38px;
         height: 38px;
         display: flex;
@@ -197,7 +215,7 @@ const onDeleteMember = (memId) => {
         overflow: hidden;
 
         @media (max-width: 768px) {
-            margin-right: 13px;
+            margin-right: 12px;
             width: 36px;
             height: 36px;
         }
@@ -226,16 +244,26 @@ const onDeleteMember = (memId) => {
         line-height: 21px;
 
         @media (max-width: 768px) {
+            font-size: 16px;
+            line-height: 21.5px;
+        }
+
+        @media (max-width: 575px) {
+            align-items: center;
+            font-size: 14px;
+            line-height: 18.5px;
             flex-wrap: wrap;
-            font-size: 12px;
-            line-height: 16px;
+            justify-content: flex-start;
+
         }
     }
 
     &__title {
         @media (max-width: 768px) {
             width: 100%;
-            margin-bottom: 3px;
+        }
+        @media (max-width: 575px) {
+            max-width: 198px;
         }
     }
 
@@ -248,6 +276,10 @@ const onDeleteMember = (memId) => {
 
         @media (max-width: 768px) {
             margin-left: 0;
+        }
+
+        @media (max-width: 768px) {
+            max-width: 70px;
         }
 
         &::before {
@@ -299,6 +331,10 @@ const onDeleteMember = (memId) => {
         @media (max-width: 768px) {
             margin-bottom: 4px;
         }
+        @media (max-width: 575px) {
+           max-width: 264px;
+           width: 100%;
+        }
     }
 
     &__select {
@@ -306,6 +342,7 @@ const onDeleteMember = (memId) => {
         border-radius: 10px;
         margin-right: 0;
         margin-bottom: 0;
+
 
         .v-field__input {
             padding-top: 12px;
@@ -331,7 +368,6 @@ const onDeleteMember = (memId) => {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-width: 224px;
         width: 224px;
         border: 1px solid #b6b6b6;
         border-radius: 10px;
@@ -340,6 +376,11 @@ const onDeleteMember = (memId) => {
 
         @media (max-width: 768px) {
             margin-left: 0;
+        }
+
+        @media (max-width: 575px) {
+            max-width: 212px;
+            width: 100%;
         }
 
         label {
