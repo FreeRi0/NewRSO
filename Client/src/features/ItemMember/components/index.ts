@@ -1,3 +1,3 @@
-import ItemMember from './ItemMember.vue';
+import ItemMember from './ItemMember.vue';;
 
-export { ItemMember };
+export { ItemMember};

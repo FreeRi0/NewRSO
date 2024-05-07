@@ -2,25 +2,24 @@
     <div class="member">
         <ul class="member__wrapper">
             <template v-if="items.length > 0">
-                <ItemMember
-                    class="member__item"
-                    v-for="item in items"
-                    :key="item.id"
-                    :item="item"
-                    :functions="functions"
-                    :is-error-members="isErrorMembers"
-                    @update-member="onUpdateMember"
-                ></ItemMember>
+                <ItemMember class="member__item" v-for="item in items" :key="item.id" :item="item"
+                    :functions="functions" :is-error-members="isErrorMembers" @update-member="onUpdateMember"
+                    @delete-member="onDeleteMember"></ItemMember>
             </template>
 
             <p v-else>В {{ unit }} еще никто не вступил...</p>
         </ul>
+    </div>
+    <div>
+
+
     </div>
 </template>
 
 <script setup>
 // import { ref, onMounted } from 'vue';
 import { ItemMember } from '@features/ItemMember';
+
 // import { HTTP } from '@app/http';
 // import { usePositionsStore } from '@features/store/positions';
 // import { storeToRefs } from 'pinia';
@@ -53,7 +52,8 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['updateMember']);
+const emit = defineEmits(['updateMember', 'deleteMember']);
+
 
 // const functions = ref(props.functions);
 
@@ -73,6 +73,11 @@ const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
 };
 
+const onDeleteMember = (memId) => {
+    emit('deleteMember', memId)
+    // console.log('member', memId);
+}
+
 // onMounted(() => {
 //     // getPositions();
 //     // positionsStore.getPositions();
@@ -91,6 +96,25 @@ const onUpdateMember = (event, id) => {
         padding-left: 16px;
         padding-right: 16px;
     }
+
+    &__delete {
+        margin-left: 12px;
+        width: 44px;
+        height: 48px;
+        border: 1px solid #b6b6b6;
+        border-radius: 10px;
+        padding: 18px 16px;
+        cursor: pointer;
+
+        img {
+            min-height: 12px;
+            min-width: 12px;
+        }
+    }
+
+    // &__wrap {
+    //    display: flex;
+    // }
 
     &__wrapper {
         max-height: 350px;
@@ -206,9 +230,14 @@ const onUpdateMember = (event, id) => {
         line-height: 21px;
 
         @media (max-width: 768px) {
+            font-size: 16px;
+            line-height: 21.5px;
+        }
+
+        @media (max-width: 575px) {
             flex-wrap: wrap;
-            font-size: 12px;
-            line-height: 16px;
+            font-size: 14px;
+            line-height: 18.5px;
         }
     }
 
@@ -272,6 +301,7 @@ const onUpdateMember = (event, id) => {
                 align-items: center;
                 // color: #35383f;// Не работает?
             }
+
             margin: 0;
         }
 
