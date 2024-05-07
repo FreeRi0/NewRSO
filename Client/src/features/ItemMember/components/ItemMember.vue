@@ -31,7 +31,7 @@
                 <FormCheckbox label="Доверенное лицо" :id="item.id" :value="item.user.last_name"
                     v-model:checked="confidant" @update:checked="changeConfidant"></FormCheckbox>
             </div>
-            <div v-if="roleStore.roles.detachment_commander?.id === userStore.currentUser?.detachment_id" class="member__delete" @click="deleteMember(item.id)">
+            <div v-if="roleStore.roles.detachment_commander?.id" class="member__delete" @click="deleteMember(item.id)">
                 <img src="@app/assets/closeDel.png" alt="del">
             </div>
         </div>
@@ -70,7 +70,6 @@ const confidant = ref(props.item.is_trusted);
 const positionMember = ref(props.item.position);
 
 const roleStore = useRoleStore();
-const userStore = useUserStore();
 
 
 const changeOption = (event) => {
