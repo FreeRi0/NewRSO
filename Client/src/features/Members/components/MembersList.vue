@@ -112,6 +112,10 @@ const onDeleteMember = (memId) => {
         }
     }
 
+    // &__wrap {
+    //    display: flex;
+    // }
+
     &__wrapper {
         max-height: 350px;
         overflow: auto;
@@ -226,9 +230,14 @@ const onDeleteMember = (memId) => {
         line-height: 21px;
 
         @media (max-width: 768px) {
+            font-size: 16px;
+            line-height: 21.5px;
+        }
+
+        @media (max-width: 575px) {
             flex-wrap: wrap;
-            font-size: 12px;
-            line-height: 16px;
+            font-size: 14px;
+            line-height: 18.5px;
         }
     }
 

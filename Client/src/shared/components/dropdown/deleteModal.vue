@@ -34,23 +34,36 @@ function del() {
 <style lang="scss" scoped>
 .modal {
   border: 2px solid #35383F;
-  width: 400px;
+  max-width: 400px;
   height: 270px;
   position: absolute;
   right: 35%;
   background: #fff;
-
   z-index: 999;
   transform: none;
 
+  @media (max-width: 575px) {
+    max-width: 320px;
+    height: 216px;
+    right: 5%;
+  }
+
   &__wrapper {
     padding: 40px 32px;
+
+    @media (max-width: 575px) {
+      padding: 32px 20px;
+    }
 
     &_title {
       font-size: 16px;
       font-weight: 600;
       font-family: Bert Sans;
       text-align: center;
+
+      @media (max-width: 575px) {
+        font-size: 14px;
+      }
     }
 
     &_buttons {
@@ -59,12 +72,22 @@ function del() {
       flex-direction: column;
       row-gap: 12px;
 
+      @media (max-width: 575px) {
+        margin-top: 28px;
+        row-gap: 8px;
+      }
+
       &_confirm {
         margin: 0px;
         font-size: 16px;
         font-weight: 600;
         font-family: Bert Sans;
         height: 52px;
+
+        @media (max-width: 575px) {
+          height: 40px;
+          font-size: 14px;
+        }
       }
 
       &_cancel {
@@ -76,6 +99,12 @@ function del() {
         font-weight: 600;
         font-family: Bert Sans;
         height: 52px;
+
+        @media (max-width: 575px) {
+          height: 40px;
+          font-size: 14px;
+          padding: 10px;
+        }
       }
     }
   }
