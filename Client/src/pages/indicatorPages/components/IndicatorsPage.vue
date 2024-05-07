@@ -765,7 +765,10 @@
                                             readonly
                                         />
                                     </div>
-                                    <div class="form__field">
+                                    <div
+                                        class="form__field"
+                                        v-if="applicationData.certificate_scans"
+                                    >
                                         <label class="form__label"
                                             >Скан грамот (при наличии)<span
                                                 >&nbsp;*</span
@@ -928,7 +931,10 @@
                                             readonly
                                         />
                                     </div>
-                                    <div class="form__field">
+                                    <div
+                                        class="form__field"
+                                        v-if="applicationData.certificate_scans"
+                                    >
                                         <label class="form__label"
                                             >Скан грамот (при наличии)<span
                                                 >&nbsp;*</span
