@@ -19,7 +19,7 @@
                 <p class="member__date">{{ item.user?.date_of_birth }}</p>
             </div>
         </div>
-        <div class="d-flex">
+        <div class="member__wrap">
             <div class="member__select-box">
                 <Select class="member__select" variant="outlined" clearable :items="functions" name="select_position"
                     id="select-position" placeholder="Выберите должность" v-model="positionMember"
