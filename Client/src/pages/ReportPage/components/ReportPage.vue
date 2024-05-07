@@ -674,7 +674,7 @@ s
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
-                                    по 15 мая 2024 года включительно.
+                                    по 30 июня 2024 года включительно.
                                 </p>
                             </div>
                         </div>
@@ -4688,6 +4688,9 @@ const postParameters = async (id) => {
                         if (!temp.is_verified) {
                             delete temp.document;
                             delete temp.certificate_scans;
+                        }
+                        if (temp.is_verified) {
+                            continue;
                         }
                         if (
                             id == 7 ||
