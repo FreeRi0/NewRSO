@@ -39,6 +39,8 @@ export const useSquadsStore = defineStore('squads', {
             }
         },
 
+
+
         async getNextSquads() {
             try {
                 this.isLoading = true;
@@ -218,6 +220,8 @@ export const useSquadsStore = defineStore('squads', {
                 this.isLoading = false;
             }
         },
+
+       
 
         async searchSquads(name: String) {
             const searchSquadsResp = await HTTP.get(

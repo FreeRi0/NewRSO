@@ -30,8 +30,9 @@
                         <Button class="form-button" type="button" label="Подать заявку" variant="text"
                             size="large"></Button></router-link>
 
-                    <Button v-else-if="eventsStore.status.is_applicant" type="button" class="form-button form-button--grey"
-                        variant="text" label="Заявка на рассмотрении" size="large"></Button>
+                    <Button v-else-if="eventsStore.status.is_applicant" type="button"
+                        class="form-button form-button--grey" variant="text" label="Заявка на рассмотрении"
+                        size="large"></Button>
 
                     <div v-else-if="eventsStore.status.is_participant" class="user-data__link">
                         Вы участник
@@ -192,7 +193,7 @@
                 </div>
             </section>
             <section class="section_wrap" v-else="picked === false">
-                <ul class="list_wrap" v-if="eventsStore.applications.length">
+                <ul class="list_wrap" v-if="eventsStore.status.is_applicant">
                     <li v-for="participant in eventsStore.applications.slice(
                         0,
                         6,
