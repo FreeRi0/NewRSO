@@ -14,7 +14,7 @@
                     >напишите нам в&nbsp;Телеграм</a
                 >.
             </p>
-            <div
+            <!-- <div
                 v-if="
                     currentUser.currentUser.value.is_verified === false &&
                     isAuth
@@ -31,7 +31,7 @@
                     Далее ожидайте одобрения заявки командиром РШ либо
                     командиром ЛСО, если вы состоите в отряде.
                 </p>
-            </div>
+            </div> -->
         </div>
 
         <app-breadcrumbs v-if="!hidden" :breadcrumbs="breadcrumbs" />
