@@ -25,13 +25,13 @@ defineProps<BreadcrumbsProps>();
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     font-family: 'Akrobat';
     font-size: 14px;
     line-height: 17px;
     font-weight: 600;
     color: #35383f;
-    padding-top: 60px;
+    padding-top: 25px;
 
     @media (max-width: 360px) {
         margin-bottom: 20px;
