@@ -84,6 +84,33 @@ s
                                     автоматически по состоянию на 30 апреля 2024
                                     года.
                                 </label>
+                                <!-- <div class="form_place">
+                                    <p>Для сведения:</p>
+                                </div>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            Количество участников ЛСО на
+                                            {{
+                                                new Date(
+                                                    Date.now(),
+                                                ).toLocaleDateString()
+                                            }}
+                                        </td>
+                                        <td>10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Количество оплаченных ЧВ на
+                                            {{
+                                                new Date(
+                                                    Date.now(),
+                                                ).toLocaleDateString()
+                                            }}
+                                        </td>
+                                        <td>10</td>
+                                    </tr>
+                                </table> -->
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -4956,4 +4983,23 @@ onMounted(async (id) => {
 .form__field-link svg {
     margin-top: 10px;
 }
+
+/* table {
+    width: 100%;
+    border-top: 1px solid #d9d9d9;
+    border-collapse: collapse;
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid #dddddd;
+}
+td {
+    width: 50%;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #d9d9d9;
+}
+.form_place p {
+    margin-top: 20px;
+    margin-bottom: 10px;
+} */
 </style>
