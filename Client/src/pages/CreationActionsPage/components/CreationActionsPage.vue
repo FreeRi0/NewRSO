@@ -440,7 +440,7 @@
                                   {{ maininfo.application_type === 'Групповая' ? 'групповые' : 'многоэтапные' }}
                                   заявки <sup class="valid-red">*</sup></label>
                                 <sortByEducation
-                                    v-model="area"
+                                    v-model="maininfo.available_structural_units"
                                     :options="area_massive"
                                     placeholder="Например, ЛСО"
                                     style="margin-top: 8px;"
@@ -1322,11 +1322,12 @@ watchEffect(() => {
             break;
         case 'Групповая':
             area_massive.value = [
-                { name: 'Округи' },
-                { name: 'Регионы' },
+                { name: 'Отряды' },
+                { name: 'Образовательные штабы' },
                 { name: 'Местные штабы' },
-                { name: 'ЛСО' },
-                { name: 'Штабы ОО' },
+                { name: 'Региональные штабы' },
+                { name: 'Окружные штабы' },
+                { name: 'Центральные штабы' },
             ];
             break;
         case 'Многоэтапная':

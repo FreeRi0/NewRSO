@@ -526,6 +526,16 @@ watch(
             margin-bottom: 26px;
             font-family: 'Bert-Sans';
             word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -moz-box;
+            height: 63px;
+            -moz-box-orient: vertical;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            line-clamp: 3;
+            box-orient: vertical;
         }
 
         &_date {
@@ -582,7 +592,8 @@ watch(
         justify-content: start;
         width: 48%;
         height: 24px;
-
+        font-size: 18px;
+        color: #35383f;
         margin-right: 1%;
     }
 

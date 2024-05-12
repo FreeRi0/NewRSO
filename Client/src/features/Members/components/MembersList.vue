@@ -97,6 +97,11 @@ const onDeleteMember = (memId) => {
         padding-right: 16px;
     }
 
+    @media (max-width: 360px) {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
     &__delete {
         width: 44px;
         height: 48px;
@@ -117,6 +122,8 @@ const onDeleteMember = (memId) => {
 
         @media (max-width: 768px) {
             flex-wrap: wrap;
+            align-items: center;
+
         }
 
         @media (max-width: 575px) {
@@ -175,6 +182,8 @@ const onDeleteMember = (memId) => {
 
         @media (max-width: 768px) {
             flex-direction: column;
+            margin-left: 5px;
+            row-gap: 8px;
         }
     }
 
@@ -198,9 +207,11 @@ const onDeleteMember = (memId) => {
         @media (max-width: 768px) {
             margin-bottom: 4px;
         }
+
         @media (max-width: 575px) {
-           max-width: 264px;
-           width: 100%;
+            max-width: 264px;
+            width: 100%;
+            margin-bottom: 0;
         }
     }
 
@@ -262,6 +273,7 @@ const onDeleteMember = (memId) => {
         @media (max-width: 768px) {
             width: 100%;
         }
+
         @media (max-width: 575px) {
             max-width: 198px;
         }
@@ -331,9 +343,10 @@ const onDeleteMember = (memId) => {
         @media (max-width: 768px) {
             margin-bottom: 4px;
         }
+
         @media (max-width: 575px) {
-           max-width: 264px;
-           width: 100%;
+            max-width: 264px;
+            width: 100%;
         }
     }
 
