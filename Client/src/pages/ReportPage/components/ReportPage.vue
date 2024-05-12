@@ -80,11 +80,10 @@ s
                                 <label class="form__label"
                                     >Численность членов линейного студенческого
                                     отряда в соответствии с объемом уплаченных
-                                    членских взносов рассчитывается
-                                    автоматически по состоянию на 30 апреля 2024
-                                    года.
+                                    членских взносов рассчитывается ежедневно.
+                                    Последняя дата рассчета 12 июня 2024 года.
                                 </label>
-                                <!-- <div class="form_place">
+                                <div class="form_place">
                                     <p>Для сведения:</p>
                                 </div>
                                 <table>
@@ -97,7 +96,9 @@ s
                                                 ).toLocaleDateString()
                                             }}
                                         </td>
-                                        <td>10</td>
+                                        <td>
+                                            {{ report[1]?.number_of_members }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -108,9 +109,11 @@ s
                                                 ).toLocaleDateString()
                                             }}
                                         </td>
-                                        <td>10</td>
+                                        <td>
+                                            {{ report[1]?.number_of_payments }}
+                                        </td>
                                     </tr>
-                                </table> -->
+                                </table>
                             </div>
                         </div>
                     </v-expansion-panel-text>
@@ -4410,7 +4413,7 @@ const deleteBlock17 = (index) => {
 };
 
 const report = ref({
-    1: { place: '' },
+    1: { number_of_members: '', number_of_payments: '' },
     2: {
         commander_achievement: null,
         commissioner_achievement: null,
@@ -4558,7 +4561,7 @@ const getParameters = async (id) => {
         isLoading.value = true;
         const response = await HTTP.get(
             `/competitions/${route.params.competition_pk}/reports/q${id}/` +
-                (id == 1 || id == 3 || id == 4 ? 'get-place/' : 'me/'),
+                (id == 1 ? 'info/' : 'me/'),
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -4984,7 +4987,7 @@ onMounted(async (id) => {
     margin-top: 10px;
 }
 
-/* table {
+table {
     width: 100%;
     border-top: 1px solid #d9d9d9;
     border-collapse: collapse;
@@ -4993,13 +4996,18 @@ onMounted(async (id) => {
     border: 1px solid #dddddd;
 }
 td {
+    font-size: 18px;
+    line-height: 23.74px;
     width: 50%;
     text-align: center;
-    padding: 10px;
+    padding: 20px;
     border: 1px solid #d9d9d9;
 }
 .form_place p {
     margin-top: 20px;
     margin-bottom: 10px;
-} */
+    font-family: Bert Sans;
+    font-size: 16px;
+    color: #35383f;
+}
 </style>
