@@ -108,7 +108,7 @@
 
                         <div class="form__field">
                             <label class="form__label" for="select-direction"
-                                >Выберите направление
+                                >Направление
                                 <sup class="valid-red">*</sup>
                             </label>
                             <SearchSelect
@@ -151,7 +151,7 @@
 
                         <div class="form__field">
                             <label class="form__label" for="select-region"
-                                >Выберите регион
+                                >Регион
                                 <sup class="valid-red">*</sup>
                             </label>
                             <SearchSelect
@@ -258,7 +258,7 @@
 
                         <div class="form__field" v-if="detachment.region">
                             <label class="form__label" for="select-headquarter"
-                                >Выберите штаб СО ОО
+                                >Штаб СО ОО
                             </label>
                             <SearchSelect
                                 :items="headquarterRegion.value"

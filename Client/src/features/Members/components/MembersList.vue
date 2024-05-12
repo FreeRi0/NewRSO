@@ -2,18 +2,22 @@
     <div class="member">
         <ul class="member__wrapper">
             <template v-if="items.length > 0">
-                <ItemMember class="member__item" v-for="item in items" :key="item.id" :item="item"
-                    :functions="functions" :is-error-members="isErrorMembers" @update-member="onUpdateMember"
-                    @delete-member="onDeleteMember"></ItemMember>
+                <ItemMember
+                    class="member__item"
+                    v-for="item in items"
+                    :key="item.id"
+                    :item="item"
+                    :functions="functions"
+                    :is-error-members="isErrorMembers"
+                    @update-member="onUpdateMember"
+                    @delete-member="onDeleteMember"
+                ></ItemMember>
             </template>
 
             <p v-else>В {{ unit }} еще никто не вступил...</p>
         </ul>
     </div>
-    <div>
-
-
-    </div>
+    <div></div>
 </template>
 
 <script setup>
@@ -54,7 +58,6 @@ const props = defineProps({
 
 const emit = defineEmits(['updateMember', 'deleteMember']);
 
-
 // const functions = ref(props.functions);
 
 // const getPositions = async () => {
@@ -74,9 +77,9 @@ const onUpdateMember = (event, id) => {
 };
 
 const onDeleteMember = (memId) => {
-    emit('deleteMember', memId)
+    emit('deleteMember', memId);
     // console.log('member', memId);
-}
+};
 
 // onMounted(() => {
 //     // getPositions();
@@ -123,7 +126,6 @@ const onDeleteMember = (memId) => {
         @media (max-width: 768px) {
             flex-wrap: wrap;
             align-items: center;
-
         }
 
         @media (max-width: 575px) {
@@ -144,6 +146,9 @@ const onDeleteMember = (memId) => {
 
         @media (max-width: 768px) {
             padding-right: 0;
+        }
+        @media (max-width: 360px) {
+            font-size: 14px;
         }
 
         &::-webkit-scrollbar {
@@ -265,7 +270,6 @@ const onDeleteMember = (memId) => {
             line-height: 18.5px;
             flex-wrap: wrap;
             justify-content: flex-start;
-
         }
     }
 
@@ -355,7 +359,6 @@ const onDeleteMember = (memId) => {
         border-radius: 10px;
         margin-right: 0;
         margin-bottom: 0;
-
 
         .v-field__input {
             padding-top: 12px;

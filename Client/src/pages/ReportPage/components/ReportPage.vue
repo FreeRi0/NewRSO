@@ -96,9 +96,10 @@ s
                                                 ).toLocaleDateString()
                                             }}
                                         </td>
-                                        <td>
+                                        <td v-if="report[1]?.number_of_members">
                                             {{ report[1]?.number_of_members }}
                                         </td>
+                                        <td v-else>0</td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -109,9 +110,12 @@ s
                                                 ).toLocaleDateString()
                                             }}
                                         </td>
-                                        <td>
+                                        <td
+                                            v-if="report[1]?.number_of_payments"
+                                        >
                                             {{ report[1]?.number_of_payments }}
                                         </td>
+                                        <td v-else>0</td>
                                     </tr>
                                 </table>
                             </div>
@@ -5009,5 +5013,8 @@ td {
     font-family: Bert Sans;
     font-size: 16px;
     color: #35383f;
+}
+.btn_large {
+    padding: 12px 32px !important;
 }
 </style>
