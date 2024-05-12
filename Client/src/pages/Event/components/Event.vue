@@ -529,6 +529,7 @@ watch(
             overflow: hidden;
             text-overflow: ellipsis;
             display: -moz-box;
+            height: 63px;
             -moz-box-orient: vertical;
             display: -webkit-box;
             -webkit-line-clamp: 3;
@@ -591,7 +592,8 @@ watch(
         justify-content: start;
         width: 48%;
         height: 24px;
-
+        font-size: 18px;
+        color: #35383f;
         margin-right: 1%;
     }
 

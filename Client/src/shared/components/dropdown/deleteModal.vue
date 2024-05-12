@@ -36,6 +36,7 @@ function del() {
   border: 2px solid #35383F;
   max-width: 400px;
   height: 270px;
+  border-radius: 10px;
   position: absolute;
   right: 35%;
   background: #fff;
@@ -45,14 +46,14 @@ function del() {
   @media (max-width: 575px) {
     max-width: 320px;
     height: 216px;
-    right: 5%;
+    right: auto;
   }
 
   &__wrapper {
     padding: 40px 32px;
 
     @media (max-width: 575px) {
-      padding: 32px 20px;
+      padding: 25px 20px;
     }
 
     &_title {
@@ -87,6 +88,7 @@ function del() {
         @media (max-width: 575px) {
           height: 40px;
           font-size: 14px;
+          padding: 5px 32px;
         }
       }
 
@@ -103,7 +105,8 @@ function del() {
         @media (max-width: 575px) {
           height: 40px;
           font-size: 14px;
-          padding: 10px;
+
+          padding: 5px 32px;
         }
       }
     }
