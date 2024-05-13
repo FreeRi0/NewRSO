@@ -123,13 +123,25 @@ const onDeleteMember = (memId) => {
         display: flex;
         column-gap: 12px;
 
+<<<<<<< Updated upstream
         @media (max-width: 768px) {
             flex-wrap: wrap;
             align-items: center;
+=======
+        @media (max-width: 1024px) {
+            column-gap: 8px;
+            width: 100%;
+
+>>>>>>> Stashed changes
         }
 
+        @media (max-width: 768px) {
+            flex-wrap: wrap;
+            width: 100%;
+            row-gap: 12px;
+
+        }
         @media (max-width: 575px) {
-            column-gap: 8px;
             row-gap: 5px;
             margin-top: 4px;
         }
@@ -143,6 +155,11 @@ const onDeleteMember = (memId) => {
         row-gap: 12px;
         margin-top: -8px;
         padding-right: 16px;
+
+        @media (max-width: 1024px) {
+            padding-right: 0;
+
+        }
 
         @media (max-width: 768px) {
             padding-right: 0;
@@ -187,7 +204,13 @@ const onDeleteMember = (memId) => {
 
         @media (max-width: 768px) {
             flex-direction: column;
-            margin-left: 5px;
+
+            row-gap: 12px;
+        }
+
+           @media (max-width: 575px) {
+            flex-direction: column;
+
             row-gap: 8px;
         }
     }
@@ -207,6 +230,7 @@ const onDeleteMember = (memId) => {
 
         @media (max-width: 1024px) {
             margin-bottom: 12px;
+            max-width: 748px;
         }
 
         @media (max-width: 768px) {
@@ -214,7 +238,7 @@ const onDeleteMember = (memId) => {
         }
 
         @media (max-width: 575px) {
-            max-width: 264px;
+
             width: 100%;
             margin-bottom: 0;
         }
@@ -323,6 +347,19 @@ const onDeleteMember = (memId) => {
         margin-left: 12px;
         min-width: 224px;
         width: 224px;
+
+        @media (max-width: 1024px) {
+              width: 100%;
+                    max-width: 344px;
+
+        }
+          @media (max-width: 768px) {
+            max-width: 100%;
+              width: 100%;
+        }
+
+
+
         // position: relative;
 
         .v-select__selection {
@@ -349,7 +386,7 @@ const onDeleteMember = (memId) => {
         }
 
         @media (max-width: 575px) {
-            max-width: 264px;
+
             width: 100%;
         }
     }
@@ -379,7 +416,7 @@ const onDeleteMember = (memId) => {
     // }
 
     &__confidant {
-        margin-left: 12px;
+
         padding: 4px 16px;
         display: flex;
         align-items: center;
@@ -390,12 +427,20 @@ const onDeleteMember = (memId) => {
         // align-self: start;
         min-height: 48px;
 
+        @media (max-width: 1024px) {
+                    width: 100%;
+                    max-width: 344px;
+
+        }
+
         @media (max-width: 768px) {
             margin-left: 0;
+            width: 100%;
+            max-width: 91%;
         }
 
         @media (max-width: 575px) {
-            max-width: 212px;
+            max-width: 88%;
             width: 100%;
         }
 

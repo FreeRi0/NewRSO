@@ -14,7 +14,7 @@
                         name: 'editAction',
                         params: { id: eventsStore.event.id },
                     }" class="user-data__link">Редактировать мероприятие</router-link>
-                    <Button
+                    <!-- <Button
                         v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant) && eventsStore.event.application_type === 'Персональная'"
                         class="form-button" type="button" @click="AddApplication()" label="Подать заявку" variant="text"
                         size="large"></Button>
@@ -28,7 +28,11 @@
                         v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant) && eventsStore.event.application_type === 'Мультиэтапная'"
                         :to="{ name: 'MultiStageSubmit' }">
                         <Button class="form-button" type="button" label="Подать заявку" variant="text"
-                            size="large"></Button></router-link>
+                            size="large"></Button></router-link> -->
+
+                    <Button v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant)"
+                        class="form-button" type="button" @click="AddApp()" label="Подать заявку" variant="text"
+                        size="large"></Button>
 
                     <Button v-else-if="eventsStore.status.is_applicant" type="button"
                         class="form-button form-button--grey" variant="text" label="Заявка на рассмотрении"
@@ -38,6 +42,7 @@
                         Вы участник
                     </div>
                 </div>
+                <modalErrorEvent v-show="showModal === true" :commander="comName" @close="close"></modalErrorEvent>
             </div>
             <h2 class="title event_about">О мероприятии</h2>
             <div class="d-flex">
@@ -298,10 +303,13 @@ import { useRegionalsStore } from '@features/store/regionals';
 import { useSquadsStore } from '@features/store/squads';
 import { useLocalsStore } from '@features/store/local';
 import { useEducationalsStore } from '@features/store/educationals';
+import { modalErrorEvent } from '@shared/components/dropdown';
 const route = useRoute();
 const router = useRouter();
 const { replaceTargetObjects } = usePage();
 const data = ref({});
+const comName = ref('');
+const showModal = ref(false);
 
 const picked = ref(true);
 const swal = inject('$swal');
@@ -318,6 +326,10 @@ const isAuth = ref(!!localStorage.getItem('Token'));
 const next = () => {
     eventsStore.getNextFilteredEvents();
 };
+const close = () => {
+    showModal.value = false;
+}
+
 const prev = () => {
     eventsStore.getFilteredEvents(
         eventsStore.event.scale,
@@ -397,8 +409,6 @@ const DetLevel = computed(() => {
     );
 });
 
-
-
 const isOrganizer = computed(() => {
     return eventsStore.organizators.find(
         (item) => item.organizer.id === userId.value,
@@ -408,6 +418,37 @@ const isOrganizer = computed(() => {
 const IsMember = computed(() => {
     return eventsStore.members.find((item) => item.user.id === userId.value);
 });
+
+const AddApp = () => {
+
+    if (eventsStore.event.application_type === 'Персональная') {
+        AddApplication()
+    }
+    if (eventsStore.event.application_type === 'Групповая') {
+        if ((eventsStore.event.available_structural_units === 'Отряды' && roleStore.roles.detachment_commander) || (eventsStore.event.available_structural_units === 'Образовательные штабы' && roleStore.roles.educational_headquarter_commander) || (eventsStore.event.available_structural_units === 'Окружные штабы' && roleStore.roles.districtheadquarter_commander) || (eventsStore.event.available_structural_units === 'Региональные штабы' && roleStore.roles.regional_headquarter_commander) || (eventsStore.event.available_structural_units === 'Местные штабы' && roleStore.roles.local_headquarter_commander)) {
+            router.push({ name: 'GroupSubmit' })
+        } else {
+            showModal.value = true;
+            if (eventsStore.event.available_structural_units === 'Отряды') {
+                comName.value = 'Командир ЛСО';
+            } else if (eventsStore.event.available_structural_units === 'Образовательные штабы') {
+                comName.value = 'Командир СО ОО';
+            }
+            else if (eventsStore.event.available_structural_units === 'Региональные штабы') {
+                comName.value = 'Командир РШ';
+            }
+            else if (eventsStore.event.available_structural_units === 'Местные штабы') {
+                comName.value = 'Командир МШ';
+            }
+            else if (eventsStore.event.available_structural_units === 'Окружные штабы') {
+                comName.value = 'Командир ОШ';
+            }
+        }
+    }
+    if (eventsStore.event.application_type === 'Мультиэтапная') {
+        router.push({ name: 'MultiStageSubmit' })
+    }
+}
 
 const AddApplication = async () => {
     try {
@@ -490,6 +531,11 @@ watch(
 </script>
 
 <style lang="scss" scoped>
+.banner__wrap {
+    position: relative;
+
+}
+
 .event {
     width: 100%;
     height: 40px;
