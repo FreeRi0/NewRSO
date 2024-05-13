@@ -2,16 +2,9 @@
     <div class="member">
         <ul class="member__wrapper">
             <template v-if="items.length > 0">
-                <ItemMember
-                    class="member__item"
-                    v-for="item in items"
-                    :key="item.id"
-                    :item="item"
-                    :functions="functions"
-                    :is-error-members="isErrorMembers"
-                    @update-member="onUpdateMember"
-                    @delete-member="onDeleteMember"
-                ></ItemMember>
+                <ItemMember class="member__item" v-for="item in items" :key="item.id" :item="item"
+                    :functions="functions" :is-error-members="isErrorMembers" @update-member="onUpdateMember"
+                    @delete-member="onDeleteMember"></ItemMember>
             </template>
 
             <p v-else>В {{ unit }} еще никто не вступил...</p>
@@ -119,20 +112,25 @@ const onDeleteMember = (memId) => {
         }
     }
 
-    &__wrap {
+    &__block {
         display: flex;
+        align-items: center;
         column-gap: 12px;
 
-<<<<<<< Updated upstream
-        @media (max-width: 768px) {
-            flex-wrap: wrap;
-            align-items: center;
-=======
         @media (max-width: 1024px) {
             column-gap: 8px;
             width: 100%;
 
->>>>>>> Stashed changes
+        }
+    }
+
+    &__wrap {
+        display: flex;
+        column-gap: 12px;
+
+        @media (max-width: 1024px) {
+            column-gap: 8px;
+            width: 100%;
         }
 
         @media (max-width: 768px) {
@@ -141,6 +139,7 @@ const onDeleteMember = (memId) => {
             row-gap: 12px;
 
         }
+
         @media (max-width: 575px) {
             row-gap: 5px;
             margin-top: 4px;
@@ -164,6 +163,7 @@ const onDeleteMember = (memId) => {
         @media (max-width: 768px) {
             padding-right: 0;
         }
+
         @media (max-width: 360px) {
             font-size: 14px;
         }
@@ -208,10 +208,10 @@ const onDeleteMember = (memId) => {
             row-gap: 12px;
         }
 
-           @media (max-width: 575px) {
+        @media (max-width: 575px) {
             flex-direction: column;
 
-            row-gap: 8px;
+            row-gap: 5px;
         }
     }
 
@@ -349,13 +349,14 @@ const onDeleteMember = (memId) => {
         width: 224px;
 
         @media (max-width: 1024px) {
-              width: 100%;
-                    max-width: 344px;
+            width: 100%;
+            max-width: 344px;
 
         }
-          @media (max-width: 768px) {
+
+        @media (max-width: 768px) {
             max-width: 100%;
-              width: 100%;
+            width: 100%;
         }
 
 
@@ -428,20 +429,27 @@ const onDeleteMember = (memId) => {
         min-height: 48px;
 
         @media (max-width: 1024px) {
-                    width: 100%;
-                    max-width: 344px;
+            width: 100%;
+            max-width: 344px;
 
         }
 
         @media (max-width: 768px) {
             margin-left: 0;
             width: 100%;
-            max-width: 91%;
+            max-width: 575px;
         }
 
         @media (max-width: 575px) {
-            max-width: 88%;
             width: 100%;
+
+
+        }
+
+        @media (max-width: 360px) {
+            width: 100%;
+            max-width: 212px;
+
         }
 
         label {
