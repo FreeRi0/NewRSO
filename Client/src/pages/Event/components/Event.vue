@@ -52,57 +52,84 @@
             <div class="text event_type_wrap">
                 {{ eventsStore.event.description }}
             </div>
+            <div class="wrap">
+                <div class="wrap__item">
 
-            <div class="event">
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/list.svg" class="mr-3" alt="" />
-                    Форма заявки: {{ eventsStore.event.application_type }}
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/list.svg" class="mr-3" alt="" />
+                        <div> Форма заявки: <p>{{ eventsStore.event.application_type }}</p>
+                        </div>
+
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/group.svg" class="mr-3" alt="" />
+                        <div> Планируемое число участников:
+                            <p>{{ eventsStore.event.participants_number }}</p>
+                        </div>
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/label.svg" class="mr-3" alt="" />
+                        <div> Адрес: <p>{{ eventsStore.event.address }}</p>
+                        </div>
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon/linkRef.svg" class="mr-3 event-cols-2_ref" alt="linkRef" />
+                        <a :href="eventsStore.event.conference_link">Ссылка на мероприятие</a>
+                    </div>
+
+
                 </div>
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
-                    Начало мероприятия:
-                    {{ eventsStore.event.time_data?.start_date }},
-                    {{ eventsStore.event.time_data?.start_time }}
+                <div class="wrap__item">
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
+
+                        <div>
+                            Начало мероприятия:
+                            <p>{{ eventsStore.event.time_data?.start_date }},
+                                {{ eventsStore.event.time_data?.start_time }}</p>
+                        </div>
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="g" />
+
+                        <div>
+                            Окончание мероприятия:
+                            <p>{{ eventsStore.event.time_data?.end_date }},
+                                {{ eventsStore.event.time_data?.end_time }}</p>
+                        </div>
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
+
+                        <div>
+                            Начало регистрации:
+                            <p>{{ eventsStore.event.time_data?.start_date }},
+                                {{ eventsStore.event.time_data?.start_time }}</p>
+                        </div>
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
+
+                        <div>
+                            Окончание регистрации:
+                            <p>{{ eventsStore.event.time_data?.registration_end_date }},
+                                {{ eventsStore.event.time_data?.registration_end_time }}</p>
+                        </div>
+
+                    </div>
                 </div>
+
+
+
             </div>
 
-            <div class="event">
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/group.svg" class="mr-3" alt="" />
-                    Планируемое число участников:
-                    {{ eventsStore.event.participants_number }}
-                </div>
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="g" />
-                    Окончание мероприятия:
-                    {{ eventsStore.event.time_data?.end_date }},
-                    {{ eventsStore.event.time_data?.end_time }}
-                </div>
-            </div>
-            <div class="event">
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/label.svg" class="mr-3" alt="" />
-                    Адрес: {{ eventsStore.event.address }}
-                </div>
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
-                    Начало регистрации:
-                    {{ eventsStore.event.time_data?.start_date }},
-                    {{ eventsStore.event.time_data?.start_time }}
-                </div>
-            </div>
-            <div class="event">
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon/linkRef.svg" class="mr-3 event-cols-2_ref" alt="linkRef" />
-                    <a :href="eventsStore.event.conference_link">Ссылка на мероприятие</a>
-                </div>
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
-                    Окончание регистрации:
-                    {{ eventsStore.event.time_data?.registration_end_date }},
-                    {{ eventsStore.event.time_data?.registration_end_time }}
-                </div>
-            </div>
+
 
             <!-- Организаторы -->
             <div
@@ -536,6 +563,30 @@ watch(
 
 }
 
+.wrap {
+    display: flex;
+    column-gap: 120px;
+
+    @media (max-width: 1024px) {
+        column-gap: 40px;
+    }
+
+    @media (max-width: 834px) {
+        flex-direction: column;
+        column-gap: 0px;
+        row-gap: 20px;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        max-width: 443px;
+        row-gap: 20px;
+
+
+    }
+}
+
 .event {
     width: 100%;
     height: 40px;
@@ -634,13 +685,30 @@ watch(
 
     &-cols-2 {
         display: flex;
-        flex-direction: row;
-        justify-content: start;
-        width: 48%;
-        height: 24px;
         font-size: 18px;
+        font-family: Bert Sans;
         color: #35383f;
-        margin-right: 1%;
+        font-weight: 400;
+        line-height: 23.74px;
+        div {
+            display: flex;
+            @media (max-width: 575px) {
+                display: block;
+                max-width: 292px;
+            }
+        }
+        p {
+            margin-left: 12px;
+
+            @media (max-width: 575px) {
+                margin-left: 5px;
+            }
+        }
+
+        @media (max-width: 575px) {
+            display: flex;
+            flex-wrap: wrap;
+        }
     }
 
     &-cols-2_ref {
