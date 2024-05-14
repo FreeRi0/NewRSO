@@ -794,7 +794,10 @@ watch(
     }
 
     @media (max-width: 430px) {
-        padding: 10px 32px;
+        padding: 5px 12px;
+        font-size: 14px;
+        font-family: Bert Sans;
+        max-width: 168px;
     }
 }
 
