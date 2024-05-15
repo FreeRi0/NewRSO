@@ -299,7 +299,7 @@ const userPages = computed(() => [
         name: 'active',
         show:
             roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.detachment_commander || roleStore.myPositions.usercentralheadquarterposition?.position === "Начальник отдела реализации мероприятий по профессиональному обучению участников студенческих отрядов ЦШ" || roleStore.myPositions.userregionalheadquarterposition?.position === "Комиссар"
+            roleStore.roles?.detachment_commander || roleStore.roles?.localheadquarter_commander || roleStore.roles?.districtheadquarter_commander || roleStore.roles?.educationalheadquarter_commander || roleStore.myPositions.usercentralheadquarterposition?.position === "Начальник отдела реализации мероприятий по профессиональному обучению участников студенческих отрядов ЦШ" || roleStore.myPositions.userregionalheadquarterposition?.position === "Комиссар"
 
         ,
     },

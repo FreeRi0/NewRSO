@@ -96,7 +96,7 @@
                             params: { id: squad.id },
                         }"
                         class="user-data__link"
-                        >Редактировать страницу</router-link
+                        >Редактировать отряд</router-link
                     >
 
                     <Button
