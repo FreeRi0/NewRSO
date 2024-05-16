@@ -1,10 +1,5 @@
 <template>
-    <v-progress-circular
-        class="circleLoader"
-        v-if="loading"
-        indeterminate
-        color="blue"
-    ></v-progress-circular>
+    <p v-if="loading">Загрузка...</p>
     <p v-else-if="!loading && !participantList.length">Список заявок пуст</p>
 
     <template v-else>
@@ -231,7 +226,7 @@ const onAction = async () => {
     try {
         for (const application of selectedParticipantList.value) {
             if (action.value === 'Одобрить') {
-   
+
                 await confirmApplication(application.user.id);
             } else {
                 await cancelApplication(application.user.id);

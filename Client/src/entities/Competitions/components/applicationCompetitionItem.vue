@@ -1,23 +1,13 @@
 <template>
     <div class="horizontallso">
         <div class="horizontallso__confidant mr-3">
-            <input
-                type="checkbox"
-                v-model="checked"
-                @change="updateCheckEvents"
-            />
+            <input type="checkbox" v-model="checked" @change="updateCheckEvents" />
         </div>
 
-        <router-link
-            :to="{ name: 'PersonalDataUser', params: { id: event.user.id } }"
-            class="horizontallso-item__wrapper mr-3"
-        >
+        <router-link :to="{ name: 'PersonalDataUser', params: { id: event.user.id } }"
+            class="horizontallso-item__wrapper mr-3" v-if="props.isGroup === false">
             <div class="horizontallso-img">
-                <img
-                    :src="event?.user?.avatar?.photo"
-                    alt="logo"
-                    v-if="event?.user?.avatar?.photo"
-                />
+                <img :src="event?.user?.avatar?.photo" alt="logo" v-if="event?.user?.avatar?.photo" />
                 <img v-else src="@app/assets/user-avatar.png" alt="photo" />
             </div>
             <div class="containerHorizontal">
@@ -33,31 +23,35 @@
                     </p>
                 </div>
                 <div class="horizontallso-item__list-date">
-                    <span
-                        style="
+                    <span style="
                             border-left: 2px solid #b6b6b6;
                             padding-right: 8px;
-                        "
-                    ></span>
+                        "></span>
                     <p>{{ event.user.date_of_birth }}</p>
                 </div>
             </div>
+
         </router-link>
-        <router-link
-            :to="{ name: 'ActionData', params: { id: event.event.id } }"
-            class="horizontallso-item__wrapper"
-        >
+        <router-link :to="{ name: 'lso', params: { id: event.headquarter_author.id } }"
+            class="horizontallso-item__wrapper mr-3" v-else>
             <div class="horizontallso-img">
-                <img
-                    :src="event.event.banner"
-                    alt="logo"
-                    v-if="event.event.banner"
-                />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                    v-else
-                />
+                <img :src="event.headquarter_author?.banner" alt="logo" v-if="event.headquarter_author?.banner" />
+                <img v-else src="@app/assets/user-avatar.png" alt="photo" />
+            </div>
+            <div class="containerHorizontal">
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{ event.headquarter_author.name }}
+                    </p>
+                </div>
+
+            </div>
+
+        </router-link>
+        <router-link :to="{ name: 'ActionData', params: { id: event.event.id } }" class="horizontallso-item__wrapper">
+            <div class="horizontallso-img">
+                <img :src="event.event.banner" alt="logo" v-if="event.event.banner" />
+                <img src="@app/assets/foto-leader-squad/foto-leader-squad-01.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
@@ -65,6 +59,7 @@
                 </p>
             </div>
         </router-link>
+
     </div>
 </template>
 <script setup>
@@ -81,6 +76,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    isGroup: {
+        type: Boolean,
+        required: false
+    }
     // position: {
     //     type: Number,
     //     default: 0,
@@ -109,17 +108,20 @@ watch(
 .horizontallso {
     display: flex;
     align-items: flex-start;
+
     &-img {
         align-items: center;
         width: 36px;
         height: 36px;
         justify-content: start;
+
         img {
             display: flex;
             position: relative;
             align-items: center;
         }
     }
+
     &-info {
         border: 1px solid #b6b6b6;
         border-radius: 10px;
@@ -128,6 +130,7 @@ watch(
         text-align: center;
 
         width: 185px;
+
         p {
             display: block;
             font-size: 16px;
@@ -136,6 +139,7 @@ watch(
         }
     }
 }
+
 .horizontallso-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -207,6 +211,7 @@ watch(
     border-radius: 10px;
     height: 48px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
@@ -224,6 +229,7 @@ watch(
     height: 48px;
     margin: 0px 12px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
