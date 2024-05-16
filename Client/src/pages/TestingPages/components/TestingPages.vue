@@ -124,7 +124,7 @@
                     </p>
                 </div>
                 <div class="start_button">
-                    <button @click="onStart" class="submit_button">
+                    <button @click="onStart" :class="{submit_button: !stoppedTest, inactive_button: stoppedTest}">
                         Начать тестирование
                     </button>
                 </div>
@@ -169,6 +169,8 @@ const questions = ref([]);
 let answers = [];
 const selected = ref(false);
 
+const stoppedTest = ref(true);
+
 const result = ref();
 let indexQuestion = ref(0);
 const choosenAnswer = ref(null);
@@ -181,6 +183,7 @@ const status = ref({
 });
 
 const onStart = async () => {
+    if(stoppedTest.value) return;
     started.value = true;
     try {
         const { data } = await HTTP.get(
